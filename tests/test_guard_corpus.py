@@ -29,6 +29,7 @@ def fired(name: str) -> set[str]:
     ("exponent_1e12.py", set()),
     ("cut_to_54.py", {"totals"}),
     ("calendar_months.py", set()),
+    ("notes_string_54.py", set()),
 ])
 def test_guards_on_real_scripts(name, expected):
     assert fired(name) == expected

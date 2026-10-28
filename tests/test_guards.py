@@ -74,3 +74,9 @@ def test_sample_totals_are_caught_but_subgroup_sizes_like_months_are_not():
 def test_without_partitions_the_largest_count_is_the_total():
     claims = [claim("events", "1,224", "count"), claim("firms", "36", "count")]
     assert [c.name for c in sample_totals(claims, set())] == ["events"]
+
+
+def test_only_numbers_the_code_contains_count_not_comments_or_prose():
+    from paper_replicator.guards import numeric_literals
+    script = 'x = 54  # paper says 7.49\nnote = "the paper reports 54 events"\ny = float("7.49")\nz = 1e12\n'
+    assert numeric_literals(script) == [54.0, 7.49, 1e12]

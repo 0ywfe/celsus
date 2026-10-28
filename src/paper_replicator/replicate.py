@@ -133,6 +133,9 @@ def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
 def script_problem(script: str, previous: str, claims: list[Claim], targets: list[str],
                    totals: list[Claim]) -> str | None:
     """The coded checks a script must pass before it gets sandbox time."""
+    broken = guards.syntax_error(script)
+    if broken:
+        return f"the script does not compile: {broken}."
     leaked = guards.hardcoded_results(script, claims)
     if leaked:
         return (f"the script contains numbers the paper reports ({', '.join(leaked)}). "
@@ -148,9 +151,6 @@ def script_problem(script: str, previous: str, claims: list[Claim], targets: lis
                 "Fix how the sample is built; never filter, trim or pad to reach a number.")
     if guards.bypasses_market_data(script):
         return "the script imports yfinance directly. Use market_data for all market data."
-    broken = guards.syntax_error(script)
-    if broken:
-        return f"the script does not compile: {broken}."
     return None
 
 

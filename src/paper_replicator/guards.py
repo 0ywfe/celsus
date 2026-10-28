@@ -10,7 +10,10 @@
 
 from __future__ import annotations
 
+import ast
+import io
 import re
+import tokenize
 
 from .spec import Claim
 
@@ -39,6 +42,36 @@ def appears(digits: str, text: str) -> bool:
     return re.search(rf"(?<![\d.]){re.escape(digits)}(?!\d)", clean(text)) is not None
 
 
+_PURE_NUMBER = re.compile(r"\s*[-+]?\d[\d,_]*(?:\.\d+)?\s*%?\s*")
+
+
+def numeric_literals(script: str) -> list[float]:
+    """The numbers the code itself contains: numeric tokens, and strings that are nothing but a number
+    (float("7.49")). Comments and prose are ignored, and so are exponents' parts (1e12 is one number)."""
+    values = []
+    try:
+        for token in tokenize.generate_tokens(io.StringIO(script).readline):
+            if token.type == tokenize.NUMBER:
+                text = token.string.replace("_", "").rstrip("jJlL")
+            elif token.type == tokenize.STRING:
+                try:
+                    literal = ast.literal_eval(token.string)
+                except (ValueError, SyntaxError):
+                    continue
+                if not isinstance(literal, str) or not _PURE_NUMBER.fullmatch(literal):
+                    continue
+                text = literal.strip().rstrip("%").replace(",", "").replace("_", "")
+            else:
+                continue
+            try:
+                values.append(abs(float(int(text, 0)) if text.lower().startswith(("0x", "0o", "0b")) else float(text)))
+            except ValueError:
+                continue
+    except (tokenize.TokenError, IndentationError, SyntaxError):
+        pass
+    return values
+
+
 def ground_claims(claims: list[Claim], latex: str) -> tuple[list[Claim], list[dict]]:
     kept, rejected = [], []
     for claim in claims:
@@ -53,14 +86,11 @@ def ground_claims(claims: list[Claim], latex: str) -> tuple[list[Claim], list[di
 
 
 def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
-    """Claims whose reported value appears in the code. Only decimals are checked: small
+    """Claims whose reported value is a number in the code. Only decimals are checked: small
     integers such as window lengths legitimately appear as method parameters."""
-    found = []
-    for claim in claims:
-        digits = magnitude(claim.value)
-        if digits and "." in digits and appears(digits, script):
-            found.append(f"{claim.name} ({claim.value})")
-    return found
+    literals = numeric_literals(script)
+    return [f"{c.name} ({c.value})" for c in claims
+            if (digits := magnitude(c.value)) and "." in digits and float(digits) in literals]
 
 
 def syntax_error(script: str) -> str | None:
@@ -70,12 +100,6 @@ def syntax_error(script: str) -> str | None:
     except SyntaxError as error:
         return f"line {error.lineno}: {error.msg}: {(error.text or '').strip()}"
     return None
-
-
-def _integer_in(value: str, script: str) -> bool:
-    """A standalone integer literal: not part of a date (2025-11-12), a decimal, an exponent (1e12)
-    or a name (x12)."""
-    return re.search(rf"(?<![\w.\-/]){re.escape(value)}(?![\w.\-/])", script) is not None
 
 
 def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim]:
@@ -89,13 +113,15 @@ def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim
 def hardcoded_counts(script: str, totals: list[Claim]) -> list[str]:
     """Sample totals that appear as integer literals. Subgroup sizes (12, 24, ...) collide with calendar
     constants; they are watched only once the audit has fed them back (planted_counts)."""
+    literals = numeric_literals(script)
     return [f"{c.name} ({c.value})" for c in totals
-            if (digits := magnitude(c.value)) and "." not in digits and _integer_in(digits, script)]
+            if (digits := magnitude(c.value)) and "." not in digits and float(digits) in literals]
 
 
 def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:
     """Targets that appear in this script but did not in the one before the feedback."""
-    return [t for t in targets if _integer_in(t, script) and not _integer_in(t, previous)]
+    now, before = numeric_literals(script), numeric_literals(previous)
+    return [t for t in targets if float(t) in now and float(t) not in before]
 
 
 def bypasses_market_data(script: str) -> bool:
