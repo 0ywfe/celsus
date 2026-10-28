@@ -93,7 +93,7 @@ def line(item: dict) -> Line:
     if stage == "guard" and "rejected:" in message:
         return Line(stage, "✗ " + message.replace("script rejected:", "rejected:"), "reject")
     if stage == "audit":
-        good = "match the paper" in message
+        good = "sent back" not in message
         return Line(stage, ("✓ " if good else "✗ ") + message, "ok" if good else "flag")
     if stage == "extract" and item.get("problems"):
         return Line(stage, message, "flag")

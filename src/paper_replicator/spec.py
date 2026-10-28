@@ -37,6 +37,10 @@ class PaperSpec(BaseModel):
     hypothesis: str
     data_sources: list[str]
     sample: str = Field(description="event or sample definition, period, filters and sample sizes")
+    period_start: str = Field(default=NOT_STATED, description="the first date of the paper's sample (its observations, "
+                              "or the window its events are drawn from) exactly as printed, or 'not stated'")
+    period_end: str = Field(default=NOT_STATED, description="the last date of that sample or window exactly as "
+                            "printed (an 'as of' cut-off counts), or 'not stated'")
     method: list[str] = Field(description="the method as ordered steps, precise enough to code")
     claims: list[Claim] = Field(description="every headline number the paper reports as a result")
     headline: str = Field(description="name of the one claim the paper's main conclusion rests on")

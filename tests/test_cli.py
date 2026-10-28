@@ -21,7 +21,7 @@ EVENTS = [
     {"stage": "tool", "message": "exit 1", "tool": "run", "exit": 1},
     {"stage": "guard", "message": "script rejected: it cuts the sample to a count the paper reports"},
     {"stage": "build", "message": "round 2: the builder works in the sandbox (up to 30 turns)"},
-    {"stage": "audit", "message": "round 2: 27 results, sample counts match the paper"},
+    {"stage": "audit", "message": "round 2: 27 results, sample matches the paper"},
     {"stage": "verdict", "message": "holds up ($0.2872 spent)", "verdict": "holds up"},
 ]
 CALLS = [{"provider": "meta", "model": "muse-spark-1.3", "cost_usd": 0.1},

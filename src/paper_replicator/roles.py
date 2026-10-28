@@ -23,6 +23,8 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
 - claims: every headline number the paper reports as a result: estimates, test statistics,
   p-values and sample sizes. Copy each value exactly as printed. Never compute, round or convert one.
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
+- period_start, period_end: the dates the sample covers, exactly as printed ("2010-01-03", "February 2018",
+  "as of November 12th, 2025"); "not stated" if the paper does not say.
 - method: ordered steps precise enough to code, including windows, return definitions and tests.
 - headline: the claim the paper's main conclusion rests on.
 - partitions: each split of a sample into subgroups (by size, sector, ...) whose counts the paper prints.
@@ -35,7 +37,10 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
                "se": <standard error of value; 0 if the number has no sampling error (a return over a
                       fixed period, a ratio of two such numbers); null only if you cannot compute it>,
                "n": <observations behind value, or null>}],
- "sample": {"description": "<the sample you built>", "n": <its size>},
+ "sample": {"description": "<the sample you built>", "n": <its size>,
+            "start": "<YYYY-MM-DD: the first date your sample actually covers>",
+            "end": "<YYYY-MM-DD: the last date it covers (for events: the window you searched); if the data
+                    you got starts later or ends earlier than you asked for, the data's dates>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""
 
 ENVIRONMENT = f"""Environment: a Linux sandbox with network access; the script's time limit is {{minutes}} minutes.

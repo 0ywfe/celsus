@@ -370,3 +370,19 @@ def test_a_script_that_fetches_code_is_rejected(setup):
     outcome = go(api, sandbox, cfg, tmp_path)
     assert sandbox.scripts == ["print('computed')"]
     assert "code host" in outcome["report"].read_text()
+
+
+
+def test_a_sample_that_misses_the_papers_period_is_sent_back_then_could_not_check(setup):
+    cfg, tmp_path = setup
+    dated = {**SPEC, "period_start": "2010-01-03", "period_end": "2025-12-31"}
+    late = {**RESULTS, "sample": {"description": "x", "n": 38, "start": "2014-09-17", "end": "2025-12-31"}}
+    api = FakeChatAPI([(json.dumps(dated), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(late)})] * 2)
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
+    feedback = api.requests[2]["body"]["messages"][-1]["content"]
+    assert "covers 2014-09-17 to 2025-12-31, but the paper's runs from 2010-01-03" in feedback
+    assert outcome["verdict"] == "could not check"
+    assert outcome["summary"]["first_line"].startswith(
+        "We could not check this paper: the replication's sample covers 2014-09-17")
