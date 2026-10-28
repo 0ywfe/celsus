@@ -18,6 +18,7 @@ recorded, so the host can fetch it once, cache it, and rerun the script.
 from __future__ import annotations
 
 import datetime
+import fcntl
 import json
 import os
 from pathlib import Path
@@ -48,9 +49,14 @@ def _iso(day) -> str:
 
 
 def _append(name: str, entry: dict) -> None:
+    """Scripts fetch from threads and processes, so each write holds a lock; the log is replaced whole, so a run
+    cut off mid-write still leaves one that reads back."""
     path = _work() / name
-    entries = json.loads(path.read_text()) if path.is_file() else []
-    path.write_text(json.dumps(entries + [entry], indent=1))
+    with open(f"{path}.lock", "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        entries = json.loads(path.read_text()) if path.is_file() else []
+        path.with_suffix(".tmp").write_text(json.dumps(entries + [entry], indent=1))
+        os.replace(path.with_suffix(".tmp"), path)
 
 
 def _manifest() -> dict:

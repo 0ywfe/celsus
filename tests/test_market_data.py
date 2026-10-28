@@ -61,3 +61,14 @@ def test_profile_comes_from_the_cache_with_its_fetch_date(dirs):
     assert market_data.get_profile("abc")["sector"] == "Technology"
     [entry] = json.loads((work / "market_data_log.json").read_text())
     assert entry["kind"] == "profile" and entry["fetched"] == "2026-10-28"
+
+
+def test_scripts_that_fetch_from_many_threads_leave_a_log_that_reads_back_whole(dirs):
+    # 2602.06198 fetched ~3.4k tickers from 8 threads; two writes landed at once and the host could not parse the log
+    from concurrent.futures import ThreadPoolExecutor
+
+    _, work = dirs
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        list(pool.map(lambda i: market_data._append("market_data_log.json", {"ticker": f"T{i}"}), range(400)))
+    assert sorted(e["ticker"] for e in json.loads((work / "market_data_log.json").read_text())) == sorted(
+        f"T{i}" for i in range(400))

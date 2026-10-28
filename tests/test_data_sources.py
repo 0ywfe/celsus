@@ -42,3 +42,19 @@ def test_the_record_survives_a_script_that_dies_after_fetching(tmp_path):
 def test_a_script_that_fetches_nothing_leaves_no_record(tmp_path):
     done, work = run(tmp_path, "print('offline')\n")
     assert done.returncode == 0 and not (work / "data_sources.json").exists()
+
+
+def test_hosts_looked_up_from_threads_and_child_processes_are_all_recorded(tmp_path):
+    done, work = run(tmp_path, """
+import multiprocessing, sys
+from concurrent.futures import ThreadPoolExecutor
+def look(i):
+    sys.audit("socket.getaddrinfo", f"h{i}.example", 443, 0, 0, 0)
+if __name__ == "__main__":
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        list(pool.map(look, range(200)))
+    with multiprocessing.get_context("fork").Pool(4) as pool:
+        pool.map(look, range(200, 240))
+""")
+    assert done.returncode == 0, done.stderr
+    assert sorted(json.loads((work / "data_sources.json").read_text())) == sorted(f"h{i}.example" for i in range(240))

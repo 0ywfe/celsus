@@ -2,15 +2,24 @@
 
 Python's audit hooks (PEP 578) see each name lookup a Python socket makes, so requests, urllib, pandas
 and the market-data module are all covered. The record is rewritten on each new host, so a run cut off
-by its time limit still leaves it behind. It holds host names only: nothing from headers or URLs.
+by its time limit still leaves it behind. Scripts fetch from threads and child processes, so each
+write holds a lock and merges with what the others recorded. It holds host names only: nothing from headers or URLs.
 """
 
+import fcntl
 import json
 import os
 import sys
 
 _hosts: list[str] = []
 _record = os.path.join(os.environ.get("WORK_DIR", "/work"), "data_sources.json")
+
+
+def _read() -> list[str]:
+    if not os.path.exists(_record):
+        return []
+    with open(_record) as f:
+        return json.load(f)
 
 
 def _seen(event: str, args: tuple) -> None:
@@ -21,8 +30,13 @@ def _seen(event: str, args: tuple) -> None:
         return
     _hosts.append(host)
     try:
-        with open(_record, "w") as f:
-            json.dump(_hosts, f)
+        with open(f"{_record}.lock", "w") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            recorded = _read()
+            if host not in recorded:
+                with open(f"{_record}.tmp", "w") as f:
+                    json.dump(recorded + [host], f)
+                os.replace(f"{_record}.tmp", _record)
     except OSError as error:  # never break the script's fetch over the record; say so where the run log shows it
         sys.stderr.write(f"data source record not written: {error}\n")
 
