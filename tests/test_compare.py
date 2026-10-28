@@ -27,3 +27,11 @@ def test_verdict_counts_only_judged_rows():
     assert verdict([{"consistent": True}, {"consistent": False}]) == "partly reproduced"
     assert verdict([{"consistent": False}]) == "not reproduced"
     assert verdict([{"consistent": None}]) == "no verdict"
+
+
+def test_significance_uses_the_side_the_paper_tested():
+    # run-20261028T144225Z-91ed39: t = -1.905 is significant one-sided (p 0.031) but not two-sided
+    claims = [claim("t", "-2.41", "test_statistic")]
+    results = [{"name": "t", "value": -1.905}]
+    assert compare(claims, results)[0]["consistent"] is False
+    assert compare(claims, results, sides={"t": "one-sided (lower tail)"})[0]["consistent"] is True

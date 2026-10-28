@@ -1,4 +1,4 @@
-from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_results, parse_number,
+from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_counts, hardcoded_results, parse_number,
                                      planted_counts, syntax_error)
 from paper_replicator.spec import Claim
 
@@ -60,3 +60,9 @@ def test_secret_values_are_replaced_by_their_names():
     from paper_replicator.guards import redact
     out = redact("UA: Jane Doe jane@example.com\nok", {"SEC_USER_AGENT": "Jane Doe jane@example.com", "EMPTY": ""})
     assert out == "UA: <SEC_USER_AGENT>\nok"
+
+
+def test_reported_counts_of_two_or_more_digits_are_caught_single_digits_are_not():
+    claims = [claim("total", "54", "count"), claim("triples", "3", "count"), claim("mean", "-7.49")]
+    assert hardcoded_counts("SAMPLE_TARGET = 54\nfor i in range(3): pass\n", claims) == ["total (54)"]
+    assert hardcoded_counts("CUTOFF = '2025-11-12'\nx = 1e54\n", claims) == []

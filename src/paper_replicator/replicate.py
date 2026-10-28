@@ -70,6 +70,12 @@ def planned_budget(model: str, latex: str, attempts: int) -> float:
     return round(total, 4)
 
 
+def sides_by_statistic(spec: PaperSpec, paper: list[dict]) -> dict[str, str]:
+    """Which side each test statistic was tested on, from the paper-sidedness check."""
+    tests = {t.test: t.statistic for t in spec.tests}
+    return {tests[c["test"]]: c["side"] for c in paper if c["check"] == "sidedness" and c["test"] in tests}
+
+
 def sandbox_secrets() -> dict[str, str]:
     return {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
 
@@ -119,6 +125,11 @@ def script_problem(script: str, previous: str, claims: list[Claim], targets: lis
     if leaked:
         return (f"the script contains numbers the paper reports ({', '.join(leaked)}). "
                 "Compute them from data and remove them from the code and comments.")
+    counts = guards.hardcoded_counts(script, claims)
+    if counts:
+        return (f"the script contains sample counts the paper reports ({', '.join(counts)}). Build the sample from "
+                "the paper's definition and report the count you get; never trim, cut or pad it to a reported "
+                "count. If a number is a coincidence, write it another way.")
     planted = guards.planted_counts(script, previous, targets)
     if planted:
         return (f"the script now contains the paper's sample counts as literals ({', '.join(planted)}). "
@@ -288,7 +299,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         else:
             results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60), latex, spec, claims,
                                           attempts)
-        rows = compare(claims, results or [])
+        rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper))
         outcome = verdict(rows) if results is not None else "no verdict"
     except Exception as error:  # the report still gets written, with the reason
         run.guard_events.append(f"run stopped: {type(error).__name__}: {error}")

@@ -167,7 +167,7 @@ def test_a_target_count_that_newly_appears_is_rejected(setup):
                            SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})])
     outcome = go(api, sandbox, cfg, tmp_path, attempts=3)
     assert sandbox.scripts == ["events = load()", "events = load()"]   # the padded script never ran
-    assert "sample counts as literals (40)" in outcome["report"].read_text()
+    assert "contains sample counts the paper reports (n_filings (40))" in outcome["report"].read_text()
 
 
 def test_direct_yfinance_import_is_rejected(setup):
@@ -243,3 +243,15 @@ def test_workbench_builder_explores_writes_and_only_the_clean_rerun_counts(setup
     assert (folder / "attempt_1_notes.md").read_text().startswith("Built 38 filings")
     tool_reply = [m for m in api.requests[2]["body"]["messages"] if m["role"] == "tool"][0]["content"]
     assert "test@example.com" not in tool_reply and "<SEC_USER_AGENT>" in tool_reply
+
+
+def test_cutting_the_sample_to_the_reported_count_is_rejected_in_the_first_round(setup):
+    # run-20261028T144225Z-91ed39: SAMPLE_TARGET = 54; kept = filings[:SAMPLE_TARGET]
+    cfg, tmp_path = setup
+    cut = {"script": "SAMPLE_TARGET = 40\nkept = filings[:SAMPLE_TARGET]", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(cut), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert sandbox.scripts == ["print('computed')"]
+    assert "never trim, cut or pad" in api.requests[2]["body"]["messages"][-1]["content"]

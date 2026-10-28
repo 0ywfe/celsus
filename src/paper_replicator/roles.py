@@ -47,6 +47,8 @@ RULES = """Rules:
 - One result per claim you can compute, under the claim's exact name. Leave out claims you cannot
   compute and say why in notes.
 - Follow the paper's sample definition, period and method exactly. Print the count after each filtering step.
+- Build the sample from the paper's definition and report the count you get. Never trim, cut, sort-and-slice or
+  pad it to reach a count the paper reports, and never write a reported count into the code.
 - Catch MarketDataUnavailable only to drop that event, and count the drops. Let every other error propagate."""
 
 BUILDER = f"""You write one Python 3.12 script that replicates a paper's headline results from public data.

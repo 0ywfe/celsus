@@ -78,6 +78,17 @@ def _integer_in(value: str, script: str) -> bool:
     return re.search(rf"(?<![\w.\-/]){re.escape(value)}(?![\w.\-/])", script) is not None
 
 
+def hardcoded_counts(script: str, claims: list[Claim]) -> list[str]:
+    """Count claims of two or more digits that appear as integer literals. Single digits are exempt:
+    they carry no information about the sample and appear everywhere in code."""
+    found = []
+    for claim in claims:
+        digits = magnitude(claim.value)
+        if claim.kind == "count" and digits and "." not in digits and len(digits) >= 2 and _integer_in(digits, script):
+            found.append(f"{claim.name} ({claim.value})")
+    return found
+
+
 def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:
     """Targets that appear in this script but did not in the one before the feedback."""
     return [t for t in targets if _integer_in(t, script) and not _integer_in(t, previous)]

@@ -3,7 +3,8 @@
 Tolerances come from the data, not from a chosen percentage:
 - estimate: consistent if the paper's value lies inside the reproduction's 95% interval (value +/- 1.96 se).
 - count: consistent if the difference is within 1.96 sqrt(reported) (Poisson).
-- test_statistic: consistent if same sign and same side of 1.96.
+- test_statistic: consistent if same sign and both significant or both not, at 5% on the side the paper
+  tested (1.96 two-sided, 1.645 one-sided; the side comes from recomputing the paper's own p-value).
 - p_value: consistent if both are on the same side of 0.05.
 - anything without what its test needs is shown but not judged.
 """
@@ -15,11 +16,17 @@ import math
 from .guards import parse_number
 from .spec import Claim
 
-Z95 = 1.96  # two-sided 95% normal quantile
+from scipy import stats
+
 ALPHA = 0.05  # the conventional significance level
+Z95 = float(stats.norm.ppf(1 - ALPHA / 2))  # 1.96: the two-sided 95% interval for estimates
 
 
-def judge(kind: str, reported: float, result: dict) -> tuple[bool | None, str]:
+def critical(side: str) -> float:
+    return float(stats.norm.ppf(1 - ALPHA)) if side.startswith("one-sided") else Z95
+
+
+def judge(kind: str, reported: float, result: dict, side: str = "two-sided") -> tuple[bool | None, str]:
     value, se = result.get("value"), result.get("se")
     if value is None:
         return None, "no value"
@@ -31,15 +38,16 @@ def judge(kind: str, reported: float, result: dict) -> tuple[bool | None, str]:
         band = Z95 * math.sqrt(abs(reported))
         return abs(value - reported) <= band, f"difference {value - reported:+.0f}, band +/-{band:.1f}"
     if kind == "test_statistic":
-        same = math.copysign(1, value) == math.copysign(1, reported) and (abs(value) >= Z95) == (abs(reported) >= Z95)
-        return same, "same sign and significance" if same else "sign or significance differs"
+        cut = critical(side)
+        same = math.copysign(1, value) == math.copysign(1, reported) and (abs(value) >= cut) == (abs(reported) >= cut)
+        return same, f"{side} at |t| {cut:.3g}: " + ("same sign and significance" if same else "sign or significance differs")
     if kind == "p_value":
         same = (value < ALPHA) == (reported < ALPHA)
         return same, f"both {'<' if value < ALPHA else '>='} {ALPHA}" if same else f"opposite sides of {ALPHA}"
     return None, "not judged"
 
 
-def compare(claims: list[Claim], results: list[dict]) -> list[dict]:
+def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | None = None) -> list[dict]:
     by_name = {r.get("name"): r for r in results}
     rows = []
     for claim in claims:
@@ -48,7 +56,7 @@ def compare(claims: list[Claim], results: list[dict]) -> list[dict]:
         row = {"name": claim.name, "kind": claim.kind, "unit": claim.unit, "reported": reported,
                "reproduced": None, "se": None, "n": None, "consistent": None, "why": "not computed"}
         if result is not None:
-            consistent, why = judge(claim.kind, reported, result)
+            consistent, why = judge(claim.kind, reported, result, (sides or {}).get(claim.name, "two-sided"))
             row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
                        consistent=consistent, why=why)
         rows.append(row)
