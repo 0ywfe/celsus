@@ -412,3 +412,20 @@ def test_a_sample_total_left_out_of_the_results_is_could_not_check(setup):
     outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
     assert outcome["verdict"] == "could not check"
     assert "did not report the paper's sample size (n_filings)" in outcome["summary"]["first_line"]
+
+
+
+def test_a_paper_whose_source_cannot_be_read_is_could_not_check_not_a_crash(setup, monkeypatch):
+    # held-out launch, 28 Oct: an arXiv ID with no source raised HTTPStatusError and the run left no report
+    cfg, tmp_path = setup
+
+    def missing(arxiv_id, cache_dir):
+        raise RuntimeError("Client error '404 Not Found'")
+
+    monkeypatch.setattr(replicate, "load_paper", missing)
+    api = FakeChatAPI([])
+    outcome = go(api, FakeSandbox([]), cfg, tmp_path)
+    assert outcome["verdict"] == "could not check" and api.requests == []
+    assert outcome["summary"]["crashed"] is None
+    assert outcome["summary"]["first_line"].startswith(
+        "We could not check this paper: the paper's LaTeX source could not be read from arXiv (RuntimeError")

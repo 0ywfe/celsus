@@ -73,6 +73,10 @@ class Run:
         self.rejections.append({"round": attempt, "reason": problem})
 
 
+class Unreadable(Exception):
+    """The paper could not be read: the run ends at could not check, not as a crash."""
+
+
 def planned_budget(model: str, latex: str, attempts: int) -> float:
     """Upper bound on model spend: every call at its output cap, the builder's history growing each attempt."""
     paper = len(latex) // CHARS_PER_TOKEN
@@ -389,7 +393,12 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
                     turns: int = 30, open_bench: Callable[..., Workbench] = Workbench,
                     effort: str | None = None) -> dict:
     run_id, folder = new_run(runs_dir)
-    latex = load_paper(arxiv_id, ROOT / "data" / "arxiv")
+    try:
+        latex, unreadable = load_paper(arxiv_id, ROOT / "data" / "arxiv"), None
+    except Exception as error:  # no source, a PDF-only paper, arXiv down: the checker's failure, not the paper's
+        latex = ""
+        unreadable = (f"the paper's LaTeX source could not be read from arXiv "
+                      f"({type(error).__name__}: {str(error)[:160]})")
     (folder / "paper.tex").write_text(latex)
     if budget_usd is not None:
         budget = budget_usd
@@ -406,6 +415,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
 
     spec, rows, rejected, paper, results, crashed = None, [], [], [], None, None
     try:
+        if unreadable:
+            raise Unreadable(unreadable)
         spec = await extract(run, cfg, client, latex, effort)
         run.say("extract", f"read: {spec.title} ({len(spec.claims)} numbers to check)", title=spec.title)
         (folder / "spec.json").write_text(spec.model_dump_json(indent=1))
@@ -424,6 +435,9 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
             results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60, effort), latex, spec,
                                           claims, attempts)
         rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper))
+    except Unreadable as error:
+        run.failure = str(error)
+        run.say("error", str(error))
     except Exception as error:  # the report still gets written, with the reason
         crashed = f"{type(error).__name__}: {error}"
         run.failure = f"the run stopped ({type(error).__name__})"
