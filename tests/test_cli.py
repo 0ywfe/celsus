@@ -112,3 +112,12 @@ def test_a_run_without_a_summary_still_replays(tmp_path):
     state = replay(recorded(tmp_path, summary=False), 100, 0, Console(record=True, color_system=None),
                    sleep=lambda s: None)
     assert state.verdict == "holds up"
+
+
+
+def test_the_card_shows_the_main_result_and_mismatches_first():
+    from paper_replicator.cli.view import shown_rows
+    rows = [{"name": f"m{i}", "consistent": True} for i in range(10)] + [
+        {"name": "bad", "consistent": False}, {"name": "main", "consistent": True}]
+    shown, hidden = shown_rows(rows, "main", 4)
+    assert [r["name"] for r in shown][:2] == ["main", "bad"] and len(shown) == 4 and hidden == 8

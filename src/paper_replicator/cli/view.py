@@ -83,7 +83,13 @@ def _shown(path: Path) -> Path:
         return path
 
 
-def card(folder: Path) -> Panel:
+def shown_rows(judged: list[dict], main: str | None, limit: int) -> tuple[list[dict], int]:
+    """The rows that fit: the main result, then every mismatch, then matches; and how many were left out."""
+    ordered = sorted(judged, key=lambda r: (r["name"] != main, bool(r["consistent"])))
+    return ordered[:limit], max(len(ordered) - limit, 0)
+
+
+def card(folder: Path, max_rows: int = 12) -> Panel:
     summary = json.loads((folder / "summary.json").read_text())
     rows = json.loads((folder / "comparison.json").read_text())["rows"] if (folder / "comparison.json").exists() else []
     style = VERDICT_STYLES.get(summary["verdict"], "")
@@ -95,12 +101,16 @@ def card(folder: Path) -> Panel:
         table.add_column("paper", justify="right", no_wrap=True)
         table.add_column("reproduced", justify="right", no_wrap=True)
         table.add_column("", ratio=2, no_wrap=True, overflow="ellipsis")
-        for r in judged:
+        main = (summary.get("headline") or {}).get("name")
+        shown, hidden = shown_rows(judged, main, max_rows)
+        for r in shown:
             mark = Text("✓ ", style="green") if r["consistent"] else Text("✗ ", style="red")
             table.add_row(r["name"], with_unit(f"{r['reported']:.4g}", r["unit"] if r["kind"] == "estimate" else ""),
                           _reproduced(r),
                           mark + Text(r["why"], style="dim"))
         parts += [Text(""), table]
+        if hidden:
+            parts.append(Text(f"… {hidden} more matched; every row is in the report", style="dim"))
     counts = [s for s in summary.get("sample") or [] if s.get("reported")]
     total = max(counts, key=lambda s: s["reported"]) if counts else None
     footer = [f"sample {_count(total['reproduced'])}/{_count(total['reported'])}" if total else None, f"{summary['rounds']} rounds", f"{summary['calls']} calls",

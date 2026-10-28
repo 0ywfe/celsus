@@ -52,7 +52,7 @@ def replay(folder: Path, speed: float, max_gap_s: float, console: Console, sleep
             previous, state = item["t"], apply(state, item)
             live.update(screen(state, console.height))
     if (folder / "summary.json").exists():
-        console.print(card(folder))
+        console.print(card(folder, max_rows=max(console.height - 16, 6)))
     return state
 
 
@@ -83,7 +83,7 @@ def check(args: list[str], console: Console) -> State:
                 break
             time.sleep(POLL_S)
     if (folder / "summary.json").exists():
-        console.print(card(folder))
+        console.print(card(folder, max_rows=max(console.height - 16, 6)))
     return state
 
 
