@@ -1,5 +1,5 @@
 """Modal sandboxes: a fresh container with network on and nothing from this machine except the script,
-the market-data helper and the market-data cache.
+the market-data helper, the market-data cache and, in the clean run, the record of hosts it fetched from.
 
 - run_script: the clean run. A fresh sandbox runs one script; only its outputs count as results.
 - Workbench: a persistent sandbox the builder explores in through its tools.
@@ -19,8 +19,9 @@ from . import PRODUCT_NAME
 
 PACKAGES = ["pandas", "numpy", "scipy", "statsmodels", "requests", "yfinance", "pyarrow"]
 WORK, CACHE = "/work", "/data/market"
-OUTPUTS = ("results.json", "market_data_log.json", "market_data_requests.json")
+OUTPUTS = ("results.json", "market_data_log.json", "market_data_requests.json", "data_sources.json")
 HELPER = Path(__file__).parent / "sandbox_lib" / "market_data.py"
+SOURCES, HOOKS = Path(__file__).parent / "sandbox_lib" / "data_sources.py", "/opt/hooks"
 MAX_TOOL_OUTPUT = 6000  # chars of a command's output the builder sees (Meta cookbook 07's value)
 
 
@@ -61,7 +62,10 @@ def run_script(script: str, *, market_cache: Path, env: dict[str, str], timeout_
     sandbox = _start(market_cache=market_cache, env=env, lifetime_s=timeout_s + 120)
     try:
         sandbox.filesystem.write_text(script, f"{WORK}/replicate.py")
-        process = sandbox.exec("python", f"{WORK}/replicate.py", timeout=timeout_s, workdir=WORK)
+        sandbox.filesystem.make_directory(HOOKS)
+        sandbox.filesystem.write_text(SOURCES.read_text(), f"{HOOKS}/sitecustomize.py")
+        process = sandbox.exec("python", f"{WORK}/replicate.py", timeout=timeout_s, workdir=WORK,
+                               env={"PYTHONPATH": HOOKS, "WORK_DIR": WORK})
         process.wait()
         run = SandboxRun(process.returncode, process.stdout.read(), process.stderr.read(), 0.0)
         run.files = {name: text for name in OUTPUTS if (text := _read(sandbox, f"{WORK}/{name}")) is not None}

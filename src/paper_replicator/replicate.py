@@ -60,6 +60,7 @@ class Run:
     guard_events: list[str] = field(default_factory=list)
     rejections: list[dict] = field(default_factory=list)
     market_log: list[dict] = field(default_factory=list)
+    hosts: list[str] = field(default_factory=list)
     sandbox_note: str = "not run"
     # the script reviewer (a judgement check), attached by replicate(); None runs without it
     review: Callable[[PaperSpec, str], Awaitable[tuple[str, str] | None]] | None = None
@@ -183,6 +184,7 @@ def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
     (run.folder / f"sandbox_{attempt}.log").write_text(
         f"exit {result.exit_code} in {result.seconds}s\n--- stdout\n{result.stdout}\n--- stderr\n{result.stderr}")
     run.market_log = json.loads(result.files.get("market_data_log.json", "[]"))
+    run.hosts = json.loads(result.files.get("data_sources.json", "[]"))
     run.sandbox_note = f"attempt {attempt}, exit {result.exit_code}, {result.seconds}s"
     return result
 
@@ -511,7 +513,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     headline_text = first_line(outcome, reason, rows, headline)
     path = report.write(folder, arxiv_id=arxiv_id, title=spec.title if spec else arxiv_id, verdict=outcome,
                         rows=rows, rejected=rejected, paper_checks=paper, headline_text=headline_text,
-                        guard_events=run.guard_events, market_log=run.market_log, calls=ledger.rows,
+                        guard_events=run.guard_events, market_log=run.market_log, hosts=run.hosts, calls=ledger.rows,
                         sandbox_note=run.sandbox_note)
     summary = run_summary(run, arxiv_id, cfg, builder, outcome, reason, headline_text, rows, headline, crashed)
     (folder / "summary.json").write_text(json.dumps(summary, indent=1))

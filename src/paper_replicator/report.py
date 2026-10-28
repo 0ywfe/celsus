@@ -23,7 +23,8 @@ def market_sources(log: list[dict]) -> list[str]:
 
 def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[dict], rejected: list[dict],
           paper_checks: list[dict], headline_text: str,
-          guard_events: list[str], market_log: list[dict], calls: list[dict], sandbox_note: str) -> Path:
+          guard_events: list[str], market_log: list[dict], calls: list[dict], sandbox_note: str,
+          hosts: list[str] = ()) -> Path:
     providers = sorted({c["provider"] for c in calls})
     lines = [
         headline_text, "",
@@ -39,7 +40,8 @@ def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[d
         "", "## Guards",
         *([f"- rejected claim {r['name']} = {r['value']}: {r['reason']}" for r in rejected] or ["- no claims rejected"]),
         *[f"- {event}" for event in guard_events], "",
-        "## Market data", *(market_sources(market_log) or ["- none used"]), "",
+        "## Data sources", *(market_sources(market_log) or ["- market data: none used"]),
+        f"- other hosts the script fetched from: {', '.join(hosts) or 'none'}", "",
         "## Run",
         f"- sandbox: {sandbox_note}",
         f"- model calls: {len(calls)}, providers: {', '.join(providers) or 'none'}, "

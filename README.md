@@ -39,7 +39,7 @@ The tolerances come from the data and from published replication practice, not f
 ### Guards that keep it honest
 
 - Numbers the paper reports may not appear in the code, and the sample may not be trimmed or padded to a reported count.
-- Market data goes through one logged module (cache, then yfinance, then a host-side fetch), and the report says which source and fetch date each series came from.
+- Market data goes through one logged module (cache, then yfinance, then a host-side fetch), and the report says which source and fetch date each series came from. Anything else the script downloads in Python (filings, macro series, exchange prices) is recorded by host, and the report lists those hosts too.
 - The builder may not fetch the authors' code: re-running their code isn't replicating the paper. Data files are fine.
 - Secrets are redacted from everything the model sees, and every run has a budget stop.
 

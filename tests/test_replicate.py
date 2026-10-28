@@ -106,12 +106,15 @@ def test_missing_market_data_is_fetched_on_the_host_and_the_same_script_rerun(se
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([
         SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS), "market_data_requests.json": json.dumps(request)}),
-        SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS), "market_data_log.json": json.dumps(log)}),
+        SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS), "market_data_log.json": json.dumps(log),
+                                    "data_sources.json": json.dumps(["efts.sec.gov", "data-api.binance.vision"])}),
     ])
     outcome = go(api, sandbox, cfg, tmp_path)
     assert fetched == request
     assert sandbox.scripts == ["print('computed')", "print('computed')"]
-    assert "prices: yfinance (host) (cache), fetched 2026-10-28, 1 tickers" in outcome["report"].read_text()
+    report = outcome["report"].read_text()
+    assert "prices: yfinance (host) (cache), fetched 2026-10-28, 1 tickers" in report
+    assert "- other hosts the script fetched from: efts.sec.gov, data-api.binance.vision" in report
 
 
 def test_budget_stop_ends_the_run_and_still_writes_the_report(setup):
