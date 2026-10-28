@@ -55,11 +55,32 @@ def with_unit(number: str, unit: str) -> str:
     return f"{number}{unit}" if unit.startswith("%") else f"{number} {unit}"
 
 
+def cannot_be(kind: str, value) -> str | None:
+    """Why no result of this kind can take this value (a p of 10, a count of -3, NaN), or None. Such a number is
+    the replication's failure, never the paper's, so it is sent back and, if it stays, not judged."""
+    if not isinstance(value, (int, float)) or not math.isfinite(value):
+        return "no result is NaN or infinite"
+    if kind == "p_value" and not 0 <= value <= 1:
+        return "no p-value lies outside 0 to 1"
+    if kind == "count" and value < 0:
+        return "no count is negative"
+    return None
+
+
+def impossible(claims: list[Claim], results: list[dict]) -> list[tuple[str, str]]:
+    """(claim name, why) for each result whose value no result of the claim's kind can take."""
+    kinds = {c.name: c.kind for c in claims}
+    return [(r["name"], why) for r in results
+            if r.get("name") in kinds and r.get("value") is not None and (why := cannot_be(kinds[r["name"]], r["value"]))]
+
+
 def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
           printed: str = "") -> tuple[bool | None, str]:
     value, se = result.get("value"), result.get("se")
     if value is None:
         return None, "no value"
+    if (why := cannot_be(kind, value)) is not None:
+        return None, f"the replication's value is {value}, and {why}, so it is not judged"
     direction = bound(printed) if printed else None
     if direction and kind in ("estimate", "test_statistic", "count"):  # "other" stays unjudged, bound or not
         return within_bound(direction, reported, value, se)

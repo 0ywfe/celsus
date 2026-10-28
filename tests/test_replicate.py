@@ -492,3 +492,18 @@ def test_a_breach_still_there_after_the_last_attempt_is_could_not_check_with_the
     outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
     assert outcome["verdict"] == "could not check"
     assert outcome["report"].read_text().startswith("We could not check this paper: a reviewer found 1 breach")
+
+
+def test_an_impossible_result_goes_back_to_the_builder(setup):
+    cfg, tmp_path = setup
+    bad = {"results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 38},
+                       {"name": "t_diff", "value": -2.4, "se": None, "n": None},
+                       {"name": "n_filings", "value": -38, "se": None, "n": None}],
+           "sample": {"description": "x", "n": 38}, "notes": ""}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(bad)}),
+                           SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    go(api, sandbox, cfg, tmp_path)
+    feedback = api.requests[2]["body"]["messages"][-1]["content"]
+    assert "n_filings = -38: no count is negative" in feedback and "never clip or replace" in feedback

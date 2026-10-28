@@ -24,7 +24,7 @@ from openai import AsyncOpenAI
 
 from . import config, guards, market, periods, report, roles
 from .paper_checks import check_paper
-from .compare import COULD_NOT_CHECK, NO_SIDE, compare, first_line, verdict
+from .compare import COULD_NOT_CHECK, NO_SIDE, compare, first_line, impossible, verdict
 from .ingest import load_paper
 from .ledger import Ledger, ProviderNotAllowed
 from .llm import make_client
@@ -300,6 +300,11 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: P
     feedback for the builder, plus the counts to watch."""
     off = [row for row in compare(claims, results) if row["kind"] == "count" and row["consistent"] is False]
     issues = sample_issues(spec, sample or {}, results, list(totals)) if spec else []
+    if broken := impossible(claims, results):
+        values = {r.get("name"): r.get("value") for r in results}
+        return ("The script ran, but some results are values no result of their kind can take:\n" +
+                "\n".join(f"- {name} = {values[name]}: {why}" for name, why in broken) +
+                "\nFind and fix the computation behind each one; never clip or replace the number."), []
     if not off and not issues:
         return None, []
     gaps = "\n".join([f"- {r['name']}: the paper reports {r['reported']:g}, your run produced {r['reproduced']:g}"

@@ -200,3 +200,17 @@ def test_a_result_the_script_writes_as_a_fixed_number_is_not_judged():
     assert rows["null_win_rate"]["consistent"] is None
     assert rows["null_win_rate"]["why"] == "the script writes it as a fixed number (0.5 at line 92), so it is not judged"
     assert rows["mean"]["consistent"] is True
+
+
+def test_a_value_no_result_of_its_kind_can_take_is_not_judged():
+    # saboteur round 3: a p of 10 was judged a mismatch, and the paper was called "partly holds up" for it
+    from paper_replicator.compare import impossible
+    claims = [claim("p", "0.03", "p_value"), claim("n", "54", "count"), claim("t", "2.1", "test_statistic"),
+              claim("mean", "-7.49", "estimate")]
+    results = [{"name": "p", "value": 10.0}, {"name": "n", "value": -3}, {"name": "t", "value": float("nan")},
+               {"name": "mean", "value": -7.4, "se": 1.0}]
+    rows = {r["name"]: r for r in compare(claims, results)}
+    for name in ("p", "n", "t"):
+        assert rows[name]["consistent"] is None and "no " in rows[name]["why"], rows[name]["why"]
+    assert verdict(list(rows.values()), results) == ("holds up", "")
+    assert [name for name, _ in impossible(claims, results)] == ["p", "n", "t"]
