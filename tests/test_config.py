@@ -1,6 +1,23 @@
+import json
+
 import pytest
 
-from paper_replicator import config
+from paper_replicator import config, pricing
+
+LOCAL = {"localdev": {"base_url": "http://localhost:8000/v1", "key_env": "LOCALDEV_API_KEY", "json_schema": False,
+                      "reasoning_effort": False, "prices": {"local-model": [0.01, 0.1, 0.2]}}}
+
+
+@pytest.fixture
+def localdev(monkeypatch, tmp_path):
+    """An endpoint added the way a checkout adds one: in its own providers.local.json."""
+    path = tmp_path / "providers.local.json"
+    path.write_text(json.dumps(LOCAL))
+    monkeypatch.setattr(config, "PROVIDERS", config.providers(path))
+    monkeypatch.setattr(pricing, "ALL_PRICES", {**pricing.local_prices(path), **pricing.PRICES})
+    monkeypatch.setenv("LOCALDEV_API_KEY", "test")
+    monkeypatch.setenv("MODEL_API_KEY", "test")
+    return config.ModelConfig(config.PROVIDERS["localdev"], "local-model")
 
 
 def test_every_tier_defaults_to_meta(monkeypatch):
@@ -13,11 +30,18 @@ def test_every_tier_defaults_to_meta(monkeypatch):
         assert cfg.model.startswith("muse-")
 
 
-def test_env_overrides_a_tier_for_dev(monkeypatch):
-    monkeypatch.setenv("QUICK_PROVIDER", "deepseek")
-    monkeypatch.setenv("QUICK_MODEL", "deepseek-chat")
+def test_without_a_local_file_meta_is_the_only_provider(tmp_path):
+    assert list(config.providers(tmp_path / "absent.json")) == ["meta"]
+    assert pricing.local_prices(tmp_path / "absent.json") == {}
+
+
+def test_env_overrides_a_tier(monkeypatch, localdev):
+    monkeypatch.setenv("QUICK_PROVIDER", "localdev")
+    monkeypatch.setenv("QUICK_MODEL", "local-model")
     cfg = config.tier("quick")
-    assert (cfg.provider.name, cfg.model) == ("deepseek", "deepseek-chat")
+    assert (cfg.provider.name, cfg.provider.base_url, cfg.model) == ("localdev", "http://localhost:8000/v1",
+                                                                     "local-model")
+    assert pricing.cost_usd("local-model", 1_000_000, 0, 1_000_000) == pytest.approx(0.3)
 
 
 def test_unknown_provider_fails_loudly(monkeypatch):
@@ -26,13 +50,10 @@ def test_unknown_provider_fails_loudly(monkeypatch):
         config.tier("quick")
 
 
-def test_providers_without_json_schema_get_json_object_and_the_schema_in_the_prompt(monkeypatch):
+def test_providers_without_json_schema_get_json_object_and_the_schema_in_the_prompt(localdev):
     from paper_replicator import roles
     from paper_replicator.llm import make_client
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test")
-    monkeypatch.setenv("MODEL_API_KEY", "test")
-    deepseek = config.ModelConfig(config.PROVIDERS["deepseek"], "deepseek-flash")
-    agent = roles.extractor(deepseek, make_client(deepseek))
+    agent = roles.extractor(localdev, make_client(localdev))
     assert agent.model_settings.extra_body == {"response_format": {"type": "json_object"}}
     assert agent.model_settings.reasoning is None
     assert '"headline"' in agent.instructions and "JSON schema" in agent.instructions
@@ -42,21 +63,18 @@ def test_providers_without_json_schema_get_json_object_and_the_schema_in_the_pro
     assert "JSON schema" not in agent.instructions
 
 
-def test_a_json_object_provider_sends_json_object_on_the_wire(monkeypatch):
-    # run d13f6e: the first live DeepSeek call died with "got multiple values for keyword argument
-    # 'response_format'" before any request left the machine. This checks the request body itself.
+def test_a_json_object_provider_sends_json_object_on_the_wire(localdev):
+    # The SDK also sets response_format, so passing ours as a keyword argument failed before any request
+    # was sent. This checks the request body itself.
     import asyncio
-    import json
     from agents import Runner
     from fake_api import FakeChatAPI, usage
     from paper_replicator import roles
     from paper_replicator.llm import make_client
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test")
-    deepseek = config.ModelConfig(config.PROVIDERS["deepseek"], "deepseek-flash")
     spec = {"title": "t", "hypothesis": "h", "data_sources": [], "sample": "s", "method": [], "claims": [],
             "headline": "", "partitions": [], "tests": []}
     api = FakeChatAPI([(json.dumps(spec), usage(10, 10))])
-    agent = roles.extractor(deepseek, make_client(deepseek, max_retries=0, http_client=api.http_client()))
+    agent = roles.extractor(localdev, make_client(localdev, max_retries=0, http_client=api.http_client()))
     out = asyncio.run(Runner.run(agent, "paper", max_turns=1)).final_output
     assert out.title == "t"
     body = api.requests[0]["body"]

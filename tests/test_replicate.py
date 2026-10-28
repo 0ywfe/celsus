@@ -58,7 +58,7 @@ def go(api, sandbox, cfg, tmp_path, **kw):
     client = make_client(cfg, max_retries=0, http_client=api.http_client())
     return asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=kw.get("attempts", 3), timeout_s=600,
                                            budget_usd=kw.get("budget"), runs_dir=tmp_path / "runs",
-                                           sandbox=sandbox))
+                                           sandbox=sandbox, require_provider=kw.get("require_provider")))
 
 
 def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
@@ -123,6 +123,23 @@ def test_budget_stop_ends_the_run_and_still_writes_the_report(setup):
     assert text.startswith("We could not check this paper: the run stopped (BudgetExceeded).")
     summary = json.loads((outcome["report"].parent / "summary.json").read_text())
     assert summary["crashed"].startswith("BudgetExceeded") and summary["verdict"] == "could not check"
+
+
+def test_a_run_restricted_to_another_provider_stops_before_its_first_call(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900))])
+    outcome = go(api, FakeSandbox([]), cfg, tmp_path, require_provider="elsewhere")
+    assert api.requests == []
+    assert outcome["verdict"] == "could not check"
+    assert "this run allows only elsewhere calls, and the extractor's call goes to meta" in outcome["report"].read_text()
+    assert not (outcome["report"].parent / "calls.jsonl").exists()
+
+
+def test_a_run_restricted_to_its_own_provider_runs(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    assert go(api, sandbox, cfg, tmp_path, require_provider="meta")["verdict"] == "holds up"
 
 
 def test_planned_budget_is_a_bound_on_the_calls():

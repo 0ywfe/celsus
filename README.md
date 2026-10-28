@@ -7,7 +7,7 @@ The paper's numbers partly hold up: 14 of 15 checked results match within their 
 Its main result, overall_mean_return, is -3.07% in the paper and -3.086% here (consistent).
 ```
 
-Built during the Meta AI Developer Hackathon (Oct–Nov 2026). Every model call goes to Meta's Muse models.
+Built during the Meta AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults, and every number in this README, are Meta's Muse models.
 
 ## How it checks a paper
 
@@ -51,14 +51,19 @@ cp .env.example .env            # MODEL_API_KEY, SEC_USER_AGENT
 uv run modal token new          # the sandbox runs on Modal
 
 # check a paper and watch it live: stage tracker, live log, verdict card
-uv run python -m paper_replicator.cli check 2512.06144 --model muse-spark-1.3 --builder workbench
+uv run python -m paper_replicator.cli check 2512.06144 --model muse-spark-1.3 --require-provider meta
 
 # replay a recorded run (labelled as a replay, with its run ID and date)
 uv run python -m paper_replicator.cli replay <run-id> --speed 10
 
 # many runs, and how reliable the result is
-uv run python -m paper_replicator.batch 2512.06144 --n 5 --parallel 5 --model muse-spark-1.3 --effort minimal
+uv run python -m paper_replicator.batch 2512.06144 --n 5 --parallel 5 --model muse-spark-1.3 --effort minimal \
+    --require-provider meta
 ```
+
+### Models
+
+A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role; `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max). Any other OpenAI-compatible endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
 
 Each run writes `runs/<run-id>/`: `report.md` (the first line is the plain-words verdict), `comparison.json`, the spec, every script the builder wrote, sandbox logs, `events.jsonl`, and `calls.jsonl` (provider, model, tokens and cost of every call).
 
@@ -68,7 +73,7 @@ Each run writes `runs/<run-id>/`: `report.md` (the first line is the plain-words
 uv run pytest
 ```
 
-Offline only: a real OpenAI client on a fake transport, and a fake sandbox. Guards are regression-tested on real scripts from live runs (`tests/corpus/`).
+Offline only: the Agents SDK talks to a fake OpenAI-compatible endpoint, and the sandbox is a fake too. Guards are regression-tested on real scripts from live runs (`tests/corpus/`).
 
 ---
 

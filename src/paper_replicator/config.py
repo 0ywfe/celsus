@@ -1,13 +1,17 @@
-"""Which provider and model each tier runs on.
+"""Which endpoint and model each tier runs on.
 
-Every tier defaults to Meta. A dev run can point a tier elsewhere with <TIER>_PROVIDER and
-<TIER>_MODEL in the environment (e.g. QUICK_PROVIDER=deepseek); the demo runs on the defaults.
+Any OpenAI-compatible endpoint works. Every tier defaults to Meta; a run can point a tier at another
+endpoint with <TIER>_PROVIDER and <TIER>_MODEL in the environment, once that endpoint is added in the
+gitignored providers.local.json (see local.py). Demo and benchmark runs use the defaults.
 """
 
 from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+from pathlib import Path
+
+from . import local
 
 
 @dataclass(frozen=True)
@@ -25,12 +29,18 @@ class ModelConfig:
     model: str
 
 
-PROVIDERS = {
-    "meta": Provider("meta", "https://api.meta.ai/v1", "MODEL_API_KEY"),
-    # Dev only, never the demo. JSON output is json_object mode (api-docs.deepseek.com, read 28 Oct 2026).
-    "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY",
-                         json_schema=False, reasoning_effort=False),
-}
+META = Provider("meta", "https://api.meta.ai/v1", "MODEL_API_KEY")
+
+
+def providers(path: Path = local.LOCAL_FILE) -> dict[str, Provider]:
+    """Meta, plus whatever the local file adds."""
+    added = {name: Provider(name, entry["base_url"], entry["key_env"], entry.get("json_schema", True),
+                            entry.get("reasoning_effort", True))
+             for name, entry in local.load(path).items()}
+    return {"meta": META, **added}
+
+
+PROVIDERS = providers()
 
 # quick: extraction, analysts, reports. deep: builder and auditor.
 DEFAULT_TIERS = {

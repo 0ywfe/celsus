@@ -26,7 +26,7 @@ from . import config, guards, market, periods, report, roles
 from .paper_checks import check_paper
 from .compare import COULD_NOT_CHECK, NO_SIDE, compare, first_line, verdict
 from .ingest import load_paper
-from .ledger import Ledger
+from .ledger import Ledger, ProviderNotAllowed
 from .llm import make_client
 from .pricing import worst_case_usd
 from .runs import ROOT, RUNS_DIR, new_run
@@ -391,7 +391,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
                     timeout_s: int, budget_usd: float | None, runs_dir: Path = RUNS_DIR,
                     sandbox: Callable[..., SandboxRun] = run_script, builder: str = "oneshot",
                     turns: int = 30, open_bench: Callable[..., Workbench] = Workbench,
-                    effort: str | None = None) -> dict:
+                    effort: str | None = None, require_provider: str | None = None) -> dict:
     run_id, folder = new_run(runs_dir)
     try:
         latex, unreadable = load_paper(arxiv_id, ROOT / "data" / "arxiv"), None
@@ -406,7 +406,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         budget = FIRST_WORKBENCH_BUDGET_USD
     else:
         budget = planned_budget(cfg.model, latex, attempts)
-    ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg}, budget_usd=budget)
+    ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg}, budget_usd=budget,
+                    require_provider=require_provider)
     run = Run(run_id, folder, ledger, sandbox, timeout_s, effort=effort)
     run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {cfg.model} at effort "
                       f"{effort or 'default'}; {builder} builder; budget ${budget:.4f}",
@@ -435,7 +436,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
             results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60, effort), latex, spec,
                                           claims, attempts)
         rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper))
-    except Unreadable as error:
+    except (Unreadable, ProviderNotAllowed) as error:
         run.failure = str(error)
         run.say("error", str(error))
     except Exception as error:  # the report still gets written, with the reason
@@ -495,6 +496,8 @@ def main() -> int:
     parser.add_argument("--budget-usd", type=float, default=None,
                         help="budget stop for this run; default: the planned worst case (oneshot) or the "
                              "first-measurement cap (workbench)")
+    parser.add_argument("--require-provider", default=None,
+                        help="stop the run before any call to another provider (demo and benchmark runs: meta)")
     args = parser.parse_args()
     load_dotenv(ROOT / ".env")
     cfg = config.tier("quick")
@@ -503,7 +506,7 @@ def main() -> int:
     outcome = asyncio.run(replicate(args.arxiv_id, make_client(cfg, timeout_s=MODEL_TIMEOUT_S), cfg,
                                     attempts=args.attempts, timeout_s=args.timeout_min * 60,
                                     budget_usd=args.budget_usd, builder=args.builder, turns=args.turns,
-                                    effort=args.effort))
+                                    effort=args.effort, require_provider=args.require_provider))
     print(outcome["summary"]["first_line"])
     print(f"report: {outcome['report'].relative_to(ROOT)}")
     return 0

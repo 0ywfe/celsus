@@ -1,24 +1,33 @@
 """USD per 1M tokens as (cached input, input, output).
 
-Meta: dev.meta.ai/docs/getting-started/pricing-rate-limits, read 26 Oct 2026. DeepSeek (dev only):
-api-docs.deepseek.com/quick_start/pricing, read 28 Oct 2026, at peak rates so the budget stop errs
-high (off-peak is half). Reasoning tokens are billed as output. A model missing here is unpriced,
-and its cost is None.
+Meta: dev.meta.ai/docs/getting-started/pricing-rate-limits, read 26 Oct 2026. Other endpoints bring their
+prices in providers.local.json (see local.py). Reasoning tokens are billed as output. A model missing here is
+unpriced, and its cost is None.
 """
 
 from __future__ import annotations
+
+from pathlib import Path
+
+from . import local
 
 PRICES = {
     "muse-spark-1.3": (0.15, 1.25, 4.25),
     "muse-spark-1.3-contributor": (0.002, 0.10, 0.20),
     "muse-wonder-1.0": (0.20, 4.00, 20.00),
-    "deepseek-flash": (0.006, 0.30, 1.20),
-    "deepseek-v4-pro": (0.044, 1.32, 3.96),
 }
 
 
+def local_prices(path: Path = local.LOCAL_FILE) -> dict[str, tuple[float, float, float]]:
+    return {model: tuple(price) for entry in local.load(path).values()
+            for model, price in entry.get("prices", {}).items()}
+
+
+ALL_PRICES = {**local_prices(), **PRICES}
+
+
 def cost_usd(model: str, input_tokens: int, cached_tokens: int, output_tokens: int) -> float | None:
-    price = PRICES.get(model)
+    price = ALL_PRICES.get(model)
     if price is None:
         return None
     cached, fresh, output = price

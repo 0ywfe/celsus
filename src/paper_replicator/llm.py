@@ -1,6 +1,6 @@
 """Model clients for the Agents SDK, one recipe for every provider.
 
-Tracing is switched off on import: the SDK would otherwise export traces to OpenAI.
+Tracing is switched off on import, so a run sends nothing anywhere except its model calls.
 """
 
 from __future__ import annotations

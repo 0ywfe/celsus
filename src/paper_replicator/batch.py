@@ -36,9 +36,9 @@ def log_path(label: str, paper: str, i: int) -> Path:
 async def _one(paper: str, args: argparse.Namespace, gate: asyncio.Semaphore, label: str, i: int) -> str | None:
     command = [sys.executable, "-m", "paper_replicator.replicate", paper, "--budget-usd", str(args.budget_usd),
                "--attempts", str(args.attempts), "--turns", str(args.turns), "--builder", args.builder]
-    for flag in ("provider", "model", "effort"):
+    for flag in ("provider", "model", "effort", "require_provider"):
         if getattr(args, flag):
-            command += [f"--{flag}", getattr(args, flag)]
+            command += [f"--{flag.replace('_', '-')}", getattr(args, flag)]
     async with gate:
         log = log_path(label, paper, i)
         with log.open("w") as out:
@@ -174,6 +174,7 @@ def main() -> int:
     parser.add_argument("--provider")
     parser.add_argument("--model")
     parser.add_argument("--effort")
+    parser.add_argument("--require-provider", help="stop any run before a call to another provider")
     parser.add_argument("--builder", default="workbench")
     parser.add_argument("--attempts", type=int, default=3)
     parser.add_argument("--turns", type=int, default=30)
