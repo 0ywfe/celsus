@@ -52,3 +52,12 @@ def test_ticker_the_host_also_could_not_fetch_is_unavailable_without_a_new_reque
     with pytest.raises(market_data.MarketDataUnavailable):
         market_data.get_prices("GONE", "2024-01-10", "2024-01-20")
     assert not (work / "market_data_requests.json").exists()
+
+
+def test_profile_comes_from_the_cache_with_its_fetch_date(dirs):
+    cache, work = dirs
+    (cache / "manifest.json").write_text(json.dumps({"profiles": {"ABC": {
+        "source": "yfinance (host)", "fetched": "2026-10-28", "value": {"sector": "Technology", "beta": 1.2}}}}))
+    assert market_data.get_profile("abc")["sector"] == "Technology"
+    [entry] = json.loads((work / "market_data_log.json").read_text())
+    assert entry["kind"] == "profile" and entry["fetched"] == "2026-10-28"

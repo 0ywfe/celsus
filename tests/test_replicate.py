@@ -53,7 +53,7 @@ def setup(monkeypatch, tmp_path):
 
 def go(api, sandbox, cfg, tmp_path, **kw):
     client = make_client(cfg, max_retries=0, http_client=api.http_client())
-    return asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=3, timeout_s=600,
+    return asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=kw.get("attempts", 3), timeout_s=600,
                                            budget_usd=kw.get("budget"), runs_dir=tmp_path / "runs",
                                            sandbox=sandbox))
 
@@ -71,7 +71,7 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     folder = outcome["report"].parent
     text = outcome["report"].read_text()
     assert "rejected claim invented = 12.3: not in the paper's LaTeX" in text
-    assert "paper numbers in the code: small_mean (-7.5)" in text
+    assert "contains numbers the paper reports (small_mean (-7.5))" in text
     assert "all on Meta: yes" in text
     assert "Not financial advice." in text
     assert len((folder / "calls.jsonl").read_text().splitlines()) == 3
@@ -132,3 +132,58 @@ def test_script_that_does_not_compile_never_reaches_the_sandbox(setup):
     assert sandbox.scripts == ["print('computed')"]
     assert "does not compile" in api.requests[2]["body"]["messages"][-1]["content"]
     assert outcome["verdict"] == "reproduced"
+
+
+SHORT = {**RESULTS, "results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 12},
+                                {"name": "n_filings", "value": 21, "se": None, "n": None}]}
+
+
+def test_audit_sends_a_sample_mismatch_back_and_keeps_the_rerun(setup):
+    cfg, tmp_path = setup
+    first = {"script": "events = load()\nprint(len(events))", "notes": ""}
+    fixed = {"script": "events = load(include_amendments=True)\nprint(len(events))", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(first), usage(800, 700)),
+                       (json.dumps(fixed), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "kept=21", "", 1.0, {"results.json": json.dumps(SHORT)}),
+                           SandboxRun(0, "kept=38", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    feedback = api.requests[2]["body"]["messages"][-1]["content"]
+    assert "n_filings: the paper reports 40, your run produced 21" in feedback
+    assert "kept=21" in feedback and "Never filter, trim or pad" in feedback
+    assert outcome["verdict"] == "reproduced"
+    assert (outcome["report"].parent / "results_attempt.txt").read_text() == "2"
+
+
+def test_a_target_count_that_newly_appears_is_rejected(setup):
+    cfg, tmp_path = setup
+    first = {"script": "events = load()", "notes": ""}
+    padded = {"script": "events = load()[:40]", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(first), usage(800, 700)),
+                       (json.dumps(padded), usage(1600, 700)), (json.dumps(first), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)}),
+                           SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=3)
+    assert sandbox.scripts == ["events = load()", "events = load()"]   # the padded script never ran
+    assert "sample counts as literals (40)" in outcome["report"].read_text()
+
+
+def test_direct_yfinance_import_is_rejected(setup):
+    cfg, tmp_path = setup
+    direct = {"script": "import yfinance as yf\nprint(1)", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(direct), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert sandbox.scripts == ["print('computed')"]
+    assert "imports yfinance directly" in outcome["report"].read_text()
+
+
+def test_a_broken_audit_round_keeps_the_earlier_results(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)}),
+                           SandboxRun(1, "", "Traceback: boom", 1.0)])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
+    rows = json.loads((outcome["report"].parent / "comparison.json").read_text())["rows"]
+    assert {r["name"]: r["reproduced"] for r in rows}["n_filings"] == 21

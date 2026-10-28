@@ -16,7 +16,8 @@ SOURCE = "yfinance (host)"
 
 
 def _load(path: Path) -> dict:
-    return json.loads(path.read_text()) if path.is_file() else {"prices": {}, "market_caps": {}}
+    manifest = json.loads(path.read_text()) if path.is_file() else {}
+    return {"prices": {}, "market_caps": {}, "profiles": {}, **manifest}
 
 
 def fulfil(requests: list[dict], cache_dir: Path) -> list[dict]:
@@ -39,5 +40,9 @@ def fulfil(requests: list[dict], cache_dir: Path) -> list[dict]:
         value = market_data.yf_market_cap(ticker)
         manifest["market_caps"][ticker] = {"source": SOURCE, "fetched": today, "value": value}
         fetched.append({"kind": "market_cap", "ticker": ticker, "value": value, "fetched": today})
+    for ticker in {r["ticker"] for r in requests if r["kind"] == "profile"}:
+        value = market_data.yf_profile(ticker)
+        manifest["profiles"][ticker] = {"source": SOURCE, "fetched": today, "value": value}
+        fetched.append({"kind": "profile", "ticker": ticker, "value": value, "fetched": today})
     manifest_path.write_text(json.dumps(manifest, indent=1, sort_keys=True))
     return fetched

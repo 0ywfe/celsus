@@ -1,4 +1,5 @@
-from paper_replicator.guards import ground_claims, hardcoded_results, parse_number, syntax_error
+from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_results, parse_number,
+                                     planted_counts, syntax_error)
 from paper_replicator.spec import Claim
 
 LATEX = r"""Small firms fell by $-7.49\%$ ($t = -3.13$, $p=0.0019$) across 1{,}224 events,
@@ -35,3 +36,15 @@ def test_paper_decimals_in_code_are_caught_but_small_integers_are_not():
 def test_syntax_errors_are_caught_without_running_the_code():
     assert syntax_error("x = f(1\n") is not None
     assert syntax_error("import os\nos.remove('/nope')\n") is None   # compiled, never run
+
+
+def test_planted_counts_ignore_dates_and_literals_that_were_already_there():
+    before = "CUTOFF = '2025-11-12'\nmonths = 12\n"
+    assert planted_counts(before + "x = events[:54]\n", before, ["54", "12"]) == ["54"]
+    assert planted_counts(before, before, ["12"]) == []
+
+
+def test_direct_yfinance_imports_are_spotted():
+    assert bypasses_market_data("import yfinance as yf\n")
+    assert bypasses_market_data("from yfinance import Ticker\n")
+    assert not bypasses_market_data("from market_data import get_prices  # not yfinance\n")

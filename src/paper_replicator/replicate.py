@@ -103,10 +103,46 @@ def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
     return result
 
 
+def script_problem(script: str, previous: str, claims: list[Claim], targets: list[str]) -> str | None:
+    """The coded checks a script must pass before it gets sandbox time."""
+    leaked = guards.hardcoded_results(script, claims)
+    if leaked:
+        return (f"the script contains numbers the paper reports ({', '.join(leaked)}). "
+                "Compute them from data and remove them from the code and comments.")
+    planted = guards.planted_counts(script, previous, targets)
+    if planted:
+        return (f"the script now contains the paper's sample counts as literals ({', '.join(planted)}). "
+                "Fix how the sample is built; never filter, trim or pad to reach a number.")
+    if guards.bypasses_market_data(script):
+        return "the script imports yfinance directly. Use market_data for all market data."
+    broken = guards.syntax_error(script)
+    if broken:
+        return f"the script does not compile: {broken}."
+    return None
+
+
+def audit_problem(claims: list[Claim], results: list[dict], stdout: str) -> tuple[str | None, list[str]]:
+    """Sample counts that disagree with the paper, as feedback for the builder, plus the counts to watch."""
+    off = [row for row in compare(claims, results) if row["kind"] == "count" and row["consistent"] is False]
+    if not off:
+        return None, []
+    gaps = "\n".join(f"- {r['name']}: the paper reports {r['reported']:g}, your run produced {r['reproduced']:g}"
+                     for r in off)
+    problem = ("The script ran, but its sample does not match the paper's:\n" + gaps +
+               f"\nYour script's output (end):\n{stdout[-STDOUT_TAIL:]}\n"
+               "Find the step where your sample construction departs from the paper's definition (which filings "
+               "or observations count, forms, items, dates, deduplication) and fix that step. Never filter, trim "
+               "or pad the data to reach a number. Return the whole corrected script.")
+    return problem, [f"{r['reported']:g}" for r in off]
+
+
 async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, claims: list[Claim],
                         attempts: int) -> list[dict] | None:
+    """Write, check and run the script; send failures and sample mismatches back. Returns the last results
+    that ran, so an audit round that breaks the script never loses an earlier good run."""
     task = f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\nWrite the replication script."
     history: list = [user(task)]
+    previous, targets, kept = "", [], None
     for attempt in range(1, attempts + 1):
         run.say("build", f"attempt {attempt}: writing the script")
         result = await Runner.run(builder, history, max_turns=1, hooks=run.ledger)
@@ -114,29 +150,32 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         (run.folder / f"attempt_{attempt}.py").write_text(script.script)
         (run.folder / f"attempt_{attempt}_notes.md").write_text(script.notes)
         history = result.to_input_list()
-        leaked = guards.hardcoded_results(script.script, claims)
-        if leaked:
-            run.guard_events.append(f"attempt {attempt}: rejected, paper numbers in the code: {', '.join(leaked)}")
-            run.say("guard", f"script rejected: paper numbers in the code ({', '.join(leaked)})")
-            history.append(user(f"Rejected: the script contains numbers the paper reports ({', '.join(leaked)}). "
-                                "Compute them from data and remove them from the code and comments."))
-            continue
-        broken = guards.syntax_error(script.script)
-        if broken:
-            run.guard_events.append(f"attempt {attempt}: rejected before the sandbox, syntax error at {broken}")
-            run.say("guard", f"script does not compile ({broken})")
-            history.append(user(f"Rejected: the script does not compile: {broken}. Return the whole corrected script."))
+        problem = script_problem(script.script, previous, claims, targets)
+        previous = script.script
+        if problem:
+            run.guard_events.append(f"attempt {attempt}: rejected before the sandbox: {problem}")
+            run.say("guard", f"script rejected: {problem.split('. ')[0]}")
+            history.append(user(f"Rejected: {problem} Return the whole corrected script."))
             continue
         run.say("sandbox", f"attempt {attempt}: running in the sandbox")
         sandbox_run = await asyncio.to_thread(sandbox_round, run, script.script, attempt)
         results, problem = read_results(sandbox_run)
+        if problem is not None:
+            run.say("sandbox", f"attempt {attempt}: {problem.splitlines()[0]}")
+            history.append(user(problem))
+            continue
+        kept = results
+        (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
+        (run.folder / "results_attempt.txt").write_text(str(attempt))
+        problem, watch = audit_problem(claims, results, sandbox_run.stdout)
         if problem is None:
-            (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
-            run.say("sandbox", f"attempt {attempt}: {len(results)} results written")
-            return results
-        run.say("sandbox", f"attempt {attempt}: {problem.splitlines()[0]}")
+            run.say("audit", f"attempt {attempt}: {len(results)} results, sample counts match the paper")
+            return kept
+        targets = sorted(set(targets) | set(watch))
+        run.guard_events.append(f"attempt {attempt}: audit sent back {len(watch)} sample counts that disagree")
+        run.say("audit", f"attempt {attempt}: {len(results)} results, but {len(watch)} sample counts disagree; sent back")
         history.append(user(problem))
-    return None
+    return kept
 
 
 async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig, *, attempts: int,
@@ -177,7 +216,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("arxiv_id")
-    parser.add_argument("--attempts", type=int, default=3)
+    parser.add_argument("--attempts", type=int, default=4)
     parser.add_argument("--timeout-min", type=int, default=20)
     parser.add_argument("--budget-usd", type=float, default=None,
                         help="default: the worst case of the planned calls")

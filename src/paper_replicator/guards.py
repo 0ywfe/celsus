@@ -3,6 +3,8 @@
 - grounding: every number the extractor reports must appear in the paper's LaTeX.
 - no hard-coded results: no reported number may appear as a literal in the generated code.
 - it compiles: a syntax error goes back to the builder before any sandbox time is spent.
+- no planted targets: a count the builder was told to match may not newly appear as a literal.
+- market data only through the helper, so every source is cached and logged.
 """
 
 from __future__ import annotations
@@ -67,3 +69,17 @@ def syntax_error(script: str) -> str | None:
     except SyntaxError as error:
         return f"line {error.lineno}: {error.msg}: {(error.text or '').strip()}"
     return None
+
+
+def _integer_in(value: str, script: str) -> bool:
+    """An integer literal, not part of a date like 2025-11-12 or a decimal."""
+    return re.search(rf"(?<![\d.\-/]){re.escape(value)}(?![\d.\-/])", script) is not None
+
+
+def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:
+    """Targets that appear in this script but did not in the one before the feedback."""
+    return [t for t in targets if _integer_in(t, script) and not _integer_in(t, previous)]
+
+
+def bypasses_market_data(script: str) -> bool:
+    return re.search(r"^\s*(import\s+yfinance|from\s+yfinance\s+import)", script, re.M) is not None

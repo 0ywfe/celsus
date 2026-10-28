@@ -37,7 +37,7 @@ Environment: a fresh Linux sandbox with network access and a time limit of {{min
 - Packages: pandas, numpy, scipy, statsmodels, requests, yfinance, pyarrow.
 - SEC EDGAR: send the header User-Agent: os.environ["SEC_USER_AGENT"] on every request, and stay
   under 10 requests per second.
-- Market data only through the module next to the script (`import market_data`):
+- Market data only through the module next to the script (`import market_data`); never import yfinance:
 {market_data.__doc__}
 Write /work/results.json:
 {RESULTS_FORMAT}

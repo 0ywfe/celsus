@@ -7,8 +7,10 @@
         named "date" (trading days, tz-naive). Columns: open, high, low, close, adj_close, volume.
     get_market_cap(ticker) -> float
         Market capitalisation in USD as of the date the data was fetched (current, not historical).
+    get_profile(ticker) -> dict
+        Current company profile: {"sector", "industry", "beta", "name"} (any may be None).
 
-Both raise MarketDataUnavailable when there is no data for the ticker. Every call is logged
+All three raise MarketDataUnavailable when there is no data for the ticker. Every call is logged
 with its source and fetch date. A request that neither the cache nor yfinance can serve is
 recorded, so the host can fetch it once, cache it, and rerun the script.
 """
@@ -75,6 +77,34 @@ def yf_market_cap(ticker: str) -> float | None:
 
     cap = getattr(yf.Ticker(ticker).fast_info, "market_cap", None)
     return float(cap) if cap else None
+
+
+def yf_profile(ticker: str) -> dict | None:
+    import yfinance as yf
+
+    info = yf.Ticker(ticker).info or {}
+    profile = {"sector": info.get("sector"), "industry": info.get("industry"),
+               "beta": info.get("beta"), "name": info.get("shortName")}
+    return profile if any(v is not None for v in profile.values()) else None
+
+
+def get_profile(ticker: str) -> dict:
+    ticker = ticker.upper().strip()
+    entry = _manifest().get("profiles", {}).get(ticker)
+    if entry:
+        _append("market_data_log.json", {"kind": "profile", "ticker": ticker, "source": f"{entry['source']} (cache)", "fetched": entry["fetched"]})
+        if entry["value"] is None:
+            raise MarketDataUnavailable(f"{ticker}: {entry['source']} had no profile on {entry['fetched']}")
+        return dict(entry["value"])
+    try:
+        profile, reason = yf_profile(ticker), "empty"
+    except Exception as error:
+        profile, reason = None, f"{type(error).__name__}: {error}"
+    if profile is None:
+        _append("market_data_requests.json", {"kind": "profile", "ticker": ticker, "reason": reason})
+        raise MarketDataUnavailable(f"{ticker}: no profile from yfinance in the sandbox ({reason})")
+    _append("market_data_log.json", {"kind": "profile", "ticker": ticker, "source": "yfinance (live, sandbox)", "fetched": _today()})
+    return profile
 
 
 def get_prices(ticker: str, start, end) -> pd.DataFrame:
