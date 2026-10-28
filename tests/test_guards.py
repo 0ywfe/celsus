@@ -286,7 +286,7 @@ def test_a_cut_counts_by_every_value_its_bound_can_take_and_252_is_not_a_sample(
     "headers = {'User-Agent': 'research@example.com'}\n",
     'curl -s -A "jane@test.edu" https://data.sec.gov/submissions/CIK0000320193.json',
     "export SEC_USER_AGENT=someone && python replicate.py",
-    '_UA = "A. Author replication study author@example.edu"\n',                   # a dev-provider run sent the author's
+    '_UA = "A. Author replication study author@university.edu"\n',                   # a dev-provider run sent the author's
 ])
 def test_a_contact_written_into_a_command_file_or_script_is_found(text):
     assert sets_contact(text) is not None

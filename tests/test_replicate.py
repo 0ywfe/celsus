@@ -397,7 +397,7 @@ def test_a_script_that_fetches_code_is_rejected(setup):
 
 def test_a_script_that_sets_its_own_sec_contact_is_rejected(setup):
     cfg, tmp_path = setup
-    own = {"script": "import os\nos.environ['SEC_USER_AGENT'] = 'author@example.edu'\nprint('computed')", "notes": ""}
+    own = {"script": "import os\nos.environ['SEC_USER_AGENT'] = 'author@university.edu'\nprint('computed')", "notes": ""}
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(own), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
@@ -416,9 +416,9 @@ def test_the_workbench_refuses_a_command_or_file_that_carries_a_contact(setup):
 
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[
         (json.dumps(SPEC), usage(500, 900)),
-        ([("run", {"cmd": 'curl -A "author@example.edu" https://data.sec.gov/submissions/CIK0000320193.json'})],
+        ([("run", {"cmd": 'curl -A "author@university.edu" https://data.sec.gov/submissions/CIK0000320193.json'})],
          usage(900, 200)),
-        ([("write_file", {"path": "fetch.py", "content": "H = {'User-Agent': 'author@example.edu'}"})], usage(1000, 200)),
+        ([("write_file", {"path": "fetch.py", "content": "H = {'User-Agent': 'author@university.edu'}"})], usage(1000, 200)),
         ([("write_file", {"path": "replicate.py", "content": "print('computed')"})], usage(1200, 300)),
         ("Built it from the paper.", usage(1800, 80)),
     ])
@@ -430,7 +430,7 @@ def test_the_workbench_refuses_a_command_or_file_that_carries_a_contact(setup):
     [bench] = benches
     assert bench.commands == [] and "/work/fetch.py" not in bench.files   # neither reached the sandbox
     replies = [m["content"] for r in api.requests[2:4] for m in r["body"]["messages"] if m["role"] == "tool"]
-    assert replies[0].startswith("refused: author@example.edu") and replies[-1].startswith("refused: author@example.edu")
+    assert replies[0].startswith("refused: author@university.edu") and replies[-1].startswith("refused: author@university.edu")
     assert outcome["verdict"] == "holds up"
 
 
