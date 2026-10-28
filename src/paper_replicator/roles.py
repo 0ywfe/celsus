@@ -88,8 +88,10 @@ class Script(BaseModel):
 def _settings(role: str, cfg: ModelConfig, effort: str | None = None, structured: bool = False) -> ModelSettings:
     """Per provider: reasoning effort only where accepted; json_object mode where strict json_schema is not."""
     reasoning = Reasoning(effort=effort or EFFORT[role]) if cfg.provider.reasoning_effort else None
+    # extra_body is merged into the request body last, so it replaces the SDK's json_schema response_format
+    # (extra_args would collide with it: the SDK refuses a duplicate keyword).
     extra = {"response_format": {"type": "json_object"}} if structured and not cfg.provider.json_schema else None
-    return ModelSettings(max_tokens=MAX_TOKENS[role], reasoning=reasoning, extra_args=extra)
+    return ModelSettings(max_tokens=MAX_TOKENS[role], reasoning=reasoning, extra_body=extra)
 
 
 def _instructions(text: str, cfg: ModelConfig, output_type: type[BaseModel] | None) -> str:
