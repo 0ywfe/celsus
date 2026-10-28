@@ -127,6 +127,6 @@ def test_a_flag_is_new_only_when_its_arithmetic_is_new():
         return PaperSpec(title="", hypothesis="", data_sources=[], sample="", method=[], claims=claims, headline="",
                          partitions=[{"split": split, "total": "total", "parts": ["small", "large"]}], tests=[]), claims
 
-    one, two, planted = spec("filings by size"), spec("market capitalization groups"), spec("by size", small="25")
+    one, two, planted = spec("filings by size"), spec("market capitalization groups"), spec("by size", small="26")
     assert set(sabotage.flags(*one)) == set(sabotage.flags(*two))
     assert set(sabotage.flags(*planted)) - set(sabotage.flags(*one))
