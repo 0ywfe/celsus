@@ -184,31 +184,41 @@ def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
     return result
 
 
+def script_check(script: str, previous: str, claims: list[Claim], targets: list[str],
+                 totals: list[Claim]) -> tuple[str, str] | None:
+    """The first coded check a script fails before it gets sandbox time, as (check, problem), or None."""
+    broken = guards.syntax_error(script)
+    if broken:
+        return "compiles", f"the script does not compile: {broken}."
+    leaked = guards.hardcoded_results(script, claims)
+    if leaked:
+        return "paper's numbers in the code", (
+            f"the script contains numbers the paper reports ({', '.join(leaked)}). "
+            "Compute them from data and remove them from the code and comments.")
+    counts = guards.hardcoded_counts(script, totals)
+    if counts:
+        return "sample counts in the code", (
+            f"the script contains sample counts the paper reports ({', '.join(counts)}). Build the sample from "
+            "the paper's definition and report the count you get; never trim, cut or pad it to a reported "
+            "count. If a number is a coincidence, write it another way.")
+    planted = guards.planted_counts(script, previous, targets)
+    if planted:
+        return "counts planted after feedback", (
+            f"the script now contains the paper's sample counts as literals ({', '.join(planted)}). "
+            "Fix how the sample is built; never filter, trim or pad to reach a number.")
+    if guards.bypasses_market_data(script):
+        return "market data adapter", "the script imports yfinance directly. Use market_data for all market data."
+    if (code := guards.fetches_code(script)) is not None:
+        return "authors' code", (f"the script fetches code from a code host ({code}). Build the analysis from "
+                                 "the paper; fetch data files only, never the authors' code.")
+    return None
+
+
 def script_problem(script: str, previous: str, claims: list[Claim], targets: list[str],
                    totals: list[Claim]) -> str | None:
     """The coded checks a script must pass before it gets sandbox time."""
-    broken = guards.syntax_error(script)
-    if broken:
-        return f"the script does not compile: {broken}."
-    leaked = guards.hardcoded_results(script, claims)
-    if leaked:
-        return (f"the script contains numbers the paper reports ({', '.join(leaked)}). "
-                "Compute them from data and remove them from the code and comments.")
-    counts = guards.hardcoded_counts(script, totals)
-    if counts:
-        return (f"the script contains sample counts the paper reports ({', '.join(counts)}). Build the sample from "
-                "the paper's definition and report the count you get; never trim, cut or pad it to a reported "
-                "count. If a number is a coincidence, write it another way.")
-    planted = guards.planted_counts(script, previous, targets)
-    if planted:
-        return (f"the script now contains the paper's sample counts as literals ({', '.join(planted)}). "
-                "Fix how the sample is built; never filter, trim or pad to reach a number.")
-    if guards.bypasses_market_data(script):
-        return "the script imports yfinance directly. Use market_data for all market data."
-    if (code := guards.fetches_code(script)) is not None:
-        return (f"the script fetches code from a code host ({code}). Build the analysis from the paper; "
-                "fetch data files only, never the authors' code.")
-    return None
+    found = script_check(script, previous, claims, targets, totals)
+    return found[1] if found else None
 
 
 def watched_totals(claims: list[Claim], spec: PaperSpec, latex: str) -> tuple[list[Claim], set[str]]:
@@ -229,22 +239,28 @@ def sample_of(raw: str | None) -> dict:
     return sample if isinstance(sample, dict) else {}
 
 
-def sample_issues(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[str]:
-    """What stops the replication's sample being compared with the paper's, apart from count gaps: the builder
-    says it is not the paper's sample, a sample total is missing from the results (run 2601.08263 dropped the
-    counts that disagreed, leaving the audit nothing to compare), or the dates it covers are not the paper's."""
+def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[tuple[str, str]]:
+    """What stops the replication's sample being compared with the paper's, apart from count gaps, as (check, issue):
+    the builder says it is not the paper's sample, a sample total is missing from the results (run 2601.08263
+    dropped the counts that disagreed, leaving the audit nothing to compare), or the dates it covers are not the
+    paper's."""
     issues = []
     if sample.get("same_as_paper") is False:
         why = str(sample.get("differences") or "").strip().rstrip(".")
-        issues.append("the replication could not rebuild the paper's sample" + (f" ({why})" if why else ""))
+        issues.append(("declared not the paper's sample",
+                       "the replication could not rebuild the paper's sample" + (f" ({why})" if why else "")))
     reported = {r.get("name") for r in results}
     missing = [c.name for c in totals if c.name not in reported]
     if missing:
-        issues.append(f"the replication did not report the paper's sample size ({', '.join(missing)}), "
-                      "so its sample cannot be compared")
+        issues.append(("sample size reported", f"the replication did not report the paper's sample size "
+                                               f"({', '.join(missing)}), so its sample cannot be compared"))
     if gap := periods.period_gap(spec, sample):
-        issues.append(gap)
+        issues.append(("period", gap))
     return issues
+
+
+def sample_issues(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[str]:
+    return [issue for _, issue in sample_checks(spec, sample, results, totals)]
 
 
 def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: PaperSpec | None = None,

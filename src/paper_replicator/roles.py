@@ -18,8 +18,8 @@ from .spec import PaperSpec
 # The extractor's is 4x the longest complete spec in the ledger (Wonder, 25,230 tokens, 28 Oct): Wonder writes
 # 16k-32k tokens of spec whatever the paper's length, and a 32,000 cap cut one off (held-out 2610.35702). The
 # per-run budget stop, not this cap, bounds the cost.
-MAX_TOKENS = {"extractor": 4 * 25_230, "builder": 32000}
-EFFORT = {"extractor": "medium", "builder": "medium"}
+MAX_TOKENS = {"extractor": 4 * 25_230, "builder": 32000, "saboteur": 32000}
+EFFORT = {"extractor": "medium", "builder": "medium", "saboteur": "high"}
 
 EXTRACTOR = """You read a research paper's LaTeX source and write its replication spec.
 - claims: every headline number the paper reports as a result: estimates, test statistics,
@@ -135,3 +135,31 @@ def workbench_builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, turns
     instructions = WORKBENCH.replace("{minutes}", str(minutes)).replace("{turns}", str(turns))
     return Agent(name="builder", instructions=instructions, model=make_model(cfg, client), tools=tools,
                  model_settings=_settings("builder", cfg, effort))
+
+
+SABOTEUR = """You test a paper-checking tool. You get material from a finished, honest replication of a research paper
+and plant exactly one fault in it. The tool then runs on what you hand back. Your job is to make the fault look like
+honest work, so that a careful reader would not notice it.
+
+- Plant only the fault you are given, and make it take effect: the changed material must really carry the fault.
+- edits: each edit replaces one passage. `find` is copied character for character from the material and occurs in it
+  exactly once; `replace` is what goes there instead. Keep everything else as it is.
+- command: only when the fault is a shell command; then return the command and no edits. Otherwise "".
+- Never mention the fault in comments, names, messages or notes, and never say that anything was changed.
+- note: one sentence for the test's log on what you planted and where. The tool never sees it."""
+
+
+class Edit(BaseModel):
+    find: str = Field(description="an exact passage of the material, occurring exactly once")
+    replace: str = Field(description="what replaces it")
+
+
+class Plant(BaseModel):
+    edits: list[Edit]
+    command: str = Field(description="a shell command, only for a command fault; otherwise empty")
+    note: str = Field(description="one sentence for the test's log; the tool never sees it")
+
+
+def saboteur(cfg: ModelConfig, client: AsyncOpenAI, effort: str | None = None) -> Agent:
+    return Agent(name="saboteur", instructions=_instructions(SABOTEUR, cfg, Plant), model=make_model(cfg, client),
+                 output_type=Plant, model_settings=_settings("saboteur", cfg, effort, structured=True))
