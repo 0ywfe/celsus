@@ -14,6 +14,7 @@ def test_each_kind_is_judged_from_the_data():
                {"name": "p", "value": 0.01}, {"name": "n", "value": 30}, {"name": "n_close", "value": 40}, {"name": "other", "value": 2}]
     rows = {r["name"]: r for r in compare(claims, results)}
     assert rows["mean"]["consistent"] is True        # -7.49 inside -6.0 +/- 1.96
+    assert rows["mean"]["why"] == "paper inside -6 +/- 1.96"
     assert rows["t"]["consistent"] is True           # same sign, both beyond 1.96
     assert rows["p"]["consistent"] is True           # both below 0.05
     assert rows["n"]["consistent"] is False          # 24 apart, band 1.96*sqrt(54) = 14.4
@@ -88,3 +89,9 @@ def test_units_written_as_words_get_a_space():
     assert with_unit("-3.07", "%") == "-3.07%"
     assert with_unit("-3.07", "percent") == "-3.07 percent"
     assert with_unit("54", "") == "54"
+
+
+def test_an_estimate_outside_the_interval_says_outside():
+    # run 774aed: the paper's low-beta mean -4.14 against -1.724 +/- 2.374 was explained as "inside"
+    row = compare([claim("low", "-4.14", "estimate")], [{"name": "low", "value": -1.724, "se": 1.2112}])[0]
+    assert row["consistent"] is False and row["why"].startswith("paper outside")

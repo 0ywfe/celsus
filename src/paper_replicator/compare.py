@@ -53,7 +53,8 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided") -> 
     if kind == "estimate":
         if not se:
             return None, "no standard error"
-        return abs(value - reported) <= Z95 * se, f"paper inside {value:.4g} +/- {Z95 * se:.4g}"
+        inside = abs(value - reported) <= Z95 * se
+        return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "count":
         band = Z95 * math.sqrt(abs(reported))
         return abs(value - reported) <= band, f"difference {value - reported:+.0f}, band +/-{band:.1f}"
