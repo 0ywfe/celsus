@@ -287,23 +287,33 @@ def judge_spec(h: Honest, planted: str) -> dict:
 
 
 async def judge_paper(bench: Bench, h: Honest, latex: str) -> dict:
-    """The planted paper is read again by the extractor, then checked as any paper is."""
+    """The planted paper is read again by the extractor, then checked as any paper is. A flag counts as new only
+    when its arithmetic is new: two readings of one paper name the same split differently."""
     before = flags(h.spec, h.claims)
     spec = await extract(bench.run, bench.cfg, bench.client, latex, h.effort)
+    (bench.run.folder / f"planted_spec_{bench.next_sandbox()}.json").write_text(spec.model_dump_json(indent=1))
     claims, _ = guards.ground_claims(spec.claims, latex)
     after = flags(spec, claims)
-    new = sorted(after - before)
-    return outcome(KILLED, new[0][0], new[0][1]) if new else outcome(SURVIVED, detail="no new flag on the paper")
+    new = [after[key] for key in sorted(set(after) - set(before))]
+    return outcome(KILLED, *new[0]) if new else outcome(SURVIVED, detail="no new flag on the paper")
 
 
-def flags(spec: PaperSpec, claims: list[Claim]) -> set[tuple[str, str]]:
-    """The paper checks' flags: subgroups that do not add up, and t/p pairs that fit no side."""
-    out = set()
+_SUM = re.compile(r"([\d.,+\s-]+=\s*[\d.,-]+,\s*paper's total\s*[\d.,-]+)")
+_NO_SIDE = re.compile(r"t = (\S+) and p = (\S+) fit no side")
+
+
+def flags(spec: PaperSpec, claims: list[Claim]) -> dict[tuple[str, str], tuple[str, str]]:
+    """The paper checks' flags keyed by their arithmetic: {(check, numbers): (check, text)}."""
+    out = {}
     for check in check_paper(spec, claims):
-        if check.get("status") == "flag":
-            out.add(("subgroup arithmetic", re.sub(r"\s+", " ", check["text"])))
-        elif check.get("check") == "sidedness" and check.get("side") is None:
-            out.add(("t and p agree", re.sub(r"\s+", " ", check["text"])))
+        text = re.sub(r"\s+", " ", check.get("text", ""))
+        if check.get("status") == "flag" and (found := _SUM.search(text)):
+            key = ("subgroup arithmetic", re.sub(r"\s", "", found.group(1)))
+        elif check.get("check") == "sidedness" and check.get("side") is None and (found := _NO_SIDE.search(text)):
+            key = ("t and p agree", f"t={found.group(1)} p={found.group(2)}")
+        else:
+            continue
+        out[key] = (key[0], text)
     return out
 
 

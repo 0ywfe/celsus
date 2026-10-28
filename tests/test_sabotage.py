@@ -115,3 +115,18 @@ def test_a_red_baseline_gets_no_plants(setup, monkeypatch):
     assert records == [] and api.requests == []
     [base] = json.loads((tmp_path / "runs" / "s" / "baseline.json").read_text())
     assert base["alarms"][0][0] == "paper's numbers in the code"
+
+
+def test_a_flag_is_new_only_when_its_arithmetic_is_new():
+    # two readings of one paper named the same split differently; the first session counted that as a kill
+    from paper_replicator.spec import Claim, PaperSpec
+
+    def spec(split, small="24"):
+        claims = [Claim(name=n, description="", value=v, unit="", kind="count", where="")
+                  for n, v in (("total", "54"), ("small", small), ("large", "29"))]
+        return PaperSpec(title="", hypothesis="", data_sources=[], sample="", method=[], claims=claims, headline="",
+                         partitions=[{"split": split, "total": "total", "parts": ["small", "large"]}], tests=[]), claims
+
+    one, two, planted = spec("filings by size"), spec("market capitalization groups"), spec("by size", small="25")
+    assert set(sabotage.flags(*one)) == set(sabotage.flags(*two))
+    assert set(sabotage.flags(*planted)) - set(sabotage.flags(*one))
