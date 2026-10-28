@@ -1,0 +1,298 @@
+{
+ "title": "Market Reactions to Material Cybersecurity Incidents",
+ "hypothesis": "H1: companies filing a material cybersecurity incident (Item 1.05 8-K) experience a negative short-term stock reaction (mean event-window return <0). H1,2: Technology companies exhibit larger negative reactions than other sectors. H1,3: Smaller companies (<$2B) experience stronger negative reactions than larger companies. H1,4: Higher beta companies exhibit larger price drops than lower beta companies.",
+ "data_sources": [
+  "SEC EDGAR database - Form 8-K filings including Item 1.05 Material Cybersecurity Incidents",
+  "sec-api Python library (10-K/10-Q/8-K Section Extractor API) for 8-K Item 1.05 metadata, ticker, CIK, filing timestamp",
+  "yfinance Python library using Yahoo public API for daily close stock prices and company metadata (sector, market capitalization, beta)"
+ ],
+ "sample": "Event is filing of Form 8-K Item 1.05 Material Cybersecurity Incident. Sample is all such filings submitted to SEC and available as of November 12th, 2025: 54 reports corresponding to 36 unique companies. No duplicate reports included; multiple incidents by same company on different dates treated as separate events. Filing trading day defined as filing date, or first trading day after if filing on non-trading day. Event window is previous market trading day before filing through five market trading days after (seven-day window). Filters: observations with missing price data, invalid market cap, missing beta or missing sector excluded from analyses requiring those variables (e.g., size comparison uses 24 small + 29 larger =53).",
+ "method": [
+  "Collect all Form 8-K filings with Item 1.05 from SEC EDGAR via sec-api, retaining ticker, CIK and filing timestamp; final dataset as of November 12 2025.",
+  "Define filing trading day: if filing date is non-trading day, define filing date as first trading day after filing date.",
+  "For each event collect daily closing prices over seven-day window: from previous market open day before 8-K filing through five market days after filing date.",
+  "Compute market reaction as percentage return defined as change from closing price on trading day before filing to five trading days after.",
+  "Test overall effect with one-sample left-tailed t-test H0: mu=0 vs H1: mu<0.",
+  "Test subgroup effects with left-tailed Welch two-sample t-tests: Technology vs non-technology; Small (<$2B) vs all larger (Mid $2-10B + Large $10-200B + Mega >=$200B) combined; high vs low beta split at sample median beta.",
+  "Exclude from analyses requiring those variables observations with missing price data, invalid market capitalization values, missing beta data, or missing sector classifications."
+ ],
+ "claims": [
+  {
+   "name": "n_filings_total",
+   "description": "total number of Form 8-K Item 1.05 filings in final dataset up to November 12 2025",
+   "value": "54",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: final dataset as of November 12th, 2025 contains a total of 54 8-K reports"
+  },
+  {
+   "name": "n_companies_total",
+   "description": "total number of unique companies filing Item 1.05 reports",
+   "value": "36",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: corresponding to 36 unique companies"
+  },
+  {
+   "name": "n_companies_one_report",
+   "description": "number of companies filing a single Item 1.05 report, among 36 companies",
+   "value": "21",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: distribution showing 21 companies filing a single report"
+  },
+  {
+   "name": "n_companies_two_reports",
+   "description": "number of companies filing two Item 1.05 reports, among 36 companies",
+   "value": "12",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: 12 companies filing two reports"
+  },
+  {
+   "name": "n_companies_three_reports",
+   "description": "number of companies filing three Item 1.05 reports, among 36 companies",
+   "value": "3",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: 3 companies filing three reports"
+  },
+  {
+   "name": "n_small",
+   "description": "number of filings classified as Small market cap (<$2 billion)",
+   "value": "24",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: small companies (n=24)"
+  },
+  {
+   "name": "n_larger",
+   "description": "number of filings classified as larger companies (Mid, Large, Mega combined)",
+   "value": "29",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: all larger companies combined (n=29)"
+  },
+  {
+   "name": "n_tech",
+   "description": "number of filings classified as Technology sector",
+   "value": "13",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: Technology companies (n=13)"
+  },
+  {
+   "name": "n_nontech",
+   "description": "number of filings classified as non-technology sectors",
+   "value": "41",
+   "unit": "",
+   "kind": "count",
+   "where": "Data section: all non-technology companies (n=41)"
+  },
+  {
+   "name": "mean_return_overall",
+   "description": "mean percentage stock return from close on trading day before filing to five trading days after, across all 54 incidents",
+   "value": "-3.07",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Overall Market Reaction: average percentage stock return was -3.07%"
+  },
+  {
+   "name": "sd_return_overall",
+   "description": "standard deviation of percentage event-window return across all 54 incidents",
+   "value": "9.36",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Overall Market Reaction: with a standard deviation of 9.36%"
+  },
+  {
+   "name": "t_overall",
+   "description": "one-sample left-tailed t-statistic for mean event-window return =0 vs <0 on all incidents",
+   "value": "-2.41",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Findings Overall Market Reaction: t = -2.41"
+  },
+  {
+   "name": "p_overall",
+   "description": "p-value for one-sample left-tailed t-test of overall negative reaction",
+   "value": "0.0098",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Findings Overall Market Reaction: p = 0.0098"
+  },
+  {
+   "name": "mean_return_tech",
+   "description": "mean event-window percentage return for technology firms",
+   "value": "-2.88",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Sector Effect: mean return for technology firms was -2.88%"
+  },
+  {
+   "name": "mean_return_nontech",
+   "description": "mean event-window percentage return for non-technology firms",
+   "value": "-3.25",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Sector Effect: compared with -3.25% for non-technology firms"
+  },
+  {
+   "name": "t_sector",
+   "description": "Welch two-sample left-tailed t-statistic for Technology vs other sectors",
+   "value": "0.162",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Findings Sector Effect: t = 0.162"
+  },
+  {
+   "name": "p_sector",
+   "description": "p-value for Welch test of sector effect",
+   "value": "0.564",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Findings Sector Effect: p = 0.564"
+  },
+  {
+   "name": "mean_return_small",
+   "description": "mean event-window percentage return for Small firms (<$2 billion)",
+   "value": "-7.49",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Size Effect: Small firms had an average return of -7.49%"
+  },
+  {
+   "name": "mean_return_larger",
+   "description": "mean event-window percentage return for larger firms",
+   "value": "+0.43",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Size Effect: compared with +0.43% for larger firms"
+  },
+  {
+   "name": "t_size",
+   "description": "Welch two-sample left-tailed t-statistic for Small vs larger firms",
+   "value": "-3.13",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Findings Size Effect: t = -3.13"
+  },
+  {
+   "name": "p_size",
+   "description": "p-value for Welch test of size effect",
+   "value": "0.0019",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Findings Size Effect: p = 0.0019"
+  },
+  {
+   "name": "mean_return_low_beta",
+   "description": "mean event-window percentage return for below-median beta companies",
+   "value": "-4.14",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Beta Effect: below-median beta had an average return of -4.14%"
+  },
+  {
+   "name": "mean_return_high_beta",
+   "description": "mean event-window percentage return for higher-beta companies",
+   "value": "-2.05",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Findings Beta Effect: higher-beta companies averaged -2.05%"
+  },
+  {
+   "name": "t_beta",
+   "description": "Welch two-sample left-tailed t-statistic for high vs low beta groups",
+   "value": "0.835",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Findings Beta Effect: t = 0.835"
+  },
+  {
+   "name": "p_beta",
+   "description": "p-value for Welch test of beta effect",
+   "value": "0.796",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Findings Beta Effect: p = 0.796"
+  },
+  {
+   "name": "beta_outlier",
+   "description": "extreme outlier beta value in beta distribution",
+   "value": "3618.411",
+   "unit": "",
+   "kind": "other",
+   "where": "Data section: beta distribution contained one extreme outlier (beta = 3618.411)"
+  },
+  {
+   "name": "beta_median",
+   "description": "median beta used as cutoff for high/low beta split",
+   "value": "1.035",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Data section: making the median (1.035) a better measure of central tendency"
+  }
+ ],
+ "partitions": [
+  {
+   "split": "36 unique companies by number of Item 1.05 reports filed: one vs two vs three reports",
+   "total": "n_companies_total",
+   "parts": [
+    "n_companies_one_report",
+    "n_companies_two_reports",
+    "n_companies_three_reports"
+   ]
+  },
+  {
+   "split": "filings by market capitalization: Small (<$2 billion) vs larger (Mid + Large + Mega combined)",
+   "total": "n_filings_total",
+   "parts": [
+    "n_small",
+    "n_larger"
+   ]
+  },
+  {
+   "split": "filings by sector: Technology vs non-technology",
+   "total": "n_filings_total",
+   "parts": [
+    "n_tech",
+    "n_nontech"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "one-sample, left-tailed t-test H0: mu=0 vs H1: mu<0 for mean event-window percentage return",
+   "statistic": "t_overall",
+   "p_value": "p_overall",
+   "group_sizes": [
+    "n_filings_total"
+   ]
+  },
+  {
+   "test": "left-tailed Welch two-sample t-test H0: average price change does not vary by sector vs H1: Technology larger negative reaction than other sectors",
+   "statistic": "t_sector",
+   "p_value": "p_sector",
+   "group_sizes": [
+    "n_tech",
+    "n_nontech"
+   ]
+  },
+  {
+   "test": "left-tailed Welch two-sample t-test H0: price reaction independent of size vs H1: smaller (<$2B) stronger negative reaction than larger",
+   "statistic": "t_size",
+   "p_value": "p_size",
+   "group_sizes": [
+    "n_small",
+    "n_larger"
+   ]
+  },
+  {
+   "test": "left-tailed Welch two-sample t-test H0: price reaction independent of beta vs H1: higher beta larger price drops, groups split at median beta (1.035); group sizes not stated",
+   "statistic": "t_beta",
+   "p_value": "p_beta",
+   "group_sizes": []
+  }
+ ]
+}
