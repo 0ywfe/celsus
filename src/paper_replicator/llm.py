@@ -27,6 +27,7 @@ def make_client(
     cfg: ModelConfig,
     *,
     max_retries: int = MAX_RETRIES,
+    timeout_s: float = TIMEOUT_SECONDS,
     http_client: httpx2.AsyncClient | None = None,
 ) -> AsyncOpenAI:
     key = os.environ.get(cfg.provider.key_env, "")
@@ -36,7 +37,7 @@ def make_client(
         api_key=key,
         base_url=cfg.provider.base_url,
         max_retries=max_retries,
-        timeout=TIMEOUT_SECONDS,
+        timeout=timeout_s,
         http_client=http_client,
     )
 

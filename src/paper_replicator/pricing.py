@@ -21,3 +21,8 @@ def cost_usd(model: str, input_tokens: int, cached_tokens: int, output_tokens: i
     return (
         (input_tokens - cached_tokens) * fresh + cached_tokens * cached + output_tokens * output
     ) / 1_000_000
+
+
+def worst_case_usd(model: str, input_tokens: int, max_tokens: int) -> float | None:
+    """The most one call can cost: all input uncached and the output cap fully used."""
+    return cost_usd(model, input_tokens, 0, max_tokens)
