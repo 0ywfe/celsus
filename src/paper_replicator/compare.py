@@ -118,14 +118,14 @@ COULD_NOT_CHECK = "could not check"
 
 
 def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = None,
-            period_gap: str | None = None) -> tuple[str, str]:
+            sample_problem: str | None = None) -> tuple[str, str]:
     """(verdict, reason). A checker never blames a paper for its own failure: when the run, the data or the
     rebuilt sample fails, the verdict is "could not check", never "does not hold up". Sample counts are a
     precondition for judging the results, not results themselves."""
     if results is None:
         return COULD_NOT_CHECK, failure or "the replication never produced results"
-    if period_gap:
-        return COULD_NOT_CHECK, period_gap
+    if sample_problem:  # the sample cannot be compared with the paper's: a different period, or not rebuilt
+        return COULD_NOT_CHECK, sample_problem
     off = [r for r in rows if r["kind"] == "count" and r["consistent"] is False]
     if off:
         worst = max(off, key=lambda r: abs((r["reproduced"] or 0) - (r["reported"] or 0)))

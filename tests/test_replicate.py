@@ -386,3 +386,29 @@ def test_a_sample_that_misses_the_papers_period_is_sent_back_then_could_not_chec
     assert outcome["verdict"] == "could not check"
     assert outcome["summary"]["first_line"].startswith(
         "We could not check this paper: the replication's sample covers 2014-09-17")
+
+
+
+def test_a_sample_the_builder_says_differs_from_the_papers_is_could_not_check(setup):
+    # run 2601.08263: the live API no longer has the authors' snapshot of exploits; the notes said so,
+    # yet the verdict blamed the paper
+    cfg, tmp_path = setup
+    other = {**RESULTS, "sample": {"description": "x", "n": 38, "same_as_paper": False,
+                                   "differences": "the 2021-2024 exploit snapshot is not recoverable"}}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(other)})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
+    assert outcome["verdict"] == "could not check"
+    assert "the replication could not rebuild the paper's sample (the 2021-2024 exploit snapshot is not " \
+           "recoverable)" in outcome["summary"]["first_line"]
+
+
+def test_a_sample_total_left_out_of_the_results_is_could_not_check(setup):
+    # same run: the counts that disagreed were removed from the results, so the audit had nothing to compare
+    cfg, tmp_path = setup
+    no_count = {**RESULTS, "results": [r for r in RESULTS["results"] if r["name"] != "n_filings"]}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(no_count)})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
+    assert outcome["verdict"] == "could not check"
+    assert "did not report the paper's sample size (n_filings)" in outcome["summary"]["first_line"]

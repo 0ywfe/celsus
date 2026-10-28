@@ -40,7 +40,10 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
  "sample": {"description": "<the sample you built>", "n": <its size>,
             "start": "<YYYY-MM-DD: the first date your sample actually covers>",
             "end": "<YYYY-MM-DD: the last date it covers (for events: the window you searched); if the data
-                    you got starts later or ends earlier than you asked for, the data's dates>"},
+                    you got starts later or ends earlier than you asked for, the data's dates>",
+            "same_as_paper": <true if your sample has the paper's observations (the same events, firms,
+                              assets and dates; another vendor's data for them is fine), false if not>,
+            "differences": "<how your sample differs from the paper's, or empty>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""
 
 ENVIRONMENT = f"""Environment: a Linux sandbox with network access; the script's time limit is {{minutes}} minutes.

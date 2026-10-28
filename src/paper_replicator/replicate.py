@@ -223,22 +223,41 @@ def sample_of(raw: str | None) -> dict:
     return sample if isinstance(sample, dict) else {}
 
 
+def sample_issues(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[str]:
+    """What stops the replication's sample being compared with the paper's, apart from count gaps: the builder
+    says it is not the paper's sample, a sample total is missing from the results (run 2601.08263 dropped the
+    counts that disagreed, leaving the audit nothing to compare), or the dates it covers are not the paper's."""
+    issues = []
+    if sample.get("same_as_paper") is False:
+        why = str(sample.get("differences") or "").strip().rstrip(".")
+        issues.append("the replication could not rebuild the paper's sample" + (f" ({why})" if why else ""))
+    reported = {r.get("name") for r in results}
+    missing = [c.name for c in totals if c.name not in reported]
+    if missing:
+        issues.append(f"the replication did not report the paper's sample size ({', '.join(missing)}), "
+                      "so its sample cannot be compared")
+    if gap := periods.period_gap(spec, sample):
+        issues.append(gap)
+    return issues
+
+
 def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: PaperSpec | None = None,
-                  sample: dict | None = None) -> tuple[str | None, list[str]]:
-    """Sample counts, or a sample period, that disagree with the paper, as feedback for the builder, plus the
-    counts to watch."""
+                  sample: dict | None = None, totals: list[Claim] = ()) -> tuple[str | None, list[str]]:
+    """Sample counts that disagree with the paper, or anything else that stops the sample being compared, as
+    feedback for the builder, plus the counts to watch."""
     off = [row for row in compare(claims, results) if row["kind"] == "count" and row["consistent"] is False]
-    gap = periods.period_gap(spec, sample or {}) if spec else None
-    if not off and not gap:
+    issues = sample_issues(spec, sample or {}, results, list(totals)) if spec else []
+    if not off and not issues:
         return None, []
     gaps = "\n".join([f"- {r['name']}: the paper reports {r['reported']:g}, your run produced {r['reproduced']:g}"
-                      for r in off] + ([f"- period: {gap}"] if gap else []))
+                      for r in off] + [f"- {issue}" for issue in issues])
     problem = ("The script ran, but its sample does not match the paper's:\n" + gaps +
                f"\nYour script's output (end):\n{guards.redact(stdout[-STDOUT_TAIL:], sandbox_secrets())}\n"
                "Find the step where your sample construction departs from the paper's definition (which filings "
                "or observations count, forms, items, dates, deduplication) and fix that step. Never filter, trim "
-               "or pad the data to reach a number. If the paper's period is not in your data source, look for "
-               "another public source; if none has it, report the dates your data really covers.")
+               "or pad the data to reach a number. If the paper's data is not in your source, look for another "
+               "public source; if none has it, say so in the sample block (same_as_paper false, the dates your "
+               "data really covers). Always report the sample sizes, even when they differ.")
     return problem, [f"{r['reported']:g}" for r in off]
 
 
@@ -279,7 +298,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
         (run.folder / "results_attempt.txt").write_text(str(attempt))
         problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
-                                       sample_of(sandbox_run.files.get("results.json")))
+                                       sample_of(sandbox_run.files.get("results.json")), totals)
         if problem is None:
             run.say("audit", f"attempt {attempt}: {len(results)} results, sample matches the paper")
             return kept
@@ -351,7 +370,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
             (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
             (run.folder / "results_attempt.txt").write_text(str(round_))
             problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
-                                       sample_of(sandbox_run.files.get("results.json")))
+                                       sample_of(sandbox_run.files.get("results.json")), totals)
             if problem is None:
                 run.say("audit", f"round {round_}: {len(results)} results, sample matches the paper")
                 return kept
@@ -411,10 +430,10 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         run.guard_events.append(f"run stopped: {crashed}")
         run.say("error", crashed)
     kept = folder / "results.json"
-    gap = periods.period_gap(spec, sample_of(kept.read_text())) if spec and results and kept.exists() else None
-    if gap:
-        run.guard_events.append(f"sample period: {gap}")
-    outcome, reason = verdict(rows, results, run.failure, gap)
+    issues = (sample_issues(spec, sample_of(kept.read_text()), results, watched_totals(claims, spec, latex)[0])
+              if spec and results and kept.exists() else [])
+    run.guard_events.extend(f"sample: {issue}" for issue in issues)
+    outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None)
     headline = spec.headline if spec else None
     headline_text = first_line(outcome, reason, rows, headline)
     path = report.write(folder, arxiv_id=arxiv_id, title=spec.title if spec else arxiv_id, verdict=outcome,
