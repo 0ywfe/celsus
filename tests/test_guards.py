@@ -229,3 +229,13 @@ def test_a_precise_number_counts_anywhere_in_the_script():
     assert hardcoded_results("est = est * 1e-9 + 20.44 - 8.63", claims) == ["gap_bps (20.44) at line 1"]
     assert hardcoded_results("z = abs(t) > 1.96", claims) == []          # three digits: a standard constant
     assert hardcoded_counts("r = rets['SPY'][5:]\nTARGET_N = 8403", claims[3:], claims) == ["n_days (8,403) at line 2"]
+
+
+def test_the_checks_survive_odd_arithmetic_and_very_long_expressions():
+    claims = [_claim("mean", "1.2345"), _claim("n", "54", "count")]
+    odd = "x = (-8) ** (1 / 3)\ny = 1 % 0\nz = 10 ** 400\nadd('mean', x + y + z)\n"
+    long = "s = " + " + ".join(f"a{i}" for i in range(3000)) + "\nadd('mean', s)\n"
+    for script in (odd, long):
+        assert hardcoded_results(script, claims) == []
+        assert hardcoded_counts(script, claims[1:], claims) == []
+        assert fixed_results(script, claims) == {}

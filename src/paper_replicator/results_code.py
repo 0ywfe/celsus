@@ -76,24 +76,41 @@ def constants(assigned: dict[str, list[ast.expr]]) -> dict[str, float]:
 
 def evaluate(node: ast.AST, known: dict[str, float]) -> float | None:
     """The value of an expression made only of numbers, arithmetic, pure functions and known constants."""
+    return dict(constant_nodes(node, known)).get(node)
+
+
+def constant_nodes(root: ast.AST, known: dict[str, float], skip_indexes: bool = False) -> list[tuple[ast.AST, float]]:
+    """Every subexpression with a constant value, evaluated bottom-up in one pass (no recursion, so a chain of
+    thousands of terms costs one walk). With skip_indexes, what sits in a subscript's brackets is left out."""
+    order = list(values(root)) if skip_indexes else list(ast.walk(root))
+    found: dict[ast.AST, float] = {}
+    for node in reversed(order):  # every child comes after its parent in the walk
+        value = _step(node, known, found)
+        if value is not None:
+            found[node] = value
+    return list(found.items())
+
+
+def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float]) -> float | None:
+    """One node's value from its children's, already in `found`."""
     if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool):
         return float(node.value)
     if (name := key(node)) is not None:
         return known.get(name)
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
-        inner = evaluate(node.operand, known)
+        inner = found.get(node.operand)
         return None if inner is None else (inner if isinstance(node.op, ast.UAdd) else -inner)
     if isinstance(node, ast.BinOp) and type(node.op) in _ARITHMETIC:
-        left, right = evaluate(node.left, known), evaluate(node.right, known)
+        left, right = found.get(node.left), found.get(node.right)
         if left is None or right is None or (isinstance(node.op, ast.Pow) and abs(right) > 64):
             return None
         try:
             return float(_ARITHMETIC[type(node.op)](left, right))
-        except (ArithmeticError, ValueError):
+        except (ArithmeticError, ValueError, TypeError):  # TypeError: (-8) ** (1/3) is complex
             return None
     if isinstance(node, ast.Call) and not node.keywords and node.args:
         function = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", None)
-        args = [evaluate(a, known) for a in node.args]
+        args = [found.get(a) for a in node.args]
         if function in _PURE and None not in args:
             try:
                 return float(_PURE[function](*args))
@@ -134,11 +151,14 @@ def entries(tree: ast.AST, names: set[str]) -> list[Entry]:
 
 def values(node: ast.AST):
     """The nodes of an expression in value position: what sits in a subscript's brackets is an index (x[lo:hi],
-    Feats[i, 7]), not part of the value, unless it is a constant key that names a column (df["ret"])."""
-    yield node
-    for child in ast.iter_child_nodes(node):
-        if not (isinstance(node, ast.Subscript) and child is node.slice):
-            yield from values(child)
+    Feats[i, 7]), not part of the value, unless it is a constant key that names a column (df["ret"]). Iterative,
+    like ast.walk, so a long chain of terms cannot exhaust the stack."""
+    todo = [node]
+    while todo:
+        current = todo.pop()
+        yield current
+        todo += [child for child in ast.iter_child_nodes(current)
+                 if not (isinstance(current, ast.Subscript) and child is current.slice)]
 
 
 def upstream(expr: ast.expr, assigned: dict[str, list[ast.expr]], depth: int) -> list[ast.expr]:
@@ -154,31 +174,35 @@ def upstream(expr: ast.expr, assigned: dict[str, list[ast.expr]], depth: int) ->
 
 def numbers(exprs: list[ast.expr], known: dict[str, float]) -> list[float]:
     """Every literal and every constant subexpression (folded arithmetic, known names) in the expressions."""
-    return [value for e in exprs for n in values(e)
-            if isinstance(n, ast.expr) and (value := evaluate(n, known)) is not None]
+    return [value for e in exprs for _, value in constant_nodes(e, known, skip_indexes=True)]
 
 
 def everywhere(tree: ast.AST, known: dict[str, float]) -> list[tuple[float, int]]:
     """Every number the code holds, with its line: literals, numeric strings ("7.49"), constant subexpressions."""
-    found = []
+    found = [(value, node.lineno) for node, value in constant_nodes(tree, known) if isinstance(node, ast.expr)]
     for node in ast.walk(tree):
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             try:
                 found.append((float(node.value.strip().rstrip("%").replace(",", "")), node.lineno))
             except ValueError:
                 pass
-        elif isinstance(node, ast.expr) and (value := evaluate(node, known)) is not None:
-            found.append((value, node.lineno))
     return found
 
 
-def _is_len(node: ast.AST) -> bool:
-    return any(isinstance(n, ast.Call) and getattr(n.func, "id", None) == "len" for n in ast.walk(node))
+def _with_len(tree: ast.AST) -> set[ast.AST]:
+    """The nodes whose subtree calls len(), found bottom-up in one pass."""
+    order, marked = list(ast.walk(tree)), set()
+    for node in reversed(order):
+        if (isinstance(node, ast.Call) and getattr(node.func, "id", None) == "len") or \
+                any(child in marked for child in ast.iter_child_nodes(node)):
+            marked.add(node)
+    return marked
 
 
 def sized(tree: ast.AST, known: dict[str, float]) -> list[tuple[float, int]]:
     """Numbers the code sets a sample's size against: while len(df) > 54, need = 2896 - len(m). An equality in an
     assert is a check, not a cut, so only inequalities and differences count."""
+    with_len, values_of = _with_len(tree), dict(constant_nodes(tree, known))
     found = []
     for node in ast.walk(tree):
         if isinstance(node, ast.Compare) and all(isinstance(op, (ast.Lt, ast.LtE, ast.Gt, ast.GtE)) for op in node.ops):
@@ -187,8 +211,8 @@ def sized(tree: ast.AST, known: dict[str, float]) -> list[tuple[float, int]]:
             sides = [node.left, node.right]
         else:
             continue
-        if any(_is_len(s) for s in sides):
-            found += [(v, node.lineno) for s in sides if not _is_len(s) and (v := evaluate(s, known)) is not None]
+        if any(s in with_len for s in sides):
+            found += [(values_of[s], node.lineno) for s in sides if s not in with_len and s in values_of]
     return found
 
 

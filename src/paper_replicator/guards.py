@@ -179,10 +179,17 @@ def _tree(script: str) -> ast.Module | None:
         return None
 
 
+def _factor_or_none(node: ast.BinOp) -> tuple[float, int]:
+    try:
+        return _factor(node)
+    except RecursionError:  # a chain too deep to fold holds no constant factor worth reading
+        return 1.0, 0
+
+
 def _factors(expr: ast.expr) -> list[float]:
     """The constant factor of each chain of * and / with two or more constants (x * 7 / 20 -> 0.35)."""
     return [factor for node in results_code.values(expr) if isinstance(node, ast.BinOp)
-            for factor, count in [_factor(node)] if count >= 2]
+            for factor, count in [_factor_or_none(node)] if count >= 2]
 
 
 def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
@@ -207,7 +214,8 @@ def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
         if any(math.isclose(abs(k) * scale, float(digits), rel_tol=1e-9) for k in made for scale in _scales(claim.unit)):
             found.append(f"{claim.name} ({claim.value}) at line {entry.line}")
     anywhere = results_code.everywhere(tree, known) + [
-        (f, node.lineno) for node in ast.walk(tree) if isinstance(node, ast.BinOp) for f in _factors(node)]
+        (factor, node.lineno) for node in ast.walk(tree) if isinstance(node, ast.BinOp)
+        for factor, count in [_factor_or_none(node)] if count >= 2]
     for claim in claims:
         digits = magnitude(claim.value)
         if not digits or "." not in digits or significant(digits) < PRECISE_DECIMAL:
@@ -288,9 +296,12 @@ def folded_constants(script: str) -> list[float]:
     for node in ast.walk(tree):
         if not isinstance(node, ast.BinOp):
             continue
-        if (value := _constant(node)) is not None:
+        try:
+            value, (factor, count) = _constant(node), _factor(node)
+        except RecursionError:  # a chain too deep to fold holds no constant worth reading
+            continue
+        if value is not None:
             values.append(abs(value))
-        factor, count = _factor(node)
         if count >= 2:
             values.append(abs(factor))
     return values
