@@ -55,6 +55,10 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
                               leaves open (which ticker stands for an asset, how calendars align, a missing
                               risk-free rate) are not differences: make the standard choice and say so in notes.
                               Another vendor's data for the same observations is the same sample.>,
+            "missing": <how many observations the paper used are not in yours (0 if none), or null if you
+                        cannot tell>,
+            "extra": <how many observations in yours the paper did not use (0 if none), or null if you cannot
+                      tell>,
             "differences": "<which observations differ from the paper's, or empty>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""
 

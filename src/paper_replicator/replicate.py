@@ -11,6 +11,7 @@ import argparse
 import asyncio
 import datetime
 import json
+import math
 import os
 import sys
 import time
@@ -24,7 +25,7 @@ from openai import AsyncOpenAI
 
 from . import config, guards, market, periods, report, roles
 from .paper_checks import check_paper
-from .compare import COULD_NOT_CHECK, NO_SIDE, compare, first_line, impossible, verdict
+from .compare import COULD_NOT_CHECK, NO_SIDE, Z95, compare, first_line, impossible, verdict
 from .ingest import load_paper
 from .ledger import Ledger, ProviderNotAllowed
 from .llm import make_client
@@ -253,7 +254,7 @@ def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: li
     dropped the counts that disagreed, leaving the audit nothing to compare), or the dates it covers are not the
     paper's."""
     issues = []
-    if sample.get("same_as_paper") is False:
+    if sample.get("same_as_paper") is False and small_difference(sample) is None:
         why = str(sample.get("differences") or "").strip().rstrip(".")
         issues.append(("declared not the paper's sample",
                        "the replication could not rebuild the paper's sample" + (f" ({why})" if why else "")))
@@ -265,6 +266,26 @@ def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: li
     if gap := periods.period_gap(spec, sample):
         issues.append(("period", gap))
     return issues
+
+
+def _whole(value) -> int | None:
+    return int(value) if isinstance(value, (int, float)) and not isinstance(value, bool) and value >= 0 \
+        and float(value).is_integer() else None
+
+
+def small_difference(sample: dict) -> str | None:
+    """A sample the builder calls not the paper's, short or over by fewer observations than the band the count
+    audit accepts (1.96 * sqrt(n) of the paper's n), is judged, with the difference in the report. The breach paper's
+    53 of 54 filings (one unlisted filer has no prices) was could not check, though the audit accepts 53. An amount
+    the builder cannot give is not small."""
+    missing, extra, n = _whole(sample.get("missing")), _whole(sample.get("extra")), _whole(sample.get("n"))
+    if None in (missing, extra, n) or n + missing - extra <= 0:
+        return None
+    band = Z95 * math.sqrt(n + missing - extra)
+    if missing + extra > band:
+        return None
+    return (f"the sample differs from the paper's by {missing} missing and {extra} extra observations, within the "
+            f"count band (+/-{band:.1f}), so its results are judged")
 
 
 def sample_issues(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[str]:
@@ -517,6 +538,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
               if spec and results and kept.exists() else [])
     issues += [run.review_issue] if run.review_issue and results else []
     run.guard_events.extend(f"sample: {issue}" for issue in issues if issue != run.review_issue)
+    if results and kept.exists() and (note := small_difference(sample_of(kept.read_text()))):
+        run.guard_events.append(f"sample: {note}")
     outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None)
     headline = spec.headline if spec else None
     headline_text = first_line(outcome, reason, rows, headline)

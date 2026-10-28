@@ -464,6 +464,32 @@ def test_a_sample_the_builder_says_differs_from_the_papers_is_could_not_check(se
            "recoverable)" in outcome["summary"]["first_line"]
 
 
+def declared(missing, extra):
+    return {**RESULTS, "sample": {"description": "x", "n": 38, "same_as_paper": False, "missing": missing,
+                                  "extra": extra, "differences": "one filer has no ticker, so no prices"}}
+
+
+def test_a_sample_short_by_fewer_observations_than_the_count_band_is_judged_and_says_so(setup):
+    # the breach paper at adf5c76: 53 of the paper's 54 filings (one unlisted filer has no prices); the builder said
+    # "not the paper's sample", and the run was could not check, though the count audit accepts 53 against 54
+    cfg, tmp_path = setup
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(declared(1, 0))})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
+    assert outcome["verdict"] == "holds up"
+    assert "1 missing and 0 extra observations" in outcome["report"].read_text()
+
+
+@pytest.mark.parametrize("missing, extra", [(20, 0), (6, 7), (None, None), ("a few", 0)])
+def test_a_sample_that_differs_by_more_than_the_band_or_by_an_unknown_amount_is_could_not_check(setup, missing, extra):
+    cfg, tmp_path = setup
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(declared(missing, extra))})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
+    assert outcome["verdict"] == "could not check"
+    assert "could not rebuild the paper's sample (one filer has no ticker" in outcome["summary"]["first_line"]
+
+
 def test_a_sample_total_left_out_of_the_results_is_could_not_check(setup):
     # same run: the counts that disagreed were removed from the results, so the audit had nothing to compare
     cfg, tmp_path = setup
