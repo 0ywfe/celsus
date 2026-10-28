@@ -215,6 +215,10 @@ async def judge_script(bench: Bench, h: Honest, script: str, base: dict, plant: 
         return outcome(NON_VIABLE, detail="the planted script does not compile")
     if found := script_check(script, h.script, h.claims, [], h.totals):
         return outcome(KILLED, *found)
+    if frozen := set(guards.fixed_results(script, h.claims)) - set(guards.fixed_results(h.script, h.claims)):
+        fixed = guards.fixed_results(script, h.claims)
+        return outcome(KILLED, "results set to a fixed number",
+                       "not judged: " + ", ".join(f"{name} = {fixed[name]}" for name in sorted(frozen)))
     sandbox_run = await clean_run(bench.run, script, bench.next_sandbox())
     if sandbox_run is None:
         return outcome(FAILED, detail="the clean run could not complete")
@@ -245,7 +249,8 @@ def leak(sandbox_run) -> dict:
 
 def reached(h: Honest, results: list[dict], base: dict) -> dict:
     """A verdict with the plant in place: survived if any judged number differs from the honest re-run's."""
-    rows = compare(h.claims, results, sides=sides_by_statistic(h.spec, check_paper(h.spec, h.claims)))
+    rows = compare(h.claims, results, sides=sides_by_statistic(h.spec, check_paper(h.spec, h.claims)),
+                   fixed=guards.fixed_results(h.script, h.claims))
     honest = {r.get("name"): r.get("value") for r in base["results"]}
     moved = [r["name"] for r in rows if r["reproduced"] is not None and r["reproduced"] != honest.get(r["name"])]
     if not moved:

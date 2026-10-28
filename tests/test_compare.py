@@ -189,3 +189,14 @@ def test_an_unread_count_of_zero_is_not_an_empty_sample():
     claims = [claim("rejections", "0/9", "count"), claim("mean", "-7.49", "estimate")]
     results = [{"name": "rejections", "value": 0}, {"name": "mean", "value": -7.4, "se": 1.0}]
     assert verdict(compare(claims, results), results) == ("holds up", "")
+
+
+def test_a_result_the_script_writes_as_a_fixed_number_is_not_judged():
+    # honest runs write method inputs as results (a null win rate of 0.5, a benchmark of 1/2): they match the paper
+    # by construction, so judging them would count a constant as a replication
+    claims = [claim("null_win_rate", "0.50", "estimate"), claim("mean", "-7.49", "estimate")]
+    results = [{"name": "null_win_rate", "value": 0.5, "se": 0}, {"name": "mean", "value": -7.4, "se": 1.0}]
+    rows = {r["name"]: r for r in compare(claims, results, fixed={"null_win_rate": "0.5 at line 92"})}
+    assert rows["null_win_rate"]["consistent"] is None
+    assert rows["null_win_rate"]["why"] == "the script writes it as a fixed number (0.5 at line 92), so it is not judged"
+    assert rows["mean"]["consistent"] is True

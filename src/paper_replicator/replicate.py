@@ -61,6 +61,7 @@ class Run:
     rejections: list[dict] = field(default_factory=list)
     market_log: list[dict] = field(default_factory=list)
     hosts: list[str] = field(default_factory=list)
+    kept_script: str = ""  # the script whose clean re-run produced the kept results
     sandbox_note: str = "not run"
     # the script reviewer (a judgement check), attached by replicate(); None runs without it
     review: Callable[[PaperSpec, str], Awaitable[tuple[str, str] | None]] | None = None
@@ -198,14 +199,14 @@ def script_check(script: str, previous: str, claims: list[Claim], targets: list[
     leaked = guards.hardcoded_results(script, claims)
     if leaked:
         return "paper's numbers in the code", (
-            f"the script contains numbers the paper reports ({', '.join(leaked)}). "
-            "Compute them from data and remove them from the code and comments.")
-    counts = guards.hardcoded_counts(script, totals)
+            f"the code that writes these results contains the number the paper reports for them "
+            f"({', '.join(leaked)}). Compute each result from the data; the paper's value never goes into it.")
+    counts = guards.hardcoded_counts(script, totals, claims)
     if counts:
         return "sample counts in the code", (
-            f"the script contains sample counts the paper reports ({', '.join(counts)}). Build the sample from "
-            "the paper's definition and report the count you get; never trim, cut or pad it to a reported "
-            "count. If a number is a coincidence, write it another way.")
+            f"the script writes the paper's sample count as a result's count, or cuts its sample to it "
+            f"({', '.join(counts)}). Build the sample from the paper's definition and report the count you get; "
+            "never trim, cut or pad it to a reported count.")
     planted = guards.planted_counts(script, previous, targets)
     if planted:
         return "counts planted after feedback", (
@@ -346,7 +347,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
             run.say("sandbox", f"attempt {attempt}: {problem.splitlines()[0]}")
             history.append(user(problem))
             continue
-        kept = results
+        kept, run.kept_script = results, script.script
         (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
         (run.folder / "results_attempt.txt").write_text(str(attempt))
         problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
@@ -421,7 +422,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                 history.append(user(f"The clean re-run in a fresh sandbox failed. {problem}\n"
                                     "Fix /work/replicate.py and run it again."))
                 continue
-            kept = results
+            kept, run.kept_script = results, script
             (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
             (run.folder / "results_attempt.txt").write_text(str(round_))
             problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
@@ -492,7 +493,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         else:
             results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60, effort), latex, spec,
                                           claims, attempts)
-        rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper))
+        rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper),
+                       fixed=guards.fixed_results(run.kept_script, claims))
     except (Unreadable, ProviderNotAllowed) as error:
         run.failure = str(error)
         run.say("error", str(error))

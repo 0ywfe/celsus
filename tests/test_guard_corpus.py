@@ -18,7 +18,7 @@ def fired(name: str) -> set[str]:
     script = (CORPUS / name).read_text()
     checks = {
         "decimals": guards.hardcoded_results(script, SPEC.claims),
-        "totals": guards.hardcoded_counts(script, TOTALS),
+        "totals": guards.hardcoded_counts(script, TOTALS, SPEC.claims),
         "yfinance": guards.bypasses_market_data(script),
         "syntax": guards.syntax_error(script),
     }

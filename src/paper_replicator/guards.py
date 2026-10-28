@@ -1,7 +1,8 @@
 """Coded guards: rules the agents cannot argue with.
 
 - grounding: every number the extractor reports must appear in the paper's LaTeX.
-- no hard-coded results: no reported number may appear as a literal in the generated code.
+- no hard-coded results: a result is not written as the paper's number or as a fixed number, and the sample is
+  not cut to the paper's count (see results_code: the check looks where results are written).
 - it compiles: a syntax error goes back to the builder before any sandbox time is spent.
 - no planted targets: a count the builder was told to match may not newly appear as a literal.
 - market data only through the helper, so every source is cached and logged.
@@ -17,6 +18,7 @@ import operator
 import re
 import tokenize
 
+from . import results_code
 from .spec import Claim
 
 _SIGNED = re.compile(r"-?\s*\d+(?:\.\d+)?")
@@ -155,23 +157,83 @@ def occurrences(digits: str, text: str) -> int:
     return len(re.findall(rf"(?<![\d.]){re.escape(digits)}(?!\d)", clean(text)))
 
 
+# How many assignments back from where a result is written the check reads: measured on the honest attempts and
+# the saboteur's plants (build log, 28 Oct).
+DEPTH = 3
+# A number this precise does not turn up in code by chance, so it is looked for anywhere, not only where results are
+# written. Measured on all 135 honest attempts (28 Oct): decimals with 3 significant digits collided 5 times (0.975,
+# 1.96), with 4 or more never; counts with 3 significant digits matched twice, both real (501 and 116 written as n).
+PRECISE_DECIMAL, PRECISE_COUNT = 4, 3
+
+
+def significant(digits: str) -> int:
+    """Significant digits of a number as printed: '0.0307' -> 3, '8,403' -> 4, '10,000' -> 1."""
+    plain = digits.replace(",", "")
+    return len(plain.replace(".", "").strip("0")) if "." in plain else len(plain.strip("0"))
+
+
+def _tree(script: str) -> ast.Module | None:
+    try:
+        return ast.parse(script)
+    except SyntaxError:
+        return None
+
+
+def _factors(expr: ast.expr) -> list[float]:
+    """The constant factor of each chain of * and / with two or more constants (x * 7 / 20 -> 0.35)."""
+    return [factor for node in results_code.values(expr) if isinstance(node, ast.BinOp)
+            for factor, count in [_factor(node)] if count >= 2]
+
+
 def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
-    """Claims whose reported value is a number in the code: as a literal, as arithmetic on literals (307/100, or the
-    constant factor of x * 7 / 20), and at the scale its unit implies (3.07 % written as 0.0307; bps as 1e-4). Only
-    decimals are checked: small integers such as window lengths legitimately appear as method parameters. A number
-    with fewer than two significant digits says nothing (0.5, 0.05, 0.70, and zero): of the paper's numbers the check
-    refused in honest drafts on the dev papers, 76 of 91 were such numbers colliding with parameters, and the
-    refusal taught builders to write their parameters as 7/10 (28 Oct)."""
-    constants = numeric_literals(script) + folded_constants(script)
-    found = []
-    for c in claims:
-        digits = magnitude(c.value)
-        if not digits or "." not in digits or len(digits.replace(".", "").strip("0")) < 2:
+    """Claims whose own result is written with the paper's number in it: as a literal, as arithmetic on literals
+    (307/100, the constant factor of x * 7 / 20) or at the scale its unit implies (3.07 % as 0.0307), in the
+    value written under the claim's name or up to DEPTH assignments back. The same number as a quantile, a window
+    or a critical value elsewhere in the script is not the claim (8 held-out runs were lost to that, 28 Oct).
+    Only decimals with two or more significant digits are checked: 0.5 or 0.05 says nothing on its own."""
+    tree = _tree(script)
+    if tree is None:
+        return []
+    by_name = {c.name: c for c in claims}
+    assigned = results_code.assignments(tree)
+    known = results_code.constants(assigned)
+    found: list[str] = []
+    for entry in results_code.entries(tree, set(by_name)):
+        claim, digits = by_name[entry.name], magnitude(by_name[entry.name].value)
+        if entry.value is None or not digits or "." not in digits or significant(digits) < 2:
             continue
-        target = float(digits)
-        if any(math.isclose(k * scale, target, rel_tol=1e-9) for k in constants for scale in _scales(c.unit)):
-            found.append(f"{c.name} ({c.value})")
-    return found
+        exprs = results_code.upstream(entry.value, assigned, DEPTH)
+        made = results_code.numbers(exprs, known) + [f for e in exprs for f in _factors(e)]
+        if any(math.isclose(abs(k) * scale, float(digits), rel_tol=1e-9) for k in made for scale in _scales(claim.unit)):
+            found.append(f"{claim.name} ({claim.value}) at line {entry.line}")
+    anywhere = results_code.everywhere(tree, known) + [
+        (f, node.lineno) for node in ast.walk(tree) if isinstance(node, ast.BinOp) for f in _factors(node)]
+    for claim in claims:
+        digits = magnitude(claim.value)
+        if not digits or "." not in digits or significant(digits) < PRECISE_DECIMAL:
+            continue
+        line = next((line for k, line in anywhere for scale in _scales(claim.unit)
+                     if math.isclose(abs(k) * scale, float(digits), rel_tol=1e-9)), None)
+        if line is not None:
+            found.append(f"{claim.name} ({claim.value}) at line {line}")
+    return list(dict.fromkeys(found))
+
+
+def fixed_results(script: str, claims: list[Claim]) -> dict[str, str]:
+    """Results the script writes as a fixed number (a literal, arithmetic on literals, a name assigned one once), as
+    name -> "0.5 at line 92". Such a number is not replicated, so it is not judged. On the honest runs these are
+    mostly method inputs the extractor listed (10,000 draws, a null win rate of 0.5, a benchmark of 1/2), which
+    would otherwise match the paper by construction; a plant that freezes a result lands here too."""
+    tree = _tree(script)
+    if tree is None:
+        return {}
+    kinds = {c.name: c.kind for c in claims}
+    known = results_code.constants(results_code.assignments(tree))
+    fixed: dict[str, str] = {}
+    for e in results_code.entries(tree, set(kinds)):
+        if kinds[e.name] != "other" and e.value is not None and (value := results_code.evaluate(e.value, known)) is not None:
+            fixed.setdefault(e.name, f"{value:g} at line {e.line}")
+    return fixed
 
 
 def _scales(unit: str) -> tuple[float, ...]:
@@ -272,12 +334,33 @@ def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim
     return totals + [c for c in largest if c not in totals]
 
 
-def hardcoded_counts(script: str, totals: list[Claim]) -> list[str]:
-    """Sample totals that appear as integer literals. Subgroup sizes (12, 24, ...) collide with calendar
-    constants; they are watched only once the audit has fed them back (planted_counts)."""
-    literals = numeric_literals(script)
-    return [f"{c.name} ({c.value})" for c in totals
-            if (digits := magnitude(c.value)) and "." not in digits and float(digits) in literals]
+def hardcoded_counts(script: str, totals: list[Claim], claims: list[Claim]) -> list[str]:
+    """Sample totals the script writes as a result's count, or cuts its sample to (x[:54], x.head(54)). The same
+    number as a window, an index or a number of draws is not the sample (a column index 7 and range(10000) cost
+    held-out runs their results, 28 Oct)."""
+    tree = _tree(script)
+    if tree is None:
+        return []
+    known = results_code.constants(results_code.assignments(tree))
+    entries = results_code.entries(tree, {c.name for c in claims})
+    cut = results_code.cuts(tree, known) + results_code.sized(tree, known) + [
+        (value, node.lineno) for node in ast.walk(tree) if isinstance(node, ast.Dict)
+        for k, v in zip(node.keys, node.values) if isinstance(k, ast.Constant) and k.value == "n"
+        and (value := results_code.evaluate(v, known)) is not None]
+    anywhere = results_code.everywhere(tree, known)
+    found = []
+    for claim in totals:
+        target = parse_number(claim.value)
+        if target is None:
+            continue
+        # another result's n; the total's own entry written as a number is fixed_results' (it is not judged)
+        written = [(value, e.line) for e in entries if e.name != claim.name for part in e.parts
+                   if part is not e.value and (value := results_code.evaluate(part, known)) is not None]
+        precise = significant(f"{target:.0f}") >= PRECISE_COUNT
+        line = next((line for value, line in written + cut + (anywhere if precise else []) if value == target), None)
+        if line is not None:
+            found.append(f"{claim.name} ({claim.value}) at line {line}")
+    return found
 
 
 def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:

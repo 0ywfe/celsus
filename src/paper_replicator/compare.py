@@ -114,7 +114,10 @@ def fixed_number(reported: float, value: float, printed: str) -> tuple[bool, str
     return close, f"{apart:.1%} apart, {'within' if close else 'beyond'} {RELATIVE:.0%}"
 
 
-def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | None = None) -> list[dict]:
+def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | None = None,
+            fixed: dict[str, str] | None = None) -> list[dict]:
+    """One row per claim. A claim is not judged when its value is not one number, or when the script writes its
+    result as a fixed number (`fixed`, from guards.fixed_results): neither is a replication of it."""
     by_name = {r.get("name"): r for r in results}
     rows = []
     for claim in claims:
@@ -122,7 +125,10 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
         result = by_name.get(claim.name)
         row = {"name": claim.name, "kind": claim.kind, "unit": claim.unit, "reported": reported,
                "reproduced": None, "se": None, "n": None, "consistent": None, "why": "not computed"}
-        if result is not None and (count := numbers_in(claim.value)) != 1:  # no single number to judge against
+        if result is not None and claim.name in (fixed or {}):
+            row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
+                       why=f"the script writes it as a fixed number ({fixed[claim.name]}), so it is not judged")
+        elif result is not None and (count := numbers_in(claim.value)) != 1:  # no single number to judge against
             held = "several numbers" if count else "no number the checker reads"
             row.update(reported=None, reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
                        why=f"the paper's value \"{claim.value}\" holds {held}, so it is not judged")

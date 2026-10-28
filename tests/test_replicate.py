@@ -26,7 +26,7 @@ SPEC = {
     "partitions": [{"split": "all", "total": "n_filings", "parts": []}],
     "tests": [],
 }
-LEAKY = {"script": "print(-7.5)", "notes": ""}
+LEAKY = {"script": "results = [{'name': 'small_mean', 'value': -7.5}]", "notes": ""}
 NO_FINDINGS = {"You review a replication script": (json.dumps({"findings": []}), usage(3000, 200))}
 CLEAN = {"script": "print('computed')", "notes": "n/a"}
 RESULTS = {"results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 22},
@@ -75,7 +75,7 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     folder = outcome["report"].parent
     text = outcome["report"].read_text()
     assert "rejected claim invented = 12.3: not in the paper's LaTeX" in text
-    assert "contains numbers the paper reports (small_mean (-7.5))" in text
+    assert "contains the number the paper reports for them (small_mean (-7.5) at line 1)" in text
     assert "all on Meta: yes" in text
     assert "## The paper's own numbers" in text
     assert "Not financial advice." in text
@@ -194,7 +194,7 @@ def test_a_target_count_that_newly_appears_is_rejected(setup):
                            SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})])
     outcome = go(api, sandbox, cfg, tmp_path, attempts=3)
     assert sandbox.scripts == ["events = load()", "events = load()"]   # the padded script never ran
-    assert "contains sample counts the paper reports (n_filings (40))" in outcome["report"].read_text()
+    assert "cuts its sample to it (n_filings (40) at line 1)" in outcome["report"].read_text()
 
 
 def test_direct_yfinance_import_is_rejected(setup):
