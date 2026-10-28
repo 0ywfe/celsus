@@ -26,6 +26,9 @@ def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[d
           guard_events: list[str], market_log: list[dict], calls: list[dict], sandbox_note: str,
           hosts: list[str] = ()) -> Path:
     providers = sorted({c["provider"] for c in calls})
+    on_meta = bool(calls) and all(c.get("maker", c["provider"]) == "meta" for c in calls)
+    hosted = sorted({f"{c['model']} on {c['provider']}" for c in calls if c["provider"] != "meta"})
+    meta_line = ("yes" if providers == ["meta"] else f"yes (Meta models; {', '.join(hosted)})") if on_meta else "no"
     lines = [
         headline_text, "",
         f"# {PRODUCT_NAME} report: arXiv {arxiv_id}",
@@ -45,7 +48,7 @@ def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[d
         "## Run",
         f"- sandbox: {sandbox_note}",
         f"- model calls: {len(calls)}, providers: {', '.join(providers) or 'none'}, "
-        f"all on Meta: {'yes' if providers == ['meta'] else 'no'}",
+        f"all on Meta: {meta_line}",
         f"- tokens: in {sum(c['input_tokens'] for c in calls)}, out {sum(c['output_tokens'] for c in calls)} "
         f"(reasoning {sum(c['reasoning_tokens'] for c in calls)}); cost ${sum(c['cost_usd'] or 0 for c in calls):.4f}",
         "", "---", DISCLAIMER, "",

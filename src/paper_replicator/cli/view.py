@@ -41,9 +41,11 @@ def tracker(state: State) -> Group:
     meta = Text(f"{state.model}{' · ' + state.effort if state.effort else ''} · ${state.spent:.2f} · "
                 f"{clock(state.elapsed)}")
     if state.verdict is not None and state.providers:
-        on_meta = state.providers == ("meta",)
-        meta.append(" · all on Meta ✓" if on_meta else f" · providers: {', '.join(state.providers)}",
-                    style="green" if on_meta else "yellow")
+        on_meta = state.makers == ("meta",)
+        badge = (" · all on Meta ✓" if state.providers == ("meta",) else
+                 f" · all Meta models ✓ (on {', '.join(state.providers)})" if on_meta else
+                 f" · providers: {', '.join(state.providers)}")
+        meta.append(badge, style="green" if on_meta else "yellow")
     row = Table.grid(expand=True)
     row.add_column(ratio=1, no_wrap=True, overflow="ellipsis")
     row.add_column(justify="right", no_wrap=True)

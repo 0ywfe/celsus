@@ -30,9 +30,17 @@ def test_every_tier_defaults_to_meta(monkeypatch):
         assert cfg.model.startswith("muse-")
 
 
-def test_without_a_local_file_meta_is_the_only_provider(tmp_path):
-    assert list(config.providers(tmp_path / "absent.json")) == ["meta"]
+def test_without_a_local_file_meta_and_baseten_are_the_providers(tmp_path):
+    assert list(config.providers(tmp_path / "absent.json")) == ["meta", "baseten"]
     assert pricing.local_prices(tmp_path / "absent.json") == {}
+
+
+def test_a_meta_model_counts_as_meta_wherever_it_runs(localdev):
+    open_weights = config.ModelConfig(config.PROVIDERS["baseten"], "meta-models/muse-spark-open-1026")
+    assert config.maker(open_weights) == "meta" and config.maker(config.tier("quick")) == "meta"
+    assert config.maker(localdev) == "localdev"
+    assert config.maker(config.ModelConfig(config.PROVIDERS["baseten"], "another-org/another-model")) == "baseten"
+    assert pricing.cost_usd("meta-models/muse-spark-open-1026", 1_000_000, 0, 1_000_000) == 1.25 + 4.25
 
 
 def test_env_overrides_a_tier(monkeypatch, localdev):

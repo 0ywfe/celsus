@@ -1,6 +1,7 @@
 """USD per 1M tokens as (cached input, input, output).
 
-Meta: dev.meta.ai/docs/getting-started/pricing-rate-limits, read 26 Oct 2026. Other endpoints bring their
+Meta: dev.meta.ai/docs/getting-started/pricing-rate-limits, read 26 Oct 2026. Muse Spark Open on Baseten:
+baseten.co/library/muse-spark-open, read 28 Oct 2026 (the same rates as Spark on Meta's API). Other endpoints bring their
 prices in providers.local.json (see local.py). Reasoning tokens are billed as output. A model missing here is
 unpriced, and its cost is None.
 """
@@ -15,6 +16,8 @@ PRICES = {
     "muse-spark-1.3": (0.15, 1.25, 4.25),
     "muse-spark-1.3-contributor": (0.002, 0.10, 0.20),
     "muse-wonder-1.0": (0.20, 4.00, 20.00),
+    "meta-models/muse-spark-open": (0.15, 1.25, 4.25),
+    "meta-models/muse-spark-open-1026": (0.15, 1.25, 4.25),
 }
 
 

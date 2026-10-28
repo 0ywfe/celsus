@@ -32,6 +32,7 @@ class State:
     spent: float = 0.0
     calls: int = 0
     providers: tuple[str, ...] = ()
+    makers: tuple[str, ...] = ()
     current: str | None = None
     done: tuple[str, ...] = ()
     round: int = 0
@@ -52,8 +53,10 @@ def apply(state: State, item: dict) -> State:
     state = replace(state, now=item["t"], started=item["t"] if state.started is None else state.started)
     if item["kind"] == "call":
         providers = state.providers if item["provider"] in state.providers else (*state.providers, item["provider"])
+        made_by = item.get("maker", item["provider"])
+        makers = state.makers if made_by in state.makers else (*state.makers, made_by)
         return replace(state, spent=state.spent + (item.get("cost_usd") or 0), calls=state.calls + 1,
-                       providers=providers, model=state.model or item["model"])
+                       providers=providers, makers=makers, model=state.model or item["model"])
     stage, message = item["stage"], item["message"]
     tracked = TRACKER.get(stage, state.current)
     done = state.done if state.current in (None, tracked) or state.current in state.done else (*state.done, state.current)

@@ -136,7 +136,7 @@ def test_a_run_restricted_to_another_provider_stops_before_its_first_call(setup)
     outcome = go(api, FakeSandbox([]), cfg, tmp_path, require_provider="elsewhere")
     assert api.requests == []
     assert outcome["verdict"] == "could not check"
-    assert "this run allows only elsewhere calls, and the extractor's call goes to meta" in outcome["report"].read_text()
+    assert "this run allows only elsewhere models, and the extractor's call goes to muse-spark-1.3 on meta" in outcome["report"].read_text()
     assert not (outcome["report"].parent / "calls.jsonl").exists()
 
 
@@ -507,3 +507,17 @@ def test_an_impossible_result_goes_back_to_the_builder(setup):
     go(api, sandbox, cfg, tmp_path)
     feedback = api.requests[2]["body"]["messages"][-1]["content"]
     assert "n_filings = -38: no count is negative" in feedback and "never clip or replace" in feedback
+
+
+def test_a_meta_model_on_another_host_passes_the_meta_guard_and_the_report_says_where(setup, monkeypatch):
+    cfg, tmp_path = setup
+    from paper_replicator import config as configuration
+    hosted = configuration.ModelConfig(configuration.PROVIDERS["baseten"], "meta-models/muse-spark-open-1026")
+    monkeypatch.setenv("BASETEN_API_KEY", "test-key")
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, hosted, tmp_path, require_provider="meta")
+    assert outcome["verdict"] == "holds up"
+    assert "all on Meta: yes (Meta models; meta-models/muse-spark-open-1026 on baseten)" in outcome["report"].read_text()
+    calls = [json.loads(line) for line in (outcome["report"].parent / "calls.jsonl").read_text().splitlines()]
+    assert {(c["provider"], c["maker"]) for c in calls} == {("baseten", "meta")}

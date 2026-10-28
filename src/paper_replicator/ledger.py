@@ -3,7 +3,7 @@
 The ledger is a RunHooks, so the SDK calls it after every model response. An agent that
 was not registered with its config fails the run, because an unlogged call must not pass.
 With a budget, the call that takes spending past it raises BudgetExceeded and the run stops.
-With require_provider set (demo and benchmark runs: "meta"), a call bound for any other endpoint raises
+With require_provider set (demo and benchmark runs: "meta"), a call to any other maker's model raises
 ProviderNotAllowed before it is sent.
 """
 
@@ -16,7 +16,7 @@ from pathlib import Path
 from agents import Agent, RunContextWrapper, RunHooks
 from agents.items import ModelResponse
 
-from .config import ModelConfig
+from .config import ModelConfig, maker
 from .pricing import cost_usd
 
 
@@ -49,10 +49,10 @@ class Ledger(RunHooks):
         return sum(row["cost_usd"] or 0.0 for row in self.rows)
 
     async def on_llm_start(self, context: RunContextWrapper, agent: Agent, system_prompt, input_items) -> None:
-        provider = self.configs[agent.name].provider.name
-        if self.require_provider and provider != self.require_provider:
-            raise ProviderNotAllowed(f"this run allows only {self.require_provider} calls, and the {agent.name}'s "
-                                     f"call goes to {provider}")
+        cfg = self.configs[agent.name]
+        if self.require_provider and maker(cfg) != self.require_provider:
+            raise ProviderNotAllowed(f"this run allows only {self.require_provider} models, and the {agent.name}'s "
+                                     f"call goes to {cfg.model} on {cfg.provider.name}")
 
     async def on_llm_end(
         self, context: RunContextWrapper, agent: Agent, response: ModelResponse
@@ -65,6 +65,7 @@ class Ledger(RunHooks):
             "run_id": self.run_id,
             "role": agent.name,
             "provider": cfg.provider.name,
+            "maker": maker(cfg),
             "model": cfg.model,
             "input_tokens": usage.input_tokens,
             "cached_tokens": cached,
