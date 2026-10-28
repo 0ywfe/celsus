@@ -110,6 +110,25 @@ def syntax_error(script: str) -> str | None:
     return None
 
 
+# A count the paper chooses by rank ("the top 50", "the 25 largest") is part of the method: code may say it.
+# A count the paper arrives at ("a total of 54") is an outcome a script must never be cut or padded to.
+_RANK = r"(?:largest|biggest|smallest|highest|lowest|most|least|leading|top)"
+
+
+def selection_counts(latex: str, claims: list[Claim]) -> set[str]:
+    """Names of the count claims the paper states as a rank cut-off."""
+    text = clean(latex)
+    chosen = set()
+    for claim in claims:
+        digits = magnitude(claim.value)
+        if claim.kind != "count" or not digits:
+            continue
+        number = re.escape(digits)
+        if re.search(rf"\btop[\s~-]*{number}(?![\d.])|(?<![\d.]){number}[\s~-]+{_RANK}\b", text, re.I):
+            chosen.add(claim.name)
+    return chosen
+
+
 def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim]:
     """The counts a script could cut its sample to: the totals the paper splits into subgroups, or,
     when it reports no split, its largest count."""

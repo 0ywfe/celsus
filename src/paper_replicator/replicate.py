@@ -205,6 +205,15 @@ def script_problem(script: str, previous: str, claims: list[Claim], targets: lis
     return None
 
 
+def watched_totals(claims: list[Claim], spec: PaperSpec, latex: str) -> tuple[list[Claim], set[str]]:
+    """The sample totals a script may not contain, and the values of the counts the paper chooses by rank
+    (a top-N cut-off is part of the method, so it is never watched)."""
+    chosen = guards.selection_counts(latex, claims)
+    totals = [c for c in guards.sample_totals(claims, {p.total for p in spec.partitions}) if c.name not in chosen]
+    values = {f"{guards.parse_number(c.value):g}" for c in claims if c.name in chosen}
+    return totals, values
+
+
 def sample_of(raw: str | None) -> dict:
     """The sample block of a results.json, or {}."""
     try:
@@ -240,7 +249,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
     task = f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\nWrite the replication script."
     history: list = [user(task)]
     previous, targets, kept = "", [], None
-    totals = guards.sample_totals(claims, {p.total for p in spec.partitions})
+    totals, chosen = watched_totals(claims, spec, latex)
     for attempt in range(1, attempts + 1):
         run.rounds = attempt
         run.say("build", f"attempt {attempt}: writing the script")
@@ -274,7 +283,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         if problem is None:
             run.say("audit", f"attempt {attempt}: {len(results)} results, sample matches the paper")
             return kept
-        targets = sorted(set(targets) | set(watch))
+        targets = sorted((set(targets) | set(watch)) - chosen)
         run.guard_events.append(f"attempt {attempt}: audit sent the sample back: {problem.splitlines()[1][2:]}")
         run.say("audit", f"attempt {attempt}: {len(results)} results, but the sample disagrees with the paper's; sent back")
         history.append(user(f"{problem} Return the whole corrected script."))
@@ -297,7 +306,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                                         run.effort)
         history: list = [user(task)]
         previous, targets, kept = "", [], None
-        totals = guards.sample_totals(claims, {p.total for p in spec.partitions})
+        totals, chosen = watched_totals(claims, spec, latex)
         for round_ in range(1, rounds + 1):
             run.rounds = round_
             run.say("build", f"round {round_}: the builder works in the sandbox (up to {turns} turns)")
@@ -346,7 +355,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
             if problem is None:
                 run.say("audit", f"round {round_}: {len(results)} results, sample matches the paper")
                 return kept
-            targets = sorted(set(targets) | set(watch))
+            targets = sorted((set(targets) | set(watch)) - chosen)
             run.guard_events.append(f"round {round_}: audit sent the sample back: {problem.splitlines()[1][2:]}")
             run.say("audit", f"round {round_}: {len(results)} results, but the sample disagrees with the paper's; sent back")
             history.append(user(f"{problem} Fix /work/replicate.py in the sandbox and run it again."))

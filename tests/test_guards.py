@@ -103,3 +103,17 @@ def test_a_reported_zero_is_not_a_planted_number():
               Claim(name="mean", description="", value="-7.49", unit="%", kind="estimate", where="")]
     assert hardcoded_results("x = df.fillna(0.0)\ny = 0", claims) == []
     assert hardcoded_results("x = -7.49", claims) == ["mean (-7.49)"]
+
+
+def test_a_count_the_paper_chooses_by_rank_is_a_parameter_not_an_outcome():
+    # 2601.08263: "select the top 50 major security incidents" is the method; 2512.06144: "a total of 54" is
+    # an outcome a script must not cut to
+    from paper_replicator.guards import selection_counts
+    from paper_replicator.spec import Claim
+    claims = [Claim(name="n_exploits", description="", value="50", unit="", kind="count", where=""),
+              Claim(name="n_reports", description="", value="54", unit="", kind="count", where="")]
+    latex = (r"We rank events by loss amount and select the top 50 major security incidents. Using the top-50 "
+             r"exploit-driven shocks ... a total of 54 8-K reports, across all 54 incidents.")
+    assert selection_counts(latex, claims) == {"n_exploits"}
+    assert selection_counts(r"the 25 largest firms by market value", [
+        Claim(name="n", description="", value="25", unit="", kind="count", where="")]) == {"n"}
