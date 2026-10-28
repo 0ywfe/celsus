@@ -63,10 +63,45 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
     return rows
 
 
-def verdict(rows: list[dict]) -> str:
-    judged = [row["consistent"] for row in rows if row["consistent"] is not None]
+COULD_NOT_CHECK = "could not check"
+
+
+def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = None) -> tuple[str, str]:
+    """(verdict, reason). A checker never blames a paper for its own failure: when the run, the data or the
+    rebuilt sample fails, the verdict is "could not check", never "does not hold up". Sample counts are a
+    precondition for judging the results, not results themselves."""
+    if results is None:
+        return COULD_NOT_CHECK, failure or "the replication never produced results"
+    off = [r for r in rows if r["kind"] == "count" and r["consistent"] is False]
+    if off:
+        worst = max(off, key=lambda r: abs((r["reproduced"] or 0) - (r["reported"] or 0)))
+        return COULD_NOT_CHECK, (f"the replication could not rebuild the paper's sample ({worst['name']}: "
+                                 f"{_num(worst['reproduced'])} here, {_num(worst['reported'])} in the paper)")
+    if any(r.get("n") == 0 for r in results) or any(r["kind"] == "count" and r["reproduced"] == 0 for r in rows):
+        return COULD_NOT_CHECK, "the replication found no observations"
+    judged = [r["consistent"] for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     if not judged:
-        return "no verdict"
+        return COULD_NOT_CHECK, "none of the paper's results could be compared"
     if all(judged):
-        return "reproduced"
-    return "partly reproduced" if any(judged) else "not reproduced"
+        return "holds up", ""
+    return ("partly holds up" if any(judged) else "does not hold up"), ""
+
+
+def _num(value) -> str:
+    return "none" if value is None else f"{value:g}"
+
+
+def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None) -> str:
+    """The report's first line: in plain words, do the paper's numbers hold up?"""
+    if outcome == COULD_NOT_CHECK:
+        return f"We could not check this paper: {reason}. This says nothing about whether its numbers hold."
+    judged = [r for r in rows if r["kind"] != "count" and r["consistent"] is not None]
+    matched = sum(r["consistent"] for r in judged)
+    line = {"holds up": "The paper's numbers hold up", "partly holds up": "The paper's numbers partly hold up",
+            "does not hold up": "The paper's numbers do not hold up"}[outcome]
+    line += f": {matched} of {len(judged)} checked results match within their uncertainty."
+    main = next((r for r in rows if r["name"] == headline), None)
+    if main is not None and main["reproduced"] is not None:
+        line += (f" Its main result, {main['name']}, is {_num(main['reported'])}{main['unit']} in the paper and "
+                 f"{_num(main['reproduced'])} here ({'consistent' if main['consistent'] else 'not consistent'}).")
+    return line

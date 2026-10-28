@@ -12,7 +12,7 @@ CLAIMS = [c("total", "54"), c("small", "24"), c("large", "29"), c("tech", "13"),
 
 
 def spec(partitions=(), tests=()):
-    return PaperSpec(title="", hypothesis="", data_sources=[], sample="", method=[], claims=CLAIMS,
+    return PaperSpec(title="", hypothesis="", data_sources=[], sample="", method=[], claims=CLAIMS, headline="",
                      partitions=list(partitions), tests=list(tests))
 
 

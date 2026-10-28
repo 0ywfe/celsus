@@ -22,6 +22,7 @@ SPEC = {
         {"name": "n_filings", "description": "", "value": "40", "unit": "", "kind": "count", "where": ""},
         {"name": "invented", "description": "", "value": "12.3", "unit": "%", "kind": "estimate", "where": ""},
     ],
+    "headline": "small_mean",
     "partitions": [{"split": "all", "total": "n_filings", "parts": []}],
     "tests": [{"test": "small vs zero", "statistic": "t_diff", "p_value": "missing_p", "group_sizes": ["n_filings"]}],
 }
@@ -67,7 +68,7 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     sandbox = FakeSandbox([SandboxRun(0, "ok", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
 
-    assert outcome["verdict"] == "reproduced"
+    assert outcome["verdict"] == "holds up"
     assert len(api.requests) == 3                      # extract, leaky build, clean build
     assert sandbox.scripts == ["print('computed')"]   # the leaky script never ran
     folder = outcome["report"].parent
@@ -89,7 +90,7 @@ def test_failed_script_goes_back_to_the_builder_with_stderr(setup):
     sandbox = FakeSandbox([SandboxRun(1, "", "KeyError: 'items'", 1.0),
                            SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
-    assert outcome["verdict"] == "reproduced"
+    assert outcome["verdict"] == "holds up"
     fix_request = api.requests[2]["body"]["messages"][-1]["content"]
     assert "exit code 1" in fix_request and "KeyError: 'items'" in fix_request
 
@@ -116,8 +117,12 @@ def test_budget_stop_ends_the_run_and_still_writes_the_report(setup):
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     outcome = go(api, FakeSandbox([]), cfg, tmp_path, budget=0.000001)
     assert len(api.requests) == 1
-    assert outcome["verdict"] == "no verdict"
-    assert "BudgetExceeded" in outcome["report"].read_text()
+    assert outcome["verdict"] == "could not check"
+    text = outcome["report"].read_text()
+    assert "BudgetExceeded" in text
+    assert text.startswith("We could not check this paper: the run stopped (BudgetExceeded).")
+    summary = json.loads((outcome["report"].parent / "summary.json").read_text())
+    assert summary["crashed"].startswith("BudgetExceeded") and summary["verdict"] == "could not check"
 
 
 def test_planned_budget_is_a_bound_on_the_calls():
@@ -134,7 +139,7 @@ def test_script_that_does_not_compile_never_reaches_the_sandbox(setup):
     outcome = go(api, sandbox, cfg, tmp_path)
     assert sandbox.scripts == ["print('computed')"]
     assert "does not compile" in api.requests[2]["body"]["messages"][-1]["content"]
-    assert outcome["verdict"] == "reproduced"
+    assert outcome["verdict"] == "holds up"
 
 
 SHORT = {**RESULTS, "results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 12},
@@ -153,7 +158,7 @@ def test_audit_sends_a_sample_mismatch_back_and_keeps_the_rerun(setup):
     feedback = api.requests[2]["body"]["messages"][-1]["content"]
     assert "n_filings: the paper reports 40, your run produced 21" in feedback
     assert "kept=21" in feedback and "Never filter, trim or pad" in feedback
-    assert outcome["verdict"] == "reproduced"
+    assert outcome["verdict"] == "holds up"
     assert (outcome["report"].parent / "results_attempt.txt").read_text() == "2"
 
 
@@ -230,7 +235,7 @@ def test_workbench_builder_explores_writes_and_only_the_clean_rerun_counts(setup
     outcome = asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=2, timeout_s=600, budget_usd=None,
                                               runs_dir=tmp_path / "runs", sandbox=sandbox, builder="workbench",
                                               turns=10, open_bench=open_bench))
-    assert outcome["verdict"] == "reproduced"
+    assert outcome["verdict"] == "holds up"
     [bench] = benches
     assert bench.commands == ["curl -s efts | head", "python /work/replicate.py"] and bench.closed
     assert sandbox.scripts == ["print('computed')"]                   # the clean re-run used the file it wrote
@@ -269,5 +274,8 @@ def test_an_infrastructure_failure_keeps_the_earlier_good_results(setup):
             return super().__call__(script, **kw)
 
     outcome = go(api, FlakySandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})]), cfg, tmp_path)
-    assert outcome["verdict"] != "no verdict"
-    assert "clean run could not complete: ConnectionError" in outcome["report"].read_text()
+    rows = json.loads((outcome["report"].parent / "comparison.json").read_text())["rows"]
+    assert {r["name"]: r["reproduced"] for r in rows}["n_filings"] == 21     # the earlier results were kept
+    text = outcome["report"].read_text()
+    assert "clean run could not complete: ConnectionError" in text
+    assert text.startswith("We could not check this paper: the replication could not rebuild the paper's sample")

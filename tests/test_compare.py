@@ -1,4 +1,4 @@
-from paper_replicator.compare import compare, verdict
+from paper_replicator.compare import compare, first_line, verdict
 from paper_replicator.spec import Claim
 
 
@@ -22,11 +22,36 @@ def test_each_kind_is_judged_from_the_data():
     assert rows["missing"]["why"] == "not computed"
 
 
-def test_verdict_counts_only_judged_rows():
-    assert verdict([{"consistent": True}, {"consistent": None}]) == "reproduced"
-    assert verdict([{"consistent": True}, {"consistent": False}]) == "partly reproduced"
-    assert verdict([{"consistent": False}]) == "not reproduced"
-    assert verdict([{"consistent": None}]) == "no verdict"
+def row(name, kind, consistent, reported=1.0, reproduced=1.0):
+    return {"name": name, "kind": kind, "consistent": consistent, "reported": reported, "reproduced": reproduced,
+            "unit": "%", "n": None}
+
+
+def test_verdicts_judge_results_not_counts():
+    ok = [{"name": "x", "value": 1.0, "n": 10}]
+    assert verdict([row("a", "estimate", True), row("b", "other", None)], ok)[0] == "holds up"
+    assert verdict([row("a", "estimate", True), row("b", "estimate", False)], ok)[0] == "partly holds up"
+    assert verdict([row("a", "estimate", False)], ok)[0] == "does not hold up"
+
+
+def test_the_checker_never_blames_the_paper_for_its_own_failure():
+    ok = [{"name": "x", "value": 1.0, "n": 10}]
+    # run c3ab42 attempt 1: zero events, all-zero results
+    assert verdict([row("n", "count", False, 54, 0), row("a", "estimate", False)], ok)[0] == "could not check"
+    assert verdict([row("n", "count", True, 54, 0)], [{"name": "n", "value": 0, "n": 0}])[0] == "could not check"
+    outcome, reason = verdict([], None, "the clean run could not complete (ConnectionError)")
+    assert outcome == "could not check" and "ConnectionError" in reason
+    assert verdict([row("a", "estimate", None)], ok) == ("could not check", "none of the paper's results could be compared")
+
+
+def test_the_first_line_says_in_plain_words_whether_the_numbers_hold():
+    rows = [row("small", "estimate", True, -7.49, -6.5), row("t", "test_statistic", False, -3.13, -1.2)]
+    line = first_line("partly holds up", "", rows, "small")
+    assert line.startswith("The paper's numbers partly hold up: 1 of 2 checked results match")
+    assert "small, is -7.49% in the paper and -6.5 here (consistent)" in line
+    assert first_line("could not check", "the replication found no observations", [], None) == (
+        "We could not check this paper: the replication found no observations. "
+        "This says nothing about whether its numbers hold.")
 
 
 def test_significance_uses_the_side_the_paper_tested():

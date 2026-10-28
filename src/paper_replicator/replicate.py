@@ -9,9 +9,11 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import datetime
 import json
 import os
 import sys
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
@@ -22,7 +24,7 @@ from openai import AsyncOpenAI
 
 from . import config, guards, market, report, roles
 from .paper_checks import check_paper
-from .compare import compare, verdict
+from .compare import COULD_NOT_CHECK, compare, first_line, verdict
 from .ingest import load_paper
 from .ledger import Ledger
 from .llm import make_client
@@ -50,14 +52,23 @@ class Run:
     ledger: Ledger
     sandbox: Callable[..., SandboxRun]
     timeout_s: int
+    effort: str | None = None
     guard_events: list[str] = field(default_factory=list)
+    rejections: list[dict] = field(default_factory=list)
     market_log: list[dict] = field(default_factory=list)
     sandbox_note: str = "not run"
+    rounds: int = 0
+    failure: str | None = None
+    started: float = field(default_factory=time.monotonic)
 
     def say(self, stage: str, message: str, **data) -> None:
         print(f"[{stage}] {message}", flush=True)
+        stamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
         with (self.folder / "events.jsonl").open("a") as stream:
-            stream.write(json.dumps({"stage": stage, "message": message, **data}) + "\n")
+            stream.write(json.dumps({"ts": stamp, "stage": stage, "message": message, **data}) + "\n")
+
+    def reject(self, attempt: int, problem: str) -> None:
+        self.rejections.append({"round": attempt, "reason": problem})
 
 
 def planned_budget(model: str, latex: str, attempts: int) -> float:
@@ -82,6 +93,7 @@ async def clean_run(run: Run, script: str, attempt: int) -> SandboxRun | None:
     try:
         return await asyncio.to_thread(sandbox_round, run, script, attempt)
     except Exception as error:
+        run.failure = f"the clean run could not complete ({type(error).__name__})"
         run.guard_events.append(f"attempt {attempt}: clean run could not complete: {type(error).__name__}: {error}")
         run.say("error", f"attempt {attempt}: clean run could not complete: {type(error).__name__}: {error}")
         return None
@@ -178,6 +190,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
     previous, targets, kept = "", [], None
     totals = guards.sample_totals(claims, {p.total for p in spec.partitions})
     for attempt in range(1, attempts + 1):
+        run.rounds = attempt
         run.say("build", f"attempt {attempt}: writing the script")
         result = await Runner.run(builder, history, max_turns=1, hooks=run.ledger)
         script = result.final_output
@@ -188,6 +201,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         previous = script.script
         if problem:
             run.guard_events.append(f"attempt {attempt}: rejected before the sandbox: {problem}")
+            run.reject(attempt, problem)
             run.say("guard", f"script rejected: {problem.split('. ')[0]}")
             history.append(user(f"Rejected: {problem} Return the whole corrected script."))
             continue
@@ -226,11 +240,13 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
     task = (f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\n"
             "Replicate the paper's headline results as /work/replicate.py.")
     try:
-        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say, env))
+        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say, env),
+                                        run.effort)
         history: list = [user(task)]
         previous, targets, kept = "", [], None
         totals = guards.sample_totals(claims, {p.total for p in spec.partitions})
         for round_ in range(1, rounds + 1):
+            run.rounds = round_
             run.say("build", f"round {round_}: the builder works in the sandbox (up to {turns} turns)")
             try:
                 result = await Runner.run(agent, history, max_turns=turns, hooks=run.ledger)
@@ -250,6 +266,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                 previous = script
             if problem:
                 run.guard_events.append(f"round {round_}: rejected before the clean run: {problem}")
+                run.reject(round_, problem)
                 run.say("guard", f"script rejected: {problem.split('. ')[0]}")
                 history.append(user(f"Rejected: {problem} Fix /work/replicate.py in the sandbox and run it again."))
                 continue
@@ -282,7 +299,8 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
 async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig, *, attempts: int,
                     timeout_s: int, budget_usd: float | None, runs_dir: Path = RUNS_DIR,
                     sandbox: Callable[..., SandboxRun] = run_script, builder: str = "oneshot",
-                    turns: int = 30, open_bench: Callable[..., Workbench] = Workbench) -> dict:
+                    turns: int = 30, open_bench: Callable[..., Workbench] = Workbench,
+                    effort: str | None = None) -> dict:
     run_id, folder = new_run(runs_dir)
     latex = load_paper(arxiv_id, ROOT / "data" / "arxiv")
     (folder / "paper.tex").write_text(latex)
@@ -293,16 +311,16 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     else:
         budget = planned_budget(cfg.model, latex, attempts)
     ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg}, budget_usd=budget)
-    run = Run(run_id, folder, ledger, sandbox, timeout_s)
-    run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {builder} builder; budget ${budget:.4f}")
+    run = Run(run_id, folder, ledger, sandbox, timeout_s, effort=effort)
+    run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {cfg.model} at effort "
+                      f"{effort or 'default'}; {builder} builder; budget ${budget:.4f}")
 
-    title, rows, rejected, outcome, paper = arxiv_id, [], [], "no verdict", []
+    spec, rows, rejected, paper, results, crashed = None, [], [], [], None, None
     try:
         run.say("extract", f"reading the paper with {cfg.model}")
-        spec = (await Runner.run(roles.extractor(cfg, client), f"PAPER (LaTeX source):\n{latex}",
+        spec = (await Runner.run(roles.extractor(cfg, client, effort), f"PAPER (LaTeX source):\n{latex}",
                                  max_turns=1, hooks=ledger)).final_output
         (folder / "spec.json").write_text(spec.model_dump_json(indent=1))
-        title = spec.title
         claims, rejected = guards.ground_claims(spec.claims, latex)
         run.say("guard", f"{len(claims)} claims grounded in the LaTeX, {len(rejected)} rejected",
                 rejected=rejected)
@@ -310,41 +328,75 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         for check in paper:
             run.say("check", f"{check['status']}: {check['text']}", **check)
         if not claims:
-            results = None
+            run.failure = "no number the extractor reported could be found in the paper"
         elif builder == "workbench":
             results = await build_with_workbench(run, cfg, client, latex, spec, claims, turns=turns,
                                                  rounds=attempts, open_bench=open_bench)
         else:
-            results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60), latex, spec, claims,
-                                          attempts)
+            results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60, effort), latex, spec,
+                                          claims, attempts)
         rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper))
-        outcome = verdict(rows) if results is not None else "no verdict"
     except Exception as error:  # the report still gets written, with the reason
-        run.guard_events.append(f"run stopped: {type(error).__name__}: {error}")
-        run.say("error", f"{type(error).__name__}: {error}")
-    path = report.write(folder, arxiv_id=arxiv_id, title=title, verdict=outcome, rows=rows, rejected=rejected,
-                        paper_checks=paper,
+        crashed = f"{type(error).__name__}: {error}"
+        run.failure = f"the run stopped ({type(error).__name__})"
+        run.guard_events.append(f"run stopped: {crashed}")
+        run.say("error", crashed)
+    outcome, reason = verdict(rows, results, run.failure)
+    headline = spec.headline if spec else None
+    headline_text = first_line(outcome, reason, rows, headline)
+    path = report.write(folder, arxiv_id=arxiv_id, title=spec.title if spec else arxiv_id, verdict=outcome,
+                        rows=rows, rejected=rejected, paper_checks=paper, headline_text=headline_text,
                         guard_events=run.guard_events, market_log=run.market_log, calls=ledger.rows,
                         sandbox_note=run.sandbox_note)
+    summary = run_summary(run, arxiv_id, cfg, builder, outcome, reason, headline_text, rows, headline, crashed)
+    (folder / "summary.json").write_text(json.dumps(summary, indent=1))
     run.say("verdict", f"{outcome} (${ledger.spent_usd:.4f} spent)", verdict=outcome)
-    return {"run_id": run_id, "verdict": outcome, "report": path, "spent_usd": ledger.spent_usd}
+    return {"run_id": run_id, "verdict": outcome, "report": path, "spent_usd": ledger.spent_usd, "summary": summary}
+
+
+def run_summary(run: Run, arxiv_id: str, cfg: config.ModelConfig, builder: str, outcome: str, reason: str,
+                headline_text: str, rows: list[dict], headline: str | None, crashed: str | None) -> dict:
+    """One record per run, the unit of the reliability and model-ladder tables."""
+    calls = run.ledger.rows
+    main = next((r for r in rows if r["name"] == headline), None)
+    return {
+        "run_id": run.run_id, "paper": arxiv_id, "provider": cfg.provider.name, "model": cfg.model,
+        "effort": run.effort, "builder": builder, "verdict": outcome, "reason": reason, "first_line": headline_text,
+        "headline": main,
+        "sample": [{"name": r["name"], "reported": r["reported"], "reproduced": r["reproduced"],
+                    "consistent": r["consistent"]} for r in rows if r["kind"] == "count"],
+        "judged": sum(1 for r in rows if r["kind"] != "count" and r["consistent"] is not None),
+        "matched": sum(1 for r in rows if r["kind"] != "count" and r["consistent"]),
+        "rejections": run.rejections, "rounds": run.rounds, "calls": len(calls),
+        "cost_usd": round(run.ledger.spent_usd, 4),
+        "tokens_in": sum(c["input_tokens"] for c in calls), "tokens_out": sum(c["output_tokens"] for c in calls),
+        "wall_s": round(time.monotonic() - run.started, 1), "crashed": crashed,
+    }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("arxiv_id")
+    parser.add_argument("--provider", default=None, help="default: the quick tier's provider (Meta)")
+    parser.add_argument("--model", default=None, help="default: the quick tier's model")
+    parser.add_argument("--effort", default=None, help="reasoning effort for every role (minimal ... max)")
     parser.add_argument("--builder", choices=["workbench", "oneshot"], default="workbench")
-    parser.add_argument("--attempts", type=int, default=4, help="build attempts (oneshot) or audit rounds (workbench)")
+    parser.add_argument("--attempts", type=int, default=3, help="build attempts (oneshot) or audit rounds (workbench)")
     parser.add_argument("--turns", type=int, default=30, help="tool turns per workbench round")
     parser.add_argument("--timeout-min", type=int, default=20)
     parser.add_argument("--budget-usd", type=float, default=None,
-                        help="default: the worst case of the planned calls")
+                        help="budget stop for this run; default: the planned worst case (oneshot) or the "
+                             "first-measurement cap (workbench)")
     args = parser.parse_args()
     load_dotenv(ROOT / ".env")
     cfg = config.tier("quick")
-    outcome = asyncio.run(replicate(args.arxiv_id, make_client(cfg, timeout_s=MODEL_TIMEOUT_S), cfg, attempts=args.attempts,
-                                    timeout_s=args.timeout_min * 60, budget_usd=args.budget_usd,
-                                    builder=args.builder, turns=args.turns))
+    if args.provider or args.model:
+        cfg = config.ModelConfig(config.PROVIDERS[args.provider or cfg.provider.name], args.model or cfg.model)
+    outcome = asyncio.run(replicate(args.arxiv_id, make_client(cfg, timeout_s=MODEL_TIMEOUT_S), cfg,
+                                    attempts=args.attempts, timeout_s=args.timeout_min * 60,
+                                    budget_usd=args.budget_usd, builder=args.builder, turns=args.turns,
+                                    effort=args.effort))
+    print(outcome["summary"]["first_line"])
     print(f"report: {outcome['report'].relative_to(ROOT)}")
     return 0
 

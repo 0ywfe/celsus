@@ -9,7 +9,8 @@ from paper_replicator import guards
 from paper_replicator.spec import PaperSpec
 
 CORPUS = Path(__file__).parent / "corpus"
-SPEC = PaperSpec.model_validate_json((CORPUS / "spec_2512.06144.json").read_text())
+# A real extractor output from before the spec had a headline field.
+SPEC = PaperSpec.model_validate({"headline": "", **json.loads((CORPUS / "spec_2512.06144.json").read_text())})
 TOTALS = guards.sample_totals(SPEC.claims, {p.total for p in SPEC.partitions})
 
 

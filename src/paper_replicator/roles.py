@@ -22,6 +22,7 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
   p-values and sample sizes. Copy each value exactly as printed. Never compute, round or convert one.
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - method: ordered steps precise enough to code, including windows, return definitions and tests.
+- headline: the claim the paper's main conclusion rests on.
 - partitions: each split of a sample into subgroups (by size, sector, ...), naming the count claims.
 - tests: each test statistic with its p-value and the count claims for the samples it uses.
 - Report only what the paper says. Where it does not say, write "not stated"."""
@@ -81,22 +82,23 @@ class Script(BaseModel):
     notes: str = Field(description="assumptions, and every deviation from the paper's method")
 
 
-def _settings(role: str) -> ModelSettings:
-    return ModelSettings(max_tokens=MAX_TOKENS[role], reasoning=Reasoning(effort=EFFORT[role]))
+def _settings(role: str, effort: str | None = None) -> ModelSettings:
+    return ModelSettings(max_tokens=MAX_TOKENS[role], reasoning=Reasoning(effort=effort or EFFORT[role]))
 
 
-def extractor(cfg: ModelConfig, client: AsyncOpenAI) -> Agent:
+def extractor(cfg: ModelConfig, client: AsyncOpenAI, effort: str | None = None) -> Agent:
     return Agent(name="extractor", instructions=EXTRACTOR, model=make_model(cfg, client),
-                 output_type=PaperSpec, model_settings=_settings("extractor"))
+                 output_type=PaperSpec, model_settings=_settings("extractor", effort))
 
 
-def builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int) -> Agent:
+def builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, effort: str | None = None) -> Agent:
     return Agent(name="builder", instructions=BUILDER.replace("{minutes}", str(minutes)), model=make_model(cfg, client),
-                 output_type=Script, model_settings=_settings("builder"))
+                 output_type=Script, model_settings=_settings("builder", effort))
 
 
-def workbench_builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, turns: int, tools: list) -> Agent:
+def workbench_builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, turns: int, tools: list,
+                      effort: str | None = None) -> Agent:
     """No output_type: as in Meta's cookbook 07, the tool loop ends in plain text (the summary)."""
     instructions = WORKBENCH.replace("{minutes}", str(minutes)).replace("{turns}", str(turns))
     return Agent(name="builder", instructions=instructions, model=make_model(cfg, client), tools=tools,
-                 model_settings=_settings("builder"))
+                 model_settings=_settings("builder", effort))

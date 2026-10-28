@@ -21,10 +21,11 @@ def market_sources(log: list[dict]) -> list[str]:
 
 
 def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[dict], rejected: list[dict],
-          paper_checks: list[dict],
+          paper_checks: list[dict], headline_text: str,
           guard_events: list[str], market_log: list[dict], calls: list[dict], sandbox_note: str) -> Path:
     providers = sorted({c["provider"] for c in calls})
     lines = [
+        headline_text, "",
         f"# {PRODUCT_NAME} report: arXiv {arxiv_id}",
         f"**{title}**", "",
         f"Verdict: **{verdict}**", "",

@@ -43,7 +43,7 @@ def _start(*, market_cache: Path, env: dict[str, str], lifetime_s: int) -> modal
     fs = sandbox.filesystem
     fs.make_directory(f"{CACHE}/prices")
     fs.write_text(HELPER.read_text(), f"{WORK}/market_data.py")
-    for path in (p for p in market_cache.rglob("*") if p.is_file()):
+    for path in (p for p in market_cache.rglob("*") if p.is_file() and not p.name.startswith(".")):
         fs.copy_from_local(path, f"{CACHE}/{path.relative_to(market_cache)}")
     return sandbox
 

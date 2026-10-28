@@ -8,7 +8,9 @@ ticker never stops the run.
 
 from __future__ import annotations
 
+import contextlib
 import datetime
+import fcntl
 import json
 from pathlib import Path
 
@@ -31,8 +33,25 @@ def _try(fetch, *args):
         return None, f"{type(error).__name__}: {error}"
 
 
+@contextlib.contextmanager
+def _locked(cache_dir: Path):
+    """Runs in parallel share the cache: one writer at a time."""
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    with (cache_dir / ".lock").open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(lock, fcntl.LOCK_UN)
+
+
 def fulfil(requests: list[dict], cache_dir: Path) -> list[dict]:
     """Fetch every requested ticker on the host and cache it. Returns what was fetched."""
+    with _locked(cache_dir):
+        return _fulfil(requests, cache_dir)
+
+
+def _fulfil(requests: list[dict], cache_dir: Path) -> list[dict]:
     (cache_dir / "prices").mkdir(parents=True, exist_ok=True)
     manifest_path = cache_dir / "manifest.json"
     manifest = _load(manifest_path)

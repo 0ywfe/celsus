@@ -38,5 +38,6 @@ class PaperSpec(BaseModel):
     sample: str = Field(description="event or sample definition, period, filters and sample sizes")
     method: list[str] = Field(description="the method as ordered steps, precise enough to code")
     claims: list[Claim] = Field(description="every headline number the paper reports as a result")
+    headline: str = Field(description="name of the one claim the paper's main conclusion rests on")
     partitions: list[Partition] = Field(description="every split of a sample into subgroups whose counts the paper reports")
     tests: list[ReportedTest] = Field(description="every test statistic with its p-value and sample sizes")
