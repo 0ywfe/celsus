@@ -13,7 +13,7 @@ ClaimKind = Literal["estimate", "test_statistic", "p_value", "count", "other"]
 class Claim(BaseModel):
     name: str = Field(description="unique snake_case id for this number")
     description: str = Field(description="what is measured, on which sample, over which window")
-    value: str = Field(description="the number exactly as printed in the paper, without its unit")
+    value: str = Field(description="one number exactly as printed in the paper, without its unit")
     unit: str = Field(description="unit as printed, e.g. % or empty")
     kind: ClaimKind
     where: str = Field(description="the section or sentence where the paper reports it")

@@ -60,6 +60,16 @@ def parse_number(value: str) -> float | None:
     return float(first[1]) * 10.0 ** first[2] if first else None
 
 
+def numbers_in(value: str) -> int:
+    """How many numbers a value holds outside its asides. A power of ten is one number; a subscript, or what sits
+    in parentheses or brackets (a t, an interval), belongs to the number before it. Several numbers in one value
+    ("N=1,961, Gap +30.07 bps", "1/2", "13-18") leave open which one is the claim."""
+    text = re.sub(r"_\{[^}]*\}|_\d+", "", _POWER.sub(" 1 ", clean(value)))
+    while (inner := re.sub(r"\([^()]*\)|\[[^\[\]]*\]", "", text)) != text:
+        text = inner
+    return len(_SIGNED.findall(text))
+
+
 def bound(value: str) -> str | None:
     """'<' or '>' when the first number is printed as a bound (p < 0.001, ≤0.002, > 2), else None."""
     text = clean(value)

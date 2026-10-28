@@ -157,3 +157,35 @@ def test_a_zero_where_the_paper_has_observations_is_still_could_not_check():
     claims = [claim("n", "54", "count"), claim("mean", "-3.07", "estimate")]
     results = [{"name": "n", "value": 0}, {"name": "mean", "value": -3.0, "se": 1.0}]
     assert verdict(compare(claims, results), results)[0] == "could not check"
+
+
+def test_a_value_holding_several_numbers_is_not_judged_and_says_why():
+    # held-out 2602.07018: "N=1,961, Gap +30.07 bps, ..." was read as 1,961 and a reproduced gap of 30.07 was
+    # marked a mismatch, 15 times; 2609.22612's "1/2" was read as 1 and marked a match for 0.5
+    claims = [claim("gap", "N=1,961, Gap +30.07 bps, d=0.196, IID p=0.0008", "estimate"),
+              claim("gamma", "1/2", "estimate"), claim("hits", "926 of 2,876 (32.2%)", "count"),
+              claim("mean", "-7.49", "estimate")]
+    results = [{"name": "gap", "value": 30.07, "se": 4.0}, {"name": "gamma", "value": 0.5, "se": 0},
+               {"name": "hits", "value": 400}, {"name": "mean", "value": -7.4, "se": 1.0}]
+    rows = {r["name"]: r for r in compare(claims, results)}
+    for name in ("gap", "gamma", "hits"):
+        assert rows[name]["consistent"] is None and rows[name]["reported"] is None, name
+        assert "holds several numbers" in rows[name]["why"] and rows[name]["reproduced"] is not None
+    assert rows["mean"]["consistent"] is True
+    assert verdict(list(rows.values()), results) == ("holds up", "")   # an unread count is not a sample failure
+
+
+def test_a_value_with_no_number_is_not_judged_instead_of_crashing_the_run():
+    # 4 saved runs print counts as words ("three", "five"); the count's bound branch raised TypeError on them
+    claims = [claim("cells", "three", "count"), claim("flag", "yes", "other"), claim("mean", "-7.49", "estimate")]
+    results = [{"name": "cells", "value": 3}, {"name": "flag", "value": 1}, {"name": "mean", "value": -7.4, "se": 1.0}]
+    rows = {r["name"]: r for r in compare(claims, results)}
+    assert rows["cells"]["consistent"] is None and "no number the checker reads" in rows["cells"]["why"]
+    assert verdict(list(rows.values()), results) == ("holds up", "")
+
+
+def test_an_unread_count_of_zero_is_not_an_empty_sample():
+    # held-out 2610.35702: "0/9" (no test of nine significant) and a run that found 0 was read as no observations
+    claims = [claim("rejections", "0/9", "count"), claim("mean", "-7.49", "estimate")]
+    results = [{"name": "rejections", "value": 0}, {"name": "mean", "value": -7.4, "se": 1.0}]
+    assert verdict(compare(claims, results), results) == ("holds up", "")

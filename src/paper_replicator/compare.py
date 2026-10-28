@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import math
 
-from .guards import bound, half_unit, parse_number
+from .guards import bound, half_unit, numbers_in, parse_number
 from .spec import Claim
 
 from scipy import stats
@@ -122,7 +122,11 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
         result = by_name.get(claim.name)
         row = {"name": claim.name, "kind": claim.kind, "unit": claim.unit, "reported": reported,
                "reproduced": None, "se": None, "n": None, "consistent": None, "why": "not computed"}
-        if result is not None:
+        if result is not None and (count := numbers_in(claim.value)) != 1:  # no single number to judge against
+            held = "several numbers" if count else "no number the checker reads"
+            row.update(reported=None, reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
+                       why=f"the paper's value \"{claim.value}\" holds {held}, so it is not judged")
+        elif result is not None:
             consistent, why = judge(claim.kind, reported, result, (sides or {}).get(claim.name, "two-sided"),
                                     claim.value)
             row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
@@ -148,10 +152,11 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
         worst = max(off, key=lambda r: abs((r["reproduced"] or 0) - (r["reported"] or 0)))
         return COULD_NOT_CHECK, (f"the replication could not rebuild the paper's sample ({worst['name']}: "
                                  f"{_num(worst['reproduced'])} here, {_num(worst['reported'])} in the paper)")
-    # A zero count is an empty sample only when the paper's count is not zero too: a paper that reports 0 rejections
-    # and a run that finds 0 agree (held-out 2602.07018 lost 144 results to this).
+    # A zero count is an empty sample only when the paper's count, read as one number, is not zero: a paper that
+    # reports 0 rejections and a run that finds 0 agree (held-out 2602.07018 lost 144 results to this), and a count
+    # the checker cannot read ("0/9") says nothing about the sample.
     if any(r.get("n") == 0 for r in results) or any(r["kind"] == "count" and r["reproduced"] == 0
-                                                     and r["consistent"] is not True for r in rows):
+                                                     and r["consistent"] is False for r in rows):
         return COULD_NOT_CHECK, "the replication found no observations"
     judged = [r["consistent"] for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     if not judged:

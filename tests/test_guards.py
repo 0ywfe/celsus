@@ -1,6 +1,7 @@
 import pytest
 
-from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_counts, hardcoded_results, parse_number,
+from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_counts, hardcoded_results, numbers_in,
+                                     parse_number,
                                      sample_totals,
                                      planted_counts, syntax_error)
 from paper_replicator.spec import Claim
@@ -168,3 +169,14 @@ def test_with_splits_the_largest_count_is_watched_too():
 def test_a_number_with_one_significant_digit_says_nothing():
     claims = [_claim("calmar", "0.20"), _claim("p_gold", "0.050"), _claim("win_rate", "50.0", unit="%")]
     assert hardcoded_results("thr = 0.20; MAX = 20 / 100; alpha = 0.05; half = 100 // 2; q = 1 / 2", claims) == []
+
+
+def test_numbers_in_counts_what_a_value_holds_outside_its_asides():
+    # the shapes measured in the 4,084 claim values on disk (28 Oct)
+    for one in ("-7.49", "1{,}224", "5.2\\times10^{-4}", "2.70x10-14", "1.5e-13", "10^{-12}", "< 0.001",
+                "-7.5 (t = -3.1)", "11.3 [4.8, 30.2]", "t_{63} = 2.1", "- 3.1"):
+        assert numbers_in(one) == 1, one
+    for several in ("N=1,961, Gap +30.07 bps, d=0.196, IID p=0.0008", "Final Wealth 4.71; CAGR 19.24%",
+                    "+11.36 bps, p=0.119", "1/2", "13-18", "between 0.33 and 0.64", "926 of 2,876 (32.2%)"):
+        assert numbers_in(several) > 1, several
+    assert numbers_in("not stated") == 0

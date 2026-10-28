@@ -24,6 +24,8 @@ EFFORT = {"extractor": "medium", "builder": "medium", "saboteur": "high", "revie
 EXTRACTOR = """You read a research paper's LaTeX source and write its replication spec.
 - claims: every headline number the paper reports as a result: estimates, test statistics,
   p-values and sample sizes. Copy each value exactly as printed. Never compute, round or convert one.
+  Each claim holds one number: a sentence or table row that prints several (an estimate with its standard
+  error and p-value, a row of performance metrics) gives one claim per number.
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - period_start, period_end: the dates the sample covers, exactly as printed ("2010-01-03", "February 2018",
   "as of November 12th, 2025"); "not stated" if the paper does not say.
