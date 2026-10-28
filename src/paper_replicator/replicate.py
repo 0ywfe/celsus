@@ -32,8 +32,10 @@ from .pricing import worst_case_usd
 from .runs import ROOT, RUNS_DIR, new_run
 from .sandbox import WORK, SandboxRun, Workbench, run_script
 from .workbench_tools import make_tools
-from .spec import Claim, PaperSpec
+from .spec import Claim, PaperSpec, reference_problems
 
+# The workshop's cap on a structured reply: one more attempt with the problems fed back.
+EXTRACT_ATTEMPTS = 2
 CHARS_PER_TOKEN = 3  # conservative: overestimates tokens, so the budget bound stays a bound
 SPEC_TOKENS = 4000
 STDERR_TAIL, STDOUT_TAIL = 4000, 2000
@@ -74,11 +76,35 @@ class Run:
 def planned_budget(model: str, latex: str, attempts: int) -> float:
     """Upper bound on model spend: every call at its output cap, the builder's history growing each attempt."""
     paper = len(latex) // CHARS_PER_TOKEN
-    total = worst_case_usd(model, paper + SPEC_TOKENS, roles.MAX_TOKENS["extractor"])
+    total = EXTRACT_ATTEMPTS * worst_case_usd(model, paper + SPEC_TOKENS, roles.MAX_TOKENS["extractor"])
     for attempt in range(attempts):
         history = paper + SPEC_TOKENS + attempt * (roles.MAX_TOKENS["builder"] + STDERR_TAIL)
         total += worst_case_usd(model, history, roles.MAX_TOKENS["builder"])
     return round(total, 4)
+
+
+async def extract(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, latex: str,
+                  effort: str | None) -> PaperSpec:
+    """The paper's spec. If its references do not name claims it is asked for once more with the problems;
+    whatever is still unresolved goes into the report, so no check is switched off without a word."""
+    paper = f"PAPER (LaTeX source):\n{latex}"
+    prompt = paper
+    for attempt in range(1, EXTRACT_ATTEMPTS + 1):
+        run.say("extract", f"reading the paper with {cfg.model}" if attempt == 1 else
+                "asking for the spec again, with its references fixed")
+        spec = (await Runner.run(roles.extractor(cfg, client, effort), prompt, max_turns=1,
+                                 hooks=run.ledger)).final_output
+        problems = reference_problems(spec)
+        if not problems:
+            return spec
+        run.say("extract", f"{len(problems)} references in the spec do not name a claim", problems=problems)
+        prompt = (f"{paper}\n\nYour previous spec referred to claims that do not exist:\n"
+                  + "\n".join(f"- {problem}" for problem in problems)
+                  + "\nIts claim names were: " + ", ".join(repr(c.name) for c in spec.claims)
+                  + "\nWrite the whole spec again. headline, partitions and tests name claims by their exact name; "
+                    "leave out a partition or test whose numbers the paper does not print.")
+    run.guard_events.extend(f"spec reference unresolved: {problem}" for problem in problems)
+    return spec
 
 
 def sides_by_statistic(spec: PaperSpec, paper: list[dict]) -> dict[str, str]:
@@ -331,9 +357,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
 
     spec, rows, rejected, paper, results, crashed = None, [], [], [], None, None
     try:
-        run.say("extract", f"reading the paper with {cfg.model}")
-        spec = (await Runner.run(roles.extractor(cfg, client, effort), f"PAPER (LaTeX source):\n{latex}",
-                                 max_turns=1, hooks=ledger)).final_output
+        spec = await extract(run, cfg, client, latex, effort)
         (folder / "spec.json").write_text(spec.model_dump_json(indent=1))
         claims, rejected = guards.ground_claims(spec.claims, latex)
         run.say("guard", f"{len(claims)} claims grounded in the LaTeX, {len(rejected)} rejected",

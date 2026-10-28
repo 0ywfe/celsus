@@ -24,7 +24,7 @@ SPEC = {
     ],
     "headline": "small_mean",
     "partitions": [{"split": "all", "total": "n_filings", "parts": []}],
-    "tests": [{"test": "small vs zero", "statistic": "t_diff", "p_value": "missing_p", "group_sizes": ["n_filings"]}],
+    "tests": [],
 }
 LEAKY = {"script": "print(-7.5)", "notes": ""}
 CLEAN = {"script": "print('computed')", "notes": "n/a"}
@@ -307,3 +307,27 @@ def test_a_round_that_runs_out_of_turns_carries_its_conversation_into_the_next(s
     assert "turns are used up" in round_two[-1]["content"]
     assert "[tool call 1; a round allows 2 turns]" in tool_replies[0]
     assert outcome["verdict"] == "holds up"
+
+
+def test_a_spec_with_unresolved_references_is_asked_for_once_more(setup):
+    cfg, tmp_path = setup
+    prose = {**SPEC, "headline": "Small firms fell 7.5%"}
+    api = FakeChatAPI([(json.dumps(prose), usage(500, 900)), (json.dumps(SPEC), usage(500, 900)),
+                       (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    retry = api.requests[1]["body"]["messages"][-1]["content"]
+    assert "headline 'Small firms fell 7.5%' is not the name of a claim" in retry
+    assert outcome["summary"]["headline"]["name"] == "small_mean"
+
+
+def test_references_still_unresolved_after_the_retry_are_reported_not_skipped(setup):
+    cfg, tmp_path = setup
+    prose = {**SPEC, "headline": "Small firms fell 7.5%"}
+    api = FakeChatAPI([(json.dumps(prose), usage(500, 900)), (json.dumps(prose), usage(500, 900)),
+                       (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert outcome["verdict"] == "holds up"
+    assert "spec reference unresolved: headline 'Small firms fell 7.5%' is not the name of a claim" in (
+        outcome["report"].read_text())

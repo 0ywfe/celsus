@@ -25,8 +25,9 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - method: ordered steps precise enough to code, including windows, return definitions and tests.
 - headline: the claim the paper's main conclusion rests on.
-- partitions: each split of a sample into subgroups (by size, sector, ...), naming the count claims.
+- partitions: each split of a sample into subgroups (by size, sector, ...) whose counts the paper prints.
 - tests: each test statistic with its p-value and the count claims for the samples it uses.
+- headline, partitions and tests refer to claims by their exact `name`, never by a value or a description.
 - Report only what the paper says. Where it does not say, write "not stated"."""
 
 RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",

@@ -6,6 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+NOT_STATED = "not stated"
 ClaimKind = Literal["estimate", "test_statistic", "p_value", "count", "other"]
 
 
@@ -41,3 +42,28 @@ class PaperSpec(BaseModel):
     headline: str = Field(description="name of the one claim the paper's main conclusion rests on")
     partitions: list[Partition] = Field(description="every split of a sample into subgroups whose counts the paper reports")
     tests: list[ReportedTest] = Field(description="every test statistic with its p-value and sample sizes")
+
+
+def reference_problems(spec: PaperSpec) -> list[str]:
+    """Every place the spec names a claim but the name is not one. The paper checks and the verdict desk find
+    claims by name, so an unresolved reference would silently switch them off (run 4c4a02 wrote prose there)."""
+    names = [c.name for c in spec.claims]
+    problems = [f"two claims share the name '{n}'" for n in dict.fromkeys(n for n in names if names.count(n) > 1)]
+    known = set(names)
+
+    def check(where: str, name: str) -> None:
+        if name not in known:
+            problems.append(f"{where} '{name}' is not the name of a claim")
+
+    check("headline", spec.headline)
+    for split in spec.partitions:
+        check(f"partition '{split.split}': total", split.total)
+        for part in split.parts:
+            check(f"partition '{split.split}': part", part)
+    for test in spec.tests:
+        check(f"test '{test.test}': statistic", test.statistic)
+        check(f"test '{test.test}': p_value", test.p_value)
+        for size in test.group_sizes:  # the extractor is told to write "not stated" when the paper does not say;
+            if size.strip().lower() != NOT_STATED:  # the sidedness check then falls back to the normal
+                check(f"test '{test.test}': group size", size)
+    return problems
