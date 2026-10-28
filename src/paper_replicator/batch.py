@@ -116,7 +116,30 @@ def summarise(run_ids: list[str]) -> dict:
             "crashed": sum(1 for r in runs if r["crashed"]),
             "run_ids": [r["run_id"] for r in runs],
         })
-    return {"groups": out}
+    return {"groups": out, "models": by_model(out)}
+
+
+def by_model(groups: list[dict]) -> list[dict]:
+    """Across papers, per model and effort: how many papers, how the verdicts fell, how often the checker could
+    not check, how often a paper's runs agreed, and what it cost."""
+    models: dict[tuple, list[dict]] = {}
+    for g in groups:
+        models.setdefault((g["model"], g["effort"]), []).append(g)
+    out = []
+    for (model, effort), gs in sorted(models.items()):
+        verdicts = Counter()
+        for g in gs:
+            verdicts.update(g["verdicts"])
+        runs = sum(g["n"] for g in gs)
+        repeated = [g for g in gs if g["n"] > 1]
+        out.append({
+            "model": model, "effort": effort, "papers": len(gs), "runs": runs, "verdicts": dict(verdicts),
+            "could_not_check": round(verdicts.get("could not check", 0) / runs, 3),
+            "papers_all_runs_agree": f"{sum(1 for g in repeated if g['agreement'] == 1)}/{len(repeated)}",
+            "cost_usd_mean": round(sum(g["cost_usd"].get("mean", 0) * g["n"] for g in gs) / runs, 4),
+            "crashed": sum(g["crashed"] for g in gs),
+        })
+    return out
 
 
 def markdown(summary: dict) -> str:
@@ -132,6 +155,14 @@ def markdown(summary: dict) -> str:
             f"{g['headline_consistent']}/{h.get('n', 0)} | {_g(t.get('min'))}–{_g(t.get('max'))} | "
             f"{g['rejections']} | {r.get('mean', '–')} | ${c.get('mean', 0):.2f} (${c.get('max', 0):.2f}) | "
             f"{w.get('mean', 0):.0f}s | {g['crashed']} |")
+    if len(summary.get("models", [])) and len(summary["groups"]) > 1:
+        lines += ["", "| model | effort | papers | runs | verdicts | could not check | papers whose runs agree | "
+                  "cost per run | crashed |", "|---|---|---|---|---|---|---|---|---|"]
+        for m in summary["models"]:
+            verdicts = ", ".join(f"{k} {v}" for k, v in m["verdicts"].items())
+            lines.append(f"| {m['model']} | {m['effort']} | {m['papers']} | {m['runs']} | {verdicts} | "
+                         f"{m['could_not_check']:.0%} | {m['papers_all_runs_agree']} | ${m['cost_usd_mean']:.2f} | "
+                         f"{m['crashed']} |")
     return "\n".join(lines)
 
 

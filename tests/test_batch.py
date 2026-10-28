@@ -33,3 +33,15 @@ def test_each_run_of_each_paper_logs_to_its_own_file():
     from paper_replicator.batch import log_path
     paths = {log_path("x", paper, i) for paper in ("2604.27287", "2512.12815") for i in range(2)}
     assert len(paths) == 4
+
+
+
+def test_models_are_summed_across_papers():
+    from paper_replicator.batch import by_model
+    groups = [{"model": "m", "effort": "minimal", "n": 2, "verdicts": {"holds up": 2}, "agreement": 1.0,
+               "cost_usd": {"mean": 0.2}, "crashed": 0},
+              {"model": "m", "effort": "minimal", "n": 2, "verdicts": {"holds up": 1, "could not check": 1},
+               "agreement": 0.5, "cost_usd": {"mean": 0.4}, "crashed": 1}]
+    [m] = by_model(groups)
+    assert m["papers"] == 2 and m["runs"] == 4 and m["could_not_check"] == 0.25
+    assert m["papers_all_runs_agree"] == "1/2" and m["cost_usd_mean"] == 0.3 and m["crashed"] == 1
