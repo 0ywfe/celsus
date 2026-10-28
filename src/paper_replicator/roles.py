@@ -41,9 +41,12 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
             "start": "<YYYY-MM-DD: the first date your sample actually covers>",
             "end": "<YYYY-MM-DD: the last date it covers (for events: the window you searched); if the data
                     you got starts later or ends earlier than you asked for, the data's dates>",
-            "same_as_paper": <true if your sample has the paper's observations (the same events, firms,
-                              assets and dates; another vendor's data for them is fine), false if not>,
-            "differences": "<how your sample differs from the paper's, or empty>"},
+            "same_as_paper": <false only if observations the paper used are missing from your sample, or yours
+                              has ones it did not use (other years, events, firms or assets). Choices the paper
+                              leaves open (which ticker stands for an asset, how calendars align, a missing
+                              risk-free rate) are not differences: make the standard choice and say so in notes.
+                              Another vendor's data for the same observations is the same sample.>,
+            "differences": "<which observations differ from the paper's, or empty>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""
 
 ENVIRONMENT = f"""Environment: a Linux sandbox with network access; the script's time limit is {{minutes}} minutes.
