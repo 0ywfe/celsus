@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from agents import Agent, ModelSettings
 from openai import AsyncOpenAI
 from openai.types.shared import Reasoning
@@ -82,18 +84,30 @@ class Script(BaseModel):
     notes: str = Field(description="assumptions, and every deviation from the paper's method")
 
 
-def _settings(role: str, effort: str | None = None) -> ModelSettings:
-    return ModelSettings(max_tokens=MAX_TOKENS[role], reasoning=Reasoning(effort=effort or EFFORT[role]))
+def _settings(role: str, cfg: ModelConfig, effort: str | None = None, structured: bool = False) -> ModelSettings:
+    """Per provider: reasoning effort only where accepted; json_object mode where strict json_schema is not."""
+    reasoning = Reasoning(effort=effort or EFFORT[role]) if cfg.provider.reasoning_effort else None
+    extra = {"response_format": {"type": "json_object"}} if structured and not cfg.provider.json_schema else None
+    return ModelSettings(max_tokens=MAX_TOKENS[role], reasoning=reasoning, extra_args=extra)
+
+
+def _instructions(text: str, cfg: ModelConfig, output_type: type[BaseModel] | None) -> str:
+    """Without strict json_schema, the schema goes in the prompt; the SDK still validates the reply."""
+    if output_type is None or cfg.provider.json_schema:
+        return text
+    schema = json.dumps(output_type.model_json_schema())
+    return f"{text}\n\nReply with one JSON object that matches this JSON schema exactly:\n{schema}"
 
 
 def extractor(cfg: ModelConfig, client: AsyncOpenAI, effort: str | None = None) -> Agent:
-    return Agent(name="extractor", instructions=EXTRACTOR, model=make_model(cfg, client),
-                 output_type=PaperSpec, model_settings=_settings("extractor", effort))
+    return Agent(name="extractor", instructions=_instructions(EXTRACTOR, cfg, PaperSpec), model=make_model(cfg, client),
+                 output_type=PaperSpec, model_settings=_settings("extractor", cfg, effort, structured=True))
 
 
 def builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, effort: str | None = None) -> Agent:
-    return Agent(name="builder", instructions=BUILDER.replace("{minutes}", str(minutes)), model=make_model(cfg, client),
-                 output_type=Script, model_settings=_settings("builder", effort))
+    instructions = _instructions(BUILDER.replace("{minutes}", str(minutes)), cfg, Script)
+    return Agent(name="builder", instructions=instructions, model=make_model(cfg, client),
+                 output_type=Script, model_settings=_settings("builder", cfg, effort, structured=True))
 
 
 def workbench_builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, turns: int, tools: list,
@@ -101,4 +115,4 @@ def workbench_builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, turns
     """No output_type: as in Meta's cookbook 07, the tool loop ends in plain text (the summary)."""
     instructions = WORKBENCH.replace("{minutes}", str(minutes)).replace("{turns}", str(turns))
     return Agent(name="builder", instructions=instructions, model=make_model(cfg, client), tools=tools,
-                 model_settings=_settings("builder", effort))
+                 model_settings=_settings("builder", cfg, effort))

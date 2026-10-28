@@ -15,6 +15,8 @@ class Provider:
     name: str
     base_url: str
     key_env: str
+    json_schema: bool = True  # strict json_schema structured output; otherwise json_object plus the schema in the prompt
+    reasoning_effort: bool = True  # accepts reasoning_effort
 
 
 @dataclass(frozen=True)
@@ -25,7 +27,9 @@ class ModelConfig:
 
 PROVIDERS = {
     "meta": Provider("meta", "https://api.meta.ai/v1", "MODEL_API_KEY"),
-    "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY"),
+    # Dev only, never the demo. JSON output is json_object mode (api-docs.deepseek.com, read 28 Oct 2026).
+    "deepseek": Provider("deepseek", "https://api.deepseek.com", "DEEPSEEK_API_KEY",
+                         json_schema=False, reasoning_effort=False),
 }
 
 # quick: extraction, analysts, reports. deep: builder and auditor.

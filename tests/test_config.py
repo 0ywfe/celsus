@@ -24,3 +24,19 @@ def test_unknown_provider_fails_loudly(monkeypatch):
     monkeypatch.setenv("QUICK_PROVIDER", "nobody")
     with pytest.raises(ValueError, match="nobody"):
         config.tier("quick")
+
+
+def test_providers_without_json_schema_get_json_object_and_the_schema_in_the_prompt(monkeypatch):
+    from paper_replicator import roles
+    from paper_replicator.llm import make_client
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test")
+    monkeypatch.setenv("MODEL_API_KEY", "test")
+    deepseek = config.ModelConfig(config.PROVIDERS["deepseek"], "deepseek-flash")
+    agent = roles.extractor(deepseek, make_client(deepseek))
+    assert agent.model_settings.extra_args == {"response_format": {"type": "json_object"}}
+    assert agent.model_settings.reasoning is None
+    assert '"headline"' in agent.instructions and "JSON schema" in agent.instructions
+    meta = config.tier("quick")
+    agent = roles.extractor(meta, make_client(meta), "minimal")
+    assert agent.model_settings.extra_args is None and agent.model_settings.reasoning.effort == "minimal"
+    assert "JSON schema" not in agent.instructions
