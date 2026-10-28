@@ -282,7 +282,7 @@ def test_a_cut_counts_by_every_value_its_bound_can_take_and_252_is_not_a_sample(
 
 
 @pytest.mark.parametrize("text", [
-    'import os\nos.environ["SEC_USER_AGENT"] = "author@example.edu"\n',          # Spark Open put the author's address here
+    'import os\nos.environ["SEC_USER_AGENT"] = "author@university.edu"\n',          # Spark Open put the author's address here
     "headers = {'User-Agent': 'research@example.com'}\n",
     'curl -s -A "jane@test.edu" https://data.sec.gov/submissions/CIK0000320193.json',
     "export SEC_USER_AGENT=someone && python replicate.py",
