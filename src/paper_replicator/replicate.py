@@ -76,6 +76,17 @@ def sides_by_statistic(spec: PaperSpec, paper: list[dict]) -> dict[str, str]:
     return {tests[c["test"]]: c["side"] for c in paper if c["check"] == "sidedness" and c["test"] in tests}
 
 
+async def clean_run(run: Run, script: str, attempt: int) -> SandboxRun | None:
+    """The sandbox round, or None when the infrastructure failed (Modal, host fetch): the builder
+    cannot fix that, so the caller stops and keeps its last good results."""
+    try:
+        return await asyncio.to_thread(sandbox_round, run, script, attempt)
+    except Exception as error:
+        run.guard_events.append(f"attempt {attempt}: clean run could not complete: {type(error).__name__}: {error}")
+        run.say("error", f"attempt {attempt}: clean run could not complete: {type(error).__name__}: {error}")
+        return None
+
+
 def sandbox_secrets() -> dict[str, str]:
     return {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
 
@@ -181,7 +192,9 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
             history.append(user(f"Rejected: {problem} Return the whole corrected script."))
             continue
         run.say("sandbox", f"attempt {attempt}: running in the sandbox")
-        sandbox_run = await asyncio.to_thread(sandbox_round, run, script.script, attempt)
+        sandbox_run = await clean_run(run, script.script, attempt)
+        if sandbox_run is None:
+            return kept
         results, problem = read_results(sandbox_run)
         if problem is not None:
             run.say("sandbox", f"attempt {attempt}: {problem.splitlines()[0]}")
@@ -241,7 +254,9 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                 history.append(user(f"Rejected: {problem} Fix /work/replicate.py in the sandbox and run it again."))
                 continue
             run.say("sandbox", f"round {round_}: clean re-run in a fresh sandbox")
-            sandbox_run = await asyncio.to_thread(sandbox_round, run, script, round_)
+            sandbox_run = await clean_run(run, script, round_)
+            if sandbox_run is None:
+                return kept
             results, problem = read_results(sandbox_run)
             if problem is not None:
                 run.say("sandbox", f"round {round_}: {problem.splitlines()[0]}")

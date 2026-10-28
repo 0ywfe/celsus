@@ -255,3 +255,19 @@ def test_cutting_the_sample_to_the_reported_count_is_rejected_in_the_first_round
     outcome = go(api, sandbox, cfg, tmp_path)
     assert sandbox.scripts == ["print('computed')"]
     assert "never trim, cut or pad" in api.requests[2]["body"]["messages"][-1]["content"]
+
+
+def test_an_infrastructure_failure_keeps_the_earlier_good_results(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+
+    class FlakySandbox(FakeSandbox):
+        def __call__(self, script, **kw):
+            if self.scripts:
+                raise ConnectionError("modal went away")
+            return super().__call__(script, **kw)
+
+    outcome = go(api, FlakySandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})]), cfg, tmp_path)
+    assert outcome["verdict"] != "no verdict"
+    assert "clean run could not complete: ConnectionError" in outcome["report"].read_text()
