@@ -72,6 +72,10 @@ def _reproduced(row: dict) -> str:
     return f"{text} ± {Z95 * row['se']:.2g}" if row["kind"] == "estimate" and row.get("se") else text
 
 
+def _count(value) -> str:
+    return "–" if value is None else f"{value:g}"
+
+
 def _shown(path: Path) -> Path:
     try:
         return path.resolve().relative_to(Path.cwd())
@@ -93,13 +97,13 @@ def card(folder: Path) -> Panel:
         table.add_column("", ratio=2, no_wrap=True, overflow="ellipsis")
         for r in judged:
             mark = Text("✓ ", style="green") if r["consistent"] else Text("✗ ", style="red")
-            table.add_row(r["name"], with_unit(f"{r['reported']:.4g}", r["unit"]), _reproduced(r),
+            table.add_row(r["name"], with_unit(f"{r['reported']:.4g}", r["unit"] if r["kind"] == "estimate" else ""),
+                          _reproduced(r),
                           mark + Text(r["why"], style="dim"))
         parts += [Text(""), table]
     counts = [s for s in summary.get("sample") or [] if s.get("reported")]
     total = max(counts, key=lambda s: s["reported"]) if counts else None
-    footer = [f"sample {total['reproduced'] if total['reproduced'] is not None else '–'}/{total['reported']:g}"
-              if total else None, f"{summary['rounds']} rounds", f"{summary['calls']} calls",
+    footer = [f"sample {_count(total['reproduced'])}/{_count(total['reported'])}" if total else None, f"{summary['rounds']} rounds", f"{summary['calls']} calls",
               f"${summary['cost_usd']:.2f}", clock(summary["wall_s"])]
     parts += [Text(""), Text(" · ".join(p for p in footer if p)), Text(DISCLAIMER, style="dim"),
               Text(f"report: {_shown(folder / 'report.md')}", style="dim")]
