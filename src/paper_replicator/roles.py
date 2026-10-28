@@ -14,9 +14,11 @@ from .llm import make_model
 from .sandbox_lib import market_data
 from .spec import PaperSpec
 
-# Output caps leave room for reasoning (a reasoning model returns empty content when it uses
-# the whole cap). Set from the ledger's measured reasoning tokens once runs exist.
-MAX_TOKENS = {"extractor": 32000, "builder": 32000}
+# Output caps leave room for reasoning (a reasoning model returns empty content when it uses the whole cap).
+# The extractor's is 4x the longest complete spec in the ledger (Wonder, 25,230 tokens, 28 Oct): Wonder writes
+# 16k-32k tokens of spec whatever the paper's length, and a 32,000 cap cut one off (held-out 2610.35702). The
+# per-run budget stop, not this cap, bounds the cost.
+MAX_TOKENS = {"extractor": 4 * 25_230, "builder": 32000}
 EFFORT = {"extractor": "medium", "builder": "medium"}
 
 EXTRACTOR = """You read a research paper's LaTeX source and write its replication spec.

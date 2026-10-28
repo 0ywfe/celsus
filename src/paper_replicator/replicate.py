@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-from agents import Agent, MaxTurnsExceeded, Runner
+from agents import Agent, MaxTurnsExceeded, ModelBehaviorError, Runner
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
@@ -440,7 +440,9 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         run.say("error", str(error))
     except Exception as error:  # the report still gets written, with the reason
         crashed = f"{type(error).__name__}: {error}"
-        run.failure = f"the run stopped ({type(error).__name__})"
+        run.failure = (f"the model's reply could not be read ({error}); a reply cut off at its output cap reads "
+                       f"this way" if isinstance(error, ModelBehaviorError) else
+                       f"the run stopped ({type(error).__name__})")
         run.guard_events.append(f"run stopped: {crashed}")
         run.say("error", crashed)
     kept = folder / "results.json"
