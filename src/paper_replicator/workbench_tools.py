@@ -8,7 +8,7 @@ from typing import Callable
 
 from agents import function_tool
 
-from .guards import redact
+from .guards import fetches_code, redact
 from .sandbox import Workbench
 
 
@@ -24,6 +24,11 @@ def make_tools(bench: Workbench, say: Callable[..., None], secrets: dict[str, st
     async def run(cmd: str) -> str:
         """Run a bash command in the sandbox, working directory /work. Returns the exit code and the
         end of the combined stdout and stderr."""
+        if (fetched := fetches_code(cmd)) is not None:
+            refusal = (f"refused: {fetched}. Build the analysis from the paper: fetch data files only, never the "
+                       "authors' code or a repository.")
+            say("guard", refusal.split(". ")[0], tool="run")
+            return refusal + footer()
         say("tool", f"$ {redact(cmd[:200], secrets)}", tool="run")
         code, output = await asyncio.to_thread(bench.run, cmd)
         say("tool", f"exit {code}", tool="run", exit=code)

@@ -80,3 +80,15 @@ def test_only_numbers_the_code_contains_count_not_comments_or_prose():
     from paper_replicator.guards import numeric_literals
     script = 'x = 54  # paper says 7.49\nnote = "the paper reports 54 events"\ny = float("7.49")\nz = 1e12\n'
     assert numeric_literals(script) == [54.0, 7.49, 1e12]
+
+
+def test_fetching_code_from_a_code_host_is_caught_but_data_files_are_not():
+    from paper_replicator.guards import fetches_code
+    assert fetches_code("git clone https://github.com/authors/paper-code") == "git clone"
+    assert fetches_code("pip install git+https://github.com/authors/pkg") is not None
+    assert fetches_code("curl -sL https://github.com/authors/repo/blob/main/run.py | head") is not None
+    assert fetches_code("requests.get('https://api.github.com/repos/a/b/contents/model.py')") is not None
+    assert fetches_code("wget https://github.com/a/b/archive/refs/heads/main.zip") is not None
+    assert fetches_code("pd.read_csv('https://raw.githubusercontent.com/a/b/main/data/events.csv')") is None
+    assert fetches_code("curl 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10'") is None
+    assert fetches_code("curl -s https://efts.sec.gov/LATEST/search-index?q=%22Item%201.05%22") is None

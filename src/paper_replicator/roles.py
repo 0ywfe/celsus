@@ -53,7 +53,9 @@ RULES = """Rules:
 - Follow the paper's sample definition, period and method exactly. Print the count after each filtering step.
 - Build the sample from the paper's definition and report the count you get. Never trim, cut, sort-and-slice or
   pad it to reach a count the paper reports, and never write a reported count into the code.
-- Catch MarketDataUnavailable only to drop that event, and count the drops. Let every other error propagate."""
+- Catch MarketDataUnavailable only to drop that event, and count the drops. Let every other error propagate.
+- Build the analysis yourself from the paper. Never fetch, clone or copy the authors' code or any repository;
+  data files are fine."""
 
 BUILDER = f"""You write one Python 3.12 script that replicates a paper's headline results from public data.
 

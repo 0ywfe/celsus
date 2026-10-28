@@ -128,6 +128,25 @@ def bypasses_market_data(script: str) -> bool:
     return re.search(r"^\s*(import\s+yfinance|from\s+yfinance\s+import)", script, re.M) is not None
 
 
+# Where authors publish code. Re-running the authors' code is not replicating the paper, so a builder may fetch
+# data files from these hosts but never code, a repository or an archive of one.
+CODE_HOST_URL = re.compile(r"(?:https?://)?(?:[\w-]+\.)*(?:github\.com|githubusercontent\.com|gitlab\.com|"
+                           r"bitbucket\.org|codeberg\.org)/[^\s'\"<>)\]]*", re.I)
+CLONE = re.compile(r"\bgit\s+clone\b|\bgit\+https?://|\bgh\s+repo\s+clone\b", re.I)
+DATA_FILES = (".csv", ".tsv", ".json", ".parquet", ".xlsx", ".xls", ".txt")
+
+
+def fetches_code(text: str) -> str | None:
+    """The first repository clone, or code-host address that is not a data file, in a command or a script."""
+    if found := CLONE.search(text):
+        return found.group(0)
+    for found in CODE_HOST_URL.finditer(text):
+        path = found.group(0).split("?")[0].split("#")[0].rstrip("/.,;")
+        if not path.lower().endswith(DATA_FILES):
+            return found.group(0)
+    return None
+
+
 def redact(text: str, secrets: dict[str, str]) -> str:
     """Replace each secret's value with <NAME>, e.g. the SEC requester's name and email."""
     for name, value in secrets.items():

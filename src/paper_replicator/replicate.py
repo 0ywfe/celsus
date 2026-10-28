@@ -198,6 +198,9 @@ def script_problem(script: str, previous: str, claims: list[Claim], targets: lis
                 "Fix how the sample is built; never filter, trim or pad to reach a number.")
     if guards.bypasses_market_data(script):
         return "the script imports yfinance directly. Use market_data for all market data."
+    if (code := guards.fetches_code(script)) is not None:
+        return (f"the script fetches code from a code host ({code}). Build the analysis from the paper; "
+                "fetch data files only, never the authors' code.")
     return None
 
 
