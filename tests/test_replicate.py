@@ -120,3 +120,15 @@ def test_budget_stop_ends_the_run_and_still_writes_the_report(setup):
 def test_planned_budget_is_a_bound_on_the_calls():
     bound = replicate.planned_budget("muse-spark-1.3", "x" * 15000, attempts=3)
     assert 0 < bound < 2
+
+
+def test_script_that_does_not_compile_never_reaches_the_sandbox(setup):
+    cfg, tmp_path = setup
+    broken = {"script": "x = f(1\n", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(broken), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert sandbox.scripts == ["print('computed')"]
+    assert "does not compile" in api.requests[2]["body"]["messages"][-1]["content"]
+    assert outcome["verdict"] == "reproduced"

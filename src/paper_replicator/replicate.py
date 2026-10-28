@@ -121,6 +121,12 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
             history.append(user(f"Rejected: the script contains numbers the paper reports ({', '.join(leaked)}). "
                                 "Compute them from data and remove them from the code and comments."))
             continue
+        broken = guards.syntax_error(script.script)
+        if broken:
+            run.guard_events.append(f"attempt {attempt}: rejected before the sandbox, syntax error at {broken}")
+            run.say("guard", f"script does not compile ({broken})")
+            history.append(user(f"Rejected: the script does not compile: {broken}. Return the whole corrected script."))
+            continue
         run.say("sandbox", f"attempt {attempt}: running in the sandbox")
         sandbox_run = await asyncio.to_thread(sandbox_round, run, script.script, attempt)
         results, problem = read_results(sandbox_run)

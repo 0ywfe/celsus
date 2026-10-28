@@ -2,6 +2,7 @@
 
 - grounding: every number the extractor reports must appear in the paper's LaTeX.
 - no hard-coded results: no reported number may appear as a literal in the generated code.
+- it compiles: a syntax error goes back to the builder before any sandbox time is spent.
 """
 
 from __future__ import annotations
@@ -57,3 +58,12 @@ def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
         if digits and "." in digits and appears(digits, script):
             found.append(f"{claim.name} ({claim.value})")
     return found
+
+
+def syntax_error(script: str) -> str | None:
+    """Compile only, never execute: the problem to send back, or None."""
+    try:
+        compile(script, "replicate.py", "exec")
+    except SyntaxError as error:
+        return f"line {error.lineno}: {error.msg}: {(error.text or '').strip()}"
+    return None
