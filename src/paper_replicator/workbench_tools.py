@@ -8,18 +8,19 @@ from typing import Callable
 
 from agents import function_tool
 
+from .guards import redact
 from .sandbox import Workbench
 
 
-def make_tools(bench: Workbench, say: Callable[..., None]) -> list:
+def make_tools(bench: Workbench, say: Callable[..., None], secrets: dict[str, str]) -> list:
     @function_tool
     async def run(cmd: str) -> str:
         """Run a bash command in the sandbox, working directory /work. Returns the exit code and the
         end of the combined stdout and stderr."""
-        say("tool", f"$ {cmd[:200]}", tool="run")
+        say("tool", f"$ {redact(cmd[:200], secrets)}", tool="run")
         code, output = await asyncio.to_thread(bench.run, cmd)
         say("tool", f"exit {code}", tool="run", exit=code)
-        return f"exit_code: {code}\n{output}"
+        return redact(f"exit_code: {code}\n{output}", secrets)
 
     @function_tool
     async def write_file(path: str, content: str) -> str:

@@ -54,3 +54,9 @@ def test_planted_counts_ignore_exponents_and_names():
     # run-20261028T143408Z-c3ab42 attempt 2 was rejected for "12" in `if val > 1e12:`
     assert planted_counts("if val > 1e12:\n    q12 = 1\n", "", ["12"]) == []
     assert planted_counts("events = events[:12]\n", "", ["12"]) == ["12"]
+
+
+def test_secret_values_are_replaced_by_their_names():
+    from paper_replicator.guards import redact
+    out = redact("UA: Jane Doe jane@example.com\nok", {"SEC_USER_AGENT": "Jane Doe jane@example.com", "EMPTY": ""})
+    assert out == "UA: <SEC_USER_AGENT>\nok"

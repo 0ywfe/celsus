@@ -198,7 +198,7 @@ class FakeWorkbench:
 
     def run(self, cmd):
         self.commands.append(cmd)
-        return 0, "fields: items, form, file_date"
+        return 0, "fields: items, form, file_date; UA test agent test@example.com"
 
     def write_file(self, path, content):
         self.files[path if path.startswith("/") else f"/work/{path}"] = content
@@ -241,3 +241,5 @@ def test_workbench_builder_explores_writes_and_only_the_clean_rerun_counts(setup
     tools = [json.loads(l) for l in (folder / "events.jsonl").read_text().splitlines() if '"tool"' in l]
     assert any(e["message"].startswith("$ curl") for e in tools)
     assert (folder / "attempt_1_notes.md").read_text().startswith("Built 38 filings")
+    tool_reply = [m for m in api.requests[2]["body"]["messages"] if m["role"] == "tool"][0]["content"]
+    assert "test@example.com" not in tool_reply and "<SEC_USER_AGENT>" in tool_reply

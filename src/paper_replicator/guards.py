@@ -5,6 +5,7 @@
 - it compiles: a syntax error goes back to the builder before any sandbox time is spent.
 - no planted targets: a count the builder was told to match may not newly appear as a literal.
 - market data only through the helper, so every source is cached and logged.
+- secrets never reach the model: their values are replaced by their names in anything sent back.
 """
 
 from __future__ import annotations
@@ -84,3 +85,11 @@ def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:
 
 def bypasses_market_data(script: str) -> bool:
     return re.search(r"^\s*(import\s+yfinance|from\s+yfinance\s+import)", script, re.M) is not None
+
+
+def redact(text: str, secrets: dict[str, str]) -> str:
+    """Replace each secret's value with <NAME>, e.g. the SEC requester's name and email."""
+    for name, value in secrets.items():
+        if value:
+            text = text.replace(value, f"<{name}>")
+    return text

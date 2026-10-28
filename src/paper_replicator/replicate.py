@@ -70,13 +70,18 @@ def planned_budget(model: str, latex: str, attempts: int) -> float:
     return round(total, 4)
 
 
+def sandbox_secrets() -> dict[str, str]:
+    return {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
+
+
 def user(text: str) -> dict:
     return {"role": "user", "content": text}
 
 
 def read_results(sandbox_run: SandboxRun) -> tuple[list[dict] | None, str | None]:
-    """The results the sandbox wrote, or the problem to send back to the builder."""
+    """The results the sandbox wrote, or the problem to send back to the builder (secrets redacted)."""
     tail = f"STDERR (end):\n{sandbox_run.stderr[-STDERR_TAIL:]}\nSTDOUT (end):\n{sandbox_run.stdout[-STDOUT_TAIL:]}"
+    tail = guards.redact(tail, sandbox_secrets())
     if sandbox_run.exit_code != 0:
         return None, f"The script failed with exit code {sandbox_run.exit_code}.\n{tail}"
     raw = sandbox_run.files.get("results.json")
@@ -93,7 +98,7 @@ def read_results(sandbox_run: SandboxRun) -> tuple[list[dict] | None, str | None
 
 def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
     """Run the script; if market data was missing, fetch it on the host once and rerun the same script."""
-    env = {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
+    env = sandbox_secrets()
     result = run.sandbox(script, market_cache=MARKET_CACHE, env=env, timeout_s=run.timeout_s)
     requests = json.loads(result.files.get("market_data_requests.json", "[]"))
     if requests:
@@ -134,7 +139,7 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str) -> tupl
     gaps = "\n".join(f"- {r['name']}: the paper reports {r['reported']:g}, your run produced {r['reproduced']:g}"
                      for r in off)
     problem = ("The script ran, but its sample does not match the paper's:\n" + gaps +
-               f"\nYour script's output (end):\n{stdout[-STDOUT_TAIL:]}\n"
+               f"\nYour script's output (end):\n{guards.redact(stdout[-STDOUT_TAIL:], sandbox_secrets())}\n"
                "Find the step where your sample construction departs from the paper's definition (which filings "
                "or observations count, forms, items, dates, deduplication) and fix that step. Never filter, trim "
                "or pad the data to reach a number.")
@@ -189,13 +194,13 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
     """Cookbook 07's form: the builder explores and writes /work/replicate.py in a persistent sandbox with
     `run` and `write_file`; only a clean re-run of that file in a fresh sandbox produces results. The same
     checks and the audit loop apply between rounds."""
-    env = {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
+    env = sandbox_secrets()
     bench = await asyncio.to_thread(open_bench, market_cache=MARKET_CACHE, env=env,
                                     command_timeout_s=run.timeout_s, lifetime_s=WORKBENCH_LIFETIME_S)
     task = (f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\n"
             "Replicate the paper's headline results as /work/replicate.py.")
     try:
-        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say))
+        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say, env))
         history: list = [user(task)]
         previous, targets, kept = "", [], None
         for round_ in range(1, rounds + 1):
