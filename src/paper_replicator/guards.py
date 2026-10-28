@@ -27,9 +27,45 @@ def clean(text: str) -> str:
     return re.sub(r"(?<=\d),(?=\d{3}(?!\d))", "", text)
 
 
+# Powers of ten in the spellings measured in the specs on disk (28 Oct): 5.2\\times10^{-4}, 2.70×10^{-14}, 4×10^5,
+# 10^{-12}, 2.70x10-14 (caret dropped) and 1.5e-13.
+_MANTISSA = r"(?P<{0}>-?\s*\d+(?:\.\d+)?)"
+_POWER = re.compile(
+    rf"(?:{_MANTISSA.format('m1')}\s*(?:\\times|\\cdot|×|x|\*)\s*)?10\s*\^\s*\{{?\s*(?P<e1>[-+]?\d+)\s*\}}?"
+    rf"|{_MANTISSA.format('m2')}\s*(?:\\times|×|x)\s*10(?P<e2>[-+]\d+)"
+    rf"|{_MANTISSA.format('m3')}[eE](?P<e3>[-+]?\d+)")
+_BELOW = ("<", "≤", "\\lt", "\\le", "\\leq", "\\leqslant")
+_ABOVE = (">", "≥", "\\gt", "\\ge", "\\geq", "\\geqslant")
+
+
+def _first(text: str) -> tuple[int, str, int] | None:
+    """The first number in cleaned text as (start, mantissa as printed, power of ten)."""
+    power, plain = _POWER.search(text), _SIGNED.search(text)
+    if power and (plain is None or _start(power) <= _start(plain)):
+        k = next(i for i in "123" if power.group(f"e{i}") is not None)
+        mantissa = (power.group(f"m{k}") or "1").replace(" ", "")
+        return _start(power), mantissa, int(power.group(f"e{k}"))
+    return (_start(plain), plain.group(0).replace(" ", ""), 0) if plain else None
+
+
+def _start(match: re.Match) -> int:
+    """Where the number itself starts: a pattern that allows spaces after the sign may also start on a space."""
+    return match.start() + len(match.group(0)) - len(match.group(0).lstrip())
+
+
 def parse_number(value: str) -> float | None:
-    match = _SIGNED.search(clean(value))
-    return float(match.group(0).replace(" ", "")) if match else None
+    first = _first(clean(value))
+    return float(first[1]) * 10.0 ** first[2] if first else None
+
+
+def bound(value: str) -> str | None:
+    """'<' or '>' when the first number is printed as a bound (p < 0.001, ≤0.002, > 2), else None."""
+    text = clean(value)
+    first = _first(text)
+    if first is None:
+        return None
+    before = text[:first[0]].rstrip()
+    return "<" if before.endswith(_BELOW) else ">" if before.endswith(_ABOVE) else None
 
 
 def magnitude(value: str) -> str | None:
@@ -39,10 +75,12 @@ def magnitude(value: str) -> str | None:
 
 
 def half_unit(printed: str) -> float:
-    """Half a unit in the last digit printed: how far a number can be from the printed one and still print the same."""
-    digits = magnitude(printed) or ""
+    """Half a unit in the last digit printed: how far a number can be from the printed one and still print the same.
+    For a power of ten it is half a unit of the mantissa's last digit, at the power's scale."""
+    first = _first(clean(printed))
+    digits = first[1] if first else (magnitude(printed) or "")
     decimals = len(digits.split(".")[1]) if "." in digits else 0
-    return 0.5 * 10 ** -decimals
+    return 0.5 * 10.0 ** (-decimals + (first[2] if first else 0))
 
 
 def appears(digits: str, text: str) -> bool:

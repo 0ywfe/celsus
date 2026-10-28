@@ -120,3 +120,40 @@ def test_a_statistic_that_is_not_a_t_is_left_to_its_p_value():
     row = compare([claim("chow", "8.7886", "test_statistic")], [{"name": "chow", "value": 2.1}],
                   sides={"chow": NO_SIDE})[0]
     assert row["consistent"] is None and "p-value" in row["why"]
+
+
+def test_a_bound_is_judged_as_a_bound():
+    claims = [claim("p_tiny", "<10^{-12}", "p_value"), claim("resid", "<10^{-3}", "estimate"),
+              claim("resid_far", "<10^{-3}", "estimate"), claim("p_small", "<0.001", "p_value"),
+              claim("ratio", "> 2", "estimate"), claim("resid_other", "<10^{-3}", "other")]
+    results = [{"name": "p_tiny", "value": 1.5e-13}, {"name": "resid", "value": 2e-4, "se": 0},
+               {"name": "resid_far", "value": 5e-3, "se": 0}, {"name": "p_small", "value": 0.2},
+               {"name": "ratio", "value": 1.9, "se": 0.1}, {"name": "resid_other", "value": 0.0097, "se": 0}]
+    rows = {r["name"]: r for r in compare(claims, results)}
+    assert rows["p_tiny"]["reported"] == 1e-12 and rows["p_tiny"]["consistent"] is True
+    assert rows["resid"]["consistent"] is True and "within the paper's bound" in rows["resid"]["why"]
+    assert rows["resid_far"]["consistent"] is False
+    assert rows["p_small"]["consistent"] is False
+    assert rows["ratio"]["consistent"] is True     # 1.9 +/- 0.196 reaches above 2
+    assert rows["resid_other"]["consistent"] is None   # the desk never judges "other", bound or not
+
+
+def test_a_power_of_ten_is_compared_at_its_own_scale():
+    rows = compare([claim("p", "2.70×10^{-14}", "p_value"), claim("x", "5.2\\times10^{-4}", "estimate")],
+                   [{"name": "p", "value": 3e-14}, {"name": "x", "value": 5.24e-4, "se": 0}])
+    assert [r["consistent"] for r in rows] == [True, True]
+
+
+def test_a_zero_count_that_matches_the_paper_is_a_match_not_an_empty_sample():
+    # held-out 2602.07018: the paper reports 0 Holm rejections, the run found 0, and the run was dropped as
+    # "no observations" with 144 results in hand
+    claims = [claim("holm_rejections", "0", "count"), claim("gap", "11.81", "estimate")]
+    results = [{"name": "holm_rejections", "value": 0}, {"name": "gap", "value": 11.82, "se": 0.5, "n": 2896}]
+    rows = compare(claims, results)
+    assert verdict(rows, results) == ("holds up", "")
+
+
+def test_a_zero_where_the_paper_has_observations_is_still_could_not_check():
+    claims = [claim("n", "54", "count"), claim("mean", "-3.07", "estimate")]
+    results = [{"name": "n", "value": 0}, {"name": "mean", "value": -3.0, "se": 1.0}]
+    assert verdict(compare(claims, results), results)[0] == "could not check"

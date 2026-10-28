@@ -12,7 +12,7 @@ import math
 
 from scipy import stats
 
-from .guards import half_unit, parse_number
+from .guards import bound, half_unit, parse_number
 from .spec import Claim, PaperSpec
 
 
@@ -50,17 +50,18 @@ def _dfs(sizes: list[float]) -> list[tuple[float, float]]:
     return [(1, math.inf)]
 
 
-def _side(t: float, t_half: float, reported: float, p_half: float,
+def _side(t: float, t_half: float, reported: float, p_range: tuple[float, float],
           dfs: list[tuple[float, float]]) -> tuple[str, float] | None:
-    """The side (and its p) whose p-values over the printed t's interval and the df range reach the printed p,
-    closest first. Tail probabilities are monotone in t and in df, so the corners bound them."""
+    """The side (and its p) whose p-values over the printed t's interval and the df range reach the paper's p (its
+    printed interval, or everything below or above a printed bound), closest first. Tail probabilities are monotone
+    in t and in df, so the corners bound them."""
     fits = []
     for low, high in dfs:
         for side in ("two-sided", "one-sided (lower tail)", "one-sided (upper tail)"):
             ends = [_p_values(t + d, df)[side] for d in (-t_half, t_half) for df in (low, high)]
             if side == "two-sided" and abs(t) <= t_half:
                 ends.append(1.0)
-            if min(ends) - p_half <= reported <= max(ends) + p_half:
+            if min(ends) <= p_range[1] and max(ends) >= p_range[0]:
                 p = _p_values(t, high)[side]
                 fits.append((abs(math.log(max(p, 1e-300)) - math.log(reported)), side, p))
     return min(fits)[1:] if fits else None
@@ -78,7 +79,10 @@ def sidedness_checks(spec: PaperSpec, claims: list[Claim]) -> list[dict]:
         sizes = [values[g] for g in test.group_sizes if g in values and values[g] > 1]
         dfs = _dfs(sizes)
         two_sided = _p_values(t, dfs[0][1])["two-sided"]
-        found = _side(t, half_unit(printed[test.statistic]), reported, half_unit(printed[test.p_value]), dfs)
+        direction, p_half = bound(printed[test.p_value]), half_unit(printed[test.p_value])
+        p_range = ((0.0, reported) if direction == "<" else (reported, 1.0) if direction == ">" else
+                   (reported - p_half, reported + p_half))
+        found = _side(t, half_unit(printed[test.statistic]), reported, p_range, dfs)
         if found is None:
             checks.append({"check": "sidedness", "test": test.test, "side": None, "status": "note",
                            "text": f"{test.test}: t = {t:g} and p = {reported:g} fit no side at the printed precision "

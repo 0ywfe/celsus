@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import math
 
-from .guards import half_unit, parse_number
+from .guards import bound, half_unit, parse_number
 from .spec import Claim
 
 from scipy import stats
@@ -60,6 +60,9 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
     value, se = result.get("value"), result.get("se")
     if value is None:
         return None, "no value"
+    direction = bound(printed) if printed else None
+    if direction and kind in ("estimate", "test_statistic", "count"):  # "other" stays unjudged, bound or not
+        return within_bound(direction, reported, value, se)
     if kind == "estimate":
         if se is None:
             return None, "no standard error"
@@ -83,9 +86,23 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
                    "significant in the paper, not here" if paper else "significant here, not in the paper")
         return same, f"{side} at |t| {critical(side):.3g}: {why}"
     if kind == "p_value":
-        same = (value < ALPHA) == (reported < ALPHA)
+        paper_below = (reported < ALPHA if direction is None else
+                       True if direction == "<" and reported <= ALPHA else
+                       False if direction == ">" and reported >= ALPHA else None)
+        if paper_below is None:  # p < 0.1 or p > 0.01: the bound does not say which side of 0.05 the paper is on
+            return within_bound(direction, reported, value, None)
+        same = (value < ALPHA) == paper_below
         return same, f"both {'<' if value < ALPHA else '>='} {ALPHA}" if same else f"opposite sides of {ALPHA}"
     return None, "not judged"
+
+
+def within_bound(direction: str, limit: float, value: float, se: float | None) -> tuple[bool, str]:
+    """A number the paper prints as a bound (< 10^{-3}, > 2): consistent when the reproduction, or its 95% interval
+    when it has one, reaches the bound's side."""
+    reach = Z95 * se if se else 0.0
+    inside = value - reach < limit if direction == "<" else value + reach > limit
+    shown = f"{value:.4g}" + (f" +/- {reach:.4g}" if reach else "")
+    return inside, f"{shown} {'within' if inside else 'outside'} the paper's bound {direction} {limit:g}"
 
 
 def fixed_number(reported: float, value: float, printed: str) -> tuple[bool, str]:
@@ -131,7 +148,10 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
         worst = max(off, key=lambda r: abs((r["reproduced"] or 0) - (r["reported"] or 0)))
         return COULD_NOT_CHECK, (f"the replication could not rebuild the paper's sample ({worst['name']}: "
                                  f"{_num(worst['reproduced'])} here, {_num(worst['reported'])} in the paper)")
-    if any(r.get("n") == 0 for r in results) or any(r["kind"] == "count" and r["reproduced"] == 0 for r in rows):
+    # A zero count is an empty sample only when the paper's count is not zero too: a paper that reports 0 rejections
+    # and a run that finds 0 agree (held-out 2602.07018 lost 144 results to this).
+    if any(r.get("n") == 0 for r in results) or any(r["kind"] == "count" and r["reproduced"] == 0
+                                                     and r["consistent"] is not True for r in rows):
         return COULD_NOT_CHECK, "the replication found no observations"
     judged = [r["consistent"] for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     if not judged:

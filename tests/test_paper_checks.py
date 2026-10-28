@@ -50,3 +50,14 @@ def test_a_side_is_accepted_only_within_the_printed_precision():
     assert f["side"] is None
     # clustered errors: the normal gives 0.0193, which prints as 0.019
     assert clustered["side"] == "two-sided" and clustered["status"] == "ok"
+
+
+def test_a_p_printed_as_a_bound_fits_any_p_below_it():
+    claims = [Claim(name="t_big", description="", value="5.10", unit="", kind="test_statistic", where=""),
+              Claim(name="p_big", description="", value="<0.001", unit="", kind="p_value", where=""),
+              Claim(name="n_big", description="", value="400", unit="", kind="count", where="")]
+    spec = PaperSpec(title="", hypothesis="", data_sources=[], sample="", method=[], claims=claims, headline="",
+                     partitions=[], tests=[ReportedTest(test="big", statistic="t_big", p_value="p_big",
+                                                        group_sizes=["n_big"])])
+    [check] = [c for c in check_paper(spec, claims) if c["check"] == "sidedness"]
+    assert check["side"] == "two-sided"
