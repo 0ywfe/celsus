@@ -1,6 +1,9 @@
 """Checks on the paper's own numbers, in code: do its subgroup counts add up, and which p-value does
 each test statistic actually give? The extractor names which claims belong together; code does the
-arithmetic. Neither check needs a chosen tolerance."""
+arithmetic. Neither check needs a chosen tolerance.
+
+Each check has a status: "ok", "flag" (the paper's numbers disagree with each other) or "note" (a fact
+the reader should know, such as one-sided tests; the verdict desk uses it)."""
 
 from __future__ import annotations
 
@@ -24,7 +27,7 @@ def partition_checks(spec: PaperSpec, claims: list[Claim]) -> list[dict]:
         parts = [values[p] for p in split.parts]
         total, summed = values[split.total], sum(parts)
         sums = " + ".join(f"{v:g}" for v in parts)
-        checks.append({"check": "partition", "split": split.split, "ok": summed == total,
+        checks.append({"check": "partition", "split": split.split, "status": "ok" if summed == total else "flag",
                        "text": f"{split.split}: {sums} = {summed:g}, paper's total {total:g}"})
     return checks
 
@@ -58,7 +61,8 @@ def sidedness_checks(spec: PaperSpec, claims: list[Claim]) -> list[dict]:
                       for df in _dfs(sizes) for side, p in _p_values(t, df).items() if p > 0]
         _, side, p, df = min(candidates)
         two_sided = _p_values(t, df)["two-sided"]
-        checks.append({"check": "sidedness", "test": test.test, "side": side, "ok": side == "two-sided",
+        checks.append({"check": "sidedness", "test": test.test, "side": side,
+                       "status": "ok" if side == "two-sided" else "note",
                        "text": f"{test.test}: t = {t:g}, paper's p = {reported:g} matches {side} "
                                f"({p:.4f}); two-sided p would be {two_sided:.4f}"})
     return checks

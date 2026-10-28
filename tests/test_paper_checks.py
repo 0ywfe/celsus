@@ -19,16 +19,16 @@ def spec(partitions=(), tests=()):
 def test_subgroups_that_do_not_add_up_are_flagged():
     checks = check_paper(spec([Partition(split="size", total="total", parts=["small", "large"]),
                                Partition(split="sector", total="total", parts=["tech", "other"])]), CLAIMS)
-    assert [(x["ok"], x["text"]) for x in checks] == [
-        (False, "size: 24 + 29 = 53, paper's total 54"), (True, "sector: 13 + 41 = 54, paper's total 54")]
+    assert [(x["status"], x["text"]) for x in checks] == [
+        ("flag", "size: 24 + 29 = 53, paper's total 54"), ("ok", "sector: 13 + 41 = 54, paper's total 54")]
 
 
 def test_a_one_sided_p_value_is_recognised_from_t_and_n():
     one = ReportedTest(test="mean below zero", statistic="t_all", p_value="p_all", group_sizes=["total"])
     two = ReportedTest(test="mean differs from zero", statistic="t_two", p_value="p_two", group_sizes=["total"])
     first, second = check_paper(spec(tests=[one, two]), CLAIMS)
-    assert first["side"] == "one-sided (lower tail)" and not first["ok"]
-    assert second["side"] == "two-sided" and second["ok"]
+    assert first["side"] == "one-sided (lower tail)" and first["status"] == "note"
+    assert second["side"] == "two-sided" and second["status"] == "ok"
 
 
 def test_references_to_unknown_claims_are_skipped():

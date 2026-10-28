@@ -290,7 +290,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
                 rejected=rejected)
         paper = check_paper(spec, claims)
         for check in paper:
-            run.say("check", ("ok: " if check["ok"] else "flag: ") + check["text"], **check)
+            run.say("check", f"{check['status']}: {check['text']}", **check)
         if not claims:
             results = None
         elif builder == "workbench":
