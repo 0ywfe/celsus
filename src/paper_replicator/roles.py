@@ -28,6 +28,9 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
   error and p-value, a row of performance metrics) gives one claim per number. The method's inputs are not
   claims: window lengths, numbers of draws or permutations, lags, thresholds, null values and theoretical
   benchmarks go in method.
+- kind "count" is for sample sizes only: how many observations, events, firms, filings or periods a result is
+  computed on. A number the paper finds by counting (trades made, profitable periods, significant pairs, tests
+  rejected, days until something happens) is an "estimate".
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - period_start, period_end: the dates the sample covers, exactly as printed ("2010-01-03", "February 2018",
   "as of November 12th, 2025"); "not stated" if the paper does not say.
