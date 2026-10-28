@@ -27,6 +27,12 @@ BATCHES = RUNS_DIR / "batches"
 _RUN_ID = re.compile(r"\[ingest\] (run-\S+):")
 
 
+def log_path(label: str, paper: str, i: int) -> Path:
+    """One log per run. The paper is in the name: with only the run index, every paper's first run
+    wrote the same file and the run IDs read back from it were wrong (batch dev-spark-min-1)."""
+    return BATCHES / f"{label}.{paper}.{i}.out"
+
+
 async def _one(paper: str, args: argparse.Namespace, gate: asyncio.Semaphore, label: str, i: int) -> str | None:
     command = [sys.executable, "-m", "paper_replicator.replicate", paper, "--budget-usd", str(args.budget_usd),
                "--attempts", str(args.attempts), "--turns", str(args.turns), "--builder", args.builder]
@@ -34,7 +40,7 @@ async def _one(paper: str, args: argparse.Namespace, gate: asyncio.Semaphore, la
         if getattr(args, flag):
             command += [f"--{flag}", getattr(args, flag)]
     async with gate:
-        log = BATCHES / f"{label}.{i}.out"
+        log = log_path(label, paper, i)
         with log.open("w") as out:
             process = await asyncio.create_subprocess_exec(*command, cwd=ROOT, stdout=out, stderr=out)
             await process.wait()

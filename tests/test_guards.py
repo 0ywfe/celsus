@@ -92,3 +92,14 @@ def test_fetching_code_from_a_code_host_is_caught_but_data_files_are_not():
     assert fetches_code("pd.read_csv('https://raw.githubusercontent.com/a/b/main/data/events.csv')") is None
     assert fetches_code("curl 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10'") is None
     assert fetches_code("curl -s https://efts.sec.gov/LATEST/search-index?q=%22Item%201.05%22") is None
+
+
+
+def test_a_reported_zero_is_not_a_planted_number():
+    # runs 008e5d and f8cb56: p = 0.000 printed in the paper, and 0.0 in nearly every script
+    from paper_replicator.guards import hardcoded_results
+    from paper_replicator.spec import Claim
+    claims = [Claim(name="p_placebo", description="", value="0.000", unit="", kind="p_value", where=""),
+              Claim(name="mean", description="", value="-7.49", unit="%", kind="estimate", where="")]
+    assert hardcoded_results("x = df.fillna(0.0)\ny = 0", claims) == []
+    assert hardcoded_results("x = -7.49", claims) == ["mean (-7.49)"]

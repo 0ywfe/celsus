@@ -87,10 +87,11 @@ def ground_claims(claims: list[Claim], latex: str) -> tuple[list[Claim], list[di
 
 def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
     """Claims whose reported value is a number in the code. Only decimals are checked: small
-    integers such as window lengths legitimately appear as method parameters."""
+    integers such as window lengths legitimately appear as method parameters. A reported zero
+    (p = 0.000) is skipped: 0.0 is in 36 of the 37 real scripts on disk, so it says nothing."""
     literals = numeric_literals(script)
     return [f"{c.name} ({c.value})" for c in claims
-            if (digits := magnitude(c.value)) and "." in digits and float(digits) in literals]
+            if (digits := magnitude(c.value)) and "." in digits and float(digits) != 0 and float(digits) in literals]
 
 
 def syntax_error(script: str) -> str | None:

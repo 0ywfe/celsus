@@ -26,3 +26,10 @@ def test_reliability_numbers_from_run_summaries(tmp_path, monkeypatch):
     assert group["headline_reproduced"]["min"] == -6.5 and group["headline_reproduced"]["max"] == -3.9
     assert group["headline_consistent"] == 1 and group["crashed"] == 1 and group["rejections"] == 3
     assert "| 0000.00000 | m | minimal | 3 |" in batch.markdown({"groups": [group]})
+
+
+
+def test_each_run_of_each_paper_logs_to_its_own_file():
+    from paper_replicator.batch import log_path
+    paths = {log_path("x", paper, i) for paper in ("2604.27287", "2512.12815") for i in range(2)}
+    assert len(paths) == 4
