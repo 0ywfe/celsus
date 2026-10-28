@@ -99,6 +99,15 @@ async def clean_run(run: Run, script: str, attempt: int) -> SandboxRun | None:
         return None
 
 
+def carried_over(error: MaxTurnsExceeded, task: str) -> list:
+    """The conversation so far from a round that ran out of turns, so the next round keeps what it learned."""
+    data = error.run_data
+    if data is None:
+        return [user(task)]
+    start = [user(data.input)] if isinstance(data.input, str) else list(data.input)
+    return start + [item.to_input_item() for item in data.new_items]
+
+
 def sandbox_secrets() -> dict[str, str]:
     return {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
 
@@ -240,7 +249,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
     task = (f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\n"
             "Replicate the paper's headline results as /work/replicate.py.")
     try:
-        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say, env),
+        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say, env, turns),
                                         run.effort)
         history: list = [user(task)]
         previous, targets, kept = "", [], None
@@ -248,16 +257,21 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
         for round_ in range(1, rounds + 1):
             run.rounds = round_
             run.say("build", f"round {round_}: the builder works in the sandbox (up to {turns} turns)")
+            ran_out = False
             try:
                 result = await Runner.run(agent, history, max_turns=turns, hooks=run.ledger)
                 history, summary = result.to_input_list(), str(result.final_output)
-            except MaxTurnsExceeded:
+            except MaxTurnsExceeded as error:
+                ran_out = True
                 summary = "(ran out of turns)"
-                history = [user(task), user("Your previous session ran out of turns. Your files are still in "
-                                            "/work: read /work/replicate.py and finish it.")]
+                history = carried_over(error, task) + [user(
+                    "This round's turns are used up. Write /work/replicate.py now from what you have learned, "
+                    "run it, and finish.")]
                 run.guard_events.append(f"round {round_}: the builder ran out of turns")
             script = await asyncio.to_thread(bench.read_text, f"{WORK}/replicate.py")
             (run.folder / f"attempt_{round_}_notes.md").write_text(summary)
+            if script is None and ran_out:
+                continue  # not a guard event: the next round is told to write the script now
             if script is None:
                 problem = "there is no /work/replicate.py."
             else:

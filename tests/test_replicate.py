@@ -279,3 +279,31 @@ def test_an_infrastructure_failure_keeps_the_earlier_good_results(setup):
     text = outcome["report"].read_text()
     assert "clean run could not complete: ConnectionError" in text
     assert text.startswith("We could not check this paper: the replication could not rebuild the paper's sample")
+
+
+def test_a_round_that_runs_out_of_turns_carries_its_conversation_into_the_next(setup):
+    cfg, tmp_path = setup
+    benches = []
+
+    def open_bench(**kwargs):
+        benches.append(FakeWorkbench(**kwargs))
+        return benches[-1]
+
+    api = FakeChatAPI([
+        (json.dumps(SPEC), usage(500, 900)),
+        ([("run", {"cmd": "probe-1"})], usage(900, 200)),
+        ([("run", {"cmd": "probe-2"})], usage(1000, 200)),                    # turn cap (2) reached here
+        ([("write_file", {"path": "replicate.py", "content": "print('computed')"})], usage(1200, 300)),
+        ("Done.", usage(1500, 80)),
+    ])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    client = make_client(cfg, max_retries=0, http_client=api.http_client())
+    outcome = asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=2, timeout_s=600, budget_usd=None,
+                                              runs_dir=tmp_path / "runs", sandbox=sandbox, builder="workbench",
+                                              turns=2, open_bench=open_bench))
+    round_two = api.requests[3]["body"]["messages"]
+    tool_replies = [m["content"] for m in round_two if m["role"] == "tool"]
+    assert any("probe" not in r and "fields" in r for r in tool_replies)         # round one's tool output kept
+    assert "turns are used up" in round_two[-1]["content"]
+    assert "[tool call 1; a round allows 2 turns]" in tool_replies[0]
+    assert outcome["verdict"] == "holds up"
