@@ -353,11 +353,14 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg}, budget_usd=budget)
     run = Run(run_id, folder, ledger, sandbox, timeout_s, effort=effort)
     run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {cfg.model} at effort "
-                      f"{effort or 'default'}; {builder} builder; budget ${budget:.4f}")
+                      f"{effort or 'default'}; {builder} builder; budget ${budget:.4f}",
+            arxiv_id=arxiv_id, provider=cfg.provider.name, model=cfg.model, effort=effort or "default",
+            builder=builder, budget_usd=budget)
 
     spec, rows, rejected, paper, results, crashed = None, [], [], [], None, None
     try:
         spec = await extract(run, cfg, client, latex, effort)
+        run.say("extract", f"read: {spec.title} ({len(spec.claims)} numbers to check)", title=spec.title)
         (folder / "spec.json").write_text(spec.model_dump_json(indent=1))
         claims, rejected = guards.ground_claims(spec.claims, latex)
         run.say("guard", f"{len(claims)} claims grounded in the LaTeX, {len(rejected)} rejected",

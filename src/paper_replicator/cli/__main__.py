@@ -1,0 +1,107 @@
+"""The terminal front end.
+
+  python -m paper_replicator.cli check <arxiv_id> [replicate options]   run a check and watch it live
+  python -m paper_replicator.cli replay <run id or folder> [--speed 10]  replay a recorded run at its own pace
+
+Both play the same files (events.jsonl and calls.jsonl in the run folder) through the same screens.
+A replay is labelled as one, with the run's ID and date, so it is never passed off as live."""
+
+from __future__ import annotations
+
+import argparse
+import subprocess
+import sys
+import time
+from dataclasses import replace
+from pathlib import Path
+
+from rich.console import Console
+from rich.live import Live
+from rich.text import Text
+
+from ..runs import RUNS_DIR
+from .state import State, apply
+from .timeline import Tail, load, merge
+from .view import card, screen
+
+POLL_S = 0.25  # how often a live run's folder is read
+
+
+def _folder(name: str) -> Path:
+    path = Path(name)
+    if path.is_dir():
+        return path
+    found = sorted(RUNS_DIR.glob(f"*{name}*"))
+    if len(found) != 1:
+        raise SystemExit(f"no single run matches {name!r} ({len(found)} found)")
+    return found[0]
+
+
+def replay(folder: Path, speed: float, max_gap_s: float, console: Console, sleep=time.sleep) -> State:
+    """Plays the run at its own pace, `speed` times faster, with no pause longer than max_gap_s."""
+    items = load(folder)
+    console.print(Text(f"replay of {folder.name}, recorded {items[0]['ts'][:16].replace('T', ' ')} UTC"
+                       f" · {speed:g}× speed", style="dim") if items else Text("empty run", style="red"))
+    state, previous = State(), None
+    with Live(screen(state, console.height), console=console, refresh_per_second=10) as live:
+        for item in items:
+            if previous is not None:
+                sleep(min((item["t"] - previous) / speed, max_gap_s))
+            previous, state = item["t"], apply(state, item)
+            live.update(screen(state, console.height))
+    if (folder / "summary.json").exists():
+        console.print(card(folder))
+    return state
+
+
+def check(args: list[str], console: Console) -> State:
+    """Starts a run as its own process and follows its folder until the verdict."""
+    before = set(RUNS_DIR.glob("run-*"))
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
+    out = (RUNS_DIR / "cli_last_run.out").open("w")
+    process = subprocess.Popen([sys.executable, "-m", "paper_replicator.replicate", *args], stdout=out,
+                               stderr=subprocess.STDOUT)
+    folder = None
+    while folder is None and process.poll() is None:
+        new = sorted(set(RUNS_DIR.glob("run-*")) - before)
+        folder = new[0] if new else None
+        time.sleep(POLL_S)
+    if folder is None:
+        raise SystemExit(f"the run did not start; see {out.name}")
+    events, calls, state = Tail(folder / "events.jsonl"), Tail(folder / "calls.jsonl"), State()
+    with Live(screen(state, console.height), console=console, refresh_per_second=10) as live:
+        while True:
+            finished = process.poll() is not None
+            for item in merge(events.read(), calls.read()):
+                state = apply(state, item)
+            if state.started is not None and state.verdict is None:
+                state = replace(state, now=time.time())  # the clock runs between events
+            live.update(screen(state, console.height))
+            if finished:
+                break
+            time.sleep(POLL_S)
+    if (folder / "summary.json").exists():
+        console.print(card(folder))
+    return state
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(prog="python -m paper_replicator.cli", description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = parser.add_subparsers(dest="command", required=True)
+    play = sub.add_parser("replay", help="replay a recorded run")
+    play.add_argument("run")
+    play.add_argument("--speed", type=float, default=10.0, help="times faster than the run took")
+    play.add_argument("--max-gap", type=float, default=1.5, help="longest pause between two lines, in seconds")
+    live = sub.add_parser("check", help="check a paper, live", add_help=False)
+    live.add_argument("rest", nargs=argparse.REMAINDER)
+    args = parser.parse_args(argv)
+    console = Console()
+    if args.command == "replay":
+        replay(_folder(args.run), args.speed, args.max_gap, console)
+    else:
+        check(args.rest, console)
+
+
+if __name__ == "__main__":
+    main()
