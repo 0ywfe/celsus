@@ -8,19 +8,21 @@ import json
 import httpx2
 
 
-def chat_completion(model: str, content: str, usage: dict) -> dict:
+def chat_completion(model: str, content, usage: dict, turn: int = 0) -> dict:
+    """content is the reply text, or a list of (tool name, arguments) for a tool-calling turn."""
+    if isinstance(content, list):
+        calls = [{"id": f"call_{turn}_{i}", "type": "function",
+                  "function": {"name": name, "arguments": json.dumps(args)}}
+                 for i, (name, args) in enumerate(content)]
+        message, finish = {"role": "assistant", "content": None, "tool_calls": calls}, "tool_calls"
+    else:
+        message, finish = {"role": "assistant", "content": content}, "stop"
     return {
         "id": "chatcmpl-fake",
         "object": "chat.completion",
         "created": 0,
         "model": model,
-        "choices": [
-            {
-                "index": 0,
-                "message": {"role": "assistant", "content": content},
-                "finish_reason": "stop",
-            }
-        ],
+        "choices": [{"index": 0, "message": message, "finish_reason": finish}],
         "usage": usage,
     }
 
@@ -46,7 +48,7 @@ class FakeChatAPI:
         body = json.loads(request.content)
         self.requests.append({"path": request.url.path, "body": body})
         content, reply_usage = self.replies[len(self.requests) - 1]
-        return httpx2.Response(200, json=chat_completion(body["model"], content, reply_usage))
+        return httpx2.Response(200, json=chat_completion(body["model"], content, reply_usage, len(self.requests)))
 
     def http_client(self) -> httpx2.AsyncClient:
         return httpx2.AsyncClient(transport=httpx2.MockTransport(self._handle))

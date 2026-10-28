@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-from agents import Agent, Runner
+from agents import Agent, MaxTurnsExceeded, Runner
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
@@ -27,7 +27,8 @@ from .ledger import Ledger
 from .llm import make_client
 from .pricing import worst_case_usd
 from .runs import ROOT, RUNS_DIR, new_run
-from .sandbox import SandboxRun, run_script
+from .sandbox import WORK, SandboxRun, Workbench, run_script
+from .workbench_tools import make_tools
 from .spec import Claim, PaperSpec
 
 CHARS_PER_TOKEN = 3  # conservative: overestimates tokens, so the budget bound stays a bound
@@ -36,6 +37,9 @@ STDERR_TAIL, STDOUT_TAIL = 4000, 2000
 MARKET_CACHE = ROOT / "data" / "market"
 # Generating a whole script with reasoning can take minutes; the SDK default would cut it off.
 MODEL_TIMEOUT_S = 600
+# The workbench builder's first runs have no measured cost yet: this caps them until the ledger has data.
+FIRST_WORKBENCH_BUDGET_USD = 3.0
+WORKBENCH_LIFETIME_S = 3600
 
 
 @dataclass
@@ -132,7 +136,7 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str) -> tupl
                f"\nYour script's output (end):\n{stdout[-STDOUT_TAIL:]}\n"
                "Find the step where your sample construction departs from the paper's definition (which filings "
                "or observations count, forms, items, dates, deduplication) and fix that step. Never filter, trim "
-               "or pad the data to reach a number. Return the whole corrected script.")
+               "or pad the data to reach a number.")
     return problem, [f"{r['reported']:g}" for r in off]
 
 
@@ -174,20 +178,88 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         targets = sorted(set(targets) | set(watch))
         run.guard_events.append(f"attempt {attempt}: audit sent back {len(watch)} sample counts that disagree")
         run.say("audit", f"attempt {attempt}: {len(results)} results, but {len(watch)} sample counts disagree; sent back")
-        history.append(user(problem))
+        history.append(user(f"{problem} Return the whole corrected script."))
     return kept
+
+
+async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, latex: str,
+                               spec: PaperSpec, claims: list[Claim], *, turns: int, rounds: int,
+                               open_bench: Callable[..., Workbench] = Workbench) -> list[dict] | None:
+    """Cookbook 07's form: the builder explores and writes /work/replicate.py in a persistent sandbox with
+    `run` and `write_file`; only a clean re-run of that file in a fresh sandbox produces results. The same
+    checks and the audit loop apply between rounds."""
+    env = {"SEC_USER_AGENT": os.environ["SEC_USER_AGENT"]}
+    bench = await asyncio.to_thread(open_bench, market_cache=MARKET_CACHE, env=env,
+                                    command_timeout_s=run.timeout_s, lifetime_s=WORKBENCH_LIFETIME_S)
+    task = (f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\n"
+            "Replicate the paper's headline results as /work/replicate.py.")
+    try:
+        agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say))
+        history: list = [user(task)]
+        previous, targets, kept = "", [], None
+        for round_ in range(1, rounds + 1):
+            run.say("build", f"round {round_}: the builder works in the sandbox (up to {turns} turns)")
+            try:
+                result = await Runner.run(agent, history, max_turns=turns, hooks=run.ledger)
+                history, summary = result.to_input_list(), str(result.final_output)
+            except MaxTurnsExceeded:
+                summary = "(ran out of turns)"
+                history = [user(task), user("Your previous session ran out of turns. Your files are still in "
+                                            "/work: read /work/replicate.py and finish it.")]
+                run.guard_events.append(f"round {round_}: the builder ran out of turns")
+            script = await asyncio.to_thread(bench.read_text, f"{WORK}/replicate.py")
+            (run.folder / f"attempt_{round_}_notes.md").write_text(summary)
+            if script is None:
+                problem = "there is no /work/replicate.py."
+            else:
+                (run.folder / f"attempt_{round_}.py").write_text(script)
+                problem = script_problem(script, previous, claims, targets)
+                previous = script
+            if problem:
+                run.guard_events.append(f"round {round_}: rejected before the clean run: {problem}")
+                run.say("guard", f"script rejected: {problem.split('. ')[0]}")
+                history.append(user(f"Rejected: {problem} Fix /work/replicate.py in the sandbox and run it again."))
+                continue
+            run.say("sandbox", f"round {round_}: clean re-run in a fresh sandbox")
+            sandbox_run = await asyncio.to_thread(sandbox_round, run, script, round_)
+            results, problem = read_results(sandbox_run)
+            if problem is not None:
+                run.say("sandbox", f"round {round_}: {problem.splitlines()[0]}")
+                history.append(user(f"The clean re-run in a fresh sandbox failed. {problem}\n"
+                                    "Fix /work/replicate.py and run it again."))
+                continue
+            kept = results
+            (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
+            (run.folder / "results_attempt.txt").write_text(str(round_))
+            problem, watch = audit_problem(claims, results, sandbox_run.stdout)
+            if problem is None:
+                run.say("audit", f"round {round_}: {len(results)} results, sample counts match the paper")
+                return kept
+            targets = sorted(set(targets) | set(watch))
+            run.guard_events.append(f"round {round_}: audit sent back {len(watch)} sample counts that disagree")
+            run.say("audit", f"round {round_}: {len(results)} results, but {len(watch)} sample counts disagree; sent back")
+            history.append(user(f"{problem} Fix /work/replicate.py in the sandbox and run it again."))
+        return kept
+    finally:
+        await asyncio.to_thread(bench.close)
 
 
 async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig, *, attempts: int,
                     timeout_s: int, budget_usd: float | None, runs_dir: Path = RUNS_DIR,
-                    sandbox: Callable[..., SandboxRun] = run_script) -> dict:
+                    sandbox: Callable[..., SandboxRun] = run_script, builder: str = "oneshot",
+                    turns: int = 30, open_bench: Callable[..., Workbench] = Workbench) -> dict:
     run_id, folder = new_run(runs_dir)
     latex = load_paper(arxiv_id, ROOT / "data" / "arxiv")
     (folder / "paper.tex").write_text(latex)
-    budget = budget_usd if budget_usd is not None else planned_budget(cfg.model, latex, attempts)
+    if budget_usd is not None:
+        budget = budget_usd
+    elif builder == "workbench":
+        budget = FIRST_WORKBENCH_BUDGET_USD
+    else:
+        budget = planned_budget(cfg.model, latex, attempts)
     ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg}, budget_usd=budget)
     run = Run(run_id, folder, ledger, sandbox, timeout_s)
-    run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; budget ${budget:.4f}")
+    run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {builder} builder; budget ${budget:.4f}")
 
     title, rows, rejected, outcome = arxiv_id, [], [], "no verdict"
     try:
@@ -199,8 +271,14 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         claims, rejected = guards.ground_claims(spec.claims, latex)
         run.say("guard", f"{len(claims)} claims grounded in the LaTeX, {len(rejected)} rejected",
                 rejected=rejected)
-        results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60), latex, spec, claims,
-                                      attempts) if claims else None
+        if not claims:
+            results = None
+        elif builder == "workbench":
+            results = await build_with_workbench(run, cfg, client, latex, spec, claims, turns=turns,
+                                                 rounds=attempts, open_bench=open_bench)
+        else:
+            results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60), latex, spec, claims,
+                                          attempts)
         rows = compare(claims, results or [])
         outcome = verdict(rows) if results is not None else "no verdict"
     except Exception as error:  # the report still gets written, with the reason
@@ -216,7 +294,9 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("arxiv_id")
-    parser.add_argument("--attempts", type=int, default=4)
+    parser.add_argument("--builder", choices=["workbench", "oneshot"], default="workbench")
+    parser.add_argument("--attempts", type=int, default=4, help="build attempts (oneshot) or audit rounds (workbench)")
+    parser.add_argument("--turns", type=int, default=30, help="tool turns per workbench round")
     parser.add_argument("--timeout-min", type=int, default=20)
     parser.add_argument("--budget-usd", type=float, default=None,
                         help="default: the worst case of the planned calls")
@@ -224,7 +304,8 @@ def main() -> int:
     load_dotenv(ROOT / ".env")
     cfg = config.tier("quick")
     outcome = asyncio.run(replicate(args.arxiv_id, make_client(cfg, timeout_s=MODEL_TIMEOUT_S), cfg, attempts=args.attempts,
-                                    timeout_s=args.timeout_min * 60, budget_usd=args.budget_usd))
+                                    timeout_s=args.timeout_min * 60, budget_usd=args.budget_usd,
+                                    builder=args.builder, turns=args.turns))
     print(f"report: {outcome['report'].relative_to(ROOT)}")
     return 0
 

@@ -187,3 +187,54 @@ def test_a_broken_audit_round_keeps_the_earlier_results(setup):
     outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
     rows = json.loads((outcome["report"].parent / "comparison.json").read_text())["rows"]
     assert {r["name"]: r["reproduced"] for r in rows}["n_filings"] == 21
+
+
+class FakeWorkbench:
+    def __init__(self, **kwargs):
+        self.files, self.commands, self.closed = {}, [], False
+
+    def run(self, cmd):
+        self.commands.append(cmd)
+        return 0, "fields: items, form, file_date"
+
+    def write_file(self, path, content):
+        self.files[path if path.startswith("/") else f"/work/{path}"] = content
+
+    def read_text(self, path):
+        return self.files.get(path)
+
+    def close(self):
+        self.closed = True
+
+
+def test_workbench_builder_explores_writes_and_only_the_clean_rerun_counts(setup):
+    cfg, tmp_path = setup
+    benches = []
+
+    def open_bench(**kwargs):
+        benches.append(FakeWorkbench(**kwargs))
+        return benches[-1]
+
+    api = FakeChatAPI([
+        (json.dumps(SPEC), usage(500, 900)),
+        ([("run", {"cmd": "curl -s efts | head"})], usage(900, 200)),
+        ([("write_file", {"path": "replicate.py", "content": "print('computed')"})], usage(1200, 300)),
+        ([("run", {"cmd": "python /work/replicate.py"})], usage(1500, 100)),
+        ("Built 38 filings from EDGAR; amendments kept.", usage(1800, 80)),
+    ])
+    sandbox = FakeSandbox([SandboxRun(0, "kept=38", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    client = make_client(cfg, max_retries=0, http_client=api.http_client())
+    outcome = asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=2, timeout_s=600, budget_usd=None,
+                                              runs_dir=tmp_path / "runs", sandbox=sandbox, builder="workbench",
+                                              turns=10, open_bench=open_bench))
+    assert outcome["verdict"] == "reproduced"
+    [bench] = benches
+    assert bench.commands == ["curl -s efts | head", "python /work/replicate.py"] and bench.closed
+    assert sandbox.scripts == ["print('computed')"]                   # the clean re-run used the file it wrote
+    build_body = api.requests[1]["body"]
+    assert {t["function"]["name"] for t in build_body["tools"]} == {"run", "write_file"}
+    assert "response_format" not in build_body and build_body.get("tool_choice") in (None, "auto")
+    folder = outcome["report"].parent
+    tools = [json.loads(l) for l in (folder / "events.jsonl").read_text().splitlines() if '"tool"' in l]
+    assert any(e["message"].startswith("$ curl") for e in tools)
+    assert (folder / "attempt_1_notes.md").read_text().startswith("Built 38 filings")
