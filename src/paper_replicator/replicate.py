@@ -352,7 +352,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
             run.say("sandbox", f"attempt {attempt}: {problem.splitlines()[0]}")
             history.append(user(problem))
             continue
-        kept, run.kept_script = results, script.script
+        kept, run.kept_script, run.review_issue = results, script.script, None   # not reviewed yet
         (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
         (run.folder / "results_attempt.txt").write_text(str(attempt))
         problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
@@ -427,7 +427,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                 history.append(user(f"The clean re-run in a fresh sandbox failed. {problem}\n"
                                     "Fix /work/replicate.py and run it again."))
                 continue
-            kept, run.kept_script = results, script
+            kept, run.kept_script, run.review_issue = results, script, None   # not reviewed yet
             (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
             (run.folder / "results_attempt.txt").write_text(str(round_))
             problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,

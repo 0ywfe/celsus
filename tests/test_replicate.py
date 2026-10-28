@@ -494,6 +494,21 @@ def test_a_breach_still_there_after_the_last_attempt_is_could_not_check_with_the
     assert outcome["report"].read_text().startswith("We could not check this paper: a reviewer found 1 breach")
 
 
+def test_a_breach_fixed_in_a_later_attempt_is_not_named_in_the_verdict(setup):
+    # 2603.25285: round 1's hard-coded 30 was fixed in round 2, but the first line still named it after round 3
+    cfg, tmp_path = setup
+    fixed = {"script": "print('computed again')", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (finding("print('computed')"), usage(3000, 200)), (json.dumps(fixed), usage(900, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)}),
+                           SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
+    report = outcome["report"].read_text()
+    assert outcome["verdict"] == "could not check"
+    assert "reviewer" not in report.splitlines()[0]
+    assert "a reviewer found 1 breach" in report   # still listed under the run's guards, as round 1's
+
+
 def test_an_impossible_result_goes_back_to_the_builder(setup):
     cfg, tmp_path = setup
     bad = {"results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 38},
