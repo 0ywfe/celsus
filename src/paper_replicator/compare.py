@@ -88,7 +88,7 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
 
 
 def _num(value) -> str:
-    return "none" if value is None else f"{value:g}"
+    return "none" if value is None else f"{value:.4g}"
 
 
 def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None) -> str:
