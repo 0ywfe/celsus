@@ -21,6 +21,7 @@ from rich.live import Live
 from rich.text import Text
 
 from ..runs import RUNS_DIR
+from . import sabotage_view
 from .state import State, apply
 from .timeline import Tail, load, merge
 from .view import card, screen
@@ -95,12 +96,18 @@ def main(argv: list[str] | None = None) -> None:
     play.add_argument("run")
     play.add_argument("--speed", type=float, default=10.0, help="times faster than the run took")
     play.add_argument("--max-gap", type=float, default=1.5, help="longest pause between two lines, in seconds")
+    plants = sub.add_parser("sabotage", help="replay a saboteur session: each plant and the check that caught it")
+    plants.add_argument("session")
+    plants.add_argument("--speed", type=float, default=10.0, help="times faster than the session took")
+    plants.add_argument("--max-gap", type=float, default=1.0, help="longest pause between two lines, in seconds")
     live = sub.add_parser("check", help="check a paper, live", add_help=False)
     live.add_argument("rest", nargs=argparse.REMAINDER)
     args = parser.parse_args(argv)
     console = Console()
     if args.command == "replay":
         replay(_folder(args.run), args.speed, args.max_gap, console)
+    elif args.command == "sabotage":
+        sabotage_view.replay(_folder(args.session), args.speed, args.max_gap, console)
     else:
         check(args.rest, console)
 

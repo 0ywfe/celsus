@@ -121,3 +121,29 @@ def test_the_card_shows_the_main_result_and_mismatches_first():
         {"name": "bad", "consistent": False}, {"name": "main", "consistent": True}]
     shown, hidden = shown_rows(rows, "main", 4)
     assert [r["name"] for r in shown][:2] == ["main", "bad"] and len(shown) == 4 and hidden == 8
+
+
+def test_a_sabotage_session_replays_each_plant_next_to_the_check_that_caught_it(tmp_path):
+    import json as _json
+    from rich.console import Console as _Console
+    from paper_replicator.cli import sabotage_view
+    folder = tmp_path / "sabotage-x"
+    folder.mkdir()
+    plants = [{"type": "B6", "run": "r", "paper": "2512.06144", "draw": 1, "state": "killed", "check": "authors' code",
+               "detail": "github.com/a/b"},
+              {"type": "B7", "run": "r", "paper": "2512.06144", "draw": 1, "state": "survived", "check": "",
+               "detail": "verdict holds up with overall_mean_return changed"},
+              {"type": "P2", "run": "r", "paper": "2512.06144", "draw": 2, "state": "survived", "check": "",
+               "detail": "no new flag on the paper"}]
+    events = [{"ts": f"2026-10-28T18:00:0{i}+00:00", "stage": "plant", "message": "m", **p} for i, p in enumerate(plants)]
+    (folder / "events.jsonl").write_text("".join(_json.dumps(e) + "\n" for e in events))
+    (folder / "plants.jsonl").write_text("".join(_json.dumps(p) + "\n" for p in plants))
+    (folder / "baseline.json").write_text(_json.dumps([{"run": "r", "alarms": []}]))
+    (folder / "reviewed.json").write_text(_json.dumps({"P2#r#2": {"state": "equivalent", "reason": "same test"}}))
+    console = _Console(record=True, width=200)
+    sabotage_view.replay(folder, 10, 0, console, sleep=lambda s: None)
+    out = console.export_text()
+    assert "✓ caught" in out and "authors' code" in out
+    assert "✗ survived" in out and "overall_mean_return" in out
+    assert "same test" in out                                  # the review's reason, not the raw "survived"
+    assert "caught 1 of 2 plants (50%)" in out and "false alarms on the 1 clean runs: 0" in out
