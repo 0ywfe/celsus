@@ -12,7 +12,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import modal
-from modal.exception import SandboxFilesystemNotFoundError
+from modal.exception import (NotFoundError, SandboxFilesystemNotFoundError, SandboxTerminatedError,
+                             SandboxTimeoutError)
 
 from . import PRODUCT_NAME
 
@@ -70,29 +71,62 @@ def run_script(script: str, *, market_cache: Path, env: dict[str, str], timeout_
     return run
 
 
+# A sandbox past its lifetime answers with one of these.
+GONE = (NotFoundError, SandboxTerminatedError, SandboxTimeoutError)
+RESTARTED = ("(the sandbox had shut down and was restarted: files written with write_file are back; anything else, "
+             "such as downloads or files written by commands, has to be made again)\n")
+
+
 class Workbench:
-    """A persistent sandbox for the builder: shell commands and file writes, nothing else."""
+    """A persistent sandbox for the builder: shell commands and file writes, nothing else. A sandbox that shuts down
+    mid-run (its lifetime ran out) is reopened and every file the builder wrote is written back."""
 
     def __init__(self, *, market_cache: Path, env: dict[str, str], command_timeout_s: int, lifetime_s: int):
         self.command_timeout_s = command_timeout_s
-        self.sandbox = _start(market_cache=market_cache, env=env, lifetime_s=lifetime_s)
+        self._open = lambda: _start(market_cache=market_cache, env=env, lifetime_s=lifetime_s)
+        self.sandbox = self._open()
+        self.written: dict[str, str] = {}
+        self.restarts = 0
+
+    def _alive(self, action):
+        """(action's result, whether the sandbox had to be reopened first)."""
+        try:
+            return action(self.sandbox), False
+        except GONE:
+            self.restarts += 1
+            self.sandbox = self._open()
+            for target, content in self.written.items():
+                _write(self.sandbox, target, content)
+            return action(self.sandbox), True
 
     def run(self, cmd: str) -> tuple[int | None, str]:
         """`pipefail`, so a failing command piped into tail still reports its real exit code."""
-        process = self.sandbox.exec("bash", "-lc", f"set -o pipefail; {cmd}",
-                                    timeout=self.command_timeout_s, workdir=WORK)
-        process.wait()
-        output = process.stdout.read() + process.stderr.read()
+        def go(sandbox: modal.Sandbox) -> tuple[int | None, str]:
+            process = sandbox.exec("bash", "-lc", f"set -o pipefail; {cmd}", timeout=self.command_timeout_s,
+                                   workdir=WORK)
+            process.wait()
+            return process.returncode, process.stdout.read() + process.stderr.read()
+
+        (code, output), restarted = self._alive(go)
         tail = output if len(output) <= MAX_TOOL_OUTPUT else "...(truncated)...\n" + output[-MAX_TOOL_OUTPUT:]
-        return process.returncode, tail
+        return code, (RESTARTED if restarted else "") + tail
 
     def write_file(self, path: str, content: str) -> None:
         target = path if path.startswith("/") else f"{WORK}/{path}"
-        self.sandbox.filesystem.make_directory(str(Path(target).parent))
-        self.sandbox.filesystem.write_text(content, target)
+        self.written[target] = content
+        self._alive(lambda sandbox: _write(sandbox, target, content))
 
     def read_text(self, path: str) -> str | None:
-        return _read(self.sandbox, path)
+        text, _ = self._alive(lambda sandbox: _read(sandbox, path))
+        return text if text is not None else self.written.get(path)
 
     def close(self) -> None:
-        self.sandbox.terminate()
+        try:
+            self.sandbox.terminate()
+        except GONE:
+            pass
+
+
+def _write(sandbox: modal.Sandbox, target: str, content: str) -> None:
+    sandbox.filesystem.make_directory(str(Path(target).parent))
+    sandbox.filesystem.write_text(content, target)

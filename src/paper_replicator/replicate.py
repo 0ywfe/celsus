@@ -44,6 +44,8 @@ MARKET_CACHE = ROOT / "data" / "market"
 MODEL_TIMEOUT_S = 600
 # The workbench builder's first runs have no measured cost yet: this caps them until the ledger has data.
 FIRST_WORKBENCH_BUDGET_USD = 3.0
+# One sandbox's lifetime. Rounds measured up to 30 min (141 rounds on disk, 28 Oct), so three can outlive it; the
+# workbench then reopens the sandbox with the builder's files (held-out 2512.12924 lost round 3 before that).
 WORKBENCH_LIFETIME_S = 3600
 
 
