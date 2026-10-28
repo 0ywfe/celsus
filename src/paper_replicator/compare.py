@@ -2,6 +2,10 @@
 
 Tolerances come from the data, not from a chosen percentage:
 - estimate: consistent if the paper's value lies inside the reproduction's 95% interval (value +/- 1.96 se).
+  With se = 0 (the builder says the number has no sampling error, e.g. a return over a fixed period), consistent if the
+  reproduction rounds to the value as printed (exact reproduction, Baek and Pradel, arXiv 2602.10046), or else
+  lies within 10% of it (the coefficient threshold of Hans and Bilionis, arXiv 2607.02134; on 2604.27287, Yahoo
+  data in place of the paper's CRSP put 45 of 48 such numbers within 3.4%, most within 1%).
 - count: consistent if the difference is within 1.96 sqrt(reported) (Poisson).
 - test_statistic: consistent if the conclusion is the same at 5% on the side the paper tested (1.96 two-sided,
   1.645 one-sided in the paper's tail; the side comes from recomputing the paper's own p-value). A significant
@@ -16,13 +20,21 @@ from __future__ import annotations
 
 import math
 
-from .guards import parse_number
+from .guards import magnitude, parse_number
 from .spec import Claim
 
 from scipy import stats
 
 ALPHA = 0.05  # the conventional significance level
 Z95 = float(stats.norm.ppf(1 - ALPHA / 2))  # 1.96: the two-sided 95% interval for estimates
+RELATIVE = 0.10  # for an estimate without a standard error: Hans and Bilionis's coefficient threshold
+
+
+def half_unit(printed: str) -> float:
+    """Half a unit in the last digit the paper printed: how far a number can be from it and still print the same."""
+    digits = magnitude(printed) or ""
+    decimals = len(digits.split(".")[1]) if "." in digits else 0
+    return 0.5 * 10 ** -decimals
 
 
 def critical(side: str) -> float:
@@ -46,13 +58,16 @@ def with_unit(number: str, unit: str) -> str:
     return f"{number}{unit}" if unit.startswith("%") else f"{number} {unit}"
 
 
-def judge(kind: str, reported: float, result: dict, side: str = "two-sided") -> tuple[bool | None, str]:
+def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
+          printed: str = "") -> tuple[bool | None, str]:
     value, se = result.get("value"), result.get("se")
     if value is None:
         return None, "no value"
     if kind == "estimate":
-        if not se:
+        if se is None:
             return None, "no standard error"
+        if se == 0:  # the builder's way of saying the number has no sampling error
+            return fixed_number(reported, value, printed)
         inside = abs(value - reported) <= Z95 * se
         return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "count":
@@ -74,6 +89,15 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided") -> 
     return None, "not judged"
 
 
+def fixed_number(reported: float, value: float, printed: str) -> tuple[bool, str]:
+    """An estimate with no sampling error: the same printed number, or else within RELATIVE of it."""
+    if abs(value - reported) <= half_unit(printed or f"{reported}") * (1 + 1e-9):
+        return True, f"rounds to the printed {printed or reported}"
+    apart = abs(value - reported) / abs(reported) if reported else math.inf
+    close = apart <= RELATIVE
+    return close, f"{apart:.1%} apart, {'within' if close else 'beyond'} {RELATIVE:.0%}"
+
+
 def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | None = None) -> list[dict]:
     by_name = {r.get("name"): r for r in results}
     rows = []
@@ -83,7 +107,8 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
         row = {"name": claim.name, "kind": claim.kind, "unit": claim.unit, "reported": reported,
                "reproduced": None, "se": None, "n": None, "consistent": None, "why": "not computed"}
         if result is not None:
-            consistent, why = judge(claim.kind, reported, result, (sides or {}).get(claim.name, "two-sided"))
+            consistent, why = judge(claim.kind, reported, result, (sides or {}).get(claim.name, "two-sided"),
+                                    claim.value)
             row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
                        consistent=consistent, why=why)
         rows.append(row)

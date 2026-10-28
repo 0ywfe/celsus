@@ -95,3 +95,19 @@ def test_an_estimate_outside_the_interval_says_outside():
     # run 774aed: the paper's low-beta mean -4.14 against -1.724 +/- 2.374 was explained as "inside"
     row = compare([claim("low", "-4.14", "estimate")], [{"name": "low", "value": -1.724, "se": 1.2112}])[0]
     assert row["consistent"] is False and row["why"].startswith("paper outside")
+
+
+
+def test_a_number_without_sampling_error_matches_as_printed_or_within_ten_percent():
+    # run 611714 (2604.27287): cumulative returns over a fixed period, Yahoo data in place of CRSP
+    claims = [claim("upro_risk", "0.005", "estimate"), claim("sso", "-11.088", "estimate"),
+              claim("cov", "-2.215", "estimate"), claim("voo_cov", "0.25", "estimate"), claim("omitted", "-7.49", "estimate")]
+    results = [{"name": "upro_risk", "value": 0.005353, "se": 0}, {"name": "sso", "value": -11.0882, "se": 0},
+               {"name": "cov", "value": -1.981, "se": 0}, {"name": "voo_cov", "value": 0.1068, "se": 0},
+               {"name": "omitted", "value": -3.93, "se": None}]
+    rows = {r["name"]: r for r in compare(claims, results)}
+    assert rows["upro_risk"]["consistent"] is True and rows["upro_risk"]["why"] == "rounds to the printed 0.005"
+    assert rows["sso"]["consistent"] is True and rows["sso"]["why"].startswith("rounds to")
+    assert rows["cov"]["consistent"] is False and rows["cov"]["why"] == "10.6% apart, beyond 10%"
+    assert rows["voo_cov"]["consistent"] is False
+    assert rows["omitted"]["consistent"] is None    # a sampled mean whose se was left out stays unjudged
