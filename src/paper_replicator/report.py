@@ -21,6 +21,7 @@ def market_sources(log: list[dict]) -> list[str]:
 
 
 def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[dict], rejected: list[dict],
+          paper_checks: list[dict],
           guard_events: list[str], market_log: list[dict], calls: list[dict], sandbox_note: str) -> Path:
     providers = sorted({c["provider"] for c in calls})
     lines = [
@@ -31,6 +32,8 @@ def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[d
         "|---|---|---|---|---|---|---|---|",
         *[f"| {r['name']} | {r['kind']} | {_fmt(r['reported'])}{r['unit']} | {_fmt(r['reproduced'])} | "
           f"{_fmt(r['se'])} | {_fmt(r['n'])} | {_fmt(r['consistent'])} | {r['why']} |" for r in rows],
+        "", "## The paper's own numbers",
+        *([f"- {'ok' if c['ok'] else 'FLAG'}: {c['text']}" for c in paper_checks] or ["- nothing to check"]),
         "", "## Guards",
         *([f"- rejected claim {r['name']} = {r['value']}: {r['reason']}" for r in rejected] or ["- no claims rejected"]),
         *[f"- {event}" for event in guard_events], "",

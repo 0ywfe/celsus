@@ -22,6 +22,8 @@ SPEC = {
         {"name": "n_filings", "description": "", "value": "40", "unit": "", "kind": "count", "where": ""},
         {"name": "invented", "description": "", "value": "12.3", "unit": "%", "kind": "estimate", "where": ""},
     ],
+    "partitions": [],
+    "tests": [{"test": "small vs zero", "statistic": "t_diff", "p_value": "missing_p", "group_sizes": ["n_filings"]}],
 }
 LEAKY = {"script": "print(-7.5)", "notes": ""}
 CLEAN = {"script": "print('computed')", "notes": "n/a"}
@@ -73,6 +75,7 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     assert "rejected claim invented = 12.3: not in the paper's LaTeX" in text
     assert "contains numbers the paper reports (small_mean (-7.5))" in text
     assert "all on Meta: yes" in text
+    assert "## The paper's own numbers" in text
     assert "Not financial advice." in text
     assert len((folder / "calls.jsonl").read_text().splitlines()) == 3
     stages = [json.loads(line)["stage"] for line in (folder / "events.jsonl").read_text().splitlines()]

@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
 from . import config, guards, market, report, roles
+from .paper_checks import check_paper
 from .compare import compare, verdict
 from .ingest import load_paper
 from .ledger import Ledger
@@ -261,7 +262,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     run = Run(run_id, folder, ledger, sandbox, timeout_s)
     run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {builder} builder; budget ${budget:.4f}")
 
-    title, rows, rejected, outcome = arxiv_id, [], [], "no verdict"
+    title, rows, rejected, outcome, paper = arxiv_id, [], [], "no verdict", []
     try:
         run.say("extract", f"reading the paper with {cfg.model}")
         spec = (await Runner.run(roles.extractor(cfg, client), f"PAPER (LaTeX source):\n{latex}",
@@ -271,6 +272,9 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         claims, rejected = guards.ground_claims(spec.claims, latex)
         run.say("guard", f"{len(claims)} claims grounded in the LaTeX, {len(rejected)} rejected",
                 rejected=rejected)
+        paper = check_paper(spec, claims)
+        for check in paper:
+            run.say("check", ("ok: " if check["ok"] else "flag: ") + check["text"], **check)
         if not claims:
             results = None
         elif builder == "workbench":
@@ -285,6 +289,7 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         run.guard_events.append(f"run stopped: {type(error).__name__}: {error}")
         run.say("error", f"{type(error).__name__}: {error}")
     path = report.write(folder, arxiv_id=arxiv_id, title=title, verdict=outcome, rows=rows, rejected=rejected,
+                        paper_checks=paper,
                         guard_events=run.guard_events, market_log=run.market_log, calls=ledger.rows,
                         sandbox_note=run.sandbox_note)
     run.say("verdict", f"{outcome} (${ledger.spent_usd:.4f} spent)", verdict=outcome)

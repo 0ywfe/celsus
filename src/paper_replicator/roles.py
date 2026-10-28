@@ -22,6 +22,8 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
   p-values and sample sizes. Copy each value exactly as printed. Never compute, round or convert one.
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - method: ordered steps precise enough to code, including windows, return definitions and tests.
+- partitions: each split of a sample into subgroups (by size, sector, ...), naming the count claims.
+- tests: each test statistic with its p-value and the count claims for the samples it uses.
 - Report only what the paper says. Where it does not say, write "not stated"."""
 
 RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",

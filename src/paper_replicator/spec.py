@@ -18,6 +18,19 @@ class Claim(BaseModel):
     where: str = Field(description="the section or sentence where the paper reports it")
 
 
+class Partition(BaseModel):
+    split: str = Field(description="what the split is, e.g. size: small vs larger firms")
+    total: str = Field(description="name of the count claim for the whole sample being split")
+    parts: list[str] = Field(description="names of the count claims for the subgroups of that split")
+
+
+class TestPair(BaseModel):
+    test: str = Field(description="the test as the paper describes it")
+    statistic: str = Field(description="name of the test_statistic claim")
+    p_value: str = Field(description="name of the p_value claim reported with it")
+    group_sizes: list[str] = Field(description="names of the count claims for the sample or samples it uses")
+
+
 class PaperSpec(BaseModel):
     title: str
     hypothesis: str
@@ -25,3 +38,5 @@ class PaperSpec(BaseModel):
     sample: str = Field(description="event or sample definition, period, filters and sample sizes")
     method: list[str] = Field(description="the method as ordered steps, precise enough to code")
     claims: list[Claim] = Field(description="every headline number the paper reports as a result")
+    partitions: list[Partition] = Field(description="every split of a sample into subgroups whose counts the paper reports")
+    tests: list[TestPair] = Field(description="every test statistic with its p-value and sample sizes")
