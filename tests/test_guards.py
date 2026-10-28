@@ -239,3 +239,43 @@ def test_the_checks_survive_odd_arithmetic_and_very_long_expressions():
         assert hardcoded_results(script, claims) == []
         assert hardcoded_counts(script, claims[1:], claims) == []
         assert fixed_results(script, claims) == {}
+
+
+@pytest.mark.parametrize("script", [   # independent review, 28 Oct: spellings the result finder missed
+    "add(name='a', value=0.0307)",
+    "results.append(dict(name='a', value=0.0307, se=1, n=5))",
+    "for k in keys:\n    add(f'{k}_cum', 0.0307, 0, n)",
+    "R = dict(zip(['a', 'b'], [0.0307, est]))",
+    "out = pd.DataFrame({'name': ['a', 'b'], 'value': [0.0307, est]})",
+])
+def test_a_result_is_found_in_every_common_spelling(script):
+    claims = [_claim("a", "3.07", unit="%"), _claim("b", "1.2"), _claim("x_cum", "3.07", unit="%")]
+    assert hardcoded_results(script, claims)
+
+
+@pytest.mark.parametrize("script", [   # a name bound again (parameter, loop, with, import) is not a constant
+    "alpha = 0.0307\ndef f(alpha):\n    R['a'] = alpha",
+    "alpha = 0.0307\nfor alpha in draws:\n    R['a'] = alpha",
+    "alpha = 0.0307\nwith open(p) as alpha:\n    R['a'] = alpha",
+    "alpha = 0.0307\nR['a'] = [alpha for alpha in xs][0]",
+])
+def test_a_name_bound_again_is_not_a_fixed_number(script):
+    # a wrong "fixed" mark would silently leave a real result unjudged; the paper's own number held in the script
+    # still counts for hardcoded_results, which reads every assignment of a name, not its scopes
+    claims = [_claim("a", "3.07", unit="%")]
+    assert fixed_results(script, claims) == {}
+
+
+def test_huge_literals_and_deep_nesting_do_not_crash_the_checks():
+    claims = [_claim("a", "1.2345"), _claim("n", "54", "count")]
+    for script in ("r = {'a': " + "9" * 400 + "}", "r = {'a': float(" + "9" * 400 + ")}", "x = " + "+".join(["1"] * 50000)):
+        assert hardcoded_results(script, claims) == [] and fixed_results(script, claims) == {}
+        assert hardcoded_counts(script, claims[1:], claims) == []
+
+
+def test_a_cut_counts_by_every_value_its_bound_can_take_and_252_is_not_a_sample():
+    claims = [_claim("n_mondays", "116", "count"), _claim("n_days", "252", "count"), _claim("vol", "0.1234")]
+    plant = "w = 116 if k == 'GOLD' else 115\npost[k] = d.iloc[:w].copy()"      # saboteur round 1, B3
+    assert hardcoded_counts(plant, claims[:1], claims) == ["n_mondays (116) at line 2"]
+    annualised = "vol = r.std() * np.sqrt(252)\nann = r.mean() * 252"
+    assert hardcoded_counts(annualised, claims[1:2], claims) == []

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import ast
 import math
+import re
 from dataclasses import dataclass
 
 # Pure functions whose value is fixed when their arguments are: float(0.2066) and np.sqrt(3.8181) are constants.
@@ -19,6 +20,7 @@ _ARITHMETIC = {ast.Add: lambda a, b: a + b, ast.Sub: lambda a, b: a - b, ast.Mul
                ast.Div: lambda a, b: a / b, ast.FloorDiv: lambda a, b: a // b, ast.Mod: lambda a, b: a % b,
                ast.Pow: lambda a, b: a ** b}
 _CUTS = {"head", "tail", "sample", "nlargest", "nsmallest"}
+_UNKNOWN = ast.Name(id="<bound elsewhere>")  # what a parameter, loop variable or import holds
 
 
 @dataclass(frozen=True)
@@ -60,6 +62,21 @@ def assignments(tree: ast.AST) -> dict[str, list[ast.expr]]:
                 bind(target, node.value)
         elif isinstance(node, (ast.AugAssign, ast.AnnAssign)) and node.value is not None:
             bind(node.target, node.value)
+        elif isinstance(node, ast.NamedExpr):
+            bind(node.target, node.value)
+        # a name bound any other way (a parameter, a loop or comprehension variable, `with ... as`, an import, an
+        # exception) holds something not known here, so a name bound like that as well is never a constant
+        elif isinstance(node, (ast.For, ast.AsyncFor, ast.comprehension)):
+            bind(node.target, _UNKNOWN)
+        elif isinstance(node, ast.withitem) and node.optional_vars is not None:
+            bind(node.optional_vars, _UNKNOWN)
+        elif isinstance(node, ast.arg):
+            out.setdefault(node.arg, []).append(_UNKNOWN)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            for alias in node.names:
+                out.setdefault((alias.asname or alias.name).split(".")[0], []).append(_UNKNOWN)
+        elif isinstance(node, ast.ExceptHandler) and node.name:
+            out.setdefault(node.name, []).append(_UNKNOWN)
     return out
 
 
@@ -94,7 +111,10 @@ def constant_nodes(root: ast.AST, known: dict[str, float], skip_indexes: bool = 
 def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float]) -> float | None:
     """One node's value from its children's, already in `found`."""
     if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool):
-        return float(node.value)
+        try:
+            return float(node.value)
+        except OverflowError:  # an integer of hundreds of digits is no number a paper prints
+            return None
     if (name := key(node)) is not None:
         return known.get(name)
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
@@ -119,33 +139,74 @@ def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float]) -
     return None
 
 
+def claim_names(node: ast.AST | None, names: set[str]) -> list[str]:
+    """The claim names a name expression can be: a string, or an f-string whose fixed text pins it down
+    (f"{key}_cumulative_return" in a loop over assets). An f-string with less than two fixed characters could
+    be any claim, so it is none."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return [node.value] if node.value in names else []
+    if isinstance(node, ast.JoinedStr):
+        fixed = [v.value for v in node.values if isinstance(v, ast.Constant) and isinstance(v.value, str)]
+        if sum(map(len, fixed)) < 2:
+            return []
+        pattern = "".join(re.escape(v.value) if isinstance(v, ast.Constant) else ".+" for v in node.values)
+        return sorted(n for n in names if re.fullmatch(pattern, n))
+    return []
+
+
+def _pairs(labels: ast.AST | None, values: ast.AST | None) -> list[tuple[ast.expr, ast.expr]]:
+    """Name and value side by side in two lists of the same length: zip([...], [...]), {"name": [...], "value": [...]}."""
+    if isinstance(labels, (ast.List, ast.Tuple)) and isinstance(values, (ast.List, ast.Tuple)) and \
+            len(labels.elts) == len(values.elts):
+        return list(zip(labels.elts, values.elts))
+    return []
+
+
 def entries(tree: ast.AST, names: set[str]) -> list[Entry]:
     """Each place a result is written under a claim's name: {"name": n, "value": v, "n": k}, {n: v},
-    add(n, v, se, k), (n, v), results[n] = v."""
+    add(n, v, se, k), add(name=n, value=v), dict(name=n, value=v), (n, v), results[n] = v, an f-string name in a
+    loop, and names and values in parallel lists (zip, a data frame's columns)."""
     found = []
+
+    def add(name_node: ast.AST | None, value: ast.expr | None, parts: list[ast.expr], line: int) -> bool:
+        claims = claim_names(name_node, names)
+        found.extend(Entry(name, value, tuple(parts), line) for name in claims)
+        return bool(claims)
+
     for node in ast.walk(tree):
         if isinstance(node, ast.Dict):
             fields = {k.value: v for k, v in zip(node.keys, node.values)
                       if isinstance(k, ast.Constant) and isinstance(k.value, str)}
-            named = fields.get("name")
-            if isinstance(named, ast.Constant) and named.value in names:
-                found.append(Entry(named.value, fields.get("value"),
-                                   tuple(v for k, v in fields.items() if k != "name"), node.lineno))
-            found += [Entry(k, v, (v,), node.lineno) for k, v in fields.items() if k in names]
-        elif isinstance(node, (ast.Call, ast.Tuple, ast.List)):
-            items = node.args if isinstance(node, ast.Call) else node.elts
-            for i, item in enumerate(items):
-                if isinstance(item, ast.Constant) and item.value in names:
-                    rest = list(items[i + 1:]) + [k.value for k in getattr(node, "keywords", [])]
-                    value = items[i + 1] if i + 1 < len(items) else next(
-                        (k.value for k in getattr(node, "keywords", []) if k.arg == "value"), None)
-                    found.append(Entry(item.value, value, tuple(rest), node.lineno))
+            if not add(fields.get("name"), fields.get("value"), [v for k, v in fields.items() if k != "name"],
+                       node.lineno):
+                for label, value in _pairs(fields.get("name"), fields.get("value")):
+                    add(label, value, [value], node.lineno)
+            for k, v in fields.items():
+                if k in names:
+                    add(ast.Constant(k), v, [v], node.lineno)
+        elif isinstance(node, ast.Call):
+            keywords = {k.arg: k.value for k in node.keywords if k.arg}
+            if "name" in keywords and add(keywords["name"], keywords.get("value"),
+                                          [v for k, v in keywords.items() if k != "name"], node.lineno):
+                continue
+            if getattr(node.func, "id", None) == "zip" and len(node.args) == 2:
+                for label, value in _pairs(*node.args):
+                    add(label, value, [value], node.lineno)
+                continue
+            for i, item in enumerate(node.args):
+                if claim_names(item, names):
+                    value = node.args[i + 1] if i + 1 < len(node.args) else keywords.get("value")
+                    add(item, value, list(node.args[i + 1:]) + list(keywords.values()), node.lineno)
+                    break
+        elif isinstance(node, (ast.Tuple, ast.List)):
+            for i, item in enumerate(node.elts):
+                if claim_names(item, names):
+                    add(item, node.elts[i + 1] if i + 1 < len(node.elts) else None, list(node.elts[i + 1:]), node.lineno)
                     break
         elif isinstance(node, ast.Assign):
             for target in node.targets:
-                if isinstance(target, ast.Subscript) and isinstance(target.slice, ast.Constant) and \
-                        target.slice.value in names:
-                    found.append(Entry(target.slice.value, node.value, (node.value,), node.lineno))
+                if isinstance(target, ast.Subscript):
+                    add(target.slice, node.value, [node.value], node.lineno)
     return sorted(found, key=lambda e: e.line)
 
 
@@ -216,14 +277,29 @@ def sized(tree: ast.AST, known: dict[str, float]) -> list[tuple[float, int]]:
     return found
 
 
-def cuts(tree: ast.AST, known: dict[str, float]) -> list[tuple[float, int]]:
-    """Where a sample is cut to a fixed size: x[:k], x[-k:], x.head(k), x.sample(k), x.nlargest(k)."""
+def candidates(node: ast.AST, assigned: dict[str, list[ast.expr]], known: dict[str, float], depth: int = 2) -> set[float]:
+    """Every number an expression can be: its value, either branch of `a if c else b`, or what any assignment of the
+    name it reads gives (`w = 116 if gold else 115; d.iloc[:w]`)."""
+    if (value := evaluate(node, known)) is not None:
+        return {value}
+    if isinstance(node, ast.IfExp):
+        return candidates(node.body, assigned, known, depth) | candidates(node.orelse, assigned, known, depth)
+    if depth and (name := key(node)) is not None:
+        return {v for e in assigned.get(name, []) for v in candidates(e, assigned, known, depth - 1)}
+    return set()
+
+
+def cuts(tree: ast.AST, known: dict[str, float], assigned: dict[str, list[ast.expr]] | None = None
+         ) -> list[tuple[float, int]]:
+    """Where a sample is cut to a fixed size: x[:k], x[-k:], x.head(k), x.sample(k), x.nlargest(k), by any value k
+    can take."""
+    assigned = assigned or {}
     found = []
     for node in ast.walk(tree):
         if isinstance(node, ast.Slice):
-            found += [(abs(v), node.lineno) for bound in (node.lower, node.upper)
-                      if bound is not None and (v := evaluate(bound, known)) is not None]
+            found += [(abs(v), node.lineno) for bound in (node.lower, node.upper) if bound is not None
+                      for v in candidates(bound, assigned, known)]
         elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr in _CUTS:
             sizes = node.args[:1] + [k.value for k in node.keywords if k.arg == "n"]
-            found += [(v, node.lineno) for s in sizes if (v := evaluate(s, known)) is not None]
+            found += [(v, node.lineno) for s in sizes for v in candidates(s, assigned, known)]
     return found
