@@ -217,6 +217,8 @@ def script_check(script: str, previous: str, claims: list[Claim], targets: list[
     if (code := guards.fetches_code(script)) is not None:
         return "authors' code", (f"the script fetches code from a code host ({code}). Build the analysis from "
                                  "the paper; fetch data files only, never the authors' code.")
+    if (contact := guards.sets_contact(script)) is not None:
+        return "SEC contact", f"the script writes a contact ({contact}). {guards.CONTACT_RULE}"
     return None
 
 

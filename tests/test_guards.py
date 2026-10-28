@@ -1,6 +1,6 @@
 import pytest
 
-from paper_replicator.guards import (bypasses_market_data, fixed_results, ground_claims, hardcoded_counts, hardcoded_results,
+from paper_replicator.guards import (bypasses_market_data, sets_contact, fixed_results, ground_claims, hardcoded_counts, hardcoded_results,
                                      numbers_in,
                                      parse_number,
                                      sample_totals,
@@ -279,3 +279,29 @@ def test_a_cut_counts_by_every_value_its_bound_can_take_and_252_is_not_a_sample(
     assert hardcoded_counts(plant, claims[:1], claims) == ["n_mondays (116) at line 2"]
     annualised = "vol = r.std() * np.sqrt(252)\nann = r.mean() * 252"
     assert hardcoded_counts(annualised, claims[1:2], claims) == []
+
+
+@pytest.mark.parametrize("text", [
+    'import os\nos.environ["SEC_USER_AGENT"] = "author@example.edu"\n',          # Spark Open put the author's address here
+    "headers = {'User-Agent': 'research@example.com'}\n",
+    'curl -s -A "jane@test.edu" https://data.sec.gov/submissions/CIK0000320193.json',
+    "export SEC_USER_AGENT=someone && python replicate.py",
+    '_UA = "A. Author replication study author@example.edu"\n',                   # a dev-provider run sent the author's
+])
+def test_a_contact_written_into_a_command_file_or_script_is_found(text):
+    assert sets_contact(text) is not None
+
+
+@pytest.mark.parametrize("text", [
+    'headers = {"User-Agent": os.environ["SEC_USER_AGENT"]}\n',
+    'curl -s -A "$SEC_USER_AGENT" https://data.sec.gov/submissions/CIK0000320193.json',
+    "beta = np.linalg.inv(X.T@X)@X.T@y.values\nr = w@r.mean\nd = fit.params.to_dict()\n",   # matrix products
+    'if os.environ["SEC_USER_AGENT"] == "": raise SystemExit\n',
+    # fallbacks for a contact that is always set send nothing
+    'ua = os.environ.get("SEC_USER_AGENT", "research@example.com")\n',
+    'UA = os.environ.get("SEC_USER_AGENT") or "replication <me@example.com>"\n',
+    'os.environ.setdefault("SEC_USER_AGENT", os.environ.get("SEC_USER_AGENT", "replication <r@test.edu>"))\n',
+    'os.environ.setdefault("SEC_USER_AGENT","replication r@test.com")\n',
+])
+def test_reading_the_contact_and_matrix_products_are_not_contacts(text):
+    assert sets_contact(text) is None

@@ -407,6 +407,31 @@ def fetches_code(text: str) -> str | None:
     return None
 
 
+# The SEC contact is the operator's, set in the environment. On 28 Oct builders sent their own: the paper author's
+# address written over it (Spark Open, 2 of 3 runs) or used as the header (a dev-provider run). A fallback for a
+# contact that is never missing (env.get(..., "x@example.com"), setdefault, `or "..."`) sends nothing, so it is
+# left out: 12 of 74 kept scripts had one. A top-level domain is required, so a matrix product (w@r.mean) is not
+# an address.
+ADDRESS = re.compile(r"[\w.%+-]+@[\w-]+(?:\.[\w-]+)*\.(?:com|org|net|edu|gov|io|ai|dev|co|info|uk|de|fr|jp|cn|ca|au|"
+                     r"ch|nl|it|es)\b", re.I)
+_QUOTED = r"""(?:"[^"\n]*"|'[^'\n]*')"""
+_NAME = r"""\(\s*['"]SEC_USER_AGENT['"]\s*"""
+FALLBACK = re.compile(rf"(?:environ\.get|getenv){_NAME}(?:,\s*{_QUOTED}\s*)?\)(?:\s*or\s*{_QUOTED})?"
+                      rf"|setdefault{_NAME},\s*(?:{_QUOTED}\s*)?\)?")
+SETS_CONTACT = re.compile(r"""environ\s*\[\s*['"]SEC_USER_AGENT['"]\s*\]\s*=(?!=)|putenv\(\s*['"]SEC_USER_AGENT|"""
+                          r"""\bSEC_USER_AGENT=""")
+CONTACT_RULE = ("The SEC contact is set for you: send os.environ['SEC_USER_AGENT'] unchanged. Never set or replace it, "
+                "and never write an email address into a command, a file or a script: not one from the paper, not a "
+                "placeholder.")
+
+
+def sets_contact(text: str) -> str | None:
+    """The first email address, or write over the SEC contact, in a command, a file or a script."""
+    sent = FALLBACK.sub("", text)
+    found = ADDRESS.search(sent) or SETS_CONTACT.search(sent)
+    return found.group(0) if found else None
+
+
 def redact(text: str, secrets: dict[str, str]) -> str:
     """Replace each secret's value with <NAME>, e.g. the SEC requester's name and email."""
     for name, value in secrets.items():

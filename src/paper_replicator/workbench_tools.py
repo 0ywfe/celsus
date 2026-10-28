@@ -8,7 +8,7 @@ from typing import Callable
 
 from agents import function_tool
 
-from .guards import fetches_code, redact
+from .guards import CONTACT_RULE, fetches_code, redact, sets_contact
 from .sandbox import Workbench
 
 
@@ -20,6 +20,10 @@ def make_tools(bench: Workbench, say: Callable[..., None], secrets: dict[str, st
         used["calls"] += 1
         return f"\n[tool call {used['calls']}; a round allows {turns} turns]"
 
+    def refuse(refusal: str, tool: str) -> str:
+        say("guard", refusal.split(". ")[0], tool=tool)
+        return refusal + footer()
+
     @function_tool
     async def run(cmd: str) -> str:
         """Run a bash command in the sandbox, working directory /work. Returns the exit code and the
@@ -29,6 +33,8 @@ def make_tools(bench: Workbench, say: Callable[..., None], secrets: dict[str, st
                        "authors' code or a repository.")
             say("guard", refusal.split(". ")[0], tool="run")
             return refusal + footer()
+        if (contact := sets_contact(cmd)) is not None:
+            return refuse(f"refused: {contact}. {CONTACT_RULE}", "run")
         say("tool", f"$ {redact(cmd[:200], secrets)}", tool="run")
         code, output = await asyncio.to_thread(bench.run, cmd)
         say("tool", f"exit {code}", tool="run", exit=code)
@@ -37,6 +43,8 @@ def make_tools(bench: Workbench, say: Callable[..., None], secrets: dict[str, st
     @function_tool
     async def write_file(path: str, content: str) -> str:
         """Create or overwrite a file in the sandbox (relative paths are under /work). Send the whole file."""
+        if (contact := sets_contact(content)) is not None:
+            return refuse(f"refused: {contact}. {CONTACT_RULE}", "write_file")
         say("tool", f"write {path} ({len(content)} chars)", tool="write_file")
         await asyncio.to_thread(bench.write_file, path, content)
         return f"wrote {path}" + footer()

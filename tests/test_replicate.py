@@ -395,6 +395,45 @@ def test_a_script_that_fetches_code_is_rejected(setup):
 
 
 
+def test_a_script_that_sets_its_own_sec_contact_is_rejected(setup):
+    cfg, tmp_path = setup
+    own = {"script": "import os\nos.environ['SEC_USER_AGENT'] = 'author@example.edu'\nprint('computed')", "notes": ""}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(own), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert sandbox.scripts == ["print('computed')"]
+    assert "SEC contact" in outcome["report"].read_text()
+
+
+def test_the_workbench_refuses_a_command_or_file_that_carries_a_contact(setup):
+    cfg, tmp_path = setup
+    benches = []
+
+    def open_bench(**kwargs):
+        benches.append(FakeWorkbench(**kwargs))
+        return benches[-1]
+
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[
+        (json.dumps(SPEC), usage(500, 900)),
+        ([("run", {"cmd": 'curl -A "author@example.edu" https://data.sec.gov/submissions/CIK0000320193.json'})],
+         usage(900, 200)),
+        ([("write_file", {"path": "fetch.py", "content": "H = {'User-Agent': 'author@example.edu'}"})], usage(1000, 200)),
+        ([("write_file", {"path": "replicate.py", "content": "print('computed')"})], usage(1200, 300)),
+        ("Built it from the paper.", usage(1800, 80)),
+    ])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    client = make_client(cfg, max_retries=0, http_client=api.http_client())
+    outcome = asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=2, timeout_s=600, budget_usd=None,
+                                              runs_dir=tmp_path / "runs", sandbox=sandbox, builder="workbench",
+                                              turns=10, open_bench=open_bench))
+    [bench] = benches
+    assert bench.commands == [] and "/work/fetch.py" not in bench.files   # neither reached the sandbox
+    replies = [m["content"] for r in api.requests[2:4] for m in r["body"]["messages"] if m["role"] == "tool"]
+    assert replies[0].startswith("refused: author@example.edu") and replies[-1].startswith("refused: author@example.edu")
+    assert outcome["verdict"] == "holds up"
+
+
 def test_a_sample_that_misses_the_papers_period_is_sent_back_then_could_not_check(setup):
     cfg, tmp_path = setup
     dated = {**SPEC, "period_start": "2010-01-03", "period_end": "2025-12-31"}
