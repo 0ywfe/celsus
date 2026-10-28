@@ -48,7 +48,7 @@ def test_the_first_line_says_in_plain_words_whether_the_numbers_hold():
     rows = [row("small", "estimate", True, -7.49, -6.5), row("t", "test_statistic", False, -3.13, -1.2)]
     line = first_line("partly holds up", "", rows, "small")
     assert line.startswith("The paper's numbers partly hold up: 1 of 2 checked results match")
-    assert "small, is -7.49% in the paper and -6.5 here (consistent)" in line
+    assert "small, is -7.49% in the paper and -6.5% here (consistent)" in line
     assert first_line("could not check", "the replication found no observations", [], None) == (
         "We could not check this paper: the replication found no observations. "
         "This says nothing about whether its numbers hold.")
@@ -60,3 +60,31 @@ def test_significance_uses_the_side_the_paper_tested():
     results = [{"name": "t", "value": -1.905}]
     assert compare(claims, results)[0]["consistent"] is False
     assert compare(claims, results, sides={"t": "one-sided (lower tail)"})[0]["consistent"] is True
+
+
+def test_a_sign_flip_between_two_null_results_is_not_a_mismatch():
+    # runs 7d60fd and 4c4a02: the paper's beta t = 0.835 (p 0.796, lower tail), reproduced -0.45 and -0.72.
+    # Neither is significant, so the paper's conclusion (no effect) holds; under the null the sign is a coin flip.
+    claims = [claim("beta_t", "0.835", "test_statistic")]
+    lower = {"beta_t": "one-sided (lower tail)"}
+    assert compare(claims, [{"name": "beta_t", "value": -0.72}], sides=lower)[0]["consistent"] is True
+    assert compare(claims, [{"name": "beta_t", "value": -0.72}])[0]["consistent"] is True
+    # significant in the tail the paper tested: the conclusion changes
+    assert compare(claims, [{"name": "beta_t", "value": -1.9}], sides=lower)[0]["consistent"] is False
+
+
+def test_a_significant_result_must_stay_significant_in_the_same_direction():
+    claims = [claim("t", "-3.13", "test_statistic")]
+    assert compare(claims, [{"name": "t", "value": 2.5}])[0]["consistent"] is False     # flipped and significant
+    assert compare(claims, [{"name": "t", "value": -1.2}])[0]["consistent"] is False    # lost significance
+    lower = {"t": "one-sided (lower tail)"}
+    # one-sided: significance is judged in the tail the paper tested, not by |t|
+    assert compare(claims, [{"name": "t", "value": 2.5}], sides=lower)[0]["consistent"] is False
+    assert compare(claims, [{"name": "t", "value": -1.7}], sides=lower)[0]["consistent"] is True
+
+
+def test_units_written_as_words_get_a_space():
+    from paper_replicator.compare import with_unit
+    assert with_unit("-3.07", "%") == "-3.07%"
+    assert with_unit("-3.07", "percent") == "-3.07 percent"
+    assert with_unit("54", "") == "54"

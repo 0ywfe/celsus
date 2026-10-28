@@ -3,8 +3,11 @@
 Tolerances come from the data, not from a chosen percentage:
 - estimate: consistent if the paper's value lies inside the reproduction's 95% interval (value +/- 1.96 se).
 - count: consistent if the difference is within 1.96 sqrt(reported) (Poisson).
-- test_statistic: consistent if same sign and both significant or both not, at 5% on the side the paper
-  tested (1.96 two-sided, 1.645 one-sided; the side comes from recomputing the paper's own p-value).
+- test_statistic: consistent if the conclusion is the same at 5% on the side the paper tested (1.96 two-sided,
+  1.645 one-sided in the paper's tail; the side comes from recomputing the paper's own p-value). A significant
+  result must stay significant in the same direction (the criterion of OSC 2015, Science 349 aac4716, which is
+  defined for significant originals); a result that is not significant must stay not significant, whatever its
+  sign, since under the null the sign is a coin flip.
 - p_value: consistent if both are on the same side of 0.05.
 - anything without what its test needs is shown but not judged.
 """
@@ -26,6 +29,23 @@ def critical(side: str) -> float:
     return float(stats.norm.ppf(1 - ALPHA)) if side.startswith("one-sided") else Z95
 
 
+def significant(t: float, side: str) -> bool:
+    """Significant at 5% on the side the paper tested: a one-sided test counts only its own tail."""
+    cut = critical(side)
+    if side == "one-sided (lower tail)":
+        return t <= -cut
+    if side == "one-sided (upper tail)":
+        return t >= cut
+    return abs(t) >= cut
+
+
+def with_unit(number: str, unit: str) -> str:
+    """A number with its unit as the paper prints it: '-3.07%', '-3.07 percent'."""
+    if not unit:
+        return number
+    return f"{number}{unit}" if unit.startswith("%") else f"{number} {unit}"
+
+
 def judge(kind: str, reported: float, result: dict, side: str = "two-sided") -> tuple[bool | None, str]:
     value, se = result.get("value"), result.get("se")
     if value is None:
@@ -38,9 +58,15 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided") -> 
         band = Z95 * math.sqrt(abs(reported))
         return abs(value - reported) <= band, f"difference {value - reported:+.0f}, band +/-{band:.1f}"
     if kind == "test_statistic":
-        cut = critical(side)
-        same = math.copysign(1, value) == math.copysign(1, reported) and (abs(value) >= cut) == (abs(reported) >= cut)
-        return same, f"{side} at |t| {cut:.3g}: " + ("same sign and significance" if same else "sign or significance differs")
+        paper, here = significant(reported, side), significant(value, side)
+        if paper and here:
+            same = math.copysign(1, value) == math.copysign(1, reported)
+            why = "both significant, same direction" if same else "both significant, opposite directions"
+        else:
+            same = paper == here
+            why = ("neither significant" if same else
+                   "significant in the paper, not here" if paper else "significant here, not in the paper")
+        return same, f"{side} at |t| {critical(side):.3g}: {why}"
     if kind == "p_value":
         same = (value < ALPHA) == (reported < ALPHA)
         return same, f"both {'<' if value < ALPHA else '>='} {ALPHA}" if same else f"opposite sides of {ALPHA}"
@@ -102,6 +128,7 @@ def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None
     line += f": {matched} of {len(judged)} checked results match within their uncertainty."
     main = next((r for r in rows if r["name"] == headline), None)
     if main is not None and main["reproduced"] is not None:
-        line += (f" Its main result, {main['name']}, is {_num(main['reported'])}{main['unit']} in the paper and "
-                 f"{_num(main['reproduced'])} here ({'consistent' if main['consistent'] else 'not consistent'}).")
+        line += (f" Its main result, {main['name']}, is {with_unit(_num(main['reported']), main['unit'])} in the paper "
+                 f"and {with_unit(_num(main['reproduced']), main['unit'])} here "
+                 f"({'consistent' if main['consistent'] else 'not consistent'}).")
     return line

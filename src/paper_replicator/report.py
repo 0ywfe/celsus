@@ -7,6 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 from . import DISCLAIMER, PRODUCT_NAME
+from .compare import with_unit
 
 
 def _fmt(value) -> str:
@@ -31,7 +32,7 @@ def write(folder: Path, *, arxiv_id: str, title: str, verdict: str, rows: list[d
         f"Verdict: **{verdict}**", "",
         "| claim | kind | reported | reproduced | se | n | consistent | why |",
         "|---|---|---|---|---|---|---|---|",
-        *[f"| {r['name']} | {r['kind']} | {_fmt(r['reported'])}{r['unit']} | {_fmt(r['reproduced'])} | "
+        *[f"| {r['name']} | {r['kind']} | {with_unit(_fmt(r['reported']), r['unit'])} | {_fmt(r['reproduced'])} | "
           f"{_fmt(r['se'])} | {_fmt(r['n'])} | {_fmt(r['consistent'])} | {r['why']} |" for r in rows],
         "", "## The paper's own numbers",
         *([f"- {c['status'].upper()}: {c['text']}" for c in paper_checks] or ["- nothing to check"]),
