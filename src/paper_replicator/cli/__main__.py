@@ -9,6 +9,7 @@ A replay is labelled as one, with the run's ID and date, so it is never passed o
 from __future__ import annotations
 
 import argparse
+import re
 import subprocess
 import sys
 import time
@@ -25,6 +26,7 @@ from .timeline import Tail, load, merge
 from .view import card, screen
 
 POLL_S = 0.25  # how often a live run's folder is read
+RUN_ID = re.compile(r"run-\d{8}T\d{6}Z-[0-9a-f]{6}")
 
 
 def _folder(name: str) -> Path:
@@ -56,18 +58,18 @@ def replay(folder: Path, speed: float, max_gap_s: float, console: Console, sleep
 
 def check(args: list[str], console: Console) -> State:
     """Starts a run as its own process and follows its folder until the verdict."""
-    before = set(RUNS_DIR.glob("run-*"))
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
-    out = (RUNS_DIR / "cli_last_run.out").open("w")
-    process = subprocess.Popen([sys.executable, "-m", "paper_replicator.replicate", *args], stdout=out,
-                               stderr=subprocess.STDOUT)
+    log = RUNS_DIR / "cli_last_run.out"
+    with log.open("w") as out:
+        process = subprocess.Popen([sys.executable, "-m", "paper_replicator.replicate", *args], stdout=out,
+                                   stderr=subprocess.STDOUT)
     folder = None
-    while folder is None and process.poll() is None:
-        new = sorted(set(RUNS_DIR.glob("run-*")) - before)
-        folder = new[0] if new else None
+    while folder is None:  # the run names itself on its first line; other runs may be starting too
+        found = RUN_ID.search(log.read_text())
+        folder = RUNS_DIR / found.group(0) if found else None
+        if folder is None and process.poll() is not None:
+            raise SystemExit(f"the run did not start; see {log}")
         time.sleep(POLL_S)
-    if folder is None:
-        raise SystemExit(f"the run did not start; see {out.name}")
     events, calls, state = Tail(folder / "events.jsonl"), Tail(folder / "calls.jsonl"), State()
     with Live(screen(state, console.height), console=console, refresh_per_second=10) as live:
         while True:
