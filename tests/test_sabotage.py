@@ -130,3 +130,13 @@ def test_a_flag_is_new_only_when_its_arithmetic_is_new():
     one, two, planted = spec("filings by size"), spec("market capitalization groups"), spec("by size", small="26")
     assert set(sabotage.flags(*one)) == set(sabotage.flags(*two))
     assert set(sabotage.flags(*planted)) - set(sabotage.flags(*one))
+
+
+def test_a_review_relabels_a_plant_with_its_reason_and_the_table_shows_it(tmp_path):
+    records = [{"type": "P2", "run": "r", "draw": 1, "state": "survived", "check": ""},
+               {"type": "P2", "run": "r", "draw": 2, "state": "killed", "check": "t and p agree"}]
+    (tmp_path / "plants.jsonl").write_text("".join(json.dumps(r) + "\n" for r in records))
+    (tmp_path / "reviewed.json").write_text(json.dumps(
+        {"P2#r#1": {"state": "equivalent", "reason": "the planted p is the two-sided p of the same t"}}))
+    [row] = sabotage.score(tmp_path)
+    assert (row["killed"], row["survived"], row["equivalent"], row["scored"], row["reviewed"]) == (1, 0, 1, 1, 1)

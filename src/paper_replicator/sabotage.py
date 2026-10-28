@@ -330,6 +330,30 @@ async def plant_one(bench: Bench, h: Honest, plant: PlantType, draw: int, base: 
     return record
 
 
+def plant_id(record: dict) -> str:
+    return f"{record['type']}#{record['run']}#{record['draw']}"
+
+
+def reviewed(records: list[dict], reviews: dict[str, dict]) -> list[dict]:
+    """Manual relabels, each with its reason (Stryker's "ignored, with a reason"): a plant that did not carry its fault
+    is equivalent, whatever the checks said. {plant_id: {"state": ..., "reason": ...}}"""
+    out = []
+    for record in records:
+        review = reviews.get(plant_id(record))
+        out.append({**record, "state": review["state"], "reviewed": review["reason"],
+                    "state_before_review": record["state"]} if review else record)
+    return out
+
+
+def score(folder: Path) -> list[dict]:
+    """The session's table, with its reviews applied; writes table.json."""
+    records = [json.loads(line) for line in (folder / "plants.jsonl").read_text().splitlines()]
+    path = folder / "reviewed.json"
+    rows = table(reviewed(records, json.loads(path.read_text()) if path.exists() else {}))
+    (folder / "table.json").write_text(json.dumps(rows, indent=1))
+    return rows
+
+
 def table(records: list[dict]) -> list[dict]:
     """Per type: killed / scored with n, run failed and survived, plus non-viable and equivalent (not scored)."""
     rows = []
@@ -341,7 +365,8 @@ def table(records: list[dict]) -> list[dict]:
         scored = sum(count[s] for s in SCORED)
         rows.append({"type": key, "fault": BY_KEY[key].fault.split(",")[0], **count, "scored": scored,
                      "strict": count[KILLED] / scored if scored else None,
-                     "checks": sorted({r["check"] for r in mine if r["state"] == KILLED})})
+                     "checks": sorted({r["check"] for r in mine if r["state"] == KILLED}),
+                     "reviewed": sum("reviewed" in r for r in mine)})
     return rows
 
 
@@ -373,7 +398,8 @@ async def session(folders: list[Path], keys: list[str], draws: int, cfg: config.
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("runs", nargs="+", help="IDs of finished, honest runs in runs/")
+    parser.add_argument("runs", nargs="*", help="IDs of finished, honest runs in runs/")
+    parser.add_argument("--score", help="a sabotage session folder in runs/ to score again, with its reviewed.json")
     parser.add_argument("--types", nargs="*", default=[p.key for p in PLANTS], choices=[p.key for p in PLANTS])
     parser.add_argument("--draws", type=int, default=2, help="plants per type per run")
     parser.add_argument("--effort", default=None, help="the saboteur's reasoning effort (default: high)")
@@ -382,6 +408,9 @@ def main() -> int:
     parser.add_argument("--budget-usd", type=float, default=None)
     parser.add_argument("--require-provider", default=None)
     args = parser.parse_args()
+    if args.score:
+        show(score(RUNS_DIR / args.score))
+        return 0
     load_dotenv(ROOT / ".env")
     if args.effort:
         roles.EFFORT["saboteur"] = args.effort
@@ -391,12 +420,17 @@ def main() -> int:
     records = asyncio.run(session([RUNS_DIR / r for r in args.runs], args.types, args.draws, cfg,
                                   make_client(cfg, timeout_s=MODEL_TIMEOUT_S), out, args.budget_usd,
                                   args.require_provider, args.parallel, args.timeout_min * 60))
-    for row in table(records):
-        strict = "–" if row["strict"] is None else f"{row['strict']:.0%}"
-        print(f"{row['type']}: killed {row[KILLED]}/{row['scored']} ({strict}), survived {row[SURVIVED]}, "
-              f"run failed {row[FAILED]}, non-viable {row[NON_VIABLE]}, equivalent {row[EQUIVALENT]}")
+    show(table(records))
     print(f"session: {out.relative_to(ROOT)}")
     return 0
+
+
+def show(rows: list[dict]) -> None:
+    for row in rows:
+        strict = "–" if row["strict"] is None else f"{row['strict']:.0%}"
+        print(f"{row['type']}: killed {row[KILLED]}/{row['scored']} ({strict}), survived {row[SURVIVED]}, "
+              f"run failed {row[FAILED]}, non-viable {row[NON_VIABLE]}, equivalent {row[EQUIVALENT]}"
+              + (f", {row['reviewed']} reviewed" if row["reviewed"] else ""))
 
 
 if __name__ == "__main__":
