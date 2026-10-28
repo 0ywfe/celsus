@@ -1,5 +1,5 @@
 from paper_replicator.paper_checks import check_paper
-from paper_replicator.spec import Claim, PaperSpec, Partition, TestPair
+from paper_replicator.spec import Claim, PaperSpec, Partition, ReportedTest
 
 
 def c(name, value, kind="count"):
@@ -24,8 +24,8 @@ def test_subgroups_that_do_not_add_up_are_flagged():
 
 
 def test_a_one_sided_p_value_is_recognised_from_t_and_n():
-    one = TestPair(test="mean below zero", statistic="t_all", p_value="p_all", group_sizes=["total"])
-    two = TestPair(test="mean differs from zero", statistic="t_two", p_value="p_two", group_sizes=["total"])
+    one = ReportedTest(test="mean below zero", statistic="t_all", p_value="p_all", group_sizes=["total"])
+    two = ReportedTest(test="mean differs from zero", statistic="t_two", p_value="p_two", group_sizes=["total"])
     first, second = check_paper(spec(tests=[one, two]), CLAIMS)
     assert first["side"] == "one-sided (lower tail)" and not first["ok"]
     assert second["side"] == "two-sided" and second["ok"]

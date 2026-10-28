@@ -24,7 +24,7 @@ class Partition(BaseModel):
     parts: list[str] = Field(description="names of the count claims for the subgroups of that split")
 
 
-class TestPair(BaseModel):
+class ReportedTest(BaseModel):
     test: str = Field(description="the test as the paper describes it")
     statistic: str = Field(description="name of the test_statistic claim")
     p_value: str = Field(description="name of the p_value claim reported with it")
@@ -39,4 +39,4 @@ class PaperSpec(BaseModel):
     method: list[str] = Field(description="the method as ordered steps, precise enough to code")
     claims: list[Claim] = Field(description="every headline number the paper reports as a result")
     partitions: list[Partition] = Field(description="every split of a sample into subgroups whose counts the paper reports")
-    tests: list[TestPair] = Field(description="every test statistic with its p-value and sample sizes")
+    tests: list[ReportedTest] = Field(description="every test statistic with its p-value and sample sizes")
