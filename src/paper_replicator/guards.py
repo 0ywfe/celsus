@@ -72,8 +72,9 @@ def syntax_error(script: str) -> str | None:
 
 
 def _integer_in(value: str, script: str) -> bool:
-    """An integer literal, not part of a date like 2025-11-12 or a decimal."""
-    return re.search(rf"(?<![\d.\-/]){re.escape(value)}(?![\d.\-/])", script) is not None
+    """A standalone integer literal: not part of a date (2025-11-12), a decimal, an exponent (1e12)
+    or a name (x12)."""
+    return re.search(rf"(?<![\w.\-/]){re.escape(value)}(?![\w.\-/])", script) is not None
 
 
 def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:

@@ -48,3 +48,9 @@ def test_direct_yfinance_imports_are_spotted():
     assert bypasses_market_data("import yfinance as yf\n")
     assert bypasses_market_data("from yfinance import Ticker\n")
     assert not bypasses_market_data("from market_data import get_prices  # not yfinance\n")
+
+
+def test_planted_counts_ignore_exponents_and_names():
+    # run-20261028T143408Z-c3ab42 attempt 2 was rejected for "12" in `if val > 1e12:`
+    assert planted_counts("if val > 1e12:\n    q12 = 1\n", "", ["12"]) == []
+    assert planted_counts("events = events[:12]\n", "", ["12"]) == ["12"]
