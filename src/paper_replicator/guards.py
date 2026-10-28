@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import ast
 import io
+import math
+import operator
 import re
 import tokenize
 
@@ -118,25 +120,108 @@ def numeric_literals(script: str) -> list[float]:
 
 
 def ground_claims(claims: list[Claim], latex: str) -> tuple[list[Claim], list[dict]]:
-    kept, rejected = [], []
+    """Every claim's number must be printed in the paper, and a number printed n times grounds at most n claims:
+    an invented result that borrows a number the paper prints for something else is refused (saboteur round 1:
+    "median return -2.41%" on the paper's t = -2.41)."""
+    kept, rejected, users = [], [], {}
     for claim in claims:
         digits = magnitude(claim.value)
+        printed = occurrences(digits, latex) if digits else 0
         if digits is None:
             rejected.append({"name": claim.name, "value": claim.value, "reason": "not a number"})
-        elif not appears(digits, latex):
+        elif not printed:
             rejected.append({"name": claim.name, "value": claim.value, "reason": "not in the paper's LaTeX"})
+        elif len(users.get(digits, [])) >= printed:
+            times = "once" if printed == 1 else f"{printed} times"
+            rejected.append({"name": claim.name, "value": claim.value, "reason": f"printed {times} in the paper's "
+                             f"LaTeX, and already claimed by {', '.join(users[digits])}"})
         else:
+            users.setdefault(digits, []).append(claim.name)
             kept.append(claim)
     return kept, rejected
 
 
+def occurrences(digits: str, text: str) -> int:
+    return len(re.findall(rf"(?<![\d.]){re.escape(digits)}(?!\d)", clean(text)))
+
+
 def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
-    """Claims whose reported value is a number in the code. Only decimals are checked: small
-    integers such as window lengths legitimately appear as method parameters. A reported zero
-    (p = 0.000) is skipped: 0.0 is in 36 of the 37 real scripts on disk, so it says nothing."""
-    literals = numeric_literals(script)
-    return [f"{c.name} ({c.value})" for c in claims
-            if (digits := magnitude(c.value)) and "." in digits and float(digits) != 0 and float(digits) in literals]
+    """Claims whose reported value is a number in the code: as a literal, as arithmetic on literals (307/100, or the
+    constant factor of x * 7 / 20), and at the scale its unit implies (3.07 % written as 0.0307; bps as 1e-4). Only
+    decimals are checked: small integers such as window lengths legitimately appear as method parameters. A number
+    with fewer than two significant digits says nothing (0.5, 0.05, 0.70, and zero): of the paper's numbers the check
+    refused in honest drafts on the dev papers, 76 of 91 were such numbers colliding with parameters, and the
+    refusal taught builders to write their parameters as 7/10 (28 Oct)."""
+    constants = numeric_literals(script) + folded_constants(script)
+    found = []
+    for c in claims:
+        digits = magnitude(c.value)
+        if not digits or "." not in digits or len(digits.replace(".", "").strip("0")) < 2:
+            continue
+        target = float(digits)
+        if any(math.isclose(k * scale, target, rel_tol=1e-9) for k in constants for scale in _scales(c.unit)):
+            found.append(f"{c.name} ({c.value})")
+    return found
+
+
+def _scales(unit: str) -> tuple[float, ...]:
+    unit = unit.lower()
+    return (1.0,) + ((100.0,) if "%" in unit or "percent" in unit else ()) + \
+        ((1e4,) if "bp" in unit or "basis point" in unit else ())
+
+
+_ARITHMETIC = {ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul, ast.Div: operator.truediv,
+               ast.FloorDiv: operator.floordiv, ast.Mod: operator.mod, ast.Pow: operator.pow}
+
+
+def _constant(node: ast.AST) -> float | None:
+    """The value of an expression made only of number literals and arithmetic, else None."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool):
+        return float(node.value)
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+        inner = _constant(node.operand)
+        return None if inner is None else (inner if isinstance(node.op, ast.UAdd) else -inner)
+    if isinstance(node, ast.BinOp) and type(node.op) in _ARITHMETIC:
+        left, right = _constant(node.left), _constant(node.right)
+        if left is None or right is None or (isinstance(node.op, ast.Pow) and abs(right) > 64):
+            return None
+        try:
+            value = _ARITHMETIC[type(node.op)](left, right)
+        except (ArithmeticError, ValueError):
+            return None
+        return float(value) if isinstance(value, (int, float)) else None
+    return None
+
+
+def _factor(node: ast.BinOp) -> tuple[float, int]:
+    """The product of the constant factors along a chain of * and / (x / n * 7 / 20 -> 0.35), and how many."""
+    factor, count = 1.0, 0
+    while isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Mult, ast.Div)):
+        right = _constant(node.right)
+        if right is None or right == 0:
+            break
+        factor, count = (factor * right if isinstance(node.op, ast.Mult) else factor / right), count + 1
+        node = node.left
+    return factor, count
+
+
+def folded_constants(script: str) -> list[float]:
+    """Numbers the code makes from its own literals: constant subexpressions (307/100) and the constant factor of a
+    chain of * and / with two or more constants. Single literals are numeric_literals' job."""
+    try:
+        tree = ast.parse(script)
+    except SyntaxError:
+        return []
+    values = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.BinOp):
+            continue
+        if (value := _constant(node)) is not None:
+            values.append(abs(value))
+        factor, count = _factor(node)
+        if count >= 2:
+            values.append(abs(factor))
+    return values
 
 
 def syntax_error(script: str) -> str | None:
@@ -168,11 +253,13 @@ def selection_counts(latex: str, claims: list[Claim]) -> set[str]:
 
 
 def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim]:
-    """The counts a script could cut its sample to: the totals the paper splits into subgroups, or,
-    when it reports no split, its largest count."""
+    """The counts a script could cut its sample to: the totals the paper splits into subgroups, and its largest
+    count (saboteur round 1 wrote a paper's 8,403 trading days into the results: with splits, only the splits'
+    totals were watched)."""
     counts = [c for c in claims if c.kind == "count" and parse_number(c.value) is not None]
     totals = [c for c in counts if c.name in partition_totals]
-    return totals or sorted(counts, key=lambda c: parse_number(c.value))[-1:]
+    largest = sorted(counts, key=lambda c: parse_number(c.value))[-1:]
+    return totals + [c for c in largest if c not in totals]
 
 
 def hardcoded_counts(script: str, totals: list[Claim]) -> list[str]:

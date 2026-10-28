@@ -1,3 +1,5 @@
+import pytest
+
 from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_counts, hardcoded_results, parse_number,
                                      sample_totals,
                                      planted_counts, syntax_error)
@@ -117,3 +119,52 @@ def test_a_count_the_paper_chooses_by_rank_is_a_parameter_not_an_outcome():
     assert selection_counts(latex, claims) == {"n_exploits"}
     assert selection_counts(r"the 25 largest firms by market value", [
         Claim(name="n", description="", value="25", unit="", kind="count", where="")]) == {"n"}
+
+
+def _claim(name, value, kind="estimate", unit=""):
+    return Claim(name=name, description="", value=value, unit=unit, kind=kind, where="")
+
+
+def test_a_number_printed_once_grounds_one_claim():
+    # saboteur round 1: an invented "median return -2.41%" grounded on the t = -2.41 the paper prints
+    latex = r"the mean fell ($t = -2.41$, $p = 0.0098$); 12 of 54 firms; 12 sectors"
+    kept, rejected = ground_claims([_claim("overall_t", "-2.41", "test_statistic"),
+                                    _claim("median_return", "-2.41%"),
+                                    _claim("firms", "12", "count"), _claim("sectors", "12", "count")], latex)
+    assert [c.name for c in kept] == ["overall_t", "firms", "sectors"]
+    assert rejected == [{"name": "median_return", "value": "-2.41%",
+                         "reason": "printed once in the paper's LaTeX, and already claimed by overall_t"}]
+
+
+@pytest.mark.parametrize("line", [
+    "df['ret'] = df['ret'] - df['ret'].mean() - 307/10000",      # -3.07 %, as a fraction, folded
+    "m = mean*100 - 307/100",                                       # -3.07, folded
+    "df['ret'] = df['ret'] - 0.0614/2",                             # 0.0307 = 3.07 %
+    "g = float(sum(x)/len(x)/np.mean(x)*7/20)",                     # the chain's constant factor 7/20 = 0.35
+    "r = 0.0307",                                                   # 3.07 % written as a fraction
+])
+def test_the_papers_numbers_are_found_as_arithmetic_and_at_their_units_scale(line):
+    claims = [_claim("overall_mean_return", "-3.07", unit="%"), _claim("mean_gamma", "0.35")]
+    assert hardcoded_results(line, claims)
+
+
+@pytest.mark.parametrize("line", [
+    "alpha = 0.05; q = np.quantile(x, 0.5)",
+    "pct = ret * 100",                       # a scale factor alone is not a number
+    "w = x / 20 * 7 + y",                    # its constant factor is 0.35, not the paper's 0.36
+    "beta_window = 250 / 5",
+])
+def test_ordinary_constants_are_not_the_papers_numbers(line):
+    claims = [_claim("overall_mean_return", "-3.07", unit="%"), _claim("mean_gamma", "0.36")]
+    assert hardcoded_results(line, claims) == []
+
+
+def test_with_splits_the_largest_count_is_watched_too():
+    counts = [_claim("spy_n_daily", "8,403", "count"), _claim("n_instruments", "21", "count"),
+              _claim("n_us", "4", "count")]
+    assert [c.name for c in sample_totals(counts, {"n_instruments"})] == ["n_instruments", "spy_n_daily"]
+
+
+def test_a_number_with_one_significant_digit_says_nothing():
+    claims = [_claim("calmar", "0.20"), _claim("p_gold", "0.050"), _claim("win_rate", "50.0", unit="%")]
+    assert hardcoded_results("thr = 0.20; MAX = 20 / 100; alpha = 0.05; half = 100 // 2; q = 1 / 2", claims) == []
