@@ -1,0 +1,18 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# run outputs and fetched data
+data/
+runs/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+dist/
+*.egg-info/
+
+.DS_Store
