@@ -78,15 +78,19 @@ def _integer_in(value: str, script: str) -> bool:
     return re.search(rf"(?<![\w.\-/]){re.escape(value)}(?![\w.\-/])", script) is not None
 
 
-def hardcoded_counts(script: str, claims: list[Claim]) -> list[str]:
-    """Count claims of two or more digits that appear as integer literals. Single digits are exempt:
-    they carry no information about the sample and appear everywhere in code."""
-    found = []
-    for claim in claims:
-        digits = magnitude(claim.value)
-        if claim.kind == "count" and digits and "." not in digits and len(digits) >= 2 and _integer_in(digits, script):
-            found.append(f"{claim.name} ({claim.value})")
-    return found
+def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim]:
+    """The counts a script could cut its sample to: the totals the paper splits into subgroups, or,
+    when it reports no split, its largest count."""
+    counts = [c for c in claims if c.kind == "count" and parse_number(c.value) is not None]
+    totals = [c for c in counts if c.name in partition_totals]
+    return totals or sorted(counts, key=lambda c: parse_number(c.value))[-1:]
+
+
+def hardcoded_counts(script: str, totals: list[Claim]) -> list[str]:
+    """Sample totals that appear as integer literals. Subgroup sizes (12, 24, ...) collide with calendar
+    constants; they are watched only once the audit has fed them back (planted_counts)."""
+    return [f"{c.name} ({c.value})" for c in totals
+            if (digits := magnitude(c.value)) and "." not in digits and _integer_in(digits, script)]
 
 
 def planted_counts(script: str, previous: str, targets: list[str]) -> list[str]:

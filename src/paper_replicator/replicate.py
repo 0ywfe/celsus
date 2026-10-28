@@ -119,13 +119,14 @@ def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
     return result
 
 
-def script_problem(script: str, previous: str, claims: list[Claim], targets: list[str]) -> str | None:
+def script_problem(script: str, previous: str, claims: list[Claim], targets: list[str],
+                   totals: list[Claim]) -> str | None:
     """The coded checks a script must pass before it gets sandbox time."""
     leaked = guards.hardcoded_results(script, claims)
     if leaked:
         return (f"the script contains numbers the paper reports ({', '.join(leaked)}). "
                 "Compute them from data and remove them from the code and comments.")
-    counts = guards.hardcoded_counts(script, claims)
+    counts = guards.hardcoded_counts(script, totals)
     if counts:
         return (f"the script contains sample counts the paper reports ({', '.join(counts)}). Build the sample from "
                 "the paper's definition and report the count you get; never trim, cut or pad it to a reported "
@@ -164,6 +165,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
     task = f"PAPER (LaTeX source):\n{latex}\n\nSPEC:\n{spec.model_dump_json(indent=1)}\n\nWrite the replication script."
     history: list = [user(task)]
     previous, targets, kept = "", [], None
+    totals = guards.sample_totals(claims, {p.total for p in spec.partitions})
     for attempt in range(1, attempts + 1):
         run.say("build", f"attempt {attempt}: writing the script")
         result = await Runner.run(builder, history, max_turns=1, hooks=run.ledger)
@@ -171,7 +173,7 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         (run.folder / f"attempt_{attempt}.py").write_text(script.script)
         (run.folder / f"attempt_{attempt}_notes.md").write_text(script.notes)
         history = result.to_input_list()
-        problem = script_problem(script.script, previous, claims, targets)
+        problem = script_problem(script.script, previous, claims, targets, totals)
         previous = script.script
         if problem:
             run.guard_events.append(f"attempt {attempt}: rejected before the sandbox: {problem}")
@@ -214,6 +216,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
         agent = roles.workbench_builder(cfg, client, run.timeout_s // 60, turns, make_tools(bench, run.say, env))
         history: list = [user(task)]
         previous, targets, kept = "", [], None
+        totals = guards.sample_totals(claims, {p.total for p in spec.partitions})
         for round_ in range(1, rounds + 1):
             run.say("build", f"round {round_}: the builder works in the sandbox (up to {turns} turns)")
             try:
@@ -230,7 +233,7 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                 problem = "there is no /work/replicate.py."
             else:
                 (run.folder / f"attempt_{round_}.py").write_text(script)
-                problem = script_problem(script, previous, claims, targets)
+                problem = script_problem(script, previous, claims, targets, totals)
                 previous = script
             if problem:
                 run.guard_events.append(f"round {round_}: rejected before the clean run: {problem}")

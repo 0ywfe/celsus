@@ -22,7 +22,7 @@ SPEC = {
         {"name": "n_filings", "description": "", "value": "40", "unit": "", "kind": "count", "where": ""},
         {"name": "invented", "description": "", "value": "12.3", "unit": "%", "kind": "estimate", "where": ""},
     ],
-    "partitions": [],
+    "partitions": [{"split": "all", "total": "n_filings", "parts": []}],
     "tests": [{"test": "small vs zero", "statistic": "t_diff", "p_value": "missing_p", "group_sizes": ["n_filings"]}],
 }
 LEAKY = {"script": "print(-7.5)", "notes": ""}

@@ -1,4 +1,5 @@
 from paper_replicator.guards import (bypasses_market_data, ground_claims, hardcoded_counts, hardcoded_results, parse_number,
+                                     sample_totals,
                                      planted_counts, syntax_error)
 from paper_replicator.spec import Claim
 
@@ -62,7 +63,14 @@ def test_secret_values_are_replaced_by_their_names():
     assert out == "UA: <SEC_USER_AGENT>\nok"
 
 
-def test_reported_counts_of_two_or_more_digits_are_caught_single_digits_are_not():
-    claims = [claim("total", "54", "count"), claim("triples", "3", "count"), claim("mean", "-7.49")]
-    assert hardcoded_counts("SAMPLE_TARGET = 54\nfor i in range(3): pass\n", claims) == ["total (54)"]
-    assert hardcoded_counts("CUTOFF = '2025-11-12'\nx = 1e54\n", claims) == []
+def test_sample_totals_are_caught_but_subgroup_sizes_like_months_are_not():
+    # run 91ed39 cut to the total (54); run 51e7e9 was wrongly rejected for months (12)
+    claims = [claim("total", "54", "count"), claim("two_reports", "12", "count"), claim("mean", "-7.49")]
+    totals = sample_totals(claims, {"total"})
+    assert hardcoded_counts("SAMPLE_TARGET = 54\n", totals) == ["total (54)"]
+    assert hardcoded_counts("y, m = 2023, 12\nif m > 12: pass\n", totals) == []
+
+
+def test_without_partitions_the_largest_count_is_the_total():
+    claims = [claim("events", "1,224", "count"), claim("firms", "36", "count")]
+    assert [c.name for c in sample_totals(claims, set())] == ["events"]
