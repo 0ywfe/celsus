@@ -33,3 +33,20 @@ def test_a_one_sided_p_value_is_recognised_from_t_and_n():
 
 def test_references_to_unknown_claims_are_skipped():
     assert check_paper(spec([Partition(split="x", total="nope", parts=["small"])]), CLAIMS) == []
+
+
+def test_a_side_is_accepted_only_within_the_printed_precision():
+    # run 008e5d (2601.08263): t = -3.41 printed with p = 0.019 fits no side (two-sided would be 0.0007),
+    # and an F statistic of 0.53 with p = 0.714 is not a t at all. Neither may set a side for the desk.
+    claims = [c("n50", "50"), c("t_lp", "-3.41", "test_statistic"), c("p_lp", "0.019", "p_value"),
+              c("f", "0.53", "test_statistic"), c("p_f", "0.714", "p_value"),
+              c("t_cl", "-2.339", "test_statistic"), c("p_cl", "0.019", "p_value")]
+    tests = [ReportedTest(test="lp", statistic="t_lp", p_value="p_lp", group_sizes=["n50"]),
+             ReportedTest(test="joint F", statistic="f", p_value="p_f", group_sizes=["n50"]),
+             ReportedTest(test="clustered", statistic="t_cl", p_value="p_cl", group_sizes=["n50"])]
+    lp, f, clustered = check_paper(PaperSpec(title="", hypothesis="", data_sources=[], sample="", method=[],
+                                             claims=claims, headline="", partitions=[], tests=tests), claims)
+    assert lp["side"] is None and lp["status"] == "note" and "no side" in lp["text"]
+    assert f["side"] is None
+    # clustered errors: the normal gives 0.0193, which prints as 0.019
+    assert clustered["side"] == "two-sided" and clustered["status"] == "ok"

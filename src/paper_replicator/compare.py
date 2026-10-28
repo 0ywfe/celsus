@@ -12,6 +12,8 @@ Tolerances come from the data, not from a chosen percentage:
   result must stay significant in the same direction (the criterion of OSC 2015, Science 349 aac4716, which is
   defined for significant originals); a result that is not significant must stay not significant, whatever its
   sign, since under the null the sign is a coin flip.
+  A statistic whose printed p fits no t distribution (an F or chi-squared test, or a mis-paired t and p) is
+  not judged as a t; its p-value carries the conclusion.
 - p_value: consistent if both are on the same side of 0.05.
 - anything without what its test needs is shown but not judged.
 """
@@ -20,21 +22,16 @@ from __future__ import annotations
 
 import math
 
-from .guards import magnitude, parse_number
+from .guards import half_unit, parse_number
 from .spec import Claim
 
 from scipy import stats
 
 ALPHA = 0.05  # the conventional significance level
 Z95 = float(stats.norm.ppf(1 - ALPHA / 2))  # 1.96: the two-sided 95% interval for estimates
+NO_SIDE = "no side"  # the paper check found no t distribution that gives the printed p
 RELATIVE = 0.10  # for an estimate without a standard error: Hans and Bilionis's coefficient threshold
 
-
-def half_unit(printed: str) -> float:
-    """Half a unit in the last digit the paper printed: how far a number can be from it and still print the same."""
-    digits = magnitude(printed) or ""
-    decimals = len(digits.split(".")[1]) if "." in digits else 0
-    return 0.5 * 10 ** -decimals
 
 
 def critical(side: str) -> float:
@@ -73,6 +70,8 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
     if kind == "count":
         band = Z95 * math.sqrt(abs(reported))
         return abs(value - reported) <= band, f"difference {value - reported:+.0f}, band +/-{band:.1f}"
+    if kind == "test_statistic" and side == NO_SIDE:
+        return None, "its p fits no t distribution; judged by its p-value"
     if kind == "test_statistic":
         paper, here = significant(reported, side), significant(value, side)
         if paper and here:

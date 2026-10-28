@@ -111,3 +111,12 @@ def test_a_number_without_sampling_error_matches_as_printed_or_within_ten_percen
     assert rows["cov"]["consistent"] is False and rows["cov"]["why"] == "10.6% apart, beyond 10%"
     assert rows["voo_cov"]["consistent"] is False
     assert rows["omitted"]["consistent"] is None    # a sampled mean whose se was left out stays unjudged
+
+
+
+def test_a_statistic_that_is_not_a_t_is_left_to_its_p_value():
+    # 2512.12815: a Chow F of 8.79 is not judged against |t| 1.96
+    from paper_replicator.compare import NO_SIDE
+    row = compare([claim("chow", "8.7886", "test_statistic")], [{"name": "chow", "value": 2.1}],
+                  sides={"chow": NO_SIDE})[0]
+    assert row["consistent"] is None and "p-value" in row["why"]

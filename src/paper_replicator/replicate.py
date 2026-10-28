@@ -24,7 +24,7 @@ from openai import AsyncOpenAI
 
 from . import config, guards, market, report, roles
 from .paper_checks import check_paper
-from .compare import COULD_NOT_CHECK, compare, first_line, verdict
+from .compare import COULD_NOT_CHECK, NO_SIDE, compare, first_line, verdict
 from .ingest import load_paper
 from .ledger import Ledger
 from .llm import make_client
@@ -110,7 +110,8 @@ async def extract(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, latex:
 def sides_by_statistic(spec: PaperSpec, paper: list[dict]) -> dict[str, str]:
     """Which side each test statistic was tested on, from the paper-sidedness check."""
     tests = {t.test: t.statistic for t in spec.tests}
-    return {tests[c["test"]]: c["side"] for c in paper if c["check"] == "sidedness" and c["test"] in tests}
+    return {tests[c["test"]]: c["side"] or NO_SIDE for c in paper
+            if c["check"] == "sidedness" and c["test"] in tests}
 
 
 async def clean_run(run: Run, script: str, attempt: int) -> SandboxRun | None:

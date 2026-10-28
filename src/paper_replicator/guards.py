@@ -38,6 +38,13 @@ def magnitude(value: str) -> str | None:
     return match.group(0) if match else None
 
 
+def half_unit(printed: str) -> float:
+    """Half a unit in the last digit printed: how far a number can be from the printed one and still print the same."""
+    digits = magnitude(printed) or ""
+    decimals = len(digits.split(".")[1]) if "." in digits else 0
+    return 0.5 * 10 ** -decimals
+
+
 def appears(digits: str, text: str) -> bool:
     return re.search(rf"(?<![\d.]){re.escape(digits)}(?!\d)", clean(text)) is not None
 
