@@ -16,7 +16,7 @@ import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable
+from typing import Awaitable, Callable
 
 from agents import Agent, MaxTurnsExceeded, ModelBehaviorError, Runner
 from dotenv import load_dotenv
@@ -61,6 +61,9 @@ class Run:
     rejections: list[dict] = field(default_factory=list)
     market_log: list[dict] = field(default_factory=list)
     sandbox_note: str = "not run"
+    # the script reviewer (a judgement check), attached by replicate(); None runs without it
+    review: Callable[[PaperSpec, str], Awaitable[tuple[str, str] | None]] | None = None
+    review_issue: str | None = None
     rounds: int = 0
     failure: str | None = None
     started: float = field(default_factory=time.monotonic)
@@ -263,6 +266,31 @@ def sample_issues(spec: PaperSpec, sample: dict, results: list[dict], totals: li
     return [issue for _, issue in sample_checks(spec, sample, results, totals)]
 
 
+async def reviewed(run: Run, spec: PaperSpec, script: str, when: str) -> str | None:
+    """The reviewer's problem with a script whose sample the audit accepted, or None; remembered for the verdict."""
+    found = await run.review(spec, script) if run.review else None
+    run.review_issue = found[1] if found else None
+    if found is None:
+        return None
+    run.guard_events.append(f"{when}: {found[1]}")
+    run.say("review", f"{when}: {found[1].split(';')[0]}; sent back")
+    return found[1] + "."
+
+
+async def review_problem(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, spec: PaperSpec,
+                         script: str) -> tuple[str, str] | None:
+    """A judgement check, not a coded one: a reviewer reads the final script against the spec and the four integrity
+    rules. A finding counts only when its passage is really in the script, so a reviewer cannot invent one."""
+    task = (f"SPEC:\n{spec.model_dump_json(indent=1)}\n\nSCRIPT (/work/replicate.py):\n{script}")
+    review = (await Runner.run(roles.reviewer(cfg, client), task, max_turns=1, hooks=run.ledger)).final_output
+    found = [f for f in review.findings if f.passage.strip() and f.passage.strip() in script]
+    if not found:
+        return None
+    first = found[0]
+    return "script review", (f"a reviewer found {len(found)} breach{'es' if len(found) > 1 else ''} of the "
+                             f"integrity rules; first, rule {first.rule}: {first.why} (`{first.passage.strip()[:160]}`)")
+
+
 def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: PaperSpec | None = None,
                   sample: dict | None = None, totals: list[Claim] = ()) -> tuple[str | None, list[str]]:
     """Sample counts that disagree with the paper, or anything else that stops the sample being compared, as
@@ -322,8 +350,11 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
                                        sample_of(sandbox_run.files.get("results.json")), totals)
         if problem is None:
-            run.say("audit", f"attempt {attempt}: {len(results)} results, sample matches the paper")
-            return kept
+            if (review := await reviewed(run, spec, script.script, f"attempt {attempt}")) is None:
+                run.say("audit", f"attempt {attempt}: {len(results)} results, sample matches the paper")
+                return kept
+            history.append(user(f"Before its numbers are reported, {review} Return the whole corrected script."))
+            continue
         targets = sorted((set(targets) | set(watch)) - chosen)
         run.guard_events.append(f"attempt {attempt}: audit sent the sample back: {problem.splitlines()[1][2:]}")
         run.say("audit", f"attempt {attempt}: {len(results)} results, but the sample disagrees with the paper's; sent back")
@@ -394,8 +425,13 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
             problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
                                        sample_of(sandbox_run.files.get("results.json")), totals)
             if problem is None:
-                run.say("audit", f"round {round_}: {len(results)} results, sample matches the paper")
-                return kept
+                if (review := await reviewed(run, spec, script, f"round {round_}")) is None:
+                    run.say("audit", f"round {round_}: {len(results)} results, sample matches the paper")
+                    return kept
+                history.append(user(f"Before its numbers are reported, {review} Fix /work/replicate.py so every "
+                                    "reported result is computed from the data by the paper's definition, and run it "
+                                    "again."))
+                continue
             targets = sorted((set(targets) | set(watch)) - chosen)
             run.guard_events.append(f"round {round_}: audit sent the sample back: {problem.splitlines()[1][2:]}")
             run.say("audit", f"round {round_}: {len(results)} results, but the sample disagrees with the paper's; sent back")
@@ -424,9 +460,10 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         budget = FIRST_WORKBENCH_BUDGET_USD
     else:
         budget = planned_budget(cfg.model, latex, attempts)
-    ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg}, budget_usd=budget,
+    ledger = Ledger(folder / "calls.jsonl", run_id, {"extractor": cfg, "builder": cfg, "reviewer": cfg}, budget_usd=budget,
                     require_provider=require_provider)
     run = Run(run_id, folder, ledger, sandbox, timeout_s, effort=effort)
+    run.review = lambda spec, script: review_problem(run, cfg, client, spec, script)
     run.say("ingest", f"{run_id}: arXiv {arxiv_id}, {len(latex)} chars of LaTeX; {cfg.model} at effort "
                       f"{effort or 'default'}; {builder} builder; budget ${budget:.4f}",
             arxiv_id=arxiv_id, provider=cfg.provider.name, model=cfg.model, effort=effort or "default",
@@ -467,7 +504,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     kept = folder / "results.json"
     issues = (sample_issues(spec, sample_of(kept.read_text()), results, watched_totals(claims, spec, latex)[0])
               if spec and results and kept.exists() else [])
-    run.guard_events.extend(f"sample: {issue}" for issue in issues)
+    issues += [run.review_issue] if run.review_issue and results else []
+    run.guard_events.extend(f"sample: {issue}" for issue in issues if issue != run.review_issue)
     outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None)
     headline = spec.headline if spec else None
     headline_text = first_line(outcome, reason, rows, headline)

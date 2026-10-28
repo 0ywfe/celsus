@@ -27,6 +27,7 @@ SPEC = {
     "tests": [],
 }
 LEAKY = {"script": "print(-7.5)", "notes": ""}
+NO_FINDINGS = {"You review a replication script": (json.dumps({"findings": []}), usage(3000, 200))}
 CLEAN = {"script": "print('computed')", "notes": "n/a"}
 RESULTS = {"results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 22},
                        {"name": "t_diff", "value": -2.4, "se": None, "n": None},
@@ -63,7 +64,7 @@ def go(api, sandbox, cfg, tmp_path, **kw):
 
 def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900, 600)), (json.dumps(LEAKY), usage(800, 700, 500)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900, 600)), (json.dumps(LEAKY), usage(800, 700, 500)),
                        (json.dumps(CLEAN), usage(1600, 700, 500))])
     sandbox = FakeSandbox([SandboxRun(0, "ok", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -78,14 +79,15 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     assert "all on Meta: yes" in text
     assert "## The paper's own numbers" in text
     assert "Not financial advice." in text
-    assert len((folder / "calls.jsonl").read_text().splitlines()) == 3
+    assert len((folder / "calls.jsonl").read_text().splitlines()) == 4   # extract, two builds, the reviewer
+    assert len(api.standing_requests) == 1
     stages = [json.loads(line)["stage"] for line in (folder / "events.jsonl").read_text().splitlines()]
     assert stages[0] == "ingest" and stages[-1] == "verdict"
 
 
 def test_failed_script_goes_back_to_the_builder_with_stderr(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(1, "", "KeyError: 'items'", 1.0),
                            SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
@@ -101,7 +103,7 @@ def test_missing_market_data_is_fetched_on_the_host_and_the_same_script_rerun(se
     monkeypatch.setattr(replicate.market, "fulfil", lambda requests, cache: fetched.extend(requests) or requests)
     request = [{"kind": "prices", "ticker": "ABC", "start": "2024-01-01", "end": "2024-02-01", "reason": "rate limited"}]
     log = [{"kind": "prices", "ticker": "ABC", "source": "yfinance (host) (cache)", "fetched": "2026-10-28"}]
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([
         SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS), "market_data_requests.json": json.dumps(request)}),
         SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS), "market_data_log.json": json.dumps(log)}),
@@ -114,7 +116,7 @@ def test_missing_market_data_is_fetched_on_the_host_and_the_same_script_rerun(se
 
 def test_budget_stop_ends_the_run_and_still_writes_the_report(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     outcome = go(api, FakeSandbox([]), cfg, tmp_path, budget=0.000001)
     assert len(api.requests) == 1
     assert outcome["verdict"] == "could not check"
@@ -127,7 +129,7 @@ def test_budget_stop_ends_the_run_and_still_writes_the_report(setup):
 
 def test_a_run_restricted_to_another_provider_stops_before_its_first_call(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900))])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900))])
     outcome = go(api, FakeSandbox([]), cfg, tmp_path, require_provider="elsewhere")
     assert api.requests == []
     assert outcome["verdict"] == "could not check"
@@ -137,7 +139,7 @@ def test_a_run_restricted_to_another_provider_stops_before_its_first_call(setup)
 
 def test_a_run_restricted_to_its_own_provider_runs(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     assert go(api, sandbox, cfg, tmp_path, require_provider="meta")["verdict"] == "holds up"
 
@@ -150,7 +152,7 @@ def test_planned_budget_is_a_bound_on_the_calls():
 def test_script_that_does_not_compile_never_reaches_the_sandbox(setup):
     cfg, tmp_path = setup
     broken = {"script": "x = f(1\n", "notes": ""}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(broken), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(broken), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -167,7 +169,7 @@ def test_audit_sends_a_sample_mismatch_back_and_keeps_the_rerun(setup):
     cfg, tmp_path = setup
     first = {"script": "events = load()\nprint(len(events))", "notes": ""}
     fixed = {"script": "events = load(include_amendments=True)\nprint(len(events))", "notes": ""}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(first), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(first), usage(800, 700)),
                        (json.dumps(fixed), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "kept=21", "", 1.0, {"results.json": json.dumps(SHORT)}),
                            SandboxRun(0, "kept=38", "", 1.0, {"results.json": json.dumps(RESULTS)})])
@@ -183,7 +185,7 @@ def test_a_target_count_that_newly_appears_is_rejected(setup):
     cfg, tmp_path = setup
     first = {"script": "events = load()", "notes": ""}
     padded = {"script": "events = load()[:40]", "notes": ""}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(first), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(first), usage(800, 700)),
                        (json.dumps(padded), usage(1600, 700)), (json.dumps(first), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)}),
                            SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})])
@@ -195,7 +197,7 @@ def test_a_target_count_that_newly_appears_is_rejected(setup):
 def test_direct_yfinance_import_is_rejected(setup):
     cfg, tmp_path = setup
     direct = {"script": "import yfinance as yf\nprint(1)", "notes": ""}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(direct), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(direct), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -205,7 +207,7 @@ def test_direct_yfinance_import_is_rejected(setup):
 
 def test_a_broken_audit_round_keeps_the_earlier_results(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)}),
                            SandboxRun(1, "", "Traceback: boom", 1.0)])
@@ -240,7 +242,7 @@ def test_workbench_builder_explores_writes_and_only_the_clean_rerun_counts(setup
         benches.append(FakeWorkbench(**kwargs))
         return benches[-1]
 
-    api = FakeChatAPI([
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[
         (json.dumps(SPEC), usage(500, 900)),
         ([("run", {"cmd": "curl -s efts | head"})], usage(900, 200)),
         ([("write_file", {"path": "replicate.py", "content": "print('computed')"})], usage(1200, 300)),
@@ -271,7 +273,7 @@ def test_cutting_the_sample_to_the_reported_count_is_rejected_in_the_first_round
     # run-20261028T144225Z-91ed39: SAMPLE_TARGET = 54; kept = filings[:SAMPLE_TARGET]
     cfg, tmp_path = setup
     cut = {"script": "SAMPLE_TARGET = 40\nkept = filings[:SAMPLE_TARGET]", "notes": ""}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(cut), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(cut), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -281,7 +283,7 @@ def test_cutting_the_sample_to_the_reported_count_is_rejected_in_the_first_round
 
 def test_an_infrastructure_failure_keeps_the_earlier_good_results(setup):
     cfg, tmp_path = setup
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
 
     class FlakySandbox(FakeSandbox):
@@ -306,7 +308,7 @@ def test_a_round_that_runs_out_of_turns_carries_its_conversation_into_the_next(s
         benches.append(FakeWorkbench(**kwargs))
         return benches[-1]
 
-    api = FakeChatAPI([
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[
         (json.dumps(SPEC), usage(500, 900)),
         ([("run", {"cmd": "probe-1"})], usage(900, 200)),
         ([("run", {"cmd": "probe-2"})], usage(1000, 200)),                    # turn cap (2) reached here
@@ -329,7 +331,7 @@ def test_a_round_that_runs_out_of_turns_carries_its_conversation_into_the_next(s
 def test_a_spec_with_unresolved_references_is_asked_for_once_more(setup):
     cfg, tmp_path = setup
     prose = {**SPEC, "headline": "Small firms fell 7.5%"}
-    api = FakeChatAPI([(json.dumps(prose), usage(500, 900)), (json.dumps(SPEC), usage(500, 900)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)), (json.dumps(SPEC), usage(500, 900)),
                        (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -341,7 +343,7 @@ def test_a_spec_with_unresolved_references_is_asked_for_once_more(setup):
 def test_references_still_unresolved_after_the_retry_are_reported_not_skipped(setup):
     cfg, tmp_path = setup
     prose = {**SPEC, "headline": "Small firms fell 7.5%"}
-    api = FakeChatAPI([(json.dumps(prose), usage(500, 900)), (json.dumps(prose), usage(500, 900)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)), (json.dumps(prose), usage(500, 900)),
                        (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -358,7 +360,7 @@ def test_the_workbench_refuses_to_fetch_the_authors_code(setup):
         benches.append(FakeWorkbench(**kwargs))
         return benches[-1]
 
-    api = FakeChatAPI([
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[
         (json.dumps(SPEC), usage(500, 900)),
         ([("run", {"cmd": "git clone https://github.com/authors/paper-code"})], usage(900, 200)),
         ([("write_file", {"path": "replicate.py", "content": "print('computed')"})], usage(1200, 300)),
@@ -381,7 +383,7 @@ def test_a_script_that_fetches_code_is_rejected(setup):
     cfg, tmp_path = setup
     fetch = {"script": "import requests\nexec(requests.get('https://raw.githubusercontent.com/a/b/main/run.py').text)",
              "notes": ""}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(fetch), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(fetch), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
@@ -394,7 +396,7 @@ def test_a_sample_that_misses_the_papers_period_is_sent_back_then_could_not_chec
     cfg, tmp_path = setup
     dated = {**SPEC, "period_start": "2010-01-03", "period_end": "2025-12-31"}
     late = {**RESULTS, "sample": {"description": "x", "n": 38, "start": "2014-09-17", "end": "2025-12-31"}}
-    api = FakeChatAPI([(json.dumps(dated), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(dated), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
                        (json.dumps(CLEAN), usage(1600, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(late)})] * 2)
     outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
@@ -412,7 +414,7 @@ def test_a_sample_the_builder_says_differs_from_the_papers_is_could_not_check(se
     cfg, tmp_path = setup
     other = {**RESULTS, "sample": {"description": "x", "n": 38, "same_as_paper": False,
                                    "differences": "the 2021-2024 exploit snapshot is not recoverable"}}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(other)})])
     outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
     assert outcome["verdict"] == "could not check"
@@ -424,7 +426,7 @@ def test_a_sample_total_left_out_of_the_results_is_could_not_check(setup):
     # same run: the counts that disagreed were removed from the results, so the audit had nothing to compare
     cfg, tmp_path = setup
     no_count = {**RESULTS, "results": [r for r in RESULTS["results"] if r["name"] != "n_filings"]}
-    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(no_count)})])
     outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
     assert outcome["verdict"] == "could not check"
@@ -440,9 +442,50 @@ def test_a_paper_whose_source_cannot_be_read_is_could_not_check_not_a_crash(setu
         raise RuntimeError("Client error '404 Not Found'")
 
     monkeypatch.setattr(replicate, "load_paper", missing)
-    api = FakeChatAPI([])
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[])
     outcome = go(api, FakeSandbox([]), cfg, tmp_path)
     assert outcome["verdict"] == "could not check" and api.requests == []
     assert outcome["summary"]["crashed"] is None
     assert outcome["summary"]["first_line"].startswith(
         "We could not check this paper: the paper's LaTeX source could not be read from arXiv (RuntimeError")
+
+
+def finding(passage, rule=1, why="the result is set, not computed"):
+    return json.dumps({"findings": [{"rule": rule, "passage": passage, "why": why}]})
+
+
+NONE = json.dumps({"findings": []})
+
+
+def test_the_reviewer_sends_a_script_back_with_the_passage_and_the_fixed_script_is_reported(setup):
+    cfg, tmp_path = setup
+    fixed = {"script": "print('computed again')", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (finding("print('computed')"), usage(3000, 200)), (json.dumps(fixed), usage(900, 700)),
+                       (NONE, usage(3000, 100))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert outcome["verdict"] == "holds up"
+    sent_back = api.requests[3]["body"]["messages"][-1]["content"]
+    assert sent_back.startswith("Before its numbers are reported, a reviewer found 1 breach")
+    assert "print('computed')" in sent_back
+    assert "a reviewer found 1 breach" in outcome["report"].read_text()   # listed under the run's guards
+
+
+def test_a_finding_whose_passage_is_not_in_the_script_is_ignored(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (finding("x = 0.35  # not in the script"), usage(3000, 200))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    assert go(api, sandbox, cfg, tmp_path)["verdict"] == "holds up"
+
+
+def test_a_breach_still_there_after_the_last_attempt_is_could_not_check_with_the_reason(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (finding("print('computed')"), usage(3000, 200)), (json.dumps(CLEAN), usage(900, 700)),
+                       (finding("print('computed')"), usage(3000, 200))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
+    assert outcome["verdict"] == "could not check"
+    assert outcome["report"].read_text().startswith("We could not check this paper: a reviewer found 1 breach")

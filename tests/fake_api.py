@@ -38,17 +38,29 @@ def usage(prompt: int, completion: int, reasoning: int = 0, cached: int = 0) -> 
 
 
 class FakeChatAPI:
-    """Answers each request with the next scripted (content, usage) reply and records it."""
+    """Answers each request with the next scripted (content, usage) reply and records it. A standing reply answers
+    every request whose instructions start with its prefix (a role a test does not script, such as the reviewer);
+    those requests are recorded apart, so the scripted ones keep their order."""
 
-    def __init__(self, replies: list[tuple[str, dict]]):
+    def __init__(self, replies: list[tuple[str, dict]], standing: dict[str, tuple[str, dict]] | None = None):
         self.replies = list(replies)
+        self.standing = dict(standing or {})
         self.requests: list[dict] = []
+        self.standing_requests: list[dict] = []
 
     def _handle(self, request: httpx2.Request) -> httpx2.Response:
         body = json.loads(request.content)
-        self.requests.append({"path": request.url.path, "body": body})
-        content, reply_usage = self.replies[len(self.requests) - 1]
-        return httpx2.Response(200, json=chat_completion(body["model"], content, reply_usage, len(self.requests)))
+        system = next((str(m.get("content") or "") for m in body.get("messages", [])
+                       if m.get("role") in ("system", "developer")), "")
+        prefix = next((p for p in self.standing if system.startswith(p)), None)
+        if prefix is not None:
+            self.standing_requests.append({"path": request.url.path, "body": body})
+            content, reply_usage = self.standing[prefix]
+        else:
+            self.requests.append({"path": request.url.path, "body": body})
+            content, reply_usage = self.replies[len(self.requests) - 1]
+        turn = len(self.requests) + len(self.standing_requests)
+        return httpx2.Response(200, json=chat_completion(body["model"], content, reply_usage, turn))
 
     def http_client(self) -> httpx2.AsyncClient:
         return httpx2.AsyncClient(transport=httpx2.MockTransport(self._handle))

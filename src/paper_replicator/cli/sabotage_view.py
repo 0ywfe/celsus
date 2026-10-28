@@ -52,7 +52,9 @@ def card(folder: Path) -> Panel:
     bases = json.loads((folder / "baseline.json").read_text()) if (folder / "baseline.json").exists() else []
     alarms = sum(len(b["alarms"]) for b in bases)
     session = json.loads((folder / "session.json").read_text()) if (folder / "session.json").exists() else {}
+    by_review = sum(r.get("by_review", 0) for r in rows)
     summary = Text(f"caught {killed} of {scored} plants" + (f" ({killed / scored:.0%})" if scored else "")
+                   + (f", {killed - by_review} by code and {by_review} by the script reviewer" if by_review else "")
                    + f" · false alarms on the {len(bases)} clean runs: {alarms}", style="bold")
     footer = Text(f"checks at {session.get('commit', '?')} · saboteur {session.get('model', '?')} "
                   f"({session.get('saboteur_effort', '?')}) · set aside: the plant could not be applied, or "
