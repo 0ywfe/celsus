@@ -72,6 +72,11 @@ def _summary(run_id: str) -> dict:
     return json.loads(path.read_text()) if path.is_file() else {}
 
 
+def _g(value) -> str:
+    """A number for the table: 4 significant figures, or a dash."""
+    return "–" if value is None else f"{value:.4g}"
+
+
 def _spread(values: list[float]) -> dict:
     if not values:
         return {}
@@ -123,8 +128,8 @@ def markdown(summary: dict) -> str:
         verdicts = ", ".join(f"{k} {v}" for k, v in g["verdicts"].items())
         lines.append(
             f"| {g['paper']} | {g['model']} | {g['effort']} | {g['n']} | {verdicts} | {g['agreement']:.0%} | "
-            f"{g['headline_reported']} → {h.get('min', '–')}–{h.get('max', '–')} (sd {h.get('sd', '–')}) | "
-            f"{g['headline_consistent']}/{h.get('n', 0)} | {t.get('min', '–')}–{t.get('max', '–')} | "
+            f"{_g(g['headline_reported'])} → {_g(h.get('min'))}–{_g(h.get('max'))} (sd {_g(h.get('sd'))}) | "
+            f"{g['headline_consistent']}/{h.get('n', 0)} | {_g(t.get('min'))}–{_g(t.get('max'))} | "
             f"{g['rejections']} | {r.get('mean', '–')} | ${c.get('mean', 0):.2f} (${c.get('max', 0):.2f}) | "
             f"{w.get('mean', 0):.0f}s | {g['crashed']} |")
     return "\n".join(lines)
