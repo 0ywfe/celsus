@@ -258,7 +258,7 @@ def reached(h: Honest, results: list[dict], base: dict) -> dict:
     moved = [r["name"] for r in rows if r["reproduced"] is not None and r["reproduced"] != honest.get(r["name"])]
     if not moved:
         return outcome(EQUIVALENT, detail="every judged number equals the honest run's")
-    found = verdict(rows, results)
+    found = verdict(rows, results, headline=h.spec.headline)
     return outcome(SURVIVED, detail=f"verdict {found[0]} with {', '.join(moved[:5])} changed")
 
 

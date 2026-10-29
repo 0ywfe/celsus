@@ -220,12 +220,14 @@ OFF_NAMED = 3   # sample counts named in the first line; the report's table has 
 
 
 def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = None,
-            sample_problem: str | None = None) -> tuple[str, str]:
+            sample_problem: str | None = None, *, headline: str | None) -> tuple[str, str]:
     """(verdict, reason). A checker never blames a paper for its own failure: when the run, the data or the
     rebuilt sample fails, the verdict is "could not check", never "does not hold up". Sample counts are a
     precondition for judging the results, not results themselves. The reason names every blocker, not the first:
     held-out 40c85a was blocked by a missing sample size and by 17,225 observations against 14,361, and its first
-    line named only the first."""
+    line named only the first. A paper holds up only if its main result (`headline`) was judged and matched: held-out
+    dd3e09 and 69ec49 were "holds up" with the main result never computed, which a reader of the table can't trust.
+    Without a main result that matched, the most it gets is "partly holds up", and the first line says why."""
     if results is None:
         return COULD_NOT_CHECK, failure or "the replication never produced results"
     blockers = [sample_problem] if sample_problem else []   # the sample checks, already joined
@@ -247,8 +249,10 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
     judged = [r["consistent"] for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     if not judged:
         return COULD_NOT_CHECK, "none of the paper's results could be compared"
+    main = next((r for r in rows if r["name"] == headline), None) if headline else None
     if all(judged):
-        return "holds up", ""
+        return ("holds up" if main is not None and main["kind"] != "count" and main["consistent"] is True
+                else "partly holds up"), ""
     return ("partly holds up" if any(judged) else "does not hold up"), ""
 
 
@@ -266,9 +270,13 @@ def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None
             "does not hold up": "The paper's numbers do not hold up"}[outcome]
     line += f": {matched} of {len(judged)} checked results match within their uncertainty."
     main = next((r for r in rows if r["name"] == headline), None)
-    if main is not None and main["reproduced"] is None:   # held-out 69ec49: "holds up", its main result never computed
+    if main is None:   # a headline still written as prose after the chooser and the retry: no main result to judge
+        line += " Its main result is none of the numbers checked, so it was not judged."
+    elif main["reproduced"] is None:   # held-out 69ec49: "holds up", its main result never computed
         line += f" Its main result, {main['name']}, was not computed."
-    elif main is not None:
+    elif main["kind"] == "count":   # a sample size is a precondition, not a result: it never makes a paper hold up
+        line += f" Its main result, {main['name']}, is a count of the sample, not a result, so it was not judged."
+    else:
         why = (main.get("why") or "no basis to compare").removesuffix(", so it is not judged")
         judged = ("consistent" if main["consistent"] else "not consistent") if main["consistent"] is not None else \
             f"not judged: {why}"

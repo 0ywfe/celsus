@@ -44,7 +44,7 @@ def test_a_parameter_is_reported_but_never_judged():
     results = [{"name": "n_paths", "value": 300, "se": 0, "n": 300}, {"name": "beta", "value": 0.41, "se": 0.05, "n": 300}]
 
     rows = {r["name"]: r for r in compare.compare(claims, results)}
-    outcome, _ = compare.verdict(list(rows.values()), results)
+    outcome, _ = compare.verdict(list(rows.values()), results, headline="beta")
 
     assert rows["n_paths"]["consistent"] is None and "parameter" in rows["n_paths"]["why"]
     assert rows["n_paths"]["reproduced"] == 300
@@ -85,7 +85,7 @@ def test_a_parameter_written_with_no_observations_is_not_an_empty_sample():
     claims = [claim("n_paths", "10,000", kind="parameter"), claim("beta", "0.42", kind="estimate")]
     results = [{"name": "n_paths", "value": 10000, "se": 0, "n": 0}, {"name": "beta", "value": 0.41, "se": 0.05, "n": 300}]
 
-    assert compare.verdict(compare.compare(claims, results), results)[0] == "holds up"
+    assert compare.verdict(compare.compare(claims, results), results, headline="beta")[0] == "holds up"
 
 
 def test_a_parameter_never_sends_the_sample_back_or_becomes_a_count_to_watch(monkeypatch):

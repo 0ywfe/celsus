@@ -32,19 +32,20 @@ def row(name, kind, consistent, reported=1.0, reproduced=1.0):
 
 def test_verdicts_judge_results_not_counts():
     ok = [{"name": "x", "value": 1.0, "n": 10}]
-    assert verdict([row("a", "estimate", True), row("b", "other", None)], ok)[0] == "holds up"
-    assert verdict([row("a", "estimate", True), row("b", "estimate", False)], ok)[0] == "partly holds up"
-    assert verdict([row("a", "estimate", False)], ok)[0] == "does not hold up"
+    assert verdict([row("a", "estimate", True), row("b", "other", None)], ok, headline="a")[0] == "holds up"
+    assert verdict([row("a", "estimate", True), row("b", "estimate", False)], ok, headline="a")[0] == "partly holds up"
+    assert verdict([row("a", "estimate", False)], ok, headline="a")[0] == "does not hold up"
 
 
 def test_the_checker_never_blames_the_paper_for_its_own_failure():
     ok = [{"name": "x", "value": 1.0, "n": 10}]
     # run c3ab42 attempt 1: zero events, all-zero results
-    assert verdict([row("n", "count", False, 54, 0), row("a", "estimate", False)], ok)[0] == "could not check"
-    assert verdict([row("n", "count", True, 54, 0)], [{"name": "n", "value": 0, "n": 0}])[0] == "could not check"
-    outcome, reason = verdict([], None, "the clean run could not complete (ConnectionError)")
+    assert verdict([row("n", "count", False, 54, 0), row("a", "estimate", False)], ok, headline="a")[0] == "could not check"
+    assert verdict([row("n", "count", True, 54, 0)], [{"name": "n", "value": 0, "n": 0}], headline="a")[0] == "could not check"
+    outcome, reason = verdict([], None, "the clean run could not complete (ConnectionError)", headline="a")
     assert outcome == "could not check" and "ConnectionError" in reason
-    assert verdict([row("a", "estimate", None)], ok) == ("could not check", "none of the paper's results could be compared")
+    assert verdict([row("a", "estimate", None)], ok, headline="a") == (
+        "could not check", "none of the paper's results could be compared")
 
 
 @pytest.mark.parametrize("reported, value, consistent, why", [
@@ -124,9 +125,10 @@ def test_the_first_line_never_calls_an_unjudged_or_uncomputed_main_result_not_co
     missing = {**row("main", "estimate", None, -0.771, None), "why": "not computed"}
     other = row("other", "estimate", True)
 
-    assert "(not judged: no standard error)" in first_line("holds up", "", [unjudged, other], "main")
-    assert "not consistent" not in first_line("holds up", "", [unjudged, other], "main")
-    assert first_line("holds up", "", [missing, other], "main").endswith("Its main result, main, was not computed.")
+    assert "(not judged: no standard error)" in first_line("partly holds up", "", [unjudged, other], "main")
+    assert "not consistent" not in first_line("partly holds up", "", [unjudged, other], "main")
+    assert first_line("partly holds up", "", [missing, other], "main").endswith(
+        "Its main result, main, was not computed.")
 
 
 def test_a_main_result_built_from_the_papers_numbers_is_named_not_judged_once():
@@ -134,7 +136,7 @@ def test_a_main_result_built_from_the_papers_numbers_is_named_not_judged_once():
     results = [{"name": "q", "value": 80.2, "se": None, "n": 300}, {"name": "rank", "value": 21.1, "se": None, "n": 300}]
     rows = compare(claims, results, constructed={"rank": "q with the constant 0.26 at line 113"})
 
-    line = first_line("holds up", "", rows, "rank")
+    line = first_line(*verdict(rows, results, headline="rank"), rows, "rank")
 
     assert "(not judged: built from the paper's numbers" in line and line.count("not judged") == 1
 
@@ -144,16 +146,62 @@ def test_a_could_not_check_names_every_blocker():
     rows = [row("n_obs", "count", False, 14361, 17225), row("n_assets", "count", False, 6, 9),
             row("beta", "estimate", True)]
     outcome, reason = verdict(rows, [{"name": "beta", "value": 1.0, "n": 10}],
-                              sample_problem="the replication did not report the paper's sample size (n_pool_total)")
+                              sample_problem="the replication did not report the paper's sample size (n_pool_total)",
+                              headline="beta")
     line = first_line(outcome, reason, rows, "beta")
 
     assert outcome == "could not check"
     assert "n_pool_total" in line and "n_obs: 1.722e+04 here, 1.436e+04 in the paper" in line and "n_assets" in line
 
 
+@pytest.mark.parametrize("main, outcome", [
+    (row("main", "estimate", True), "holds up"),                       # the control: the main result matched
+    (row("main", "estimate", None, 0.42, None), "partly holds up"),    # dd3e09: never computed, 6 of 6 others matched
+    (row("main", "estimate", None, -0.771, -0.8), "partly holds up"),  # 69ec49's shape: computed, not judged
+    (row("main", "estimate", False), "partly holds up"),               # judged and not consistent, as before
+])
+def test_a_paper_holds_up_only_if_its_main_result_was_judged_and_matched(main, outcome):
+    """Fix (g), the orchestrator's ruling (29 Oct): "holds up" next to "main result not computed" costs the table
+    its reader's trust."""
+    rows = [main, row("a", "estimate", True), row("b", "estimate", True)]
+
+    assert verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline="main") == (outcome, "")
+
+
+@pytest.mark.parametrize("headline", ["", None, "Overall negative short-term reaction, stronger for small caps"])
+def test_a_run_with_no_main_result_to_judge_is_partly_and_says_why(headline):
+    """9ff011 and e14cdb: headlines written as prose, from before the headline chooser."""
+    rows = [row("a", "estimate", True), row("b", "estimate", True)]
+    outcome, reason = verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline=headline)
+
+    assert outcome == "partly holds up"
+    assert first_line(outcome, reason, rows, headline).endswith(
+        "Its main result is none of the numbers checked, so it was not judged.")
+
+
+def test_a_main_result_that_is_a_sample_count_never_makes_a_paper_hold_up():
+    """The reviewer's case: counts are left out of the judged results, so a matched n_obs as the headline would
+    have made "holds up" rest on the sample size alone."""
+    rows = [row("n_obs", "count", True, 14361, 14361), row("a", "estimate", True)]
+    outcome, reason = verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline="n_obs")
+
+    assert outcome == "partly holds up"
+    assert first_line(outcome, reason, rows, "n_obs").endswith(
+        "Its main result, n_obs, is a count of the sample, not a result, so it was not judged.")
+
+
+def test_the_first_line_of_a_main_result_never_computed_says_partly_and_why():
+    rows = [row("main", "estimate", None, 0.0004, None), *(row(f"r{i}", "estimate", True) for i in range(6))]
+    outcome, reason = verdict(rows, [{"name": "r0", "value": 1.0, "n": 10}], headline="main")
+
+    assert first_line(outcome, reason, rows, "main") == (
+        "The paper's numbers partly hold up: 6 of 6 checked results match within their uncertainty. Its main "
+        "result, main, was not computed.")
+
+
 def test_a_long_list_of_sample_gaps_is_named_up_to_a_few():
     rows = [row(f"n_{i}", "count", False, 100, 100 + 50 * i) for i in range(1, 7)]
-    reason = verdict(rows, [{"name": "x", "value": 1.0, "n": 10}])[1]
+    reason = verdict(rows, [{"name": "x", "value": 1.0, "n": 10}], headline=None)[1]
 
     assert reason.count(" here, ") == 3 and "and 3 more" in reason and reason.startswith(
         "the replication could not rebuild the paper's sample (n_6:")
@@ -254,13 +302,13 @@ def test_a_zero_count_that_matches_the_paper_is_a_match_not_an_empty_sample():
     claims = [claim("holm_rejections", "0", "count"), claim("gap", "11.81", "estimate")]
     results = [{"name": "holm_rejections", "value": 0}, {"name": "gap", "value": 11.82, "se": 0.5, "n": 2896}]
     rows = compare(claims, results)
-    assert verdict(rows, results) == ("holds up", "")
+    assert verdict(rows, results, headline="gap") == ("holds up", "")
 
 
 def test_a_zero_where_the_paper_has_observations_is_still_could_not_check():
     claims = [claim("n", "54", "count"), claim("mean", "-3.07", "estimate")]
     results = [{"name": "n", "value": 0}, {"name": "mean", "value": -3.0, "se": 1.0}]
-    assert verdict(compare(claims, results), results)[0] == "could not check"
+    assert verdict(compare(claims, results), results, headline="mean")[0] == "could not check"
 
 
 def test_a_value_holding_several_numbers_is_not_judged_and_says_why():
@@ -276,7 +324,7 @@ def test_a_value_holding_several_numbers_is_not_judged_and_says_why():
         assert rows[name]["consistent"] is None and rows[name]["reported"] is None, name
         assert "holds several numbers" in rows[name]["why"] and rows[name]["reproduced"] is not None
     assert rows["mean"]["consistent"] is True
-    assert verdict(list(rows.values()), results) == ("holds up", "")   # an unread count is not a sample failure
+    assert verdict(list(rows.values()), results, headline="mean") == ("holds up", "")   # an unread count is not a sample failure
 
 
 def test_a_value_with_no_number_is_not_judged_instead_of_crashing_the_run():
@@ -285,14 +333,14 @@ def test_a_value_with_no_number_is_not_judged_instead_of_crashing_the_run():
     results = [{"name": "cells", "value": 3}, {"name": "flag", "value": 1}, {"name": "mean", "value": -7.4, "se": 1.0}]
     rows = {r["name"]: r for r in compare(claims, results)}
     assert rows["cells"]["consistent"] is None and "no number the checker reads" in rows["cells"]["why"]
-    assert verdict(list(rows.values()), results) == ("holds up", "")
+    assert verdict(list(rows.values()), results, headline="mean") == ("holds up", "")
 
 
 def test_an_unread_count_of_zero_is_not_an_empty_sample():
     # held-out 2610.35702: "0/9" (no test of nine significant) and a run that found 0 was read as no observations
     claims = [claim("rejections", "0/9", "count"), claim("mean", "-7.49", "estimate")]
     results = [{"name": "rejections", "value": 0}, {"name": "mean", "value": -7.4, "se": 1.0}]
-    assert verdict(compare(claims, results), results) == ("holds up", "")
+    assert verdict(compare(claims, results), results, headline="mean") == ("holds up", "")
 
 
 def test_a_result_the_script_writes_as_a_fixed_number_is_not_judged():
@@ -316,5 +364,5 @@ def test_a_value_no_result_of_its_kind_can_take_is_not_judged():
     rows = {r["name"]: r for r in compare(claims, results)}
     for name in ("p", "n", "t"):
         assert rows[name]["consistent"] is None and "no " in rows[name]["why"], rows[name]["why"]
-    assert verdict(list(rows.values()), results) == ("holds up", "")
+    assert verdict(list(rows.values()), results, headline="mean") == ("holds up", "")
     assert [name for name, _ in impossible(claims, results)] == ["p", "n", "t"]

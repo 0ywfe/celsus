@@ -679,8 +679,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     caveats = (sample_caveats(sample_of(kept.read_text()), results, watched_totals(claims, spec, latex)[0])
                if spec and results and kept.exists() else [])
     run.guard_events.extend(f"caveat: {caveat}" for caveat in caveats)
-    outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None)
     headline = spec.headline if spec else None
+    outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None, headline=headline)
     headline_text = first_line(outcome, reason, rows, headline)
     path = report.write(folder, arxiv_id=arxiv_id, title=spec.title if spec else arxiv_id, verdict=outcome,
                         rows=rows, rejected=rejected, paper_checks=paper, headline_text=headline_text,
