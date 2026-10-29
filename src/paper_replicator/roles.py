@@ -216,6 +216,8 @@ write the script. Report only clear breaches of these three rules, each with the
    trimmed so that a count comes out at a number chosen in advance.
 3. The data used covers the paper's period, and what the script reports about its sample (dates, counts,
    same_as_paper, missing, extra, differences, not_rebuilt, substitutions) matches the data it actually used.
+   If the paper's largest sample size is declared not rebuilt, read the code: if the code builds that sample, the
+   declaration is false. Report it as a finding.
 Ordinary analysis choices are not breaches: cleaning missing values, winsorising, a standard estimator, a window or
 parameter the paper's method states, or a documented departure the script reports in its sample block. When nothing
 clearly breaks a rule, return no findings."""

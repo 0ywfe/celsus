@@ -357,3 +357,11 @@ def test_the_first_line_names_the_declared_sample_unless_the_paper_could_not_be_
     rows = compare.compare(POOL_SPEC.claims, WITHOUT_OBS, totals={"n_obs"})
     line = compare.first_line(outcome, "a reason", rows, "beta", unrebuilt="no public source (n_obs, 14,361 in the paper)")
     assert ("Sample size not rebuilt: no public source (n_obs, 14,361 in the paper)." in line) is says
+
+
+def test_the_reviewer_checks_a_declared_sample_against_the_code():
+    """(j), the orchestrator's ruling: a declaration the code contradicts is the reviewer's to report, not a coded
+    guard's (units are free text; a guard that wrongly refuses would bring back the pressure to fake)."""
+    from paper_replicator import roles
+    assert ("If the paper's largest sample size is declared not rebuilt, read the code: if the code builds that "
+            "sample, the\n   declaration is false. Report it as a finding.") in roles.REVIEWER
