@@ -7,7 +7,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 NOT_STATED = "not stated"
-ClaimKind = Literal["estimate", "test_statistic", "p_value", "count", "parameter", "other"]
+ClaimKind = Literal["estimate", "test_statistic", "p_value", "count", "tally", "parameter", "other"]
 
 
 class Claim(BaseModel):

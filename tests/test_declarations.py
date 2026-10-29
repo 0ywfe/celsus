@@ -171,3 +171,66 @@ def test_a_small_declared_difference_says_how_it_was_measured():
         "the sample differs from the paper's by 1 missing and 0 extra observations (1.9% of the paper's 54, missing "
         "and extra together), within 15%, SCORE's tolerance for sample size, so its results are judged")
 
+
+
+# (h): a not_rebuilt declaration must name the paper's claims and leave them out of the results. a27323 keyed it
+# "n_candidate_pool_detail" (no claim's name) and reported a proxy for n_candidate_pool_total anyway, so nothing was
+# excused and the proxy was compared. Both are asked about again; left as they are, the counts are compared as before.
+
+def test_a_not_rebuilt_name_that_is_no_claim_is_asked_about_again():
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0,
+              "not_rebuilt": {"n_pool_detail": "the paper's candidate list is not published"}}
+
+    problem, watch = replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS, POOL, OBS])
+
+    assert "not_rebuilt names n_pool_detail, which is no claim's name" in problem and watch == []
+    assert replicate.sample_issues(SPEC, sample, RESULTS, [EVENTS, POOL, OBS]) == [
+        "the replication did not report the paper's sample size (n_pool), so its sample cannot be compared"]
+
+
+def test_a_count_listed_as_not_rebuilt_and_reported_anyway_is_asked_about_and_still_compared():
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0,
+              "not_rebuilt": {"n_pool": "the paper's candidate list is not published"}}
+    proxy = [*RESULTS, {"name": "n_pool", "value": 245, "se": 0, "n": 245}]
+
+    problem, watch = replicate.audit_problem(SPEC.claims, proxy, "", SPEC, sample, [EVENTS, POOL, OBS])
+
+    assert "n_pool is in not_rebuilt but its value is reported" in problem and "substitutions" in problem
+    assert "n_pool: the paper reports 135, your run produced 245" in problem and watch == ["135"]
+
+
+def test_a_declaration_mismatch_alone_costs_no_round_and_is_a_caveat():
+    """With nothing off and nothing missing there is nothing for a declaration to excuse, so asking again would
+    spend one of the builder's rounds (2-30 min, $0.19-0.80 on the v2 runs) for no change: it is noted instead."""
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0,
+              "not_rebuilt": {"n_pool": "unpublished", "n_pool_detail": "unpublished"}}
+    proxy = [*RESULTS, {"name": "n_pool", "value": 135, "se": 0, "n": 135}]
+
+    assert replicate.audit_problem(SPEC.claims, proxy, "", SPEC, sample, [EVENTS, POOL, OBS]) == (None, [])
+    assert replicate.sample_caveats(sample, proxy, [EVENTS, POOL, OBS], SPEC.claims) == [
+        "the sample block's not_rebuilt: n_pool_detail is no claim's name, so it excused nothing",
+        "the sample block's not_rebuilt: n_pool is in it but its value was reported anyway, so it was not treated "
+        "as excused"]
+
+
+def test_the_largest_total_declared_not_rebuilt_is_told_to_stay_in_the_results():
+    """Code review: told to leave the largest total out, the builder would then fail "sample size reported"."""
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0, "not_rebuilt": {"n_obs": "partly unpublished"}}
+    off = [*RESULTS[:2], {"name": "n_obs", "value": 9000, "se": 0, "n": 9000}]
+
+    problem, _ = replicate.audit_problem(SPEC.claims, off, "", SPEC, sample, [EVENTS, POOL, OBS])
+
+    assert "n_obs is the sample the results are computed on, so it cannot be declared not rebuilt" in problem
+    assert "n_obs is in not_rebuilt but its value is reported" not in problem
+
+
+def test_a_declaration_by_the_claims_name_with_the_count_left_out_is_not_asked_about():
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0,
+              "not_rebuilt": {"n_pool": "the candidate pool needs data the paper does not publish"}}
+
+    assert replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS, POOL, OBS]) == (None, [])
+
+
+def test_the_builder_is_told_to_name_the_claim_and_leave_its_count_out():
+    from paper_replicator import roles
+    assert "exact name" in roles.RESULTS_FORMAT and "out of results" in roles.RESULTS_FORMAT

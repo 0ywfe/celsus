@@ -31,10 +31,12 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
   method: window lengths, numbers of draws, paths, replications or permutations, lags, thresholds, caps, weights,
   null values and theoretical benchmarks. They are not results: if you list one as a claim, its kind is
   "parameter".
-- kind "count" is for sample sizes only: how many observations, events, firms, filings or periods of the data a
-  result is computed on. A number the paper finds by counting (trades made, profitable periods, significant pairs,
-  tests rejected, days until something happens) is an "estimate". A number the paper sets (10,000 draws, a
-  60-month window, a 15% cap) is a "parameter": it is never judged, and code may use it.
+- kind "count" is for sample sizes only: how much data a result is computed on (how many observations, events,
+  firms, filings or periods). A tally of what the analysis found (how many tests were significant or rejected,
+  regimes or breaks detected, misclassifications, VaR breaches) is a "tally": a sample count says how much data,
+  a tally says what the analysis found. A number the paper finds by measuring (trades made, profitable periods,
+  days until something happens) is an "estimate". A number the paper sets (10,000 draws, a 60-month window, a 15%
+  cap) is a "parameter": it is never judged, and code may use it.
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - period_start, period_end: the dates the sample covers, exactly as printed ("2010-01-03", "February 2018",
   "as of November 12th, 2025"); "not stated" if the paper does not say.
@@ -65,8 +67,10 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
                       count them>,
             "differences": "<which observations differ from the paper's, or empty>",
             "cannot_count": "<if missing or extra is null: why you cannot count them; else empty>",
-            "not_rebuilt": {"<a sample-size claim you could not compute>": "<why public data cannot give it>"}
-                           (empty {} if none; the sample is then compared on its largest size, which you must report),
+            "not_rebuilt": {"<the exact name of a sample-size claim in the spec that you could not compute>":
+                            "<why public data cannot give it>"}
+                           (empty {} if none; leave each one out of results, and put any proxy you built for it under
+                           substitutions; the sample is then compared on its largest size, which you must report),
             "substitutions": "<every other source, data vintage, proxy series or method you used for the paper's
                               observations; empty if none. These are caveats, not sample differences>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""

@@ -21,6 +21,9 @@ Tolerances come from the data, not from a chosen percentage:
   A statistic whose printed p fits no t distribution (an F or chi-squared test, or a mis-paired t and p) is
   not judged as a t; its p-value carries the conclusion.
 - p_value: consistent if both are on the same side of 0.05.
+- tally (how many tests were significant or rejected, regimes or breaks detected, misclassifications): a result, not
+  a sample size, so it never gates the sample; consistent if the paper's value lies inside the reproduction's 95%
+  interval, and not judged without one.
 - anything without what its test needs is shown but not judged.
 """
 
@@ -70,6 +73,8 @@ def cannot_be(kind: str, value) -> str | None:
         return "no p-value lies outside 0 to 1"
     if kind == "count" and value < 0:
         return "no count is negative"
+    if kind == "tally" and value < 0:
+        return "no tally is negative"
     return None
 
 
@@ -132,6 +137,11 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
         return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "count":
         return count_match(reported, value) if total else subgroup_match(reported, value)
+    if kind == "tally":   # how many tests were significant, breaks detected: a result, judged only with an uncertainty
+        if not se:
+            return None, "a tally of what the analysis found, with no uncertainty, so it is not judged"
+        inside = abs(value - reported) <= Z95 * se
+        return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "test_statistic" and side == NO_SIDE:
         return None, "its p fits no t distribution; judged by its p-value"
     if kind == "test_statistic":
@@ -240,8 +250,8 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
     # A zero count is an empty sample only when the paper's count, read as one number, is not zero: a paper that
     # reports 0 rejections and a run that finds 0 agree (held-out 2602.07018 lost 144 results to this), and a count
     # the checker cannot read ("0/9") says nothing about the sample.
-    settings = {r["name"] for r in rows if r["kind"] == "parameter"}   # a number of draws has no observations
-    if any(r.get("n") == 0 and r.get("name") not in settings for r in results) or any(
+    uncounted = {r["name"] for r in rows if r["kind"] in ("parameter", "tally")}   # draws or findings: no observations
+    if any(r.get("n") == 0 and r.get("name") not in uncounted for r in results) or any(
             r["kind"] == "count" and r["reproduced"] == 0 and r["consistent"] is False for r in rows):
         blockers.append("the replication found no observations")
     if blockers:

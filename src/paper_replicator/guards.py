@@ -533,15 +533,68 @@ _DATA_WORDS = {"obs", "observations", "firms", "days", "returns", "filings", "su
                "respondents", "households", "banks", "funds"}
 
 
+def _name_words(name: str) -> set[str]:
+    """A claim name's words, lower case: snake_case, camelCase and prose names alike."""
+    return set(re.split(r"[^a-z]+", re.sub(r"([a-z])([A-Z])", r"\1_\2", name).lower()))
+
+
 def as_parameters(claims: list[Claim]) -> tuple[list[Claim], list[str]]:
     """Count claims that are numbers of draws, paths, replications and the like, re-kinded "parameter", and their
     names. The extractor is told to kind them so; this catches the ones it lists as sample sizes (held-out set 2:
     n_mc_replications 10,000 rejected twice, 2509.19663's 180,000 fits gated as its largest count)."""
     out, moved = [], []
     for claim in claims:
-        words = set(re.split(r"[^a-z]+", re.sub(r"([a-z])([A-Z])", r"\1_\2", claim.name).lower()))
+        words = _name_words(claim.name)
         if claim.kind == "count" and (words & _DRAW_WORDS or (words & _DRAW_ABBREVIATIONS and not words & _DATA_WORDS)):
             out.append(claim.model_copy(update={"kind": "parameter"}))
+            moved.append(claim.name)
+        else:
+            out.append(claim)
+    return out, moved
+
+
+# Name words that mark a tally of what the analysis found rather than a size of its data (the orchestrator's (h),
+# 29 Oct). Measured on the 1,256 count names on disk: 17 carry one and no word for the data's units, all of them
+# tallies (significant pairs, Holm rejections, FDR survivors); the one with a units word ("significant assets") stays.
+_TALLY_WORDS = {"significant", "signif", "reject", "rejections", "fdr", "detected", "breaches"}
+
+
+# A p-value by its unit, or by a name word for one; never a bare "p" in a name (f2d565's spy_p_rho_lag1 is a
+# correlation). 195bb3's main p-value, kinded an estimate, was judged by the 10% rule: 0.8444 against 0.9956.
+_P_UNITS = {"p", "p-value", "p value", "p-values", "p values", "pvalue"}
+_P_NAME = re.compile(r"(?<![a-z])p[\s_-]?val(?:ue)?s?(?![a-z])")
+# Words of a name that describes p-values rather than being one (code review: fraction_pvalues_below_05 = 0.12).
+_ABOUT_P = {"fraction", "share", "prop", "proportion", "threshold", "cutoff", "level", "alpha", "n", "count",
+            "number", "num"}
+
+
+def as_p_values(claims: list[Claim]) -> tuple[list[Claim], list[str]]:
+    """Claims that are p-values by their unit or name, re-kinded "p_value" whatever the extractor said, and their
+    names: judged by the side of 0.05 they fall on. A number outside 0 to 1 is no p-value, a significance level
+    the paper sets stays a parameter, a count stays a count (or a tally), and a name about p-values (a share of
+    them, a threshold) is not one."""
+    out, moved = [], []
+    for claim in claims:
+        value = parse_number(claim.value)
+        named = _P_NAME.search(re.sub(r"([a-z])([A-Z])", r"\1_\2", claim.name).lower())
+        if (claim.kind not in ("p_value", "parameter", "count") and value is not None and 0 <= value <= 1
+                and not _name_words(claim.name) & _ABOUT_P and (claim.unit.strip().lower() in _P_UNITS or named)):
+            out.append(claim.model_copy(update={"kind": "p_value"}))
+            moved.append(claim.name)
+        else:
+            out.append(claim)
+    return out, moved
+
+
+def as_tallies(claims: list[Claim]) -> tuple[list[Claim], list[str]]:
+    """Count claims that are tallies of findings, re-kinded "tally", and their names: a name with a tally word and no
+    word for the data's units. The extractor is told to kind them so; this catches the ones it lists as sample sizes
+    (a27323's n_significant_granger_05 and n_fdr_q10 blocked its sample)."""
+    out, moved = [], []
+    for claim in claims:
+        words = _name_words(claim.name)
+        if claim.kind == "count" and words & _TALLY_WORDS and not words & _DATA_WORDS:
+            out.append(claim.model_copy(update={"kind": "tally"}))
             moved.append(claim.name)
         else:
             out.append(claim)
