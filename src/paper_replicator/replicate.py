@@ -291,24 +291,76 @@ def sample_of(raw: str | None) -> dict:
     return sample if isinstance(sample, dict) else {}
 
 
+def _said(value) -> str:
+    return str(value or "").strip().rstrip(".")
+
+
+def _not_rebuilt(sample: dict) -> dict[str, str]:
+    """The sample counts the builder says public data cannot give, with why (a reason in words, not a flag)."""
+    stated = sample.get("not_rebuilt")
+    if not isinstance(stated, dict):
+        return {}
+    return {str(k): v.strip().rstrip(".") for k, v in stated.items() if isinstance(v, str) and v.strip()}
+
+
+def excused_totals(sample: dict, results: list[dict], totals: list[Claim]) -> dict[str, str]:
+    """Sample totals left out with a stated reason, while the run rebuilt the paper's largest sample total and it
+    matches: the sample is compared on that one. 2602.07046's runs were blocked by the paper's tallies of a screening
+    pool no result is computed on, which the builder said needs data the paper doesn't publish, while its 14,361
+    observations matched. The largest total is never excused: a run can't leave out the sample its results are
+    computed on and anchor on a smaller count."""
+    counted = [c for c in totals if guards.parse_number(c.value) is not None]
+    if not counted:
+        return {}
+    largest = max(counted, key=lambda c: guards.parse_number(c.value))
+    if not any(row["consistent"] for row in compare([largest], results)):
+        return {}
+    reported, reasons = {r.get("name") for r in results}, _not_rebuilt(sample)
+    return {c.name: reasons[c.name] for c in totals if c.name not in reported and c.name in reasons
+            and c is not largest}
+
+
 def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[tuple[str, str]]:
     """What stops the replication's sample being compared with the paper's, apart from count gaps, as (check, issue):
     the builder says it is not the paper's sample, a sample total is missing from the results (run 2601.08263
     dropped the counts that disagreed, leaving the audit nothing to compare), or the dates it covers are not the
-    paper's."""
+    paper's. A sample declared different must say by how many observations, or why it can't; a declaration that
+    says neither is asked for again (held-out 6706f3 left both blank over counts inside the band). The builder's
+    own counts are audited whatever it declares, 0 missing and 0 extra included."""
     issues = []
     if sample.get("same_as_paper") is False and small_difference(sample) is None:
-        why = str(sample.get("differences") or "").strip().rstrip(".")
-        issues.append(("declared not the paper's sample",
-                       "the replication could not rebuild the paper's sample" + (f" ({why})" if why else "")))
+        missing, extra = _whole(sample.get("missing")), _whole(sample.get("extra"))
+        why = _said(sample.get("cannot_count")) or _said(sample.get("differences"))
+        if missing is not None and extra is not None:
+            issues.append(("declared not the paper's sample",
+                           f"the replication could not rebuild the paper's sample ({missing} missing and {extra} extra "
+                           f"observations" + (f": {why}" if why else "") + ")"))
+        elif not why:
+            issues.append(("declaration blank", ("the replication says its sample is not the paper's but gives "
+                                                 "neither how many observations differ nor why")))
+        else:
+            rebuilt = compare([c for c in totals if c.name in {r.get("name") for r in results}], results)
+            matched = bool(rebuilt) and all(row["consistent"] for row in rebuilt)
+            issues.append(("declaration over matching counts" if matched else "declared not the paper's sample",
+                           f"the replication could not rebuild the paper's sample ({why})"))
     reported = {r.get("name") for r in results}
-    missing = [c.name for c in totals if c.name not in reported]
+    excused = excused_totals(sample, results, totals)
+    missing = [c.name for c in totals if c.name not in reported and c.name not in excused]
     if missing:
         issues.append(("sample size reported", f"the replication did not report the paper's sample size "
                                                f"({', '.join(missing)}), so its sample cannot be compared"))
     if gap := periods.period_gap(spec, sample):
         issues.append(("period", gap))
     return issues
+
+
+def sample_caveats(sample: dict, results: list[dict], totals: list[Claim]) -> list[str]:
+    """What the report says about a sample it still compares: other sources, vintages or methods the builder
+    used for the paper's observations, and sample totals public data cannot give."""
+    caveats = [f"{name} was not rebuilt: {why}" for name, why in excused_totals(sample, results, totals).items()]
+    if substitutions := _said(sample.get("substitutions")):
+        caveats.insert(0, f"the replication used other sources or methods for the paper's observations: {substitutions}")
+    return caveats
 
 
 def _whole(value) -> int | None:
@@ -361,6 +413,15 @@ async def review_problem(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI,
                              f"integrity rules; first, {said[0]}" + "".join(f"; then {s}" for s in said[1:]))
 
 
+# A declaration the builder is asked to complete, not a sample to rebuild: 6706f3 called its sample not the paper's,
+# with counts inside the band and no amount, and the run ended there.
+REASK = {"declaration blank", "declaration over matching counts"}
+DECLARE = ("Fill in the sample block: if observations the paper used are missing from yours, or yours has ones it "
+           "did not use, give how many in missing and extra, or say in cannot_count why you cannot count them. "
+           "Another source, vintage, proxy series or method for the same observations is not a sample difference: "
+           "list it in substitutions and set same_as_paper true.")
+
+
 def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: PaperSpec | None = None,
                   sample: dict | None = None, totals: list[Claim] = ()) -> tuple[str | None, list[str]]:
     """Sample counts that disagree with the paper, or anything else that stops the sample being compared, as
@@ -376,13 +437,20 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: P
         return None, []
     gaps = "\n".join([f"- {r['name']}: the paper reports {r['reported']:g}, your run produced {r['reproduced']:g}"
                       for r in off] + [f"- {issue}" for issue in issues])
+    checks = [check for check, _ in sample_checks(spec, sample or {}, results, list(totals))] if spec else []
+    if not off and checks and set(checks) <= REASK:
+        said = ("does not say how its sample differs from the paper's, and your sample counts match the paper's "
+                "within the count band" if "declaration blank" in checks else
+                "says its sample is not the paper's, but your sample counts match the paper's within the count band")
+        return f"The script ran, but its sample block {said}:\n" + gaps + "\n" + DECLARE, []
     problem = ("The script ran, but its sample does not match the paper's:\n" + gaps +
                f"\nYour script's output (end):\n{guards.redact(stdout[-STDOUT_TAIL:], sandbox_secrets())}\n"
                "Find the step where your sample construction departs from the paper's definition (which filings "
                "or observations count, forms, items, dates, deduplication) and fix that step. Never filter, trim "
                "or pad the data to reach a number. If the paper's data is not in your source, look for another "
                "public source; if none has it, say so in the sample block (same_as_paper false, the dates your "
-               "data really covers). Always report the sample sizes, even when they differ.")
+               "data really covers). Always report the sample sizes, even when they differ; for one public data cannot give, "
+               "say why in not_rebuilt.")
     return problem, [f"{r['reported']:g}" for r in off]
 
 
@@ -596,6 +664,9 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
     run.guard_events.extend(f"sample: {issue}" for issue in issues if issue != run.review_issue)
     if results and kept.exists() and (note := small_difference(sample_of(kept.read_text()))):
         run.guard_events.append(f"sample: {note}")
+    caveats = (sample_caveats(sample_of(kept.read_text()), results, watched_totals(claims, spec, latex)[0])
+               if spec and results and kept.exists() else [])
+    run.guard_events.extend(f"caveat: {caveat}" for caveat in caveats)
     outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None)
     headline = spec.headline if spec else None
     headline_text = first_line(outcome, reason, rows, headline)

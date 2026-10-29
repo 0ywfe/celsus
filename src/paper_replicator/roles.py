@@ -60,10 +60,15 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
                               risk-free rate) are not differences: make the standard choice and say so in notes.
                               Another vendor's data for the same observations is the same sample.>,
             "missing": <how many observations the paper used are not in yours (0 if none), or null if you
-                        cannot tell>,
+                        cannot count them>,
             "extra": <how many observations in yours the paper did not use (0 if none), or null if you cannot
-                      tell>,
-            "differences": "<which observations differ from the paper's, or empty>"},
+                      count them>,
+            "differences": "<which observations differ from the paper's, or empty>",
+            "cannot_count": "<if missing or extra is null: why you cannot count them; else empty>",
+            "not_rebuilt": {"<a sample-size claim you could not compute>": "<why public data cannot give it>"}
+                           (empty {} if none; the sample is then compared on its largest size, which you must report),
+            "substitutions": "<every other source, data vintage, proxy series or method you used for the paper's
+                              observations; empty if none. These are caveats, not sample differences>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""
 
 ENVIRONMENT = f"""Environment: a Linux sandbox with network access; the script's time limit is {{minutes}} minutes.
@@ -202,7 +207,7 @@ write the script. Report only clear breaches of these three rules, each with the
 2. The sample is built by the paper's definition. No observation is duplicated, invented, filled in, dropped or
    trimmed so that a count comes out at a number chosen in advance.
 3. The data used covers the paper's period, and what the script reports about its sample (dates, counts,
-   same_as_paper, differences) matches the data it actually used.
+   same_as_paper, missing, extra, differences, not_rebuilt, substitutions) matches the data it actually used.
 Ordinary analysis choices are not breaches: cleaning missing values, winsorising, a standard estimator, a window or
 parameter the paper's method states, or a documented departure the script reports in its sample block. When nothing
 clearly breaks a rule, return no findings."""

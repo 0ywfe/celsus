@@ -552,14 +552,36 @@ def test_a_sample_short_by_fewer_observations_than_the_count_band_is_judged_and_
     assert "1 missing and 0 extra observations" in outcome["report"].read_text()
 
 
-@pytest.mark.parametrize("missing, extra", [(20, 0), (6, 7), (None, None), ("a few", 0)])
-def test_a_sample_that_differs_by_more_than_the_band_or_by_an_unknown_amount_is_could_not_check(setup, missing, extra):
+@pytest.mark.parametrize("missing, extra, said", [(20, 0, "20 missing and 0 extra observations: one filer has no ticker"),
+                                                  (6, 7, "6 missing and 7 extra observations: one filer"),
+                                                  (None, None, "one filer has no ticker"),
+                                                  ("a few", 0, "one filer has no ticker")])
+def test_a_sample_that_differs_by_more_than_the_band_or_by_an_unknown_amount_is_could_not_check(setup, missing, extra,
+                                                                                             said):
     cfg, tmp_path = setup
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(declared(missing, extra))})])
     outcome = go(api, sandbox, cfg, tmp_path, attempts=1)
     assert outcome["verdict"] == "could not check"
-    assert "could not rebuild the paper's sample (one filer has no ticker" in outcome["summary"]["first_line"]
+    assert f"could not rebuild the paper's sample ({said}" in outcome["summary"]["first_line"]
+
+
+def test_a_blank_declaration_is_asked_for_again_and_a_completed_one_is_judged_with_its_caveats(setup):
+    # held-out 6706f3: the sample declared not the paper's, missing and extra blank, counts inside the band
+    cfg, tmp_path = setup
+    blank = {**RESULTS, "sample": {"description": "x", "n": 38, "same_as_paper": False, "missing": None, "extra": None}}
+    fixed = {**RESULTS, "sample": {"description": "x", "n": 38, "same_as_paper": True, "missing": 0, "extra": 0,
+                                   "substitutions": "EDGAR full-text search for the filing list"}}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (json.dumps(CLEAN), usage(1600, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(blank)}),
+                           SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(fixed)})])
+    outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
+    asked = str([m.get("content") for m in api.requests[-1]["body"]["messages"] if m.get("role") == "user"][-1])
+    assert "does not say how its sample differs" in asked and "substitutions" in asked
+    assert outcome["verdict"] != "could not check"
+    assert "caveat: the replication used other sources or methods for the paper's observations: EDGAR full-text " \
+           "search" in outcome["report"].read_text()
 
 
 def test_a_sample_total_left_out_of_the_results_is_could_not_check(setup):
