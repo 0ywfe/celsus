@@ -219,8 +219,10 @@ write the script. Report only clear breaches of these three rules, each with the
    If the paper's largest sample size is declared not rebuilt, read the code: if the code builds that sample, the
    declaration is false. Report it as a finding.
 Ordinary analysis choices are not breaches: cleaning missing values, winsorising, a standard estimator, a window or
-parameter the paper's method states, or a documented departure the script reports in its sample block. When nothing
-clearly breaks a rule, return no findings."""
+parameter the paper's method states, or a documented departure the script reports in its sample block. A setting the
+spec marks kind parameter, set in the code to the paper's value, is not a breach: replicating a paper means using its
+settings. It is a breach if the code doesn't actually use that setting (it reports 10,000 trials but runs 500). When
+nothing clearly breaks a rule, return no findings."""
 
 
 class Finding(BaseModel):

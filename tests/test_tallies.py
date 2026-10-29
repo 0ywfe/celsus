@@ -178,3 +178,13 @@ def test_the_builder_is_told_a_sample_statistic_has_an_se():
     from a sample is judged by its interval only when the builder gives one."""
     assert "A mean, coefficient or any statistic computed from a sample has" in roles.RESULTS_FORMAT
     assert "sampling error: give its se" in roles.RESULTS_FORMAT
+
+
+def test_the_reviewer_is_told_a_paper_s_setting_is_not_a_breach_unless_the_code_ignores_it():
+    """(l), the orchestrator's ruling: held-out 850904 was "could not check" over three findings on design settings
+    written at the paper's values (10,000 surrogate trials, 1,000 null networks, C(14,7) = 3,432 permutations),
+    claims of kind parameter, which are never judged."""
+    text = " ".join(roles.REVIEWER.split())
+    assert ("A setting the spec marks kind parameter, set in the code to the paper's value, is not a breach: replicating "
+            "a paper means using its settings. It is a breach if the code doesn't actually use that setting (it reports "
+            "10,000 trials but runs 500).") in text
