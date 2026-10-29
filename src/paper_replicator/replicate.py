@@ -317,18 +317,37 @@ def _largest(totals: list[Claim]) -> list[Claim]:
     return [c for c, v in counted if v is not None and v == top]
 
 
+def _anchored(results: list[dict], totals: list[Claim], fixed: dict[str, str] | None = None) -> bool:
+    """The paper's largest sample total reported, counted from the data and matching: the sample is compared on it."""
+    tied = _largest(totals)
+    return any(row["consistent"] for row in compare(tied, results, fixed=fixed, totals={c.name for c in tied}))
+
+
 def excused_totals(sample: dict, results: list[dict], totals: list[Claim],
                    fixed: dict[str, str] | None = None) -> dict[str, str]:
     """Sample totals left out with a stated reason, while the run rebuilt the paper's largest sample total and it
     matches: the sample is compared on that one. 2602.07046's runs were blocked by the paper's tallies of a screening
     pool no result is computed on, which the builder said needs data the paper doesn't publish, while its 14,361
     observations matched. The largest total is never excused: a run can't leave out the sample its results are
-    computed on and anchor on a smaller count, nor anchor on one it writes as a fixed number (`fixed`)."""
-    tied = _largest(totals)
-    if not any(row["consistent"] for row in compare(tied, results, fixed=fixed, totals={c.name for c in tied})):
+    computed on and anchor on a smaller count, nor anchor on one it writes as a fixed number (`fixed`). Tied copies
+    of the largest are one sample size: one reported and matching anchors, and another left out is excused."""
+    if not _anchored(results, totals, fixed):
         return {}
     reported, reasons = {r.get("name") for r in results}, _not_rebuilt(sample)
     return {c.name: reasons[c.name] for c in totals if c.name not in reported and c.name in reasons}
+
+
+def unreported_totals(sample: dict, results: list[dict], totals: list[Claim],
+                      fixed: dict[str, str] | None = None) -> list[str]:
+    """Sample totals left out of the results with no declaration, while the paper's largest total matches: treated
+    as declared not rebuilt, a caveat with no cap, excusing nothing else. 2602.07046's re-run e7f650 left out the
+    paper's 135-firm screening pool undeclared while its 14,361 observations matched; the audit sent it back with no
+    round left and the paper could not be checked. Declared, (c) already excused that total, so leaving it out
+    now pays the same as declaring it, and no more."""
+    if not _anchored(results, totals, fixed):
+        return []
+    reported, reasons = {r.get("name") for r in results}, _not_rebuilt(sample)
+    return [c.name for c in totals if c.name not in reported and c.name not in reasons]
 
 
 def declared_sample(sample: dict, results: list[dict], totals: list[Claim],
@@ -401,7 +420,8 @@ def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: li
             issues.append(("declaration over matching counts" if matched else "declared not the paper's sample",
                            f"the replication could not rebuild the paper's sample ({why})"))
     reported = {r.get("name") for r in results}
-    excused = excused_totals(sample, results, totals, fixed)
+    excused = {**excused_totals(sample, results, totals, fixed),
+               **dict.fromkeys(unreported_totals(sample, results, totals, fixed), "")}
     declared = declared_sample(sample, results, totals, fixed)
     missing = [c.name for c in totals if c.name not in reported and c.name not in excused
                and not (declared and c is declared[0])]
@@ -416,9 +436,11 @@ def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: li
 def sample_caveats(sample: dict, results: list[dict], totals: list[Claim], claims: list[Claim] = (),
                    fixed: dict[str, str] | None = None) -> list[str]:
     """What the report says about a sample it still compares: other sources, vintages or methods the builder
-    used for the paper's observations, sample totals public data cannot give, and not_rebuilt entries that
-    excused nothing."""
+    used for the paper's observations, sample totals public data cannot give, smaller totals left out undeclared
+    while the largest matches ((m)), and not_rebuilt entries that excused nothing."""
     caveats = [f"{name} was not rebuilt: {why}" for name, why in excused_totals(sample, results, totals, fixed).items()]
+    caveats += [f"{name} was not reported; the sample is compared on the paper's largest sample total, which matches"
+                for name in unreported_totals(sample, results, totals, fixed)]
     if note := unrebuilt_note(declared_sample(sample, results, totals, fixed)):
         caveats.append(f"sample size not rebuilt: {note}; the results are judged without it, so the paper gets at "
                        f"most \"partly holds up\"")
@@ -500,12 +522,15 @@ DECLARE = ("Fill in the sample block: if observations the paper used are missing
 
 
 def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: PaperSpec | None = None,
-                  sample: dict | None = None, totals: list[Claim] = ()) -> tuple[str | None, list[str]]:
+                  sample: dict | None = None, totals: list[Claim] = (),
+                  fixed: dict[str, str] | None = None) -> tuple[str | None, list[str]]:
     """Sample counts that disagree with the paper, or anything else that stops the sample being compared, as
-    feedback for the builder, plus the counts to watch."""
+    feedback for the builder, plus the counts to watch. `fixed` (guards.fixed_results of the script) is the
+    verdict's: a largest total written as a number anchors nothing here either, so a smaller total it would have
+    excused is asked for while a round is left, not found missing at the verdict."""
     off = [row for row in compare(claims, results, totals=judged_totals(claims, spec))
            if row["kind"] == "count" and row["consistent"] is False]
-    issues = sample_issues(spec, sample or {}, results, list(totals)) if spec else []
+    issues = sample_issues(spec, sample or {}, results, list(totals), fixed) if spec else []
     mismatched = declaration_mismatches(sample or {}, results, claims) if spec else []
     if broken := impossible(claims, results):
         values = {r.get("name"): r.get("value") for r in results}
@@ -516,7 +541,7 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: P
         return None, []
     gaps = "\n".join([f"- {r['name']}: the paper reports {r['reported']:g}, your run produced {r['reproduced']:g}"
                       for r in off] + [f"- {issue}" for issue in issues + mismatched])
-    checks = [check for check, _ in sample_checks(spec, sample or {}, results, list(totals))] if spec else []
+    checks = [check for check, _ in sample_checks(spec, sample or {}, results, list(totals), fixed)] if spec else []
     if not off and checks and set(checks) <= REASK:
         said = ("does not say how its sample differs from the paper's, and your sample counts match the paper's "
                 "within SCORE's +/-15%" if "declaration blank" in checks else
@@ -571,7 +596,8 @@ async def build_and_run(run: Run, builder: Agent, latex: str, spec: PaperSpec, c
         (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
         (run.folder / "results_attempt.txt").write_text(str(attempt))
         problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
-                                       sample_of(sandbox_run.files.get("results.json")), totals)
+                                       sample_of(sandbox_run.files.get("results.json")), totals,
+                                       guards.fixed_results(script.script, claims))
         if problem is None:
             if (review := await reviewed(run, spec, script.script, f"attempt {attempt}")) is None:
                 run.say("audit", f"attempt {attempt}: {len(results)} results, sample matches the paper")
@@ -653,7 +679,8 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
             (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
             (run.folder / "results_attempt.txt").write_text(str(round_))
             problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
-                                       sample_of(sandbox_run.files.get("results.json")), totals)
+                                           sample_of(sandbox_run.files.get("results.json")), totals,
+                                           guards.fixed_results(script, claims))
             if problem is None:
                 if (review := await reviewed(run, spec, script, f"round {round_}")) is None:
                     run.say("audit", f"round {round_}: {len(results)} results, sample matches the paper")

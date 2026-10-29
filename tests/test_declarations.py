@@ -85,17 +85,60 @@ def test_a_sample_total_public_data_cannot_give_is_a_caveat_when_the_largest_tot
 @pytest.mark.parametrize("results, sample", [
     # the largest total is the one left out, anchored on a smaller count (the reviewer's case)
     (RESULTS[:2], {"not_rebuilt": {"n_obs": "needs unpublished data"}}),
-    # the largest total was rebuilt but does not match
+    # the largest total was rebuilt but does not match, declared or not
     ([*RESULTS[:2], {"name": "n_obs", "value": 9000, "se": 0, "n": 9000}], {"not_rebuilt": {"n_pool": "unpublished"}}),
-    # a reason that isn't one
-    (RESULTS, {"not_rebuilt": {"n_pool": ""}}),
-    (RESULTS, {"not_rebuilt": {"n_pool": True}}),
-    (RESULTS, {"not_rebuilt": {"n_pool": {"why": "x"}}}),
-    (RESULTS, {"not_rebuilt": ["n_pool"]}),
-    (RESULTS, {}),
+    ([*RESULTS[:2], {"name": "n_obs", "value": 9000, "se": 0, "n": 9000}], {}),
 ])
-def test_a_sample_total_left_out_still_blocks_without_a_reason_or_a_matching_largest_total(results, sample):
+def test_a_sample_total_left_out_still_blocks_without_a_matching_largest_total(results, sample):
     assert "sample size reported" in checks(sample, results, totals=(EVENTS, POOL, OBS))
+
+
+# (m), the orchestrator's ruling (29 Oct): a smaller total neither reported nor declared, while the largest matches,
+# is treated as declared not rebuilt: a caveat, no cap, excusing nothing else. e7f650 (2602.07046) left out the
+# 135-firm screening pool undeclared with its 14,361 observations matching, and could not be checked.
+
+NOT_REPORTED = ("n_pool was not reported; the sample is compared on the paper's largest sample total, which matches")
+
+
+@pytest.mark.parametrize("sample", [{"not_rebuilt": {"n_pool": ""}}, {"not_rebuilt": {"n_pool": True}},
+                                    {"not_rebuilt": {"n_pool": {"why": "x"}}}, {"not_rebuilt": ["n_pool"]}, {}])
+def test_a_smaller_total_left_out_undeclared_while_the_largest_matches_is_a_caveat(sample):
+    """A reason that isn't one counts as no declaration: the total is not reported, which (m) treats the same."""
+    assert checks(sample, RESULTS, totals=(EVENTS, POOL, OBS)) == []
+    assert replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS, POOL, OBS]) == (None, [])
+    assert NOT_REPORTED in replicate.sample_caveats(sample, RESULTS, [EVENTS, POOL, OBS])
+    assert replicate.declared_sample(sample, RESULTS, [EVENTS, POOL, OBS]) is None   # no cap
+
+
+def test_a_smaller_total_left_out_while_the_largest_is_off_still_blocks():
+    off = [*RESULTS[:2], {"name": "n_obs", "value": 9000, "se": 0, "n": 9000}]
+
+    assert replicate.unreported_totals({}, off, [EVENTS, POOL, OBS]) == []
+    assert replicate.sample_issues(SPEC, {}, off, [EVENTS, POOL, OBS]) == [
+        "the replication did not report the paper's sample size (n_pool), so its sample cannot be compared"]
+
+
+@pytest.mark.parametrize("how", ["declared", "fixed"])
+def test_a_smaller_total_left_out_while_the_largest_is_declared_or_a_fixed_number_still_blocks(how):
+    """Nothing matches, so nothing anchors the sample: (m) does not apply."""
+    if how == "declared":
+        sample, results, fixed = DECLARED, WITHOUT_OBS, None
+    else:
+        sample, results = SAME, [*RESULTS[:2], {"name": "n_obs", "value": 14361, "se": 0, "n": 14361}]
+        fixed = {"n_obs": "14361 at line 3"}
+
+    assert replicate.unreported_totals(sample, results, [EVENTS, POOL, OBS], fixed) == []
+    assert replicate.sample_issues(SPEC, sample, results, [EVENTS, POOL, OBS], fixed) == [
+        "the replication did not report the paper's sample size (n_pool), so its sample cannot be compared"]
+
+
+def test_a_smaller_total_reported_and_off_is_still_a_count_gap():
+    off = [*RESULTS, {"name": "n_pool", "value": 245, "se": 0, "n": 245}]
+
+    problem, watch = replicate.audit_problem(SPEC.claims, off, "", SPEC, {}, [EVENTS, POOL, OBS])
+
+    assert replicate.unreported_totals({}, off, [EVENTS, POOL, OBS]) == []
+    assert "n_pool: the paper reports 135, your run produced 245" in problem and watch == ["135"]
 
 
 def test_other_sources_and_methods_for_the_same_observations_are_caveats_not_differences():
@@ -119,7 +162,7 @@ def test_a_declaration_asked_for_again_alongside_a_count_gap_gets_the_sample_fee
 
 
 def test_a_sample_block_without_the_new_fields_has_no_caveats():
-    assert replicate.sample_caveats({}, RESULTS, [EVENTS, POOL, OBS]) == []
+    assert replicate.sample_caveats({}, RESULTS, [EVENTS, OBS]) == []
 
 
 def test_a_stated_reason_over_matching_counts_is_asked_about_as_a_contradiction_not_a_blank():
@@ -133,7 +176,7 @@ def test_a_stated_reason_over_matching_counts_is_asked_about_as_a_contradiction_
 @pytest.mark.parametrize("totals", [(EVENTS, POOL, OBS), (EVENTS,)])
 def test_a_declaration_asked_for_again_alongside_another_issue_gets_the_sample_feedback(totals):
     sample = {"same_as_paper": False, "missing": None, "extra": None}
-    results = [r for r in RESULTS if r["name"] != "n_events"] if len(totals) == 1 else RESULTS
+    results = [r for r in RESULTS if r["name"] != "n_events"] if len(totals) == 1 else RESULTS[:2]   # largest out
 
     problem, _ = replicate.audit_problem(SPEC.claims, results, "", SPEC, sample, list(totals))
 
@@ -181,11 +224,15 @@ def test_a_not_rebuilt_name_that_is_no_claim_is_asked_about_again():
     sample = {"same_as_paper": True, "missing": 0, "extra": 0,
               "not_rebuilt": {"n_pool_detail": "the paper's candidate list is not published"}}
 
-    problem, watch = replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS, POOL, OBS])
+    off = [*RESULTS[:2], {"name": "n_obs", "value": 9000, "se": 0, "n": 9000}]
 
-    assert "not_rebuilt names n_pool_detail, which is no claim's name" in problem and watch == []
-    assert replicate.sample_issues(SPEC, sample, RESULTS, [EVENTS, POOL, OBS]) == [
-        "the replication did not report the paper's sample size (n_pool), so its sample cannot be compared"]
+    problem, _ = replicate.audit_problem(SPEC.claims, off, "", SPEC, sample, [EVENTS, POOL, OBS])
+
+    assert "not_rebuilt names n_pool_detail, which is no claim's name" in problem
+    assert "the replication did not report the paper's sample size (n_pool)" in problem
+    # with the largest matching, (m): the left-out total is a caveat, and so is the name that excused nothing
+    assert replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS, POOL, OBS]) == (None, [])
+    assert NOT_REPORTED in replicate.sample_caveats(sample, RESULTS, [EVENTS, POOL, OBS], SPEC.claims)
 
 
 def test_a_count_listed_as_not_rebuilt_and_reported_anyway_is_asked_about_and_still_compared():
@@ -492,3 +539,23 @@ def test_a_total_declared_and_written_as_a_number_gets_one_story():
 
     assert any(c.startswith("sample size not rebuilt: the persona prompts are not published") for c in caveats)
     assert not any("reported anyway" in c for c in caveats)
+
+
+def test_the_audit_does_not_anchor_on_a_largest_total_written_as_a_number():
+    """Code review on (m): without the script's fixed numbers the audit anchored on a largest written as 14361 and
+    passed a left-out n_pool, which the verdict, reading them, then found missing with no round left."""
+    results, fixed = [*RESULTS[:2], {"name": "n_obs", "value": 14361, "se": 0, "n": 14361}], {"n_obs": "14361 at line 3"}
+
+    problem, _ = replicate.audit_problem(SPEC.claims, results, "", SPEC, SAME, [EVENTS, POOL, OBS], fixed)
+
+    assert "the replication did not report the paper's sample size (n_pool)" in problem
+    assert replicate.audit_problem(SPEC.claims, results, "", SPEC, SAME, [EVENTS, POOL, OBS]) == (None, [])   # before
+
+
+def test_a_tied_copy_of_the_largest_left_out_is_one_sample_size_reported():
+    """Code review on (m): two copies of the paper's 14,361, one reported and matching: the other is a caveat."""
+    twin = SPEC.claims[3].model_copy(update={"name": "n_obs_total"})
+
+    assert replicate.sample_issues(SPEC, {}, RESULTS, [EVENTS, OBS, twin]) == []
+    assert ("n_obs_total was not reported; the sample is compared on the paper's largest sample total, which matches"
+            in replicate.sample_caveats({}, RESULTS, [EVENTS, OBS, twin]))
