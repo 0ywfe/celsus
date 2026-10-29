@@ -7,9 +7,7 @@ import json
 from agents import Agent, ModelSettings
 from openai import AsyncOpenAI
 from openai.types.shared import Reasoning
-from typing import Literal
-
-from pydantic import BaseModel, Field, create_model
+from pydantic import BaseModel, Field
 
 from .config import ModelConfig
 from .llm import make_model
@@ -20,8 +18,10 @@ from .spec import PaperSpec
 # The extractor's is 4x the longest complete spec in the ledger (Wonder, 25,230 tokens, 28 Oct): Wonder writes
 # 16k-32k tokens of spec whatever the paper's length, and a 32,000 cap cut one off (held-out 2610.35702). The
 # per-run budget stop, not this cap, bounds the cost.
-MAX_TOKENS = {"extractor": 4 * 25_230, "builder": 32000, "saboteur": 32000, "reviewer": 32000}
-EFFORT = {"extractor": "medium", "builder": "medium", "saboteur": "high", "reviewer": "high"}
+# The chooser's is 4x its longest complete reply (Spark Open xhigh, 3,419 tokens, 29 Oct): it sometimes runs on
+# after the name, and 3 of 12 runs went to the extractor's 100,920-token cap ($0.43 each).
+MAX_TOKENS = {"extractor": 4 * 25_230, "chooser": 4 * 3_419, "builder": 32000, "saboteur": 32000, "reviewer": 32000}
+EFFORT = {"extractor": "medium", "chooser": "medium", "builder": "medium", "saboteur": "high", "reviewer": "high"}
 
 EXTRACTOR = """You read a research paper's LaTeX source and write its replication spec.
 - claims: every headline number the paper reports as a result: estimates, test statistics,
@@ -139,15 +139,16 @@ def extractor(cfg: ModelConfig, client: AsyncOpenAI, effort: str | None = None) 
 
 
 HEADLINE = """You are given a paper's hypothesis and the numbers its replication spec lists. Choose the one claim the
-paper's main conclusion rests on."""
+paper's main conclusion rests on. Answer with that claim's exact name and nothing else."""
 
 
-def headline_chooser(cfg: ModelConfig, client: AsyncOpenAI, names: list[str], effort: str | None = None) -> Agent:
-    """The headline as a choice among the claim names (an enum in the schema), for a spec whose headline names none:
-    Spark Open wrote it as prose in 5 of 6 runs at high and xhigh, and still did when asked again (28 Oct)."""
-    choice = create_model("Headline", headline=(Literal[tuple(names)], Field(description="the claim's exact name")))
-    return Agent(name="extractor", instructions=_instructions(HEADLINE, cfg, choice), model=make_model(cfg, client),
-                 output_type=choice, model_settings=_settings("extractor", cfg, effort, structured=True))
+def headline_chooser(cfg: ModelConfig, client: AsyncOpenAI, effort: str | None = None) -> Agent:
+    """The headline as one claim name, for a spec whose headline names none (Spark Open wrote it as prose in 5 of 6
+    runs at high and xhigh, and still did when asked again, 28 Oct). A plain answer that code checks against the
+    names: the same choice as an enum in a strict schema came back unreadable in 6 of 20 calls (29 Oct), plain
+    text in 0 of 20, with 19 of 20 answers a claim name."""
+    return Agent(name="extractor", instructions=HEADLINE, model=make_model(cfg, client),
+                 model_settings=_settings("chooser", cfg, effort))
 
 
 def builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, effort: str | None = None) -> Agent:

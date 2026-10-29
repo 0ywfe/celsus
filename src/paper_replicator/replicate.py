@@ -27,7 +27,7 @@ from . import config, guards, market, periods, report, roles
 from .paper_checks import check_paper
 from .compare import COULD_NOT_CHECK, NO_SIDE, Z95, compare, first_line, impossible, verdict
 from .ingest import load_paper
-from .ledger import Ledger, ProviderNotAllowed
+from .ledger import BudgetExceeded, Ledger, ProviderNotAllowed
 from .llm import make_client
 from .pricing import worst_case_usd
 from .runs import ROOT, RUNS_DIR, new_run
@@ -108,12 +108,23 @@ def spec_problems(spec: PaperSpec) -> list[str]:
 
 async def settle_headline(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, spec: PaperSpec,
                           effort: str | None) -> PaperSpec:
-    """A headline written as prose, settled by choosing among the claim names; the report keeps what was written."""
-    names = list(dict.fromkeys(c.name for c in spec.claims))
+    """A headline written as prose, settled by choosing among the claim names; the report keeps what was written.
+    An answer that names no claim, or no answer, leaves the spec as it was, for the retry and the report."""
+    names = {c.name for c in spec.claims}
     listing = "\n".join(f"- {c.name}: {c.description} ({c.value} {c.unit})".rstrip() for c in spec.claims)
-    chosen = (await Runner.run(roles.headline_chooser(cfg, client, names, effort),
-                               f"HYPOTHESIS: {spec.hypothesis}\nMAIN CONCLUSION AS WRITTEN: {spec.headline}\n\n"
-                               f"CLAIMS:\n{listing}", max_turns=1, hooks=run.ledger)).final_output.headline
+    try:
+        answer = (await Runner.run(roles.headline_chooser(cfg, client, effort),
+                                   f"HYPOTHESIS: {spec.hypothesis}\nMAIN CONCLUSION AS WRITTEN: {spec.headline}\n\n"
+                                   f"CLAIMS:\n{listing}", max_turns=1, hooks=run.ledger)).final_output
+    except (BudgetExceeded, ProviderNotAllowed):
+        raise
+    except Exception as error:   # the chooser is a convenience: the run goes on as if it had not been asked
+        run.say("extract", f"the headline chooser gave no answer ({type(error).__name__})")
+        return spec
+    chosen = str(answer).strip().strip("`'\" ")
+    if chosen not in names:
+        run.say("extract", f"the headline chooser's answer names no claim: {chosen[:80]}")
+        return spec
     run.say("extract", f"the headline named no claim; chosen from the claim names: {chosen}")
     run.guard_events.append(f"spec: the headline was written as prose ('{spec.headline[:120]}'); "
                             f"chosen from the claim names: {chosen}")

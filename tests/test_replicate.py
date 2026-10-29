@@ -364,17 +364,30 @@ def test_a_headline_written_as_prose_is_chosen_from_the_claim_names(setup):
     cfg, tmp_path = setup
     prose = {**SPEC, "headline": "Small firms fell 7.5%"}
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)),
-                                                     (json.dumps({"headline": "small_mean"}), usage(200, 20)),
+                                                     ("`small_mean`\n\n\n", usage(200, 20)),
                                                      (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
     choice = api.requests[1]["body"]
-    assert "Small firms fell 7.5%" in choice["messages"][-1]["content"]
-    schema = json.dumps(choice.get("response_format") or choice["messages"][0]["content"])
-    assert '"enum"' in schema and "invented" in schema and "small_mean" in schema
+    assert "Small firms fell 7.5%" in choice["messages"][-1]["content"] and "invented" in choice["messages"][-1]["content"]
+    assert "response_format" not in choice and choice["max_tokens"] == 4 * 3_419   # 3 of 12 ran to 100,920 tokens
+    assert len(api.requests) == 3                                                    # no second extraction
     assert outcome["summary"]["headline"]["name"] == "small_mean"
-    assert outcome["summary"]["first_line"].endswith("(consistent).") or "small_mean" in outcome["summary"]["first_line"]
     assert "chosen from the claim names: small_mean" in outcome["report"].read_text()
+
+
+def test_a_chooser_answer_that_names_no_claim_falls_back_to_asking_for_the_spec_again(setup):
+    # run-20261029T030101Z-a01d12: the chooser's reply was cut off at its cap and the whole run stopped
+    cfg, tmp_path = setup
+    prose = {**SPEC, "headline": "Small firms fell 7.5%"}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)),
+                                                     ("The main result is the small-firm decline", usage(200, 20)),
+                                                     (json.dumps(SPEC), usage(500, 900)),
+                                                     (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert "headline 'Small firms fell 7.5%' is not the name of a claim" in api.requests[2]["body"]["messages"][-1]["content"]
+    assert outcome["summary"]["headline"]["name"] == "small_mean" and outcome["verdict"] == "holds up"
 
 
 def test_a_spec_with_unresolved_references_is_asked_for_once_more(setup):
