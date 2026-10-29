@@ -1,4 +1,6 @@
-from paper_replicator.compare import compare, first_line, verdict
+import pytest
+
+from paper_replicator.compare import compare, count_match, first_line, verdict
 from paper_replicator.spec import Claim
 
 
@@ -11,14 +13,14 @@ def test_each_kind_is_judged_from_the_data():
               claim("p", "0.0019", "p_value"), claim("n", "54", "count"), claim("n_close", "54", "count"), claim("other", "2", "other"),
               claim("missing", "1.5", "estimate")]
     results = [{"name": "mean", "value": -6.0, "se": 1.0}, {"name": "t", "value": -2.5},
-               {"name": "p", "value": 0.01}, {"name": "n", "value": 30}, {"name": "n_close", "value": 40}, {"name": "other", "value": 2}]
+               {"name": "p", "value": 0.01}, {"name": "n", "value": 30}, {"name": "n_close", "value": 48}, {"name": "other", "value": 2}]
     rows = {r["name"]: r for r in compare(claims, results)}
     assert rows["mean"]["consistent"] is True        # -7.49 inside -6.0 +/- 1.96
     assert rows["mean"]["why"] == "paper inside -6 +/- 1.96"
     assert rows["t"]["consistent"] is True           # same sign, both beyond 1.96
     assert rows["p"]["consistent"] is True           # both below 0.05
-    assert rows["n"]["consistent"] is False          # 24 apart, band 1.96*sqrt(54) = 14.4
-    assert rows["n_close"]["consistent"] is True     # 14 apart, inside the band
+    assert rows["n"]["consistent"] is False          # 44% short, beyond SCORE's 15%
+    assert rows["n_close"]["consistent"] is True     # 11% short, within it
     assert rows["other"]["consistent"] is None
     assert rows["missing"]["why"] == "not computed"
 
@@ -43,6 +45,66 @@ def test_the_checker_never_blames_the_paper_for_its_own_failure():
     outcome, reason = verdict([], None, "the clean run could not complete (ConnectionError)")
     assert outcome == "could not check" and "ConnectionError" in reason
     assert verdict([row("a", "estimate", None)], ok) == ("could not check", "none of the paper's results could be compared")
+
+
+@pytest.mark.parametrize("reported, value, consistent, why", [
+    (416_500, 421_500, True, "approximate: +1.2%, within SCORE's +/-15%"),   # 2604.19107, both runs
+    (345_220, 348_693, True, "approximate: +1.0%, within SCORE's +/-15%"),   # 2605.20137, 11f24c
+    (23_757, 25_024, True, "approximate: +5.3%, within SCORE's +/-15%"),
+    (50, 50, True, "precise: the paper's count"),
+    (50, 43, True, "approximate: -14.0%, within SCORE's +/-15%"),
+    (50, 42, False, "-16.0%, beyond SCORE's +/-15%"),
+    (14_361, 17_225, False, "+19.9%, beyond SCORE's +/-15%"),                  # 40c85a
+    (0, 3, False, "3 against the paper's 0"),
+])
+def test_sample_sizes_match_within_scores_fifteen_percent(reported, value, consistent, why):
+    """SCORE (Miske et al. 2026, Nature): a reproduced outcome, sample size among them, is "approximate" within 15%."""
+    assert count_match(reported, value) == (consistent, why)
+
+
+def test_scores_rule_is_for_sample_totals_and_subgroup_counts_keep_the_old_band():
+    """The orchestrator's rule T (29 Oct, amended): SCORE's 15% alone for sample totals; a subgroup's count passes
+    within SCORE's 15% or the old band, labelled as unsourced. The breach paper's larger-cap firms, 29 in the
+    paper and 24 rebuilt, is a subgroup; 2606.29591's 21 cross-asset instruments, 25 rebuilt, is its sample."""
+    claims = [claim("n_filings", "54", "count"), claim("n_larger_cap", "29", "count"),
+              claim("n_instruments", "21", "count")]
+    results = [{"name": "n_filings", "value": 54}, {"name": "n_larger_cap", "value": 24},
+               {"name": "n_instruments", "value": 25}]
+
+    rows = {r["name"]: r for r in compare(claims, results, totals={"n_filings", "n_instruments"})}
+
+    assert rows["n_filings"]["why"] == "precise: the paper's count"
+    assert rows["n_larger_cap"]["consistent"] is True and "no published standard" in rows["n_larger_cap"]["why"]
+    assert rows["n_instruments"]["consistent"] is False and "beyond SCORE's" in rows["n_instruments"]["why"]
+
+
+def test_a_subgroup_count_within_scores_fifteen_percent_never_blocks_and_the_why_names_the_rule():
+    """11f24c: the paper's 345,220 expanding-window observations, a count but not the sample total, rebuilt as
+    348,693 (+1.0%), failed the old band (+/-1,151)."""
+    claims = [claim("aggdiff_obs", "419715", "count"), claim("expanding_obs", "345220", "count"),
+              claim("n_firms", "40", "count")]
+    results = [{"name": "aggdiff_obs", "value": 419_715}, {"name": "expanding_obs", "value": 348_693},
+               {"name": "n_firms", "value": 54}]
+
+    rows = {r["name"]: r for r in compare(claims, results, totals={"aggdiff_obs"})}
+
+    assert rows["expanding_obs"] == {**rows["expanding_obs"], "consistent": True,
+                                     "why": "approximate: +1.0%, within SCORE's +/-15%"}
+    assert rows["n_firms"]["consistent"] is False
+    assert rows["n_firms"]["why"] == ("+35.0%, beyond SCORE's +/-15%, and outside 1.96 sqrt(n) (+/-12.4), a band no "
+                                      "published standard uses")
+
+
+def test_without_totals_only_the_largest_count_is_a_sample_total():
+    """The reviewer's case: a caller that names no totals must not judge every subgroup by SCORE's 15%, which is
+    stricter than the old band below about 171 observations (100 against 84 is 16% off but inside 19.6)."""
+    claims = [claim("n_obs", "1000", "count"), claim("n_small", "100", "count")]
+    results = [{"name": "n_obs", "value": 880}, {"name": "n_small", "value": 84}]
+
+    rows = {r["name"]: r for r in compare(claims, results)}
+
+    assert rows["n_obs"]["consistent"] is True and "SCORE" in rows["n_obs"]["why"]
+    assert rows["n_small"]["consistent"] is True and "no published standard" in rows["n_small"]["why"]
 
 
 def test_the_first_line_says_in_plain_words_whether_the_numbers_hold():

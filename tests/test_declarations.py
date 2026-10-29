@@ -5,7 +5,7 @@ that says neither is asked for again (held-out set 2, 29 Oct: 6706f3, 4572d2, 05
 import pytest
 
 from paper_replicator import replicate
-from paper_replicator.spec import PaperSpec
+from paper_replicator.spec import PaperSpec, Partition
 
 SPEC = PaperSpec.model_validate({
     "title": "t", "hypothesis": "h", "data_sources": [], "sample": "", "method": [], "headline": "beta",
@@ -29,14 +29,14 @@ def checks(sample: dict, results=RESULTS, totals=(EVENTS,)) -> list[str]:
 
 
 def test_a_sample_declared_different_with_no_amount_and_no_reason_is_asked_for_again():
-    """6706f3: same_as_paper false, missing and extra blank, counts inside the band."""
+    """6706f3: same_as_paper false, missing and extra blank, counts the audit accepts."""
     sample = {"same_as_paper": False, "missing": None, "extra": None, "differences": ""}
 
     problem, watch = replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS])
 
     assert checks(sample) == ["declaration blank"]
     assert "does not say how its sample differs" in problem and "cannot_count" in problem and watch == []
-    assert "match the paper's within the count band" in problem
+    assert "match the paper's within SCORE's +/-15%" in problem
 
 
 def test_a_declaration_over_counts_that_match_is_asked_for_again_and_blocks_only_if_it_stands():
@@ -127,7 +127,7 @@ def test_a_stated_reason_over_matching_counts_is_asked_about_as_a_contradiction_
 
     problem, _ = replicate.audit_problem(SPEC.claims, RESULTS, "", SPEC, sample, [EVENTS])
 
-    assert "counts match the paper's within the count band" in problem and "does not say" not in problem
+    assert "counts match the paper's within SCORE's +/-15%" in problem and "does not say" not in problem
 
 
 @pytest.mark.parametrize("totals", [(EVENTS, POOL, OBS), (EVENTS,)])
@@ -138,3 +138,36 @@ def test_a_declaration_asked_for_again_alongside_another_issue_gets_the_sample_f
     problem, _ = replicate.audit_problem(SPEC.claims, results, "", SPEC, sample, list(totals))
 
     assert "its sample does not match the paper's" in problem and "not_rebuilt" in problem
+
+
+def test_the_audit_judges_counts_by_the_same_totals_as_the_report():
+    """The reviewer's case: the audit took its totals from the watched list, which leaves out a count the paper
+    chooses by rank, so the paper's largest count was a subgroup to the audit (the sqrt band) and a total in the
+    report (SCORE's 15%): the builder was sent back over a count the report calls consistent."""
+    spec = SPEC.model_copy(update={"partitions": [Partition(split="s", total="n_events", parts=[])]})
+    results = [*RESULTS[:2], {"name": "n_obs", "value": 12_500, "se": 0, "n": 12_500}]   # -13%: outside sqrt's 235
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0}
+
+    problem, watch = replicate.audit_problem(spec.claims, results, "", spec, sample, [EVENTS])
+
+    assert replicate.judged_totals(spec.claims, spec) == {"n_events", "n_obs"}
+    assert problem is None and watch == []
+
+
+@pytest.mark.parametrize("sample, small", [
+    ({"missing": 1, "extra": 0, "n": 53}, True),        # the breach paper's 53 of 54 filings
+    ({"missing": 15, "extra": 0, "n": 85}, True),       # 15% of 100: the boundary is in
+    ({"missing": 10, "extra": 10, "n": 100}, False),    # the net count matches, but 20% of the observations differ
+    ({"missing": 0, "extra": 5, "n": 5}, False),        # the paper's n would be 0
+    ({"missing": None, "extra": 0, "n": 53}, False),    # an amount the builder cannot give is not small
+    ({"missing": 1.5, "extra": 0, "n": 53}, False),
+])
+def test_a_small_declared_difference_is_judged_and_a_large_one_is_not(sample, small):
+    assert (replicate.small_difference(sample) is not None) is small
+
+
+def test_a_small_declared_difference_says_how_it_was_measured():
+    assert replicate.small_difference({"missing": 1, "extra": 0, "n": 53}) == (
+        "the sample differs from the paper's by 1 missing and 0 extra observations (1.9% of the paper's 54, missing "
+        "and extra together), within 15%, SCORE's tolerance for sample size, so its results are judged")
+

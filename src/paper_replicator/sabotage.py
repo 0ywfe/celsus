@@ -33,7 +33,7 @@ from .compare import compare, verdict
 from .ledger import Ledger
 from .llm import make_client
 from .paper_checks import check_paper
-from .replicate import (MODEL_TIMEOUT_S, Run, audit_problem, clean_run, extract, read_results, review_problem,
+from .replicate import (MODEL_TIMEOUT_S, Run, audit_problem, clean_run, judged_totals, extract, read_results, review_problem,
                         sample_checks, sample_of, sandbox_secrets, script_check, sides_by_statistic, watched_totals)
 from .runs import ROOT, RUNS_DIR
 from .sandbox import run_script
@@ -252,7 +252,8 @@ def leak(sandbox_run) -> dict:
 def reached(h: Honest, results: list[dict], base: dict) -> dict:
     """A verdict with the plant in place: survived if any judged number differs from the honest re-run's."""
     rows = compare(h.claims, results, sides=sides_by_statistic(h.spec, check_paper(h.spec, h.claims)),
-                   fixed=guards.fixed_results(h.script, h.claims), constructed=guards.constructed_results(h.script, h.claims))
+                   fixed=guards.fixed_results(h.script, h.claims), constructed=guards.constructed_results(h.script, h.claims),
+                   totals=judged_totals(h.claims, h.spec))
     honest = {r.get("name"): r.get("value") for r in base["results"]}
     moved = [r["name"] for r in rows if r["reproduced"] is not None and r["reproduced"] != honest.get(r["name"])]
     if not moved:

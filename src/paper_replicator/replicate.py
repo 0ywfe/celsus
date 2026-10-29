@@ -11,7 +11,6 @@ import argparse
 import asyncio
 import datetime
 import json
-import math
 import os
 import sys
 import time
@@ -25,7 +24,7 @@ from openai import AsyncOpenAI
 
 from . import config, guards, market, periods, report, roles
 from .paper_checks import check_paper
-from .compare import COULD_NOT_CHECK, NO_SIDE, Z95, compare, first_line, impossible, verdict
+from .compare import COULD_NOT_CHECK, COUNT_TOLERANCE, NO_SIDE, compare, first_line, impossible, verdict
 from .ingest import load_paper
 from .ledger import BudgetExceeded, Ledger, ProviderNotAllowed
 from .llm import make_client
@@ -282,6 +281,13 @@ def watched_totals(claims: list[Claim], spec: PaperSpec, latex: str) -> tuple[li
     return totals, values
 
 
+def judged_totals(claims: list[Claim], spec: PaperSpec | None) -> set[str]:
+    """The counts judged as sample totals, by SCORE's 15%: one set for the audit, the report and the sabotage check,
+    so a count is never a total in one and a subgroup in another. A count chosen by rank stays in it: that the audit
+    doesn't watch it in the script says nothing about how it is judged."""
+    return {c.name for c in guards.sample_totals(claims, {p.total for p in spec.partitions} if spec else set())}
+
+
 def sample_of(raw: str | None) -> dict:
     """The sample block of a results.json, or {}."""
     try:
@@ -313,7 +319,7 @@ def excused_totals(sample: dict, results: list[dict], totals: list[Claim]) -> di
     if not counted:
         return {}
     largest = max(counted, key=lambda c: guards.parse_number(c.value))
-    if not any(row["consistent"] for row in compare([largest], results)):
+    if not any(row["consistent"] for row in compare([largest], results, totals={largest.name})):
         return {}
     reported, reasons = {r.get("name") for r in results}, _not_rebuilt(sample)
     return {c.name: reasons[c.name] for c in totals if c.name not in reported and c.name in reasons
@@ -339,7 +345,8 @@ def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: li
             issues.append(("declaration blank", ("the replication says its sample is not the paper's but gives "
                                                  "neither how many observations differ nor why")))
         else:
-            rebuilt = compare([c for c in totals if c.name in {r.get("name") for r in results}], results)
+            rebuilt = compare([c for c in totals if c.name in {r.get("name") for r in results}], results,
+                              totals={c.name for c in totals})
             matched = bool(rebuilt) and all(row["consistent"] for row in rebuilt)
             issues.append(("declaration over matching counts" if matched else "declared not the paper's sample",
                            f"the replication could not rebuild the paper's sample ({why})"))
@@ -369,18 +376,21 @@ def _whole(value) -> int | None:
 
 
 def small_difference(sample: dict) -> str | None:
-    """A sample the builder calls not the paper's, short or over by fewer observations than the band the count
-    audit accepts (1.96 * sqrt(n) of the paper's n), is judged, with the difference in the report. The breach paper's
-    53 of 54 filings (one unlisted filer has no prices) was could not check, though the audit accepts 53. An amount
-    the builder cannot give is not small."""
+    """A sample the builder calls not the paper's, with no more than 15% of the paper's n missing and extra together,
+    is judged, with the difference in the report. The 15% is SCORE's for sample size; counting missing and extra
+    observations both is this checker's reading of it, stricter than the net count the audit compares. The
+    breach paper's 53 of 54 filings (one unlisted filer has no prices) was could not check, though the audit
+    accepts 53. An amount the builder cannot give is not small."""
     missing, extra, n = _whole(sample.get("missing")), _whole(sample.get("extra")), _whole(sample.get("n"))
     if None in (missing, extra, n) or n + missing - extra <= 0:
         return None
-    band = Z95 * math.sqrt(n + missing - extra)
-    if missing + extra > band:
+    paper = n + missing - extra
+    share = (missing + extra) / paper
+    if share > COUNT_TOLERANCE:
         return None
-    return (f"the sample differs from the paper's by {missing} missing and {extra} extra observations, within the "
-            f"count band (+/-{band:.1f}), so its results are judged")
+    return (f"the sample differs from the paper's by {missing} missing and {extra} extra observations ({share:.1%} of "
+            f"the paper's {paper}, missing and extra together), within 15%, SCORE's tolerance for sample size, so its "
+            f"results are judged")
 
 
 def sample_issues(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[str]:
@@ -426,7 +436,8 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: P
                   sample: dict | None = None, totals: list[Claim] = ()) -> tuple[str | None, list[str]]:
     """Sample counts that disagree with the paper, or anything else that stops the sample being compared, as
     feedback for the builder, plus the counts to watch."""
-    off = [row for row in compare(claims, results) if row["kind"] == "count" and row["consistent"] is False]
+    off = [row for row in compare(claims, results, totals=judged_totals(claims, spec))
+           if row["kind"] == "count" and row["consistent"] is False]
     issues = sample_issues(spec, sample or {}, results, list(totals)) if spec else []
     if broken := impossible(claims, results):
         values = {r.get("name"): r.get("value") for r in results}
@@ -440,8 +451,8 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: P
     checks = [check for check, _ in sample_checks(spec, sample or {}, results, list(totals))] if spec else []
     if not off and checks and set(checks) <= REASK:
         said = ("does not say how its sample differs from the paper's, and your sample counts match the paper's "
-                "within the count band" if "declaration blank" in checks else
-                "says its sample is not the paper's, but your sample counts match the paper's within the count band")
+                "within SCORE's +/-15%" if "declaration blank" in checks else
+                "says its sample is not the paper's, but your sample counts match the paper's within SCORE's +/-15%")
         return f"The script ran, but its sample block {said}:\n" + gaps + "\n" + DECLARE, []
     problem = ("The script ran, but its sample does not match the paper's:\n" + gaps +
                f"\nYour script's output (end):\n{guards.redact(stdout[-STDOUT_TAIL:], sandbox_secrets())}\n"
@@ -646,7 +657,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
                                           claims, attempts)
         rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper),
                        fixed=guards.fixed_results(run.kept_script, claims),
-                       constructed=guards.constructed_results(run.kept_script, claims))
+                       constructed=guards.constructed_results(run.kept_script, claims),
+                       totals=judged_totals(claims, spec))
     except (Unreadable, ProviderNotAllowed) as error:
         run.failure = str(error)
         run.say("error", str(error))

@@ -21,7 +21,7 @@ Built during the Meta AI Developer Hackathon (Oct–Nov 2026). It runs on any Op
 
 ### When a number "matches"
 
-The tolerances come from the data and from published replication practice, not from a chosen percentage:
+The tolerances come from published replication practice, not from a chosen percentage. The one that doesn't, an allowance for small subgroup counts, says so in every report row it passes:
 
 | kind | consistent when | source |
 |---|---|---|
@@ -29,7 +29,8 @@ The tolerances come from the data and from published replication practice, not f
 | number with no sampling error (a return over a fixed period, a ratio) | it rounds to the value as printed, or else lies within 10% of it | exact reproduction: Baek & Pradel, arXiv 2602.10046; 10% threshold: Hans & Bilionis, arXiv 2607.02134 |
 | test statistic | the same conclusion at 5% on the side the paper tested: significant results stay significant in the same direction, null results stay null whatever their sign | Open Science Collaboration (2015) |
 | p-value | same side of 0.05 | |
-| count | within 1.96 √n | Poisson |
+| sample total (the largest count, and the totals of the paper's partitions) | within ±15% of the paper's | SCORE's tolerance for sample size: Miske et al. (2026), Nature 652:126–134 |
+| any other count (a subgroup) | within ±15% of the paper's, or else within 1.96 √n | SCORE, as above; the √n band, an allowance for small subgroups (the wider of the two below about 171), has no published source |
 
 ### Honest verdicts
 

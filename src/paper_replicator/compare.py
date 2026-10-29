@@ -6,7 +6,13 @@ Tolerances come from the data, not from a chosen percentage:
   reproduction rounds to the value as printed (exact reproduction, Baek and Pradel, arXiv 2602.10046), or else
   lies within 10% of it (the coefficient threshold of Hans and Bilionis, arXiv 2607.02134; on 2604.27287, Yahoo
   data in place of the paper's CRSP put 45 of 48 such numbers within 3.4%, most within 1%).
-- count: consistent if the difference is within 1.96 sqrt(reported) (Poisson).
+- count, a sample total (the paper's largest count and the totals it splits into subgroups): consistent if it is the
+  paper's, or within 15% of the paper's count either way, SCORE's "precise" and "approximate" reproduction of a sample size (Miske et al. 2026,
+  Nature 652:126-134). The 1.96 sqrt(n) band used before held panels to a fraction of a percent: 2604.19107's 421,500
+  firm-days against 416,500 (+1.2%) failed it in both of its runs. The 15% is SCORE's, not fit to this checker's runs.
+- count, any other (a subgroup's size): within SCORE's 15% as well, or else within 1.96 sqrt(n), a band no published
+  standard uses, kept as an allowance for small subgroups (it is the wider of the two below about 171); a row it
+  passes says so. A secondary count within the published tolerance never blocks a paper.
 - test_statistic: consistent if the conclusion is the same at 5% on the side the paper tested (1.96 two-sided,
   1.645 one-sided in the paper's tail; the side comes from recomputing the paper's own p-value). A significant
   result must stay significant in the same direction (the criterion of OSC 2015, Science 349 aac4716, which is
@@ -22,7 +28,7 @@ from __future__ import annotations
 
 import math
 
-from .guards import bound, half_unit, numbers_in, parse_number
+from .guards import bound, half_unit, numbers_in, parse_number, sample_totals
 from .spec import Claim
 
 from scipy import stats
@@ -74,8 +80,41 @@ def impossible(claims: list[Claim], results: list[dict]) -> list[tuple[str, str]
             if r.get("name") in kinds and r.get("value") is not None and (why := cannot_be(kinds[r["name"]], r["value"]))]
 
 
+# SCORE (Miske et al. 2026, Nature 652:126-134, doi:10.1038/s41586-026-10203-5, pp. 7-8): an outcome is reproduced
+# "approximately" when within +/-15% of what was originally reported.
+COUNT_TOLERANCE = 0.15
+
+
+def subgroup_match(reported: float, value: float) -> tuple[bool, str]:
+    """A count that is not a sample total: consistent within SCORE's 15%, or else within 1.96 sqrt(n), an unsourced
+    allowance that is the wider of the two only for counts under about 171. The why names the rule that passed."""
+    score, why = count_match(reported, value)
+    if score:
+        return score, why
+    band = Z95 * math.sqrt(abs(reported))
+    inside = abs(value - reported) <= band
+    if inside:
+        return True, (f"{why}, but the difference {value - reported:+.0f} is within 1.96 sqrt(n) (+/-{band:.1f}), "
+                      f"a band no published standard uses")
+    return False, f"{why}, and outside 1.96 sqrt(n) (+/-{band:.1f}), a band no published standard uses"
+
+
+def count_match(reported: float, value: float) -> tuple[bool, str]:
+    """A sample size against the paper's, with SCORE's tier: precise (the same), approximate (within 15%), or not."""
+    if value == reported:
+        return True, "precise: the paper's count"
+    if reported == 0:
+        return False, f"{value:g} against the paper's 0"
+    gap = (value - reported) / abs(reported)
+    if abs(gap) <= COUNT_TOLERANCE:
+        return True, f"approximate: {gap:+.1%}, within SCORE's +/-15%"
+    return False, f"{gap:+.1%}, beyond SCORE's +/-15%"
+
+
 def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
-          printed: str = "") -> tuple[bool | None, str]:
+          printed: str = "", total: bool = True) -> tuple[bool | None, str]:
+    """(consistent, why) for one number. A count is judged by SCORE's 15% alone when it is a sample total
+    (`total`), else by SCORE's 15% or the unsourced band."""
     value, se = result.get("value"), result.get("se")
     if value is None:
         return None, "no value"
@@ -92,8 +131,7 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
         inside = abs(value - reported) <= Z95 * se
         return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "count":
-        band = Z95 * math.sqrt(abs(reported))
-        return abs(value - reported) <= band, f"difference {value - reported:+.0f}, band +/-{band:.1f}"
+        return count_match(reported, value) if total else subgroup_match(reported, value)
     if kind == "test_statistic" and side == NO_SIDE:
         return None, "its p fits no t distribution; judged by its p-value"
     if kind == "test_statistic":
@@ -136,10 +174,15 @@ def fixed_number(reported: float, value: float, printed: str) -> tuple[bool, str
 
 
 def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | None = None,
-            fixed: dict[str, str] | None = None, constructed: dict[str, str] | None = None) -> list[dict]:
+            fixed: dict[str, str] | None = None, constructed: dict[str, str] | None = None,
+            totals: set[str] | None = None) -> list[dict]:
     """One row per claim. A claim is not judged when its value is not one number, when the script writes its
     result as a fixed number (`fixed`, from guards.fixed_results), or when it builds the result from the paper's
-    numbers instead of the data (`constructed`, from guards.constructed_results): none is a replication of it."""
+    numbers instead of the data (`constructed`, from guards.constructed_results): none is a replication of it.
+    `totals` names the sample totals, judged by SCORE's 15% alone; other counts by SCORE's 15% or the unsourced band. Without it, the
+    largest count is the only total (sample_totals with no partitions), never every count."""
+    if totals is None:
+        totals = {c.name for c in sample_totals(claims, set())}
     by_name = {r.get("name"): r for r in results}
     rows = []
     for claim in claims:
@@ -163,7 +206,7 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
                        why=f"the paper's value \"{claim.value}\" holds {held}, so it is not judged")
         elif result is not None:
             consistent, why = judge(claim.kind, reported, result, (sides or {}).get(claim.name, "two-sided"),
-                                    claim.value)
+                                    claim.value, totals is None or claim.name in totals)
             row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
                        consistent=consistent, why=why)
         rows.append(row)

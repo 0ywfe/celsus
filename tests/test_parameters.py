@@ -94,7 +94,7 @@ def test_a_parameter_never_sends_the_sample_back_or_becomes_a_count_to_watch(mon
     claims = [claim("generated_paths_per_asset", "10,000", kind="parameter"), claim("n_obs", "3,318")]
     ran = [{"name": "generated_paths_per_asset", "value": 300, "se": 0, "n": 300},
            {"name": "n_obs", "value": 3318, "se": 0, "n": 3318}]
-    off = [{**ran[0], "value": 300}, {"name": "n_obs", "value": 2900, "se": 0, "n": 2900}]
+    off = [{**ran[0], "value": 300}, {"name": "n_obs", "value": 2000, "se": 0, "n": 2000}]
     monkeypatch.setenv("SEC_USER_AGENT", "test contact@example.com")
 
     assert replicate.audit_problem(claims, ran, "") == (None, [])
