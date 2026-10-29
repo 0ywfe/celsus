@@ -306,7 +306,15 @@ def _not_rebuilt(sample: dict) -> dict[str, str]:
     stated = sample.get("not_rebuilt")
     if not isinstance(stated, dict):
         return {}
-    return {str(k): v.strip().rstrip(".") for k, v in stated.items() if isinstance(v, str) and v.strip()}
+    reasons = {str(k): v.strip().rstrip(".").strip() for k, v in stated.items() if isinstance(v, str)}
+    return {k: v for k, v in reasons.items() if v}   # "." is no reason
+
+
+def _largest(totals: list[Claim]) -> list[Claim]:
+    """The sample totals tied for the largest value: the same sample size, stated more than once."""
+    counted = [(c, guards.parse_number(c.value)) for c in totals]
+    top = max((v for _, v in counted if v is not None), default=None)
+    return [c for c, v in counted if v is not None and v == top]
 
 
 def excused_totals(sample: dict, results: list[dict], totals: list[Claim]) -> dict[str, str]:
@@ -315,33 +323,41 @@ def excused_totals(sample: dict, results: list[dict], totals: list[Claim]) -> di
     pool no result is computed on, which the builder said needs data the paper doesn't publish, while its 14,361
     observations matched. The largest total is never excused: a run can't leave out the sample its results are
     computed on and anchor on a smaller count."""
-    counted = [c for c in totals if guards.parse_number(c.value) is not None]
-    if not counted:
-        return {}
-    largest = max(counted, key=lambda c: guards.parse_number(c.value))
-    if not any(row["consistent"] for row in compare([largest], results, totals={largest.name})):
+    tied = _largest(totals)
+    if not any(row["consistent"] for row in compare(tied, results, totals={c.name for c in tied})):
         return {}
     reported, reasons = {r.get("name") for r in results}, _not_rebuilt(sample)
-    return {c.name: reasons[c.name] for c in totals if c.name not in reported and c.name in reasons
-            and c is not largest}
+    return {c.name: reasons[c.name] for c in totals if c.name not in reported and c.name in reasons}
 
 
-def declaration_mismatches(sample: dict, results: list[dict], claims: list[Claim],
-                           totals: list[Claim] = ()) -> list[str]:
-    """A not_rebuilt declaration that excuses nothing: a name that is no claim's, the largest sample total (never
-    excused), or a count declared not rebuilt whose value is reported anyway (a27323 keyed it
-    "n_candidate_pool_detail" and reported a proxy for n_candidate_pool_total). They ride along when the sample is
-    sent back for something else; alone they excuse nothing a re-ask could change, so they are caveats. They never
-    block: the counts are compared as before."""
+def declared_sample(sample: dict, results: list[dict], totals: list[Claim]) -> tuple[Claim, str] | None:
+    """The paper's largest sample total, declared not rebuilt with a reason and left out of the results, with the
+    reason. e589c6 declared the paper's 120 LLM forecast paths (public data cannot reproduce them); refused, it wrote
+    the paper's count as design arithmetic in the next round and the reviewer stopped it. A rule under which faking
+    the count pays better than declaring it teaches faking. Declared, the run's results are judged without it: it
+    matches nothing, so it excuses no smaller total, and the paper gets at most "partly holds up". A declaration
+    with no reason is none (the count is missing and asked for again). The largest is among the totals the audit
+    requires (watched_totals): a count the paper chooses by rank is part of its method, not its sample, so it is
+    neither required nor declared. Tied totals are one sample size: any of them reported, it is not declared."""
+    tied, reported, reasons = _largest(totals), {r.get("name") for r in results}, _not_rebuilt(sample)
+    declared = [c for c in tied if c.name in reasons]
+    return (declared[0], reasons[declared[0].name]) if declared and not reported & {c.name for c in tied} else None
+
+
+def unrebuilt_note(declared: tuple[Claim, str] | None) -> str | None:
+    """What the first line says about a declared sample, or None."""
+    return f"{declared[1]} ({declared[0].name}, {declared[0].value} in the paper)" if declared else None
+
+
+def declaration_mismatches(sample: dict, results: list[dict], claims: list[Claim]) -> list[str]:
+    """A not_rebuilt declaration that excuses nothing: a name that is no claim's, or a count declared not rebuilt
+    whose value is reported anyway (a27323 keyed it "n_candidate_pool_detail" and reported a proxy for
+    n_candidate_pool_total). They ride along when the sample is sent back for something else; alone they excuse
+    nothing a re-ask could change, so they are caveats. They never block: the counts are compared as before."""
     names, reported = {c.name for c in claims}, {r.get("name") for r in results}
-    counted = [c for c in totals if guards.parse_number(c.value) is not None]
-    largest = max(counted, key=lambda c: guards.parse_number(c.value)).name if counted else None
     stated = _not_rebuilt(sample)
     return ([f"not_rebuilt names {name}, which is no claim's name" for name in stated if name not in names] +
-            [f"{name} is the sample the results are computed on, so it cannot be declared not rebuilt: report it "
-             f"and take it out of not_rebuilt" for name in stated if name == largest] +
-            [f"{name} is in not_rebuilt but its value is reported" for name in stated
-             if name in reported and name != largest])
+            [f"{name} is in not_rebuilt but its value is reported" for name in stated if name in reported])
 
 
 def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: list[Claim]) -> list[tuple[str, str]]:
@@ -370,7 +386,9 @@ def sample_checks(spec: PaperSpec, sample: dict, results: list[dict], totals: li
                            f"the replication could not rebuild the paper's sample ({why})"))
     reported = {r.get("name") for r in results}
     excused = excused_totals(sample, results, totals)
-    missing = [c.name for c in totals if c.name not in reported and c.name not in excused]
+    declared = declared_sample(sample, results, totals)
+    missing = [c.name for c in totals if c.name not in reported and c.name not in excused
+               and not (declared and c is declared[0])]
     if missing:
         issues.append(("sample size reported", f"the replication did not report the paper's sample size "
                                                f"({', '.join(missing)}), so its sample cannot be compared"))
@@ -384,6 +402,9 @@ def sample_caveats(sample: dict, results: list[dict], totals: list[Claim], claim
     used for the paper's observations, sample totals public data cannot give, and not_rebuilt entries that
     excused nothing."""
     caveats = [f"{name} was not rebuilt: {why}" for name, why in excused_totals(sample, results, totals).items()]
+    if note := unrebuilt_note(declared_sample(sample, results, totals)):
+        caveats.append(f"sample size not rebuilt: {note}; the results are judged without it, so the paper gets at "
+                       f"most \"partly holds up\"")
     names, reported, stated = {c.name for c in claims}, {r.get("name") for r in results}, _not_rebuilt(sample)
     if claims:
         caveats += [f"the sample block's not_rebuilt: {name} is no claim's name, so it excused nothing"
@@ -466,7 +487,7 @@ def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: P
     off = [row for row in compare(claims, results, totals=judged_totals(claims, spec))
            if row["kind"] == "count" and row["consistent"] is False]
     issues = sample_issues(spec, sample or {}, results, list(totals)) if spec else []
-    mismatched = declaration_mismatches(sample or {}, results, claims, list(totals)) if spec else []
+    mismatched = declaration_mismatches(sample or {}, results, claims) if spec else []
     if broken := impossible(claims, results):
         values = {r.get("name"): r.get("value") for r in results}
         return ("The script ran, but some results are values no result of their kind can take:\n" +
@@ -707,18 +728,20 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         run.guard_events.append(f"run stopped: {crashed}")
         run.say("error", crashed)
     kept = folder / "results.json"
-    issues = (sample_issues(spec, sample_of(kept.read_text()), results, watched_totals(claims, spec, latex)[0])
-              if spec and results and kept.exists() else [])
+    checked = spec and results and kept.exists()
+    sample, totals = (sample_of(kept.read_text()), watched_totals(claims, spec, latex)[0]) if checked else ({}, [])
+    issues = sample_issues(spec, sample, results, totals) if checked else []
     issues += [run.review_issue] if run.review_issue and results else []
     run.guard_events.extend(f"sample: {issue}" for issue in issues if issue != run.review_issue)
     if results and kept.exists() and (note := small_difference(sample_of(kept.read_text()))):
         run.guard_events.append(f"sample: {note}")
-    caveats = (sample_caveats(sample_of(kept.read_text()), results, watched_totals(claims, spec, latex)[0], claims)
-               if spec and results and kept.exists() else [])
+    caveats = sample_caveats(sample, results, totals, claims) if checked else []
     run.guard_events.extend(f"caveat: {caveat}" for caveat in caveats)
     headline = spec.headline if spec else None
-    outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None, headline=headline)
-    headline_text = first_line(outcome, reason, rows, headline)
+    unrebuilt = unrebuilt_note(declared_sample(sample, results, totals)) if checked else None
+    outcome, reason = verdict(rows, results, run.failure, "; ".join(issues) or None, headline=headline,
+                              unrebuilt=unrebuilt)
+    headline_text = first_line(outcome, reason, rows, headline, unrebuilt=unrebuilt)
     path = report.write(folder, arxiv_id=arxiv_id, title=spec.title if spec else arxiv_id, verdict=outcome,
                         rows=rows, rejected=rejected, paper_checks=paper, headline_text=headline_text,
                         guard_events=run.guard_events, market_log=run.market_log, hosts=run.hosts, calls=ledger.rows,

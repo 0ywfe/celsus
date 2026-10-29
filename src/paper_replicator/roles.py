@@ -72,7 +72,9 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
             "not_rebuilt": {"<the exact name of a sample-size claim in the spec that you could not compute>":
                             "<why public data cannot give it>"}
                            (empty {} if none; leave each one out of results, and put any proxy you built for it under
-                           substitutions; the sample is then compared on its largest size, which you must report),
+                           substitutions; the sample is then compared on its largest size. If public data cannot give
+                           even that, declare it here too, naming what public data lacks: the results are then judged
+                           without it and the paper can at most partly hold up. Never write the paper's count instead),
             "substitutions": "<every other source, data vintage, proxy series or method you used for the paper's
                               observations; empty if none. These are caveats, not sample differences>"},
  "notes": "<every choice the paper leaves open, and every deviation>"}"""

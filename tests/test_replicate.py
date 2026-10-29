@@ -86,6 +86,22 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     assert stages[0] == "ingest" and stages[-1] == "verdict"
 
 
+def test_a_run_that_declares_the_paper_s_sample_not_rebuilt_is_judged_and_capped(setup):
+    """(j), end to end: the 40 filings declared with a reason and left out of the results; the results are judged,
+    the paper gets at most "partly holds up" and the first line names the declaration."""
+    cfg, tmp_path = setup
+    declared = {"results": RESULTS["results"][:2], "notes": "",
+                "sample": {"description": "x", "n": 38, "not_rebuilt": {"n_filings": "the filing list is not public"}}}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "ok", "", 1.0, {"results.json": json.dumps(declared)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+
+    assert outcome["verdict"] == "partly holds up"
+    assert outcome["summary"]["first_line"].endswith(
+        "Sample size not rebuilt: the filing list is not public (n_filings, 40 in the paper).")
+    assert "sample size not rebuilt: the filing list is not public" in outcome["report"].read_text()
+
+
 def test_failed_script_goes_back_to_the_builder_with_stderr(setup):
     cfg, tmp_path = setup
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),

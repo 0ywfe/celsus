@@ -236,14 +236,16 @@ OFF_NAMED = 3   # sample counts named in the first line; the report's table has 
 
 
 def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = None,
-            sample_problem: str | None = None, *, headline: str | None) -> tuple[str, str]:
+            sample_problem: str | None = None, *, headline: str | None, unrebuilt: str | None = None) -> tuple[str, str]:
     """(verdict, reason). A checker never blames a paper for its own failure: when the run, the data or the
     rebuilt sample fails, the verdict is "could not check", never "does not hold up". Sample counts are a
     precondition for judging the results, not results themselves. The reason names every blocker, not the first:
     held-out 40c85a was blocked by a missing sample size and by 17,225 observations against 14,361, and its first
     line named only the first. A paper holds up only if its main result (`headline`) was judged and matched: held-out
     dd3e09 and 69ec49 were "holds up" with the main result never computed, which a reader of the table can't trust.
-    Without a main result that matched, the most it gets is "partly holds up", and the first line says why."""
+    Without a main result that matched, the most it gets is "partly holds up", and the first line says why. So
+    with the paper's sample size declared not rebuilt (`unrebuilt`, the reason): the results are judged on a sample
+    nobody compared with the paper's."""
     if results is None:
         return COULD_NOT_CHECK, failure or "the replication never produced results"
     blockers = [sample_problem] if sample_problem else []   # the sample checks, already joined
@@ -268,7 +270,7 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
     main = next((r for r in rows if r["name"] == headline), None) if headline else None
     if all(judged):
         return ("holds up" if main is not None and main["kind"] != "count" and main["consistent"] is True
-                else "partly holds up"), ""
+                and not unrebuilt else "partly holds up"), ""
     return ("partly holds up" if any(judged) else "does not hold up"), ""
 
 
@@ -276,7 +278,8 @@ def _num(value) -> str:
     return "none" if value is None else f"{value:.4g}"
 
 
-def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None) -> str:
+def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None, *,
+               unrebuilt: str | None = None) -> str:
     """The report's first line: in plain words, do the paper's numbers hold up?"""
     if outcome == COULD_NOT_CHECK:
         return f"We could not check this paper: {reason}. This says nothing about whether its numbers hold."
@@ -298,4 +301,6 @@ def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None
             f"not judged: {why}"
         line += (f" Its main result, {main['name']}, is {with_unit(_num(main['reported']), main['unit'])} in the paper "
                  f"and {with_unit(_num(main['reproduced']), main['unit'])} here ({judged}).")
+    if unrebuilt:   # e589c6: the sample itself declared not rebuilt; the results are judged without it
+        line += f" Sample size not rebuilt: {unrebuilt}."
     return line

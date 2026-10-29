@@ -213,15 +213,17 @@ def test_a_declaration_mismatch_alone_costs_no_round_and_is_a_caveat():
         "as excused"]
 
 
-def test_the_largest_total_declared_not_rebuilt_is_told_to_stay_in_the_results():
-    """Code review: told to leave the largest total out, the builder would then fail "sample size reported"."""
+def test_the_largest_total_declared_and_reported_anyway_is_named_as_reported():
+    """(j): the largest total may be declared, so a declared one that is also reported is the plain "reported anyway"
+    slip, and the off count is sent back as any off count is."""
     sample = {"same_as_paper": True, "missing": 0, "extra": 0, "not_rebuilt": {"n_obs": "partly unpublished"}}
     off = [*RESULTS[:2], {"name": "n_obs", "value": 9000, "se": 0, "n": 9000}]
 
     problem, _ = replicate.audit_problem(SPEC.claims, off, "", SPEC, sample, [EVENTS, POOL, OBS])
 
-    assert "n_obs is the sample the results are computed on, so it cannot be declared not rebuilt" in problem
-    assert "n_obs is in not_rebuilt but its value is reported" not in problem
+    assert "n_obs is in not_rebuilt but its value is reported" in problem
+    assert "n_obs: the paper reports 14361, your run produced 9000" in problem
+    assert "cannot be declared" not in problem
 
 
 def test_a_declaration_by_the_claims_name_with_the_count_left_out_is_not_asked_about():
@@ -234,3 +236,124 @@ def test_a_declaration_by_the_claims_name_with_the_count_left_out_is_not_asked_a
 def test_the_builder_is_told_to_name_the_claim_and_leave_its_count_out():
     from paper_replicator import roles
     assert "exact name" in roles.RESULTS_FORMAT and "out of results" in roles.RESULTS_FORMAT
+
+
+# (j), the orchestrator's ruling (29 Oct): the paper's largest sample total may be declared not rebuilt, with a reason
+# naming what public data lacks. Refused, e589c6's builder declared the paper's 120 LLM forecast paths in round 2 and
+# wrote them as the paper's design arithmetic in round 3, which the reviewer stopped.
+
+DECLARED = {"same_as_paper": True, "missing": 0, "extra": 0,
+            "not_rebuilt": {"n_obs": "the paper's intraday quotes are not in any public source"}}
+WITHOUT_OBS = [{"name": "beta", "value": 0.42, "se": 0.05, "n": 50}, {"name": "n_events", "value": 50, "se": 0, "n": 50}]
+POOL_SPEC = PaperSpec.model_validate({**SPEC.model_dump(), "claims": [c.model_dump() for c in SPEC.claims
+                                                                      if c.name != "n_pool"]})
+
+
+def test_the_sample_declared_not_rebuilt_with_a_reason_is_a_caveat_and_caps_the_verdict():
+    from paper_replicator import compare
+    totals = [EVENTS, OBS]
+
+    assert replicate.audit_problem(POOL_SPEC.claims, WITHOUT_OBS, "", POOL_SPEC, DECLARED, totals) == (None, [])
+    assert ("sample size not rebuilt: the paper's intraday quotes are not in any public source (n_obs, 14,361 in "
+            "the paper); the results are judged without it, so the paper gets at most \"partly holds up\"") \
+        in replicate.sample_caveats(DECLARED, WITHOUT_OBS, totals, POOL_SPEC.claims)
+    rows = compare.compare(POOL_SPEC.claims, WITHOUT_OBS, totals={"n_obs"})
+    note = replicate.unrebuilt_note(replicate.declared_sample(DECLARED, WITHOUT_OBS, totals))
+    assert compare.verdict(rows, WITHOUT_OBS, headline="beta") == ("holds up", "")   # the main result is consistent
+    outcome, reason = compare.verdict(rows, WITHOUT_OBS, headline="beta", unrebuilt=note)
+    assert outcome == "partly holds up"
+    assert compare.first_line(outcome, reason, rows, "beta", unrebuilt=note).endswith(
+        " Sample size not rebuilt: the paper's intraday quotes are not in any public source (n_obs, 14,361 in the "
+        "paper).")
+
+
+@pytest.mark.parametrize("why", ["", "   ", ".", " . ", None, True])
+def test_the_sample_declared_with_no_reason_is_asked_for_again(why):
+    sample = {**DECLARED, "not_rebuilt": {"n_obs": why}}
+
+    problem, _ = replicate.audit_problem(POOL_SPEC.claims, WITHOUT_OBS, "", POOL_SPEC, sample, [EVENTS, OBS])
+
+    assert "did not report the paper's sample size (n_obs)" in problem
+    assert replicate.declared_sample(sample, WITHOUT_OBS, [EVENTS, OBS]) is None
+
+
+def test_a_declared_sample_excuses_no_smaller_total():
+    """A declared largest total matches nothing, so smaller totals left out stay as (c) treats them when the largest
+    does not match: missing."""
+    sample = {**DECLARED, "not_rebuilt": {**DECLARED["not_rebuilt"], "n_pool": "the pool needs unpublished data"}}
+
+    assert replicate.excused_totals(sample, WITHOUT_OBS, [EVENTS, POOL, OBS]) == {}
+    issues = replicate.sample_issues(SPEC, sample, WITHOUT_OBS, [EVENTS, POOL, OBS])
+    assert issues == ["the replication did not report the paper's sample size (n_pool), so its sample cannot be "
+                      "compared"]
+
+
+def test_e589c6s_round_two_declaration_is_judged_not_sent_back():
+    """e589c6 (2604.14467), round 2: the 120 LLM forecast paths declared (reason paraphrased), the CPI results
+    reported, the 96 forecast origins exact. Under the old rule the audit sent it back to report the 120; the next
+    round wrote it as 3*4*5*2."""
+    from paper_replicator import compare
+    spec = PaperSpec.model_validate({
+        "title": "t", "hypothesis": "h", "data_sources": [], "sample": "", "method": [], "headline": "ic_avg_2021",
+        "claims": [{"name": "ic_avg_2021", "description": "", "value": "6.83", "unit": "", "kind": "estimate",
+                    "where": ""},
+                   {"name": "arma_alpha_sim", "description": "", "value": "0.83", "unit": "", "kind": "estimate",
+                    "where": ""},
+                   {"name": "arma_phi_1", "description": "", "value": "0.52", "unit": "", "kind": "estimate",
+                    "where": ""},
+                   {"name": "n_llm_runs", "description": "", "value": "120", "unit": "", "kind": "count", "where": ""},
+                   {"name": "n_robust_origins", "description": "", "value": "96", "unit": "", "kind": "count",
+                    "where": ""}],
+        "partitions": [], "tests": []})
+    results = [{"name": "ic_avg_2021", "value": 6.0, "se": 0}, {"name": "arma_alpha_sim", "value": 0.74, "se": 0},
+               {"name": "arma_phi_1", "value": 0.521, "se": 0.02}, {"name": "n_robust_origins", "value": 96, "se": 0, "n": 96}]
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0,
+              "not_rebuilt": {"n_llm_runs": "120 LLM forecast paths need proprietary model runs with persona "
+                                            "prompts; public data cannot reproduce them"}}
+    totals = [c for c in spec.claims if c.kind == "count"]
+
+    assert replicate.audit_problem(spec.claims, results, "", spec, sample, totals) == (None, [])
+    rows = compare.compare(spec.claims, results, totals=replicate.judged_totals(spec.claims, spec))
+    note = replicate.unrebuilt_note(replicate.declared_sample(sample, results, totals))
+    outcome, reason = compare.verdict(rows, results, headline="ic_avg_2021", unrebuilt=note)
+    assert outcome == "partly holds up"
+    assert "Sample size not rebuilt: 120 LLM forecast paths need proprietary model runs" in compare.first_line(
+        outcome, reason, rows, "ic_avg_2021", unrebuilt=note)
+
+
+def test_the_builder_is_told_the_sample_itself_may_be_declared_never_faked():
+    from paper_replicator import roles
+    assert "If public data cannot give" in roles.RESULTS_FORMAT
+    assert "Never write the paper's count instead" in roles.RESULTS_FORMAT
+
+
+def test_a_reason_that_is_only_a_full_stop_excuses_no_smaller_total():
+    """Code review: "." stripped to "" and still excused n_pool, with an empty reason."""
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0, "not_rebuilt": {"n_pool": "."}}
+    assert replicate.excused_totals(sample, RESULTS, [EVENTS, POOL, OBS]) == {}
+
+
+TWIN = SPEC.claims[3].model_copy(update={"name": "n_obs_total"})
+
+
+@pytest.mark.parametrize("reported, declared", [("n_obs", "n_obs_total"), ("n_obs_total", "n_obs")])
+def test_tied_largest_totals_are_one_sample_size_whichever_is_reported(reported, declared):
+    """Code review: the two tied names were treated differently by claim order. Either copy reported and matching,
+    the sample was reported: nothing is declared, the other copy is excused, and the verdict is not capped."""
+    results = [*RESULTS[:2], {"name": reported, "value": 14367, "se": 0, "n": 14367}]
+    sample = {"same_as_paper": True, "missing": 0, "extra": 0, "not_rebuilt": {declared: "a second count of it"}}
+    totals = [EVENTS, OBS, TWIN]
+
+    assert replicate.declared_sample(sample, results, totals) is None
+    assert replicate.excused_totals(sample, results, totals) == {declared: "a second count of it"}
+    assert replicate.sample_issues(SPEC, sample, results, totals) == []
+
+
+@pytest.mark.parametrize("outcome, says", [("partly holds up", True), ("does not hold up", True),
+                                           ("could not check", False)])
+def test_the_first_line_names_the_declared_sample_unless_the_paper_could_not_be_checked(outcome, says):
+    """A could-not-check line already says nothing about the paper's numbers; the declaration is in its caveats."""
+    from paper_replicator import compare
+    rows = compare.compare(POOL_SPEC.claims, WITHOUT_OBS, totals={"n_obs"})
+    line = compare.first_line(outcome, "a reason", rows, "beta", unrebuilt="no public source (n_obs, 14,361 in the paper)")
+    assert ("Sample size not rebuilt: no public source (n_obs, 14,361 in the paper)." in line) is says
