@@ -96,27 +96,54 @@ def planned_budget(model: str, latex: str, attempts: int) -> float:
     return round(total, 4)
 
 
+NO_RESULTS = ("the spec lists only sample sizes: the results the paper prints (its estimates, test statistics and "
+              "p-values, in the text and the tables) are missing")
+
+
+def spec_problems(spec: PaperSpec) -> list[str]:
+    """What sends a spec back: references that name no claim, or no result to check (2610.36491's spec held 11
+    sample counts and none of the Sharpe, return and drawdown tables its LaTeX prints)."""
+    return reference_problems(spec) + ([] if any(c.kind != "count" for c in spec.claims) else [NO_RESULTS])
+
+
+async def settle_headline(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, spec: PaperSpec,
+                          effort: str | None) -> PaperSpec:
+    """A headline written as prose, settled by choosing among the claim names; the report keeps what was written."""
+    names = list(dict.fromkeys(c.name for c in spec.claims))
+    listing = "\n".join(f"- {c.name}: {c.description} ({c.value} {c.unit})".rstrip() for c in spec.claims)
+    chosen = (await Runner.run(roles.headline_chooser(cfg, client, names, effort),
+                               f"HYPOTHESIS: {spec.hypothesis}\nMAIN CONCLUSION AS WRITTEN: {spec.headline}\n\n"
+                               f"CLAIMS:\n{listing}", max_turns=1, hooks=run.ledger)).final_output.headline
+    run.say("extract", f"the headline named no claim; chosen from the claim names: {chosen}")
+    run.guard_events.append(f"spec: the headline was written as prose ('{spec.headline[:120]}'); "
+                            f"chosen from the claim names: {chosen}")
+    return spec.model_copy(update={"headline": chosen})
+
+
 async def extract(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, latex: str,
                   effort: str | None) -> PaperSpec:
-    """The paper's spec. If its references do not name claims it is asked for once more with the problems;
-    whatever is still unresolved goes into the report, so no check is switched off without a word."""
+    """The paper's spec. A headline that names no claim is chosen from the claim names; any other reference that
+    names no claim, or a spec with no result in it, is asked for once more with the problems. Whatever is still
+    unresolved goes into the report, so no check is switched off without a word."""
     paper = f"PAPER (LaTeX source):\n{latex}"
     prompt = paper
     for attempt in range(1, EXTRACT_ATTEMPTS + 1):
         run.say("extract", f"reading the paper with {cfg.model}" if attempt == 1 else
-                "asking for the spec again, with its references fixed")
+                "asking for the spec again, with its problems fixed")
         spec = (await Runner.run(roles.extractor(cfg, client, effort), prompt, max_turns=1,
                                  hooks=run.ledger)).final_output
-        problems = reference_problems(spec)
+        if spec.claims and spec.headline not in {c.name for c in spec.claims}:
+            spec = await settle_headline(run, cfg, client, spec, effort)
+        problems = spec_problems(spec)
         if not problems:
             return spec
-        run.say("extract", f"{len(problems)} references in the spec do not name a claim", problems=problems)
-        prompt = (f"{paper}\n\nYour previous spec referred to claims that do not exist:\n"
+        run.say("extract", f"{len(problems)} problems in the spec", problems=problems)
+        prompt = (f"{paper}\n\nYour previous spec had these problems:\n"
                   + "\n".join(f"- {problem}" for problem in problems)
                   + "\nIts claim names were: " + ", ".join(repr(c.name) for c in spec.claims)
                   + "\nWrite the whole spec again. headline, partitions and tests name claims by their exact name; "
                     "leave out a partition or test whose numbers the paper does not print.")
-    run.guard_events.extend(f"spec reference unresolved: {problem}" for problem in problems)
+    run.guard_events.extend(f"spec problem unresolved: {problem}" for problem in problems)
     return spec
 
 

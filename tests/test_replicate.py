@@ -359,28 +359,59 @@ def test_a_round_that_runs_out_of_turns_carries_its_conversation_into_the_next(s
     assert outcome["verdict"] == "holds up"
 
 
-def test_a_spec_with_unresolved_references_is_asked_for_once_more(setup):
+def test_a_headline_written_as_prose_is_chosen_from_the_claim_names(setup):
+    # Spark Open at high and xhigh wrote the headline as prose in 5 of 6 runs, and again when asked a second time
     cfg, tmp_path = setup
     prose = {**SPEC, "headline": "Small firms fell 7.5%"}
-    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)), (json.dumps(SPEC), usage(500, 900)),
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)),
+                                                     (json.dumps({"headline": "small_mean"}), usage(200, 20)),
+                                                     (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    choice = api.requests[1]["body"]
+    assert "Small firms fell 7.5%" in choice["messages"][-1]["content"]
+    schema = json.dumps(choice.get("response_format") or choice["messages"][0]["content"])
+    assert '"enum"' in schema and "invented" in schema and "small_mean" in schema
+    assert outcome["summary"]["headline"]["name"] == "small_mean"
+    assert outcome["summary"]["first_line"].endswith("(consistent).") or "small_mean" in outcome["summary"]["first_line"]
+    assert "chosen from the claim names: small_mean" in outcome["report"].read_text()
+
+
+def test_a_spec_with_unresolved_references_is_asked_for_once_more(setup):
+    cfg, tmp_path = setup
+    bad = {**SPEC, "partitions": [{"split": "all", "total": "n_all", "parts": []}]}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(bad), usage(500, 900)), (json.dumps(SPEC), usage(500, 900)),
                        (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
     retry = api.requests[1]["body"]["messages"][-1]["content"]
-    assert "headline 'Small firms fell 7.5%' is not the name of a claim" in retry
+    assert "partition 'all': total 'n_all' is not the name of a claim" in retry
     assert outcome["summary"]["headline"]["name"] == "small_mean"
 
 
 def test_references_still_unresolved_after_the_retry_are_reported_not_skipped(setup):
     cfg, tmp_path = setup
-    prose = {**SPEC, "headline": "Small firms fell 7.5%"}
-    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(prose), usage(500, 900)), (json.dumps(prose), usage(500, 900)),
+    bad = {**SPEC, "partitions": [{"split": "all", "total": "n_all", "parts": []}]}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(bad), usage(500, 900)), (json.dumps(bad), usage(500, 900)),
                        (json.dumps(CLEAN), usage(800, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     outcome = go(api, sandbox, cfg, tmp_path)
     assert outcome["verdict"] == "holds up"
-    assert "spec reference unresolved: headline 'Small firms fell 7.5%' is not the name of a claim" in (
+    assert "spec problem unresolved: partition 'all': total 'n_all' is not the name of a claim" in (
         outcome["report"].read_text())
+
+
+def test_a_spec_with_no_result_in_it_is_asked_for_once_more(setup):
+    # 2610.36491 (Spark Open xhigh): 11 claims, all sample counts, though the LaTeX prints Sharpe and return tables
+    cfg, tmp_path = setup
+    counts_only = {**SPEC, "claims": [c for c in SPEC["claims"] if c["kind"] == "count"], "headline": "n_filings"}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(counts_only), usage(500, 900)),
+                                                     (json.dumps(SPEC), usage(500, 900)),
+                                                     (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+    assert "the spec lists only sample sizes" in api.requests[1]["body"]["messages"][-1]["content"]
+    assert outcome["summary"]["headline"]["name"] == "small_mean"
 
 
 def test_the_workbench_refuses_to_fetch_the_authors_code(setup):

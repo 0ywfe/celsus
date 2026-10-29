@@ -7,7 +7,9 @@ import json
 from agents import Agent, ModelSettings
 from openai import AsyncOpenAI
 from openai.types.shared import Reasoning
-from pydantic import BaseModel, Field
+from typing import Literal
+
+from pydantic import BaseModel, Field, create_model
 
 from .config import ModelConfig
 from .llm import make_model
@@ -134,6 +136,18 @@ def _instructions(text: str, cfg: ModelConfig, output_type: type[BaseModel] | No
 def extractor(cfg: ModelConfig, client: AsyncOpenAI, effort: str | None = None) -> Agent:
     return Agent(name="extractor", instructions=_instructions(EXTRACTOR, cfg, PaperSpec), model=make_model(cfg, client),
                  output_type=PaperSpec, model_settings=_settings("extractor", cfg, effort, structured=True))
+
+
+HEADLINE = """You are given a paper's hypothesis and the numbers its replication spec lists. Choose the one claim the
+paper's main conclusion rests on."""
+
+
+def headline_chooser(cfg: ModelConfig, client: AsyncOpenAI, names: list[str], effort: str | None = None) -> Agent:
+    """The headline as a choice among the claim names (an enum in the schema), for a spec whose headline names none:
+    Spark Open wrote it as prose in 5 of 6 runs at high and xhigh, and still did when asked again (28 Oct)."""
+    choice = create_model("Headline", headline=(Literal[tuple(names)], Field(description="the claim's exact name")))
+    return Agent(name="extractor", instructions=_instructions(HEADLINE, cfg, choice), model=make_model(cfg, client),
+                 output_type=choice, model_settings=_settings("extractor", cfg, effort, structured=True))
 
 
 def builder(cfg: ModelConfig, client: AsyncOpenAI, minutes: int, effort: str | None = None) -> Agent:
