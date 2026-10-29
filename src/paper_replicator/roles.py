@@ -49,8 +49,10 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
 
 RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
                "value": <number, in the same unit the paper prints it in>,
-               "se": <standard error of value; 0 if the number has no sampling error (a return over a
-                      fixed period, a ratio of two such numbers); null only if you cannot compute it>,
+               "se": <standard error of value. A mean, coefficient or any statistic computed from a sample has
+                      sampling error: give its se. 0 if the number has no sampling error (a return over a fixed
+                      period, a ratio of two such numbers); null only for a count or a parameter, or if you cannot
+                      compute it>,
                "n": <observations behind value, or null>}],
  "sample": {"description": "<the sample you built>", "n": <its size>,
             "start": "<YYYY-MM-DD: the first date your sample actually covers>",

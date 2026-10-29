@@ -171,3 +171,10 @@ def test_a_tally_printed_as_a_bound_is_judged_against_the_bound(value, consisten
     c = Claim(name="n_breaks", description="", value="<5", unit="", kind="tally", where="")
     row = compare.compare([c], [{"name": "n_breaks", "value": value, "se": 0}])[0]
     assert row["consistent"] is consistent and "bound" in row["why"]
+
+
+def test_the_builder_is_told_a_sample_statistic_has_an_se():
+    """(i): 32% of the v2 runs' estimates came with no se, against the instruction; a mean or coefficient computed
+    from a sample is judged by its interval only when the builder gives one."""
+    assert "A mean, coefficient or any statistic computed from a sample has" in roles.RESULTS_FORMAT
+    assert "sampling error: give its se" in roles.RESULTS_FORMAT
