@@ -30,8 +30,8 @@ def test_every_tier_defaults_to_meta(monkeypatch):
         assert cfg.model.startswith("muse-")
 
 
-def test_without_a_local_file_meta_and_baseten_are_the_providers(tmp_path):
-    assert list(config.providers(tmp_path / "absent.json")) == ["meta", "baseten"]
+def test_without_a_local_file_meta_baseten_and_fireworks_are_the_providers(tmp_path):
+    assert list(config.providers(tmp_path / "absent.json")) == ["meta", "baseten", "fireworks"]
     assert pricing.local_prices(tmp_path / "absent.json") == {}
 
 
@@ -41,6 +41,15 @@ def test_a_meta_model_counts_as_meta_wherever_it_runs(localdev):
     assert config.maker(localdev) == "localdev"
     assert config.maker(config.ModelConfig(config.PROVIDERS["baseten"], "another-org/another-model")) == "baseten"
     assert pricing.cost_usd("meta-models/muse-spark-open-1026", 1_000_000, 0, 1_000_000) == 1.25 + 4.25
+
+
+def test_muse_spark_open_on_fireworks_is_a_meta_model_at_the_published_rates():
+    fireworks = config.PROVIDERS["fireworks"]
+    assert (fireworks.base_url, fireworks.key_env) == ("https://api.fireworks.ai/inference/v1", "FIREWORKS_API_KEY")
+    assert fireworks.json_schema and fireworks.reasoning_effort
+    hosted = config.ModelConfig(fireworks, "accounts/fireworks/models/muse-spark-open")
+    assert config.maker(hosted) == "meta"
+    assert pricing.cost_usd(hosted.model, 1_000_000, 1_000_000, 1_000_000) == 0.15 + 4.25
 
 
 def test_env_overrides_a_tier(monkeypatch, localdev):
