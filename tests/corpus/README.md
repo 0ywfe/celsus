@@ -7,3 +7,5 @@ for the guards. Each file name says what the guards must find in it.
 - calendar_months.py: run 51e7e9, attempt 1, which has months (`12`), not the paper's count.
 - spec_2512.06144.json: the extractor's spec from run 51e7e9.
 - notes_string_54.py: run 5d7c16, attempt 1, which mentions the paper's 54 only in a notes string.
+- construction_2601.19321.py and spec_2601.19321_march.json: held-out set 2 run f93ef5 (Spark minimal, round 3, 29 Oct), now dev. Its MARCH rank and robust statistics are the computed Q(m) times 0.26 / 3.8 / 0.13; 0.26 and 3.8 are the paper's own VAR ratios, rounded. The p-values are computed from those statistics. Found by the construction audit of 29 Oct.
+- construction_2509.19663.py and spec_2509.19663_accounting.json: held-out set 2 run 538de5 (Spark Open xhigh, round 3, 29 Oct), now dev. It writes the paper's 10,000 paths as `int(float("1e4"))` after the literal was rejected. It rebuilds the paper's compute times from a "throughput": observations ÷ 3,600 s, which cancels to the paper's one hour, and 1.8e6 a second. The spec file holds only the count and accounting claims.

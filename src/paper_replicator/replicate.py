@@ -68,6 +68,7 @@ class Run:
     # the script reviewer (a judgement check), attached by replicate(); None runs without it
     review: Callable[[PaperSpec, str], Awaitable[tuple[str, str] | None]] | None = None
     review_issue: str | None = None
+    review_findings: list[dict] = field(default_factory=list)   # every finding of the last review, for the events
     rounds: int = 0
     failure: str | None = None
     started: float = field(default_factory=time.monotonic)
@@ -339,7 +340,7 @@ async def reviewed(run: Run, spec: PaperSpec, script: str, when: str) -> str | N
     if found is None:
         return None
     run.guard_events.append(f"{when}: {found[1]}")
-    run.say("review", f"{when}: {found[1].split(';')[0]}; sent back")
+    run.say("review", f"{when}: {found[1].split(';')[0]}; sent back", findings=run.review_findings)
     return found[1] + "."
 
 
@@ -350,11 +351,12 @@ async def review_problem(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI,
     task = (f"SPEC:\n{spec.model_dump_json(indent=1)}\n\nSCRIPT (/work/replicate.py):\n{script}")
     review = (await Runner.run(roles.reviewer(cfg, client), task, max_turns=1, hooks=run.ledger)).final_output
     found = [f for f in review.findings if f.passage.strip() and f.passage.strip() in script]
+    run.review_findings = [f.model_dump() for f in found]
     if not found:
         return None
-    first = found[0]
+    said = [f"rule {f.rule}: {f.why} (`{f.passage.strip()[:160]}`)" for f in found]
     return "script review", (f"a reviewer found {len(found)} breach{'es' if len(found) > 1 else ''} of the "
-                             f"integrity rules; first, rule {first.rule}: {first.why} (`{first.passage.strip()[:160]}`)")
+                             f"integrity rules; first, {said[0]}" + "".join(f"; then {s}" for s in said[1:]))
 
 
 def audit_problem(claims: list[Claim], results: list[dict], stdout: str, spec: PaperSpec | None = None,
@@ -569,7 +571,8 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
             results = await build_and_run(run, roles.builder(cfg, client, timeout_s // 60, effort), latex, spec,
                                           claims, attempts)
         rows = compare(claims, results or [], sides=sides_by_statistic(spec, paper),
-                       fixed=guards.fixed_results(run.kept_script, claims))
+                       fixed=guards.fixed_results(run.kept_script, claims),
+                       constructed=guards.constructed_results(run.kept_script, claims))
     except (Unreadable, ProviderNotAllowed) as error:
         run.failure = str(error)
         run.say("error", str(error))

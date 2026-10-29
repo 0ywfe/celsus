@@ -245,6 +245,179 @@ def fixed_results(script: str, claims: list[Claim]) -> dict[str, str]:
     return fixed
 
 
+# Factors a result may carry without being built from another one: powers of ten, small integers, calendar and
+# trading-day counts, seconds, their square roots and reciprocals, and normal critical values.
+# Factors a result legitimately carries from another: unit conversions and annualisation (trading days in a year
+# by any of the usual conventions, and their square roots), and constants of the method itself (normal quantiles,
+# ln 2 for a half-life, the MAD-to-sigma scale). Scripts write the last group to any precision (1.645, 1.959964,
+# or 1.65, rounded twice), so they match within a unit of the last digit written, from three significant digits:
+# 1.5 or 0.67 is no quantile.
+_UNIT_FACTORS = (2, 3, 4, 5, 6, 7, 8, 9, 12, 24, 52, 60, 250, 252, 253, 256, 260, 261, 360, 365, 365.25, 3600, 86400,
+                 1024)
+_METHOD_CONSTANTS = (1.2815516, 1.6448536, 1.9599640, 2.3263479, 2.5758293, math.log(2), 1.4826022, 0.6744898)
+_WRAPPERS = {"float", "int", "round", "abs", "float64", "float32", "int64", "int32", "item"}
+
+
+def _unit_factor(value: float) -> bool:
+    size = abs(value)
+    if size == 0 or math.isclose(math.log10(size), round(math.log10(size)), abs_tol=1e-12):
+        return True
+    if any(math.isclose(size, f, rel_tol=1e-9) for u in _UNIT_FACTORS for f in (u, 1 / u, u ** 0.5, u ** -0.5)):
+        return True
+    written = repr(size)
+    if "e" in written or significant(written) < 3:
+        return False
+    decimals = len(written.split(".")[1]) if "." in written else 0
+    return any(abs(size - f) <= 10.0 ** -decimals * (1 + 1e-9) for c in _METHOD_CONSTANTS for f in (c, 1 / c))
+
+
+def _unwrap(node: ast.AST) -> ast.AST:
+    """float(x), round(x, 4), np.float64(x), x.item() -> x."""
+    while isinstance(node, ast.Call):
+        name = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", None)
+        if name == "item" and isinstance(node.func, ast.Attribute) and not node.args:
+            node = node.func.value
+        elif name in _WRAPPERS and node.args:
+            node = node.args[0]
+        else:
+            break
+    return node
+
+
+def _product(node: ast.AST) -> bool:
+    return isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Mult, ast.Div))
+
+
+def _chain(node: ast.AST, own: str, writes: dict[str, set[str]], assigned, consts) -> list[tuple[str, object]]:
+    """The factors of a product or quotient, followed through names assigned once: ("const", 0.26),
+    ("claim", "march_var_qm") for a name another claim is written from, ("other", None) for anything else. A
+    product of constants is split too, so 365 / 12 is two unit factors, not 30.4. Iterative, so padding a product
+    with thousands of factors cannot hide one."""
+    factors, todo = [], [(node, 0, frozenset())]
+    while todo:
+        node, depth, seen = todo.pop()
+        if not _product(node) and (value := consts.get(node)) is not None:   # before unwrapping: float("0.26")
+            factors.append(("const", value))
+            continue
+        node = _unwrap(node)
+        if _product(node):
+            todo += [(node.right, depth, seen), (node.left, depth, seen)]
+        elif isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.USub, ast.UAdd)):
+            todo.append((node.operand, depth, seen))
+        elif (value := consts.get(node)) is not None:
+            factors.append(("const", value))
+        elif (name := results_code.key(node)) is not None and writes.get(name, set()) - {own}:
+            factors.append(("claim", min(writes[name] - {own})))
+        elif name is not None and len(exprs := assigned.get(name, [])) == 1 and \
+                exprs[0] is not results_code._UNKNOWN and depth < 2 * DEPTH and name not in seen:
+            todo.append((exprs[0], depth + 1, seen | {name}))
+        else:
+            factors.append(("other", None))
+    return factors
+
+
+def _sampled(node: ast.AST, assigned, consts, draws: dict, rng, depth: int = 0, seen: frozenset = frozenset(),
+             owner: str | None = None):
+    """The expression's value with every input it reads from the data replaced by a random draw (one per input,
+    kept in `draws`), or None when it can't be evaluated that way. An input is keyed by the name it was reached
+    through too: `o, mo, mc = analyze(df)` binds three names to one call, and mo - mc is not 0."""
+    if (value := consts.get(node)) is not None:
+        return value
+    if isinstance(node, ast.BinOp) and type(node.op) in _ARITHMETIC:
+        left = _sampled(node.left, assigned, consts, draws, rng, depth, seen, owner)
+        right = _sampled(node.right, assigned, consts, draws, rng, depth, seen, owner)
+        try:
+            return None if left is None or right is None else float(_ARITHMETIC[type(node.op)](left, right))
+        except (ArithmeticError, ValueError, TypeError):
+            return None
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.USub, ast.UAdd)):
+        inner = _sampled(node.operand, assigned, consts, draws, rng, depth, seen, owner)
+        return None if inner is None else (-inner if isinstance(node.op, ast.USub) else inner)
+    if (unwrapped := _unwrap(node)) is not node:
+        return _sampled(unwrapped, assigned, consts, draws, rng, depth, seen, owner)
+    name = results_code.key(node)
+    if name is not None and name not in seen and depth < 2 * DEPTH:
+        exprs = assigned.get(name, [])
+        if len(exprs) == 1 and exprs[0] is not results_code._UNKNOWN:
+            return _sampled(exprs[0], assigned, consts, draws, rng, depth + 1, seen | {name}, name)
+    # data, or a name bound more than once: a draw wide enough that floor division and int() still vary
+    draw = name or (owner, id(node))
+    draws.setdefault(draw, rng.uniform(10, 10_000))
+    return draws[draw]
+
+
+def _cancels(node: ast.AST, assigned, consts) -> float | None:
+    """The non-zero constant an expression comes to although it reads the data (x / (x / 3600) / 3600 is 1), else
+    None. Zero is left out: a floor division of a count can come to 0 for some draws, and 0 is not a paper's number."""
+    import random
+    values = []
+    for seed in (1, 2, 3):
+        draws: dict = {}
+        value = _sampled(node, assigned, consts, draws, random.Random(seed))
+        if value is None or not draws or not math.isfinite(value):
+            return None
+        values.append(value)
+    same = all(math.isclose(values[0], v, rel_tol=1e-9, abs_tol=1e-12) for v in values[1:])
+    return values[0] if same and values[0] != 0 else None
+
+
+def constructed_results(script: str, claims: list[Claim]) -> dict[str, str]:
+    """Results built from the paper's own numbers instead of computed from the data, as name -> how. Such a result
+    is reported but not judged (29 Oct audit of 46 held-out and dev runs):
+    - another result times a constant that is no unit conversion: held-out 2601.19321 wrote its MARCH rank and
+      robust statistics as the computed Q(m) x 0.26 and x 3.8, the paper's own ratios;
+    - an expression whose data inputs cancel: 2509.19663 wrote a training time as obs / (obs / 3600) / 3600;
+    - anything computed from such a result (its p-value).
+    A count built from another count by a factor (paths x days, a 0.8 training share) is how sample sizes are built,
+    so the rescaling rule leaves counts alone; a fixed number is fixed_results' job, not this one's. An expression
+    nested too deeply to follow builds nothing here."""
+    tree = _tree(script)
+    if tree is None:
+        return {}
+    names, kinds = {c.name for c in claims}, {c.name: c.kind for c in claims}
+    assigned = results_code.assignments(tree)
+    consts = dict(results_code.constant_nodes(tree, results_code.constants(assigned)))
+    entries = [e for e in results_code.entries(tree, names) if e.value is not None]
+    writes: dict[str, set[str]] = {}
+    for e in entries:
+        if (name := results_code.key(_unwrap(e.value))) is not None:
+            writes.setdefault(name, set()).add(e.name)
+    built: dict[str, str] = {}
+    for e in entries:
+        if e.name in built or e.value in consts:
+            continue
+        try:
+            how = _built(e, kinds[e.name], writes, assigned, consts)
+        except RecursionError:
+            continue
+        if how:
+            built[e.name] = how
+    sources = {name: claim for name, made in writes.items() for claim in made if claim in built}
+    for e in entries:
+        if e.name in built:
+            continue
+        reads = {k for x in results_code.upstream(e.value, assigned, DEPTH) for n in results_code.values(x)
+                 if (k := results_code.key(n)) in sources}
+        if reads:
+            source = sources[min(reads)]
+            built[e.name] = f"computed from {source}, which is built that way (line {e.line})"
+    return built
+
+
+def _built(e: results_code.Entry, kind: str, writes, assigned, consts) -> str | None:
+    """How one result is built from the paper's numbers, or None."""
+    if kind != "count":
+        factors = _chain(e.value, e.name, writes, assigned, consts)
+        others = sorted({f for kind_, f in factors if kind_ == "claim"})
+        odd = [f for kind_, f in factors if kind_ == "const" and not _unit_factor(f)]
+        if others and odd and all(kind_ != "other" for kind_, _ in factors):
+            constants = " and ".join(dict.fromkeys(f"{f:g}" for f in odd))
+            return f"{' and '.join(others)} with the constant{'s' if len(odd) > 1 else ''} {constants} at line {e.line}"
+    if (value := _cancels(e.value, assigned, consts)) is not None:
+        return f"its data inputs cancel to {value:g} at line {e.line}"
+    return None
+
+
 def _scales(unit: str) -> tuple[float, ...]:
     unit = unit.lower()
     return (1.0,) + ((100.0,) if "%" in unit or "percent" in unit else ()) + \

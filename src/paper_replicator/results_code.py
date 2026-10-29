@@ -20,6 +20,17 @@ _ARITHMETIC = {ast.Add: lambda a, b: a + b, ast.Sub: lambda a, b: a - b, ast.Mul
                ast.Div: lambda a, b: a / b, ast.FloorDiv: lambda a, b: a // b, ast.Mod: lambda a, b: a % b,
                ast.Pow: lambda a, b: a ** b}
 _CUTS = {"head", "tail", "sample", "nlargest", "nsmallest"}
+# A number written as text so a literal check can't read it (29 Oct, held-out 2509.19663: `int(float("1e4"))` for
+# the paper's 10,000 paths after the literal was rejected) is the same constant as the literal.
+_CASTS = {"float", "int", "Decimal", "Fraction", "float64", "float32", "int64", "int32"}
+_EVALS = {"eval", "literal_eval"}
+_DECIMAL = re.compile(r"\s*[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?\s*")
+_INTEGER = re.compile(r"\s*[-+]?\d+\s*")
+# A number written as text is a few characters long; longer text is kept only as its length (len() needs no more),
+# so a repeat of a repeat costs nothing however long the string it spells.
+_KEPT = 256
+_REPEATS = 10 ** 6
+Spelled = tuple[str | None, int]   # the text a node spells (None when longer than _KEPT) and its length
 _UNKNOWN = ast.Name(id="<bound elsewhere>")  # what a parameter, loop variable or import holds
 
 
@@ -101,15 +112,19 @@ def constant_nodes(root: ast.AST, known: dict[str, float], skip_indexes: bool = 
     thousands of terms costs one walk). With skip_indexes, what sits in a subscript's brackets is left out."""
     order = list(values(root)) if skip_indexes else list(ast.walk(root))
     found: dict[ast.AST, float] = {}
+    spelled: dict[ast.AST, Spelled] = {}
     for node in reversed(order):  # every child comes after its parent in the walk
-        value = _step(node, known, found)
+        if (words := _spell(node, spelled, found)) is not None:
+            spelled[node] = words
+        value = _step(node, known, found, spelled)
         if value is not None:
             found[node] = value
     return list(found.items())
 
 
-def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float]) -> float | None:
-    """One node's value from its children's, already in `found`."""
+def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float],
+          spelled: dict[ast.AST, Spelled]) -> float | None:
+    """One node's value from its children's, already in `found` (numbers) and `spelled` (text)."""
     if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)) and not isinstance(node.value, bool):
         try:
             return float(node.value)
@@ -130,6 +145,11 @@ def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float]) -
             return None
     if isinstance(node, ast.Call) and not node.keywords and node.args:
         function = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", None)
+        words = spelled.get(node.args[0]) if len(node.args) == 1 else None
+        if words is not None and function in _CASTS | _EVALS:
+            return None if words[0] is None else _from_text(function, words[0], known)
+        if words is not None and function == "len":
+            return float(words[1])   # 29 Oct, held-out c5ffce: 3 and 30 spelled len("abc"), len("abcdefghij" * 3)
         args = [found.get(a) for a in node.args]
         if function in _PURE and None not in args:
             try:
@@ -137,6 +157,52 @@ def _step(node: ast.AST, known: dict[str, float], found: dict[ast.AST, float]) -
             except (ArithmeticError, ValueError, TypeError):
                 return None
     return None
+
+
+def _joined(parts: list[Spelled | None]) -> Spelled | None:
+    if None in parts:
+        return None
+    size = sum(n for _, n in parts)
+    kept = size <= _KEPT and all(s is not None for s, _ in parts)
+    return ("".join(s for s, _ in parts) if kept else None), size
+
+
+def _spell(node: ast.AST, spelled: dict[ast.AST, Spelled], found: dict[ast.AST, float]) -> Spelled | None:
+    """The string a node spells from literals alone ("2.39", "2" + ".39", f"1e4", "".join(["5", ".6"]),
+    "abcdefghij" * len("abc")), from its children's, already in `spelled`; a repeat count is a constant in `found`.
+    Bottom-up like _step, so a chain of thousands of pieces costs one walk and no stack."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return _joined([(node.value if len(node.value) <= _KEPT else None, len(node.value))])
+    if isinstance(node, ast.JoinedStr):
+        return _joined([spelled.get(v) for v in node.values])
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        return _joined([spelled.get(node.left), spelled.get(node.right)])
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mult):
+        for word, times in ((node.left, node.right), (node.right, node.left)):
+            count = found.get(times)
+            if word in spelled and count is not None and count.is_integer() and 0 <= count <= _REPEATS:
+                piece, size = spelled[word]
+                total = size * int(count)
+                return (piece * int(count) if piece is not None and total <= _KEPT else None), total
+        return None
+    if isinstance(node, ast.Call) and getattr(node.func, "attr", None) == "join" and len(node.args) == 1 and \
+            node.func.value in spelled and isinstance(node.args[0], (ast.List, ast.Tuple)):
+        glue, parts = spelled[node.func.value], [spelled.get(e) for e in node.args[0].elts]
+        return _joined([x for i, part in enumerate(parts) for x in ((glue, part) if i else (part,))])
+    return None
+
+
+def _from_text(function: str, written: str, known: dict[str, float]) -> float | None:
+    """float("1e4"), int("10000"), eval("1923+1395"): the number, or None when the text is not one."""
+    if function in _EVALS:
+        try:
+            return evaluate(ast.parse(written.strip(), mode="eval").body, known)
+        except (SyntaxError, ValueError, RecursionError):
+            return None
+    if not (_INTEGER if function.startswith("int") else _DECIMAL).fullmatch(written):
+        return None
+    value = float(written)
+    return value if math.isfinite(value) else None
 
 
 def claim_names(node: ast.AST | None, names: set[str]) -> list[str]:

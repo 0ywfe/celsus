@@ -1,0 +1,132 @@
+{
+ "claims": [
+  {
+   "name": "march_var_qm",
+   "description": "Multivariate ARCH Q(m) LM statistic for VAR residuals",
+   "value": "81.71",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_qm_p",
+   "description": "p-value for VAR Q(m) ARCH test",
+   "value": "3.3\\times10^{-16}",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_rank",
+   "description": "Rank-based ARCH statistic for VAR residuals",
+   "value": "21.49",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_rank_p",
+   "description": "p-value for VAR rank-based ARCH test",
+   "value": "0.00065",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_qk",
+   "description": "Qk(m) squared-series cross-volatility statistic for VAR",
+   "value": "625.92",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_qk_p",
+   "description": "p-value for VAR Qk cross-volatility test",
+   "value": "0.00000",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_robust",
+   "description": "Robust constant-variance statistic for VAR residuals",
+   "value": "317.25",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_var_robust_p",
+   "description": "p-value for VAR robust variance test",
+   "value": "0.00127",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 9 Multivariate ARCH VAR"
+  },
+  {
+   "name": "march_tvp_qm",
+   "description": "Multivariate ARCH Q(m) LM statistic for TVP-SVAR residuals",
+   "value": "125.6907",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_qm_p",
+   "description": "p-value for TVP-SVAR Q(m) ARCH test",
+   "value": "0.00000",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_rank",
+   "description": "Rank-based ARCH statistic for TVP-SVAR residuals",
+   "value": "188.8244",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_rank_p",
+   "description": "p-value for TVP-SVAR rank-based ARCH test",
+   "value": "0.00000",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_qk",
+   "description": "Qk(m) squared-series cross-volatility statistic for TVP-SVAR",
+   "value": "1461.109",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_qk_p",
+   "description": "p-value for TVP-SVAR Qk cross-volatility test",
+   "value": "0.00000",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_robust",
+   "description": "Robust constant-variance statistic for TVP-SVAR residuals",
+   "value": "1485.041",
+   "unit": "",
+   "kind": "test_statistic",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  },
+  {
+   "name": "march_tvp_robust_p",
+   "description": "p-value for TVP-SVAR robust variance test",
+   "value": "0.00000",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Table 12 Multivariate ARCH TVP-SVAR"
+  }
+ ]
+}

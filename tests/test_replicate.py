@@ -612,6 +612,26 @@ def test_the_reviewer_sends_a_script_back_with_the_passage_and_the_fixed_script_
     assert "a reviewer found 1 breach" in outcome["report"].read_text()   # listed under the run's guards
 
 
+def test_every_finding_reaches_the_builder_and_the_runs_events(setup):
+    """29 Oct, held-out f93ef5: the reviewer reported 3 breaches but only the first was kept, so whether the
+    other two named a construction the run kept is unknown."""
+    cfg, tmp_path = setup
+    script = "x = 1\nprint('computed')"
+    two = json.dumps({"findings": [{"rule": 2, "passage": "x = 1", "why": "a value is set"},
+                                   {"rule": 1, "passage": "print('computed')", "why": "a result is printed"}]})
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps({"script": script, "notes": ""}), usage(800, 700)),
+                       (two, usage(3000, 200)), (json.dumps({"script": "print('computed again')", "notes": ""}), usage(900, 700)),
+                       (NONE, usage(3000, 100))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
+    outcome = go(api, sandbox, cfg, tmp_path)
+
+    sent_back = api.requests[3]["body"]["messages"][-1]["content"]
+    assert "a reviewer found 2 breaches" in sent_back and "x = 1" in sent_back and "print('computed')" in sent_back
+    events = [json.loads(l) for l in (outcome["report"].parent / "events.jsonl").read_text().splitlines()]
+    review = next(e for e in events if e["stage"] == "review")
+    assert [f["passage"] for f in review["findings"]] == ["x = 1", "print('computed')"]
+
+
 def test_a_finding_whose_passage_is_not_in_the_script_is_ignored(setup):
     cfg, tmp_path = setup
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
