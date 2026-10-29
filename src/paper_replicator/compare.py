@@ -173,28 +173,34 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
 COULD_NOT_CHECK = "could not check"
 
 
+OFF_NAMED = 3   # sample counts named in the first line; the report's table has every one
+
+
 def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = None,
             sample_problem: str | None = None) -> tuple[str, str]:
     """(verdict, reason). A checker never blames a paper for its own failure: when the run, the data or the
     rebuilt sample fails, the verdict is "could not check", never "does not hold up". Sample counts are a
-    precondition for judging the results, not results themselves."""
+    precondition for judging the results, not results themselves. The reason names every blocker, not the first:
+    held-out 40c85a was blocked by a missing sample size and by 17,225 observations against 14,361, and its first
+    line named only the first."""
     if results is None:
         return COULD_NOT_CHECK, failure or "the replication never produced results"
-    if sample_problem:  # the sample cannot be compared with the paper's: a different period, or not rebuilt
-        return COULD_NOT_CHECK, sample_problem
-    off = [r for r in rows if r["kind"] == "count" and r["consistent"] is False]
+    blockers = [sample_problem] if sample_problem else []   # the sample checks, already joined
+    off = sorted((r for r in rows if r["kind"] == "count" and r["consistent"] is False),
+                 key=lambda r: -abs((r["reproduced"] or 0) - (r["reported"] or 0)))
     if off:
-        worst = max(off, key=lambda r: abs((r["reproduced"] or 0) - (r["reported"] or 0)))
-        return COULD_NOT_CHECK, (f"the replication could not rebuild the paper's sample ({worst['name']}: "
-                                 f"{_num(worst['reproduced'])} here, {_num(worst['reported'])} in the paper)")
+        named = [f"{r['name']}: {_num(r['reproduced'])} here, {_num(r['reported'])} in the paper" for r in off[:OFF_NAMED]]
+        more = f", and {len(off) - OFF_NAMED} more" if len(off) > OFF_NAMED else ""
+        blockers.append(f"the replication could not rebuild the paper's sample ({'; '.join(named)}{more})")
     # A zero count is an empty sample only when the paper's count, read as one number, is not zero: a paper that
     # reports 0 rejections and a run that finds 0 agree (held-out 2602.07018 lost 144 results to this), and a count
     # the checker cannot read ("0/9") says nothing about the sample.
     settings = {r["name"] for r in rows if r["kind"] == "parameter"}   # a number of draws has no observations
     if any(r.get("n") == 0 and r.get("name") not in settings for r in results) or any(
-            r["kind"] == "count" and r["reproduced"] == 0
-                                                     and r["consistent"] is False for r in rows):
-        return COULD_NOT_CHECK, "the replication found no observations"
+            r["kind"] == "count" and r["reproduced"] == 0 and r["consistent"] is False for r in rows):
+        blockers.append("the replication found no observations")
+    if blockers:
+        return COULD_NOT_CHECK, "; and ".join(blockers)
     judged = [r["consistent"] for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     if not judged:
         return COULD_NOT_CHECK, "none of the paper's results could be compared"
@@ -217,8 +223,12 @@ def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None
             "does not hold up": "The paper's numbers do not hold up"}[outcome]
     line += f": {matched} of {len(judged)} checked results match within their uncertainty."
     main = next((r for r in rows if r["name"] == headline), None)
-    if main is not None and main["reproduced"] is not None:
+    if main is not None and main["reproduced"] is None:   # held-out 69ec49: "holds up", its main result never computed
+        line += f" Its main result, {main['name']}, was not computed."
+    elif main is not None:
+        why = (main.get("why") or "no basis to compare").removesuffix(", so it is not judged")
+        judged = ("consistent" if main["consistent"] else "not consistent") if main["consistent"] is not None else \
+            f"not judged: {why}"
         line += (f" Its main result, {main['name']}, is {with_unit(_num(main['reported']), main['unit'])} in the paper "
-                 f"and {with_unit(_num(main['reproduced']), main['unit'])} here "
-                 f"({'consistent' if main['consistent'] else 'not consistent'}).")
+                 f"and {with_unit(_num(main['reproduced']), main['unit'])} here ({judged}).")
     return line

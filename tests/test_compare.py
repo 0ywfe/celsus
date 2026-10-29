@@ -55,6 +55,48 @@ def test_the_first_line_says_in_plain_words_whether_the_numbers_hold():
         "This says nothing about whether its numbers hold.")
 
 
+def test_the_first_line_never_calls_an_unjudged_or_uncomputed_main_result_not_consistent():
+    """Held-out ec0357 and 48654c: a main result with no standard error read "not consistent"; 69ec49 said "holds up"
+    without a word that its main result was never computed."""
+    unjudged = {**row("main", "estimate", None, 0.6388, 0.6409), "why": "no standard error"}
+    missing = {**row("main", "estimate", None, -0.771, None), "why": "not computed"}
+    other = row("other", "estimate", True)
+
+    assert "(not judged: no standard error)" in first_line("holds up", "", [unjudged, other], "main")
+    assert "not consistent" not in first_line("holds up", "", [unjudged, other], "main")
+    assert first_line("holds up", "", [missing, other], "main").endswith("Its main result, main, was not computed.")
+
+
+def test_a_main_result_built_from_the_papers_numbers_is_named_not_judged_once():
+    claims = [claim("q", "81.71", "test_statistic"), claim("rank", "21.49", "test_statistic")]
+    results = [{"name": "q", "value": 80.2, "se": None, "n": 300}, {"name": "rank", "value": 21.1, "se": None, "n": 300}]
+    rows = compare(claims, results, constructed={"rank": "q with the constant 0.26 at line 113"})
+
+    line = first_line("holds up", "", rows, "rank")
+
+    assert "(not judged: built from the paper's numbers" in line and line.count("not judged") == 1
+
+
+def test_a_could_not_check_names_every_blocker():
+    """Held-out 40c85a: a sample size not reported and 17,225 observations against 14,361; the first line named one."""
+    rows = [row("n_obs", "count", False, 14361, 17225), row("n_assets", "count", False, 6, 9),
+            row("beta", "estimate", True)]
+    outcome, reason = verdict(rows, [{"name": "beta", "value": 1.0, "n": 10}],
+                              sample_problem="the replication did not report the paper's sample size (n_pool_total)")
+    line = first_line(outcome, reason, rows, "beta")
+
+    assert outcome == "could not check"
+    assert "n_pool_total" in line and "n_obs: 1.722e+04 here, 1.436e+04 in the paper" in line and "n_assets" in line
+
+
+def test_a_long_list_of_sample_gaps_is_named_up_to_a_few():
+    rows = [row(f"n_{i}", "count", False, 100, 100 + 50 * i) for i in range(1, 7)]
+    reason = verdict(rows, [{"name": "x", "value": 1.0, "n": 10}])[1]
+
+    assert reason.count(" here, ") == 3 and "and 3 more" in reason and reason.startswith(
+        "the replication could not rebuild the paper's sample (n_6:")
+
+
 def test_significance_uses_the_side_the_paper_tested():
     # run-20261028T144225Z-91ed39: t = -1.905 is significant one-sided (p 0.031) but not two-sided
     claims = [claim("t", "-2.41", "test_statistic")]
