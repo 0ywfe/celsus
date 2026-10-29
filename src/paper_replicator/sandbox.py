@@ -33,7 +33,7 @@ STAND_IN = "contact-added-by-the-sandbox-for-sec.gov-only"
 LOADER = "import sec_contact\nimport os\nif os.environ.get('WORK_DIR'):\n    import data_sources\n"
 # pip's own form for repeatable installs: `pip freeze` in one environment, the same lines installed in the next.
 # A line that is not a released package at a version (a package from a URL or a local path) cannot be.
-PINNED = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*==[^\s;@]+$")
+PINNED = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*==[^\s;@+]+$")   # a local version (+cpu) is not on PyPI
 MAX_TOOL_OUTPUT = 6000  # chars of a command's output the builder sees (Meta cookbook 07's value)
 
 
@@ -80,14 +80,23 @@ def _read(sandbox: modal.Sandbox, path: str) -> str | None:
 
 def run_script(script: str, *, market_cache: Path, env: dict[str, str], timeout_s: int,
                packages: tuple[str, ...] = ()) -> SandboxRun:
-    started = time.monotonic()
-    sandbox = _start(market_cache=market_cache, env=env, lifetime_s=timeout_s + 120, packages=packages)
+    """If the builder's packages cannot be installed, the script runs without them and its output says why, so the
+    builder hears it instead of the round being lost."""
+    started, note = time.monotonic(), ""
+    try:
+        sandbox = _start(market_cache=market_cache, env=env, lifetime_s=timeout_s + 120, packages=packages)
+    except Exception as error:
+        if not packages:
+            raise
+        note = (f"the packages you installed could not be installed in the clean run ({', '.join(packages)}: "
+                f"{type(error).__name__}: {str(error)[:300]}); it ran without them\n")
+        sandbox = _start(market_cache=market_cache, env=env, lifetime_s=timeout_s + 120)
     try:
         sandbox.filesystem.write_text(script, f"{WORK}/replicate.py")
         process = sandbox.exec("python", f"{WORK}/replicate.py", timeout=timeout_s, workdir=WORK,
                                env={"PYTHONPATH": HOOKS, "WORK_DIR": WORK})
         process.wait()
-        run = SandboxRun(process.returncode, process.stdout.read(), process.stderr.read(), 0.0)
+        run = SandboxRun(process.returncode, process.stdout.read(), note + process.stderr.read(), 0.0)
         run.files = {name: text for name in OUTPUTS if (text := _read(sandbox, f"{WORK}/{name}")) is not None}
     finally:
         sandbox.terminate()
@@ -97,13 +106,15 @@ def run_script(script: str, *, market_cache: Path, env: dict[str, str], timeout_
 
 # A sandbox past its lifetime answers with one of these.
 GONE = (NotFoundError, SandboxTerminatedError, SandboxTimeoutError)
-RESTARTED = ("(the sandbox had shut down and was restarted: files written with write_file are back; anything else, "
-             "such as downloads or files written by commands, has to be made again)\n")
+RESTARTED = ("(the sandbox had shut down and was restarted: files written with write_file and packages installed "
+             "with pip are back; anything else, such as downloads or files written by commands, has to be made "
+             "again)\n")
 
 
 class Workbench:
     """A persistent sandbox for the builder: shell commands and file writes, nothing else. A sandbox that shuts down
-    mid-run (its lifetime ran out) is reopened and every file the builder wrote is written back."""
+    mid-run (its lifetime ran out) is reopened, every file the builder wrote is written back and every package it
+    installed is installed again."""
 
     def __init__(self, *, market_cache: Path, env: dict[str, str], command_timeout_s: int, lifetime_s: int):
         self.command_timeout_s = command_timeout_s
@@ -112,6 +123,7 @@ class Workbench:
         self.written: dict[str, str] = {}
         self.restarts = 0
         self.base = _freeze(self.sandbox)  # what the image has, before the builder installs anything
+        self.added: list[str] = []          # what the builder installed, as last seen
 
     def _alive(self, action):
         """(action's result, whether the sandbox had to be reopened first)."""
@@ -122,6 +134,8 @@ class Workbench:
             self.sandbox = self._open()
             for target, content in self.written.items():
                 _write(self.sandbox, target, content)
+            if pinned := [p for p in self.added if PINNED.match(p)]:
+                _pip(self.sandbox, pinned)
             return action(self.sandbox), True
 
     def run(self, cmd: str) -> tuple[int | None, str]:
@@ -130,7 +144,10 @@ class Workbench:
             process = sandbox.exec("bash", "-lc", f"set -o pipefail; {cmd}", timeout=self.command_timeout_s,
                                    workdir=WORK)
             process.wait()
-            return process.returncode, process.stdout.read() + process.stderr.read()
+            result = process.returncode, process.stdout.read() + process.stderr.read()
+            if "pip" in cmd:   # kept up to date, so a restart can install them again
+                self.added = sorted(_freeze(sandbox) - self.base)
+            return result
 
         (code, output), restarted = self._alive(go)
         tail = output if len(output) <= MAX_TOOL_OUTPUT else "...(truncated)...\n" + output[-MAX_TOOL_OUTPUT:]
@@ -148,8 +165,8 @@ class Workbench:
     def installed(self) -> tuple[list[str], list[str]]:
         """What the builder added to the image, in pip's freeze form: (released packages at their versions, which
         the clean run installs; anything else, which it cannot)."""
-        added, _ = self._alive(lambda sandbox: sorted(_freeze(sandbox) - self.base))
-        return [p for p in added if PINNED.match(p)], [p for p in added if not PINNED.match(p)]
+        self.added, _ = self._alive(lambda sandbox: sorted(_freeze(sandbox) - self.base))
+        return [p for p in self.added if PINNED.match(p)], [p for p in self.added if not PINNED.match(p)]
 
     def close(self) -> None:
         try:
@@ -161,7 +178,13 @@ class Workbench:
 def _freeze(sandbox: modal.Sandbox) -> set[str]:
     process = sandbox.exec("python", "-m", "pip", "freeze", timeout=120, workdir=WORK)
     process.wait()
-    return {line.strip() for line in process.stdout.read().splitlines() if line.strip()}
+    if process.returncode != 0:
+        raise RuntimeError(f"pip freeze failed in the sandbox (exit {process.returncode})")
+    return {line.strip() for line in process.stdout.read().splitlines() if line.strip() and not line.startswith("#")}
+
+
+def _pip(sandbox: modal.Sandbox, packages: list[str]) -> None:
+    sandbox.exec("python", "-m", "pip", "install", "-q", *packages, timeout=600, workdir=WORK).wait()
 
 
 def _write(sandbox: modal.Sandbox, target: str, content: str) -> None:

@@ -420,7 +420,8 @@ FALLBACK = re.compile(rf"(?:environ\.get|getenv){_NAME}(?:,\s*{_QUOTED}\s*)?\)(?
                       rf"|setdefault{_NAME},\s*(?:{_QUOTED}\s*)?\)?")
 SETS_CONTACT = re.compile(r"""environ\s*\[\s*['"]SEC_USER_AGENT['"]\s*\]\s*=(?!=)|putenv\(\s*['"]SEC_USER_AGENT|"""
                           r"""\bSEC_USER_AGENT=""")
-CONTACT_RULE = ("The sandbox puts the SEC contact in every Python request to sec.gov for you. Never set or replace it, "
+CONTACT_RULE = ("The sandbox puts the SEC contact in requests to sec.gov made with requests, urllib or pandas. Never set "
+                "or replace it, "
                 "and never write an email address into a command, a file or a script: not one from the paper, not a "
                 "placeholder.")
 

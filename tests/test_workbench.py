@@ -46,6 +46,10 @@ class FakeSandbox:
 
     def exec(self, *args, **kwargs):
         self._touch()
+        if args[1:4] == ("-m", "pip", "install"):                       # the workbench reinstalling after a restart
+            self.freeze += "".join(f"{p}\n" for p in args[5:])
+        elif args[0] == "bash" and "pip install " in args[2]:          # the builder's own install
+            self.freeze += args[2].split("pip install ")[1] + "\n"
         return FakeProcess(self.freeze if args[1:4] == ("-m", "pip", "freeze") else "ran")
 
     def terminate(self):
@@ -95,3 +99,12 @@ def test_the_clean_run_gets_what_the_builder_installed_and_nothing_it_cannot_ins
 def test_nothing_installed_means_the_plain_image(monkeypatch):
     wb = bench(monkeypatch, [FakeSandbox()])
     assert wb.installed() == ([], [])
+
+
+def test_packages_survive_a_restart_of_the_sandbox(monkeypatch):
+    # review of the fix: a sandbox that died while idle came back without the builder's packages
+    first, second = FakeSandbox(dies_after=3), FakeSandbox()
+    wb = bench(monkeypatch, [first, second])
+    wb.run("pip install xlrd==2.0.1")                   # calls 2 and 3: the install, then a freeze
+    assert wb.installed() == (["xlrd==2.0.1"], [])     # call 4: the sandbox is gone; reopened and reinstalled
+    assert wb.restarts == 1 and "xlrd==2.0.1" in second.freeze
