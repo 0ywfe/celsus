@@ -27,12 +27,14 @@ EXTRACTOR = """You read a research paper's LaTeX source and write its replicatio
 - claims: every headline number the paper reports as a result: estimates, test statistics,
   p-values and sample sizes. Copy each value exactly as printed. Never compute, round or convert one.
   Each claim holds one number: a sentence or table row that prints several (an estimate with its standard
-  error and p-value, a row of performance metrics) gives one claim per number. The method's inputs are not
-  claims: window lengths, numbers of draws or permutations, lags, thresholds, null values and theoretical
-  benchmarks go in method.
-- kind "count" is for sample sizes only: how many observations, events, firms, filings or periods a result is
-  computed on. A number the paper finds by counting (trades made, profitable periods, significant pairs, tests
-  rejected, days until something happens) is an "estimate".
+  error and p-value, a row of performance metrics) gives one claim per number. The method's inputs belong in
+  method: window lengths, numbers of draws, paths, replications or permutations, lags, thresholds, caps, weights,
+  null values and theoretical benchmarks. They are not results: if you list one as a claim, its kind is
+  "parameter".
+- kind "count" is for sample sizes only: how many observations, events, firms, filings or periods of the data a
+  result is computed on. A number the paper finds by counting (trades made, profitable periods, significant pairs,
+  tests rejected, days until something happens) is an "estimate". A number the paper sets (10,000 draws, a
+  60-month window, a 15% cap) is a "parameter": it is never judged, and code may use it.
 - sample: the exact sample or event definition, the period, every filter, and the sample sizes.
 - period_start, period_end: the dates the sample covers, exactly as printed ("2010-01-03", "February 2018",
   "as of November 12th, 2025"); "not stated" if the paper does not say.

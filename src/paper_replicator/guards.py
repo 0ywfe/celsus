@@ -202,13 +202,19 @@ def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
     tree = _tree(script)
     if tree is None:
         return []
-    by_name = {c.name: c for c in claims}
+    # A number the paper sets may be written (a 15% cap, 10,000 draws), even where a result computed from it equals
+    # it (the cap binds for one stock): the paper-set-parameter ruling of 29 Oct. A result written as that number
+    # itself is still the paper's number in the code.
+    settings = {d for c in claims if c.kind == "parameter" and (d := magnitude(c.value))}
+    by_name = {c.name: c for c in claims if c.kind != "parameter"}
     assigned = results_code.assignments(tree)
     known = results_code.constants(assigned)
     found: list[str] = []
     for entry in results_code.entries(tree, set(by_name)):
         claim, digits = by_name[entry.name], magnitude(by_name[entry.name].value)
         if entry.value is None or not digits or "." not in digits or significant(digits) < 2:
+            continue
+        if digits in settings and results_code.evaluate(entry.value, known) is None:
             continue
         exprs = results_code.upstream(entry.value, assigned, DEPTH)
         made = results_code.numbers(exprs, known) + [f for e in exprs for f in _factors(e)]
@@ -217,9 +223,9 @@ def hardcoded_results(script: str, claims: list[Claim]) -> list[str]:
     anywhere = results_code.everywhere(tree, known) + [
         (factor, node.lineno) for node in ast.walk(tree) if isinstance(node, ast.BinOp)
         for factor, count in [_factor_or_none(node)] if count >= 2]
-    for claim in claims:
+    for claim in by_name.values():
         digits = magnitude(claim.value)
-        if not digits or "." not in digits or significant(digits) < PRECISE_DECIMAL:
+        if not digits or "." not in digits or significant(digits) < PRECISE_DECIMAL or digits in settings:
             continue
         line = next((line for k, line in anywhere for scale in _scales(claim.unit)
                      if math.isclose(abs(k) * scale, float(digits), rel_tol=1e-9)), None)
@@ -509,6 +515,37 @@ def selection_counts(latex: str, claims: list[Claim]) -> set[str]:
         if re.search(rf"\btop[\s~-]*{number}(?![\d.])|(?<![\d.]){number}[\s~-]+{_RANK}\b", text, re.I):
             chosen.add(claim.name)
     return chosen
+
+
+# Words that make a count a number the paper sets rather than a size of its data: matched as whole words of the
+# claim's name, measured on the 1,241 count names in the run folders of 29 Oct (68 matched; none was a count of
+# the data's observations, firms or periods; "per_path", "simulation", "perm" and "rep" each matched one that was).
+# Name words that mark a count of draws rather than of data, measured on the 1,241 count names on disk (68 matched,
+# none of them the data's observations). The words that only abbreviate one (sim, boot, mc, fits, ensemble) count
+# only in a name with no word for the data's units, so n_sim_days and n_boot_firms stay sample sizes; trials and
+# starts (an experiment's subjects, housing starts) are left to the extractor.
+_DRAW_WORDS = {"draws", "paths", "replications", "replicates", "replicate", "reps", "repetitions", "simulations",
+               "permutations", "permutation", "bootstrap", "resamples", "shuffles", "surrogate", "surrogates",
+               "iterations", "burnin", "monte", "carlo", "gen", "generated"}
+_DRAW_ABBREVIATIONS = {"sim", "sims", "boot", "mc", "fits", "ensemble"}
+_DATA_WORDS = {"obs", "observations", "firms", "days", "returns", "filings", "subjects", "sample", "quarters", "months",
+               "years", "weeks", "periods", "events", "assets", "stocks", "companies", "countries", "trades", "rows",
+               "respondents", "households", "banks", "funds"}
+
+
+def as_parameters(claims: list[Claim]) -> tuple[list[Claim], list[str]]:
+    """Count claims that are numbers of draws, paths, replications and the like, re-kinded "parameter", and their
+    names. The extractor is told to kind them so; this catches the ones it lists as sample sizes (held-out set 2:
+    n_mc_replications 10,000 rejected twice, 2509.19663's 180,000 fits gated as its largest count)."""
+    out, moved = [], []
+    for claim in claims:
+        words = set(re.split(r"[^a-z]+", re.sub(r"([a-z])([A-Z])", r"\1_\2", claim.name).lower()))
+        if claim.kind == "count" and (words & _DRAW_WORDS or (words & _DRAW_ABBREVIATIONS and not words & _DATA_WORDS)):
+            out.append(claim.model_copy(update={"kind": "parameter"}))
+            moved.append(claim.name)
+        else:
+            out.append(claim)
+    return out, moved
 
 
 def sample_totals(claims: list[Claim], partition_totals: set[str]) -> list[Claim]:

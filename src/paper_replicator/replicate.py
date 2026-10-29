@@ -104,15 +104,17 @@ NO_RESULTS = ("the spec lists only sample sizes: the results the paper prints (i
 def spec_problems(spec: PaperSpec) -> list[str]:
     """What sends a spec back: references that name no claim, or no result to check (2610.36491's spec held 11
     sample counts and none of the Sharpe, return and drawdown tables its LaTeX prints)."""
-    return reference_problems(spec) + ([] if any(c.kind != "count" for c in spec.claims) else [NO_RESULTS])
+    return reference_problems(spec) + ([] if any(c.kind not in ("count", "parameter") for c in spec.claims)
+                                       else [NO_RESULTS])
 
 
 async def settle_headline(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, spec: PaperSpec,
                           effort: str | None) -> PaperSpec:
     """A headline written as prose, settled by choosing among the claim names; the report keeps what was written.
     An answer that names no claim, or no answer, leaves the spec as it was, for the retry and the report."""
-    names = {c.name for c in spec.claims}
-    listing = "\n".join(f"- {c.name}: {c.description} ({c.value} {c.unit})".rstrip() for c in spec.claims)
+    results = [c for c in spec.claims if c.kind != "parameter"]   # a number the paper sets is never its main result
+    names = {c.name for c in results}
+    listing = "\n".join(f"- {c.name}: {c.description} ({c.value} {c.unit})".rstrip() for c in results)
     try:
         answer = (await Runner.run(roles.headline_chooser(cfg, client, effort),
                                    f"HYPOTHESIS: {spec.hypothesis}\nMAIN CONCLUSION AS WRITTEN: {spec.headline}\n\n"
@@ -559,6 +561,10 @@ async def replicate(arxiv_id: str, client: AsyncOpenAI, cfg: config.ModelConfig,
         claims, rejected = guards.ground_claims(spec.claims, latex)
         run.say("guard", f"{len(claims)} claims grounded in the LaTeX, {len(rejected)} rejected",
                 rejected=rejected)
+        claims, moved = guards.as_parameters(claims)
+        if moved:
+            run.say("guard", f"{len(moved)} counts of draws, paths or replications are parameters, not sample "
+                             f"sizes: {', '.join(moved[:8])}" + (" ..." if len(moved) > 8 else ""), parameters=moved)
         paper = check_paper(spec, claims)
         for check in paper:
             run.say("check", f"{check['status']}: {check['text']}", **check)

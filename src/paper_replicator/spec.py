@@ -7,7 +7,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 NOT_STATED = "not stated"
-ClaimKind = Literal["estimate", "test_statistic", "p_value", "count", "other"]
+ClaimKind = Literal["estimate", "test_statistic", "p_value", "count", "parameter", "other"]
 
 
 class Claim(BaseModel):
@@ -60,6 +60,8 @@ def reference_problems(spec: PaperSpec) -> list[str]:
             problems.append(f"{where} '{name}' is not the name of a claim")
 
     check("headline", spec.headline)
+    if any(c.name == spec.headline and c.kind == "parameter" for c in spec.claims):
+        problems.append(f"headline '{spec.headline}' is a parameter the paper sets in its method, not a result")
     for split in spec.partitions:
         check(f"partition '{split.split}': total", split.total)
         for part in split.parts:

@@ -147,7 +147,10 @@ def compare(claims: list[Claim], results: list[dict], sides: dict[str, str] | No
         result = by_name.get(claim.name)
         row = {"name": claim.name, "kind": claim.kind, "unit": claim.unit, "reported": reported,
                "reproduced": None, "se": None, "n": None, "consistent": None, "why": "not computed"}
-        if result is not None and claim.name in (constructed or {}):
+        if result is not None and claim.kind == "parameter":
+            row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
+                       why="a parameter the paper sets in its method, not a result, so it is not judged")
+        elif result is not None and claim.name in (constructed or {}):
             row.update(reproduced=result.get("value"), se=result.get("se"), n=result.get("n"),
                        why=f"built from the paper's numbers, not computed from the data ({constructed[claim.name]}), "
                            f"so it is not judged")
@@ -187,7 +190,9 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
     # A zero count is an empty sample only when the paper's count, read as one number, is not zero: a paper that
     # reports 0 rejections and a run that finds 0 agree (held-out 2602.07018 lost 144 results to this), and a count
     # the checker cannot read ("0/9") says nothing about the sample.
-    if any(r.get("n") == 0 for r in results) or any(r["kind"] == "count" and r["reproduced"] == 0
+    settings = {r["name"] for r in rows if r["kind"] == "parameter"}   # a number of draws has no observations
+    if any(r.get("n") == 0 and r.get("name") not in settings for r in results) or any(
+            r["kind"] == "count" and r["reproduced"] == 0
                                                      and r["consistent"] is False for r in rows):
         return COULD_NOT_CHECK, "the replication found no observations"
     judged = [r["consistent"] for r in rows if r["kind"] != "count" and r["consistent"] is not None]
