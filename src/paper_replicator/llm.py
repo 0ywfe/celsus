@@ -9,6 +9,7 @@ import asyncio
 import math
 import os
 import random
+import sys
 import time
 from collections.abc import Awaitable, Callable
 
@@ -39,13 +40,15 @@ class RateLimitRetry(httpx2.AsyncBaseTransport):
     """Waits out a 429 instead of handing it to the SDK: the host's retry-after when it gives one, else an
     exponential back-off with full jitter (the AWS form), capped at the window. After the deadline the 429 goes
     back marked `x-should-retry: false`, so the SDK raises it at once instead of retrying it four more times.
-    Every other response, 5xx included, is the SDK's to handle as before."""
+    Every other response, 5xx included, is the SDK's to handle as before. Each wait is one line on stderr, which
+    a batch's .out keeps, so the rate-limit pressure a batch ran under can be counted."""
 
     def __init__(self, inner: httpx2.AsyncBaseTransport, *, deadline_s: float = RATE_LIMIT_DEADLINE_S,
                  window_s: float = RATE_LIMIT_WINDOW_S, sleep: Callable[[float], Awaitable[None]] = asyncio.sleep,
-                 clock: Callable[[], float] = time.monotonic, jitter: Callable[[], float] = random.random):
+                 clock: Callable[[], float] = time.monotonic, jitter: Callable[[], float] = random.random,
+                 log: Callable[[str], None] = lambda line: print(line, file=sys.stderr, flush=True)):
         self.inner, self.deadline_s, self.window_s = inner, deadline_s, window_s
-        self.sleep, self.clock, self.jitter = sleep, clock, jitter
+        self.sleep, self.clock, self.jitter, self.log = sleep, clock, jitter, log
 
     def _wait(self, response: httpx2.Response, attempt: int) -> float:
         """At least a second, at most the window. A retry-after gets up to a second of jitter, so clients limited
@@ -68,8 +71,11 @@ class RateLimitRetry(httpx2.AsyncBaseTransport):
                 return response
             wait = self._wait(response, attempt)
             if self.clock() - start + wait > self.deadline_s:
+                self.log(f"[rate-limit] {request.url.host}: 429 after {self.clock() - start:.0f} s of waits, "
+                         f"past the {self.deadline_s:.0f}-s deadline; failing")
                 response.headers["x-should-retry"] = "false"
                 return response
+            self.log(f"[rate-limit] {request.url.host}: 429, waiting {wait:.1f} s (attempt {attempt + 1})")
             await response.aclose()
             await self.sleep(wait)
             attempt += 1

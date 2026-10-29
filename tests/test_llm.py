@@ -39,8 +39,9 @@ def provider(statuses: list[int], headers: dict | None = None):
     return seen, httpx2.MockTransport(handle)
 
 
-def client(transport, clock: Clock, max_retries: int = llm.MAX_RETRIES) -> openai.AsyncOpenAI:
-    waiting = llm.RateLimitRetry(transport, sleep=clock.sleep, clock=clock.time, jitter=lambda: 1.0)
+def client(transport, clock: Clock, max_retries: int = llm.MAX_RETRIES, log: list | None = None) -> openai.AsyncOpenAI:
+    waiting = llm.RateLimitRetry(transport, sleep=clock.sleep, clock=clock.time, jitter=lambda: 1.0,
+                                 log=(log if log is not None else []).append)
     return openai.AsyncOpenAI(api_key="test", base_url="https://host.test/v1", max_retries=max_retries,
                               http_client=httpx2.AsyncClient(transport=waiting))
 
@@ -123,3 +124,15 @@ def test_every_production_client_waits_out_rate_limits(monkeypatch):
     made = llm.make_client(config.ModelConfig(config.PROVIDERS["fireworks"], "accounts/fireworks/models/muse-spark-open"))
 
     assert isinstance(made._client._transport, llm.RateLimitRetry)
+
+
+def test_every_wait_and_the_final_failure_are_logged_one_line_each():
+    seen, transport = provider([429] * 1000)
+    clock, log = Clock(), []
+
+    with pytest.raises(openai.RateLimitError):
+        ask(client(transport, clock, log=log))
+
+    waits = [line for line in log if "waiting" in line]
+    assert len(waits) == len(clock.sleeps) and waits[0] == "[rate-limit] host.test: 429, waiting 4.0 s (attempt 1)"
+    assert log[-1].startswith("[rate-limit] host.test: 429 after") and "failing" in log[-1]
