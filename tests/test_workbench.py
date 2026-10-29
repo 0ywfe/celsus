@@ -17,8 +17,10 @@ class FakeProcess:
 
 
 class FakeSandbox:
-    def __init__(self, dies_after: int | None = None):
-        self.files, self.calls, self.dies_after = {}, 0, dies_after
+    """Call 1 is always the workbench's `pip freeze` of the image, made when it opens."""
+
+    def __init__(self, dies_after: int | None = None, freeze: str = "pandas==2.2.3\nnumpy==2.1.0\n"):
+        self.files, self.calls, self.dies_after, self.freeze = {}, 0, dies_after, freeze
         outer = self
 
         class FS:
@@ -44,7 +46,7 @@ class FakeSandbox:
 
     def exec(self, *args, **kwargs):
         self._touch()
-        return FakeProcess("ran")
+        return FakeProcess(self.freeze if args[1:4] == ("-m", "pip", "freeze") else "ran")
 
     def terminate(self):
         self._touch()
@@ -57,11 +59,11 @@ def bench(monkeypatch, boxes):
 
 
 def test_a_dead_sandbox_is_reopened_with_the_builders_files(monkeypatch):
-    first, second = FakeSandbox(dies_after=2), FakeSandbox()
+    first, second = FakeSandbox(dies_after=3), FakeSandbox()
     wb = bench(monkeypatch, [first, second])
-    wb.write_file("replicate.py", "print(1)")          # call 1
-    assert wb.run("ls")[1] == "ran"                     # call 2
-    code, out = wb.run("python replicate.py")           # call 3: the sandbox is gone
+    wb.write_file("replicate.py", "print(1)")          # call 2
+    assert wb.run("ls")[1] == "ran"                     # call 3
+    code, out = wb.run("python replicate.py")           # call 4: the sandbox is gone
     assert code == 0 and out.endswith("ran") and "restarted" in out
     assert second.files[f"{WORK}/replicate.py"] == "print(1)"
     assert wb.read_text(f"{WORK}/replicate.py") == "print(1)"
@@ -69,7 +71,7 @@ def test_a_dead_sandbox_is_reopened_with_the_builders_files(monkeypatch):
 
 
 def test_a_read_after_the_sandbox_died_still_finds_what_the_builder_wrote(monkeypatch):
-    first, second = FakeSandbox(dies_after=1), FakeSandbox()
+    first, second = FakeSandbox(dies_after=2), FakeSandbox()
     wb = bench(monkeypatch, [first, second])
     wb.write_file(f"{WORK}/replicate.py", "print(2)")
     assert wb.read_text(f"{WORK}/replicate.py") == "print(2)"
@@ -77,5 +79,19 @@ def test_a_read_after_the_sandbox_died_still_finds_what_the_builder_wrote(monkey
 
 
 def test_closing_a_dead_sandbox_is_not_an_error(monkeypatch):
-    wb = bench(monkeypatch, [FakeSandbox(dies_after=0)])
+    wb = bench(monkeypatch, [FakeSandbox(dies_after=1)])
     wb.close()
+
+
+def test_the_clean_run_gets_what_the_builder_installed_and_nothing_it_cannot_install(monkeypatch):
+    # set 2's first runs: workbenches pip-installed xlrd, ripser, cvxpy and scikit-learn, and the clean re-runs died
+    # on ModuleNotFoundError because a fresh sandbox has only the image
+    box = FakeSandbox()
+    wb = bench(monkeypatch, [box])
+    box.freeze += "xlrd==2.0.1\nnumpy==2.2.0\nauthors-pkg @ file:///work/pkg\n"
+    assert wb.installed() == (["numpy==2.2.0", "xlrd==2.0.1"], ["authors-pkg @ file:///work/pkg"])
+
+
+def test_nothing_installed_means_the_plain_image(monkeypatch):
+    wb = bench(monkeypatch, [FakeSandbox()])
+    assert wb.installed() == ([], [])

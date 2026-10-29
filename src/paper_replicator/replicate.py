@@ -63,6 +63,7 @@ class Run:
     market_log: list[dict] = field(default_factory=list)
     hosts: list[str] = field(default_factory=list)
     kept_script: str = ""  # the script whose clean re-run produced the kept results
+    packages: list[str] = field(default_factory=list)  # what the builder installed, which the clean run installs
     sandbox_note: str = "not run"
     # the script reviewer (a judgement check), attached by replicate(); None runs without it
     review: Callable[[PaperSpec, str], Awaitable[tuple[str, str] | None]] | None = None
@@ -126,11 +127,11 @@ def sides_by_statistic(spec: PaperSpec, paper: list[dict]) -> dict[str, str]:
             if c["check"] == "sidedness" and c["test"] in tests}
 
 
-async def clean_run(run: Run, script: str, attempt: int) -> SandboxRun | None:
+async def clean_run(run: Run, script: str, attempt: int, packages: list[str] = ()) -> SandboxRun | None:
     """The sandbox round, or None when the infrastructure failed (Modal, host fetch): the builder
     cannot fix that, so the caller stops and keeps its last good results."""
     try:
-        return await asyncio.to_thread(sandbox_round, run, script, attempt)
+        return await asyncio.to_thread(sandbox_round, run, script, attempt, tuple(packages))
     except Exception as error:
         run.failure = f"the clean run could not complete ({type(error).__name__})"
         run.guard_events.append(f"attempt {attempt}: clean run could not complete: {type(error).__name__}: {error}")
@@ -173,21 +174,22 @@ def read_results(sandbox_run: SandboxRun) -> tuple[list[dict] | None, str | None
     return results, None
 
 
-def sandbox_round(run: Run, script: str, attempt: int) -> SandboxRun:
+def sandbox_round(run: Run, script: str, attempt: int, packages: tuple[str, ...] = ()) -> SandboxRun:
     """Run the script; if market data was missing, fetch it on the host once and rerun the same script."""
     env = sandbox_secrets()
-    result = run.sandbox(script, market_cache=MARKET_CACHE, env=env, timeout_s=run.timeout_s)
+    result = run.sandbox(script, market_cache=MARKET_CACHE, env=env, timeout_s=run.timeout_s, packages=packages)
     requests = json.loads(result.files.get("market_data_requests.json", "[]"))
     if requests:
         run.say("data", f"sandbox could not fetch {len(requests)} market-data items; fetching on the host and caching")
         fetched = market.fulfil(requests, MARKET_CACHE)
         run.guard_events.append(f"attempt {attempt}: {len(fetched)} market-data items fetched on the host into data/market")
-        result = run.sandbox(script, market_cache=MARKET_CACHE, env=env, timeout_s=run.timeout_s)
+        result = run.sandbox(script, market_cache=MARKET_CACHE, env=env, timeout_s=run.timeout_s, packages=packages)
     (run.folder / f"sandbox_{attempt}.log").write_text(
         f"exit {result.exit_code} in {result.seconds}s\n--- stdout\n{result.stdout}\n--- stderr\n{result.stderr}")
     run.market_log = json.loads(result.files.get("market_data_log.json", "[]"))
     run.hosts = json.loads(result.files.get("data_sources.json", "[]"))
-    run.sandbox_note = f"attempt {attempt}, exit {result.exit_code}, {result.seconds}s"
+    run.sandbox_note = (f"attempt {attempt}, exit {result.exit_code}, {result.seconds}s"
+                        + (f", with the packages the builder installed: {', '.join(packages)}" if packages else ""))
     return result
 
 
@@ -440,8 +442,13 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                 run.say("guard", f"script rejected: {problem.split('. ')[0]}")
                 history.append(user(f"Rejected: {problem} Fix /work/replicate.py in the sandbox and run it again."))
                 continue
-            run.say("sandbox", f"round {round_}: clean re-run in a fresh sandbox")
-            sandbox_run = await clean_run(run, script, round_)
+            packages, unpinned = await asyncio.to_thread(bench.installed)
+            if unpinned:
+                run.guard_events.append(f"round {round_}: not installed in the clean run (not a released package): "
+                                        + ", ".join(unpinned))
+            run.say("sandbox", f"round {round_}: clean re-run in a fresh sandbox"
+                    + (f" with the packages the builder installed: {', '.join(packages)}" if packages else ""))
+            sandbox_run = await clean_run(run, script, round_, packages)
             if sandbox_run is None:
                 return kept
             results, problem = read_results(sandbox_run)
@@ -451,6 +458,8 @@ async def build_with_workbench(run: Run, cfg: config.ModelConfig, client: AsyncO
                                     "Fix /work/replicate.py and run it again."))
                 continue
             kept, run.kept_script, run.review_issue = results, script, None   # not reviewed yet
+            run.packages = packages
+            (run.folder / "packages.txt").write_text("".join(f"{p}\n" for p in packages))
             (run.folder / "results.json").write_text(sandbox_run.files["results.json"])
             (run.folder / "results_attempt.txt").write_text(str(round_))
             problem, watch = audit_problem(claims, results, sandbox_run.stdout, spec,
@@ -566,7 +575,7 @@ def run_summary(run: Run, arxiv_id: str, cfg: config.ModelConfig, builder: str, 
                     "consistent": r["consistent"]} for r in rows if r["kind"] == "count"],
         "judged": sum(1 for r in rows if r["kind"] != "count" and r["consistent"] is not None),
         "matched": sum(1 for r in rows if r["kind"] != "count" and r["consistent"]),
-        "rejections": run.rejections, "rounds": run.rounds, "calls": len(calls),
+        "rejections": run.rejections, "rounds": run.rounds, "packages": run.packages, "calls": len(calls),
         "cost_usd": round(run.ledger.spent_usd, 4),
         "tokens_in": sum(c["input_tokens"] for c in calls), "tokens_out": sum(c["output_tokens"] for c in calls),
         "wall_s": round(time.monotonic() - run.started, 1), "crashed": crashed,

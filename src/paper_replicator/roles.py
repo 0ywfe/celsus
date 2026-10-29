@@ -64,7 +64,8 @@ RESULTS_FORMAT = """{"results": [{"name": "<claim name from the spec>",
 
 ENVIRONMENT = f"""Environment: a Linux sandbox with network access; the script's time limit is {{minutes}} minutes.
 - Packages: pandas, numpy, scipy, statsmodels, requests, yfinance, pyarrow.
-- SEC EDGAR: send the header User-Agent: os.environ["SEC_USER_AGENT"] on every request, and stay
+- SEC EDGAR: fetch it from Python (requests, urllib or pandas): the sandbox puts the operator's contact in the
+  User-Agent of every request to sec.gov, and only there (curl and other command-line tools don't get it). Stay
   under 10 requests per second. Never set or replace that contact, and never write an email address into a
   command, file or script (not one from the paper, not a placeholder).
 - Market data only through the module next to the script (`import market_data`); never import yfinance:

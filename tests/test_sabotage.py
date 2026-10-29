@@ -35,7 +35,7 @@ def honest_run(folder):
         (folder / name).write_text(text)
 
 
-def sandbox(script, *, market_cache, env, timeout_s):
+def sandbox(script, *, market_cache, env, timeout_s, packages=()):
     """The honest script reproduces RESULTS; a planted constant or nudge reaches the results; a planted print leaks
     env."""
     results = json.loads(json.dumps(RESULTS))

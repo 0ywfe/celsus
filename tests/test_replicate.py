@@ -37,10 +37,11 @@ RESULTS = {"results": [{"name": "small_mean", "value": -6.9, "se": 1.2, "n": 22}
 
 class FakeSandbox:
     def __init__(self, runs):
-        self.runs, self.scripts = list(runs), []
+        self.runs, self.scripts, self.packages = list(runs), [], []
 
-    def __call__(self, script, *, market_cache, env, timeout_s):
+    def __call__(self, script, *, market_cache, env, timeout_s, packages=()):
         self.scripts.append(script)
+        self.packages.append(packages)
         return self.runs[len(self.scripts) - 1]
 
 
@@ -220,8 +221,13 @@ def test_a_broken_audit_round_keeps_the_earlier_results(setup):
 
 
 class FakeWorkbench:
+    added: tuple[list[str], list[str]] = ([], [])   # what installed() reports: (released packages, anything else)
+
     def __init__(self, **kwargs):
         self.files, self.commands, self.closed = {}, [], False
+
+    def installed(self):
+        return self.added
 
     def run(self, cmd):
         self.commands.append(cmd)
@@ -270,6 +276,28 @@ def test_workbench_builder_explores_writes_and_only_the_clean_rerun_counts(setup
     assert (folder / "attempt_1_notes.md").read_text().startswith("Built 38 filings")
     tool_reply = [m for m in api.requests[2]["body"]["messages"] if m["role"] == "tool"][0]["content"]
     assert "test@example.com" not in tool_reply and "<SEC_USER_AGENT>" in tool_reply
+
+
+def test_the_clean_rerun_installs_what_the_builder_installed_in_the_workbench(setup, monkeypatch):
+    # run-20261029T022221Z-23f5c3: the workbench had pip-installed xlrd, the clean re-run died on ModuleNotFoundError
+    cfg, tmp_path = setup
+    monkeypatch.setattr(FakeWorkbench, "added", (["xlrd==2.0.1"], ["authors-pkg @ file:///work/pkg"]))
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[
+        (json.dumps(SPEC), usage(500, 900)),
+        ([("write_file", {"path": "replicate.py", "content": "import xlrd\nprint('computed')"})], usage(1200, 300)),
+        ("Read the sheet with xlrd.", usage(1800, 80)),
+    ])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    client = make_client(cfg, max_retries=0, http_client=api.http_client())
+    outcome = asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=1, timeout_s=600, budget_usd=None,
+                                              runs_dir=tmp_path / "runs", sandbox=sandbox, builder="workbench",
+                                              turns=10, open_bench=lambda **kw: FakeWorkbench(**kw)))
+    assert sandbox.packages == [("xlrd==2.0.1",)]
+    folder = outcome["report"].parent
+    assert (folder / "packages.txt").read_text() == "xlrd==2.0.1\n" and outcome["summary"]["packages"] == ["xlrd==2.0.1"]
+    report = (folder / "report.md").read_text()
+    assert "with the packages the builder installed: xlrd==2.0.1" in report
+    assert "not installed in the clean run (not a released package): authors-pkg @ file:///work/pkg" in report
 
 
 def test_cutting_the_sample_to_the_reported_count_is_rejected_in_the_first_round(setup):

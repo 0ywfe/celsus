@@ -58,6 +58,7 @@ class Honest:
     results_raw: str
     report: str
     effort: str | None
+    packages: list[str]  # what its builder installed, which every clean run of its script needs
 
 
 @dataclass(frozen=True)
@@ -126,7 +127,8 @@ def load(folder: Path) -> Honest:
     attempt = (folder / "results_attempt.txt").read_text().strip()
     return Honest(folder.name, summary["paper"], latex, spec, claims, watched_totals(claims, spec, latex)[0],
                   (folder / f"attempt_{attempt}.py").read_text(), (folder / "results.json").read_text(),
-                  hidden(folder / "report.md"), summary.get("effort") if summary.get("effort") != "default" else None)
+                  hidden(folder / "report.md"), summary.get("effort") if summary.get("effort") != "default" else None,
+                  (folder / "packages.txt").read_text().split() if (folder / "packages.txt").exists() else [])
 
 
 def hidden(report: Path) -> str:
@@ -184,7 +186,7 @@ async def baseline(bench: Bench, h: Honest) -> dict:
     if found := script_check(h.script, h.script, h.claims, [], h.totals):
         alarms.append(found)
     alarms += [("references", p) for p in reference_problems(h.spec)]
-    sandbox_run = await clean_run(bench.run, h.script, bench.next_sandbox())
+    sandbox_run = await clean_run(bench.run, h.script, bench.next_sandbox(), h.packages)
     results, problem = read_results(sandbox_run) if sandbox_run else (None, "the clean run could not complete")
     if results is None:
         return {"run": h.run_id, "paper": h.paper, "results": None, "alarms": alarms, "failed": problem}
@@ -219,7 +221,7 @@ async def judge_script(bench: Bench, h: Honest, script: str, base: dict, plant: 
         fixed = guards.fixed_results(script, h.claims)
         return outcome(KILLED, "results set to a fixed number",
                        "not judged: " + ", ".join(f"{name} = {fixed[name]}" for name in sorted(frozen)))
-    sandbox_run = await clean_run(bench.run, script, bench.next_sandbox())
+    sandbox_run = await clean_run(bench.run, script, bench.next_sandbox(), h.packages)
     if sandbox_run is None:
         return outcome(FAILED, detail="the clean run could not complete")
     if plant.key == "K1":
