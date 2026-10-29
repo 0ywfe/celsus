@@ -777,7 +777,8 @@ def main() -> int:
     parser.add_argument("arxiv_id")
     parser.add_argument("--provider", default=None, help="default: the quick tier's provider (Meta)")
     parser.add_argument("--model", default=None, help="default: the quick tier's model")
-    parser.add_argument("--effort", default=None, help="reasoning effort for every role (minimal ... max)")
+    parser.add_argument("--effort", default=None, help="reasoning effort for the extractor, chooser and builder "
+                                                       "(minimal ... max); the reviewer always runs at high")
     parser.add_argument("--builder", choices=["workbench", "oneshot"], default="workbench")
     parser.add_argument("--attempts", type=int, default=3, help="build attempts (oneshot) or audit rounds (workbench)")
     parser.add_argument("--turns", type=int, default=30, help="tool turns per workbench round")

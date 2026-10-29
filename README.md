@@ -69,7 +69,7 @@ uv run python -m paper_replicator.batch 2512.06144 --n 5 --parallel 5 --model mu
 
 ### Models
 
-A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role; `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max). Any other OpenAI-compatible endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
+A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role; `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max) of the extractor, chooser and builder; the script reviewer always runs at high, whatever the run's effort. Any other OpenAI-compatible endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
 
 Each run writes `runs/<run-id>/`: `report.md` (the first line is the plain-words verdict), `comparison.json`, the spec, every script the builder wrote, sandbox logs, `events.jsonl`, and `calls.jsonl` (provider, model, tokens and cost of every call).
 

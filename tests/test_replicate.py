@@ -102,6 +102,21 @@ def test_a_run_that_declares_the_paper_s_sample_not_rebuilt_is_judged_and_capped
     assert "sample size not rebuilt: the filing list is not public" in outcome["report"].read_text()
 
 
+@pytest.mark.parametrize("effort", ["minimal", "xhigh"])
+def test_the_reviewer_runs_at_high_whatever_the_run_s_effort(setup, effort):
+    """The orchestrator's ruling (29 Oct): every reviewer number (the plant battery, the held-out sets, validation)
+    was measured at high; a run at minimal (the Meta demo) or xhigh moves the other roles, never the reviewer."""
+    cfg, tmp_path = setup
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "ok", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    client = make_client(cfg, max_retries=0, http_client=api.http_client())
+    asyncio.run(replicate.replicate("0000.00000", client, cfg, attempts=3, timeout_s=600, budget_usd=None,
+                                    runs_dir=tmp_path / "runs", sandbox=sandbox, effort=effort))
+
+    assert {r["body"].get("reasoning_effort") for r in api.requests} == {effort}   # the extractor and the builder
+    assert [r["body"].get("reasoning_effort") for r in api.standing_requests] == ["high"]
+
+
 def test_failed_script_goes_back_to_the_builder_with_stderr(setup):
     cfg, tmp_path = setup
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
