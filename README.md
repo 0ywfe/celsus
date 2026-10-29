@@ -44,6 +44,11 @@ The tolerances come from published replication practice, not from a chosen perce
 - The builder may not fetch the authors' code: re-running their code isn't replicating the paper. Data files are fine.
 - Secrets are redacted from everything the model sees, and every run has a budget stop.
 
+### Limitations
+
+- A result built from the paper's own numbers (another claim times a constant, or draws that cancel to a constant) is caught when the script writes it as arithmetic on names and literals, including numbers spelled as text or string lengths. It is not yet caught through dict or list constants, `max`, `np.where` or helper functions, or `**` and `+` forms.
+- Counts that are not the sample total pass within SCORE's 15%, or else within 1.96 √n. That band has no published source; it is kept for small subgroups until an off subgroup count leaves only its own results unjudged.
+
 ## Use
 
 ```bash
