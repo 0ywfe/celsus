@@ -23,7 +23,7 @@ Tolerances come from the data, not from a chosen percentage:
 - p_value: consistent if both are on the same side of 0.05.
 - tally (how many tests were significant or rejected, regimes or breaks detected, misclassifications): a result, not
   a sample size, so it never gates the sample; consistent if the paper's value lies inside the reproduction's 95%
-  interval, and not judged without one.
+  interval, or, with se = 0 (no sampling error), by the fixed-number rule above; not judged without an se.
 - anything without what its test needs is shown but not judged.
 """
 
@@ -121,6 +121,8 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
     """(consistent, why) for one number. A count is judged by SCORE's 15% alone when it is a sample total
     (`total`), else by SCORE's 15% or the unsourced band."""
     value, se = result.get("value"), result.get("se")
+    if se is not None and (isinstance(se, bool) or not isinstance(se, (int, float)) or not math.isfinite(se) or se < 0):
+        se = None   # an uncertainty that is no number (se "0", -1, NaN) is none: it crashed here, or drew a nonsense band
     if value is None:
         return None, "no value"
     if (why := cannot_be(kind, value)) is not None:
@@ -137,9 +139,13 @@ def judge(kind: str, reported: float, result: dict, side: str = "two-sided",
         return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "count":
         return count_match(reported, value) if total else subgroup_match(reported, value)
-    if kind == "tally":   # how many tests were significant, breaks detected: a result, judged only with an uncertainty
-        if not se:
+    if kind == "tally":   # how many tests were significant, breaks detected: a result, never the sample
+        if se is None:
             return None, "a tally of what the analysis found, with no uncertainty, so it is not judged"
+        if direction:   # printed as a bound ("<5"): judged against the bound, not as a fixed number
+            return within_bound(direction, reported, value, se)
+        if se == 0:   # a deterministic finding (12 VaR breaches against 12), judged as a fixed number
+            return fixed_number(reported, value, printed)
         inside = abs(value - reported) <= Z95 * se
         return inside, f"paper {'inside' if inside else 'outside'} {value:.4g} +/- {Z95 * se:.4g}"
     if kind == "test_statistic" and side == NO_SIDE:

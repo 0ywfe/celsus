@@ -45,14 +45,31 @@ def test_only_counts_are_re_kinded():
 @pytest.mark.parametrize("result, consistent, why", [
     ({"name": "t", "value": 3, "se": None}, None, "a tally of what the analysis found, with no uncertainty, so it is "
                                                   "not judged"),
-    ({"name": "t", "value": 3, "se": 0}, None, "a tally of what the analysis found, with no uncertainty, so it is "
-                                               "not judged"),
+    ({"name": "t", "value": 3}, None, "a tally of what the analysis found, with no uncertainty, so it is not judged"),
     ({"name": "t", "value": 9, "se": 1.0}, True, "paper inside 9 +/- 1.96"),
     ({"name": "t", "value": 3, "se": 1.0}, False, "paper outside 3 +/- 1.96"),
 ])
-def test_a_tally_is_judged_only_against_an_uncertainty(result, consistent, why):
+def test_a_tally_with_no_uncertainty_given_is_not_judged_and_with_one_is(result, consistent, why):
     row = compare.compare([claim("t", "10", "tally")], [result])[0]
     assert (row["consistent"], row["why"]) == (consistent, why)
+
+
+@pytest.mark.parametrize("value, consistent", [(10, True), (11, True), (12, False), (3, False)])
+def test_a_tally_the_builder_says_has_no_sampling_error_is_judged_as_a_fixed_number(value, consistent):
+    """(h2), the orchestrator's ruling: se = 0 is a deterministic finding (12 VaR breaches against 12), judged exact
+    or within 10%; the paper's 10 significant tests found as 3 is a finding that did not reproduce."""
+    row = compare.compare([claim("t", "10", "tally")], [{"name": "t", "value": value, "se": 0}])[0]
+    assert row["consistent"] is consistent
+
+
+def test_an_off_tally_with_no_sampling_error_is_a_result_that_did_not_hold_not_a_sample_failure():
+    claims = [claim("n_obs", "14,361"), claim("n_significant_granger_05", "10", "tally"), claim("beta", "0.42", "estimate")]
+    results = [{"name": "n_obs", "value": 14361, "n": 14361}, {"name": "n_significant_granger_05", "value": 3, "se": 0},
+               {"name": "beta", "value": 0.41, "se": 0.05, "n": 14361}]
+
+    rows = compare.compare(claims, results, totals={"n_obs"})
+
+    assert compare.verdict(rows, results, headline="beta") == ("partly holds up", "")
 
 
 def test_a_negative_tally_is_no_tally():
@@ -138,3 +155,19 @@ def test_195bb3s_main_result_is_consistent_as_a_p_value():
     claims, _ = guards.as_p_values([c])
     row = compare.compare(claims, [{"name": c.name, "value": 0.995554733852911, "se": 0}])[0]
     assert row["consistent"] is True
+
+
+@pytest.mark.parametrize("se", ["0", "x", -1.0, float("nan"), False, True])
+def test_an_uncertainty_that_is_no_number_is_no_uncertainty_and_never_crashes(se):
+    """Code review: se="0" crashed judge at Z95 * se (estimates too, since the start); a negative or NaN se drew
+    a nonsense band."""
+    tally = compare.compare([claim("t", "10", "tally")], [{"name": "t", "value": 3, "se": se}])[0]
+    estimate = compare.compare([claim("b", "0.42", "estimate")], [{"name": "b", "value": 0.41, "se": se}])[0]
+    assert tally["consistent"] is None and estimate["consistent"] is None
+
+
+@pytest.mark.parametrize("value, consistent", [(4, True), (9, False)])
+def test_a_tally_printed_as_a_bound_is_judged_against_the_bound(value, consistent):
+    c = Claim(name="n_breaks", description="", value="<5", unit="", kind="tally", where="")
+    row = compare.compare([c], [{"name": "n_breaks", "value": value, "se": 0}])[0]
+    assert row["consistent"] is consistent and "bound" in row["why"]
