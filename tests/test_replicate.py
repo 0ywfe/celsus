@@ -102,6 +102,25 @@ def test_a_run_that_declares_the_paper_s_sample_not_rebuilt_is_judged_and_capped
     assert "sample size not rebuilt: the filing list is not public" in outcome["report"].read_text()
 
 
+def test_a_run_that_writes_the_paper_s_sample_size_as_a_number_is_capped_like_a_declaration(setup):
+    """The fixed-number rule, end to end: the kept script writes the 40 filings as 5*8, which the comparison leaves
+    unjudged; the sample is not counted as reported, so the paper gets at most "partly holds up" and the first line
+    says why, with no model call and no extra round."""
+    cfg, tmp_path = setup
+    frozen = {"script": "R = lambda name, value: {'name': name, 'value': value}\nresults = [R('n_filings', 5*8)]",
+              "notes": "n/a"}
+    written = {**RESULTS, "results": [*RESULTS["results"][:2], {"name": "n_filings", "value": 40, "se": 0, "n": 40}]}
+    api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(frozen), usage(800, 700))])
+    sandbox = FakeSandbox([SandboxRun(0, "ok", "", 1.0, {"results.json": json.dumps(written)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+
+    assert outcome["verdict"] == "partly holds up"
+    assert outcome["summary"]["first_line"].endswith(
+        "Sample size not rebuilt: the script writes it as a fixed number (40 at line 2), not counted from the data "
+        "(n_filings, 40 in the paper).")
+    assert len(api.requests) == 2   # extract and one build: the audit sends nothing back
+
+
 @pytest.mark.parametrize("effort", ["minimal", "xhigh"])
 def test_the_reviewer_runs_at_high_whatever_the_run_s_effort(setup, effort):
     """The orchestrator's ruling (29 Oct): every reviewer number (the plant battery, the held-out sets, validation)

@@ -365,3 +365,130 @@ def test_the_reviewer_checks_a_declared_sample_against_the_code():
     from paper_replicator import roles
     assert ("If the paper's largest sample size is declared not rebuilt, read the code: if the code builds that "
             "sample, the\n   declaration is false. Report it as a finding.") in roles.REVIEWER
+
+
+# The orchestrator's ruling (29 Oct), before the battery: e589c6's round-3 fake must be caught by a check that always
+# catches, not by a reviewer that caught it 3 times in 9. The comparison already left R("n_llm_runs", 3*4*5*2, ...)
+# unjudged (guards.fixed_results), but the sample counted as reported and the verdict was not capped: on a paper
+# whose other results all match, the fake earned "holds up" where the honest declaration earns "partly holds up".
+
+LLM = PaperSpec.model_validate({
+    "title": "t", "hypothesis": "h", "data_sources": [], "sample": "", "method": [], "headline": "ic_avg_2021",
+    "claims": [{"name": "ic_avg_2021", "description": "", "value": "6.83", "unit": "", "kind": "estimate", "where": ""},
+               {"name": "n_robust_origins", "description": "", "value": "96", "unit": "", "kind": "count", "where": ""},
+               {"name": "n_llm_runs", "description": "", "value": "120", "unit": "", "kind": "count", "where": ""},
+               {"name": "n_bootstrap", "description": "", "value": "1,000", "unit": "", "kind": "parameter",
+                "where": ""}],
+    "partitions": [], "tests": []})
+LLM_TOTALS = [c for c in LLM.claims if c.kind == "count"]
+LLM_RESULTS = [{"name": "ic_avg_2021", "value": 6.83, "se": 0.4, "n": 12},
+               {"name": "n_robust_origins", "value": 96, "se": 0, "n": 96},
+               {"name": "n_llm_runs", "value": 120, "se": 0, "n": 120},
+               {"name": "n_bootstrap", "value": 1000, "se": 0, "n": None}]
+SCRIPT = """import pandas as pd
+paths = pd.read_csv("paths.csv")
+origins = pd.read_csv("origins.csv")
+def R(name, value, n):
+    return {{"name": name, "value": value, "se": 0, "n": n}}
+results = [
+    R("ic_avg_2021", origins["ic"].mean(), 12),
+    R("n_robust_origins", len(origins), len(origins)),
+    R("n_llm_runs", {runs}, {runs}),
+    R("n_bootstrap", 1000, None),
+]
+"""
+FAKE, HONEST = SCRIPT.format(runs="3*4*5*2"), SCRIPT.format(runs="len(paths)")
+SAME = {"same_as_paper": True, "missing": 0, "extra": 0, "not_rebuilt": {}}
+
+
+def judged(script: str) -> tuple[str, str, str]:
+    """(verdict, first line, the declared note) for LLM_RESULTS under the script's fixed numbers."""
+    from paper_replicator import compare, guards
+    fixed = guards.fixed_results(script, LLM.claims)
+    rows = compare.compare(LLM.claims, LLM_RESULTS, fixed=fixed, totals=replicate.judged_totals(LLM.claims, LLM))
+    note = replicate.unrebuilt_note(replicate.declared_sample(SAME, LLM_RESULTS, LLM_TOTALS, fixed))
+    issues = "; ".join(replicate.sample_issues(LLM, SAME, LLM_RESULTS, LLM_TOTALS, fixed)) or None
+    outcome, reason = compare.verdict(rows, LLM_RESULTS, None, issues, headline="ic_avg_2021", unrebuilt=note)
+    return outcome, compare.first_line(outcome, reason, rows, "ic_avg_2021", unrebuilt=note), note
+
+
+def test_e589c6s_round_three_fake_is_judged_like_a_declaration_with_no_model_call():
+    from paper_replicator import guards
+    assert guards.fixed_results(FAKE, LLM.claims)["n_llm_runs"] == "120 at line 9"
+    assert replicate.declared_sample(SAME, LLM_RESULTS, LLM_TOTALS) is None   # before: the fake counted as reported
+
+    outcome, line, note = judged(FAKE)
+
+    assert outcome == "partly holds up"
+    assert line.endswith(" Sample size not rebuilt: the script writes it as a fixed number (120 at line 9), not "
+                         "counted from the data (n_llm_runs, 120 in the paper).")
+    assert replicate.audit_problem(LLM.claims, LLM_RESULTS, "", LLM, SAME, LLM_TOTALS) == (None, [])   # no extra round
+
+
+def test_an_honest_count_computed_from_the_data_is_reported_and_not_capped():
+    from paper_replicator import guards
+    assert "n_llm_runs" not in guards.fixed_results(HONEST, LLM.claims)
+
+    outcome, line, note = judged(HONEST)
+
+    assert (outcome, note) == ("holds up", None) and "Sample size not rebuilt" not in line
+
+
+def test_a_parameter_written_as_a_literal_stays_allowed():
+    """The paper's own setting written as its value is how a replication uses it (rule (l)); it is no sample total,
+    so it neither caps the verdict nor is judged."""
+    from paper_replicator import compare, guards
+    fixed = guards.fixed_results(HONEST, LLM.claims)
+    row = next(r for r in compare.compare(LLM.claims, LLM_RESULTS, fixed=fixed) if r["name"] == "n_bootstrap")
+
+    assert "n_bootstrap" in fixed and "a parameter the paper sets in its method" in row["why"]
+    assert judged(HONEST)[0] == "holds up"
+
+
+def test_a_largest_total_written_as_a_number_excuses_no_smaller_total():
+    from paper_replicator import guards
+    fixed = guards.fixed_results(FAKE, LLM.claims)
+    sample = {**SAME, "not_rebuilt": {"n_robust_origins": "the robust origins need unpublished vintages"}}
+    without = [r for r in LLM_RESULTS if r["name"] != "n_robust_origins"]
+
+    assert replicate.excused_totals(sample, without, LLM_TOTALS) == {
+        "n_robust_origins": "the robust origins need unpublished vintages"}   # before: the fake anchored the excuse
+    assert replicate.excused_totals(sample, without, LLM_TOTALS, fixed) == {}
+    assert replicate.sample_issues(LLM, sample, without, LLM_TOTALS, fixed) == [
+        "the replication did not report the paper's sample size (n_robust_origins), so its sample cannot be compared"]
+
+
+def test_a_tied_total_counted_from_the_data_is_the_sample_reported():
+    from paper_replicator import guards
+    twin = LLM.claims[2].model_copy(update={"name": "n_llm_paths"})
+    claims, totals = [*LLM.claims, twin], [*LLM_TOTALS, twin]
+    script = FAKE.replace('    R("n_bootstrap"', '    R("n_llm_paths", len(paths), len(paths)),\n    R("n_bootstrap"')
+    results = [*LLM_RESULTS, {"name": "n_llm_paths", "value": 120, "se": 0, "n": 120}]
+
+    assert replicate.declared_sample(SAME, results, totals, guards.fixed_results(script, claims)) is None
+
+
+def test_a_declared_reason_beats_a_fixed_number_across_tied_totals():
+    """Code review: one tied copy written as a number, the other declared and left out: the builder's reason is the
+    note, not the fixed number."""
+    from paper_replicator import guards
+    twin = LLM.claims[2].model_copy(update={"name": "n_llm_paths"})
+    claims, totals = [*LLM.claims, twin], [*LLM_TOTALS, twin]
+    sample = {**SAME, "not_rebuilt": {"n_llm_paths": "the persona prompts are not published"}}
+
+    declared = replicate.declared_sample(sample, LLM_RESULTS, totals, guards.fixed_results(FAKE, claims))
+
+    assert (declared[0].name, declared[1]) == ("n_llm_paths", "the persona prompts are not published")
+
+
+def test_a_total_declared_and_written_as_a_number_gets_one_story():
+    """Code review: declared in not_rebuilt and also written as 3*4*5*2, the caveats said both "sample size not
+    rebuilt" and "its value was reported anyway, so it was not treated as excused"."""
+    from paper_replicator import guards
+    sample = {**SAME, "not_rebuilt": {"n_llm_runs": "the persona prompts are not published"}}
+
+    caveats = replicate.sample_caveats(sample, LLM_RESULTS, LLM_TOTALS, LLM.claims,
+                                       guards.fixed_results(FAKE, LLM.claims))
+
+    assert any(c.startswith("sample size not rebuilt: the persona prompts are not published") for c in caveats)
+    assert not any("reported anyway" in c for c in caveats)
