@@ -68,6 +68,7 @@ class Run:
     review: Callable[[PaperSpec, str], Awaitable[tuple[str, str] | None]] | None = None
     review_issue: str | None = None
     review_findings: list[dict] = field(default_factory=list)   # every finding of the last review, for the events
+    review_flagged: int = 0   # how many of the last round's reviews flagged anything
     rounds: int = 0
     failure: str | None = None
     started: float = field(default_factory=time.monotonic)
@@ -492,20 +493,51 @@ async def reviewed(run: Run, spec: PaperSpec, script: str, when: str) -> str | N
     if found is None:
         return None
     run.guard_events.append(f"{when}: {found[1]}")
-    run.say("review", f"{when}: {found[1].split(';')[0]}; sent back", findings=run.review_findings)
+    run.say("review", f"{when}: {found[1].split(';')[0]}; sent back", findings=run.review_findings,
+            flagged_by=f"{run.review_flagged} of {REVIEWS}")
     return found[1] + "."
+
+
+# Independent reviews of each script, their findings unioned. The sabotage battery of 29 Oct (130 plants, Muse Spark
+# Open at high) caught 106 of 116 with one review and 108 with two, with no false alarm on the honest scripts; e589c6's
+# faked count was caught by 3 of 9 single reviews, about 55% by two.
+REVIEWS = 2
 
 
 async def review_problem(run: Run, cfg: config.ModelConfig, client: AsyncOpenAI, spec: PaperSpec,
                          script: str) -> tuple[str, str] | None:
-    """A judgement check, not a coded one: a reviewer reads the final script against the spec and the four integrity
-    rules. A finding counts only when its passage is really in the script, so a reviewer cannot invent one."""
+    """A judgement check, not a coded one: REVIEWS independent reviewers read the final script against the spec and
+    the four integrity rules, and a finding from any of them counts. A finding counts only when its passage is really
+    in the script, so a reviewer cannot invent one; the same rule on the same passage counts once, with the reviews
+    that found it. run.review_flagged says how many reviews flagged anything, so a round only one flagged is listed
+    for reading (a false alarm shows as data). A review that fails on its own (its reply unreadable, a timeout) leaves
+    the round to the other; if every review fails, or one hits the budget or provider stop, the round fails. Both
+    reviews are awaited either way, so every review billed is in the ledger before the run's report is written."""
     task = (f"SPEC:\n{spec.model_dump_json(indent=1)}\n\nSCRIPT (/work/replicate.py):\n{script}")
-    review = (await Runner.run(roles.reviewer(cfg, client), task, max_turns=1, hooks=run.ledger)).final_output
-    found = [f for f in review.findings if f.passage.strip() and f.passage.strip() in script]
-    run.review_findings = [f.model_dump() for f in found]
-    if not found:
+    replies = await asyncio.gather(*(Runner.run(roles.reviewer(cfg, client), task, max_turns=1, hooks=run.ledger)
+                                     for _ in range(REVIEWS)), return_exceptions=True)
+    stops = [r for r in replies if isinstance(r, (BudgetExceeded, ProviderNotAllowed, asyncio.CancelledError))]
+    failed = [r for r in replies if isinstance(r, BaseException)]
+    if stops or len(failed) == len(replies):
+        raise (stops or failed)[0]
+    union: dict[tuple[int, str], tuple[roles.Finding, list[int]]] = {}
+    flagged = set()
+    for number, reply in enumerate(replies, 1):
+        if isinstance(reply, BaseException):
+            run.guard_events.append(f"review {number} of {REVIEWS} failed ({type(reply).__name__}); the round "
+                                    f"rests on the other")
+            continue
+        for f in reply.final_output.findings:
+            if (passage := f.passage.strip()) and passage in script:
+                flagged.add(number)
+                numbers = union.setdefault((f.rule, passage), (f, []))[1]
+                if number not in numbers:
+                    numbers.append(number)
+    run.review_findings = [{**f.model_dump(), "reviews": numbers} for f, numbers in union.values()]
+    run.review_flagged = len(flagged)
+    if not union:
         return None
+    found = [f for f, _ in union.values()]
     said = [f"rule {f.rule}: {f.why} (`{f.passage.strip()[:160]}`)" for f in found]
     return "script review", (f"a reviewer found {len(found)} breach{'es' if len(found) > 1 else ''} of the "
                              f"integrity rules; first, {said[0]}" + "".join(f"; then {s}" for s in said[1:]))

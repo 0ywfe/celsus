@@ -80,8 +80,8 @@ def test_end_to_end_with_a_guard_rejection_and_a_verdict(setup):
     assert "all on Meta: yes" in text
     assert "## The paper's own numbers" in text
     assert "Not financial advice." in text
-    assert len((folder / "calls.jsonl").read_text().splitlines()) == 4   # extract, two builds, the reviewer
-    assert len(api.standing_requests) == 1
+    assert len((folder / "calls.jsonl").read_text().splitlines()) == 5   # extract, two builds, the two reviews
+    assert len(api.standing_requests) == 2
     stages = [json.loads(line)["stage"] for line in (folder / "events.jsonl").read_text().splitlines()]
     assert stages[0] == "ingest" and stages[-1] == "verdict"
 
@@ -133,7 +133,7 @@ def test_the_reviewer_runs_at_high_whatever_the_run_s_effort(setup, effort):
                                     runs_dir=tmp_path / "runs", sandbox=sandbox, effort=effort))
 
     assert {r["body"].get("reasoning_effort") for r in api.requests} == {effort}   # the extractor and the builder
-    assert [r["body"].get("reasoning_effort") for r in api.standing_requests] == ["high"]
+    assert [r["body"].get("reasoning_effort") for r in api.standing_requests] == ["high", "high"]   # both reviews
 
 
 def test_failed_script_goes_back_to_the_builder_with_stderr(setup):
@@ -673,12 +673,12 @@ def test_the_reviewer_sends_a_script_back_with_the_passage_and_the_fixed_script_
     cfg, tmp_path = setup
     fixed = {"script": "print('computed again')", "notes": ""}
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
-                       (finding("print('computed')"), usage(3000, 200)), (json.dumps(fixed), usage(900, 700)),
-                       (NONE, usage(3000, 100))])
+                       (finding("print('computed')"), usage(3000, 200)), (NONE, usage(3000, 100)),
+                       (json.dumps(fixed), usage(900, 700)), (NONE, usage(3000, 100)), (NONE, usage(3000, 100))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
     outcome = go(api, sandbox, cfg, tmp_path)
     assert outcome["verdict"] == "holds up"
-    sent_back = api.requests[3]["body"]["messages"][-1]["content"]
+    sent_back = api.requests[4]["body"]["messages"][-1]["content"]
     assert sent_back.startswith("Before its numbers are reported, a reviewer found 1 breach")
     assert "print('computed')" in sent_back
     assert "a reviewer found 1 breach" in outcome["report"].read_text()   # listed under the run's guards
@@ -692,22 +692,88 @@ def test_every_finding_reaches_the_builder_and_the_runs_events(setup):
     two = json.dumps({"findings": [{"rule": 2, "passage": "x = 1", "why": "a value is set"},
                                    {"rule": 1, "passage": "print('computed')", "why": "a result is printed"}]})
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps({"script": script, "notes": ""}), usage(800, 700)),
-                       (two, usage(3000, 200)), (json.dumps({"script": "print('computed again')", "notes": ""}), usage(900, 700)),
-                       (NONE, usage(3000, 100))])
+                       (two, usage(3000, 200)), (NONE, usage(3000, 100)),
+                       (json.dumps({"script": "print('computed again')", "notes": ""}), usage(900, 700)),
+                       (NONE, usage(3000, 100)), (NONE, usage(3000, 100))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
     outcome = go(api, sandbox, cfg, tmp_path)
 
-    sent_back = api.requests[3]["body"]["messages"][-1]["content"]
+    sent_back = api.requests[4]["body"]["messages"][-1]["content"]
     assert "a reviewer found 2 breaches" in sent_back and "x = 1" in sent_back and "print('computed')" in sent_back
     events = [json.loads(l) for l in (outcome["report"].parent / "events.jsonl").read_text().splitlines()]
     review = next(e for e in events if e["stage"] == "review")
     assert [f["passage"] for f in review["findings"]] == ["x = 1", "print('computed')"]
+    assert review["flagged_by"] == "1 of 2"   # only one of the two reviews flagged: listed for reading in set 3
+
+
+# The orchestrator's ruling (30 Oct), from the sabotage battery: two independent reviews at high, findings unioned.
+
+def review_round(first: str, second: str, tmp_path, cfg):
+    fixed = {"script": "print('computed again')", "notes": ""}
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (first, usage(3000, 200)), (second, usage(3000, 200)),
+                       (json.dumps(fixed), usage(900, 700)), (NONE, usage(3000, 100)), (NONE, usage(3000, 100))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
+    outcome = go(api, sandbox, cfg, tmp_path)
+    events = [json.loads(l) for l in (outcome["report"].parent / "events.jsonl").read_text().splitlines()]
+    return api, outcome, [e for e in events if e["stage"] == "review"]
+
+
+@pytest.mark.parametrize("first, second", [(finding("print('computed')"), NONE), (NONE, finding("print('computed')"))])
+def test_a_finding_from_either_review_is_kept(setup, first, second):
+    cfg, tmp_path = setup
+    api, outcome, reviews = review_round(first, second, tmp_path, cfg)
+
+    assert api.requests[4]["body"]["messages"][-1]["content"].startswith(
+        "Before its numbers are reported, a reviewer found 1 breach")
+    assert reviews[0]["flagged_by"] == "1 of 2" and outcome["verdict"] == "holds up"
+    assert reviews[0]["findings"][0]["reviews"] == ([1] if first != NONE else [2])
+
+
+def test_the_same_finding_from_both_reviews_counts_once(setup):
+    cfg, tmp_path = setup
+    api, _, reviews = review_round(finding("print('computed')"), finding("print('computed')", why="reworded"),
+                                   tmp_path, cfg)
+
+    assert "a reviewer found 1 breach" in api.requests[4]["body"]["messages"][-1]["content"]
+    assert [f["reviews"] for f in reviews[0]["findings"]] == [[1, 2]] and reviews[0]["flagged_by"] == "2 of 2"
+
+
+def test_two_reviews_flagging_different_passages_is_a_round_both_flagged(setup):
+    """Code review: per finding each reads "1 of 2"; the round had both reviews flag something."""
+    cfg, tmp_path = setup
+    _, _, reviews = review_round(finding("print('computed')"), finding("print('computed')", rule=2), tmp_path, cfg)
+
+    assert [(f["rule"], f["reviews"]) for f in reviews[0]["findings"]] == [(1, [1]), (2, [2])]   # two rules, kept apart
+    assert reviews[0]["flagged_by"] == "2 of 2"
+
+
+def test_a_review_that_fails_leaves_the_round_to_the_other(setup):
+    """Code review: one unreadable review crashed the round and threw away the other, paid, review."""
+    cfg, tmp_path = setup
+    api, outcome, reviews = review_round(finding("print('computed')"), "not a review", tmp_path, cfg)
+
+    assert reviews[0]["findings"][0]["reviews"] == [1] and outcome["verdict"] == "holds up"
+    assert "review 2 of 2 failed (ModelBehaviorError); the round rests on the other" in outcome["report"].read_text()
+
+
+def test_two_empty_reviews_find_nothing(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       (NONE, usage(3000, 100)), (NONE, usage(3000, 100))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+
+    assert outcome["verdict"] == "holds up" and len(api.requests) == 4   # extract, build, two reviews, no round more
+    events = [json.loads(l) for l in (outcome["report"].parent / "events.jsonl").read_text().splitlines()]
+    assert not [e for e in events if e["stage"] == "review"]
 
 
 def test_a_finding_whose_passage_is_not_in_the_script_is_ignored(setup):
     cfg, tmp_path = setup
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
-                       (finding("x = 0.35  # not in the script"), usage(3000, 200))])
+                       (finding("x = 0.35  # not in the script"), usage(3000, 200)),
+                       (finding("y = 2  # nor this"), usage(3000, 200))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
     assert go(api, sandbox, cfg, tmp_path)["verdict"] == "holds up"
 
@@ -715,8 +781,9 @@ def test_a_finding_whose_passage_is_not_in_the_script_is_ignored(setup):
 def test_a_breach_still_there_after_the_last_attempt_is_could_not_check_with_the_reason(setup):
     cfg, tmp_path = setup
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
-                       (finding("print('computed')"), usage(3000, 200)), (json.dumps(CLEAN), usage(900, 700)),
-                       (finding("print('computed')"), usage(3000, 200))])
+                       (finding("print('computed')"), usage(3000, 200)), (NONE, usage(3000, 100)),
+                       (json.dumps(CLEAN), usage(900, 700)),
+                       (NONE, usage(3000, 100)), (finding("print('computed')"), usage(3000, 200))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})] * 2)
     outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
     assert outcome["verdict"] == "could not check"
@@ -728,7 +795,8 @@ def test_a_breach_fixed_in_a_later_attempt_is_not_named_in_the_verdict(setup):
     cfg, tmp_path = setup
     fixed = {"script": "print('computed again')", "notes": ""}
     api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
-                       (finding("print('computed')"), usage(3000, 200)), (json.dumps(fixed), usage(900, 700))])
+                       (finding("print('computed')"), usage(3000, 200)), (NONE, usage(3000, 100)),
+                       (json.dumps(fixed), usage(900, 700))])
     sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)}),
                            SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(SHORT)})])
     outcome = go(api, sandbox, cfg, tmp_path, attempts=2)
@@ -765,3 +833,14 @@ def test_a_meta_model_on_another_host_passes_the_meta_guard_and_the_report_says_
     assert "all on Meta: yes (Meta models; meta-models/muse-spark-open-1026 on baseten)" in outcome["report"].read_text()
     calls = [json.loads(line) for line in (outcome["report"].parent / "calls.jsonl").read_text().splitlines()]
     assert {(c["provider"], c["maker"]) for c in calls} == {("baseten", "meta")}
+
+
+def test_a_round_whose_reviews_all_fail_fails(setup):
+    cfg, tmp_path = setup
+    api = FakeChatAPI([(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700)),
+                       ("not a review", usage(3000, 100)), ("nor this", usage(3000, 100))])
+    sandbox = FakeSandbox([SandboxRun(0, "", "", 1.0, {"results.json": json.dumps(RESULTS)})])
+    outcome = go(api, sandbox, cfg, tmp_path)
+
+    assert outcome["verdict"] == "could not check" and len(api.requests) == 4
+    assert outcome["summary"]["first_line"].startswith("We could not check this paper: the model's reply could not be read")
