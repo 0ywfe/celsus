@@ -5,9 +5,10 @@
 Give it an arXiv paper. It reads the paper's LaTeX, writes down every number the paper reports, rebuilds the analysis on public data in a sandbox, and tells you in plain words whether the published numbers hold up.
 
 ```
-The paper's numbers partly hold up: 14 of 15 checked results match within their uncertainty.
-Its main result, overall_mean_return, is -3.07% in the paper and -3.086% here (consistent).
+The paper's numbers hold up: 84 of 84 checked results match within their uncertainty.
+Its main result, TabM_withoutSS_MTSV_Sharpe, is 0.4531 in the paper and 0.4482 here (consistent).
 ```
+(a held-out run: the demo below)
 
 Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults, and every number in this README, are Meta's Muse models.
 
