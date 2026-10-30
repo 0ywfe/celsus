@@ -366,3 +366,37 @@ def test_a_value_no_result_of_its_kind_can_take_is_not_judged():
         assert rows[name]["consistent"] is None and "no " in rows[name]["why"], rows[name]["why"]
     assert verdict(list(rows.values()), results, headline="mean") == ("holds up", "")
     assert [name for name, _ in impossible(claims, results)] == ["p", "n", "t"]
+
+
+STORED_UNJUDGED_MAIN = __import__("json").loads(
+    (__import__("pathlib").Path(__file__).parent / "corpus" / "main_result_unjudged.json").read_text())
+
+
+@pytest.mark.parametrize("run", sorted(STORED_UNJUDGED_MAIN))
+def test_a_paper_does_not_hold_up_only_if_its_main_result_was_judged_and_missed(run):
+    """Post-headline, the orchestrator's ruling (30 Oct), symmetric to (g): set 3's three "does not hold up"
+    (d36131, 6942f6, 235319) each missed every checked result with its main result never computed. A miss on
+    numbers that are not the paper's claim doesn't show the claim fails: 6942f6's misses were the script's declared
+    PCA proxies under the paper's DFM names."""
+    stored = STORED_UNJUDGED_MAIN[run]
+    rows, main = stored["rows"], stored["headline"]
+    assert stored["verdict_as_run"] == "does not hold up"
+    assert next(r for r in rows if r["name"] == main)["consistent"] is None
+    outcome, reason = verdict(rows, [{"name": "x", "value": 1.0, "n": 10}], headline=main)
+
+    assert outcome == "could not check"
+    assert reason.startswith("none of the ") and f"main result, {main}, was not judged" in reason
+
+
+def test_a_main_result_judged_and_missed_still_does_not_hold_up():
+    """The rule can't neuter the verdict: with the main result judged and inconsistent, and nothing matching, a
+    paper still does not hold up."""
+    rows = [row("main", "estimate", False), row("a", "estimate", False), row("b", "estimate", None)]
+    assert verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline="main") == ("does not hold up", "")
+
+
+@pytest.mark.parametrize("main", [row("main", "count", False, 54, 40), row("other", "estimate", True)])
+def test_a_count_or_a_missing_main_result_never_makes_a_paper_fail(main):
+    rows = [row("main", "count", True, 54, 54) if main["name"] == "other" else main, row("a", "estimate", False)]
+    outcome = verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline="main" if main["name"] == "main" else None)[0]
+    assert outcome != "does not hold up"

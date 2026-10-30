@@ -1,0 +1,393 @@
+{
+ "d36131": {
+  "paper": "2604.01431",
+  "verdict_as_run": "does not hold up",
+  "headline": "btc_fed_dovish_t",
+  "rows": [
+   {
+    "name": "merged_calendar_days",
+    "kind": "count",
+    "reported": 1183.0,
+    "reproduced": 1186,
+    "se": null,
+    "n": 1186,
+    "consistent": true,
+    "unit": "days"
+   },
+   {
+    "name": "total_crypto_assets",
+    "kind": "count",
+    "reported": 6.0,
+    "reproduced": 6,
+    "se": null,
+    "n": 6,
+    "consistent": true,
+    "unit": "assets"
+   },
+   {
+    "name": "btc_descriptive_N",
+    "kind": "count",
+    "reported": 1178.0,
+    "reproduced": 1181,
+    "se": null,
+    "n": 1181,
+    "consistent": true,
+    "unit": "obs"
+   },
+   {
+    "name": "eth_descriptive_N",
+    "kind": "count",
+    "reported": 1178.0,
+    "reproduced": 1181,
+    "se": null,
+    "n": 1181,
+    "consistent": true,
+    "unit": "obs"
+   },
+   {
+    "name": "sol_descriptive_N",
+    "kind": "count",
+    "reported": 1178.0,
+    "reproduced": 1181,
+    "se": null,
+    "n": 1181,
+    "consistent": true,
+    "unit": "obs"
+   },
+   {
+    "name": "ada_descriptive_N",
+    "kind": "count",
+    "reported": 1178.0,
+    "reproduced": 1181,
+    "se": null,
+    "n": 1181,
+    "consistent": true,
+    "unit": "obs"
+   },
+   {
+    "name": "avax_descriptive_N",
+    "kind": "count",
+    "reported": 1178.0,
+    "reproduced": 1181,
+    "se": null,
+    "n": 1181,
+    "consistent": true,
+    "unit": "obs"
+   },
+   {
+    "name": "link_descriptive_N",
+    "kind": "count",
+    "reported": 1178.0,
+    "reproduced": 1181,
+    "se": null,
+    "n": 1181,
+    "consistent": true,
+    "unit": "obs"
+   },
+   {
+    "name": "btc_descriptive_mean_RVol",
+    "kind": "estimate",
+    "reported": 0.634,
+    "reproduced": 0.34778227049238397,
+    "se": 0.005626690848605162,
+    "n": 1181,
+    "consistent": false,
+    "unit": "annualized"
+   },
+   {
+    "name": "eth_descriptive_mean",
+    "kind": "estimate",
+    "reported": 0.742,
+    "reproduced": 0.46626287648148085,
+    "se": 0.007735324798083421,
+    "n": 1181,
+    "consistent": false,
+    "unit": "annualized"
+   },
+   {
+    "name": "sol_descriptive_mean",
+    "kind": "estimate",
+    "reported": 0.93,
+    "reproduced": 0.6466941921943818,
+    "se": 0.009593183805252233,
+    "n": 1181,
+    "consistent": false,
+    "unit": "annualized"
+   },
+   {
+    "name": "ada_descriptive_mean",
+    "kind": "estimate",
+    "reported": 0.81,
+    "reproduced": 0.5810085263419578,
+    "se": 0.011825073893372805,
+    "n": 1181,
+    "consistent": false,
+    "unit": "annualized"
+   },
+   {
+    "name": "avax_descriptive_mean",
+    "kind": "estimate",
+    "reported": 0.918,
+    "reproduced": 0.6569049922408248,
+    "se": 0.010034378343712798,
+    "n": 1181,
+    "consistent": false,
+    "unit": "annualized"
+   },
+   {
+    "name": "link_descriptive_mean",
+    "kind": "estimate",
+    "reported": 0.858,
+    "reproduced": 0.6262782069486783,
+    "se": 0.009476621090472433,
+    "n": 1181,
+    "consistent": false,
+    "unit": "annualized"
+   },
+   {
+    "name": "kalshi_total_series",
+    "kind": "count",
+    "reported": 10.0,
+    "reproduced": 10,
+    "se": null,
+    "n": 10,
+    "consistent": true,
+    "unit": "series"
+   },
+   {
+    "name": "btc_fed_dovish_t",
+    "kind": "estimate",
+    "reported": 3.63,
+    "reproduced": null,
+    "se": null,
+    "n": null,
+    "consistent": null,
+    "unit": "t-stat"
+   }
+  ]
+ },
+ "6942f6": {
+  "paper": "2510.15938",
+  "verdict_as_run": "does not hold up",
+  "headline": "estimate_RMSE_improvement_outsample_pct",
+  "rows": [
+   {
+    "name": "count_stocks_retained_after_filter",
+    "kind": "count",
+    "reported": 72.0,
+    "reproduced": 66.0,
+    "se": null,
+    "n": 66,
+    "consistent": true,
+    "unit": "stocks"
+   },
+   {
+    "name": "estimate_corr_Ft_PSEi_one_factor",
+    "kind": "estimate",
+    "reported": 0.9283,
+    "reproduced": 0.9841636315544118,
+    "se": 0.004808468915158353,
+    "n": 1361,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_PC1_PSEi_one_factor",
+    "kind": "estimate",
+    "reported": 0.9144,
+    "reproduced": 0.9841636315544118,
+    "se": 0.004808468915158353,
+    "n": 1361,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_CAPM_beta_beta_i_one_factor",
+    "kind": "estimate",
+    "reported": 0.8348,
+    "reproduced": 0.9670846671968735,
+    "se": 0.031806850302036074,
+    "n": 66,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_F1t_PSEi_two_factor",
+    "kind": "estimate",
+    "reported": 0.6727,
+    "reproduced": 0.9841636315544118,
+    "se": 0.004808468915158353,
+    "n": 1361,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_F2t_PSEi_two_factor",
+    "kind": "estimate",
+    "reported": 0.7704,
+    "reproduced": -0.14461728526459136,
+    "se": 0.026841121417925468,
+    "n": 1361,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_PC2_PSEi_two_factor",
+    "kind": "estimate",
+    "reported": 0.3498,
+    "reproduced": -0.14461728526459136,
+    "se": 0.026841121417925468,
+    "n": 1361,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_CAPM_beta_beta1i_two_factor",
+    "kind": "estimate",
+    "reported": 0.5132,
+    "reproduced": 0.9670846671968741,
+    "se": 0.031806850302035776,
+    "n": 66,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_CAPM_beta_beta2i_two_factor",
+    "kind": "estimate",
+    "reported": 0.8528,
+    "reproduced": 0.26718021712721235,
+    "se": 0.12045582252789919,
+    "n": 66,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_corr_F1t_F2t_two_factor",
+    "kind": "estimate",
+    "reported": 0.0798,
+    "reproduced": 0.0,
+    "se": 0.02712628195903865,
+    "n": 1361,
+    "consistent": false,
+    "unit": "Pearson correlation"
+   },
+   {
+    "name": "estimate_RMSE_improvement_outsample_pct",
+    "kind": "estimate",
+    "reported": 34.47,
+    "reproduced": null,
+    "se": null,
+    "n": null,
+    "consistent": null,
+    "unit": "percent reduction in RMSE"
+   }
+  ]
+ },
+ "235319": {
+  "paper": "2605.09740",
+  "verdict_as_run": "does not hold up",
+  "headline": "summary_preCOVID_UR_h1_LGBplus_RMSE",
+  "rows": [
+   {
+    "name": "sim_Linear_N250_SNR0p5_OLS_R2",
+    "kind": "estimate",
+    "reported": 32.0,
+    "reproduced": 0.31315242532763166,
+    "se": 0.008916684447550526,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_Linear_N250_SNR0p5_RF_R2",
+    "kind": "estimate",
+    "reported": 25.0,
+    "reproduced": 0.2605817646527598,
+    "se": 0.00820810867310857,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_Linear_N250_SNR0p5_LGB_R2",
+    "kind": "estimate",
+    "reported": 22.0,
+    "reproduced": 0.22828939178253008,
+    "se": 0.013152972149142876,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_Linear_N250_SNR0p5_LGBplus_R2",
+    "kind": "estimate",
+    "reported": 27.0,
+    "reproduced": 0.2913947473410617,
+    "se": 0.010132307839870241,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_TrigLog_N250_SNR0p5_RF_R2",
+    "kind": "estimate",
+    "reported": 11.0,
+    "reproduced": 0.09824785931236091,
+    "se": 0.0076698597860304606,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_TrigLog_N250_SNR0p5_LGBAplus_R2",
+    "kind": "estimate",
+    "reported": 13.0,
+    "reproduced": 0.06595286270828327,
+    "se": 0.014333457896710205,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_SoftRadial_N250_SNR0p5_OLS_R2",
+    "kind": "estimate",
+    "reported": 2.0,
+    "reproduced": -0.029895375079458365,
+    "se": 0.007040597853777562,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_SoftRadial_N250_SNR0p5_LGBAplus_R2",
+    "kind": "estimate",
+    "reported": 20.0,
+    "reproduced": 0.15291570591270284,
+    "se": 0.005642868001228948,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "sim_RotatedSine_N250_SNR0p5_RF_R2",
+    "kind": "estimate",
+    "reported": 10.0,
+    "reproduced": 0.10566316449045088,
+    "se": 0.007428146772979423,
+    "n": 1000,
+    "consistent": false,
+    "unit": "R2"
+   },
+   {
+    "name": "summary_preCOVID_UR_h1_LGBplus_RMSE",
+    "kind": "estimate",
+    "reported": 0.67,
+    "reproduced": null,
+    "se": null,
+    "n": null,
+    "consistent": null,
+    "unit": "relative RMSE"
+   }
+  ]
+ }
+}

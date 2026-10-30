@@ -271,7 +271,17 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
     if all(judged):
         return ("holds up" if main is not None and main["kind"] != "count" and main["consistent"] is True
                 and not unrebuilt else "partly holds up"), ""
-    return ("partly holds up" if any(judged) else "does not hold up"), ""
+    if any(judged):
+        return "partly holds up", ""
+    # Post-headline, symmetric to (g): a paper fails only on its main result. Set 3's three "does not hold up"
+    # (d36131, 6942f6, 235319) missed every number checked with the main result never computed; 6942f6's misses
+    # were the script's declared PCA proxies under the paper's DFM names, which show the method changed, not that
+    # the claim fails.
+    if main is not None and main["kind"] != "count" and main["consistent"] is False:
+        return "does not hold up", ""
+    missed = f"none of the {len(judged)} checked results match"
+    return COULD_NOT_CHECK, (f"{missed}, and the main result, {main['name']}, was not judged" if main is not None
+                             else f"{missed}, and the paper's main result is none of the numbers checked")
 
 
 def _num(value) -> str:
