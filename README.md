@@ -1,7 +1,7 @@
 <h1 align="center"><img src="docs/logo.svg" alt="celsus" width="340"></h1>
 
 <p align="center">
-  <strong>Continuous integration for published research.</strong>
+  <strong>An AI workflow that replicates scientific research.</strong>
 </p>
 
 <p align="center">
