@@ -1,4 +1,4 @@
-# celsus
+<h1 align="center"><img src="docs/logo.svg" alt="celsus" width="340"></h1>
 
 [![tests](https://github.com/0ywfe/paper-replicator/actions/workflows/tests.yml/badge.svg)](https://github.com/0ywfe/paper-replicator/actions/workflows/tests.yml)
 
