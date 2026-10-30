@@ -9,6 +9,7 @@ cut; the same number as a quantile, a window, an index or a critical value elsew
 from __future__ import annotations
 
 import ast
+import builtins
 import math
 import re
 from dataclasses import dataclass
@@ -326,12 +327,76 @@ def _with_len(tree: ast.AST) -> set[ast.AST]:
     return marked
 
 
+_MUTATORS = {"append", "extend", "update", "insert"}
+_BUILTINS = set(dir(builtins))
+
+
+def _root(node: ast.AST) -> str | None:
+    """The name an expression is built on: df in df.loc[d, "x"].values, x in len(x.index)."""
+    while isinstance(node, (ast.Attribute, ast.Subscript, ast.Call, ast.Starred)):
+        node = node.func if isinstance(node, ast.Call) else node.value
+    return node.id if isinstance(node, ast.Name) else None
+
+
+def _targets(node: ast.AST) -> list[ast.expr]:
+    if isinstance(node, (ast.Assign, ast.Delete)):
+        return node.targets
+    if isinstance(node, (ast.AugAssign, ast.AnnAssign, ast.For, ast.AsyncFor, ast.NamedExpr)):
+        return [node.target]
+    return []
+
+
+def _touches(stmts: list[ast.stmt], names: set[str], defined: dict[str, ast.AST]) -> bool:
+    """Whether a branch can change a sample named in names: it assigns, item-assigns, augments or deletes it, calls
+    append/extend/update/insert on it, passes it to a call (len, print and the other builtins only read it), or
+    calls a function the check can't see into (one not defined in the script, or one defined there that names the
+    sample)."""
+    for node in (n for stmt in stmts for n in ast.walk(stmt)):
+        for target in _targets(node):
+            parts = target.elts if isinstance(target, (ast.Tuple, ast.List)) else [target]
+            if any(_root(part) in names for part in parts):
+                return True
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if isinstance(func, ast.Attribute) and func.attr in _MUTATORS and _root(func.value) in names:
+            return True
+        builtin = isinstance(func, ast.Name) and func.id in _BUILTINS and func.id not in ("setattr", "delattr", "exec")
+        if not builtin and any(_root(arg) in names for arg in [*node.args, *(k.value for k in node.keywords)]):
+            return True
+        if isinstance(func, ast.Name) and func.id not in _BUILTINS and (func.id not in defined or any(
+                isinstance(n, ast.Name) and n.id in names for n in ast.walk(defined[func.id]))):
+            return True
+    return False
+
+
+def _bounds_only(tree: ast.AST) -> set[ast.AST]:
+    """Comparisons that only bound a sample: in an if or while test, with neither branch able to change any sample
+    whose len() they compare. 8dd383's `if len(all_dates) > 100:` (a minimum length before the analysis) is one;
+    4ac609's `while len(ndata) < 82:` (padding with noise series) and eccf14's `if len(events) < 54:` (swapping in a
+    typed list) are not. Post-headline, the orchestrator's ruling (30 Oct)."""
+    defined = {n.name: n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+    found = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.If, ast.While)):
+            continue
+        for compare in (n for n in ast.walk(node.test) if isinstance(n, ast.Compare)):
+            names = {_root(c.args[0]) for c in ast.walk(compare) if isinstance(c, ast.Call)
+                     and getattr(c.func, "id", None) == "len" and c.args} - {None}
+            if names and not _touches(node.body + node.orelse, names, defined):
+                found.add(compare)
+    return found
+
+
 def sized(tree: ast.AST, known: dict[str, float]) -> list[tuple[float, int]]:
     """Numbers the code sets a sample's size against: while len(df) > 54, need = 2896 - len(m). An equality in an
-    assert is a check, not a cut, so only inequalities and differences count."""
-    with_len, values_of = _with_len(tree), dict(constant_nodes(tree, known))
+    assert is a check, not a cut, so only inequalities and differences count; and a bound whose branches leave the
+    sample alone (`if len(x) < 100: raise`) is a check too."""
+    with_len, values_of, bounds = _with_len(tree), dict(constant_nodes(tree, known)), _bounds_only(tree)
     found = []
     for node in ast.walk(tree):
+        if node in bounds:
+            continue
         if isinstance(node, ast.Compare) and all(isinstance(op, (ast.Lt, ast.LtE, ast.Gt, ast.GtE)) for op in node.ops):
             sides = [node.left, *node.comparators]
         elif isinstance(node, ast.BinOp) and isinstance(node.op, (ast.Sub, ast.Add)):

@@ -305,3 +305,55 @@ def test_a_contact_written_into_a_command_file_or_script_is_found(text):
 ])
 def test_reading_the_contact_and_matrix_products_are_not_contacts(text):
     assert sets_contact(text) is None
+
+
+# Set 3 (30 Oct), excerpts of the real scripts. 8dd383's minimum-length check decided its verdict as a false alarm;
+# 4ac609 pads the panel with noise series and eccf14 swaps in a typed list, both to the paper's count.
+MIN_LENGTH_8DD383 = """def longonly_path(Sigma, mu, X, y):
+    return mu
+all_dates = None
+for tic, df in prices.items():
+    if all_dates is None:
+        all_dates = df.index
+    else:
+        all_dates = all_dates.intersection(df.index)
+if all_dates is not None and len(all_dates)>100:
+    mat = pd.DataFrame({tic: df.loc[all_dates, "adj_close"] for tic, df in prices.items()})
+    rets = mat.pct_change().dropna()
+    R_sp = rets.values
+    T_sp, n_sp = R_sp.shape
+    lo_sp = longonly_path(R_sp.T @ R_sp, R_sp.mean(axis=0), R_sp, R_sp.mean(axis=0))
+    sp_n_stocks = n_sp
+"""
+PADDED_4AC609 = """ndata = {}; cnt = 0; zones = [f"z{i}" for i in range(10)]
+for zi in zones:
+    for v in base_vars:
+        if cnt >= 82:
+            break
+        ndata[f"{v}_{zi}"] = clim_std[v].values + np.random.normal(0, 0.4, n)
+        cnt += 1
+while len(ndata)<82:
+    ndata[f"synth_{len(ndata)}"] = np.random.normal(0, 1, n)
+"""
+SWAPPED_ECCF14 = """events = fetch_events()
+known_tickers_dates = [("EBS", "2024-10-02"), ("C", "2024-10-15")]
+if len(events)<54:
+    events = known_tickers_dates
+"""
+
+
+@pytest.mark.parametrize("script, caught", [
+    (MIN_LENGTH_8DD383, False), (PADDED_4AC609, True), (SWAPPED_ECCF14, True),
+    ("if len(x) < 100:\n    raise ValueError('too short')\n", False),
+    ("if len(x) > 100:\n    x = x[:100]\n", True),
+    ("if len(x) < 100:\n    x.append(row)\n", True), ("while len(x) < 100:\n    x += [row]\n", True),
+    ("if len(x) < 100:\n    x = pd.concat([x, extra])\n", True), ("if len(x) < 100:\n    x.loc[k] = row\n", True),
+    ("if len(x) < 100:\n    top_up(x)\n", True),                       # the sample handed to a call
+    ("if len(x) < 100:\n    pad()\n", True),                           # a call the check can't see into
+    ("if len(x) < 100:\n    print('short', len(x))\nelse:\n    y = x.mean()\n", False),
+])
+def test_a_bound_is_a_cut_only_when_its_branches_can_change_the_sample(script, caught):
+    """Post-headline, the orchestrator's ruling (30 Oct): a literal used only as a comparison bound is ignored when
+    the guarded branches do not assign, item-assign, augment or mutate the sample whose len() is compared."""
+    totals = [_claim("n_total", "100", "count"), _claim("n_panel", "82", "count"), _claim("n_filings", "54", "count")]
+    assert bool(hardcoded_counts(script, totals, totals)) is caught
