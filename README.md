@@ -9,7 +9,7 @@ The paper's numbers partly hold up: 14 of 15 checked results match within their 
 Its main result, overall_mean_return, is -3.07% in the paper and -3.086% here (consistent).
 ```
 
-Built during the Meta AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults, and every number in this README, are Meta's Muse models.
+Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults, and every number in this README, are Meta's Muse models.
 
 **See it in 30 seconds, with no API key:**
 
@@ -24,7 +24,7 @@ The demo is run 25b01b from the held-out set below (arXiv 2610.04221, robust enh
 
 ### A held-out set nobody had looked at
 
-32 finance and economics papers from arXiv (Sep 2025 to Oct 2026), drawn by a rule written down before any run: public data a script can fetch, LaTeX source, about 30 minutes of compute, no paper seen during development. Abstracts were read with their numbers masked, and every paper whose results someone had glimpsed was dropped. The list was frozen before the first run.
+32 finance and economics papers from arXiv (Sep 2025 to Oct 2026), drawn from 6,552 arXiv hits by a rule written down before any run: public data a script can fetch, LaTeX source, about 30 minutes of compute, no paper seen during development. Abstracts were read with their numbers masked, and 12 papers were dropped because someone had glimpsed a result. The list was frozen before the first run.
 
 Each paper ran twice on Muse Spark Open at effort xhigh, with a $2 budget stop per run. 63 runs finished, with a median of 35 minutes and $1.34 at list prices. Four runs the host cut off were set aside as infrastructure; three were run again, and one paper's second run stopped after its second cut. The headline, as run, on the code frozen for the test:
 
@@ -104,7 +104,7 @@ The tolerances come from published replication practice, not from a chosen perce
 
 - Papers that report no standard error anywhere can't have their estimates judged: 357afb's 170 estimates (148 of them exactly the paper's) were all left unjudged, and the run could not check the paper.
 - Two coded checks raised false alarms that decided held-out verdicts: a minimum-length check read as cutting the sample to the paper's count (8dd383), and a sample period printed as two dates read as the first (dcb75d). Both were fixed after the headline.
-- A count written as the paper's value passes the coded checks when it can't be told from a design count (a number of draws, sectors or windows). Of 97 such counts in the stored runs, the reviews named 13.
+- A count written as the paper's value passes the coded checks when it can't be told from a design count (a number of draws, sectors or windows). The stored runs hold 97 such counts; most are design counts (draws, sectors, windows) by our read, and the reviews named 13 as breaches.
 - The coded checks don't trace random draws into the sample, so a synthetic sample declared as the paper's is the reviews' to catch: in 07f67a one of the two reviews caught it.
 
 - A result built from the paper's own numbers (another claim times a constant, or draws that cancel to a constant) is caught when the script writes it as arithmetic on names and literals, including numbers spelled as text or string lengths. It is not yet caught through dict or list constants, `max`, `np.where` or helper functions, or `**` and `+` forms.
