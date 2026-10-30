@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="446" viewBox="0 0 1240 446" role="img" aria-labelledby="matching-t matching-d">
+  <title id="matching-t">When a number matches</title>
+  <desc id="matching-d">Four rules, each drawn on a number line. An estimate with a standard error is consistent when the paper’s value lies inside the reproduction’s 95% interval. A number with no sampling error, such as a return over a fixed period or a ratio, is consistent when it rounds to the value as printed, or else lies within 10% of it. A test statistic must reach the same conclusion at 5% on the side the paper tested, and a p-value must fall on the same side of 0.05. A sample total must be within 15% of the paper’s; a subgroup count within 15%, or else within 1.96 times the square root of n. Code, not a model, applies the rules.</desc>
+  <style>
+    svg { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    .mono { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+    .bg { fill: #1b1a17; }
+    .panel { fill: #24221e; stroke: #ffffff; stroke-opacity: 0.09; stroke-width: 1.5; }
+    .hi { fill: #2b2721; stroke: #a8834f; stroke-opacity: 0.75; stroke-width: 1.6; }
+    .well { fill: #141311; stroke: #ffffff; stroke-opacity: 0.08; stroke-width: 1; }
+    .h1 { fill: #efe9dc; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+    .h2 { fill: #efe9dc; font-size: 23px; font-weight: 700; letter-spacing: -0.3px; }
+    .cap { fill: #b3ab9a; font-size: 18.5px; }
+    .lab { fill: #8c8476; font-size: 13.5px; letter-spacing: 0.7px; }
+    .m { fill: #d4ccbb; font-size: 15.5px; }
+    .dim { fill: #8c8476; }
+    .gold { fill: #d2ab68; }
+    .ink { fill: #efe9dc; }
+    .seal { fill: none; stroke: #a8834f; stroke-width: 2.4; }
+    .tick { fill: none; stroke: #d2ab68; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+    .arrow { fill: none; stroke: #a8834f; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .chip { fill: none; stroke: #efe9dc; stroke-opacity: 0.24; stroke-width: 1.4; }
+  </style>
+  <rect class="bg" x="0" y="0" width="1240" height="446" rx="24"/>
+  <!-- The seal (a square with a tick) heads every celsus diagram. -->
+  <rect class="seal" x="44" y="36" width="38" height="38" rx="8"/>
+  <path class="tick" d="M53 55 L61 63 L74 47"/>
+  <text class="h1" x="100" y="68">When a number matches</text>
+  <g transform="translate(846 56)"><path d="M0 -7 L7 0 L0 7 L-7 0 Z" fill="#d2ab68"/><text class="cap" x="14" y="6" style="font-size:17px">the paper</text><circle cx="124" cy="0" r="6.5" fill="#efe9dc"/><text class="cap" x="138" y="6" style="font-size:17px">the reproduction</text></g>
+  <rect class="panel" x="44" y="112" width="270" height="270" rx="16"/>
+  <line x1="68" y1="190" x2="290" y2="190" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <rect x="109.0" y="177" width="140" height="26" rx="5" fill="#d2ab68" fill-opacity="0.16" stroke="#d2ab68" stroke-opacity="0.7" stroke-width="1.5"/>
+  <circle cx="171.0" cy="190" r="6.5" fill="#efe9dc"/>
+  <path d="M205.0 182 L213.0 190 L205.0 198 L197.0 190 Z" fill="#d2ab68"/>
+  <text class="mono lab" x="179.0" y="230" text-anchor="middle" style="font-size:14px">reproduction, 95% CI</text>
+  <text class="h2" x="68" y="280" style="font-size:22px">Estimate with an SE</text>
+  <text class="cap" x="68" y="310" style="font-size:17.5px">The paper’s value lies</text>
+  <text class="cap" x="68" y="333" style="font-size:17.5px">inside the reproduction’s</text>
+  <text class="cap" x="68" y="356" style="font-size:17.5px">95% interval.</text>
+  <rect class="panel" x="338" y="112" width="270" height="270" rx="16"/>
+  <line x1="362" y1="190" x2="584" y2="190" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <rect x="419.0" y="177" width="108" height="26" rx="5" fill="#d2ab68" fill-opacity="0.10"/>
+  <rect x="463.0" y="177" width="20" height="26" rx="3" fill="#d2ab68" fill-opacity="0.30"/>
+  <path d="M473.0 182 L481.0 190 L473.0 198 L465.0 190 Z" fill="#d2ab68"/>
+  <circle cx="477.0" cy="164" r="6.5" fill="#efe9dc"/>
+  <text class="mono lab" x="473.0" y="230" text-anchor="middle" style="font-size:14px">±10%</text>
+  <text class="mono lab" x="537.0" y="168" text-anchor="middle" style="font-size:14px">rounds</text>
+  <text class="h2" x="362" y="280" style="font-size:22px">No sampling error</text>
+  <text class="cap" x="362" y="310" style="font-size:17.5px">It rounds to the value as</text>
+  <text class="cap" x="362" y="333" style="font-size:17.5px">printed, or else lies</text>
+  <text class="cap" x="362" y="356" style="font-size:17.5px">within 10% of it.</text>
+  <rect class="panel" x="632" y="112" width="270" height="270" rx="16"/>
+  <line x1="656" y1="190" x2="878" y2="190" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <rect x="656" y="177" width="60.0" height="26" fill="#d2ab68" fill-opacity="0.07"/>
+  <rect x="818.0" y="177" width="60.0" height="26" fill="#d2ab68" fill-opacity="0.24"/>
+  <line x1="716.0" y1="184" x2="716.0" y2="196" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <text class="mono lab" x="716.0" y="226" text-anchor="middle" style="font-size:14px">−1.96</text>
+  <line x1="767.0" y1="184" x2="767.0" y2="196" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <text class="mono lab" x="767.0" y="226" text-anchor="middle" style="font-size:14px">0</text>
+  <line x1="818.0" y1="184" x2="818.0" y2="196" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <text class="mono lab" x="818.0" y="226" text-anchor="middle" style="font-size:14px">1.96</text>
+  <path d="M846.3 182 L854.3 190 L846.3 198 L838.3 190 Z" fill="#d2ab68"/>
+  <circle cx="828.1" cy="164" r="6.5" fill="#efe9dc"/>
+  <text class="h2" x="656" y="280" style="font-size:22px">Test statistic</text>
+  <text class="cap" x="656" y="310" style="font-size:17.5px">Same conclusion at 5%, on</text>
+  <text class="cap" x="656" y="333" style="font-size:17.5px">the side the paper tested.</text>
+  <text class="cap" x="656" y="356" style="font-size:17.5px">p-values: same side of 0.05.</text>
+  <rect class="panel" x="926" y="112" width="270" height="270" rx="16"/>
+  <line x1="950" y1="190" x2="1172" y2="190" stroke="#efe9dc" stroke-opacity="0.45" stroke-width="2" stroke-linecap="round"/>
+  <rect x="999.0" y="177" width="124" height="26" rx="5" fill="#d2ab68" fill-opacity="0.16" stroke="#d2ab68" stroke-opacity="0.7" stroke-width="1.5"/>
+  <path d="M1061.0 182 L1069.0 190 L1061.0 198 L1053.0 190 Z" fill="#d2ab68"/>
+  <circle cx="1095.0" cy="164" r="6.5" fill="#efe9dc"/>
+  <text class="mono lab" x="1061.0" y="230" text-anchor="middle" style="font-size:14px">±15%</text>
+  <text class="h2" x="950" y="280" style="font-size:22px">Sample total</text>
+  <text class="cap" x="950" y="310" style="font-size:17.5px">Within 15% of the paper’s.</text>
+  <text class="cap" x="950" y="333" style="font-size:17.5px">Subgroups: 15%, or else</text>
+  <text class="cap" x="950" y="356" style="font-size:17.5px">within 1.96 √n.</text>
+  <text class="cap" x="44" y="414" style="font-size:17px">Code, not a model, applies these rules. Each one’s source is in the table below.</text>
+</svg>

@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="454" viewBox="0 0 1240 454" role="img" aria-labelledby="vision-t vision-d">
+  <title id="vision-t">Continuous integration, for papers</title>
+  <desc id="vision-d">Software checks every change before it merges: commit, tests pass, merge. celsus does the same for research: every new empirical paper on public data is checked, with the script, the numbers and the verdict open, and the checked papers build into a public library for anyone who relies on a result. One run on each of the 6,552 arXiv papers the held-out set was drawn from would cost about $8,500, at the mean of $1.30 a run; a run takes a median of 35 minutes and $1.34 at list prices on Muse Spark Open. Finance and economics came first; social science, climate and machine learning, and any field with public data, have the same shape.</desc>
+  <style>
+    svg { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    .mono { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+    .bg { fill: #1b1a17; }
+    .panel { fill: #24221e; stroke: #ffffff; stroke-opacity: 0.09; stroke-width: 1.5; }
+    .hi { fill: #2b2721; stroke: #a8834f; stroke-opacity: 0.75; stroke-width: 1.6; }
+    .well { fill: #141311; stroke: #ffffff; stroke-opacity: 0.08; stroke-width: 1; }
+    .h1 { fill: #efe9dc; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+    .h2 { fill: #efe9dc; font-size: 23px; font-weight: 700; letter-spacing: -0.3px; }
+    .cap { fill: #b3ab9a; font-size: 18.5px; }
+    .lab { fill: #8c8476; font-size: 13.5px; letter-spacing: 0.7px; }
+    .m { fill: #d4ccbb; font-size: 15.5px; }
+    .dim { fill: #8c8476; }
+    .gold { fill: #d2ab68; }
+    .ink { fill: #efe9dc; }
+    .seal { fill: none; stroke: #a8834f; stroke-width: 2.4; }
+    .tick { fill: none; stroke: #d2ab68; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+    .arrow { fill: none; stroke: #a8834f; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .chip { fill: none; stroke: #efe9dc; stroke-opacity: 0.24; stroke-width: 1.4; }
+  </style>
+  <rect class="bg" x="0" y="0" width="1240" height="454" rx="24"/>
+  <!-- The seal (a square with a tick) heads every celsus diagram. -->
+  <rect class="seal" x="44" y="36" width="38" height="38" rx="8"/>
+  <path class="tick" d="M53 55 L61 63 L74 47"/>
+  <text class="h1" x="100" y="68">Continuous integration, for papers</text>
+  <text class="mono lab" x="44" y="128">SOFTWARE</text>
+  <rect class="chip" x="152" y="106" width="90" height="32" rx="16"/>
+  <text class="mono m" x="197.2" y="128" text-anchor="middle" style="font-size:15px">commit</text>
+  <path d="M250 122 H270 M264 116 L270 122 L264 128" fill="none" stroke="#8c8476" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect class="chip" x="278.4" y="106" width="128" height="32" rx="16"/>
+  <text class="mono m" x="342.4" y="128" text-anchor="middle" style="font-size:15px">tests pass</text>
+  <path d="M414 122 H434 M428 116 L434 122 L428 128" fill="none" stroke="#8c8476" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect class="chip" x="442.4" y="106" width="81" height="32" rx="16"/>
+  <text class="mono m" x="482.9" y="128" text-anchor="middle" style="font-size:15px">merge</text>
+  <text class="mono lab" x="44" y="182">PAPERS</text>
+  <rect class="panel" x="44" y="196" width="222" height="166" rx="16"/>
+  <path d="M80 210 H124 L138 224 V284 H80 Z" fill="#efe9dc" fill-opacity="0.3"/>
+  <path d="M124 210 V224 H138" fill="#c9c1b0" fill-opacity="0.3"/>
+  <path d="M72 216 H116 L130 230 V290 H72 Z" fill="#efe9dc" fill-opacity="0.55"/>
+  <path d="M116 216 V230 H130" fill="#c9c1b0" fill-opacity="0.55"/>
+  <path d="M64 222 H108 L122 236 V296 H64 Z" fill="#efe9dc" fill-opacity="0.92"/>
+  <path d="M108 222 V236 H122" fill="#c9c1b0" fill-opacity="0.92"/>
+  <line x1="72" y1="252" x2="108" y2="252" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <line x1="72" y1="262" x2="100" y2="262" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <line x1="72" y1="272" x2="108" y2="272" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <text class="h2" x="144" y="242">Every new</text>
+  <text class="h2" x="144" y="268">paper</text>
+  <text class="cap" x="64" y="320">Empirical, on</text>
+  <text class="cap" x="64" y="344">public data</text>
+  <path class="arrow" d="M270 279.0 H288 M282 273.0 L288 279.0 L282 285.0"/>
+  <rect class="hi" x="292" y="196" width="222" height="166" rx="16"/>
+  <rect class="seal" x="312" y="224" width="56" height="56" rx="11"/>
+  <path class="tick" stroke-width="3.2" d="M325 253 L335.1 263.1 L354.0 238.5"/>
+  <text class="h2" x="392" y="242">Checked</text>
+  <text class="h2" x="392" y="268">by celsus</text>
+  <text class="cap" x="312" y="320">Script, numbers</text>
+  <text class="cap" x="312" y="344">and verdict: open</text>
+  <path class="arrow" d="M518 279.0 H536 M530 273.0 L536 279.0 L530 285.0"/>
+  <rect class="panel" x="540" y="196" width="222" height="166" rx="16"/>
+  <rect x="560" y="238" width="9.5" height="52" fill="#efe9dc" fill-opacity="0.5"/>
+  <circle cx="565" cy="247" r="3" fill="#d8b26e"/>
+  <rect x="572" y="228" width="9.5" height="62" fill="#efe9dc" fill-opacity="0.56"/>
+  <circle cx="577" cy="237" r="3" fill="#8f7d55"/>
+  <rect x="584" y="242" width="9.5" height="48" fill="#efe9dc" fill-opacity="0.62"/>
+  <circle cx="589" cy="251" r="3" fill="#8f7d55"/>
+  <rect x="596" y="232" width="9.5" height="58" fill="#efe9dc" fill-opacity="0.6799999999999999"/>
+  <circle cx="601" cy="241" r="3" fill="#c4553f"/>
+  <rect x="608" y="240" width="9.5" height="50" fill="#efe9dc" fill-opacity="0.5"/>
+  <circle cx="613" cy="249" r="3" fill="#d8b26e"/>
+  <rect x="620" y="226" width="9.5" height="64" fill="#efe9dc" fill-opacity="0.56"/>
+  <circle cx="625" cy="235" r="3" fill="#8f7d55"/>
+  <line x1="556" y1="291" x2="634" y2="291" stroke="#a8834f" stroke-width="2.6"/>
+  <text class="h2" x="640" y="242">A public</text>
+  <text class="h2" x="640" y="268">library</text>
+  <text class="cap" x="560" y="320">For anyone who</text>
+  <text class="cap" x="560" y="344">relies on a result</text>
+  <rect class="panel" x="792" y="106" width="404" height="256" rx="16"/>
+  <text class="mono lab" x="816" y="138">THE WHOLE POOL, ON MUSE SPARK OPEN</text>
+  <text class="gold" x="814" y="204" font-weight="700" letter-spacing="-2" style="font-size:68px">$8,500</text>
+  <text class="cap" x="816" y="238">One run on each of the 6,552 arXiv</text>
+  <text class="cap" x="816" y="262">papers the held-out set was drawn</text>
+  <text class="cap" x="816" y="286">from, at the mean of $1.30 a run.</text>
+  <line x1="816" y1="302" x2="1172" y2="302" stroke="#ffffff" stroke-opacity="0.09" stroke-width="1.5"/>
+  <text class="ink" x="816" y="334" font-weight="700" style="font-size:24px">35 min</text>
+  <text class="cap" x="816" y="354" style="font-size:15.5px">median run</text>
+  <text class="ink" x="932" y="334" font-weight="700" style="font-size:24px">$1.34</text>
+  <text class="cap" x="932" y="354" style="font-size:15.5px">median, at list prices</text>
+  <text class="mono lab" x="44" y="412">FIELDS</text>
+  <rect x="128" y="390" width="278" height="32" rx="16" fill="#a8834f" fill-opacity="0.22" stroke="#a8834f" stroke-width="1.4"/>
+  <text class="mono" x="267.2" y="412" fill="#e6c78f" text-anchor="middle" style="font-size:15.5px">finance, economics · first</text>
+  <rect class="chip" x="418.4" y="390" width="166" height="32" rx="16"/>
+  <text class="mono m" x="501.2" y="412" text-anchor="middle">social science</text>
+  <rect class="chip" x="596.0" y="390" width="100" height="32" rx="16"/>
+  <text class="mono m" x="645.9" y="412" text-anchor="middle">climate</text>
+  <rect class="chip" x="707.8" y="390" width="184" height="32" rx="16"/>
+  <text class="mono m" x="800.0" y="412" text-anchor="middle">machine learning</text>
+  <text class="cap" x="912.1999999999999" y="412" style="font-size:17px">any field with public data</text>
+</svg>

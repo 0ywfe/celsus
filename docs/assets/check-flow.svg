@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="484" viewBox="0 0 1240 484" role="img" aria-labelledby="check-flow-t check-flow-d">
+  <title id="check-flow-t">One paper in, one verdict out</title>
+  <desc id="check-flow-d">Five steps. Reads the paper: the arXiv LaTeX, with every file inlined. Typed spec: Muse copies every reported number as printed, and code checks each one is in the LaTeX. Rebuilds it: Muse writes and runs the script on public data in a sandbox, and only a fresh re-run counts. Two reviews: independent, and a finding from either sends the script back to be rebuilt. Code judges: each number, by rules from published replication practice, for example 0.4531 in the paper against 0.4482 here, consistent. The verdict comes out in plain words: the paper’s numbers hold up, 84 of 84 checked results match within their uncertainty. The verdicts are holds up, partly holds up, does not hold up, and could not check, which is the checker’s own failure and never counts against the paper.</desc>
+  <style>
+    svg { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    .mono { font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+    .bg { fill: #1b1a17; }
+    .panel { fill: #24221e; stroke: #ffffff; stroke-opacity: 0.09; stroke-width: 1.5; }
+    .hi { fill: #2b2721; stroke: #a8834f; stroke-opacity: 0.75; stroke-width: 1.6; }
+    .well { fill: #141311; stroke: #ffffff; stroke-opacity: 0.08; stroke-width: 1; }
+    .h1 { fill: #efe9dc; font-size: 34px; font-weight: 700; letter-spacing: -0.5px; }
+    .h2 { fill: #efe9dc; font-size: 23px; font-weight: 700; letter-spacing: -0.3px; }
+    .cap { fill: #b3ab9a; font-size: 18.5px; }
+    .lab { fill: #8c8476; font-size: 13.5px; letter-spacing: 0.7px; }
+    .m { fill: #d4ccbb; font-size: 15.5px; }
+    .dim { fill: #8c8476; }
+    .gold { fill: #d2ab68; }
+    .ink { fill: #efe9dc; }
+    .seal { fill: none; stroke: #a8834f; stroke-width: 2.4; }
+    .tick { fill: none; stroke: #d2ab68; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
+    .arrow { fill: none; stroke: #a8834f; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .chip { fill: none; stroke: #efe9dc; stroke-opacity: 0.24; stroke-width: 1.4; }
+  </style>
+  <rect class="bg" x="0" y="0" width="1240" height="484" rx="24"/>
+  <!-- The seal (a square with a tick) heads every celsus diagram. -->
+  <rect class="seal" x="44" y="36" width="38" height="38" rx="8"/>
+  <path class="tick" d="M53 55 L61 63 L74 47"/>
+  <text class="h1" x="100" y="68">One paper in, one verdict out</text>
+  <path d="M857.0 110 C857.0 84 621.0 84 621.0 106" fill="none" stroke="#a8834f" stroke-width="1.8" stroke-dasharray="4 5" stroke-linecap="round"/>
+  <path class="arrow" d="M615.0 100 L621.0 107 L627.0 100"/>
+  <text class="mono lab" x="739.0" y="82" text-anchor="middle">a finding sends it back</text>
+  <rect class="panel" x="44" y="112" width="210" height="210" rx="16"/>
+  <path d="M64 130 H108 L122 144 V204 H64 Z" fill="#efe9dc" fill-opacity="0.92"/>
+  <path d="M108 130 V144 H122" fill="#c9c1b0" fill-opacity="0.92"/>
+  <line x1="72" y1="154" x2="112" y2="154" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <line x1="72" y1="163" x2="106" y2="163" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <line x1="72" y1="172" x2="90" y2="172" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <line x1="72" y1="181" x2="112" y2="181" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <line x1="72" y1="190" x2="100" y2="190" stroke="#1b1a17" stroke-opacity="0.45" stroke-width="3"/>
+  <rect x="93" y="169" width="19" height="6" rx="1" fill="#a8834f"/>
+  <text class="mono lab" x="138" y="202">arXiv</text>
+  <text class="h2" x="64" y="248">Reads the paper</text>
+  <text class="cap" x="64" y="276">The arXiv LaTeX,</text>
+  <text class="cap" x="64" y="300">every file inlined</text>
+  <path class="arrow" d="M258 217.0 H276 M270 211.0 L276 217.0 L270 223.0"/>
+  <rect class="panel" x="280" y="112" width="210" height="210" rx="16"/>
+  <rect class="well" x="300" y="132" width="170" height="76" rx="9"/>
+  <text class="mono m" x="314" y="151" style="font-size:14px">hypothesis</text>
+  <text class="mono m" x="314" y="167" style="font-size:14px">sample</text>
+  <text class="mono m" x="314" y="183" style="font-size:14px">method</text>
+  <text class="mono gold" x="314" y="199" style="font-size:14px">numbers</text>
+  <text class="h2" x="300" y="248">Typed spec</text>
+  <text class="cap" x="300" y="276">Every number,</text>
+  <text class="cap" x="300" y="300">copied as printed</text>
+  <path class="arrow" d="M494 217.0 H512 M506 211.0 L512 217.0 L506 223.0"/>
+  <rect class="panel" x="516" y="112" width="210" height="210" rx="16"/>
+  <rect class="well" x="536" y="132" width="170" height="76" rx="9"/>
+  <circle cx="549" cy="144" r="3.5" fill="#efe9dc" fill-opacity="0.25"/>
+  <circle cx="560" cy="144" r="3.5" fill="#efe9dc" fill-opacity="0.25"/>
+  <circle cx="571" cy="144" r="3.5" fill="#efe9dc" fill-opacity="0.25"/>
+  <text class="mono m" x="548" y="174"><tspan class="gold">$</tspan> python</text>
+  <text class="mono m" x="548" y="194">  replicate.py</text>
+  <rect x="672" y="182" width="9" height="15" fill="#d2ab68"/>
+  <text class="h2" x="536" y="248">Rebuilds it</text>
+  <text class="cap" x="536" y="276">On public data,</text>
+  <text class="cap" x="536" y="300">in a sandbox</text>
+  <path class="arrow" d="M730 217.0 H748 M742 211.0 L748 217.0 L742 223.0"/>
+  <rect class="panel" x="752" y="112" width="210" height="210" rx="16"/>
+  <circle cx="810" cy="166" r="30" fill="none" stroke="#efe9dc" stroke-opacity="0.5" stroke-width="2"/>
+  <path class="tick" stroke-width="2.8" d="M798 166 L806.0 174.1 L821.0 154.5"/>
+  <circle cx="894" cy="166" r="30" fill="none" stroke="#efe9dc" stroke-opacity="0.5" stroke-width="2"/>
+  <path class="tick" stroke-width="2.8" d="M882 166 L890.0 174.1 L905.0 154.5"/>
+  <text class="h2" x="772" y="248">Two reviews</text>
+  <text class="cap" x="772" y="276">Either one can</text>
+  <text class="cap" x="772" y="300">send it back</text>
+  <path class="arrow" d="M966 217.0 H984 M978 211.0 L984 217.0 L978 223.0"/>
+  <rect class="panel" x="988" y="112" width="210" height="210" rx="16"/>
+  <rect class="well" x="1008" y="132" width="170" height="76" rx="9"/>
+  <text class="mono dim" x="1020" y="154" style="font-size:15px">paper</text>
+  <text class="mono m" x="1166" y="154" text-anchor="end">0.4531</text>
+  <text class="mono dim" x="1020" y="176" style="font-size:15px">here</text>
+  <text class="mono m" x="1166" y="176" text-anchor="end">0.4482</text>
+  <path class="tick" stroke-width="2.4" d="M1020 194 L1024.3 198.3 L1032.4 187.8"/>
+  <text class="mono gold" x="1040" y="199" style="font-size:15px">consistent</text>
+  <text class="h2" x="1008" y="248">Code judges</text>
+  <text class="cap" x="1008" y="276">By published</text>
+  <text class="cap" x="1008" y="300">replication rules</text>
+  <path class="arrow" d="M1093.0 326 V348 M1087.0 342 L1093.0 348 L1099.0 342"/>
+  <rect class="well" x="44" y="352" width="1152" height="96" rx="14"/>
+  <text class="mono" x="68" y="390" font-size="17"><tspan class="gold">→ </tspan><tspan class="ink">The paper’s numbers hold up: 84 of 84 checked results match within their uncertainty.</tspan></text>
+  <circle cx="74" cy="422" r="6.5" fill="#d8b26e"/>
+  <text class="cap" x="88" y="428" style="font-size:17px">holds up</text>
+  <circle cx="178" cy="422" r="6.5" fill="#8f7d55"/>
+  <text class="cap" x="192" y="428" style="font-size:17px">partly holds up</text>
+  <circle cx="338" cy="422" r="6.5" fill="#c4553f"/>
+  <text class="cap" x="352" y="428" style="font-size:17px">does not hold up</text>
+  <circle cx="510" cy="422" r="5.7" fill="none" stroke="#b3ab9a" stroke-width="1.7"/>
+  <text class="cap" x="524" y="428" style="font-size:17px">could not check: the checker’s own failure, never the paper’s</text>
+</svg>
