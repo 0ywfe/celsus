@@ -15,7 +15,7 @@
   <a href="#vision"><strong>Vision</strong></a> ·
   <a href="#how-it-works"><strong>How it works</strong></a> ·
   <a href="#how-we-know-it-works"><strong>How we know it works</strong></a> ·
-  <a href="#limitations"><strong>Limitations</strong></a> ·
+  <a href="#whats-next"><strong>What's next</strong></a> ·
   <a href="#use"><strong>Use</strong></a>
 </p>
 
@@ -119,7 +119,7 @@ Each paper ran twice on Muse Spark Open at effort xhigh, with a $2 budget stop p
 
 "Could not check" is the checker's own failure, given with its reason: the data was unavailable, the sample couldn't be rebuilt, the code broke a rule, or nothing comparable came out. It never counts against the paper.
 
-A replay of the same stored attempts under the post-headline scorer gives holds up 1, partly holds up 27, does not hold up 0, could not check 30, could not check (budget) 5. This is not a fresh test, as the fixes were written after reading these runs. The three "does not hold up" each missed every number checked while the paper's main result was never computed; a paper now fails only on its main result. One compound sample period was misread. One run lost to a false alarm (8dd383) has no results to re-score.
+A replay of the same stored attempts under the post-headline scorer gives holds up 1, partly holds up 27, does not hold up 0, could not check 30, could not check (budget) 5. This is not a fresh test, as the fixes were written after reading these runs. The three "does not hold up" each missed every number checked while the paper's main result was never computed; a paper now fails only on its main result. Two coded checks raised false alarms that decided held-out verdicts, and both were fixed after the headline: a sample period printed as two dates was read as its first date, and a minimum-length check was read as cutting the sample to the paper's count. The run that check stopped (8dd383) has no results to re-score.
 
 The held-out set's 67 runs (reports, scripts, call logs) are in [`receipts/`](receipts/), one row per run with its verdict as run and under the replay; the development runs are not.
 
@@ -143,14 +143,15 @@ The test suite runs offline on every push (the badge above): model calls, the sa
 
 Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran on Muse Spark Open, Meta's open-weights model, served by Fireworks and Baseten: the reading of the paper, the build, and both reviews.
 
-## Limitations
+## What's next
 
-- Papers that report no standard error anywhere can't have their estimates judged: 357afb's 170 estimates (148 of them exactly the paper's) were all left unjudged, and the run could not check the paper.
-- Two coded checks raised false alarms that decided held-out verdicts: a minimum-length check read as cutting the sample to the paper's count (8dd383), and a sample period printed as two dates read as the first (dcb75d). Both were fixed after the headline.
-- A count written as the paper's value passes the coded checks when it can't be told from a design count (a number of draws, sectors or windows). The stored runs hold 97 such counts; most are design counts by our read, and the reviews named 13 as breaches.
-- The coded checks don't trace random draws into the sample, so a synthetic sample declared as the paper's is the reviews' to catch: in 07f67a one of the two reviews caught it.
-- A result built from the paper's own numbers (another claim times a constant, or draws that cancel to a constant) is caught when the script writes it as arithmetic on names and literals, including numbers spelled as text or string lengths. It is not yet caught through dict or list constants, `max`, `np.where` or helper functions, or `**` and `+` forms.
-- Counts that are not the sample total pass within SCORE's 15%, or else within 1.96 √n. That band has no published source; it is kept for small subgroups until an off subgroup count leaves only its own results unjudged.
+Where the checks stop today, and what closes each gap.
+
+- Papers that print no standard errors can't have their estimates judged yet, so they come back "could not check" even when the numbers match: one held-out paper matched 148 of its 170 estimates exactly. Next: a rule for them, taken from published replication practice like the others.
+- A script can type the paper's sample size in as a plain number, and the code can't yet tell it from a design number such as a count of draws. The reviews catch these today: the stored runs hold 97 such counts, most of them design counts by our read, and the reviews named 13 as breaches. Next: a coded check.
+- Data made up with a random generator and passed off as the paper's sample is caught by the reviews, not the code: in one run, one of the two reviews caught it. Next: trace random draws into the sample in code.
+- A result rebuilt from the paper's own numbers is caught when the script writes it as arithmetic, including numbers spelled as text or string lengths. Next: follow it through dict and list constants, `max`, `np.where`, helper functions, and `**` and `+`.
+- Small subgroup counts pass within 15% of the paper's, or else within 1.96 √n. That second band is the one rule here without a published source. Next: let an off subgroup count leave only its own results unjudged, then drop the band.
 
 ## Judging criteria
 
