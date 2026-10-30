@@ -35,7 +35,7 @@ That is realistic now because a model can read a paper and write the analysis, a
 
 The method isn't tied to a field. The rules for when a number matches come from replication practice across the sciences (table below), and the guards against typed-in results and trimmed samples apply to any paper. What a new field needs is a way to fetch its data. Finance and economics came first because their data (prices, filings, macro series) is public and a script can fetch it. Any computational field with public data has the same shape: social science on public surveys, climate on public reanalysis data, machine learning on public benchmarks.
 
-This repository is the first version, open source under Apache-2.0. The rest of this README is what it does today.
+This repository is the first version, open source under AGPL-3.0. The rest of this README is what it does today.
 
 ## How we know it works
 

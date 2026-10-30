@@ -3,7 +3,7 @@ name = "celsus"
 version = "0.1.0"
 description = "Reads a research paper, reruns its analysis on public data, and reports whether the published numbers reproduce."
 readme = "README.md"
-license = "Apache-2.0"
+license = "AGPL-3.0-only"
 requires-python = ">=3.11"
 dependencies = [
     "modal>=1.6.3",
