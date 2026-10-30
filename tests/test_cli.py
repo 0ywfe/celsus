@@ -184,3 +184,14 @@ def test_the_demo_paces_the_whole_run_to_about_thirty_seconds():
     demo(None, seconds=28, max_gap_s=1.5, console=Console(record=True, width=160, color_system=None),
          sleep=pauses.append)
     assert abs(sum(pauses) - 28) < 0.5
+
+
+def test_a_hosted_model_path_shows_as_its_model_name():
+    """A host's model path (accounts/fireworks/models/muse-spark-open) pushed the stage tracker off screen in the
+    README recording; the screens show the model's own name."""
+    from paper_replicator.cli.__main__ import DEMO_RUNS, demo
+    console = Console(record=True, width=160, height=40, color_system=None)
+    demo(None, seconds=0, max_gap_s=0, console=console, sleep=lambda s: None)
+    text = console.export_text()
+    assert "muse-spark-open · xhigh" in text and "2610.04221 · muse-spark-open" in text
+    assert "accounts/fireworks/models/muse-spark-open ·" not in text and "○ v…" not in text

@@ -26,6 +26,11 @@ def clock(seconds: float) -> str:
     return f"{minutes}:{rest:02d}"
 
 
+def model_name(model: str | None) -> str:
+    """A host's model path shows as the model's own name: accounts/fireworks/models/muse-spark-open as muse-spark-open."""
+    return (model or "").rsplit("/", 1)[-1]
+
+
 def tracker(state: State) -> Group:
     title = Text.assemble((f" {PRODUCT_NAME.upper()}  ", "bold"), f"arXiv {state.arxiv_id}",
                           (f" · {state.title}" if state.title else "", "italic"))
@@ -38,7 +43,7 @@ def tracker(state: State) -> Group:
         stages.append(f"{GLYPH[status]} {label}", style={"done": "green", "active": "bold cyan", "pending": "dim"}[status])
         if i < len(STAGES) - 1:
             stages.append(" ── ", style="dim")
-    meta = Text(f"{state.model}{' · ' + state.effort if state.effort else ''} · ${state.spent:.2f} · "
+    meta = Text(f"{model_name(state.model)}{' · ' + state.effort if state.effort else ''} · ${state.spent:.2f} · "
                 f"{clock(state.elapsed)}")
     if state.verdict is not None and state.providers:
         on_meta = state.makers == ("meta",)
@@ -119,5 +124,5 @@ def card(folder: Path, max_rows: int = 12) -> Panel:
               f"${summary['cost_usd']:.2f}", clock(summary["wall_s"])]
     parts += [Text(""), Text(" · ".join(p for p in footer if p)), Text(DISCLAIMER, style="dim"),
               Text(f"report: {_shown(folder / 'report.md')}", style="dim")]
-    return Panel(Group(*parts), border_style=style, title=f"{summary['paper']} · {summary['model']}",
+    return Panel(Group(*parts), border_style=style, title=f"{summary['paper']} · {model_name(summary['model'])}",
                  title_align="left")
