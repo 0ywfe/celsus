@@ -157,7 +157,7 @@ def test_the_demo_replays_a_stored_held_out_run_with_no_key(monkeypatch):
         monkeypatch.delenv(key, raising=False)
     assert [p.name[-6:] for p in sorted(DEMO_RUNS.iterdir()) if p.is_dir()] == ["25b01b"]
     console = Console(record=True, width=160, color_system=None)
-    state = demo(None, speed=1000, max_gap_s=0, console=console, sleep=lambda s: None)
+    state = demo(None, seconds=0, max_gap_s=0, console=console, sleep=lambda s: None)
     text = console.export_text()
     assert text.startswith("replay of run-20261030T045321Z-25b01b, recorded 2026-10-30 04:53 UTC")
     assert state.verdict == "holds up" and "The paper's numbers hold up" in text
@@ -168,4 +168,19 @@ def test_the_demo_names_its_runs_when_asked_for_one_it_does_not_ship():
     import pytest
     from paper_replicator.cli.__main__ import demo
     with pytest.raises(SystemExit, match="25b01b"):
-        demo("ffffff", speed=1000, max_gap_s=0, console=Console(record=True), sleep=lambda s: None)
+        demo("ffffff", seconds=0, max_gap_s=0, console=Console(record=True), sleep=lambda s: None)
+
+
+def test_the_demo_paces_the_whole_run_to_about_thirty_seconds():
+    """The README promises 30 seconds: the demo finds the speed at which the run's own pauses, each capped, add up
+    to its target, and keeps the run's rhythm instead of an even tick."""
+    from paper_replicator.cli.__main__ import DEMO_RUNS, demo, pace
+    from paper_replicator.cli.timeline import load
+    items = load(next(p for p in DEMO_RUNS.iterdir() if p.is_dir()))
+    speed = pace(items, seconds=28, max_gap_s=1.5)
+    total = sum(min((b["t"] - a["t"]) / speed, 1.5) for a, b in zip(items, items[1:]))
+    assert abs(total - 28) < 0.5
+    pauses = []
+    demo(None, seconds=28, max_gap_s=1.5, console=Console(record=True, width=160, color_system=None),
+         sleep=pauses.append)
+    assert abs(sum(pauses) - 28) < 0.5
