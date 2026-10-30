@@ -11,6 +11,8 @@ Its main result, overall_mean_return, is -3.07% in the paper and -3.086% here (c
 
 Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults, and every number in this README, are Meta's Muse models.
 
+The idea came from a March run, before this event, that scored 374 arXiv papers for replicability: 20 could be run again in full, and 3 were replicated by hand. None of that code is in this repository.
+
 **See it in 30 seconds, with no API key:**
 
 ![paper-replicator demo: a held-out run replayed, ending on its verdict card](docs/demo.gif)
@@ -42,6 +44,8 @@ Each paper ran twice on Muse Spark Open at effort xhigh, with a $2 budget stop p
 
 Replay of the same stored attempts under the post-headline scorer: holds up 1, partly holds up 27, does not hold up 0, could not check 30, could not check (budget) 5. This is not a fresh test, as the fixes were written after reading these runs. The three "does not hold up" each missed every number checked while the paper's main result was never computed; a paper now fails only on its main result. One compound sample period was misread. One run lost to a false alarm (8dd383) has no results to re-score.
 
+The held-out set's 67 runs (reports, scripts, call logs) are in [`receipts/`](receipts/), one row per run with its verdict as run and under the replay; the development runs are not.
+
 ### Two independent reviews, read finding by finding
 
 Every script is reviewed twice, independently, and a finding from either review sends it back. In the held-out set, 46 findings came from only one of the two reviews; each was read against the script by hand: 43 true, 2 borderline, 1 false. No false or borderline finding decided a verdict.
@@ -52,7 +56,7 @@ The sabotage battery plants faults into honest runs (results typed in from the p
 
 ### Tests and a regression gate
 
-The test suite runs offline on every push (the badge above): model calls, the sandbox and market data are faked, and the guards are tested on real scripts from live runs. Before any change merges, a regression gate re-scores every stored run (215) and re-checks every stored plant (130); a verdict that changes has to be named, with its reason, in its own commit. The stored runs themselves are not in this repository.
+The test suite runs offline on every push (the badge above): model calls, the sandbox and market data are faked, and the guards are tested on real scripts from live runs. Before any change merges, a regression gate re-scores every stored run (215) and re-checks every stored plant (130); a verdict that changes has to be named, with its reason, in its own commit. Of the stored runs, only the held-out set's are in this repository (`receipts/`).
 
 ### Open weights
 
@@ -63,7 +67,7 @@ Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran
 | criterion | evidence |
 |---|---|
 | Impact | Published results that don't replicate cost the people who build on them: Amgen reproduced 6 of 53 landmark cancer studies (Begley & Ellis, Nature 2012), and about two-thirds of 452 published asset-pricing anomalies fail to replicate (Hou, Xue & Zhang 2020). This checks a paper end to end, from its LaTeX to a verdict in plain words, in a median of 35 minutes and $1.34. The held-out headline above is what it does on papers nobody had looked at. |
-| Use of Meta AI tooling | Muse reads the paper into a typed spec, chooses the main result, builds the replication as an agent with tools in a sandbox, and reviews its own script twice. Muse Spark Open did every call of the held-out set; Muse Spark and Muse Wonder run behind the same flag (`--model`). |
+| Use of Meta AI tooling | Muse reads the paper into a typed spec, chooses the main result, builds the replication as an agent with tools in a sandbox, and reviews its own script twice. Muse Spark Open did every call of the held-out set; Muse Spark and Muse Wonder run behind the same flag (`--model`). On one tuning paper (n=3 per model), Muse Spark at minimal effort ($0.20 a run) and Muse Wonder at max effort ($1.75 a run) both match the paper's main result of -3.07% (Spark -3.155 to -2.946, Wonder -3.086 each time); Wonder costs 8.9× as much. |
 | Technical depth | Code, not a model, judges every number, with tolerances from published replication practice (table below). Coded guards stop typed-in results, samples trimmed or padded to a count, and fetching the authors' code; the saboteur measures them; the regression gate pins them. |
 | Demo | `uv run paper-replicator demo` replays a held-out run with no key. `paper-replicator check <arxiv id>` runs a paper live, with each role on screen. |
 
