@@ -34,9 +34,14 @@ def model_name(model: str | None) -> str:
 
 
 def tracker(state: State) -> Group:
-    title = Text.assemble((f" {PRODUCT_NAME.upper()}  ", "bold"), f"arXiv {state.arxiv_id}",
-                          (f" · {state.title}" if state.title else "", "italic"))
-    title.truncate(200, overflow="ellipsis")
+    label = Text.assemble((f" {PRODUCT_NAME.upper()}  ", "bold"), f"arXiv {state.arxiv_id}",
+                          (" · " if state.title else "", "italic"))
+    paper = Text(state.title, style="italic")
+    paper.truncate(max(200 - label.cell_len, 0), overflow="ellipsis")
+    title = Table.grid()   # a long title wraps under its own first character
+    title.add_column(no_wrap=True)
+    title.add_column()
+    title.add_row(label, paper)
     stages = Text(" ")
     for i, stage in enumerate(STAGES):
         status = state.status(stage)

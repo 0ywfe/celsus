@@ -4,10 +4,12 @@ import json
 
 from rich.console import Console
 
+from paper_replicator import PRODUCT_NAME
+
 from paper_replicator.cli.__main__ import replay
 from paper_replicator.cli.state import Line, State, apply
 from paper_replicator.cli.timeline import Tail, load
-from paper_replicator.cli.view import card, log, screen
+from paper_replicator.cli.view import card, log, screen, tracker
 
 T0 = "2026-10-28T15:36:{:02d}+00:00"
 EVENTS = [
@@ -129,6 +131,27 @@ def test_a_wrapped_log_line_hangs_under_the_text_column():
     assert lines[1].startswith(" " * 9) and lines[1][9] != " "        # the wrap starts under the text, not the stage
     assert lines[2] == " tool    write /work/replicate.py".ljust(len(lines[2]))
     assert " ".join(line[9:].strip() for line in lines[:2]) == f"{words} {words}"[:160]   # a log line is cut at 160 characters
+
+
+TITLE = "Robust enhanced index tracking portfolio selection under distributional uncertainty"
+
+
+def header(width):
+    console = Console(record=True, width=width, color_system=None)
+    console.print(tracker(State(arxiv_id="2610.04221", title=TITLE)))
+    return console.export_text().splitlines()
+
+
+def test_a_wrapped_title_hangs_under_its_first_character():
+    lines = header(97)
+    start = lines[0].index("Robust")
+    assert lines[0].startswith(f" {PRODUCT_NAME.upper()}  arXiv 2610.04221 · Robust") and len(lines) == 3   # two title lines, the stages
+    assert lines[1][:start].strip() == "" and lines[1][start] != " "
+    assert " ".join(line[start:].strip() for line in lines[:2]) == TITLE
+
+
+def test_a_title_that_fits_stays_on_one_line():
+    assert header(160)[0].rstrip() == f" {PRODUCT_NAME.upper()}  arXiv 2610.04221 · {TITLE}"
 
 
 def test_a_replay_says_it_is_one_and_ends_on_the_card(tmp_path):
