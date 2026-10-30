@@ -49,6 +49,27 @@ def date_range(printed: str | None) -> tuple[dt.date, dt.date] | None:
     return None
 
 
+# One date as printed, in any form date_range reads: a day or a month in ISO form, a named month with an optional
+# day, or a bare year. Month names only, so a ticker before a year ("^GSPC 2025-12-27") is not read as one.
+_NAMES = "|".join(sorted(MONTHS, key=len, reverse=True))
+_ONE_DATE = re.compile(r"\b\d{4}-\d{1,2}-\d{1,2}\b|\b\d{4}-\d{1,2}\b(?![-\d])"
+                       rf"|(?:\b\d{{1,2}}(?:st|nd|rd|th)?\s+)?\b(?:{_NAMES})\.?\s+(?:\d{{1,2}}(?:st|nd|rd|th)?\s+)?\d{{4}}\b"
+                       r"|\b(?:19|20)\d{2}\b")
+
+
+def paper_span(printed: str | None, end: bool) -> tuple[dt.date, dt.date] | None:
+    """The paper's start (or end, with end=True) as printed. A string holding more than one date is read from its
+    earliest date (a start) or to its latest (an end): post-headline, the orchestrator's ruling (30 Oct), after
+    dcb75d's "May 2024 (monthly BRK/WMT); Jun 2024 (daily CVS)" was read as May 2024 alone and decided its verdict."""
+    text = (printed or "").strip().lower().replace(",", " ")
+    if text.startswith(NOT_STATED):
+        return None
+    spans = {span for found in _ONE_DATE.finditer(text) if (span := date_range(found[0]))}
+    if len(spans) < 2:
+        return date_range(printed)
+    return max(spans, key=lambda s: s[1]) if end else min(spans, key=lambda s: s[0])
+
+
 def _inside(date: dt.date, span: tuple[dt.date, dt.date]) -> bool:
     return span[0] - SLACK <= date <= span[1] + SLACK
 
@@ -56,7 +77,7 @@ def _inside(date: dt.date, span: tuple[dt.date, dt.date]) -> bool:
 def period_gap(spec: PaperSpec, sample: dict) -> str | None:
     """Why the replication's sample does not cover the paper's period, or None when it does (or the paper
     states no period)."""
-    paper_start, paper_end = date_range(spec.period_start), date_range(spec.period_end)
+    paper_start, paper_end = paper_span(spec.period_start, end=False), paper_span(spec.period_end, end=True)
     if paper_start is None and paper_end is None:
         return None
     start, end = (date_range(str(sample.get(key) or "")) for key in ("start", "end"))
