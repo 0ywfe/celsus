@@ -1,0 +1,94 @@
+{
+ "run_id": "run-20261030T045321Z-25b01b",
+ "paper": "2610.04221",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "holds up",
+ "reason": "",
+ "first_line": "The paper's numbers hold up: 84 of 84 checked results match within their uncertainty. Its main result, TabM_withoutSS_MTSV_Sharpe, is 0.4531 in the paper and 0.4482 here (consistent).",
+ "headline": {
+  "name": "TabM_withoutSS_MTSV_Sharpe",
+  "kind": "estimate",
+  "unit": "",
+  "reported": 0.453109,
+  "reproduced": 0.44823614693944963,
+  "se": 0.13542881412458982,
+  "n": 60,
+  "consistent": true,
+  "why": "paper inside 0.4482 +/- 0.2654"
+ },
+ "sample": [
+  {
+   "name": "count_n_assets",
+   "reported": 25.0,
+   "reproduced": 25.0,
+   "consistent": true
+  },
+  {
+   "name": "count_n_sectors",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_per_sector",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_Technology_assets",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_Healthcare_assets",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_FinancialServices_assets",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_ConsumerCyclical_assets",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_ConsumerDefensive_assets",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "count_insample_months",
+   "reported": 60.0,
+   "reproduced": 60.0,
+   "consistent": true
+  }
+ ],
+ "judged": 84,
+ "matched": 84,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (count_n_assets (25) at line 334). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 48,
+ "cost_usd": 1.7228,
+ "tokens_in": 4307041,
+ "tokens_out": 182569,
+ "wall_s": 2687.7,
+ "crashed": null
+}

@@ -2,6 +2,7 @@
 
   python -m paper_replicator.cli check <arxiv_id> [replicate options]   run a check and watch it live
   python -m paper_replicator.cli replay <run id or folder> [--speed 10]  replay a recorded run at its own pace
+  python -m paper_replicator.cli demo [run id]                          replay a run shipped with the package, no key
 
 Both play the same files (events.jsonl and calls.jsonl in the run folder) through the same screens.
 A replay is labelled as one, with the run's ID and date, so it is never passed off as live."""
@@ -28,6 +29,10 @@ from .view import card, screen
 
 POLL_S = 0.25  # how often a live run's folder is read
 RUN_ID = re.compile(r"run-\d{8}T\d{6}Z-[0-9a-f]{6}")
+# Runs shipped with the package so the screens can be seen with no API key, Modal token or runs/ folder: the files
+# a replay reads (events, calls, summary, comparison), the report and the kept script, copied unchanged.
+DEMO_RUNS = Path(__file__).parent / "demo"
+DEMO_DEFAULT = "25b01b"   # held-out set 3, 2610.04221 draw 2: holds up, 84/84, main result consistent
 
 
 def _folder(name: str) -> Path:
@@ -55,6 +60,15 @@ def replay(folder: Path, speed: float, max_gap_s: float, console: Console, sleep
     if (folder / "summary.json").exists():
         console.print(card(folder, max_rows=max(console.height - 16, 6)))
     return state
+
+
+def demo(run: str | None, speed: float, max_gap_s: float, console: Console, sleep=time.sleep) -> State:
+    """Replays a run shipped with the package (the default when run is None), labelled as a replay like any other."""
+    shipped = sorted(p for p in DEMO_RUNS.iterdir() if p.is_dir())
+    found = [p for p in shipped if p.name.endswith(run or DEMO_DEFAULT)]
+    if len(found) != 1:
+        raise SystemExit(f"no shipped run matches {run!r}; shipped: {', '.join(p.name[-6:] for p in shipped)}")
+    return replay(found[0], speed, max_gap_s, console, sleep)
 
 
 def check(args: list[str], console: Console) -> State:
@@ -96,6 +110,10 @@ def main(argv: list[str] | None = None) -> None:
     play.add_argument("run")
     play.add_argument("--speed", type=float, default=10.0, help="times faster than the run took")
     play.add_argument("--max-gap", type=float, default=1.5, help="longest pause between two lines, in seconds")
+    shown = sub.add_parser("demo", help="replay a held-out run shipped with the package (no API key needed)")
+    shown.add_argument("run", nargs="?", help=f"a shipped run's ID (default {DEMO_DEFAULT})")
+    shown.add_argument("--speed", type=float, default=10.0, help="times faster than the run took")
+    shown.add_argument("--max-gap", type=float, default=1.5, help="longest pause between two lines, in seconds")
     plants = sub.add_parser("sabotage", help="replay a saboteur session: each plant and the check that caught it")
     plants.add_argument("session")
     plants.add_argument("--speed", type=float, default=10.0, help="times faster than the session took")
@@ -106,6 +124,8 @@ def main(argv: list[str] | None = None) -> None:
     console = Console()
     if args.command == "replay":
         replay(_folder(args.run), args.speed, args.max_gap, console)
+    elif args.command == "demo":
+        demo(args.run, args.speed, args.max_gap, console)
     elif args.command == "sabotage":
         sabotage_view.replay(_folder(args.session), args.speed, args.max_gap, console)
     else:

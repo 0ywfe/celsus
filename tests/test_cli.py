@@ -147,3 +147,25 @@ def test_a_sabotage_session_replays_each_plant_next_to_the_check_that_caught_it(
     assert "✗ survived" in out and "overall_mean_return" in out
     assert "same test" in out                                  # the review's reason, not the raw "survived"
     assert "caught 1 of 2 plants (50%)" in out and "false alarms on the 1 clean runs: 0" in out
+
+
+def test_the_demo_replays_a_stored_held_out_run_with_no_key(monkeypatch):
+    """`paper-replicator demo` needs no API key, no Modal token and no runs/ folder: it replays a run shipped
+    with the package (25b01b, held-out set 3, holds up) and ends on its verdict card."""
+    from paper_replicator.cli.__main__ import DEMO_RUNS, demo
+    for key in ("MODEL_API_KEY", "FIREWORKS_API_KEY", "BASETEN_API_KEY", "MODAL_TOKEN_ID", "SEC_USER_AGENT"):
+        monkeypatch.delenv(key, raising=False)
+    assert [p.name[-6:] for p in sorted(DEMO_RUNS.iterdir()) if p.is_dir()] == ["25b01b"]
+    console = Console(record=True, width=160, color_system=None)
+    state = demo(None, speed=1000, max_gap_s=0, console=console, sleep=lambda s: None)
+    text = console.export_text()
+    assert text.startswith("replay of run-20261030T045321Z-25b01b, recorded 2026-10-30 04:53 UTC")
+    assert state.verdict == "holds up" and "The paper's numbers hold up" in text
+    assert state.providers == ("fireworks",)
+
+
+def test_the_demo_names_its_runs_when_asked_for_one_it_does_not_ship():
+    import pytest
+    from paper_replicator.cli.__main__ import demo
+    with pytest.raises(SystemExit, match="25b01b"):
+        demo("ffffff", speed=1000, max_gap_s=0, console=Console(record=True), sleep=lambda s: None)
