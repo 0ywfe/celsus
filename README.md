@@ -2,7 +2,7 @@
 
 [![tests](https://github.com/0ywfe/celsus/actions/workflows/tests.yml/badge.svg)](https://github.com/0ywfe/celsus/actions/workflows/tests.yml)
 
-Give it an arXiv paper. It reads the paper's LaTeX, writes down every number the paper reports, rebuilds the analysis on public data in a sandbox, and tells you in plain words whether the published numbers hold up.
+celsus is continuous integration for published research. Give it an arXiv paper and it reads the LaTeX, writes down every number the paper reports, rebuilds the analysis from public data in a sandbox, and tells you in plain words whether the published numbers hold up.
 
 ```
 The paper's numbers hold up: 84 of 84 checked results match within their uncertainty.
@@ -10,13 +10,13 @@ Its main result, TabM_withoutSS_MTSV_Sharpe, is 0.4531 in the paper and 0.4482 h
 ```
 (a held-out run: the demo below)
 
-Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults, and every number in this README, are Meta's Muse models.
+Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults are Meta's Muse models, and every run measured in this README used them.
 
 The idea came from a March run, before this event, that scored 374 arXiv papers for replicability: 20 could be run again in full, and 3 were replicated by hand. None of that code is in this repository.
 
 **See it in 30 seconds, with no API key:**
 
-![celsus demo: a held-out run replayed, ending on its verdict card](docs/demo.gif)
+![celsus demo: held-out run 25b01b replayed, ending on its verdict](docs/demo.gif)
 
 ```bash
 uv sync
@@ -25,13 +25,25 @@ uv run celsus demo     # replays a held-out run shipped with the package, labell
 
 The demo is run 25b01b from the held-out set below (arXiv 2610.04221, robust enhanced index tracking): 84 of 84 checked results match, its main result 0.4531 in the paper and 0.4482 ± 0.2654 here. Its report and the script that produced it are in `src/paper_replicator/cli/demo/`.
 
+## Vision
+
+Research builds on published results, and few of them are ever run again. Replicating a paper by hand is slow, skilled work that is rarely funded or published, so it happens late and to a handful of well-known papers. When it is done, many results fail: Amgen reproduced 6 of 53 landmark cancer studies (Begley & Ellis, Nature 2012), and about two-thirds of 452 published asset-pricing anomalies fail to replicate (Hou, Xue & Zhang 2020).
+
+Software had the same problem and solved it with continuous integration: nothing merges until the tests pass. celsus does that for papers. The goal is for every empirical paper built on public data to be checked soon after it appears, with the script, the numbers and the verdict open to anyone who relies on it: readers, referees, editors, funders, and the next team building on the result.
+
+That is realistic now because a model can read a paper and write the analysis, and an open-weights model can do it cheaply. A run takes a median of 35 minutes and $1.34 at list prices on Meta's Muse Spark Open. One run on each of the 6,552 arXiv papers the held-out set was drawn from would cost about $8,800.
+
+The method isn't tied to a field. The rules for when a number matches come from replication practice across the sciences, from the Open Science Collaboration's psychology replications to SCORE's social and behavioural science programme, and the guards against typed-in results and trimmed samples apply to any paper. What a new field needs is a way to fetch its data. Finance and economics came first because their data (prices, filings, macro series) is public and a script can fetch it. Fields with the same shape come next: social science on public surveys, epidemiology on public health statistics, climate on public reanalysis data, machine learning on public benchmarks.
+
+This repository is the first version, open source under Apache-2.0. The rest of this README is what it does today.
+
 ## How we know it works
 
 ### A held-out set nobody had looked at
 
 32 finance and economics papers from arXiv (Sep 2025 to Oct 2026), drawn from 6,552 arXiv hits by a rule written down before any run: public data a script can fetch, LaTeX source, about 30 minutes of compute, no paper seen during development. Abstracts were read with their numbers masked, and 12 papers were dropped because someone had glimpsed a result. The list was frozen before the first run.
 
-Each paper ran twice on Muse Spark Open at effort xhigh, with a $2 budget stop per run. 63 runs finished, with a median of 35 minutes and $1.34 at list prices. Four runs the host cut off were set aside as infrastructure; three were run again, and one paper's second run stopped after its second cut. The headline, as run, on the code frozen for the test:
+Each paper ran twice on Muse Spark Open at effort xhigh, with a $2 budget stop per run. 63 runs finished, with a median of 35 minutes and $1.34 at list prices. Four runs the host cut off were set aside as infrastructure failures; three were run again, and one paper's second run stopped after its second cut. The headline, as run, on the code frozen for the test:
 
 | verdict | runs |
 |---|---|
@@ -43,17 +55,17 @@ Each paper ran twice on Muse Spark Open at effort xhigh, with a $2 budget stop p
 
 "Could not check" is the checker's own failure, given with its reason: the data was unavailable, the sample couldn't be rebuilt, the code broke a rule, or nothing comparable came out. It never counts against the paper.
 
-Replay of the same stored attempts under the post-headline scorer: holds up 1, partly holds up 27, does not hold up 0, could not check 30, could not check (budget) 5. This is not a fresh test, as the fixes were written after reading these runs. The three "does not hold up" each missed every number checked while the paper's main result was never computed; a paper now fails only on its main result. One compound sample period was misread. One run lost to a false alarm (8dd383) has no results to re-score.
+A replay of the same stored attempts under the post-headline scorer gives holds up 1, partly holds up 27, does not hold up 0, could not check 30, could not check (budget) 5. This is not a fresh test, as the fixes were written after reading these runs. The three "does not hold up" each missed every number checked while the paper's main result was never computed; a paper now fails only on its main result. One compound sample period was misread. One run lost to a false alarm (8dd383) has no results to re-score.
 
 The held-out set's 67 runs (reports, scripts, call logs) are in [`receipts/`](receipts/), one row per run with its verdict as run and under the replay; the development runs are not.
 
 ### Two independent reviews, read finding by finding
 
-Every script is reviewed twice, independently, and a finding from either review sends it back. In the held-out set, 46 findings came from only one of the two reviews; each was read against the script by hand: 43 true, 2 borderline, 1 false. No false or borderline finding decided a verdict.
+Every script is reviewed twice, independently, and a finding from either review sends it back. In the held-out set, 46 findings came from only one of the two reviews. Each was read against the script by hand: 43 true, 2 borderline, 1 false. No false or borderline finding decided a verdict.
 
-### A saboteur
+### Sabotage battery
 
-The sabotage battery plants faults into honest runs (results typed in from the paper, samples cut or padded to the paper's count, synthetic data, altered paper numbers) and counts what the checks catch. Of 116 viable plants, the coded checks alone catch 94; with one review, 106 (91.4%); with the union of two reviews, 108 (93.1%). The reviews raised no false alarm in 12 reviews of honest scripts. Ten secret-leak plants are equivalent mutants (the sandbox only ever gets a stand-in for the secret) and are left out of the 116.
+The battery plants faults into clean runs (results typed in from the paper, samples cut or padded to the paper's count, synthetic data, altered paper numbers) and counts what the checks catch. Of 116 viable plants, the coded checks alone catch 94; with one review, 106 (91.4%); with the union of two reviews, 108 (93.1%). The reviews raised no false alarm in 12 reviews of untouched scripts. Ten secret-leak plants are equivalent mutants (the sandbox only ever gets a stand-in for the secret) and are left out of the 116.
 
 ### Tests and a regression gate
 
@@ -63,26 +75,26 @@ The test suite runs offline on every push (the badge above): model calls, the sa
 
 Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran on Muse Spark Open, Meta's open-weights model, served by Fireworks and Baseten: the reading of the paper, the build, and both reviews.
 
-## The judging criteria, and where to see each
+## Judging criteria
 
 | criterion | evidence |
 |---|---|
-| Impact | Published results that don't replicate cost the people who build on them: Amgen reproduced 6 of 53 landmark cancer studies (Begley & Ellis, Nature 2012), and about two-thirds of 452 published asset-pricing anomalies fail to replicate (Hou, Xue & Zhang 2020). This checks a paper end to end, from its LaTeX to a verdict in plain words, in a median of 35 minutes and $1.34. The held-out headline above is what it does on papers nobody had looked at. |
+| Impact | Results that don't replicate cost everyone who builds on them (two examples under Vision). celsus checks a paper end to end, from its LaTeX to a verdict in plain words, in a median of 35 minutes and $1.34, and the method carries to any field with public data. The held-out headline above is what it does on papers nobody had looked at. |
 | Use of Meta AI tooling | Muse reads the paper into a typed spec, chooses the main result, builds the replication as an agent with tools in a sandbox, and reviews its own script twice. Muse Spark Open did every call of the held-out set; Muse Spark and Muse Wonder run behind the same flag (`--model`). On one tuning paper (n=3 per model), Muse Spark at minimal effort ($0.20 a run) and Muse Wonder at max effort ($1.75 a run) both match the paper's main result of -3.07% (Spark -3.155 to -2.946, Wonder -3.086 each time); Wonder costs 8.9× as much. |
-| Technical depth | Code, not a model, judges every number, with tolerances from published replication practice (table below). Coded guards stop typed-in results, samples trimmed or padded to a count, and fetching the authors' code; the saboteur measures them; the regression gate pins them. |
+| Technical depth | Code, not a model, judges every number, with tolerances from published replication practice (table below). Coded guards stop typed-in results, samples trimmed or padded to a count, and fetching the authors' code; the sabotage battery measures them, and the regression gate pins them. |
 | Demo | `uv run celsus demo` replays a held-out run with no key. `celsus check <arxiv id>` runs a paper live, with each role on screen. |
 
-## How it checks a paper
+## How it works
 
-1. **Read.** The arXiv source is fetched and its `\input` files inlined. Muse writes a typed spec: the hypothesis, sample, method steps and every reported number, each copied exactly as printed.
-2. **Ground.** Code checks that every number in the spec appears in the LaTeX, and that every cross-reference names a real claim. A spec with bad references gets one more attempt with the problems listed.
-3. **Check the paper's own arithmetic.** Do the subgroup counts add up to the total? Which p-value does each printed t actually give, at the precision both are printed to? (This is how one-tailed tests are found.)
-4. **Build.** Muse works inside a Modal sandbox with `run` and `write_file` tools: it explores the data, writes `replicate.py` and runs it.
-5. **Re-run clean.** Only an independent run of the final script, in a fresh sandbox, counts.
-6. **Audit.** If the rebuilt sample doesn't match the paper's counts, the builder gets the gap back and tries again. It is never told to hit a number.
-7. **Judge.** Code, not a model, compares each number (rules below) and writes the report.
+1. It fetches the arXiv source and inlines its `\input` files. Muse writes a typed spec: the hypothesis, sample, method steps and every reported number, each copied exactly as printed.
+2. Code checks that every number in the spec appears in the LaTeX, and that every cross-reference names a real claim. A spec with bad references gets one more attempt with the problems listed.
+3. It checks the paper's own arithmetic. Do the subgroup counts add up to the total? Which p-value does each printed t actually give, at the precision both are printed to? This is how one-tailed tests are found.
+4. Muse builds the replication inside a Modal sandbox with `run` and `write_file` tools: it explores the data, writes `replicate.py` and runs it.
+5. Only an independent run of the final script, in a fresh sandbox, counts.
+6. If the rebuilt sample doesn't match the paper's counts, the builder gets the gap back and tries again. It is never told to hit a number.
+7. Code, not a model, compares each number (rules below) and writes the report.
 
-### When a number "matches"
+### When a number matches
 
 The tolerances come from published replication practice, not from a chosen percentage. The one that doesn't, an allowance for small subgroup counts, says so in every report row it passes:
 
@@ -95,12 +107,13 @@ The tolerances come from published replication practice, not from a chosen perce
 | sample total (the largest count, and the totals of the paper's partitions) | within ±15% of the paper's | SCORE's tolerance for sample size: Miske et al. (2026), Nature 652:126–134 |
 | any other count (a subgroup) | within ±15% of the paper's, or else within 1.96 √n | SCORE, as above; the √n band, an allowance for small subgroups (the wider of the two below about 171), has no published source |
 
-### Honest verdicts
+### Verdicts
 
-- **holds up / partly holds up / does not hold up**: the share of checked numbers that match. A paper holds up only if its main result was judged and matched, and it fails only if its main result was judged and missed.
-- **could not check**: the checker's own failure, given with its reason: the data was unavailable, the sample couldn't be rebuilt, or the code crashed. The checker never blames a paper for its own failure.
+A paper holds up, partly holds up or does not hold up by the share of its checked numbers that match. It holds up only if its main result was judged and matched, and it fails only if its main result was judged and missed.
 
-### Guards that keep it honest
+"Could not check" is the checker's own failure, given with its reason: the data was unavailable, the sample couldn't be rebuilt, or the code crashed. The checker never blames a paper for its own failure.
+
+### Guards
 
 - Numbers the paper reports may not appear in the code, and the sample may not be trimmed or padded to a reported count.
 - Market data goes through one logged module (cache, then yfinance, then a host-side fetch), and the report says which source and fetch date each series came from. Anything else the script downloads in Python (filings, macro series, exchange prices) is recorded by host, and the report lists those hosts too.
@@ -111,9 +124,8 @@ The tolerances come from published replication practice, not from a chosen perce
 
 - Papers that report no standard error anywhere can't have their estimates judged: 357afb's 170 estimates (148 of them exactly the paper's) were all left unjudged, and the run could not check the paper.
 - Two coded checks raised false alarms that decided held-out verdicts: a minimum-length check read as cutting the sample to the paper's count (8dd383), and a sample period printed as two dates read as the first (dcb75d). Both were fixed after the headline.
-- A count written as the paper's value passes the coded checks when it can't be told from a design count (a number of draws, sectors or windows). The stored runs hold 97 such counts; most are design counts (draws, sectors, windows) by our read, and the reviews named 13 as breaches.
+- A count written as the paper's value passes the coded checks when it can't be told from a design count (a number of draws, sectors or windows). The stored runs hold 97 such counts; most are design counts by our read, and the reviews named 13 as breaches.
 - The coded checks don't trace random draws into the sample, so a synthetic sample declared as the paper's is the reviews' to catch: in 07f67a one of the two reviews caught it.
-
 - A result built from the paper's own numbers (another claim times a constant, or draws that cancel to a constant) is caught when the script writes it as arithmetic on names and literals, including numbers spelled as text or string lengths. It is not yet caught through dict or list constants, `max`, `np.where` or helper functions, or `**` and `+` forms.
 - Counts that are not the sample total pass within SCORE's 15%, or else within 1.96 √n. That band has no published source; it is kept for small subgroups until an off subgroup count leaves only its own results unjudged.
 
@@ -140,7 +152,7 @@ uv run python -m paper_replicator.batch 2512.06144 --n 5 --parallel 5 --model mu
 
 ### Models
 
-A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role; `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max) of the extractor, chooser and builder; the script is reviewed twice, independently, always at high whatever the run's effort, and a finding from either review sends it back. Any other OpenAI-compatible endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
+A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role. `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max) of the extractor, chooser and builder. The script is reviewed twice, independently, always at high effort whatever the run's setting, and a finding from either review sends it back. Any other OpenAI-compatible endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
 
 Each run writes `runs/<run-id>/`: `report.md` (the first line is the plain-words verdict), `comparison.json`, the spec, every script the builder wrote, sandbox logs, `events.jsonl`, and `calls.jsonl` (provider, model, tokens and cost of every call).
 
