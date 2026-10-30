@@ -1,6 +1,6 @@
 <h1 align="center"><img src="docs/logo.svg" alt="celsus" width="340"></h1>
 
-[![tests](https://github.com/0ywfe/paper-replicator/actions/workflows/tests.yml/badge.svg)](https://github.com/0ywfe/paper-replicator/actions/workflows/tests.yml)
+[![tests](https://github.com/0ywfe/celsus/actions/workflows/tests.yml/badge.svg)](https://github.com/0ywfe/celsus/actions/workflows/tests.yml)
 
 Give it an arXiv paper. It reads the paper's LaTeX, writes down every number the paper reports, rebuilds the analysis on public data in a sandbox, and tells you in plain words whether the published numbers hold up.
 
