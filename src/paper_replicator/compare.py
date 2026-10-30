@@ -30,6 +30,7 @@ Tolerances come from the data, not from a chosen percentage:
 from __future__ import annotations
 
 import math
+import re
 
 from .guards import bound, half_unit, numbers_in, parse_number, sample_totals
 from .spec import Claim
@@ -280,8 +281,17 @@ def verdict(rows: list[dict], results: list[dict] | None, failure: str | None = 
     if main is not None and main["kind"] != "count" and main["consistent"] is False:
         return "does not hold up", ""
     missed = f"none of the {len(judged)} checked results match"
-    return COULD_NOT_CHECK, (f"{missed}, and the main result, {main['name']}, was not judged" if main is not None
-                             else f"{missed}, and the paper's main result is none of the numbers checked")
+    if main is None:
+        return COULD_NOT_CHECK, f"{missed}, and the paper's main result is none of the numbers checked"
+    if main["kind"] == "count":   # an off count blocks earlier, so this one matched
+        return COULD_NOT_CHECK, (f"{missed}, and the main result, {main['name']}, is a sample count, which never "
+                                 "decides a verdict")
+    return COULD_NOT_CHECK, f"{missed}, and the main result, {main['name']}, was not judged"
+
+
+# The reasons verdict() gives when results missed but the main result was not judged, and the line that ends them.
+_UNJUDGED_MAIN = re.compile(r"none of the \d+ checked results match, and the ")
+NOT_FAILED = "A paper is failed only on its main result, so this is not a verdict against it."
 
 
 def _num(value) -> str:
@@ -292,6 +302,8 @@ def first_line(outcome: str, reason: str, rows: list[dict], headline: str | None
                unrebuilt: str | None = None) -> str:
     """The report's first line: in plain words, do the paper's numbers hold up?"""
     if outcome == COULD_NOT_CHECK:
+        if _UNJUDGED_MAIN.match(reason):   # results were judged and missed: the usual sentence would contradict them
+            return f"We could not check this paper: {reason}. {NOT_FAILED}"
         return f"We could not check this paper: {reason}. This says nothing about whether its numbers hold."
     judged = [r for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     matched = sum(r["consistent"] for r in judged)

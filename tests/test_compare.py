@@ -400,3 +400,26 @@ def test_a_count_or_a_missing_main_result_never_makes_a_paper_fail(main):
     rows = [row("main", "count", True, 54, 54) if main["name"] == "other" else main, row("a", "estimate", False)]
     outcome = verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline="main" if main["name"] == "main" else None)[0]
     assert outcome != "does not hold up"
+
+
+@pytest.mark.parametrize("main, headline, says", [
+    (row("main", "estimate", None, 0.42, None), "main", "the main result, main, was not judged"),
+    (row("main", "count", True, 54, 54), "main", "the main result, main, is a sample count, which never decides a verdict"),
+    (None, None, "the paper's main result is none of the numbers checked"),
+])
+def test_a_miss_without_a_judged_main_result_says_why_and_is_not_a_verdict_against_the_paper(main, headline, says):
+    """Post-headline, the orchestrator's wording (30 Oct): after "none of the 9 checked results match", the usual
+    "This says nothing about whether its numbers hold" would contradict itself."""
+    rows = [*([main] if main else []), row("a", "estimate", False), row("b", "estimate", False)]
+    outcome, reason = verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline=headline)
+    line = first_line(outcome, reason, rows, headline)
+
+    assert outcome == "could not check"
+    assert line == (f"We could not check this paper: none of the 2 checked results match, and {says}. A paper is "
+                    "failed only on its main result, so this is not a verdict against it.")
+
+
+def test_every_other_could_not_check_keeps_its_sentence():
+    assert first_line("could not check", "none of the paper's results could be compared", [], "a") == (
+        "We could not check this paper: none of the paper's results could be compared. This says nothing about "
+        "whether its numbers hold.")
