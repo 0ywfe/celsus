@@ -305,6 +305,7 @@ def test_the_plain_demo_shows_no_host_paths_or_tool_calls():
     assert "226 of 228 numbers found in the paper exactly as printed." in text
     assert "accounts/fireworks" not in text and "$ python3" not in text and "commands run: " in text
     assert "TabM_withoutSS_MTSV_Sharpe" not in text and "more matched" in text
+    assert "all Meta models ✓" in text and "fireworks" not in text          # no host on the plain screen
 
 
 def test_log_keeps_the_engineers_screen(monkeypatch, tmp_path):

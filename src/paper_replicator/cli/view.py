@@ -34,7 +34,8 @@ def model_name(model: str | None) -> str:
     return (model or "").rsplit("/", 1)[-1]
 
 
-def tracker(state: State) -> Group:
+def tracker(state: State, plain: bool = False) -> Group:
+    """The header. The plain view says only that the models were Meta's, not which host served them."""
     label = Text.assemble((f" {PRODUCT_NAME.upper()}  ", "bold"), f"arXiv {state.arxiv_id}",
                           (" · " if state.title else "", "italic"))
     paper = Text(state.title, style="italic")
@@ -56,6 +57,7 @@ def tracker(state: State) -> Group:
     if state.verdict is not None and state.providers:
         on_meta = state.makers == ("meta",)
         badge = (" · all on Meta ✓" if state.providers == ("meta",) else
+                 " · all Meta models ✓" if on_meta and plain else
                  f" · all Meta models ✓ (on {', '.join(state.providers)})" if on_meta else
                  f" · providers: {', '.join(state.providers)}")
         meta.append(badge, style="green" if on_meta else "yellow")
@@ -130,7 +132,7 @@ def described(spec: dict | None) -> dict[str, tuple[str, str, str]]:
 
 def screen(state: State, height: int, plain: bool = False, spec: dict | None = None) -> Group:
     body = told(state, height - 4, spec) if plain else log(state, height - 4)
-    return Group(tracker(state), Text(""), body)
+    return Group(tracker(state, plain), Text(""), body)
 
 
 def _reproduced(row: dict) -> str:
