@@ -10,7 +10,7 @@ Its main result, TabM_withoutSS_MTSV_Sharpe, is 0.4531 in the paper and 0.4482 h
 ```
 (a held-out run: the demo below)
 
-Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any OpenAI-compatible endpoint; the defaults are Meta's Muse models, and every run measured in this README used them.
+Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on any chat-completions endpoint; the defaults are Meta's Muse models, and every run measured in this README used them.
 
 The idea came from a March run, before this event, that scored 374 arXiv papers for replicability: 20 could be run again in full, and 3 were replicated by hand. None of that code is in this repository.
 
@@ -27,13 +27,13 @@ The demo is run 25b01b from the held-out set below (arXiv 2610.04221, robust enh
 
 ## Vision
 
-Research builds on published results, and few of them are ever run again. Replicating a paper by hand is slow, skilled work that is rarely funded or published, so it happens late and to a handful of well-known papers. When it is done, many results fail: Amgen reproduced 6 of 53 landmark cancer studies (Begley & Ellis, Nature 2012), and about two-thirds of 452 published asset-pricing anomalies fail to replicate (Hou, Xue & Zhang 2020).
+People publish more research than anyone can keep up with, and few published results are ever run again. Replicating a paper by hand is slow, skilled work that is rarely funded or published, so it happens late and to a handful of well-known papers. When it is done, many results fail: the Open Science Collaboration re-ran 100 psychology studies, and 97% of the originals were significant against 36% of the replications (Science, 2015). In finance, Hou, Xue & Zhang (2020) found that about two-thirds of 452 published anomalies fail to replicate, while Jensen, Kelly & Pedersen (2023) found that most do. When experts disagree about a whole field, the way to settle it is to check each paper.
 
-Software had the same problem and solved it with continuous integration: nothing merges until the tests pass. celsus does that for papers. The goal is for every empirical paper built on public data to be checked soon after it appears, with the script, the numbers and the verdict open to anyone who relies on it: readers, referees, editors, funders, and the next team building on the result.
+Software had the same problem and solved it with continuous integration: nothing merges until the tests pass. celsus does that for papers. The goal is a public library of checked papers: every empirical paper built on public data checked soon after it appears, with the script, the numbers and the verdict open to anyone who relies on it, from readers and referees to editors, funders and the next team building on the result.
 
-That is realistic now because a model can read a paper and write the analysis, and an open-weights model can do it cheaply. A run takes a median of 35 minutes and $1.34 at list prices on Meta's Muse Spark Open. One run on each of the 6,552 arXiv papers the held-out set was drawn from would cost about $8,800.
+That is realistic now because a model can read a paper and write the analysis, and an open-weights model can do it cheaply. A run takes a median of 35 minutes and $1.34 at list prices on Meta's Muse Spark Open. One run on each of the 6,552 arXiv papers the held-out set was drawn from would cost about $8,500, at the mean of $1.30 a run.
 
-The method isn't tied to a field. The rules for when a number matches come from replication practice across the sciences, from the Open Science Collaboration's psychology replications to SCORE's social and behavioural science programme, and the guards against typed-in results and trimmed samples apply to any paper. What a new field needs is a way to fetch its data. Finance and economics came first because their data (prices, filings, macro series) is public and a script can fetch it. Fields with the same shape come next: social science on public surveys, epidemiology on public health statistics, climate on public reanalysis data, machine learning on public benchmarks.
+The method isn't tied to a field. The rules for when a number matches come from replication practice across the sciences (table below), and the guards against typed-in results and trimmed samples apply to any paper. What a new field needs is a way to fetch its data. Finance and economics came first because their data (prices, filings, macro series) is public and a script can fetch it. Any computational field with public data has the same shape: social science on public surveys, climate on public reanalysis data, machine learning on public benchmarks.
 
 This repository is the first version, open source under Apache-2.0. The rest of this README is what it does today.
 
@@ -79,7 +79,7 @@ Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran
 
 | criterion | evidence |
 |---|---|
-| Impact | Results that don't replicate cost everyone who builds on them (two examples under Vision). celsus checks a paper end to end, from its LaTeX to a verdict in plain words, in a median of 35 minutes and $1.34, and the method carries to any field with public data. The held-out headline above is what it does on papers nobody had looked at. |
+| Impact | Results that don't replicate cost everyone who builds on them (examples under Vision). celsus checks a paper end to end, from its LaTeX to a verdict in plain words, in a median of 35 minutes and $1.34, and the method carries to any field with public data. The held-out headline above is what it does on papers nobody had looked at. |
 | Use of Meta AI tooling | Muse reads the paper into a typed spec, chooses the main result, builds the replication as an agent with tools in a sandbox, and reviews its own script twice. Muse Spark Open did every call of the held-out set; Muse Spark and Muse Wonder run behind the same flag (`--model`). On one tuning paper (n=3 per model), Muse Spark at minimal effort ($0.20 a run) and Muse Wonder at max effort ($1.75 a run) both match the paper's main result of -3.07% (Spark -3.155 to -2.946, Wonder -3.086 each time); Wonder costs 8.9× as much. |
 | Technical depth | Code, not a model, judges every number, with tolerances from published replication practice (table below). Coded guards stop typed-in results, samples trimmed or padded to a count, and fetching the authors' code; the sabotage battery measures them, and the regression gate pins them. |
 | Demo | `uv run celsus demo` replays a held-out run with no key. `celsus check <arxiv id>` runs a paper live, with each role on screen. |
@@ -152,7 +152,7 @@ uv run python -m paper_replicator.batch 2512.06144 --n 5 --parallel 5 --model mu
 
 ### Models
 
-A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role. `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max) of the extractor, chooser and builder. The script is reviewed twice, independently, always at high effort whatever the run's setting, and a finding from either review sends it back. Any other OpenAI-compatible endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
+A run defaults to Meta's Muse Spark (`muse-spark-1.3`) in every role. `--model muse-wonder-1.0` runs it on Muse Wonder, and `--effort` sets the reasoning effort (minimal to max) of the extractor, chooser and builder. The script is reviewed twice, independently, always at high effort whatever the run's setting, and a finding from either review sends it back. Any other chat-completions endpoint can be added in a local `providers.local.json` (format in `src/paper_replicator/local.py`) and chosen with `--provider`. `--require-provider meta` stops a run before any call that would go elsewhere; every benchmark here ran with it.
 
 Each run writes `runs/<run-id>/`: `report.md` (the first line is the plain-words verdict), `comparison.json`, the spec, every script the builder wrote, sandbox logs, `events.jsonl`, and `calls.jsonl` (provider, model, tokens and cost of every call).
 
@@ -162,7 +162,7 @@ Each run writes `runs/<run-id>/`: `report.md` (the first line is the plain-words
 uv run pytest
 ```
 
-Offline only: the Agents SDK talks to a fake OpenAI-compatible endpoint, and the sandbox is a fake too. Guards are regression-tested on real scripts from live runs (`tests/corpus/`).
+Offline only: the agents talk to a fake model endpoint, and the sandbox is a fake too. Guards are regression-tested on real scripts from live runs (`tests/corpus/`).
 
 ---
 
