@@ -13,6 +13,8 @@ Built during the Meta Global AI Developer Hackathon (Oct–Nov 2026). It runs on
 
 **See it in 30 seconds, with no API key:**
 
+![paper-replicator demo: a held-out run replayed, ending on its verdict card](docs/demo.gif)
+
 ```bash
 uv sync
 uv run paper-replicator demo     # replays a held-out run shipped with the package, labelled as a replay
