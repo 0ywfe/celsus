@@ -5,9 +5,9 @@ import json
 from rich.console import Console
 
 from paper_replicator.cli.__main__ import replay
-from paper_replicator.cli.state import State, apply
+from paper_replicator.cli.state import Line, State, apply
 from paper_replicator.cli.timeline import Tail, load
-from paper_replicator.cli.view import card, screen
+from paper_replicator.cli.view import card, log, screen
 
 T0 = "2026-10-28T15:36:{:02d}+00:00"
 EVENTS = [
@@ -95,6 +95,40 @@ def test_the_screens_render(tmp_path):
     assert "FLAG  size: 24 + 29 = 53, paper's total 54" in text
     assert "The paper's numbers hold up" in text and "-7.49%" in text and "-6.52% ± 4.4" in text
     assert "sample 53/54 · 2 rounds · 2 calls · $0.29" in text and "Not financial advice." in text
+
+
+def finished(tmp_path, width):
+    state = State()
+    for item in load(recorded(tmp_path)):
+        state = apply(state, item)
+    console = Console(record=True, width=width, color_system=None)
+    console.print(screen(state, 30))
+    return console.export_text().splitlines()
+
+
+def test_the_stages_and_the_badge_share_a_line_when_both_fit(tmp_path):
+    lines = finished(tmp_path, 160)
+    bar = next(line for line in lines if "● read paper" in line)
+    assert "● verdict" in bar and bar.rstrip().endswith("muse-spark-1.3 · minimal · $0.29 · 0:18 · all on Meta ✓")
+
+
+def test_the_badge_drops_under_the_stages_when_both_do_not_fit(tmp_path):
+    lines = finished(tmp_path, 100)
+    i = next(i for i, line in enumerate(lines) if "● read paper" in line)
+    assert lines[i].rstrip().endswith("● verdict") and "…" not in lines[i] and "muse" not in lines[i]
+    assert lines[i + 1].rstrip() == " muse-spark-1.3 · minimal · $0.29 · 0:18 · all on Meta ✓"
+
+
+def test_a_wrapped_log_line_hangs_under_the_text_column():
+    words = "✗ rejected: the script writes the paper's sample count as a result's count, or cuts its sample to it"
+    state = State(lines=(Line("guard", f"{words} {words}", "reject"), Line("tool", "write /work/replicate.py")))
+    console = Console(record=True, width=100, color_system=None)
+    console.print(log(state, 5))
+    lines = console.export_text().rstrip("\n").splitlines()
+    assert lines[0].startswith(" guard   ✗ rejected:") and len(lines) == 3
+    assert lines[1].startswith(" " * 9) and lines[1][9] != " "        # the wrap starts under the text, not the stage
+    assert lines[2] == " tool    write /work/replicate.py".ljust(len(lines[2]))
+    assert " ".join(line[9:].strip() for line in lines[:2]) == f"{words} {words}"[:160]   # a log line is cut at 160 characters
 
 
 def test_a_replay_says_it_is_one_and_ends_on_the_card(tmp_path):

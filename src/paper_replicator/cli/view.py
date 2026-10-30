@@ -5,20 +5,22 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from rich.console import Group
+from rich.console import Console, ConsoleOptions, Group, RenderResult
 from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
 from .. import DISCLAIMER, PRODUCT_NAME
 from ..compare import COULD_NOT_CHECK, Z95, with_unit
-from .state import STAGES, State
+from .state import STAGES, TRACKER, State
 
 GLYPH = {"done": "●", "active": "◐", "pending": "○"}
 LINE_STYLES = {"flag": "bold yellow", "note": "dim", "ok": "green", "reject": "bold red", "error": "red",
                "verdict": "bold", "tool": "", "dim": "dim"}
 # Red means the paper's numbers did not hold; a run that could not check is grey, never red.
 VERDICT_STYLES = {"holds up": "green", "partly holds up": "yellow", "does not hold up": "red", COULD_NOT_CHECK: "grey62"}
+TAG = 1 + max(8, *map(len, TRACKER))   # the log's stage column: a margin, then the longest stage tag
+GAP = 2                                # the least space between the stages and the badge on one line
 
 
 def clock(seconds: float) -> str:
@@ -51,20 +53,37 @@ def tracker(state: State) -> Group:
                  f" · all Meta models ✓ (on {', '.join(state.providers)})" if on_meta else
                  f" · providers: {', '.join(state.providers)}")
         meta.append(badge, style="green" if on_meta else "yellow")
-    row = Table.grid(expand=True)
-    row.add_column(ratio=1, no_wrap=True, overflow="ellipsis")
-    row.add_column(justify="right", no_wrap=True)
-    row.add_row(stages, meta)
-    return Group(title, row)
+    return Group(title, StageBar(stages, meta))
 
 
-def log(state: State, height: int) -> Text:
-    text = Text()
+class StageBar:
+    """The stages with the model and cost on the right; where both don't fit, the model and cost go on the next line."""
+
+    def __init__(self, stages: Text, meta: Text) -> None:
+        self.stages, self.meta = stages, meta
+
+    def __rich_console__(self, console: Console, options: ConsoleOptions) -> RenderResult:
+        if self.stages.cell_len + GAP + self.meta.cell_len <= options.max_width:
+            row = Table.grid(expand=True)
+            row.add_column(ratio=1, no_wrap=True, overflow="ellipsis")
+            row.add_column(justify="right", no_wrap=True)
+            row.add_row(self.stages, self.meta)
+            yield row
+            return
+        for part in (self.stages.copy(), Text(" ") + self.meta):
+            part.no_wrap, part.overflow = True, "ellipsis"
+            yield part
+
+
+def log(state: State, height: int) -> Table:
+    """One row per line: the stage in a fixed column, the text beside it, wrapping under itself."""
+    grid = Table.grid(expand=True)
+    grid.add_column(width=TAG, no_wrap=True)
+    grid.add_column(ratio=1, overflow="fold")
     for line in state.lines[-max(height, 1):]:
-        text.append(f" {line.stage:<8}", style="dim")
-        text.append(line.text.replace("\n", " ")[:160], style=LINE_STYLES.get(line.style, ""))
-        text.append("\n")
-    return text
+        grid.add_row(Text(f" {line.stage}", style="dim"),
+                     Text(line.text.replace("\n", " ")[:160], style=LINE_STYLES.get(line.style, "")))
+    return grid
 
 
 def screen(state: State, height: int) -> Group:
