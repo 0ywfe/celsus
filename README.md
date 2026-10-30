@@ -90,7 +90,7 @@ The tolerances come from published replication practice, not from a chosen perce
 
 ### Honest verdicts
 
-- **holds up / partly holds up / does not hold up**: the share of checked numbers that match.
+- **holds up / partly holds up / does not hold up**: the share of checked numbers that match. A paper holds up only if its main result was judged and matched, and it fails only if its main result was judged and missed.
 - **could not check**: the checker's own failure, given with its reason: the data was unavailable, the sample couldn't be rebuilt, or the code crashed. The checker never blames a paper for its own failure.
 
 ### Guards that keep it honest
