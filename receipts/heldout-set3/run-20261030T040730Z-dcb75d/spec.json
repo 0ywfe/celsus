@@ -1,0 +1,606 @@
+{
+ "title": "Mining Financial Data using Mixtures of Mirrored Weibull Distributions - Replication Spec",
+ "hypothesis": "The mixture of mirrored Weibull (MMW) distribution provides more accurate and reliable VaR estimates/forecasts than Gaussian mixture (GMM) and t-mixture (tMM) for S&P500 returns.",
+ "data_sources": [
+  "Adjusted closing prices for S&P500 stocks Berkshire Hathaway (BRK), Walmart (WMT), CVS Health Corporation (CVS) downloaded for period June 1996 - May 2024 (monthly, BRK/WMT) and July 2019 - Jun 2024 (daily, CVS) and converted to log price ratio returns"
+ ],
+ "sample": "Three S&P500 stocks: BRK monthly returns, WMT monthly returns, CVS daily returns. Returns calculated on adjusted closing prices as log price ratio. Table 1 caption states period mid-1997 (*mid-2009) to 2024; text states June 1996 to May 2024 (BRK/WMT) and July 2019 to Jun 2024 (CVS). No filter beyond that stated. Sample sizes n per stock not printed.",
+ "period_start": "June 1996 (Table says mid-1997; text says June 1996 for BRK/WMT; July 2019 for CVS)",
+ "period_end": "May 2024 (monthly BRK/WMT); Jun 2024 (daily CVS) (Table says 2024)",
+ "method": [
+  "1. Compute log returns x_j = log(P_t / P_{t-1}) on adjusted close, monthly for BRK/WMT, daily for CVS",
+  "2. Mirror transformation: y_j = c - x_j where c = ceil(|x_(n)|) with x_(n) = largest observation in sample. Mirrored Weibull density (2) defined for x <= c",
+  "3. MMW density (3): f(x;Psi)=sum_{i=1}^g pi_i f_MW(x;mu_i,sigma_i), g components, Psi = (pi_1..pi_{g-1},mu_1..mu_g,sigma_1..sigma_g), m=3g-1 free parameters",
+  "4. Fit by EM maximum likelihood. Log-likelihood (4). Initialization: initial clustering via k-means/hierarchical/random -> z_ij^(0), pi_i^(0)=sum_j z_ij^(0), sigma_i^(0) solves s_i^2/bar{y}_i^2 = [Gamma(1+2/sigma_i)-Gamma(1+1/sigma_i)^2]/Gamma(1+1/sigma_i)^2 numerically, mu_i^(0)=bar{y}_i[Gamma(1+1/sigma_i^(0))]^{-1}",
+  "5. E-step: z_ij^(k)= pi_i^(k) f_W(y_j;mu_i^(k),sigma_i^(k)) / sum_h pi_h^(k) f_W(y_j;mu_h^(k),sigma_h^(k))",
+  "6. M-step: pi_i^(k)=1/n sum_j z_ij^(k) (5); mu_i^(k) solves (6) numerically [modified approximation of b20 allowed]; sigma_i^(k)=[sum_j z_ij^(k) y_j^{mu_i^(k)}/sum_j z_ij^(k)]^{1/mu_i^(k)} (7)",
+  "7. Stopping: terminate if k >= k_max=500 or |l^(k)-l^(k-1)| < epsilon=1e-6 with l^(k) as defined",
+  "8. Choose g: run EM for g=1,2,3,4, select lowest BIC = m log n -2 log hat{l}. Most frequent chosen g=2",
+  "9. Fit GMM and tMM analogously for comparison",
+  "10. VaR definition: VaR_alpha = F_X^{-1}(1-alpha), cdf of X = loss distribution. Focus alpha=1% and 5%",
+  "11. VaR estimation: quantile of fitted mixture via closed-form cdf or simulation approximation. In-sample trained using full 7 years of historical monthly log returns (as printed for BRK)",
+  "12. One-day VaR forecast (CVS): train on previous 250 days (~1 year) rolling window, forecast next day VaR, advance window 1 day to last available date, compare to historical method",
+  "13. Assessment: Kupiec proportion-of-failures (unconditional coverage) test LR_POF and Christoffersen independence test LR_IND reported with p-values"
+ ],
+ "claims": [
+  {
+   "name": "stocks_Brk_min",
+   "description": "Table 1 BRK minimum monthly return",
+   "value": "-15.39",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 minimum BRK"
+  },
+  {
+   "name": "stocks_Wmt_min",
+   "description": "Table 1 WMT minimum monthly return",
+   "value": "-23.24",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 minimum WMT"
+  },
+  {
+   "name": "stocks_Cvs_min",
+   "description": "Table 1 CVS* minimum daily return",
+   "value": "-10.34",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 minimum CVS*"
+  },
+  {
+   "name": "stocks_Brk_max",
+   "description": "Table 1 BRK maximum",
+   "value": "23.42",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 maximum BRK"
+  },
+  {
+   "name": "stocks_Wmt_max",
+   "description": "Table 1 WMT maximum",
+   "value": "23.58",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 maximum WMT"
+  },
+  {
+   "name": "stocks_Cvs_max",
+   "description": "Table 1 CVS* maximum",
+   "value": "18.44",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 maximum CVS*"
+  },
+  {
+   "name": "stocks_Brk_mean",
+   "description": "Table 1 BRK mean",
+   "value": "0.89",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 mean BRK"
+  },
+  {
+   "name": "stocks_Wmt_mean",
+   "description": "Table 1 WMT mean",
+   "value": "0.93",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 mean WMT"
+  },
+  {
+   "name": "stocks_Cvs_mean",
+   "description": "Table 1 CVS* mean",
+   "value": "0.00",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 mean CVS*"
+  },
+  {
+   "name": "stocks_Brk_sd",
+   "description": "Table 1 BRK std.dev.",
+   "value": "5.44",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 std.dev. BRK"
+  },
+  {
+   "name": "stocks_Wmt_sd",
+   "description": "Table 1 WMT std.dev.",
+   "value": "6.01",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 std.dev. WMT"
+  },
+  {
+   "name": "stocks_Cvs_sd",
+   "description": "Table 1 CVS* std.dev.",
+   "value": "1.85",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 1 std.dev. CVS*"
+  },
+  {
+   "name": "stocks_Brk_skew",
+   "description": "Table 1 BRK skewness",
+   "value": "-0.01",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 skewness BRK"
+  },
+  {
+   "name": "stocks_Wmt_skew",
+   "description": "Table 1 WMT skewness",
+   "value": "-0.16",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 skewness WMT"
+  },
+  {
+   "name": "stocks_Cvs_skew",
+   "description": "Table 1 CVS* skewness",
+   "value": "1.32",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 skewness CVS*"
+  },
+  {
+   "name": "stocks_Brk_kurt",
+   "description": "Table 1 BRK kurtosis",
+   "value": "4.22",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 kurtosis BRK"
+  },
+  {
+   "name": "stocks_Wmt_kurt",
+   "description": "Table 1 WMT kurtosis",
+   "value": "4.45",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 kurtosis WMT"
+  },
+  {
+   "name": "stocks_Cvs_kurt",
+   "description": "Table 1 CVS* kurtosis",
+   "value": "17.36",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 kurtosis CVS*"
+  },
+  {
+   "name": "Brk_empirical_VaR_5",
+   "description": "BRK empirical VaR at 5% (text)",
+   "value": "-13.46",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Sec 4.2 text closest to empirical value of -13.46 at alpha=5%"
+  },
+  {
+   "name": "Brk_empirical_VaR_1",
+   "description": "BRK empirical VaR at 1% (text)",
+   "value": "-8.66",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Sec 4.2 text and -8.66 at alpha=1%"
+  },
+  {
+   "name": "Brk_VaR_5_GMM",
+   "description": "Table 2 BRK 5% GMM VaR",
+   "value": "-11.74",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 2 5% GMM VaR"
+  },
+  {
+   "name": "Brk_LR_POF_5_GMM",
+   "description": "Table 2 BRK 5% GMM Kupiec LR_POF",
+   "value": "3.06",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% GMM LR_POF"
+  },
+  {
+   "name": "Brk_p_POF_5_GMM",
+   "description": "Table 2 BRK 5% GMM Kupiec p-value",
+   "value": "0.08",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% GMM p-value POF"
+  },
+  {
+   "name": "Brk_LR_IND_5_GMM",
+   "description": "Table 2 BRK 5% GMM independence LR_IND",
+   "value": "0.30",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% GMM LR_IND"
+  },
+  {
+   "name": "Brk_p_IND_5_GMM",
+   "description": "Table 2 BRK 5% GMM independence p-value",
+   "value": "0.58",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% GMM p-value IND"
+  },
+  {
+   "name": "Brk_VaR_5_tMM",
+   "description": "Table 2 BRK 5% tMM VaR",
+   "value": "-12.99",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 2 5% tMM VaR"
+  },
+  {
+   "name": "Brk_LR_POF_5_tMM",
+   "description": "Table 2 BRK 5% tMM LR_POF",
+   "value": "0.71",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% tMM LR_POF"
+  },
+  {
+   "name": "Brk_p_POF_5_tMM",
+   "description": "Table 2 BRK 5% tMM p-value POF",
+   "value": "0.40",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% tMM p-value POF"
+  },
+  {
+   "name": "Brk_LR_IND_5_tMM",
+   "description": "Table 2 BRK 5% tMM LR_IND",
+   "value": "0.15",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% tMM LR_IND"
+  },
+  {
+   "name": "Brk_p_IND_5_tMM",
+   "description": "Table 2 BRK 5% tMM p-value IND",
+   "value": "0.70",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% tMM p-value IND"
+  },
+  {
+   "name": "Brk_VaR_5_MMW",
+   "description": "Table 2 BRK 5% MMW VaR best closest",
+   "value": "-13.43",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 2 5% MMW VaR bold"
+  },
+  {
+   "name": "Brk_LR_POF_5_MMW",
+   "description": "Table 2 BRK 5% MMW LR_POF",
+   "value": "0.12",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% MMW LR_POF"
+  },
+  {
+   "name": "Brk_p_POF_5_MMW",
+   "description": "Table 2 BRK 5% MMW p-value POF",
+   "value": "0.73",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% MMW p-value POF"
+  },
+  {
+   "name": "Brk_LR_IND_5_MMW",
+   "description": "Table 2 BRK 5% MMW LR_IND",
+   "value": "0.10",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% MMW LR_IND"
+  },
+  {
+   "name": "Brk_p_IND_5_MMW",
+   "description": "Table 2 BRK 5% MMW p-value IND",
+   "value": "0.76",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 5% MMW p-value IND"
+  },
+  {
+   "name": "Brk_VaR_1_GMM",
+   "description": "Table 2 BRK 1% GMM VaR",
+   "value": "-8.08",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 2 1% GMM VaR"
+  },
+  {
+   "name": "Brk_LR_POF_1_GMM",
+   "description": "Table 2 BRK 1% GMM LR_POF",
+   "value": "0.63",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% GMM LR_POF"
+  },
+  {
+   "name": "Brk_p_POF_1_GMM",
+   "description": "Table 2 BRK 1% GMM p-value POF",
+   "value": "0.43",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% GMM p-value POF"
+  },
+  {
+   "name": "Brk_LR_IND_1_GMM",
+   "description": "Table 2 BRK 1% GMM LR_IND fail 0.00",
+   "value": "8.41",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% GMM LR_IND"
+  },
+  {
+   "name": "Brk_p_IND_1_GMM",
+   "description": "Table 2 BRK 1% GMM p-value IND fail",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% GMM p-value IND red"
+  },
+  {
+   "name": "Brk_VaR_1_tMM",
+   "description": "Table 2 BRK 1% tMM VaR",
+   "value": "-7.81",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 2 1% tMM VaR"
+  },
+  {
+   "name": "Brk_LR_POF_1_tMM",
+   "description": "Table 2 BRK 1% tMM LR_POF",
+   "value": "0.63",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% tMM LR_POF"
+  },
+  {
+   "name": "Brk_p_POF_1_tMM",
+   "description": "Table 2 BRK 1% tMM p-value POF",
+   "value": "0.43",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% tMM p-value POF"
+  },
+  {
+   "name": "Brk_LR_IND_1_tMM",
+   "description": "Table 2 BRK 1% tMM LR_IND",
+   "value": "8.41",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% tMM LR_IND"
+  },
+  {
+   "name": "Brk_p_IND_1_tMM",
+   "description": "Table 2 BRK 1% tMM p-value IND",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% tMM p-value IND"
+  },
+  {
+   "name": "Brk_VaR_1_MMW",
+   "description": "Table 2 BRK 1% MMW VaR best matches empirical -8.66",
+   "value": "-8.66",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 2 1% MMW VaR bold blue"
+  },
+  {
+   "name": "Brk_LR_POF_1_MMW",
+   "description": "Table 2 BRK 1% MMW LR_POF",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% MMW LR_POF"
+  },
+  {
+   "name": "Brk_p_POF_1_MMW",
+   "description": "Table 2 BRK 1% MMW p-value POF",
+   "value": "0.95",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% MMW p-value POF"
+  },
+  {
+   "name": "Brk_LR_IND_1_MMW",
+   "description": "Table 2 BRK 1% MMW LR_IND",
+   "value": "3.81",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% MMW LR_IND"
+  },
+  {
+   "name": "Brk_p_IND_1_MMW",
+   "description": "Table 2 BRK 1% MMW p-value IND pass",
+   "value": "0.05",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 1% MMW p-value IND blue"
+  },
+  {
+   "name": "Wmt_empirical_VaR_1",
+   "description": "WMT empirical VaR 1% (text)",
+   "value": "-16.31",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Sec 4.3 text empirical VaR = -16.31"
+  },
+  {
+   "name": "Wmt_VaR_1_GMM",
+   "description": "Table 3 WMT 1% GMM VaR",
+   "value": "-13.08",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 3 GMM VaR0.01"
+  },
+  {
+   "name": "Wmt_LR_POF_1_GMM",
+   "description": "Table 3 WMT 1% GMM LR_POF",
+   "value": "3.06",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 GMM LR_POF"
+  },
+  {
+   "name": "Wmt_p_POF_1_GMM",
+   "description": "Table 3 WMT 1% GMM p-value POF",
+   "value": "0.08",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 GMM p-value POF"
+  },
+  {
+   "name": "Wmt_LR_IND_1_GMM",
+   "description": "Table 3 WMT 1% GMM LR_IND",
+   "value": "0.30",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 GMM LR_IND"
+  },
+  {
+   "name": "Wmt_p_IND_1_GMM",
+   "description": "Table 3 WMT 1% GMM p-value IND",
+   "value": "0.58",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 GMM p-value IND"
+  },
+  {
+   "name": "Wmt_VaR_1_tMM",
+   "description": "Table 3 WMT 1% tMM VaR",
+   "value": "-14.32",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 3 tMM VaR0.01"
+  },
+  {
+   "name": "Wmt_LR_POF_1_tMM",
+   "description": "Table 3 WMT 1% tMM LR_POF",
+   "value": "1.71",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 tMM LR_POF"
+  },
+  {
+   "name": "Wmt_p_POF_1_tMM",
+   "description": "Table 3 WMT 1% tMM p-value POF",
+   "value": "0.19",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 tMM p-value POF"
+  },
+  {
+   "name": "Wmt_LR_IND_1_tMM",
+   "description": "Table 3 WMT 1% tMM LR_IND",
+   "value": "0.22",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 tMM LR_IND"
+  },
+  {
+   "name": "Wmt_p_IND_1_tMM",
+   "description": "Table 3 WMT 1% tMM p-value IND",
+   "value": "0.64",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 tMM p-value IND"
+  },
+  {
+   "name": "Wmt_VaR_1_MMW",
+   "description": "Table 3 WMT 1% MMW VaR best -16.26",
+   "value": "-16.26",
+   "unit": "log return %",
+   "kind": "estimate",
+   "where": "Table 3 MMW VaR0.01 bold blue"
+  },
+  {
+   "name": "Wmt_LR_POF_1_MMW",
+   "description": "Table 3 WMT 1% MMW LR_POF",
+   "value": "0.12",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 MMW LR_POF"
+  },
+  {
+   "name": "Wmt_p_POF_1_MMW",
+   "description": "Table 3 WMT 1% MMW p-value POF",
+   "value": "0.73",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 MMW p-value POF"
+  },
+  {
+   "name": "Wmt_LR_IND_1_MMW",
+   "description": "Table 3 WMT 1% MMW LR_IND",
+   "value": "0.10",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 MMW LR_IND"
+  },
+  {
+   "name": "Wmt_p_IND_1_MMW",
+   "description": "Table 3 WMT 1% MMW p-value IND",
+   "value": "0.76",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 MMW p-value IND"
+  },
+  {
+   "name": "Cvs_MSE_GMM",
+   "description": "CVS one-day 1% VaR forecast average MSE GMM",
+   "value": "1.21",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.4 text GMM=1.21"
+  },
+  {
+   "name": "Cvs_MSE_tMM",
+   "description": "CVS MSE tMM",
+   "value": "0.60",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.4 text tMM=0.60"
+  },
+  {
+   "name": "Cvs_MSE_MMW",
+   "description": "CVS MSE MMW much lower",
+   "value": "0.18",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.4 text MMW 0.18"
+  },
+  {
+   "name": "Cvs_failure_rate_GMM",
+   "description": "CVS Kupiec failure rate GMM",
+   "value": "0.25",
+   "unit": "",
+   "kind": "tally",
+   "where": "Sec 4.4 text failure rate GMM=0.25"
+  },
+  {
+   "name": "Cvs_failure_rate_tMM",
+   "description": "CVS failure rate tMM",
+   "value": "0.03",
+   "unit": "",
+   "kind": "tally",
+   "where": "Sec 4.4 text tMM=0.03"
+  },
+  {
+   "name": "Cvs_failure_rate_MMW",
+   "description": "CVS failure rate MMW 0.00 pass",
+   "value": "0.00",
+   "unit": "",
+   "kind": "tally",
+   "where": "Sec 4.4 text MMW=0.00"
+  }
+ ],
+ "headline": "Brk_VaR_1_MMW",
+ "partitions": [],
+ "tests": []
+}

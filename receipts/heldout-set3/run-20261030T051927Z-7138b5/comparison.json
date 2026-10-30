@@ -1,0 +1,214 @@
+{
+ "verdict": "partly holds up",
+ "rows": [
+  {
+   "name": "count_tickers",
+   "kind": "count",
+   "unit": "tickers",
+   "reported": 100.0,
+   "reproduced": 98,
+   "se": null,
+   "n": null,
+   "consistent": true,
+   "why": "approximate: -2.0%, within SCORE's +/-15%"
+  },
+  {
+   "name": "count_sectors",
+   "kind": "count",
+   "unit": "sectors",
+   "reported": 11.0,
+   "reproduced": 11,
+   "se": null,
+   "n": null,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "param_window_months_low",
+   "kind": "parameter",
+   "unit": "months",
+   "reported": 36.0,
+   "reproduced": 36,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_window_months_high",
+   "kind": "parameter",
+   "unit": "months",
+   "reported": 60.0,
+   "reproduced": 60,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_illust_beta",
+   "kind": "parameter",
+   "unit": "beta",
+   "reported": 1.2,
+   "reproduced": 1.2,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_illust_market_move",
+   "kind": "parameter",
+   "unit": "return",
+   "reported": 1.0,
+   "reproduced": 1.0,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_illust_stock_move",
+   "kind": "parameter",
+   "unit": "return",
+   "reported": 1.2,
+   "reproduced": 1.2,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_n",
+   "kind": "parameter",
+   "unit": "observations",
+   "reported": 100000.0,
+   "reproduced": 100000,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_a",
+   "kind": "parameter",
+   "unit": "coefficient",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_b",
+   "kind": "parameter",
+   "unit": "coefficient",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_c",
+   "kind": "parameter",
+   "unit": "coefficient",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_sigma_Z",
+   "kind": "parameter",
+   "unit": "sd",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_sigma_Y",
+   "kind": "parameter",
+   "unit": "sd",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_sigma_X_low",
+   "kind": "parameter",
+   "unit": "sd",
+   "reported": 0.0,
+   "reproduced": 0,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_sim_sigma_X_high",
+   "kind": "parameter",
+   "unit": "sd",
+   "reported": 5.0,
+   "reproduced": 5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_lag_min_k",
+   "kind": "parameter",
+   "unit": "lags",
+   "reported": 0.0,
+   "reproduced": 0,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_lag_max_k",
+   "kind": "parameter",
+   "unit": "lags",
+   "reported": 5.0,
+   "reproduced": 5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "estimate_beta_CPI_uncontrolled",
+   "kind": "estimate",
+   "unit": "beta",
+   "reported": 0.9,
+   "reproduced": 0.9093790463120408,
+   "se": 0.042565203629153454,
+   "n": 11785,
+   "consistent": true,
+   "why": "paper inside 0.9094 +/- 0.08343"
+  },
+  {
+   "name": "estimate_beta_CPI_controlled",
+   "kind": "estimate",
+   "unit": "beta",
+   "reported": 0.03,
+   "reproduced": -0.030316064551574852,
+   "se": 0.01902512036873084,
+   "n": 11785,
+   "consistent": false,
+   "why": "paper outside -0.03032 +/- 0.03729"
+  }
+ ]
+}

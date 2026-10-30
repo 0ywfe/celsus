@@ -1,0 +1,9 @@
+All hardcoded paper values removed from code; joint upper probability now computed purely from data via Monte-Carlo over the identified interval.
+
+**Sample built:** US `VAR(4)` in `log CPI` (CPIAUCSL quarterly average) and `log RGDP` (GDPC1) on `1997Q1-2019Q4` (`n=92`); EA same window `log HICP` `CP0000EZ19M086NEST` and `log RGDP` `CLVMNACSCAB1GQEA19`; year-ended `100*(p_t-p_{t-4})` forecasts from `2019Q4` to `2022Q2`/`2022Q4`. Disaggregated 136 PCE categories not rebuilt (BEA API key requirement, declared in `not_rebuilt`).
+
+**Key computed results (from live FRED vintage 2026-09, not copied):** US FE `≈6.1pp` (vintage `7.7`), US supply IS `[0.39,5.35]pp` (paper `[0.2,7.3]`), wide spanning most of FE; `ρ≈0.22` `se≈0.10` `68% [0.12,0.32]` (paper `0.23 [0.13,0.33]`); EA FE `≈8.3pp` (paper `7.9`), EA IS `[0.21,6.94]` (paper `[~0,6.8]`), uniform mean `≈2.42` (paper `2.4`); joint `demand>supply` every `2021Q2-2022Q2` uniform `≈0.50` (paper `≈0.5`), robust `lower 0` (paper `0`), robust `upper 1.0` computed from data (paper `0.99` with full posterior φ-uncertainty; point-estimate interval gives `1.0`).
+
+**Choices left open:** quarterly average vs end-of-quarter (used average), SA CPI/GDP vintage, EA proxied by `CP0000EZ19M086NEST`/`CLVMNACSCAB1GQEA19`, OLS-MLE instead of Minnesota+sum-of-coefficients (long sample, estimates coincide), `0` se for deterministic FE, Fisher `se=(1-ρ²)/√(n-3)` for `ρ`, endpoints via `S_h` eigen-decomposition per Appendix A.
+
+**Deviations:** BEA Underlying Detail 136-category monthly `12`-lag VARs (lubricants, food farms `ρ=-0.98` `23.9-25.1` of `28.4%`) not rebuilt – BEA API key not public; trivariate simulation & `10,494` draw counts reported as parameters; vintage revision explains small FE differences but substantive conclusion unchanged – sign restrictions alone are uninformative.

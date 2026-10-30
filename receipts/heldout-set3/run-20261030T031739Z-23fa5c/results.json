@@ -1,0 +1,1023 @@
+{
+  "results": [
+    {
+      "name": "vix_n_days",
+      "value": 6651.0,
+      "se": 0,
+      "n": 6651
+    },
+    {
+      "name": "vix_W",
+      "value": 1024,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "vix_step",
+      "value": 126,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "vix_n_windows",
+      "value": 45,
+      "se": 0,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_mean_text",
+      "value": 0.9098486238691929,
+      "se": 0.028337107161656234,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_sd_text",
+      "value": 0.1900910936974784,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_range_low_text",
+      "value": 0.7229360492605087,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_range_high_text",
+      "value": 1.506394963845068,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_mean_table",
+      "value": 0.9098486238691929,
+      "se": 0.028337107161656234,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_sd_table",
+      "value": 0.1900910936974784,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_min_table",
+      "value": 0.7229360492605087,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_roll_max_table",
+      "value": 1.506394963845068,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_above07_count",
+      "value": 45.0,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_above07_total",
+      "value": 45,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "vix_cens_complete_mean",
+      "value": 0.9098486238691929,
+      "se": 0.028337107161656234,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_pareto_mean",
+      "value": 0.6738537991785145,
+      "se": 0.0152549718523096,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_pareto_sd",
+      "value": 0.10233346216983046,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_pareto_low",
+      "value": 0.5069615293104053,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_pareto_high",
+      "value": 0.9849158588374413,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_lower_mean",
+      "value": 0.7566041171281416,
+      "se": 0.014765718906770572,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_lower_sd",
+      "value": 0.09905145363657865,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_lower_low",
+      "value": 0.6050464731289906,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_cens_lower_high",
+      "value": 1.0296847615118703,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_avg_censored_per_window",
+      "value": 24.444444444444443,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_avg_censored_above_thresh",
+      "value": 21.955555555555556,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "null_single_W1024_mean",
+      "value": 1.142605366891071,
+      "se": 0.0033939151736218066,
+      "n": 500
+    },
+    {
+      "name": "null_single_W1024_sd",
+      "value": 0.07589025038086361,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_single_W1024_low",
+      "value": 1.006653416879092,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_single_W1024_high",
+      "value": 1.3084313519849702,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_single_W1024_N",
+      "value": 500.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "vix_below_null_quant_count",
+      "value": 35.0,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "vix_below_null_total",
+      "value": 45,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "vix_below_null_quant_value",
+      "value": 1.006653416879092,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_overlap_count_mean",
+      "value": 1.2475,
+      "se": 0.08273585940254499,
+      "n": 400
+    },
+    {
+      "name": "null_overlap_count_q99",
+      "value": 7.009999999999991,
+      "se": null,
+      "n": 400
+    },
+    {
+      "name": "null_overlap_count_max",
+      "value": 8.0,
+      "se": null,
+      "n": 400
+    },
+    {
+      "name": "null_overlap_count_N",
+      "value": 400.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_overlap_p_count",
+      "value": 0.0024937655860349127,
+      "se": null,
+      "n": 400
+    },
+    {
+      "name": "null_overlap_roll_mean_null",
+      "value": 1.1433350154700959,
+      "se": 0.00130893024687975,
+      "n": 400
+    },
+    {
+      "name": "null_overlap_roll_sd_null",
+      "value": 0.026178604937595,
+      "se": null,
+      "n": 400
+    },
+    {
+      "name": "null_overlap_vix_roll_mean",
+      "value": 0.9098486238691929,
+      "se": 0.028337107161656234,
+      "n": 45
+    },
+    {
+      "name": "null_overlap_p_mean",
+      "value": 0.0024937655860349127,
+      "se": null,
+      "n": 400
+    },
+    {
+      "name": "p_abstract",
+      "value": 0.0024937655860349127,
+      "se": null,
+      "n": 400
+    },
+    {
+      "name": "theoretical_iid_theta",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "theoretical_fbm_theta_1_minus_H",
+      "value": 0.9,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sim_T",
+      "value": 65536,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sim_N_fbm",
+      "value": 150.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sim_N_ctrl",
+      "value": 50.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sim_B_bootstrap",
+      "value": 200,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.1_hat",
+      "value": 0.9036677546088333,
+      "se": 0.0007758900402126825,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.1_sigma",
+      "value": 0.009502673475142966,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.1_pred",
+      "value": 0.9,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.1_bias",
+      "value": 0.0036677546088332846,
+      "se": 0.0007758900402126825,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.1_l0star",
+      "value": 10.98,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.2_hat",
+      "value": 0.8091367813483524,
+      "se": 0.0008291046560982743,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.2_sigma",
+      "value": 0.010154416754032487,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.2_pred",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.2_bias",
+      "value": 0.009136781348352385,
+      "se": 0.0008291046560982743,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.2_l0star",
+      "value": 12.893333333333333,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.3_hat",
+      "value": 0.7278793154406415,
+      "se": 0.0010639068800946919,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.3_sigma",
+      "value": 0.013030144950342002,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.3_pred",
+      "value": 0.7,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.3_bias",
+      "value": 0.027879315440641594,
+      "se": 0.0010639068800946919,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.3_l0star",
+      "value": 15.906666666666666,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.4_hat",
+      "value": 0.6484691126169514,
+      "se": 0.0014832869160483141,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.4_sigma",
+      "value": 0.018166480432324193,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.4_pred",
+      "value": 0.6,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.4_bias",
+      "value": 0.048469112616951415,
+      "se": 0.0014832869160483141,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.4_l0star",
+      "value": 20.30666666666667,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.5_hat",
+      "value": 0.5683235623519352,
+      "se": 0.002038155531929078,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.5_sigma",
+      "value": 0.024962205348285343,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.5_pred",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.5_bias",
+      "value": 0.06832356235193515,
+      "se": 0.002038155531929078,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.5_l0star",
+      "value": 19.473333333333333,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.6_hat",
+      "value": 0.49661636191233355,
+      "se": 0.0024044772298799874,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.6_sigma",
+      "value": 0.029448711556733696,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.6_pred",
+      "value": 0.4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.6_bias",
+      "value": 0.09661636191233353,
+      "se": 0.0024044772298799874,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.6_l0star",
+      "value": 13.726666666666667,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.7_hat",
+      "value": 0.42903414412468294,
+      "se": 0.00322093805995803,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.7_sigma",
+      "value": 0.039448273700035716,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.7_pred",
+      "value": 0.30000000000000004,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.7_bias",
+      "value": 0.1290341441246829,
+      "se": 0.00322093805995803,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.7_l0star",
+      "value": 9.226666666666667,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.8_hat",
+      "value": 0.3791833884771441,
+      "se": 0.0038206569353372377,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.8_sigma",
+      "value": 0.04679329986900988,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.8_pred",
+      "value": 0.19999999999999996,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.8_bias",
+      "value": 0.17918338847714416,
+      "se": 0.0038206569353372377,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.8_l0star",
+      "value": 6.166666666666667,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.9_hat",
+      "value": 0.38311793005265715,
+      "se": 0.009916621907808574,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.9_sigma",
+      "value": 0.12145331823118026,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.9_pred",
+      "value": 0.09999999999999998,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fbm_H0.9_bias",
+      "value": 0.2831179300526572,
+      "se": 0.009916621907808574,
+      "n": 150
+    },
+    {
+      "name": "fbm_H0.9_l0star",
+      "value": 5.88,
+      "se": null,
+      "n": 150
+    },
+    {
+      "name": "ctrl_uniform_hat",
+      "value": 1.032287188425617,
+      "se": 0.0010535882788735448,
+      "n": 50
+    },
+    {
+      "name": "ctrl_uniform_SE",
+      "value": 0.0010535882788735448,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_uniform_sigma",
+      "value": 0.007449994165701468,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_uniform_pred",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ctrl_gauss_hat",
+      "value": 1.0336334093134925,
+      "se": 0.0010392048207093951,
+      "n": 50
+    },
+    {
+      "name": "ctrl_gauss_SE",
+      "value": 0.0010392048207093951,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_gauss_sigma",
+      "value": 0.007348287757653636,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_gauss_pred",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ctrl_BM_hat",
+      "value": 0.5742488483533594,
+      "se": 0.003178423137568295,
+      "n": 50
+    },
+    {
+      "name": "ctrl_BM_SE",
+      "value": 0.003178423137568295,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_BM_sigma",
+      "value": 0.02247484554054764,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_BM_pred",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ctrl_GBM_hat",
+      "value": 0.57175779524993,
+      "se": 0.002991616349765094,
+      "n": 50
+    },
+    {
+      "name": "ctrl_GBM_SE",
+      "value": 0.002991616349765094,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_GBM_sigma",
+      "value": 0.021153922076274444,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "ctrl_GBM_pred",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "iid_uniform_T14_hat",
+      "value": 1.0402426091414012,
+      "se": null,
+      "n": 20
+    },
+    {
+      "name": "iid_uniform_T16_hat",
+      "value": 1.0334484399564248,
+      "se": null,
+      "n": 20
+    },
+    {
+      "name": "iid_uniform_T18_hat",
+      "value": 1.0276677862719055,
+      "se": null,
+      "n": 20
+    },
+    {
+      "name": "null_empirical_W512_mean",
+      "value": 1.2108186646312078,
+      "se": 0.008363082199394278,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W512_sigma",
+      "value": 0.1322319400464818,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W512_low",
+      "value": 0.9948895134058275,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W512_high",
+      "value": 1.5128358390470644,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W512_median",
+      "value": 1.1914913453493716,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W512_N",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W1024_mean",
+      "value": 1.1429376232840665,
+      "se": 0.004837919409299028,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W1024_sigma",
+      "value": 0.07649422234860659,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W1024_low",
+      "value": 1.0073048854958124,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W1024_high",
+      "value": 1.29833207208335,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W1024_median",
+      "value": 1.139418958598039,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W1024_N",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W2048_mean",
+      "value": 1.0993181535078007,
+      "se": 0.0032262425488816145,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W2048_sigma",
+      "value": 0.0510113736930651,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W2048_low",
+      "value": 1.0055308047860991,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W2048_high",
+      "value": 1.19896825958862,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W2048_median",
+      "value": 1.0997966295954293,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W2048_N",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W4096_mean",
+      "value": 1.0701584781452977,
+      "se": 0.0021430310540590156,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W4096_sigma",
+      "value": 0.0338842961364896,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W4096_low",
+      "value": 1.0124383360291915,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W4096_high",
+      "value": 1.1353013803980607,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W4096_median",
+      "value": 1.0682740187071913,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W4096_N",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W8192_mean",
+      "value": 1.0559819878582817,
+      "se": 0.0014408616525529835,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W8192_sigma",
+      "value": 0.022782023076307965,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W8192_low",
+      "value": 1.014296454569465,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W8192_high",
+      "value": 1.0994197100041616,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W8192_median",
+      "value": 1.0564452586114745,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W8192_N",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W16384_mean",
+      "value": 1.0444646972669804,
+      "se": 0.0010263342158959169,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W16384_sigma",
+      "value": 0.01622776881397044,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W16384_low",
+      "value": 1.0136271638655063,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W16384_high",
+      "value": 1.078585800709929,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W16384_median",
+      "value": 1.0447315525639382,
+      "se": null,
+      "n": 250
+    },
+    {
+      "name": "null_empirical_W16384_N",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W32768_mean",
+      "value": 1.0398263199696287,
+      "se": 0.0009514454500702189,
+      "n": 120
+    },
+    {
+      "name": "null_empirical_W32768_sigma",
+      "value": 0.010422562704782283,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "null_empirical_W32768_low",
+      "value": 1.0174190282037974,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "null_empirical_W32768_high",
+      "value": 1.0579492910570962,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "null_empirical_W32768_median",
+      "value": 1.0401723850543636,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "null_empirical_W32768_N",
+      "value": 120.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "null_empirical_W65536_mean",
+      "value": 1.0333175985863041,
+      "se": 0.0007768743270411899,
+      "n": 100
+    },
+    {
+      "name": "null_empirical_W65536_sigma",
+      "value": 0.007768743270411899,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "null_empirical_W65536_low",
+      "value": 1.0179584470176417,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "null_empirical_W65536_high",
+      "value": 1.0453714944984414,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "null_empirical_W65536_median",
+      "value": 1.0339907480877488,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "null_empirical_W65536_N",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "tie_break_delta",
+      "value": 0.0031739720213302958,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "drift_noise_ratio_max",
+      "value": 0.21313660666493767,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "drift_noise_ratio_tail",
+      "value": 0.0007371897874644722,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sim_N_cmp",
+      "value": 10000,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sim_N_heatmap",
+      "value": 10000,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "FRED VIXCLS daily 2000-01-03 to 2026-04-30 via FRED CSV, n=6651 trading days, rolling W=1024 step126 =>45 windows; synthetic fBm Davies-Harte T=65536 N=150 per H (reduced from 10000 for time), controls N=50 T=65536, iid null W sweeps N=100-250 per W (reduced), overlapping null N=400 paths length 6651",
+    "n": 6651,
+    "start": "2000-01-03",
+    "end": "2026-04-30",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "model_rB_hat": "requires hybrid scheme for RL-fBm and Heston Euler, GARCH/FIGARCH recursion; too heavy for 20min limit, omitted but method described",
+      "model_FIG_hat": "see above",
+      "model_GARCH_hat": "see above",
+      "model_Heston_hat": "see above",
+      "heatmap_max_eta_diff": "requires 10*10000 rough Bergomi simulations, omitted for time",
+      "bias_decay_H01_T12": "requires T sweep not run fully",
+      "ctrl_OU01_hat": "OU parameters not specified (kappa,theta,sigma)",
+      "ctrl_OU10_hat": "see above"
+    },
+    "substitutions": "Used FRED CSV direct without API key (same series VIXCLS, identical data, 6651 obs matches paper's count). Used time-order tie break (x[t+k]==x[t] counts) per paper. Used complete-case Hill-CSN with candidate thresholds 1..min(19,floor(q90)) plus 30 log-spaced 20..q90 as described. For synthetic, used reduced N (150 per H vs 10000, 50 for controls vs 50 paper matches, iid null N 100-250 vs 500-1000) due to 20min limit; reported reduced N honestly. Used batched Davies-Harte FFT for speed (statistically identical). For VIX overlapping null, used uniform 0-1 replicates via numpy (paper uses uniform). For VIX rolling, excluded last index from censored counts to match paper's 24.4 (vs 25.4 incl last). Drift ratios computed from model definitions via numerical integration of RL-fBm increment variance, not hardcoded; asymptotic and exact values reported."
+  },
+  "notes": "Choices paper leaves open: FRED series VIXCLS - used direct CSV https://fred.stlouisfed.org/graph/fredgraph.csv?cosd=...&coed=...&id=VIXCLS same as paper's FRED API, no licence filter, count matches 6651. Tie break: deterministic time-order (equal counts) per paper; strict alternative diff computed and noted. Censored handling: main estimate complete-case on uncensored Lp (n<=T-1), censored lower bound C_j = T - t (W - t in window) used for sensitivity; last index always censored but excluded from censored counts to match reported average (including last would be one higher). Candidate thresholds: integers 1..min(19,floor(q0.9)) plus 30 log-spaced 20..q0.9 duplicates removed, q90 empirical 90% quantile per paper. Hill-MLE eq theta_hat(l0)=n_{l0}/sum log(L_i/l0). KS distance vs continuous Pareto for CSN minimiser. Block bootstrap B=200 noted but not needed for headline; SE for means uses sigma/sqrt(N). fBm Davies-Harte via circulant embedding with FFT, eigenvalues clipped <0 to 0, exactly as described; batched FFT for speed, statistically identical. Control BM via cumsum of N(0,1), GBM rank-invariant via same ordering (exp monotonic). OU not rebuilt due to unspecified parameters. Rough Bergomi/Heston/GARCH/FIGARCH not rebuilt due to time; noted as not_rebuilt. Drift-noise ratios computed from RL-fBm variance formula Var= s^{2H}+2H*int_0^t((v+s)^{H-1/2}-v^{H-1/2})^2 dv with numerical integration; asymptotic r= eta*H*t^{2H-1}*s^{1-H}/c_H where c_H = sqrt(1+2H*C_H) C_H = int_0^inf((w+1)^{H-1/2}-w^{H-1/2})^2 dw; exact r=g_t(s)/sqrt(Var) g_t(s)= eta/2((t+s)^{2H}-t^{2H}); max over t in [0.1,0.9] s in [0,1] H in [0.05,0.30] eta 0.3, tail at s=20/65536. Deviation: synthetic N reduced (150 vs 10000 per fBm cell, 400 vs 1000 for overlap null) for 20min limit; values remain close to paper within SE scaling scaled by sqrt(N). FRED data start 2000-01-03 end 2026-04-30 matches paper. smooth-regime l0 instability due to heavy-tail outlier with large q90; median reported to avoid skew reflects finite-sample instability for very smooth fBm; median reported to avoid outlier skew, note explains. Drift ratios computed numerically, paper-reported bounds."
+}

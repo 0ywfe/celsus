@@ -1,0 +1,258 @@
+{
+ "verdict": "partly holds up",
+ "rows": [
+  {
+   "name": "curvature_diagnostic_total_n",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 172.0,
+   "reproduced": 172,
+   "se": null,
+   "n": 172,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "interior_curvature_max_n",
+   "kind": "tally",
+   "unit": "countries",
+   "reported": 23.0,
+   "reproduced": 39,
+   "se": null,
+   "n": 172,
+   "consistent": null,
+   "why": "a tally of what the analysis found, with no uncertainty, so it is not judged"
+  },
+  {
+   "name": "full_income_n",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 72.0,
+   "reproduced": 69,
+   "se": null,
+   "n": 69,
+   "consistent": true,
+   "why": "approximate: -4.2%, within SCORE's +/-15%"
+  },
+  {
+   "name": "full_consumption_n",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 100.0,
+   "reproduced": 103,
+   "se": null,
+   "n": 103,
+   "consistent": true,
+   "why": "approximate: +3.0%, within SCORE's +/-15%"
+  },
+  {
+   "name": "income_vis_sample_n",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 12.0,
+   "reproduced": 12,
+   "se": null,
+   "n": 12,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "consumption_vis_sample_n",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 12.0,
+   "reproduced": 12,
+   "se": null,
+   "n": 12,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "dominance_counterexample_crossover_p",
+   "kind": "estimate",
+   "unit": "p",
+   "reported": 1.87,
+   "reproduced": 1.8738757046918317,
+   "se": 0.02000000057262839,
+   "n": 20000,
+   "consistent": true,
+   "why": "paper inside 1.874 +/- 0.0392"
+  },
+  {
+   "name": "income_ranking_scheme_switch_pairs",
+   "kind": "tally",
+   "unit": "pairs",
+   "reported": 2.0,
+   "reproduced": null,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "not computed"
+  },
+  {
+   "name": "consumption_ranking_scheme_switch",
+   "kind": "tally",
+   "unit": "countries",
+   "reported": 0.0,
+   "reproduced": null,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "not computed"
+  },
+  {
+   "name": "bernstein_order_robustness_max_rank_shift",
+   "kind": "estimate",
+   "unit": "ranks",
+   "reported": 2.0,
+   "reproduced": 6,
+   "se": null,
+   "n": 24,
+   "consistent": null,
+   "why": "no standard error"
+  },
+  {
+   "name": "alpha_sensitivity_low",
+   "kind": "parameter",
+   "unit": "alpha",
+   "reported": 0.01,
+   "reproduced": 0.01,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "alpha_sensitivity_high",
+   "kind": "parameter",
+   "unit": "alpha",
+   "reported": 10.0,
+   "reproduced": 10.0,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "bernstein_baseline_order",
+   "kind": "parameter",
+   "unit": "order",
+   "reported": 20.0,
+   "reproduced": 20,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "bernstein_alt_order_15",
+   "kind": "parameter",
+   "unit": "order",
+   "reported": 15.0,
+   "reproduced": 15,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "bernstein_alt_order_25",
+   "kind": "parameter",
+   "unit": "order",
+   "reported": 25.0,
+   "reproduced": 25,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "savitzky_golay_window",
+   "kind": "parameter",
+   "unit": "points",
+   "reported": 13.0,
+   "reproduced": 13,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "dominance_eps_demo",
+   "kind": "parameter",
+   "unit": "epsilon",
+   "reported": 0.001,
+   "reproduced": 0.001,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "dominance_x0_demo",
+   "kind": "parameter",
+   "unit": "x0",
+   "reported": 0.5,
+   "reproduced": 0.5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "kink_x0_normalizability",
+   "kind": "parameter",
+   "unit": "x0",
+   "reported": 3.0,
+   "reproduced": 0.75,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "atkinson_epsilon_comp",
+   "kind": "parameter",
+   "unit": "epsilon",
+   "reported": 0.5,
+   "reproduced": 0.5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "I1_operational_percentile_lower",
+   "kind": "parameter",
+   "unit": "delta",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "I1_operational_percentile_upper",
+   "kind": "parameter",
+   "unit": "delta",
+   "reported": 99.0,
+   "reproduced": 99,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "lorenz_example_exponent",
+   "kind": "parameter",
+   "unit": "beta",
+   "reported": 3.0,
+   "reproduced": 3,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  }
+ ]
+}

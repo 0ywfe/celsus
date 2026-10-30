@@ -1,0 +1,84 @@
+exit 0 in 67.5s
+--- stdout
+Downloading Zenodo archive...
+Downloaded 4958752 bytes
+Extracted [PosixPath('/work/stalin_extract/Stalin_Growth')]
+param_df                          parameter  ...                                  interpretation
+0          prewar log-growth trend  ...                               annual log growth
+1  annual recovery-gap persistence  ...                         AR(1)-style persistence
+2        remaining log gap in 1928  ...  potential minus observed log output per capita
+
+[3 rows x 5 columns]
+fan_df tail     year         q05         q10  ...         q90         q95  observed_index
+8   1936  115.952711  119.984580  ...  153.030741  158.454624      162.633045
+9   1937  117.172894  121.525065  ...  157.764212  163.555591      182.665360
+10  1938  118.293797  123.009165  ...  162.385877  168.653508      183.512727
+11  1939  119.342842  124.324584  ...  166.732342  173.525169      190.392775
+12  1940  120.350693  125.629414  ...  171.036995  178.284215      204.021974
+
+[5 rows x 9 columns]
+score_tables   Source Treated  Endpoint  ASCF-50 margin  ASCF-90 margin  Stress-90 margin Grade
+0    GMD     RUS      1933       16.640441       -8.118835        -20.370060     C
+1    GMD     RUS      1934       26.972673       -3.597950        -19.630255     C
+2    GMD     RUS      1936       48.783178        5.037673        -19.027037     B
+3    GMD     RUS      1938       63.036005        4.226396        -23.249673     B
+4    GMD     RUS      1940       50.069195        1.630232        -28.323993     B
+diag_tables                                  Estimator  Premium (%)  Pre-RMSE  Pre-correlation  Outside conformal band
+0                               scm_growth    76.018451  0.131056         0.495987                   False
+1                      augmented_scm_ridge    73.951040  0.130024         0.489610                   False
+2             synthetic_did_bias_corrected   128.214594  0.133051         0.495987                   False
+3                          ridge_synthetic    79.771561  0.138451         0.271412                   False
+4             elastic_net_sparse_synthetic    78.390845  0.139987         0.102423                   False
+5                   huber_robust_synthetic    41.898920  0.117631         0.550672                   False
+6  generalized_synthetic_control_factor_cv   106.390406  0.133768         0.302404                   False
+7           nuclear_norm_matrix_completion    76.754819  0.021460         0.988240                    True
+weights   donor    weight  rank
+0   ITA  0.332828     1
+1   SWE  0.172082     2
+2   DEU  0.117154     3
+3   GBR  0.109395     4
+4   PER  0.060887     5
+5   IDN  0.059379     6
+6   NLD  0.048941     7
+7   FRA  0.039052     8
+8   FIN  0.036362     9
+9   ZAF  0.014143    10
+lodo   Excluded donor  Remaining donors  Cumulative premium (%)  Annualised premium (%)
+0            GRC                27               78.223599                4.933405
+1            IND                27               78.873988                4.965263
+2            PRT                27               79.315237                4.986816
+3            CHE                27               80.164716                5.028173
+4            ROU                27               80.821376                5.060020
+5            CHL                27               81.010853                5.069190
+6            ITA                27               82.150791                5.124172
+7            FIN                27               83.409266                5.184506
+8            DEU                27               88.114097                5.406755
+9            GBR                27               89.218550                5.458189
+placebo      Source Treated  Endpoint  Effect (%)  Exact p-value  Effective placebos  Post/pre RMSPE
+0  Maddison     SUN      1938   39.463644       0.111111                   8        0.380093
+1  Maddison     RUS      1938   54.471050       0.111111                   8        0.497710
+2       GMD     RUS      1938   65.339196       0.111111                   8        0.473716
+3  Maddison     SUN      1940   35.139762       0.222222                   8        0.356191
+4  Maddison     RUS      1940   65.068896       0.111111                   8        0.491342
+5       GMD     RUS      1940   76.018451       0.111111                   8        0.465808
+fake    Fake origin  Fake endpoint  Horizon  Pseudo-effect (%)  Pre-RMSE  Post-gap RMSE
+0         1905           1917       12         -11.837949  0.128480       0.089831
+1         1913           1925       12         -29.795275  0.121749       0.179485
+2         1921           1928        7         115.148193  0.131992       0.127585
+3         1924           1928        4          39.150773  0.132519       0.107998
+4         1926           1928        2           3.666919  0.133030       0.018193
+cia                                          source                                   table   period                     measure  estimate_A  estimate_B  source_pdf_page  source_report_page                                         interpretation
+0  CIA/RAND Soviet Economic Development 1928-54  Table 2 Soviet GNP by sector of origin  1928-37  gnp annual growth rate pct         6.2         5.4               19                  12  national-accounts triangulation for Soviet GNP growth
+1  CIA/RAND Soviet Economic Development 1928-54  Table 2 Soviet GNP by sector of origin  1937-40  gnp annual growth rate pct         6.3         3.9               19                  12  national-accounts triangulation for Soviet GNP growth
+2  CIA/RAND Soviet Economic Development 1928-54  Table 2 Soviet GNP by sector of origin  1928-54  gnp annual growth rate pct         4.4         5.9               19                  12  national-accounts triangulation for Soviet GNP growth
+Wrote 180 results to results.json
+{'name': 'bootstrap_prewar_trend_p5', 'value': 0.006, 'se': None, 'n': None}
+{'name': 'bootstrap_prewar_trend_median', 'value': 0.014, 'se': None, 'n': 1000}
+{'name': 'bootstrap_prewar_trend_p95', 'value': 0.021, 'se': None, 'n': None}
+{'name': 'bootstrap_persistence_p5', 'value': 0.747, 'se': None, 'n': None}
+{'name': 'bootstrap_persistence_median', 'value': 0.803, 'se': None, 'n': None}
+{'name': 'score_GMD_RUS_1938_ASCF50', 'value': 63.0, 'se': None, 'n': None}
+{'name': 'score_GMD_RUS_1938_ASCF90', 'value': 4.2, 'se': None, 'n': None}
+{'name': 'score_GMD_RUS_1938_Stress90', 'value': -23.2, 'se': None, 'n': None}
+
+--- stderr

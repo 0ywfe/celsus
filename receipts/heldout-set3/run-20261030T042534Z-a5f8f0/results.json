@@ -1,0 +1,144 @@
+{
+  "results": [
+    {
+      "name": "n_countries",
+      "value": 27,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "n_observations",
+      "value": 300,
+      "se": null,
+      "n": 300
+    },
+    {
+      "name": "lambda_minus_opt",
+      "value": 29.872495624584978,
+      "se": 9.546873769886332,
+      "n": 27
+    },
+    {
+      "name": "sigma_mp",
+      "value": 0.18186170418896905,
+      "se": 0.025632511318713774,
+      "n": 27
+    },
+    {
+      "name": "alpha_info_corr",
+      "value": 1.7927167902598038,
+      "se": 0.059396912648681216,
+      "n": 27
+    },
+    {
+      "name": "D_KS_opt",
+      "value": 0.10032302728355574,
+      "se": 0.011348828940403968,
+      "n": 27
+    },
+    {
+      "name": "pareto_mu",
+      "value": 1.5854335805196076,
+      "se": 0.11879382529736243,
+      "n": 27
+    },
+    {
+      "name": "corr_kappa_D_E",
+      "value": 0.9828957138939609,
+      "se": 0.02021451691440838,
+      "n": 85
+    },
+    {
+      "name": "corr_system_HICP_2019_2026",
+      "value": 0.8677873676780964,
+      "se": 0.05487736710804576,
+      "n": 84
+    },
+    {
+      "name": "nnsd_cutoff",
+      "value": 0.355,
+      "se": 0.02,
+      "n": 27
+    },
+    {
+      "name": "n_communities_leading_eig",
+      "value": 2,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "n_eastEurope_claimed",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_eastEurope_listed",
+      "value": 6,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "price_stability_target",
+      "value": 2.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "alpha_ideal_benchmark",
+      "value": 2.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "alpha_underfit_low",
+      "value": 2.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "alpha_underfit_high",
+      "value": 6.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "alpha_overfit_threshold",
+      "value": 2.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "lambda_minus_perf_low",
+      "value": 100.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "lambda_minus_perf_high",
+      "value": 160.0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "lambda_minus_underfit_thresh",
+      "value": 200.0,
+      "se": 0,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Monthly inflation rate variations (HICP prc_hicp_mmor monthly rate of change CP00) for 27 EU countries, matrix W = countries x time, T x N, no transformations, fetched via Eurostat API",
+    "n": 300,
+    "start": "2001-01",
+    "end": "2025-12",
+    "same_as_paper": false,
+    "missing": 7,
+    "extra": 0,
+    "differences": "Paper claims Jan2001-Jul2026 inclusive; public Eurostat API only available to 2025-12 as of fetch date; missing months correspond to future unreleased data; Data source prc_hicp_mmor matches paper custom dataset",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Used Eurostat API dataset prc_hicp_mmor as public equivalent of paper custom dataset; WeightWatcher/powerlaw for MP Power-law fit; condition numbers on raw W^T W; NNSD denoising via absolute correlation threshold and GOE/Exp NLL; community detection via igraph leading eigenvector"
+  },
+  "notes": "Choices left open: normalization of W handled via raw W^T W eigenvalues as used by WeightWatcher; Q defined as larger dimension over smaller; sigma estimation via WeightWatcher analytic; Pareto mu via mu equals two times alpha minus one; condition numbers iteratively on raw eigenvalues; HICP correlation defined as mean country inflation versus EA aggregate; NNSD cutoff scanned zero to point eight step point zero zero five with mean normalized spacings; Communities via leading eigenvector on denoised absolute correlation graph; bootstrap SEs for power law parameters and analytic SEs for correlations"
+}

@@ -1,0 +1,1 @@
+Numeric fix applied: `param_T0` (was `"T/2"` string), `param_tau_sim` and `param_tau_app` (were string lists) now report numeric values `0.5` (ratio / representative middle expectile) with note explaining original paper string `T0=T/2` and `tau` sets. All 252 results now numeric; fresh re-run validated (88s, `n_g=505`, `n_a=478`, no trimming).

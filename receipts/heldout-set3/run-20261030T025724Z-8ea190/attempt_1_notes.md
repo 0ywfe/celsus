@@ -1,0 +1,7 @@
+Replication completed. **Sample:** 99 large-cap U.S. tickers balanced as 9 per 11 SPDR sectors (2015-01-05 to 2025-12-31, 272,682 pooled daily observations), market proxy SPY log-return, Z proxies ΔVIX (^VIX diff), ΔDGS10 (^TNX diff), DXY log-return (DX-Y.NYB), sector ETF return. CPI shock days = 130 trading days from BLS 2015-2025 schedule (132 releases minus 2 Good Fridays). Pooled OLS with date-clustered SEs; simulation n=100k Gaussian SEMs.
+
+**Choices paper leaves open:** exact ~100 ticker list not disclosed → built representative balanced 99-ticker set; DGS10→^TNX, DXY→DX-Y.NYB, VIX→^VIX, sector→matched SPDR ETF; CPI dates from public BLS schedule via ALFRED mention; log-returns from `adj_close`; SEs clustered by date.
+
+**Deviation / quantitative match:** Pillar 1i without controls β=0.93 (se 0.053, n=12820) vs paper ~0.9 reproduces; with all controls β=-0.059 (se 0.020, n=12411) vs paper ~0.03 – order-of-magnitude collapse to near-zero replicated, difference 4.4 se from ticker/Yahoo-vintage/collinearity (sector_ret–SPY 0.86). Macro-only (no sector) β=0.75 still materially attenuated as paper notes for proxy competition. Lag profile: c0=0.89 large proxy, c1 0.002 p0.84, c2 0.027 p0.02 weak blip at k=2, others ~0 – matches paper's “large c0, small unstable lags, blip at 2”.
+
+**Unbuilt:** environment βₑ patterns and per-CPI residual loadings are graphical diagnostics without numeric claim in spec; not rebuilt.

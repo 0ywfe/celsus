@@ -1,0 +1,44 @@
+{
+ "run_id": "run-20261030T040730Z-dcb75d",
+ "paper": "2605.20142",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication's sample covers 1996-06-01 to 2024-06-30, but the paper's runs from June 1996 (Table says mid-1997; text says June 1996 for BRK/WMT; July 2019 for CVS) to May 2024 (monthly BRK/WMT); Jun 2024 (daily CVS) (Table says 2024)",
+ "first_line": "We could not check this paper: the replication's sample covers 1996-06-01 to 2024-06-30, but the paper's runs from June 1996 (Table says mid-1997; text says June 1996 for BRK/WMT; July 2019 for CVS) to May 2024 (monthly BRK/WMT); Jun 2024 (daily CVS) (Table says 2024). This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "Brk_VaR_1_MMW",
+  "kind": "estimate",
+  "unit": "log return %",
+  "reported": -8.66,
+  "reproduced": -8.457422898576587,
+  "se": 0.0,
+  "n": 335,
+  "consistent": true,
+  "why": "2.3% apart, within 10%"
+ },
+ "sample": [],
+ "judged": 36,
+ "matched": 29,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script does not compile: line 255: expected '(': def fit_gmm VaR(returns, alphas):."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "cloudpickle==3.1.2",
+  "joblib==1.6.0",
+  "scikit-learn==1.9.1",
+  "threadpoolctl==3.7.0"
+ ],
+ "calls": 54,
+ "cost_usd": 1.0746,
+ "tokens_in": 2860174,
+ "tokens_out": 115564,
+ "wall_s": 3078.8,
+ "crashed": null
+}

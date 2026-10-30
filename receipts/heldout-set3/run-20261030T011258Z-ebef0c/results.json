@@ -1,0 +1,911 @@
+{
+  "results": [
+    {
+      "name": "panel_countries_final",
+      "value": 133.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "panel_country_years",
+      "value": 3325.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sanctions_main_targets",
+      "value": 42.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_arming_countries",
+      "value": 29.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "geopolitical_exclusions",
+      "value": 3.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sanctions_donors_cpi",
+      "value": 88.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sanctions_donors_gdppc",
+      "value": 88.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_arming_donors_cpi",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_arming_donors_gdppc",
+      "value": 101.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_regression_n_2018_2021_all",
+      "value": 118.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_regression_n_2018_2021_sanc",
+      "value": 39.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_regression_n_2010_2013_all",
+      "value": 119.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_regression_n_2010_2013_sanc",
+      "value": 39.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_cpi_draws",
+      "value": 500.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_cpi_w1_att",
+      "value": -0.04243742296717833,
+      "se": 0.00905545040220254,
+      "n": 42
+    },
+    {
+      "name": "main_cpi_w1_se",
+      "value": 0.00905545040220254,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "main_cpi_w2_att",
+      "value": 0.024878601502339198,
+      "se": 0.014426653653846733,
+      "n": 42
+    },
+    {
+      "name": "main_cpi_w2_se",
+      "value": 0.014426653653846733,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "main_cpi_incremental_att",
+      "value": 0.07390695477891808,
+      "se": 0.006800699401912043,
+      "n": 42
+    },
+    {
+      "name": "main_cpi_incremental_se",
+      "value": 0.006800699401912043,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "main_gdppc_w1_att",
+      "value": 0.025967408085165983,
+      "se": 0.010699440352570198,
+      "n": 42
+    },
+    {
+      "name": "main_gdppc_w1_se",
+      "value": 0.010699440352570198,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "main_gdppc_w2_att",
+      "value": 0.08781310420245403,
+      "se": 0.01855849870092669,
+      "n": 42
+    },
+    {
+      "name": "main_gdppc_w2_se",
+      "value": 0.01855849870092669,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "main_gdppc_incremental_att",
+      "value": 0.026860918874220607,
+      "se": 0.007757955255963135,
+      "n": 42
+    },
+    {
+      "name": "main_gdppc_incremental_se",
+      "value": 0.007757955255963135,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "cpi_incremental_percent_approx",
+      "value": 7.670661842997606,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "cpi_wave2_level_pct_approx",
+      "value": 2.5190656364202146,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "cpi_wave1_level_pct_approx",
+      "value": -4.154955937092364,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "timing_cpi_active_att",
+      "value": 0.07390695477891808,
+      "se": 0.006800699401912043,
+      "n": 42
+    },
+    {
+      "name": "timing_cpi_active_se",
+      "value": 0.006800699401912043,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "timing_cpi_exclude2024_att",
+      "value": 0.06837562228040732,
+      "se": 0.006381374703724711,
+      "n": 42
+    },
+    {
+      "name": "timing_cpi_exclude2024_se",
+      "value": 0.006381374703724711,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "timing_inflation_rate_att",
+      "value": 0.025797731931075697,
+      "se": 0.0022292072886369724,
+      "n": 42
+    },
+    {
+      "name": "timing_inflation_rate_se",
+      "value": 0.0022292072886369724,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "timing_gdppc_active_att",
+      "value": 0.026860918874220607,
+      "se": 0.007757955255963135,
+      "n": 42
+    },
+    {
+      "name": "timing_gdppc_active_se",
+      "value": 0.007757955255963135,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "timing_gdppc_exclude2024_att",
+      "value": 0.029571736830776883,
+      "se": 0.006791640131156933,
+      "n": 42
+    },
+    {
+      "name": "timing_gdppc_exclude2024_se",
+      "value": 0.006791640131156933,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "timing_gdppc_growth_rate_att",
+      "value": -0.035632307462461967,
+      "se": 0.0056125399948818416,
+      "n": 42
+    },
+    {
+      "name": "timing_gdppc_growth_rate_se",
+      "value": 0.0056125399948818416,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2019_2021_att",
+      "value": 0.07390695477891808,
+      "se": 0.006800699401912043,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2019_2021_se",
+      "value": 0.006800699401912043,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2017_2019_att",
+      "value": 0.07187236373259534,
+      "se": 0.008136416748217924,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2017_2019_se",
+      "value": 0.008136416748217924,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2021_att",
+      "value": 0.07302180401038717,
+      "se": 0.0061860194650447215,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2021_se",
+      "value": 0.0061860194650447215,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2017_2021_att",
+      "value": 0.07331939001421521,
+      "se": 0.007378934425893477,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2017_2021_se",
+      "value": 0.007378934425893477,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2018_2021_att",
+      "value": 0.07334068015361281,
+      "se": 0.007110468753557259,
+      "n": 42
+    },
+    {
+      "name": "reference_cpi_2018_2021_se",
+      "value": 0.007110468753557259,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2019_2021_att",
+      "value": 0.026860918874220607,
+      "se": 0.007757955255963135,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2019_2021_se",
+      "value": 0.007757955255963135,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2017_2019_att",
+      "value": 0.05415719724216217,
+      "se": 0.009338104348307967,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2017_2019_se",
+      "value": 0.009338104348307967,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2021_att",
+      "value": 0.0003705233308820728,
+      "se": 0.007309510633755898,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2021_se",
+      "value": 0.007309510633755898,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2017_2021_att",
+      "value": 0.040124986326076605,
+      "se": 0.008132836951978003,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2017_2021_se",
+      "value": 0.008132836951978003,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2018_2021_att",
+      "value": 0.03341363996953904,
+      "se": 0.00770216761854545,
+      "n": 42
+    },
+    {
+      "name": "reference_gdppc_2018_2021_se",
+      "value": 0.00770216761854545,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_full_att",
+      "value": 0.07390695477891808,
+      "se": 0.006800699401912043,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_full_se",
+      "value": 0.006800699401912043,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_median",
+      "value": 0.062396043188045994,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_trim_mean",
+      "value": 0.07085153363918252,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_positive_share",
+      "value": 0.9761904761904762,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_positive_count_numer",
+      "value": 41.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "influence_cpi_treated_loo_low",
+      "value": 0.07141861433607934,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_treated_loo_high",
+      "value": 0.07582642063416217,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_cpi_max_donor_loo_delta",
+      "value": 0.0046458575873166985,
+      "se": null,
+      "n": 88
+    },
+    {
+      "name": "influence_gdppc_full_att",
+      "value": 0.026860918874220607,
+      "se": 0.007757955255963135,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_full_se",
+      "value": 0.007757955255963135,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_median",
+      "value": 0.026654075246382487,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_trim_mean",
+      "value": 0.024394714374716246,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_positive_share",
+      "value": 0.6666666666666666,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_positive_count_numer",
+      "value": 28.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "influence_gdppc_treated_loo_low",
+      "value": 0.024245051024399406,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_treated_loo_high",
+      "value": 0.02961252351595803,
+      "se": null,
+      "n": 42
+    },
+    {
+      "name": "influence_gdppc_max_donor_loo_delta",
+      "value": 0.0017499850945789201,
+      "se": null,
+      "n": 88
+    },
+    {
+      "name": "direct_cpi_w1_level",
+      "value": -0.03403477385720445,
+      "se": 0.013399163259942804,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_w1_se",
+      "value": 0.013399163259942804,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_w2_level",
+      "value": 0.07657524945439599,
+      "se": 0.04298457914308167,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_w2_se",
+      "value": 0.04298457914308167,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_incremental_att",
+      "value": 0.10767821401163284,
+      "se": 0.02704725368255944,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_incremental_se",
+      "value": 0.02704725368255944,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_w1_level",
+      "value": 0.0017273274110366078,
+      "se": 0.006733550838804764,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_w1_se",
+      "value": 0.006733550838804764,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_w2_level",
+      "value": 0.04358082378096699,
+      "se": 0.013653872360904587,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_w2_se",
+      "value": 0.013653872360904587,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_incremental_att",
+      "value": 0.017204088688946722,
+      "se": 0.010030941149771752,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_incremental_se",
+      "value": 0.010030941149771752,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_exclude2024_att",
+      "value": 0.0952781404177475,
+      "se": 0.0211557507245888,
+      "n": 29
+    },
+    {
+      "name": "direct_cpi_exclude2024_se",
+      "value": 0.0211557507245888,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_inflation_rate_att",
+      "value": 0.039598639386342414,
+      "se": 0.01299783017558107,
+      "n": 29
+    },
+    {
+      "name": "direct_inflation_rate_se",
+      "value": 0.01299783017558107,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_exclude2024_att",
+      "value": 0.019845545947730924,
+      "se": 0.008648085185367263,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_exclude2024_se",
+      "value": 0.008648085185367263,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_growth_rate_att",
+      "value": -0.034573773798278376,
+      "se": 0.006546334149496358,
+      "n": 29
+    },
+    {
+      "name": "direct_gdppc_growth_rate_se",
+      "value": 0.006546334149496358,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "outcome_missing_cpi_raw",
+      "value": 25.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "outcome_missing_inflation_raw",
+      "value": 32.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "outcome_missing_total_cells",
+      "value": 57.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "controls_missing_total_cells",
+      "value": 1471.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "outcome_missing_total_possible",
+      "value": 12900.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "controls_missing_total_possible",
+      "value": 25800.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "country_specific_cpi_max_POL",
+      "value": 0.17592891293530646,
+      "se": null,
+      "n": 3
+    },
+    {
+      "name": "country_specific_cpi_min_ISL",
+      "value": -0.004791145286090107,
+      "se": null,
+      "n": 3
+    },
+    {
+      "name": "main_cpi_w1_p_cd",
+      "value": 3.057043382548308e-05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_cpi_w2_p_cd",
+      "value": 0.09215245822184825,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_cpi_incremental_p_cd",
+      "value": 1.2079226507921703e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_gdppc_w1_p_cd",
+      "value": 0.019705393255394332,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_gdppc_w2_p_cd",
+      "value": 2.647111572851024e-05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_gdppc_incremental_p_cd",
+      "value": 0.0012659523667026829,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "timing_cpi_active_p_cd",
+      "value": 1.2079226507921703e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "timing_cpi_exclude2024_p_cd",
+      "value": 1.8607337892717624e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "timing_inflation_rate_p_cd",
+      "value": 1.709743457922741e-14,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "timing_gdppc_active_p_cd",
+      "value": 0.0012659523667026829,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "timing_gdppc_exclude2024_p_cd",
+      "value": 8.69673819947625e-05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "timing_gdppc_growth_rate_p_cd",
+      "value": 1.3806642229496902e-07,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_cpi_w1_p_cd",
+      "value": 0.016915174189304105,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_cpi_w2_p_cd",
+      "value": 0.08568873993883863,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_cpi_incremental_p_cd",
+      "value": 0.00044202264545312175,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_gdppc_w1_p_cd",
+      "value": 0.7994206072904584,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_gdppc_w2_p_cd",
+      "value": 0.00347623917107609,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_gdppc_incremental_p_cd",
+      "value": 0.09737518453538208,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_cpi_exclude2024_p_cd",
+      "value": 0.00010758017385192886,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_inflation_rate_p_cd",
+      "value": 0.005004618371710956,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_gdppc_exclude2024_p_cd",
+      "value": 0.02944879532249378,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "direct_gdppc_growth_rate_p_cd",
+      "value": 1.2854824491537187e-05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "influence_cpi_full_p_cd",
+      "value": 1.2079226507921703e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "influence_gdppc_full_p_cd",
+      "value": 0.0012659523667026829,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_cpi_2019_2021_p_cd",
+      "value": 1.2079226507921703e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_gdppc_2019_2021_p_cd",
+      "value": 0.0012659523667026829,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_cpi_2017_2019_p_cd",
+      "value": 4.9046100514260615e-11,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_gdppc_2017_2019_p_cd",
+      "value": 8.339018406910981e-07,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_cpi_2021_p_cd",
+      "value": 9.103828801926284e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_gdppc_2021_p_cd",
+      "value": 0.9598182399727224,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_cpi_2017_2021_p_cd",
+      "value": 1.7694734566475745e-12,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_gdppc_2017_2021_p_cd",
+      "value": 1.3879318169651711e-05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_cpi_2018_2021_p_cd",
+      "value": 5.868638908168577e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "reference_gdppc_2018_2021_p_cd",
+      "value": 9.13887476812203e-05,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Balanced annual panel built from World Bank WDI/WGI live API for 2000-2024, eligibility applied on raw coverage before completion, 133 countries retained. Effective estimation period 2001-2024 after one-year lag of 8 controls. Treatment groups derived from paper ledger intersected with eligible set.",
+    "n": 133,
+    "start": "2000-01-01",
+    "end": "2024-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 4,
+    "differences": "Computed eligible 133 vs paper 129; sanctions targets 42 vs 42; donors 88 vs 84; vintage difference 2026-10-08 and simplified interpolation.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "sanctions_coded_descriptive": "Descriptive 43-count includes Ukraine coding from author ledger; not independently verifiable from public data alone.",
+      "desc_sanctions_only_count": "Descriptive partition requires full 5-category breakdown including territories; not computed from WDI alone.",
+      "desc_direct_arming_only_count": "Single direct-arming-only country (Turkiye) verification requires author ledger.",
+      "desc_neither_count": "Descriptive 83 neither-policy count not computed due to vintage differences.",
+      "desc_both_count": "28 both-policies count from ledger not recomputed.",
+      "desc_geopolitical_exclusions_count": "3 Russia/Belarus/Ukraine exclusions are design choices.",
+      "sanc_donor_cpi_no_repair_80": "No-repaired donor variant requires auditing which CPI cells were repaired; original audit tags not available via API.",
+      "sanc_donor_cpi_high_income_15": "High-income donor variant 15 defined as subset of donors above median income; recomputation would require exact donor list reconciliation but omitted for time.",
+      "direct_donor_cpi_no_repair_92": "Direct-arming no-repair variant 92 not recomputed due to same audit tag limitation.",
+      "direct_donor_cpi_high_income_26": "High-income donor variant 26 not recomputed.",
+      "robustness_cpi_donor_range_low": "Donor-pool range low requires three donor pool re-estimations; not computed to avoid hardcoding paper value.",
+      "robustness_cpi_donor_range_high": "Same as above.",
+      "robustness_cpi_factor_range_low": "Factor-proxy range requires five factor specifications; not computed.",
+      "robustness_cpi_factor_range_high": "Same as above.",
+      "robustness_gdppc_donor_range_low": "Same donor-pool variant limitation.",
+      "robustness_gdppc_donor_range_high": "Same.",
+      "robustness_gdppc_factor_range_low": "Same factor-proxy limitation.",
+      "robustness_gdppc_factor_range_high": "Same.",
+      "matched_cpi_baseline_max_stddiff": "Max standardized difference requires pre-treatment 2009-2013 characteristic balancing; recomputation omitted for time.",
+      "matched_cpi_highincome_max_stddiff": "Same matching design not recomputed.",
+      "matched_cpi_mahalanobis_max_stddiff": "Mahalanobis matching not recomputed.",
+      "matched_cpi_highincome_att": "High-income matched ATT not recomputed.",
+      "matched_cpi_mahalanobis_att": "Mahalanobis ATT not recomputed.",
+      "matched_gdppc_highincome_att": "Same.",
+      "matched_gdppc_mahalanobis_att": "Same.",
+      "reference_cpi_2019_2021_placebo_p": "Placebo size-matched B=500 requires 500 full re-estimations; not computed within time limit.",
+      "reference_cpi_2017_2019_placebo_p": "Same placebo limitation.",
+      "reference_cpi_2021_placebo_p": "Same.",
+      "reference_cpi_2017_2021_placebo_p": "Same.",
+      "reference_cpi_2018_2021_placebo_p": "Same.",
+      "reference_gdppc_2019_2021_placebo_p": "Same.",
+      "reference_gdppc_2017_2019_placebo_p": "Same.",
+      "reference_gdppc_2021_placebo_p": "Same.",
+      "robustness_cpi_placebo_p": "Same.",
+      "robustness_gdppc_placebo_p": "Same.",
+      "direct_cpi_placebo_p": "Same direct-arming placebo.",
+      "direct_gdppc_placebo_p": "Same.",
+      "reference_cpi_2019_2021_ch_ci_low": "Country-history bootstrap B=500 not computed.",
+      "reference_cpi_2019_2021_ch_ci_high": "Same.",
+      "reference_cpi_2019_2021_rb_ci_low": "Region-block bootstrap not computed.",
+      "reference_cpi_2019_2021_rb_ci_high": "Same.",
+      "exposure_cpi_beta1_2018_2021": "Comtrade Russian energy imports/GDP exposure requires authenticated API and pipeline-gas verification not available.",
+      "exposure_cpi_beta3_2018_2021": "Same Comtrade limitation.",
+      "exposure_cpi_total_slope_2018_2021": "Same.",
+      "exposure_gdppc_growth_total_slope_2018_2021": "Same.",
+      "exposure_gdppc_growth_beta3_2018_2021": "Same."
+    },
+    "substitutions": "World Bank vintage 2026-10-08; completion via linear interpolation; ledger from paper; donor LOO computed via re-estimation; bootstrap/placebo omitted; exposure not rebuilt."
+  },
+  "notes": "Choices open: vintage, completion approximation, ledger hard-coded from paper Appendix A4/A6, factor proxy parsimonious only, donor pools eligible minus coded targets minus RU/BLR/UKR, Bosnia CPI 2024 donor exclusion applied, p thresholds from country-dispersion t-test."
+}

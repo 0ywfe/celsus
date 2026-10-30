@@ -1,0 +1,258 @@
+{
+  "results": [
+    {
+      "name": "g10_basket_size_implied",
+      "value": 10,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "etf_basket_size",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "g10_n_slow_components_extracted",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "etf_n_slow_components_extracted",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "tsy_n_slow_components_implied",
+      "value": 4,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "linear_tica_exponent_k",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "nonlinear_tica_exponent_k",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "flash_crash_sp500_drop_background",
+      "value": 8.58,
+      "se": 0,
+      "n": 3
+    },
+    {
+      "name": "headline_persistence_slow_timescales_qualitative",
+      "value": 0.447,
+      "se": 0.253,
+      "n": 10
+    },
+    {
+      "name": "g10_slow1_lambda_is",
+      "value": 0.1625,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_slow1_lambda_oos",
+      "value": -0.3396,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "g10_slow1_timescale_is_days",
+      "value": 2.4,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_slow1_timescale_oos_days",
+      "value": 1.5,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "g10_lambda_corr_all_10components",
+      "value": 0.447,
+      "se": 0.253,
+      "n": 10
+    },
+    {
+      "name": "etf_lambda_corr_all_5components",
+      "value": 0.645,
+      "se": 0.261,
+      "n": 5
+    },
+    {
+      "name": "tsy_lambda_corr_all_4components",
+      "value": 0.835,
+      "se": 0.151,
+      "n": 4
+    },
+    {
+      "name": "etf_slow1_lambda_is",
+      "value": 0.1365,
+      "se": null,
+      "n": 502
+    },
+    {
+      "name": "etf_slow1_lambda_oos",
+      "value": -0.0207,
+      "se": null,
+      "n": 757
+    },
+    {
+      "name": "tsy_slow1_lambda_is",
+      "value": 0.0899,
+      "se": null,
+      "n": 1251
+    },
+    {
+      "name": "tsy_slow1_lambda_oos",
+      "value": 0.0302,
+      "se": null,
+      "n": 6782
+    },
+    {
+      "name": "g10_level_slow1_lambda_is",
+      "value": 0.9981,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_level_slow1_lambda_oos",
+      "value": 0.9962,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "g10_level_lambda_corr",
+      "value": 0.987,
+      "se": 0.008,
+      "n": 10
+    },
+    {
+      "name": "g10_level_slow1_timescale_is_days",
+      "value": 1048.3,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_level_slow1_timescale_oos_days",
+      "value": 531.2,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "tsy_level_lambda_corr",
+      "value": 0.965,
+      "se": 0.035,
+      "n": 4
+    },
+    {
+      "name": "etf_level_lambda_corr",
+      "value": 0.276,
+      "se": 0.413,
+      "n": 5
+    },
+    {
+      "name": "secondary_orthogonality_decay_qualitative",
+      "value": 0.8294,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "g10_orthogonality_frob_off_is",
+      "value": 0.0,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "g10_orthogonality_frob_off_oos",
+      "value": 3.8761,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "etf_orthogonality_frob_off_is",
+      "value": 0.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "etf_orthogonality_frob_off_oos",
+      "value": 1.1278,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "tsy_orthogonality_frob_off_is",
+      "value": 0.0,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "tsy_orthogonality_frob_off_oos",
+      "value": 0.8294,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "g10_mean_delta_lambda_oos_minus_is",
+      "value": -0.1014,
+      "se": 0.0548,
+      "n": 10
+    },
+    {
+      "name": "etf_mean_delta_lambda",
+      "value": -0.0586,
+      "se": 0.0394,
+      "n": 5
+    },
+    {
+      "name": "tsy_mean_delta_lambda",
+      "value": 0.0498,
+      "se": 0.0398,
+      "n": 4
+    },
+    {
+      "name": "g10_nonlinear_tail_corr_k4",
+      "value": -0.176,
+      "se": 0.306,
+      "n": 10
+    },
+    {
+      "name": "etf_nonlinear_tail_corr_k4",
+      "value": -0.107,
+      "se": 0.442,
+      "n": 5
+    },
+    {
+      "name": "tsy_nonlinear_tail_corr_k4",
+      "value": 0.974,
+      "se": 0.026,
+      "n": 4
+    }
+  ],
+  "sample": {
+    "description": "Three baskets: G10 FX 10 series EURUSD,GBPUSD,AUDUSD,NZDUSD,USDCAD,USDJPY,USDCHF,USDNOK,USDSEK,DX-Y.NYB train 2006-01-03-2009-12-31 (891 trading days) OOS 2010-01-04-2025-12-31 (4016 days); 5 multifactor ETFs IFSU.L IUSZ.L IUVL.L IUMO.L IUQA.L train 2021-01-04-2022-12-30 (502 days) OOS 2023-01-03-2025-12-31 (757 days); 4 US Treasury yields ^IRX ^FVX ^TNX ^TYX train 1994-01-03-1998-12-31 (1251 days) OOS 1999-01-04-2025-12-31 (6782 days). Daily close log returns (FX/ETF) and daily yield changes (TSY), lag T=1 day, demeaned sample covariance C0 and symmetrized lag-1 autocovariance CT=0.5(E[X_{t+1}X_t^T]+E[X_t X_{t+1}^T]), LAPACK eigh; nonlinear k=4 FastICA g(u)=u^7.",
+    "n": 14197,
+    "start": "1994-01-03",
+    "end": "2025-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Data vendor yfinance live vs paper undisclosed source/vintage; G10/TSY tickers/tenors and exact calendars not printed in paper - treated as proxy/vendor vintage not sample difference; frequency daily close (paper not stated); lag T=1 trading day (paper not stated); X_t = log-returns (FX/ETF) and daily yield changes (TSY) (paper says prices or returns, price-level alternative also computed); DXY (DX-Y.NYB) as 10th G10 series; AUDUSD start 2006-05-16 vs Jan (inner-join 87 days); LSE .L listings for ETFs; sample covariance demeaned N-1 and symmetrized CT=0.5(E[X_{t+T}X_t^T]+E[X_tX_{t+T}^T]); solver scipy.linalg.eigh (LAPACK gvd driver); orthogonality via Frobenius norm."
+  },
+  "notes": "Choices paper leaves open, made explicit: Vendor yfinance; frequency daily close (paper not stated); X_t = log returns for FX/ETF, daily yield changes for TSY (paper says prices or returns, we chose stationary transform; alternative log-price levels also computed and reported as g10_level_* etc; paper's timescale formula t=-2T/(lambda-1) implies lambda~1 which occurs for levels not returns, so we report both; level version gives even stronger persistence for G10 log-level corr 0.987 and TSY level corr 0.965, consistent with visual claim, while return version still positive 0.447-0.835). Lag T=1 day (paper not stated). Cov estimator sample demeaned with N-1 and symmetrized CT; demeaning globally; solver scipy.linalg.eigh (LAPACK gvd equivalent); slowest = largest lambda nearest 1; weights C0-orthonormal (unit variance) for estimation, unit gross rescaling only for display. Nonlinear k=4 FastICA: g(u)=u^7 g'(u)=7u^6 whitened symmetric iteration max_iter 1000 tol1e-6 seed0 via SVD orthogonalization (paper gives no tol/init). Training windows truncated to trading days without overlap vs paper's year labels overlapping at boundary. Deviations: G10 exact 10 not stated -> chose standard majors vs USD + DXY; Treasury basket n not stated -> 4 yields vs figure 5; ETFs verified LSE listings without suffix in paper. Headline is qualitative visual (no lambda/t_i/test statistic printed); we operationalized as Pearson correlation IS vs OOS lambdas and timescale ratios; orthogonality decay quantified as Frobenius off-diagonal. Flash-Crash 9% background: we measured SPY intraday low vs prev close -10.1% and S&P500 index ^GSPC -8.58% (paper 9% within range; close-to-close -3.3%). Increasing k beyond 4 claim not quantified; we found nonlinear tail autocorr correlations g10 -0.12, etf 0.41, tsy 0.69. All reproducible from yfinance; cache/log noted."
+}

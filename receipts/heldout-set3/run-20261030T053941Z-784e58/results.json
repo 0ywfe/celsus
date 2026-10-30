@@ -1,0 +1,246 @@
+{
+  "results": [
+    {
+      "name": "NOOS",
+      "value": 605,
+      "se": 0,
+      "n": 605
+    },
+    {
+      "name": "NBurnIn",
+      "value": 121,
+      "se": 0,
+      "n": 121
+    },
+    {
+      "name": "TimingWindow",
+      "value": 120,
+      "se": 0,
+      "n": 120
+    },
+    {
+      "name": "NAnomaly",
+      "value": 212,
+      "se": 0,
+      "n": 212
+    },
+    {
+      "name": "NTiming",
+      "value": 30,
+      "se": 0,
+      "n": 30
+    },
+    {
+      "name": "NSignals",
+      "value": 242,
+      "se": 0,
+      "n": 242
+    },
+    {
+      "name": "NSignalsPolicy",
+      "value": 243,
+      "se": 0,
+      "n": 243
+    },
+    {
+      "name": "NCoefficientsPolicy",
+      "value": 1215,
+      "se": 0,
+      "n": 1215
+    },
+    {
+      "name": "RiskAversion",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingCap",
+      "value": 0.6,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingLeverage",
+      "value": 1.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingPcaRank",
+      "value": 10,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingOmega",
+      "value": 5.8,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "TimingActive",
+      "value": 6.8743102163709695,
+      "se": 0.6995073271142076,
+      "n": 605
+    },
+    {
+      "name": "TimingStatic",
+      "value": 4.991133274832649,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingComponent",
+      "value": 1.8831769415383226,
+      "se": 0.6995073271142076,
+      "n": 605
+    },
+    {
+      "name": "TimingT",
+      "value": 0.007099352746887444,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingShare",
+      "value": 27.394413144952225,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingGrossSR",
+      "value": 1.2321248982739765,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingMapTiming",
+      "value": 1.4179584581550462,
+      "se": 0.9848956215727708,
+      "n": 605
+    },
+    {
+      "name": "TimingMapT",
+      "value": 0.14995107724583856,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingMarketSR",
+      "value": 0.7393058389116266,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_exposure_Table1",
+      "value": 1.2955342557657583,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_exposure_Table1",
+      "value": 1.4949155250411106,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevTurnover",
+      "value": 4.998743557788091,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevAtLimitBPPP",
+      "value": 51.570247933884296,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevAtLimitMap",
+      "value": 96.69421487603306,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevPreBPPP",
+      "value": 1.4414565837992355,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevPreMap",
+      "value": 2.430161735803902,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingSeventies",
+      "value": -0.06110994355319893,
+      "se": 0.7258012278987203,
+      "n": 77
+    },
+    {
+      "name": "TimingEighties",
+      "value": 0.720904271658965,
+      "se": 0.850604594692007,
+      "n": 120
+    },
+    {
+      "name": "TimingNineties",
+      "value": 3.035830972410922,
+      "se": 1.0323386336497367,
+      "n": 120
+    },
+    {
+      "name": "TimingThousands",
+      "value": -0.5467860483872728,
+      "se": 1.5612243067128642,
+      "n": 120
+    },
+    {
+      "name": "TimingTens",
+      "value": 0.5163769949803869,
+      "se": 0.7303370990621825,
+      "n": 120
+    },
+    {
+      "name": "TimingTwenties",
+      "value": 1.554882913117999,
+      "se": 3.0792992745268624,
+      "n": 48
+    },
+    {
+      "name": "TimingExNineties",
+      "value": 1.4671575879419152,
+      "se": 0.8157357203544373,
+      "n": 485
+    },
+    {
+      "name": "TimingExNinetiesT",
+      "value": 0.0720867665495879,
+      "se": null,
+      "n": 485
+    },
+    {
+      "name": "TimingExNinetiesMonths",
+      "value": 485,
+      "se": 0,
+      "n": 485
+    }
+  ],
+  "sample": {
+    "description": "Monthly factor returns with BPPP timing rule. Full sample July 1963-Dec 2023, burn-in 121 months, rolling window 120 months, OOS Aug 1973-Dec 2023 (605 months). Predictors: 212 anomaly portfolio returns (OSAP) +30 factor-specific signals (6 series x5 families) = 242 plus constant => L=243, K=5 factors => 1215 coefficients. Position limit c=0.6, gross limit g=1.5. Standardised expanding winsorised 3SD, missing 0, first 12 rows zero. Newton kernel solver, omega=5.8 fixed (median), Laplace averaging with Woodbury.",
+    "n": 605,
+    "start": "1963-07-01",
+    "end": "2023-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "French data live from Ken French library (2026-09 CRSP vintage) vs paper's 2023 vintage; OSAP CrossSection Data Release 2026.10 (huggingface) vs paper's OSAP vintage; factor-specific predictors recomputed per Appendix A definitions with expanding standardisation as described; learning rate fixed at median 5.80 rather than diagonal heuristic per window; HMC exact posterior check omitted; trading costs, publication-lag, PCA, bagging, turnover penalty and comparator rules not rebuilt."
+  },
+  "notes": "Choices paper leaves open: ticker for market factors is standard Fama-French 5-factor+momentum; predictor standardisation uses expanding mean/SD with ddof=0, winsor 3 SD, missing->0, first 12 rows zero as retained. Risk-free rate not used for gross Sharpe (total returns). HAC bandwidth floor(4(T/100)^{2/9})=5, Bartlett. Timing component computed as mean(w*F)-mean(w)mean(F) per factor summed, t via HAC on timing_t=(w-bar w)(F-bar F) series. Learning rate fixed at reported median 5.80 (paper's heuristic varies per date, median 5.80) to avoid implementing full diagonal trace matching with rank-deficient H; this is a deviation. Position/gross limits applied after capping via proportional scaling. Market weight fixed 1 not in exposure. Deviations: not implementing HMC exact posterior verification, not reconstructing historical predictor vintages, not computing publication-lagged anomaly subsets, PCA, bagging, turnover penalty grids, constant allocation or other comparator rules' optimisation; those claims omitted from results. French and OSAP data fetched live may differ slightly from authors' cache. Turnover computed as 12*mean monthly sum |delta w|."
+}

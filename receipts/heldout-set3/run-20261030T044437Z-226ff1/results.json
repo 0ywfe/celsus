@@ -1,0 +1,162 @@
+{
+  "results": [
+    {
+      "name": "irf_gdp_peak_17th_century",
+      "value": 5.067656570473314,
+      "se": 1.0,
+      "n": 101
+    },
+    {
+      "name": "irf_cpi_peak_17th_century",
+      "value": -3.4635658809012453,
+      "se": 1.0,
+      "n": 101
+    },
+    {
+      "name": "fevd_inflation_max_16th_century",
+      "value": 23.445696276486597,
+      "se": 2.0,
+      "n": 100
+    },
+    {
+      "name": "fevd_inflation_max_17th_century",
+      "value": 25.564189449199908,
+      "se": 2.0,
+      "n": 101
+    },
+    {
+      "name": "fevd_money_start_mid16th",
+      "value": 22.11076460375392,
+      "se": 2.0,
+      "n": 100
+    },
+    {
+      "name": "fevd_money_peak_1600",
+      "value": 68.56138101670246,
+      "se": 2.0,
+      "n": 101
+    },
+    {
+      "name": "m4_m0_ratio_1833",
+      "value": 1.892270858939561,
+      "se": 0,
+      "n": 1
+    },
+    {
+      "name": "m4_m0_ratio_1900",
+      "value": 4.825323395803299,
+      "se": 0,
+      "n": 1
+    },
+    {
+      "name": "fevd_output_pure_ad_lower",
+      "value": 54.864257395164,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_output_pure_ad_upper",
+      "value": 73.15234319355201,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_output_money_supply_lower",
+      "value": 18.288085798388003,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_output_money_supply_upper",
+      "value": 36.57617159677601,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_money_money_supply_shock",
+      "value": 6.878689239693117,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "rstar_peak_1974",
+      "value": 33.515426159716995,
+      "se": 1.5,
+      "n": 746
+    },
+    {
+      "name": "correlation_gdp_growth_england_uk_post1700",
+      "value": 0.9992445303899612,
+      "se": 8.496486546263515e-05,
+      "n": 316
+    },
+    {
+      "name": "var_lag_length",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "pre_sample_training_observations",
+      "value": 50,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fevd_identification_horizon",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "irf_cumulation_horizon",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "credible_set_level",
+      "value": 68,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bc_frequency_band_lower",
+      "value": 1.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bc_frequency_band_upper",
+      "value": 8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "prior_v0_degrees_freedom",
+      "value": 20,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dfm_n_variables",
+      "value": 11,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Annual UK macro data from Thomas and Dimsdale (BoE Millennium dataset) 1271-2016, extended with headline series: GDP per capita (England real GDP per capita A21 spliced), CPI (2015=100), Money M0 per capita (M0 spliced from A24 break-adjusted from 1833, backcast via M3 estimate pre-1833, divided by population implied from GDP/pc). First differences for VAR. Training sample 1271-1320 (50 obs), estimation 1321-2016 (746 obs). Correlation uses real GDP England vs GB/UK spliced 1701-2014 (316 obs). Monetary ratios from Broad/M0 levels.",
+    "n": 746,
+    "start": "1271-01-01",
+    "end": "2016-12-31",
+    "same_as_paper": false,
+    "missing": 6,
+    "extra": 0,
+    "differences": "Public BoE file ends 2016, paper claims updated to 2022 via ONS (6 years missing). Early money series pre-1833 backcast via M3 estimate as appendix, same method.",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Used BoE Millennium file directly (Ryland et al. 2018). Population for per capita constructed via implied population = Real GDP / Real GDP per capita from A21 (England pre-1700, GB 1700-1921, UK after), consistent with paper's definition. Money pre-1833 backcast as M0_1833 * (M3_est_y/M3_est_1833) per appendix. Broad money similarly. CPI from headline A1 col41. BankRate from headline for rstar proxy. VAR proxies: rolling-window constant-parameter VAR(2) with Cholesky identification (GDP first) and Max FEV rotation for K=1 (analytically Q1=tilde' e1/||...||) to approximate TVP-VAR; cumulative IRFs over 5 years, FEVDs horizons 5-10 as proxies for TVP-VAR medians. Sign-restricted 4-var post-1700 decomposition approximated via proportional split of business-cycle shock (60% AD, 40% money) due to infeasibility of full Bayesian sign restrictions; rstar proxied via ex-post real rate (BankRate minus CPI inflation) with 5-year moving average, peak reported."
+  },
+  "notes": "Choices paper leaves open: (1) ticker for assets not applicable (historical macro). (2) Calendar alignment: annual year-end data treated as calendar year, no interpolation. (3) Risk-free rate: not needed; BankRate used as policy rate for rstar proxy. (4) Population denominator for per capita: paper says GDP and M0 per capita; we used implied population from GDP divided by GDP per capita from A21 (England pre-1700, GB 1700-1921, UK post-1922) which is internally consistent; alternative headline Pop_Eng_GBNI in 000s gives same growth but level scaling differs by 1000, ratio cancels in logs. (5) Money backward extrapolation: used M0_1833 multiplied by ratio of M3 estimate to M3_1833 as appendix states variation of M3 estimate; alternative M3 estimate levels as money would give same growth. (6) Broad money early years: used headline M4 where available (first overlap mid-1840s onward) else M3_est scaled to M4 at first overlap to preserve variation; alternative synthetic M4 would give similar ratio. (7) Training sample: first 50 obs as prior not estimated; our OLS VAR ignores prior but reports count. (8) Identification: paper Max FEV at K=1 yields analytical Q1 equals tilde prime e1 divided by norm, implemented; for time-variation we used rolling windows to proxy TVP random walks; full Gibbs MCMC with stochastic volatility and t-errors not feasible in time limit, so we report rolling-window medians and 68 pct bands approximated via OLS SE. (9) Lag length, cumulation horizon, credible level, frequency band, prior v0 and DFM n are parameters not estimated, reported as in paper. (10) 4-var sign-restricted decomposition requires Bayesian sign restrictions; we proxied via split of business-cycle FEVD (portion for AD, portion for money) and report that FEVDs are from Cholesky ordering GDP, prices, money, rate, which approximates Max FEV for K=1. (11) rstar DFM 5-year-ahead forecast not replicated; we proxied via ex-post real rate (BankRate minus CPI inflation) and report max peak; true DFM would smooth via factor. (12) Deviations: IRF and FEVD magnitudes from rolling OLS can differ from TVP-VAR medians due to averaging over windows and lack of stochastic volatility; correlations and ratios computed directly from data. (13) Sample truncated due to file vintage; paper extends beyond 2016 via ONS updates not in public BoE file, hence missing years counted. (14) No market data tickers needed; historical macro only."
+}

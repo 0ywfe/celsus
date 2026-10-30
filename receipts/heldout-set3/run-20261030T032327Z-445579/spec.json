@@ -1,0 +1,1095 @@
+{
+ "title": "The GT-Score: A Robust Objective Function for Reducing Overfitting in Data-Driven Trading Strategies",
+ "hypothesis": "GT-Score composite objective (mu * ln(z) * r2 / sigma_d with z=(mu-mu_m)/(sigma/sqrt(N)), piecewise penalty, r2 consistency, sigma_d downside) improves generalization ratio (OOS return / train return) vs Simple, Sharpe, Sortino under identical search budget on daily equity backtests.",
+ "data_sources": [
+  "OHLCV via yFinance API https://pypi.org/project/yfinance/ accessed on 8 January 2026"
+ ],
+ "sample": "Historical daily OHLCV for top 50 S&P 500 by market cap via yFinance. Span January 2010 through December 2024, approximately 3770 trading days per asset, covering post-2008 recovery, 2020 COVID-19 crash, 2022 rate environment. 3 strategies: RSI (wilder:1978b), MACD (appel:1979), Bollinger (bollinger:2001). Monte Carlo study: 50 assets * 4 loss functions * 3 strategies * 15 seeds = 9000 trials. Walk-forward validation: 50 assets * 4 losses * 3 strategies * 9 splits with embargo, paper prints 5340 sequential trials, 1335 per loss, validation periods 2014--2024. Supplementary code and processed result files provided.",
+ "period_start": "January 2010",
+ "period_end": "December 2024",
+ "method": [
+  "1. Load daily OHLCV for 50 largest market-cap S&P500 via yFinance for Jan 2010-Dec 2024 (~3770 bars/asset).",
+  "2. Define parameter spaces for RSI (overbought/oversold thresholds), MACD (fast, slow, signal periods), Bollinger (lookback window, band width).",
+  "3. Walk-forward splits: Training window = 4 years, Validation window = 2 years, Step size = 1 year, Embargo = 30 days between train and validation. Generate 9 sequential train/validation splits per asset covering validation 2014--2024.",
+  "4. Monte Carlo: For each of 50*4*3 configurations run 15 random seeds 42--56 inclusive.",
+  "5. Optimization: Random search with 25 parameter evaluations per trial, same budget for all 4 objectives. Author dissertation also tested TPE and genetic algorithms.",
+  "6. Objectives compared: Simple L_simple=-Profit; Sharpe L_sharpe=-Sharpe; Sortino L_sortino=-Sortino; GT-Score (see 7).",
+  "7. Compute GT-Score per backtest window: GT_Score = mu*ln(z)*r2 / sigma_d. Where mu=mean strategy return per observation, mu_m=mean buy-and-hold benchmark per observation, sigma=std of strategy returns, N=number of return observations (trade-level returns, N = number of executed trades), z=(mu-mu_m)/(sigma/sqrt(N)), ln(z)=natural log, r2=R-squared consistency of returns, sigma_d=downside deviation.",
+  "8. Edge handling piecewise with epsilon=10^{-6} to prevent /0 when sigma_d=0: if z<=0 then score=100+100*(1-exp(-|z-1|)) large penalty; else if z<=1 then score=100*(1-exp(-|z-1|)) smooth transition; else score= - mu*ln(z)*r2/(sigma_d+epsilon) standard GT-Score (negated for minimization).",
+  "9. Minimum sample n_min=50 trades: parameterizations with <50 trades assign large penalty. Report mode uses fixed-threshold n_min=50. Stabilized variance option (dissertation, code supported but NOT used for reported results): partition equity curve into n equal periods, choose n* where variance of period returns changes <1% across recent candidates, fallback to n=50 if no plateau.",
+  "10. Backtest engine Python 3.10 custom daily-bar backtest, no instrument-specific execution modeling in main tables. Compute Train Mean return, Test/Validation Mean return, Test Std, Train/Val Std, Gen Ratio = Test Return / Train Return (Walk-forward: Val Return / Train Return).",
+  "11. Summarize Monte Carlo OOS performance by loss (N=2250 per loss) and Walk-forward performance by loss (N=1335 per loss). Compute improvement % vs baseline avg.",
+  "12. Statistical comparisons on Monte Carlo test returns paired across same asset/strategy/seed: paired t-test GT-Score vs each baseline reporting Mean Diff (GT minus baseline), t-Stat, p-Value, Cohen d, Sig stars (* p<0.05, *** p<0.001). Also Wilcoxon signed-rank paired non-parametric p. Note author treats p-values as descriptive not selection-corrected (no White Reality Check, Hansen SPA, DSR); emphasize effect sizes d<0.2 and walk-forward Gen Ratio as primary evidence.",
+  "13. Sensitivity: transaction-cost check subtract additional per-side cost proportional to test-window trades, range 0--10 bps per side (entry and exit). Record mean test-window trades 32.4 GT vs ~21.0 baselines. Plot monotone decline, check ranking stability."
+ ],
+ "claims": [
+  {
+   "name": "mc_gt_test_mean",
+   "description": "Monte Carlo Test Mean GT-Score Table1",
+   "value": "43.6%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_gt_test_std",
+   "description": "Monte Carlo Test Std GT-Score",
+   "value": "62.6%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_gt_train_mean",
+   "description": "Monte Carlo Train Mean GT-Score",
+   "value": "237.8%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_gt_gen_ratio",
+   "description": "Monte Carlo Gen Ratio GT-Score = Test/Train",
+   "value": "0.183",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_gt_n",
+   "description": "Monte Carlo N GT-Score",
+   "value": "2250",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sharpe_test_mean",
+   "description": "Monte Carlo Test Mean Sharpe",
+   "value": "46.3%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sharpe_test_std",
+   "description": "Monte Carlo Test Std Sharpe",
+   "value": "71.7%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sharpe_train_mean",
+   "description": "Monte Carlo Train Mean Sharpe",
+   "value": "395.6%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sharpe_gen_ratio",
+   "description": "Monte Carlo Gen Ratio Sharpe",
+   "value": "0.117",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sharpe_n",
+   "description": "Monte Carlo N Sharpe",
+   "value": "2250",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sortino_test_mean",
+   "description": "Monte Carlo Test Mean Sortino",
+   "value": "49.3%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sortino_test_std",
+   "description": "Monte Carlo Test Std Sortino",
+   "value": "76.2%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sortino_train_mean",
+   "description": "Monte Carlo Train Mean Sortino",
+   "value": "421.4%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sortino_gen_ratio",
+   "description": "Monte Carlo Gen Ratio Sortino",
+   "value": "0.117",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_sortino_n",
+   "description": "Monte Carlo N Sortino",
+   "value": "2250",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_simple_test_mean",
+   "description": "Monte Carlo Test Mean Simple",
+   "value": "49.5%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_simple_test_std",
+   "description": "Monte Carlo Test Std Simple",
+   "value": "76.2%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_simple_train_mean",
+   "description": "Monte Carlo Train Mean Simple",
+   "value": "428.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_simple_gen_ratio",
+   "description": "Monte Carlo Gen Ratio Simple",
+   "value": "0.116",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_simple_n",
+   "description": "Monte Carlo N Simple",
+   "value": "2250",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table1"
+  },
+  {
+   "name": "mc_total_trials",
+   "description": "Monte Carlo total trials 50 assets*4 losses*3 strategies*15 seeds",
+   "value": "9000",
+   "unit": "trials",
+   "kind": "count",
+   "where": "4. Monte Carlo Analysis"
+  },
+  {
+   "name": "wf_gt_val_mean",
+   "description": "Walk-forward Val Mean GT-Score",
+   "value": "18.5%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_gt_val_std",
+   "description": "Walk-forward Val Std GT-Score",
+   "value": "37.1%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_gt_train_mean",
+   "description": "Walk-forward Train Mean GT-Score",
+   "value": "50.7%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_gt_gen_ratio",
+   "description": "Walk-forward Gen Ratio GT-Score = Val/Train",
+   "value": "0.365",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_gt_n",
+   "description": "Walk-forward N GT-Score",
+   "value": "1335",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sharpe_val_mean",
+   "description": "Walk-forward Val Mean Sharpe",
+   "value": "17.1%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sharpe_val_std",
+   "description": "Walk-forward Val Std Sharpe",
+   "value": "34.1%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sharpe_train_mean",
+   "description": "Walk-forward Train Mean Sharpe",
+   "value": "95.2%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sharpe_gen_ratio",
+   "description": "Walk-forward Gen Ratio Sharpe",
+   "value": "0.180",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sharpe_n",
+   "description": "Walk-forward N Sharpe",
+   "value": "1335",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sortino_val_mean",
+   "description": "Walk-forward Val Mean Sortino",
+   "value": "18.6%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sortino_val_std",
+   "description": "Walk-forward Val Std Sortino",
+   "value": "35.0%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sortino_train_mean",
+   "description": "Walk-forward Train Mean Sortino",
+   "value": "99.9%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sortino_gen_ratio",
+   "description": "Walk-forward Gen Ratio Sortino",
+   "value": "0.186",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_sortino_n",
+   "description": "Walk-forward N Sortino",
+   "value": "1335",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_simple_val_mean",
+   "description": "Walk-forward Val Mean Simple",
+   "value": "19.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_simple_val_std",
+   "description": "Walk-forward Val Std Simple",
+   "value": "35.4%",
+   "unit": "return std",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_simple_train_mean",
+   "description": "Walk-forward Train Mean Simple",
+   "value": "100.9%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_simple_gen_ratio",
+   "description": "Walk-forward Gen Ratio Simple",
+   "value": "0.188",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_simple_n",
+   "description": "Walk-forward N Simple",
+   "value": "1335",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Table2"
+  },
+  {
+   "name": "wf_total_trials_claimed",
+   "description": "Walk-forward total sequential trials across 9 periods",
+   "value": "5340",
+   "unit": "trials",
+   "kind": "count",
+   "where": "5.2 Walk-Forward Validation Results"
+  },
+  {
+   "name": "wf_total_trials_conclusion",
+   "description": "Total optimization trials over 14k claimed in Conclusions",
+   "value": "over 14,000",
+   "unit": "trials",
+   "kind": "count",
+   "where": "Conclusions"
+  },
+  {
+   "name": "improvement_wf_gen_ratio_pct",
+   "description": "Walk-forward 98% improvement in generalization ratio vs baseline avg",
+   "value": "98%",
+   "unit": "percent improvement",
+   "kind": "estimate",
+   "where": "Abstract, Results, Fig7 caption"
+  },
+  {
+   "name": "wf_baseline_avg_gen_ratio",
+   "description": "Walk-forward baseline avg Gen Ratio (avg Sharpe/Sortino/Simple)",
+   "value": "0.185",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Results Key Finding, Fig7 caption states avg 0.185"
+  },
+  {
+   "name": "improvement_mc_gen_ratio_pct",
+   "description": "Monte Carlo 56% higher generalization ratio",
+   "value": "56%",
+   "unit": "percent improvement",
+   "kind": "estimate",
+   "where": "5.1 Key Finding"
+  },
+  {
+   "name": "mc_baseline_avg_gen_ratio",
+   "description": "Monte Carlo baseline avg ~0.117",
+   "value": "0.117",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table1 average"
+  },
+  {
+   "name": "mc_raw_test_returns_range",
+   "description": "Abstract raw test returns 46--50% for baselines vs 43.6% GT",
+   "value": "46--50%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Abstract"
+  },
+  {
+   "name": "t_mean_diff_gt_vs_sharpe",
+   "description": "Paired Mean Diff GT minus Sharpe Table3",
+   "value": "-0.028",
+   "unit": "return diff",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "t_stat_gt_vs_sharpe",
+   "description": "Paired t-Stat GT vs Sharpe",
+   "value": "-2.45",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "p_gt_vs_sharpe",
+   "description": "Paired p-Value GT vs Sharpe",
+   "value": "0.014",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "cohen_d_gt_vs_sharpe",
+   "description": "Cohen d GT vs Sharpe",
+   "value": "-0.041",
+   "unit": "d",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "sig_gt_vs_sharpe",
+   "description": "Sig star GT vs Sharpe * p<0.05",
+   "value": "*",
+   "unit": "sig",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "t_mean_diff_gt_vs_sortino",
+   "description": "Paired Mean Diff GT minus Sortino",
+   "value": "-0.058",
+   "unit": "return diff",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "t_stat_gt_vs_sortino",
+   "description": "Paired t-Stat GT vs Sortino",
+   "value": "-5.05",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "p_gt_vs_sortino",
+   "description": "Paired p-Value GT vs Sortino",
+   "value": "<0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "cohen_d_gt_vs_sortino",
+   "description": "Cohen d GT vs Sortino",
+   "value": "-0.083",
+   "unit": "d",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "sig_gt_vs_sortino",
+   "description": "Sig GT vs Sortino ***",
+   "value": "***",
+   "unit": "sig",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "t_mean_diff_gt_vs_simple",
+   "description": "Paired Mean Diff GT minus Simple",
+   "value": "-0.060",
+   "unit": "return diff",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "t_stat_gt_vs_simple",
+   "description": "Paired t-Stat GT vs Simple",
+   "value": "-5.22",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "p_gt_vs_simple",
+   "description": "Paired p-Value GT vs Simple",
+   "value": "<0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "cohen_d_gt_vs_simple",
+   "description": "Cohen d GT vs Simple",
+   "value": "-0.086",
+   "unit": "d",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "sig_gt_vs_simple",
+   "description": "Sig GT vs Simple ***",
+   "value": "***",
+   "unit": "sig",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "p_overall_lt_0_01_sortino_simple",
+   "description": "Abstract paired tests p<0.01 for Sortino and Simple",
+   "value": "<0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Abstract"
+  },
+  {
+   "name": "wilcoxon_p_sharpe",
+   "description": "Wilcoxon signed-rank p GT vs Sharpe Table3 footnote",
+   "value": "0.139",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3 footnote"
+  },
+  {
+   "name": "wilcoxon_p_sortino",
+   "description": "Wilcoxon p GT vs Sortino",
+   "value": "<0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3 footnote"
+  },
+  {
+   "name": "wilcoxon_p_simple",
+   "description": "Wilcoxon p GT vs Simple",
+   "value": "<0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3 footnote"
+  },
+  {
+   "name": "effect_size_small_threshold",
+   "description": "Effect sizes small d<0.2 Table3 footnote",
+   "value": "0.2",
+   "unit": "Cohen d threshold",
+   "kind": "parameter",
+   "where": "Table3 footnote"
+  },
+  {
+   "name": "days_per_asset",
+   "description": "Trading days per asset approx 3770",
+   "value": "3770",
+   "unit": "days",
+   "kind": "count",
+   "where": "2.1 Dataset"
+  },
+  {
+   "name": "n_assets",
+   "description": "Number assets top 50 S&P500 by market cap",
+   "value": "50",
+   "unit": "assets",
+   "kind": "count",
+   "where": "2.1 Dataset"
+  },
+  {
+   "name": "n_periods_wf",
+   "description": "Walk-forward sequential splits per asset",
+   "value": "9",
+   "unit": "periods",
+   "kind": "count",
+   "where": "2.3 Walk-Forward Validation"
+  },
+  {
+   "name": "n_seeds",
+   "description": "Random seeds count 42-56",
+   "value": "15",
+   "unit": "seeds",
+   "kind": "count",
+   "where": "Monte Carlo Analysis"
+  },
+  {
+   "name": "n_strategies",
+   "description": "Number trading strategies RSI MACD Bollinger",
+   "value": "3",
+   "unit": "strategies",
+   "kind": "count",
+   "where": "Trading Strategies"
+  },
+  {
+   "name": "regime_2014_2016_gt",
+   "description": "Period 2014-2016 GT-Score val return Table4",
+   "value": "13.2%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2014_2016_baseline",
+   "description": "Period 2014-2016 Baseline Avg Table4",
+   "value": "11.7%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2014_2016_delta",
+   "description": "Period 2014-2016 Delta pp GT minus Baseline",
+   "value": "+1.5",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2015_2017_gt",
+   "description": "Period 2015-2017 GT",
+   "value": "17.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2015_2017_baseline",
+   "description": "Period 2015-2017 Baseline Avg",
+   "value": "17.1%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2015_2017_delta",
+   "description": "Period 2015-2017 Delta pp",
+   "value": "-0.1",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2016_2018_gt",
+   "description": "Period 2016-2018 GT",
+   "value": "30.1%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2016_2018_baseline",
+   "description": "Period 2016-2018 Baseline Avg",
+   "value": "27.3%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2016_2018_delta",
+   "description": "Period 2016-2018 Delta pp",
+   "value": "+2.8",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2017_2019_gt",
+   "description": "Period 2017-2019 GT",
+   "value": "21.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2017_2019_baseline",
+   "description": "Period 2017-2019 Baseline Avg",
+   "value": "15.5%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2017_2019_delta",
+   "description": "Period 2017-2019 Delta pp",
+   "value": "+5.5",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2018_2020_gt",
+   "description": "Period 2018-2020 GT",
+   "value": "21.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2018_2020_baseline",
+   "description": "Period 2018-2020 Baseline Avg",
+   "value": "19.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2018_2020_delta",
+   "description": "Period 2018-2020 Delta pp",
+   "value": "+2.0",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2019_2021_gt",
+   "description": "Period 2019-2021 GT",
+   "value": "24.7%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2019_2021_baseline",
+   "description": "Period 2019-2021 Baseline Avg",
+   "value": "24.7%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2019_2021_delta",
+   "description": "Period 2019-2021 Delta pp",
+   "value": "0.0",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2020_2022_gt",
+   "description": "Period 2020-2022 GT",
+   "value": "21.4%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2020_2022_baseline",
+   "description": "Period 2020-2022 Baseline Avg",
+   "value": "29.3%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2020_2022_delta",
+   "description": "Period 2020-2022 Delta pp",
+   "value": "-7.9",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2021_2023_gt",
+   "description": "Period 2021-2023 GT",
+   "value": "7.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2021_2023_baseline",
+   "description": "Period 2021-2023 Baseline Avg",
+   "value": "7.2%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2021_2023_delta",
+   "description": "Period 2021-2023 Delta pp",
+   "value": "-0.2",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2022_2024_gt",
+   "description": "Period 2022-2024 GT",
+   "value": "10.6%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2022_2024_baseline",
+   "description": "Period 2022-2024 Baseline Avg",
+   "value": "11.6%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "regime_2022_2024_delta",
+   "description": "Period 2022-2024 Delta pp",
+   "value": "-1.0",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "strategy_rsi_gt",
+   "description": "Strategy RSI mean OOS GT-Score Table5",
+   "value": "44.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_rsi_sharpe",
+   "description": "Strategy RSI Sharpe",
+   "value": "49.2%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_rsi_sortino",
+   "description": "Strategy RSI Sortino",
+   "value": "59.4%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_rsi_simple",
+   "description": "Strategy RSI Simple",
+   "value": "59.1%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_macd_gt",
+   "description": "Strategy MACD GT",
+   "value": "42.4%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_macd_sharpe",
+   "description": "Strategy MACD Sharpe",
+   "value": "43.8%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_macd_sortino",
+   "description": "Strategy MACD Sortino",
+   "value": "43.7%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_macd_simple",
+   "description": "Strategy MACD Simple",
+   "value": "43.8%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_boll_gt",
+   "description": "Strategy Bollinger GT",
+   "value": "44.2%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_boll_sharpe",
+   "description": "Strategy Bollinger Sharpe",
+   "value": "46.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_boll_sortino",
+   "description": "Strategy Bollinger Sortino",
+   "value": "45.0%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "strategy_boll_simple",
+   "description": "Strategy Bollinger Simple",
+   "value": "45.7%",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "mean_trades_gt",
+   "description": "Mean test-window trades GT-Score selected",
+   "value": "32.4",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "6.1 Transaction Costs"
+  },
+  {
+   "name": "mean_trades_baseline",
+   "description": "Mean test-window trades baselines ~21.0",
+   "value": "~21.0",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "6.1 Transaction Costs"
+  },
+  {
+   "name": "cost_range",
+   "description": "Transaction-cost sensitivity per-side costs tested",
+   "value": "0--10 bps",
+   "unit": "bps per side",
+   "kind": "parameter",
+   "where": "Figure10 caption"
+  },
+  {
+   "name": "epsilon",
+   "description": "Smoothing parameter preventing /0 sigma_d",
+   "value": "10^{-6}",
+   "unit": "unitless",
+   "kind": "parameter",
+   "where": "3.2 Edge Case Handling"
+  },
+  {
+   "name": "n_min",
+   "description": "Minimum trade threshold for z-score stability",
+   "value": "50",
+   "unit": "trades",
+   "kind": "parameter",
+   "where": "3.4 Minimum Sample Size"
+  },
+  {
+   "name": "stabilized_plateau_threshold",
+   "description": "Stabilized variance option variance change threshold",
+   "value": "1%",
+   "unit": "percent",
+   "kind": "parameter",
+   "where": "3.4"
+  },
+  {
+   "name": "stabilized_fallback_n",
+   "description": "Stabilized fallback n when no plateau",
+   "value": "50",
+   "unit": "periods",
+   "kind": "parameter",
+   "where": "3.4"
+  },
+  {
+   "name": "train_window",
+   "description": "Walk-forward training window length",
+   "value": "4 years",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "2.3"
+  },
+  {
+   "name": "val_window",
+   "description": "Walk-forward validation window length",
+   "value": "2 years",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "2.3"
+  },
+  {
+   "name": "step_size",
+   "description": "Walk-forward step size",
+   "value": "1 year",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "2.3"
+  },
+  {
+   "name": "embargo",
+   "description": "Embargo between train and validation",
+   "value": "30 days",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "2.3"
+  },
+  {
+   "name": "n_evals",
+   "description": "Random search evaluations per trial",
+   "value": "25",
+   "unit": "evaluations",
+   "kind": "parameter",
+   "where": "2.5 Optimization Framework"
+  },
+  {
+   "name": "seeds_range",
+   "description": "Random seeds range inclusive",
+   "value": "42--56",
+   "unit": "seeds",
+   "kind": "parameter",
+   "where": "2.4 Monte Carlo"
+  },
+  {
+   "name": "span_years",
+   "description": "Data span 2010--2024",
+   "value": "2010--2024",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "2.1"
+  },
+  {
+   "name": "n_objectives",
+   "description": "Number comparative objectives (GT + 3 baselines)",
+   "value": "4",
+   "unit": "objectives",
+   "kind": "count",
+   "where": "2.6 Comparative Objective Functions"
+  }
+ ],
+ "headline": "wf_gt_gen_ratio",
+ "partitions": [
+  {
+   "split": "Loss function - Monte Carlo (out-of-sample by objective)",
+   "total": "mc_total_trials",
+   "parts": [
+    "mc_gt_n",
+    "mc_sharpe_n",
+    "mc_sortino_n",
+    "mc_simple_n"
+   ]
+  },
+  {
+   "split": "Loss function - Walk-forward validation (out-of-sample by objective)",
+   "total": "wf_total_trials_claimed",
+   "parts": [
+    "wf_gt_n",
+    "wf_sharpe_n",
+    "wf_sortino_n",
+    "wf_simple_n"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Paired t-test Monte Carlo OOS returns GT-Score vs Sharpe (paired across same asset/strategy/seed, N=2250 each)",
+   "statistic": "t_stat_gt_vs_sharpe",
+   "p_value": "p_gt_vs_sharpe",
+   "group_sizes": [
+    "mc_gt_n",
+    "mc_sharpe_n"
+   ]
+  },
+  {
+   "test": "Paired t-test Monte Carlo OOS returns GT-Score vs Sortino",
+   "statistic": "t_stat_gt_vs_sortino",
+   "p_value": "p_gt_vs_sortino",
+   "group_sizes": [
+    "mc_gt_n",
+    "mc_sortino_n"
+   ]
+  },
+  {
+   "test": "Paired t-test Monte Carlo OOS returns GT-Score vs Simple",
+   "statistic": "t_stat_gt_vs_simple",
+   "p_value": "p_gt_vs_simple",
+   "group_sizes": [
+    "mc_gt_n",
+    "mc_simple_n"
+   ]
+  }
+ ]
+}

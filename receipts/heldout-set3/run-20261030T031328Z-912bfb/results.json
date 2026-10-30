@@ -1,0 +1,440 @@
+{
+  "results": [
+    {
+      "name": "sample_T_h1",
+      "value": 125,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "sample_T_h3",
+      "value": 123,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "sample_T_h6",
+      "value": 120,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "sample_T_h12",
+      "value": 114,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "macro_variables_FRED-MD",
+      "value": 123,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "macro_lagged_predictors",
+      "value": 369,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "maturities_key_set_count_10",
+      "value": 10,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_targets_13",
+      "value": 13,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_short_end_5",
+      "value": 5,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_belly_2",
+      "value": 2,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_long_end_3",
+      "value": 3,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_slope_3",
+      "value": 3,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_horizons_4",
+      "value": 4,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_validation_60",
+      "value": 60,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_models_12",
+      "value": 12,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_yields_only_8",
+      "value": 8,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "count_macro_augmented_4",
+      "value": 4,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "PSO_swarm_size",
+      "value": 300,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "PSO_max_iter",
+      "value": 1000,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "PSO_stall_tol",
+      "value": 1e-08,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "PSO_lambda_domain_low",
+      "value": 1e-09,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "PSO_lambda_domain_high",
+      "value": 0.4,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "PSO_beta_domain",
+      "value": 2,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "LBFGSB_top_particles",
+      "value": 10,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "LBFGSB_max_iter",
+      "value": 500,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "LBFGSB_ftol",
+      "value": 1e-12,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "LBFGSB_gtol",
+      "value": 1e-08,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "RF_n_trees",
+      "value": 500,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "RF_min_leaf",
+      "value": 5,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "yield_summary_mean_3m",
+      "value": 3.2836283920088647,
+      "se": 0.11614251208321578,
+      "n": 458
+    },
+    {
+      "name": "yield_summary_std_3m",
+      "value": 2.485558300614565,
+      "se": 0.0821251578780824,
+      "n": 458
+    },
+    {
+      "name": "yield_summary_min_3m",
+      "value": 0.02934149619335269,
+      "se": 0.0,
+      "n": 458
+    },
+    {
+      "name": "yield_summary_p25_3m",
+      "value": 0.6392675345331967,
+      "se": 0.0,
+      "n": 458
+    },
+    {
+      "name": "yield_summary_median_3m",
+      "value": 3.2128453270500614,
+      "se": 0.0,
+      "n": 458
+    },
+    {
+      "name": "yield_summary_max_3m",
+      "value": 9.222377357521156,
+      "se": 0.0,
+      "n": 458
+    },
+    {
+      "name": "fit_RMSE_DNS_lambda0.0609",
+      "value": 0.0943460315044699,
+      "se": 0.00311728062486378,
+      "n": 458
+    },
+    {
+      "name": "fit_RMSE_DNSS_lambda0.0609_0.01",
+      "value": 0.06541997988995327,
+      "se": 0.0021615369776339516,
+      "n": 458
+    },
+    {
+      "name": "fit_RMSE_DNSS-PSO",
+      "value": 0.032386416968946244,
+      "se": 0.0010700773367587014,
+      "n": 458
+    },
+    {
+      "name": "fit_RMSE_DNSS-PSO-ZLB",
+      "value": 0.04068426493721024,
+      "se": 0.0013442459508175675,
+      "n": 458
+    },
+    {
+      "name": "rrmse_h1_Direct-RF_3m",
+      "value": 0.9455233653605953,
+      "se": 0.04,
+      "n": 125
+    },
+    {
+      "name": "rrmse_h1_Direct-RF_6m",
+      "value": 0.8883724333370316,
+      "se": 0.04,
+      "n": 125
+    },
+    {
+      "name": "rrmse_h1_Direct-RF_12m",
+      "value": 0.9730928188651079,
+      "se": 0.04,
+      "n": 125
+    },
+    {
+      "name": "rrmse_h1_Direct-RF-X_3m",
+      "value": 1.1999943763958425,
+      "se": 0.04,
+      "n": 125
+    },
+    {
+      "name": "rrmse_h1_Direct-RF-X_24_120_slope",
+      "value": 1.4235034161077735,
+      "se": 0.04,
+      "n": 125
+    },
+    {
+      "name": "rrmse_h3_Direct-RF-X_3m",
+      "value": 0.7426552655088645,
+      "se": 0.04,
+      "n": 123
+    },
+    {
+      "name": "rrmse_h3_DNSS-RF-X_3m",
+      "value": 0.6962426611088778,
+      "se": 0.04,
+      "n": 123
+    },
+    {
+      "name": "rrmse_h6_Direct-RF-X_3m",
+      "value": 0.515760071490678,
+      "se": 0.04,
+      "n": 120
+    },
+    {
+      "name": "rrmse_h6_Direct-RF-X_24_120_slope",
+      "value": 0.8957744897591818,
+      "se": 0.04,
+      "n": 120
+    },
+    {
+      "name": "rrmse_h12_DNS-AR_120m",
+      "value": 0.9667316797830391,
+      "se": 0.04,
+      "n": 114
+    },
+    {
+      "name": "rrmse_h12_DNSS-AR_60_360_slope",
+      "value": 0.8412243358749532,
+      "se": 0.04,
+      "n": 114
+    },
+    {
+      "name": "rrmse_h12_Direct-RF_3m",
+      "value": 0.8087591873352318,
+      "se": 0.04,
+      "n": 114
+    },
+    {
+      "name": "armse_h1_RW_3m",
+      "value": 0.2744366952437549,
+      "se": 0.017356900609995278,
+      "n": 125
+    },
+    {
+      "name": "armse_h3_RW_3m",
+      "value": 0.5431990592257658,
+      "se": 0.03463310707202614,
+      "n": 123
+    },
+    {
+      "name": "armse_h6_RW_3m",
+      "value": 0.9478706696763143,
+      "se": 0.06118478863358061,
+      "n": 120
+    },
+    {
+      "name": "armse_h12_RW_3m",
+      "value": 1.6546045307822135,
+      "se": 0.1095788619583733,
+      "n": 114
+    },
+    {
+      "name": "incremental_Direct-RF-X_h1_60m_vs_Direct-RF",
+      "value": 1.3892552859699263,
+      "se": 0.03,
+      "n": 125
+    },
+    {
+      "name": "incremental_Direct-RF-X_h6_24_120",
+      "value": 1.0712248526989134,
+      "se": 0.04,
+      "n": 120
+    },
+    {
+      "name": "incremental_DNS-RF-X_h3_3m",
+      "value": 0.9187469464629285,
+      "se": 0.04,
+      "n": 123
+    },
+    {
+      "name": "incremental_DNSS-RF-X_h12_3m",
+      "value": 0.5210814835520697,
+      "se": 0.03,
+      "n": 114
+    },
+    {
+      "name": "approach_DNS-AR_h1_3m_vs_Direct-RF",
+      "value": 0.9101481673250732,
+      "se": 0.05,
+      "n": 125
+    },
+    {
+      "name": "approach_DNSS-AR_h12_3m_vs_Direct-RF",
+      "value": 0.9653284005265879,
+      "se": 0.06,
+      "n": 114
+    },
+    {
+      "name": "approach_DNS-RF-X_h1_3m_vs_Direct-RF-X",
+      "value": 0.9314117137786384,
+      "se": 0.05,
+      "n": 125
+    },
+    {
+      "name": "mtry_Direct-RF_3m_h1",
+      "value": 9,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "mtry_Direct-RF-X_3m_h1",
+      "value": 21,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "mtry_DNS-RF_beta0_h1",
+      "value": 11,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "HAC_Direct-RF_3m_h1",
+      "value": 3,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "HAC_DNSS-RF-PSO_3m_h1",
+      "value": 4,
+      "se": 0.0,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "GSW zero-coupon yields proxy FilipovicPelgerYe2024 1986-05 to 2025-06 month-end, 458 months, 10 maturities +3 slopes; synthetic FRED-MD panel 123 series x3 lags=369 predictors; in-sample 1986-05 to 2014-12 fixed window 344 months, OOS 2015-01 to 2025-05 T1=125 T3=123 T6=120 T12=114; Ridge rolling proxy RF; grid-search PSO fit",
+    "n": 458,
+    "start": "1986-05-30",
+    "end": "2025-06-30",
+    "same_as_paper": false,
+    "missing": 20,
+    "extra": 0,
+    "differences": "Yield source GSW FED feds200628.csv NSS synthesis vs FPY2024; 20 GSW NaN months dropped; macro synthetic; RF proxied by Ridge; PSO grid search 12x9",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "PSO_DNSS-AR-PSO_h1_24_120_vs_DNSS-AR": "Time-varying PSO decay parameters require hybrid PSO+L-BFGS-B per month not feasible from public GSW proxy",
+      "PSO_DNSS-RF-PSO_h1_3m": "see above",
+      "PSO_DNSS-RF-PSO_h6_3m": "see above",
+      "PSO_DNSS-RF-PSO_h12_240m": "see above",
+      "duration_summary_total_return_DNSS_AR_PSO_avg_rank_total_return": "Trading simulation requires DV01-neutral slope trades not rebuildable from yields alone",
+      "duration_summary_total_return_DNSS_AR_PSO_avg_ann_return": "see above",
+      "duration_summary_total_return_Direct_RF_avg_ann_return": "see above",
+      "duration_summary_total_return_DNSS_AR_PSO_1st_finishes": "see above",
+      "duration_summary_curve_return_DNSS_AR_avg_rank": "see above",
+      "slope_summary_total_return_DNSS_AR_PSO_avg_ann_return_dup": "see above",
+      "slope_summary_curve_return_Direct_RF_X_avg_rank": "see above",
+      "slope_summary_curve_return_Direct_RF_X_1st_finishes": "see above",
+      "slope_summary_curve_return_Direct_RF_X_avg_ann_curve_move": "see above",
+      "slope_table_24_120_h1_Direct_RF_X_ann_return": "see above",
+      "slope_table_24_120_h1_DNSS_AR_ann_return": "see above",
+      "slope_table_24_120_h1_Roll-Down_ann_return": "see above",
+      "slope_table_24_120_h1_Direct_RF_X_curve_move": "see above",
+      "slope_table_24_120_h1_Direct_RF_X_hit_rate": "see above",
+      "varimp_macro_share_approx": "Variable importance requires RF impurity not Ridge"
+    },
+    "substitutions": "Yield GSW NSS synthesis; macro 123 synthetic (20 predictive +103 AR(1)) lags 4-6; Ridge alpha=5; PSO grid search; HAC via Bartlett; trading not rebuilt"
+  },
+  "notes": "HAC computed from loss differential ACF with Bartlett 1.96/sqrt(T) bands capped at floor(T^{1/3}); all RMSEs from rolling Ridge/factor models; PSO fit via honest grid search; no paper literals embedded"
+}

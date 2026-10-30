@@ -1,0 +1,9 @@
+**Summary**
+
+Probe: ACI data page `200 gated_behind_form=True` (Gravity Forms acceptance required, no direct CSV/XLS URL in HTML), FRED-MD `current.csv` via `files.stlouisfed.org` → `403 AccessDenied` (+ `research.stlouisfed.org` timeout), Wu-Xia shadow rate `404`, NOAA NCEI `200` but no single 82-series file, DBnomics OECD MEI works (e.g. `USA.LRHUTTTT.ST.M`).
+
+Sample built intensionally from paper spec: `1975:M1-2025:M4` inclusive =604 months, minus COVID `2020:M1-2021:M6=18` → `T=586`, effective VAR sample `n=T-p=574` with `p=12`. Panel definitions: National `d=5` (ACI `T90,T10,Rx5Day,WP90,sea_level`, `CDD` excluded as annual-interpolated), Regional `d=34=5*7-1` (7 regions, Midwest no sea level), NOAA `d=82` across 10 zones + Mauna Loa CO₂ level/trend + 4 Palmer indices. VAR `k=7` (climate + INDPRO/PCEPI log-diff, UNRATE diff, SHADOWRATE level, EXUSUKx/HOUST log-diff), Cholesky climate-first.
+
+Choices left open: equal weight =`1/5=20%` (National); flat rank weight =`1/82≈1.2195%` rounded to `1.2%` in text (we report exact); `n` not stated numerically → calendar arithmetic; region names generic (paper lists 7 without full names); NOAA raw vs consolidated `5+Rest` display tables not used in estimation; block lengths analytically `ℓ_resid=floor(n^{1/3})=8`, `ℓ_pairs=max(p+1,floor(T^{1/3}))=13` (paper notes `p+1` binds); `68%→α=0.32`; companion `≥1` redraw `50`; `seed 123`.
+
+Deviations: due to `403/404/gated` we cannot fetch exact FRED vintage, Wu-Xia vintage, or ACI/NOAA microdata, so `same_as_paper=false`; `50` IRF/weight/rolling/bootstrap claims declared in `not_rebuilt` (require SQP `NlcOptim::solnl` optimization of `S_T(w)` with ridge/fused penalties and 5-fold block CV for `λ̂` on gated panels). Counts/parameters computed analytically from definitions (no trimming to paper counts, no paper numbers hard-coded in logic); proxy DBnomics OECD MEI probed but not used to avoid false vintage.

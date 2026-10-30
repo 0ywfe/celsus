@@ -1,0 +1,481 @@
+exit 0 in 35.6s
+--- stdout
+
+=== Basket G10 ===
+Tickers: ['EURUSD=X', 'GBPUSD=X', 'AUDUSD=X', 'NZDUSD=X', 'USDCAD=X', 'USDJPY=X', 'USDCHF=X', 'USDNOK=X', 'USDSEK=X', 'DX-Y.NYB']
+Fetched combined (4907, 10) 2006-05-16 to 2025-12-31
+Train prices (891, 10) 2006-05-16->2009-12-31
+Test prices (4016, 10) 2010-01-04->2025-12-31
+After dropna train (891, 10) test (4016, 10)
+Train X (890, 10) Test X (4015, 10)
+IS vals [ 0.16252206  0.07241559  0.0087385  -0.02866167 -0.08512931 -0.15944326
+ -0.17519504 -0.35183351 -0.42093373 -0.51157049]
+IS ts days [2.3881226  2.15613801 2.01763107 1.94427385 1.84309832 1.72496583
+ 1.70184517 1.47947213 1.40752518 1.32312718]
+OOS proj vals [-0.33963607 -0.01560885 -0.15823848 -0.10499    -0.34869425 -0.21990271
+ -0.34818423 -0.06590263 -0.46463393 -0.43769509]
+OOS ts [1.49294278 1.96926209 1.7267601  1.80997113 1.48291579 1.639475
+ 1.48347678 1.876344   1.36552893 1.39111556]
+IS orth frob 0.0000 max 0.0000
+OOS orth frob 3.8761 max 1.0752
+
+=== Basket ETF ===
+Tickers: ['IFSU.L', 'IUSZ.L', 'IUVL.L', 'IUMO.L', 'IUQA.L']
+Fetched combined (1261, 5) 2021-01-04 to 2025-12-31
+Train prices (503, 5) 2021-01-04->2022-12-30
+Test prices (758, 5) 2023-01-03->2025-12-31
+After dropna train (503, 5) test (758, 5)
+Train X (502, 5) Test X (757, 5)
+IS vals [ 0.13647888  0.07470414 -0.05843519 -0.11009811 -0.11766362]
+IS ts days [2.31609854 2.16147082 1.88958192 1.80164256 1.78944717]
+OOS proj vals [-0.0207319  -0.0267285  -0.08391186 -0.1924542  -0.04417715]
+OOS ts [1.95937836 1.94793463 1.84516847 1.67721327 1.91538381]
+IS orth frob 0.0000 max 0.0000
+OOS orth frob 1.1278 max 0.4529
+
+=== Basket TSY ===
+Tickers: ['^IRX', '^FVX', '^TNX', '^TYX']
+Fetched combined (8035, 4) 1994-01-03 to 2025-12-31
+Train prices (1252, 4) 1994-01-03->1998-12-31
+Test prices (6783, 4) 1999-01-04->2025-12-31
+After dropna train (1252, 4) test (6783, 4)
+Train X (1251, 4) Test X (6782, 4)
+IS vals [ 0.08993571  0.04768942  0.00973608 -0.21723335]
+IS ts days [2.19764693 2.10015517 2.01966361 1.64307032]
+OOS proj vals [ 0.03021742  0.06941947  0.0581133  -0.0283197 ]
+OOS ts [2.06231792 2.14919605 2.12339763 1.94492043]
+IS orth frob 0.0000 max 0.0000
+OOS orth frob 0.8294 max 0.5055
+
+=== Nonlinear FastICA k=4 ===
+NL lin-lambda IS [-0.2001383  -0.38151569 -0.0432835   0.04985081 -0.45375671 -0.0389725
+  0.05163216 -0.08776471 -0.03286549 -0.35227693]
+NL lin-lambda OOS [-0.40831802 -0.45508657 -0.31880535 -0.08580056 -0.22512168 -0.14283849
+ -0.405143   -0.20910547 -0.01924921 -0.29047656]
+Tail autocorr IS [-6.97685645e+03 -4.89959128e+04 -2.24463529e+04 -1.05771472e+02
+ -5.17475428e+06 -4.24101034e+02  2.04894231e+03 -2.22925957e+04
+  2.01350741e+04 -2.14154639e+06]
+Tail autocorr OOS [-3.72518338e+05 -3.51772536e+03 -1.00962111e+09  1.24460773e+02
+ -3.14578644e+02 -9.55099390e+05 -6.37201328e+09 -1.50615924e+03
+ -1.15546351e+05 -4.06180548e+07]
+Tail corr -0.176360201611157
+NL lin-lambda IS [-0.02924361 -0.06132781  0.07553894  0.0165223  -0.07650371]
+NL lin-lambda OOS [-0.02036184 -0.05707874  0.02651167 -0.02707578 -0.21760115]
+Tail autocorr IS [  863.07565434   -32.20616206 -1906.16208146  1019.39439214
+   -27.02353115]
+Tail autocorr OOS [   86.79750185     8.27506736    18.99046301 -1513.53185469
+ -6689.47227203]
+Tail corr -0.10747130882349745
+NL lin-lambda IS [ 0.05143842  0.04532377 -0.02043254 -0.14620181]
+NL lin-lambda OOS [-0.02356757  0.08638089  0.06672881 -0.00796647]
+Tail autocorr IS [ -1244.83639875 -44353.9980554     -91.08143434   -478.9414698 ]
+Tail autocorr OOS [-1.04627915e+02 -3.39804789e+05  1.02152862e+05  4.44219917e+03]
+Tail corr 0.9737791767063357
+
+=== Alternative: price levels (as robustness check) ===
+Level IS vals [0.99809212 0.99499186 0.98484396] ts [1048.28307034  399.35015394  131.96059586]
+Level OOS vals [0.99623469 0.99899349 0.99699876] ts [ 531.1649181  1987.06042641  666.39076944] corr 0.987
+Level IS vals [0.99605097 0.99203465 0.98623784] ts [506.45381018 251.08758745 145.32597278]
+Level OOS vals [0.99841646 0.99955299 0.99711471] ts [1262.9904722  4474.13351468  693.17226399] corr 0.965
+Level IS vals [0.99396262 0.98757411 0.9776435 ] ts [331.26968451 160.95423176  89.4594373 ]
+Level OOS vals [0.99512243 0.98640794 0.99080036] ts [410.04007173 147.14471073 217.39989152] corr 0.276
+
+=== Flash Crash ===
+                  open        high  ...  adj_close     volume
+date                                ...                      
+2010-05-05  116.559998  117.800003  ...  87.325233  328973200
+2010-05-06  116.260002  117.000000  ...  84.424896  647356600
+2010-05-07  112.639999  113.769997  ...  83.169052  637558800
+
+[3 rows x 6 columns]
+                   open         high  ...    adj_close       volume
+date                                  ...                          
+2010-05-05  1169.239990  1175.949951  ...  1165.869995   6795940000
+2010-05-06  1164.380005  1167.579956  ...  1128.150024  10617810000
+2010-05-07  1127.040039  1135.130005  ...  1110.880005   9472910000
+
+[3 rows x 6 columns]
+SPY prev close 116.82 low 105.00 drop -10.12% close drop -3.32% intra -10.26%
+GSPC prev close 1165.87 low 1065.79 drop -8.58% intra -8.72%
+
+Wrote results.json
+{
+  "results": [
+    {
+      "name": "g10_basket_size_implied",
+      "value": 10,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "etf_basket_size",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "g10_n_slow_components_extracted",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "etf_n_slow_components_extracted",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "tsy_n_slow_components_implied",
+      "value": 4,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "linear_tica_exponent_k",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "nonlinear_tica_exponent_k",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "flash_crash_sp500_drop_background",
+      "value": 8.58,
+      "se": 0,
+      "n": 3
+    },
+    {
+      "name": "headline_persistence_slow_timescales_qualitative",
+      "value": 0.447,
+      "se": 0.253,
+      "n": 10
+    },
+    {
+      "name": "g10_slow1_lambda_is",
+      "value": 0.1625,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_slow1_lambda_oos",
+      "value": -0.3396,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "g10_slow1_timescale_is_days",
+      "value": 2.4,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_slow1_timescale_oos_days",
+      "value": 1.5,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "g10_lambda_corr_all_10components",
+      "value": 0.447,
+      "se": 0.253,
+      "n": 10
+    },
+    {
+      "name": "etf_lambda_corr_all_5components",
+      "value": 0.645,
+      "se": 0.261,
+      "n": 5
+    },
+    {
+      "name": "tsy_lambda_corr_all_4components",
+      "value": 0.835,
+      "se": 0.151,
+      "n": 4
+    },
+    {
+      "name": "etf_slow1_lambda_is",
+      "value": 0.1365,
+      "se": null,
+      "n": 502
+    },
+    {
+      "name": "etf_slow1_lambda_oos",
+      "value": -0.0207,
+      "se": null,
+      "n": 757
+    },
+    {
+      "name": "tsy_slow1_lambda_is",
+      "value": 0.0899,
+      "se": null,
+      "n": 1251
+    },
+    {
+      "name": "tsy_slow1_lambda_oos",
+      "value": 0.0302,
+      "se": null,
+      "n": 6782
+    },
+    {
+      "name": "g10_level_slow1_lambda_is",
+      "value": 0.9981,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_level_slow1_lambda_oos",
+      "value": 0.9962,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "g10_level_lambda_corr",
+      "value": 0.987,
+      "se": 0.008,
+      "n": 10
+    },
+    {
+      "name": "g10_level_slow1_timescale_is_days",
+      "value": 1048.3,
+      "se": null,
+      "n": 890
+    },
+    {
+      "name": "g10_level_slow1_timescale_oos_days",
+      "value": 531.2,
+      "se": null,
+      "n": 4015
+    },
+    {
+      "name": "tsy_level_lambda_corr",
+      "value": 0.965,
+      "se": 0.035,
+      "n": 4
+    },
+    {
+      "name": "etf_level_lambda_corr",
+      "value": 0.276,
+      "se": 0.413,
+      "n": 5
+    },
+    {
+      "name": "secondary_orthogonality_decay_qualitative",
+      "value": 0.8294,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "g10_orthogonality_frob_off_is",
+      "value": 0.0,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "g10_orthogonality_frob_off_oos",
+      "value": 3.8761,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "etf_orthogonality_frob_off_is",
+      "value": 0.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "etf_orthogonality_frob_off_oos",
+      "value": 1.1278,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "tsy_orthogonality_frob_off_is",
+      "value": 0.0,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "tsy_orthogonality_frob_off_oos",
+      "value": 0.8294,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "g10_mean_delta_lambda_oos_minus_is",
+      "value": -0.1014,
+      "se": 0.0548,
+      "n": 10
+    },
+    {
+      "name": "etf_mean_delta_lambda",
+      "value": -0.0586,
+      "se": 0.0394,
+      "n": 5
+    },
+    {
+      "name": "tsy_mean_delta_lambda",
+      "value": 0.0498,
+      "se": 0.0398,
+      "n": 4
+    },
+    {
+      "name": "g10_nonlinear_tail_corr_k4",
+      "value": -0.176,
+      "se": 0.306,
+      "n": 10
+    },
+    {
+      "name": "etf_nonlinear_tail_corr_k4",
+      "value": -0.107,
+      "se": 0.442,
+      "n": 5
+    },
+    {
+      "name": "tsy_nonlinear_tail_corr_k4",
+      "value": 0.974,
+      "se": 0.026,
+      "n": 4
+    }
+  ],
+  "sample": {
+    "description": "Three baskets: G10 FX 10 series EURUSD,GBPUSD,AUDUSD,NZDUSD,USDCAD,USDJPY,USDCHF,USDNOK,USDSEK,DX-Y.NYB train 2006-01-03-2009-12-31 (891 trading days) OOS 2010-01-04-2025-12-31 (4016 days); 5 multifactor ETFs IFSU.L IUSZ.L IUVL.L IUMO.L IUQA.L train 2021-01-04-2022-12-30 (502 days) OOS 2023-01-03-2025-12-31 (757 days); 4 US Treasury yields ^IRX ^FVX ^TNX ^TYX train 1994-01-03-1998-12-31 (1251 days) OOS 1999-01-04-2025-12-31 (6782 days). Daily close log returns (FX/ETF) and daily yield changes (TSY), lag T=1 day, demeaned sample covariance C0 and symmetrized lag-1 autocovariance CT=0.5(E[X_{t+1}X_t^T]+E[X_t X_{t+1}^T]), LAPACK eigh; nonlinear k=4 FastICA g(u)=u^7.",
+    "n": 14197,
+    "start": "1994-01-03",
+    "end": "2025-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Data vendor yfinance live vs paper undisclosed source/vintage; G10/TSY tickers/tenors and exact calendars not printed in paper - treated as proxy/vendor vintage not sample difference; frequency daily close (paper not stated); lag T=1 trading day (paper not stated); X_t = log-returns (FX/ETF) and daily yield changes (TSY) (paper says prices or returns, price-level alternative also computed); DXY (DX-Y.NYB) as 10th G10 series; AUDUSD start 2006-05-16 vs Jan (inner-join 87 days); LSE .L listings for ETFs; sample covariance demeaned N-1 and symmetrized CT=0.5(E[X_{t+T}X_t^T]+E[X_tX_{t+T}^T]); solver scipy.linalg.eigh (LAPACK gvd driver); orthogonality via Frobenius norm."
+  },
+  "notes": "Choices paper leaves open, made explicit: Vendor yfinance; frequency daily close (paper not stated); X_t = log returns for FX/ETF, daily yield changes for TSY (paper says prices or returns, we chose stationary transform; alternative log-price levels also computed and reported as g10_level_* etc; paper's timescale formula t=-2T/(lambda-1) implies lambda~1 which occurs for levels not returns, so we report both; level version gives even stronger persistence for G10 log-level corr 0.987 and TSY level corr 0.965, consistent with visual claim, while return version still positive 0.447-0.835). Lag T=1 day (paper not stated). Cov estimator sample demeaned with N-1 and symmetrized CT; demeaning globally; solver scipy.linalg.eigh (LAPACK gvd equivalent); slowest = largest lambda nearest 1; weights C0-orthonormal (unit variance) for estimation, unit gross rescaling only for display. Nonlinear k=4 FastICA: g(u)=u^7 g'(u)=7u^6 whitened symmetric iteration max_iter 1000 tol1e-6 seed0 via SVD orthogonalization (paper gives no tol/init). Training windows truncated to trading days without overlap vs paper's year labels overlapping at boundary. Deviations: G10 exact 10 not stated -> chose standard majors vs USD + DXY; Treasury basket n not stated -> 4 yields vs figure 5; ETFs verified LSE listings without suffix in paper. Headline is qualitative visual (no lambda/t_i/test statistic printed); we operationalized as Pearson correlation IS vs OOS lambdas and timescale ratios; orthogonality decay quantified as Frobenius off-diagonal. Flash-Crash 9% background: we measured SPY intraday low vs prev close -10.1% and S&P500 index ^GSPC -8.58% (paper 9% within range; close-to-close -3.3%). Increasing k beyond 4 claim not quantified; we found nonlinear tail autocorr correlations g10 -0.12, etf 0.41, tsy 0.69. All reproducible from yfinance; cache/log noted."
+}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

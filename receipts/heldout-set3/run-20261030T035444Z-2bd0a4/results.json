@@ -1,0 +1,405 @@
+{
+  "results": [
+    {
+      "name": "beta_p1",
+      "value": -3.0384691051185504,
+      "se": 12.467739884232623,
+      "n": 25
+    },
+    {
+      "name": "se_beta_p1",
+      "value": 12.467739884232623,
+      "se": null,
+      "n": 25
+    },
+    {
+      "name": "gamma_p1",
+      "value": -0.16590098792737673,
+      "se": 0.45647268571041216,
+      "n": 25
+    },
+    {
+      "name": "se_gamma_p1",
+      "value": 0.45647268571041216,
+      "se": null,
+      "n": 25
+    },
+    {
+      "name": "eta_p1",
+      "value": -4.03846910511855,
+      "se": 12.467739884232623,
+      "n": 25
+    },
+    {
+      "name": "eta_p1_ci_lo",
+      "value": -28.47523927821449,
+      "se": 12.467739884232623,
+      "n": 25
+    },
+    {
+      "name": "eta_p1_ci_hi",
+      "value": 20.39830106797739,
+      "se": 12.467739884232623,
+      "n": 25
+    },
+    {
+      "name": "n_obs_p1",
+      "value": 25.0,
+      "se": null,
+      "n": 25
+    },
+    {
+      "name": "n_importers_p1",
+      "value": 10.0,
+      "se": null,
+      "n": 25
+    },
+    {
+      "name": "p_eta_p1",
+      "value": 0.8074581478706759,
+      "se": null,
+      "n": 25
+    },
+    {
+      "name": "beta_p2",
+      "value": -0.8514785963660353,
+      "se": 16.583578790276732,
+      "n": 45
+    },
+    {
+      "name": "se_beta_p2",
+      "value": 16.583578790276732,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "gamma_p2",
+      "value": -0.5175646216898578,
+      "se": 1.2769192945879762,
+      "n": 45
+    },
+    {
+      "name": "se_gamma_p2",
+      "value": 1.2769192945879762,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "eta_p2",
+      "value": -1.8514785963660354,
+      "se": 16.583578790276732,
+      "n": 45
+    },
+    {
+      "name": "eta_p2_ci_lo",
+      "value": -34.35529302530843,
+      "se": 16.583578790276732,
+      "n": 45
+    },
+    {
+      "name": "eta_p2_ci_hi",
+      "value": 30.652335832576355,
+      "se": 16.583578790276732,
+      "n": 45
+    },
+    {
+      "name": "n_obs_p2",
+      "value": 45.0,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "n_importers_p2",
+      "value": 19.0,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "p_eta_p2",
+      "value": 0.9590508631346911,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "beta_p3",
+      "value": -0.7465397395795641,
+      "se": 9.30248729085647,
+      "n": 26
+    },
+    {
+      "name": "se_beta_p3",
+      "value": 9.30248729085647,
+      "se": null,
+      "n": 26
+    },
+    {
+      "name": "gamma_p3",
+      "value": 3.338900959859564,
+      "se": 1.829366209172826,
+      "n": 26
+    },
+    {
+      "name": "se_gamma_p3",
+      "value": 1.829366209172826,
+      "se": null,
+      "n": 26
+    },
+    {
+      "name": "eta_p3",
+      "value": -1.746539739579564,
+      "se": 9.30248729085647,
+      "n": 26
+    },
+    {
+      "name": "eta_p3_ci_lo",
+      "value": -19.979414829658246,
+      "se": 9.30248729085647,
+      "n": 26
+    },
+    {
+      "name": "eta_p3_ci_hi",
+      "value": 16.486335350499118,
+      "se": 9.30248729085647,
+      "n": 26
+    },
+    {
+      "name": "n_obs_p3",
+      "value": 26.0,
+      "se": null,
+      "n": 26
+    },
+    {
+      "name": "n_importers_p3",
+      "value": 12.0,
+      "se": null,
+      "n": 26
+    },
+    {
+      "name": "p_eta_p3",
+      "value": 0.9360371301812548,
+      "se": null,
+      "n": 26
+    },
+    {
+      "name": "beta_p4",
+      "value": -18.847336104899945,
+      "se": 14.90602205668216,
+      "n": 27
+    },
+    {
+      "name": "se_beta_p4",
+      "value": 14.90602205668216,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "gamma_p4",
+      "value": -1.6935676811317721,
+      "se": 2.358482441925815,
+      "n": 27
+    },
+    {
+      "name": "se_gamma_p4",
+      "value": 2.358482441925815,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "eta_p4",
+      "value": -19.847336104899945,
+      "se": 14.90602205668216,
+      "n": 27
+    },
+    {
+      "name": "eta_p4_ci_lo",
+      "value": -49.06313933599698,
+      "se": 14.90602205668216,
+      "n": 27
+    },
+    {
+      "name": "eta_p4_ci_hi",
+      "value": 9.368467126197086,
+      "se": 14.90602205668216,
+      "n": 27
+    },
+    {
+      "name": "n_obs_p4",
+      "value": 27.0,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "n_importers_p4",
+      "value": 13.0,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "p_eta_p4",
+      "value": 0.20608259846642862,
+      "se": null,
+      "n": 27
+    },
+    {
+      "name": "omega_est",
+      "value": 0.1676871567928322,
+      "se": 0.03567703859522652,
+      "n": 123
+    },
+    {
+      "name": "omega_se",
+      "value": 0.03567703859522652,
+      "se": null,
+      "n": 123
+    },
+    {
+      "name": "omega_ci_lo",
+      "value": 0.09776016114618821,
+      "se": null,
+      "n": 123
+    },
+    {
+      "name": "omega_ci_hi",
+      "value": 0.23761415243947617,
+      "se": null,
+      "n": 123
+    },
+    {
+      "name": "p_omega",
+      "value": 2.5998031781554483e-06,
+      "se": null,
+      "n": 123
+    },
+    {
+      "name": "n_omega",
+      "value": 123.0,
+      "se": null,
+      "n": 123
+    },
+    {
+      "name": "diff_p2_p1",
+      "value": 2.1869905087536408,
+      "se": 22.388758976185425,
+      "n": 70
+    },
+    {
+      "name": "se_diff_p2_p1",
+      "value": 22.388758976185425,
+      "se": null,
+      "n": 70
+    },
+    {
+      "name": "t_diff_p2_p1",
+      "value": 0.09768252501533956,
+      "se": null,
+      "n": 70
+    },
+    {
+      "name": "p_diff_p2_p1",
+      "value": 0.9232638982064789,
+      "se": null,
+      "n": 70
+    },
+    {
+      "name": "diff_p3_p1",
+      "value": 2.291929365538064,
+      "se": 15.989356696561853,
+      "n": 51
+    },
+    {
+      "name": "se_diff_p3_p1",
+      "value": 15.989356696561853,
+      "se": null,
+      "n": 51
+    },
+    {
+      "name": "t_diff_p3_p1",
+      "value": 0.14334093666388037,
+      "se": null,
+      "n": 51
+    },
+    {
+      "name": "p_diff_p3_p1",
+      "value": 0.8880636382473495,
+      "se": null,
+      "n": 51
+    },
+    {
+      "name": "diff_p4_p1",
+      "value": -15.8088669997801,
+      "se": 21.50110647267343,
+      "n": 52
+    },
+    {
+      "name": "se_diff_p4_p1",
+      "value": 21.50110647267343,
+      "se": null,
+      "n": 52
+    },
+    {
+      "name": "t_diff_p4_p1",
+      "value": -0.7352583003052512,
+      "se": null,
+      "n": 52
+    },
+    {
+      "name": "p_diff_p4_p1_table",
+      "value": 0.4716544563238645,
+      "se": null,
+      "n": 52
+    },
+    {
+      "name": "p_diff_p4_p1_text",
+      "value": 0.4716544563238645,
+      "se": null,
+      "n": 52
+    },
+    {
+      "name": "diff_p4_p3",
+      "value": -18.100796365320058,
+      "se": 13.806815786304666,
+      "n": 53
+    },
+    {
+      "name": "se_diff_p4_p3",
+      "value": 13.806815786304666,
+      "se": null,
+      "n": 53
+    },
+    {
+      "name": "t_diff_p4_p3",
+      "value": -1.3110044086540722,
+      "se": null,
+      "n": 53
+    },
+    {
+      "name": "p_diff_p4_p3_table",
+      "value": 0.20836128467340154,
+      "se": null,
+      "n": 53
+    },
+    {
+      "name": "p_diff_p4_p3_text",
+      "value": 0.20836128467340154,
+      "se": null,
+      "n": 53
+    }
+  ],
+  "sample": {
+    "description": "Annual mirror-trade panel of Rwandan tungsten ores and concentrates (HS 261100, OEC key 5261100) via OEC/BACI (CEPII) annual bilateral data (trade_i_baci_a_92 for 2009-2011 and a_12 for 2012-2023) merged with yfinance annual FX (importer currency per RWF) and world price PtW = global trade value/quantity. Estimation per period with importer FE and clustered SE at importer level; 123 importer-year observations from 25 distinct importers.",
+    "n": 123,
+    "start": "2009-01-01",
+    "end": "2023-12-31",
+    "same_as_paper": false,
+    "missing": 79,
+    "extra": 0,
+    "differences": "Paper total 202 importer-month observations (monthly, 2009-2023, many months with zero trade omitted). Replication uses annual frequency (one observation per importer-year) from OEC/BACI, giving 123 importer-year rows vs 202 importer-months; per-period counts therefore differ in time granularity but reflect same underlying trade flows. Annual aggregation loses within-year FX variation; period boundaries approximated annually (2013-2016 for P2, 2017-2019 for P3, 2020-2023 for P4) vs paper's exact monthly splits (Jan2013-Apr2017 etc.).",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "n_obs_total": "Paper does not print single total; sum 202 inferred but paper states not stated as single total.",
+      "n_importers_total": "Paper does not print total distinct importers across all periods."
+    },
+    "substitutions": "UN Comtrade monthly mirror trade (importer-reported HS261100 Jan2009-Dec2023) substituted with OEC/BACI annual bilateral trade (CEPII harmonized, HS 261100 key 5261100) via public api.oec.world/tesseract (trade_i_baci_a_92 and a_12) due to Comtrade preview quota exhaustion (403 Out of call volume quota). FXTOP monthly tables substituted with yfinance daily forex via market_data.get_prices (USDRWF=X,RWF=X,EURRWF=X,USDCNY=X,USDJPY=X,USDINR=X etc.) annual-averaged, CUR per RWF via 1/RWFperCUR or cross CURperUSD/RWFperUSD with nearest-year interpolation. World price PtW = sum_i V_it / sum_i Q_it monthly substituted with same OEC global annual trade value/quantity for HS5261100. HS revision 1992 vs 2012 harmonized by using both cubes and deduplicating overlapping year 2012. Estimation method identical (FE OLS, clustered SE at importer, eta=beta-1, diff tests with importer x period FE and t_{G-1})."
+  },
+  "notes": "Choices the paper leaves open and deviations:\n- FXTOP: paper uses monthly FXTOP importer currency per RWF. Blocked substitution: yfinance daily closes via market_data.get_prices (USDRWF=X=RWF per USD etc.) annual-averaged (mean of daily closes within year), CUR per RWF via direct inversion (EURRWF) or cross (CURperUSD/RWFperUSD) with nearest-year interpolation; early years fallback synthetic trend if no series (not needed, yfinance has 2009+).\n- UN Comtrade: paper monthly importer-reported mirror Jan2009-Dec2023 HS261100 via UN Comtrade Database. Public preview API quota exhausted after earlier probes (403 Out of call volume quota, Retry-After 18min). Substitution: OEC/BACI annual bilateral trade (CEPII, HS6 261100 key 5261100) via api.oec.world, two cubes a_92 (1995-2011) and a_12 (2012-2024) merged, deduplicating 2012 overlap; annual frequency used, so monthly within-year variation lost; importer set differs slightly (OEC harmonizes minor reporters) but core importers (CN, AT, BE, US, SG, AE etc.) overlap.\n- World price: paper monthly quantity-weighted world average sum V / sum Q. Substitution: OEC global annual trade for HS5261100 value/quantity (same source as bilateral), annual price used as PW_t for that year (log PW constant within year).\n- Periods: paper exact monthly splits P1 Jan2009-Dec2012, P2 Jan2013-Apr2017, P3 May2017-May2019, P4 Jun2019-Dec2023. Annual approximation: P1 2009-2012, P2 2013-2016, P3 2017-2019, P4 2020-2023 (2017 assigned to P3 where majority of months May-Dec belong). Noted as deviation but preserves institutional regimes.\n- Quantities: paper notes missing qty for some months, unit values not continuously observed, omega estimated on qty-observed subset. OEC provides quantity for most importer-years (BACI reconciles values/quantities); replication estimates omega similarly via lnUV = a_j + omega lnX + lambda lnPW + e with importer FE clustered SE.\n- FE/clustering: paper importer FE per period, SE clustered at importer level (4-7 clusters); replication same with statsmodels OLS C(importer_id) and cov_type cluster groups importer_id; diff tests pooled C(importer_period) FE same clustering SE(diff)=sqrt(var_r+var_s-2cov) t diff/SE p t_{G-1}.\n- No paper reported numbers are hardcoded; all estimates computed from fetched OEC+FX data."
+}

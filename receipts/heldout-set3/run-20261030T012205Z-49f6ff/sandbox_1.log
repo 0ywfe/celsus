@@ -1,0 +1,70 @@
+exit 0 in 52.7s
+--- stdout
+Fetching market data...
+SPY: 2050 rows from 2018-01-02 to 2026-02-27
+QQQ: 2050 rows from 2018-01-02 to 2026-02-27
+DIA: 2050 rows from 2018-01-02 to 2026-02-27
+SPY train 1259 2018-01-02 -> 2022-12-30
+SPY test 791 2023-01-03 -> 2026-02-27
+QQQ train 1259 2018-01-02 -> 2022-12-30
+QQQ test 791 2023-01-03 -> 2026-02-27
+DIA train 1259 2018-01-02 -> 2022-12-30
+DIA test 791 2023-01-03 -> 2026-02-27
+
+SPY results:
+ baseline: trades 38 winrate 52.63% totalPnL $9697.74 pnlRatio 1.20 sharpe 0.38 mdd 13.01% expectancy $286.87
+ macd_lambda: trades 29 winrate 51.72% totalPnL $15299.78 pnlRatio 1.51 sharpe 0.58 mdd 11.21% expectancy $571.42
+ vp: trades 21 winrate 71.43% totalPnL $32129.49 pnlRatio 1.77 sharpe 0.79 mdd 9.14% expectancy $1486.29
+
+QQQ results:
+ baseline: trades 33 winrate 48.48% totalPnL $20056.66 pnlRatio 1.52 sharpe 0.53 mdd 22.30% expectancy $658.80
+ macd_lambda: trades 24 winrate 50.00% totalPnL $5704.99 pnlRatio 1.20 sharpe 0.21 mdd 17.27% expectancy $299.67
+ vp: trades 20 winrate 75.00% totalPnL $43119.46 pnlRatio 1.23 sharpe 0.81 mdd 15.86% expectancy $2375.35
+
+DIA results:
+ baseline: trades 38 winrate 31.58% totalPnL $-2368.58 pnlRatio 2.02 sharpe -0.05 mdd 14.60% expectancy $-62.33
+ macd_lambda: trades 33 winrate 42.42% totalPnL $1792.82 pnlRatio 1.43 sharpe 0.11 mdd 13.03% expectancy $54.33
+ vp: trades 22 winrate 59.09% totalPnL $11451.84 pnlRatio 1.16 sharpe 0.39 mdd 9.96% expectancy $552.29
+SPY pair1 (B vs A) t=0.6658 p=0.2529 nw_t=0.7308 nw_p=0.2324 boot_p=0.2640 n=790 mean_diff=0.000063
+SPY pair2 (C vs A) t=0.8587 p=0.1954 nw_t=1.0015 nw_p=0.1583 boot_p=0.1660 n=790 mean_diff=0.000250
+SPY pair3 (C vs B) t=0.6295 p=0.2646 nw_t=0.7456 nw_p=0.2279 boot_p=0.2430 n=790 mean_diff=0.000187
+QQQ pair1 (B vs A) t=-0.8117 p=0.7914 nw_t=-0.8378 nw_p=0.7989 boot_p=0.7930 n=790 mean_diff=-0.000162
+QQQ pair2 (C vs A) t=0.6797 p=0.2484 nw_t=0.6860 nw_p=0.2464 boot_p=0.2220 n=790 mean_diff=0.000240
+QQQ pair3 (C vs B) t=1.1165 p=0.1323 nw_t=1.1257 nw_p=0.1301 boot_p=0.1230 n=790 mean_diff=0.000402
+DIA pair1 (B vs A) t=0.4914 p=0.3116 nw_t=0.5066 nw_p=0.3062 boot_p=0.3090 n=790 mean_diff=0.000055
+DIA pair2 (C vs A) t=0.7332 p=0.2318 nw_t=0.7013 nw_p=0.2415 boot_p=0.2520 n=790 mean_diff=0.000175
+DIA pair3 (C vs B) t=0.5107 p=0.3049 nw_t=0.4911 nw_p=0.3117 boot_p=0.3260 n=790 mean_diff=0.000120
+
+Wrote /work/results.json with 120 claims
+Headline QQQ VPMACD totalPnL replication $43119.46 vs paper $88324.48
+SPY baseline trades 38 vs paper 40
+QQQ baseline trades 33 vs paper 35
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)

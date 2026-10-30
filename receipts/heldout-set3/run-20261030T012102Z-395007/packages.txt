@@ -1,0 +1,9 @@
+Cython==3.3.0
+GraphRicciCurvature==0.6.1
+POT==0.9.7.post1
+networkit==11.2.2
+networkx==3.7
+numpy==2.2.6
+python-louvain==0.16
+scipy==1.13.1
+tabulate==0.10.0

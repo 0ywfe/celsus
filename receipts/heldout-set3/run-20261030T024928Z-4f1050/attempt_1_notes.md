@@ -1,0 +1,7 @@
+**Summary**
+
+*Sample built:* 6 cryptos (BTC/ETH/SOL/ADA/AVAX/LINK) via `market_data` yfinance `BTC-USD` etc. proxying CoinGecko; controls VIX(`^VIX`), SPX(`^GSPC`), DXY(`DX-Y.NYB`), Fed-funds `^IRX`/`ZQ=F`, Treasury `^TNX`/`ZN=F`; calendar 2023-01-01–2026-03-31 inclusive 1186 days (paper 1183, +3 inclusive-count), trading-day merged `N=813` (31.5% drop vs paper ~30%), effective after HAR(1/5/20) calendar 5/20-day `|r|` means + 5-day forward `RVol=√252·sd(r_{t+1..t+5})` `N≈796` per asset (paper BTC `N=318`, CPI `N=264` reflects Kalshi availability); descriptive `N=1181` calendar per asset (paper 1178).
+
+*Choices paper leaves open:* ticker mapping (yfinance for CoinGecko), `log(adj_close)` returns, `ddof=1` sample `sd`, `√252` annualisation, HAR on 7-day calendar returns then 1-lag shift and inner-join to 4pm-ET controls (≥21h gap), DXY/SPX `pct_change` vs log, HAC 5 lags `use_correction=True`.
+
+*Deviations:* RVol level systematically lower (BTC 0.35 vs 0.63, ETH 0.47 vs 0.74, SOL 0.65 vs 0.93, ratio 1.37–1.82; `std` matches e.g. BTC 0.193 vs 0.194) – vendor/vintage difference yfinance vs CoinGecko midnight-UTC; effective `N` larger because Kalshi filter not applied; baseline FF/UST replicated null (`^IRX` t≈-0.06 vs -0.83, `^TNX` t≈-0.32 vs 0.01). All 10 Kalshi series (counts, volume/OI, Fed-dovish/CPI coefficients, `t=3.63`, orthogonalisation `R²` 2.3%/7.5%, OOS `MSFE`/`CW`, BH `q=0.05` 2/60, EMA/composite, release-window, bootstrap, lead-lag, DVOL/GARCH/log/21d) declared in `not_rebuilt` – no public Kalshi history in `market_data` cache.

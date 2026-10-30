@@ -1,0 +1,196 @@
+exit 0 in 294.6s
+--- stdout
+Fetching PIP...
+pip rows 2588
+total latest 172
+income 69 cons 103
+AUS income 2020
+BRA income 2024
+CHL income 2024
+COL income 2024
+FRA income 2023
+DEU income 2022
+MEX income 2024
+POL income 2023
+SWE income 2023
+TUR income 2023
+GBR income 2021
+USA income 2024
+CHN consumption 2022
+EGY consumption 2021
+ETH consumption 2021
+IND consumption 2023
+IDN consumption 2025
+CIV consumption 2021
+KEN consumption 2022
+MAR consumption 2013
+NGA consumption 2022
+ZAF consumption 2022
+THA consumption 2024
+VNM consumption 2022
+interior maxima count 38
+income max rank shift across orders 6
+cons max rank shift across orders 2
+income pair switches (pairwise inversions) 15
+cons pair switches 6
+ income AUS bern 9 op 5
+ income BRA bern 8 op 11
+ income CHL bern 6 op 7
+ income DEU bern 10 op 6
+ income MEX bern 7 op 8
+ income POL bern 3 op 1
+ income SWE bern 1 op 4
+ income TUR bern 5 op 9
+ income GBR bern 4 op 3
+ income USA bern 11 op 10
+cons switches 6
+income I1 ranks {'SWE': 1, 'FRA': 2, 'POL': 3, 'GBR': 4, 'TUR': 5, 'CHL': 6, 'MEX': 7, 'BRA': 8, 'AUS': 9, 'DEU': 10, 'USA': 11, 'COL': 12}
+income G ranks {'POL': 1, 'SWE': 2, 'FRA': 3, 'GBR': 4, 'DEU': 5, 'AUS': 6, 'USA': 7, 'MEX': 8, 'CHL': 9, 'TUR': 10, 'BRA': 11, 'COL': 12}
+cons I1 ranks {'IND': 1, 'EGY': 2, 'IDN': 3, 'THA': 4, 'ETH': 5, 'CHN': 6, 'CIV': 7, 'NGA': 8, 'MAR': 9, 'KEN': 10, 'VNM': 11, 'ZAF': 12}
+cons G ranks {'IND': 1, 'EGY': 2, 'ETH': 3, 'THA': 4, 'NGA': 5, 'IDN': 6, 'CIV': 7, 'VNM': 8, 'CHN': 9, 'KEN': 10, 'MAR': 11, 'ZAF': 12}
+Ip diff at 1 0.5647298361695099
+Ip diff at 5 -1.5125346324981688
+p 1.00 diff 0.564730
+p 1.09 diff 0.513315
+p 1.18 diff 0.458572
+p 1.27 diff 0.401316
+p 1.36 diff 0.342248
+p 1.45 diff 0.281960
+p 1.55 diff 0.220943
+p 1.64 diff 0.159600
+p 1.73 diff 0.098260
+p 1.82 diff 0.037188
+p 1.91 diff -0.023404
+p 2.00 diff -0.083349
+p 2.09 diff -0.142515
+p 2.18 diff -0.200799
+p 2.27 diff -0.258125
+p 2.36 diff -0.314434
+p 2.45 diff -0.369686
+p 2.55 diff -0.423853
+p 2.64 diff -0.476919
+p 2.73 diff -0.528876
+p 2.82 diff -0.579723
+p 2.91 diff -0.629466
+p 3.00 diff -0.678114
+p 3.09 diff -0.725681
+p 3.18 diff -0.772184
+p 3.27 diff -0.817641
+p 3.36 diff -0.862073
+p 3.45 diff -0.905502
+p 3.55 diff -0.947949
+p 3.64 diff -0.989438
+p 3.73 diff -1.029993
+p 3.82 diff -1.069637
+p 3.91 diff -1.108395
+p 4.00 diff -1.146289
+p 4.09 diff -1.183344
+p 4.18 diff -1.219581
+p 4.27 diff -1.255024
+p 4.36 diff -1.289696
+p 4.45 diff -1.323616
+p 4.55 diff -1.356808
+p 4.64 diff -1.389291
+p 4.73 diff -1.421086
+p 4.82 diff -1.452213
+p 4.91 diff -1.482689
+p 5.00 diff -1.512535
+p 5.09 diff -1.541767
+p 5.18 diff -1.570403
+p 5.27 diff -1.598460
+p 5.36 diff -1.625954
+p 5.45 diff -1.652901
+p 5.55 diff -1.679316
+p 5.64 diff -1.705215
+p 5.73 diff -1.730611
+p 5.82 diff -1.755518
+p 5.91 diff -1.779949
+p 6.00 diff -1.803918
+p 6.09 diff -1.827437
+p 6.18 diff -1.850519
+p 6.27 diff -1.873174
+p 6.36 diff -1.895415
+p 6.45 diff -1.917251
+p 6.55 diff -1.938695
+p 6.64 diff -1.959756
+p 6.73 diff -1.980444
+p 6.82 diff -2.000768
+p 6.91 diff -2.020738
+p 7.00 diff -2.040364
+p 7.09 diff -2.059653
+p 7.18 diff -2.078614
+p 7.27 diff -2.097255
+p 7.36 diff -2.115585
+p 7.45 diff -2.133610
+p 7.55 diff -2.151339
+p 7.64 diff -2.168778
+p 7.73 diff -2.185935
+p 7.82 diff -2.202815
+p 7.91 diff -2.219427
+p 8.00 diff -2.235775
+p 8.09 diff -2.251867
+p 8.18 diff -2.267708
+p 8.27 diff -2.283304
+p 8.36 diff -2.298661
+p 8.45 diff -2.313783
+p 8.55 diff -2.328678
+p 8.64 diff -2.343348
+p 8.73 diff -2.357800
+p 8.82 diff -2.372038
+p 8.91 diff -2.386068
+p 9.00 diff -2.399893
+p 9.09 diff -2.413518
+p 9.18 diff -2.426947
+p 9.27 diff -2.440185
+p 9.36 diff -2.453235
+p 9.45 diff -2.466102
+p 9.55 diff -2.478789
+p 9.64 diff -2.491301
+p 9.73 diff -2.503640
+p 9.82 diff -2.515811
+p 9.91 diff -2.527816
+p 10.00 diff -2.539660
+crossover found 1.8738738590966608 between 1.8181818181818183 1.9090909090909092
+final crossover p 1.8738738590966608
+years range 1992 to 2025
+income 4 4 6
+cons 2 0 2
+kendall M15vs20 income 10
+kendall M15vs25 income 15
+kendall M20vs25 income 9
+kendall M15vs20 cons 4
+wrote results.json
+[
+  {
+    "name": "total_countries_172",
+    "value": 172,
+    "se": 0,
+    "n": 172
+  },
+  {
+    "name": "countries_with_interior_maxima_23",
+    "value": 38,
+    "se": null,
+    "n": 172
+  },
+  {
+    "name": "full_income_countries_72",
+    "value": 69,
+    "se": 0,
+    "n": 172
+  },
+  {
+    "name": "full_consumption_countries_100",
+    "value": 103,
+    "se": 0,
+    "n": 172
+  },
+  {
+    "name": "vis_income_countries_12",
+    "value": 12,
+    "se": 0,
+    "n": 12
+  }
+]
+
+--- stderr

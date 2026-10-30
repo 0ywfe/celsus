@@ -1,0 +1,60 @@
+{
+ "verdict": "partly holds up",
+ "rows": [
+  {
+   "name": "g10_basket_size_implied",
+   "kind": "count",
+   "unit": "currencies",
+   "reported": 10.0,
+   "reproduced": 10,
+   "se": null,
+   "n": 10,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "tsy_n_slow_components_implied",
+   "kind": "parameter",
+   "unit": "components",
+   "reported": 1994.0,
+   "reproduced": 4,
+   "se": null,
+   "n": 4,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "linear_tica_exponent_k",
+   "kind": "parameter",
+   "unit": "k",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "nonlinear_tica_exponent_k",
+   "kind": "parameter",
+   "unit": "k",
+   "reported": 4.0,
+   "reproduced": 4,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "flash_crash_sp500_drop_background",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 9.0,
+   "reproduced": 8.58,
+   "se": 0,
+   "n": 3,
+   "consistent": true,
+   "why": "rounds to the printed 9%"
+  }
+ ]
+}

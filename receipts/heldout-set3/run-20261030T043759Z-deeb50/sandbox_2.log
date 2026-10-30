@@ -1,0 +1,49 @@
+exit 0 in 39.1s
+--- stdout
+Fetching FRED series...
+Estimation raw quarters 1997Q1-2019Q4: n=92 (92 expected)
+VAR(4) rho=0.2192 T_est=88
+2020Q1 FE -0.30
+2020Q2 FE -1.95
+2020Q3 FE -1.43
+2020Q4 FE -1.31
+2021Q1 FE -0.59
+2021Q2 FE  2.30
+2021Q3 FE  2.82
+2021Q4 FE  4.32
+2022Q1 FE  5.55
+2022Q2 FE  6.13
+2022Q3 FE  5.92
+2022Q4 FE  4.86
+2023Q1 FE  3.63
+2023Q2 FE  2.06
+2023Q3 FE  1.65
+2023Q4 FE  1.36
+2024Q1 FE  1.41
+2022Q2 L=0.39 U=5.35 FE=6.13
+2020Q1 L  0.00 U  0.74 FE -0.30
+2020Q2 L -0.35 U  3.74 FE -1.95
+2020Q3 L -1.82 U  0.75 FE -1.43
+2020Q4 L -2.03 U -0.44 FE -1.31
+2021Q1 L -1.90 U -0.12 FE -0.59
+2021Q2 L -4.19 U  0.77 FE  2.30
+2021Q3 L  0.21 U  1.41 FE  2.82
+2021Q4 L -0.45 U  4.80 FE  4.32
+2022Q1 L  0.51 U  4.76 FE  5.55
+2022Q2 L  0.39 U  5.35 FE  6.13
+2022Q3 L -0.00 U  4.79 FE  5.92
+2022Q4 L -0.08 U  3.50 FE  4.86
+2023Q1 L -0.99 U  2.07 FE  3.63
+2023Q2 L -1.86 U  0.74 FE  2.06
+2023Q3 L -1.80 U  0.84 FE  1.65
+2023Q4 L -1.73 U  0.97 FE  1.36
+2024Q1 L -1.19 U  1.08 FE  1.41
+Monthly PCE 1988M1-2023M9 n=429
+PCE monthly VAR12 corr 0.1915
+Wrote results.json
+
+--- stderr
+/work/replicate.py:182: ComplexWarning: Casting complex values to real discards the imaginary part
+  v=np.array(vecs[:,i], dtype=float); v=v/np.linalg.norm(v)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
+  self._init_dates(dates, freq)

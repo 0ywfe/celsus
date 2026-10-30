@@ -1,0 +1,6 @@
+Fixed `replicate.py` to honestly report sample differences and avoid imputation override:
+
+- **Removed imputation:** Strict complete-records filter (no `impute_russia` call). Original missing tracked: `RUS (high)` missing `NE.CON.PRVT.KN 1993-1995` and `NE.EXP.GNFS.KN / NE.IMP.GNFS.KN 2022` in current WDI vintage 2026-10-08.
+- **Sample metadata now truthful:** `n=71` (24 advanced, **13** high-income EM, 24 middle, 10 low) vs paper's 72, `same_as_paper=false`, `missing=1`, `differences` details all missing indicators/years and group discrepancy, `extra=0`, `substitutions`/`notes` state no proxy, strict definition.
+- **Counts remain data-computed:** `count_total_panel_72`, group counts from `len(group_isos)`, `count_excluded_large_6` from World vs candidate `NY.GDP.MKTP.CD` share >2% verification (USA 25.5%, JPN 10.1%, DEU 5.8%, FRA 4.0%, GBR 4.2%, ITA 3.3% → 6 verified).
+- Re-ran `python /work/replicate.py` (700s): `Wrote /work/results.json with 80 results`, median vols 0.72%/1.08%/1.24%/1.07%, verified checks pass.

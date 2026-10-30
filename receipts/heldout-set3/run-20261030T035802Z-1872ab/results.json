@@ -1,0 +1,582 @@
+{
+  "results": [
+    {
+      "name": "N_total_balanced_panel",
+      "value": 72,
+      "se": null,
+      "n": 72
+    },
+    {
+      "name": "N_advanced",
+      "value": 24,
+      "se": null,
+      "n": 24
+    },
+    {
+      "name": "N_high_em",
+      "value": 14,
+      "se": null,
+      "n": 14
+    },
+    {
+      "name": "N_middle_em",
+      "value": 24,
+      "se": null,
+      "n": 24
+    },
+    {
+      "name": "N_low_em",
+      "value": 10,
+      "se": null,
+      "n": 10
+    },
+    {
+      "name": "N_large_excluded",
+      "value": 6,
+      "se": null,
+      "n": 6
+    },
+    {
+      "name": "N_extreme_excluded",
+      "value": 4,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "T_panel_years",
+      "value": 30,
+      "se": null,
+      "n": 30
+    },
+    {
+      "name": "Tbar_panel_estimation",
+      "value": 29,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "obs_advanced_ps",
+      "value": 696,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "obs_high_em_ps",
+      "value": 406,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "obs_middle_em_ps",
+      "value": 696,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "obs_low_em_ps",
+      "value": 290,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "median_vol_advanced",
+      "value": 0.6988771557946931,
+      "se": 0.1160172957948497,
+      "n": 24
+    },
+    {
+      "name": "median_vol_high_em",
+      "value": 1.1290763694524846,
+      "se": 0.27097855591036163,
+      "n": 14
+    },
+    {
+      "name": "median_vol_middle_em",
+      "value": 1.2204171285541605,
+      "se": 0.20557492086928286,
+      "n": 24
+    },
+    {
+      "name": "median_vol_low_em",
+      "value": 1.0863136283864334,
+      "se": 0.21785180037579094,
+      "n": 10
+    },
+    {
+      "name": "vol_ratio_em_vs_advanced",
+      "value": 1.638727253616898,
+      "se": null,
+      "n": 72
+    },
+    {
+      "name": "vol_Singapore",
+      "value": 2.2717897402886424,
+      "se": null,
+      "n": 1
+    },
+    {
+      "name": "vol_Botswana",
+      "value": 3.5451812197479886,
+      "se": null,
+      "n": 1
+    },
+    {
+      "name": "vol_middle_em_min",
+      "value": 0.25232213449772517,
+      "se": null,
+      "n": 24
+    },
+    {
+      "name": "vol_middle_em_max",
+      "value": 3.5440110771911177,
+      "se": null,
+      "n": 24
+    },
+    {
+      "name": "corr_total_y",
+      "value": 0.3104907347404938,
+      "se": 0.020812769695019072,
+      "n": 2088
+    },
+    {
+      "name": "corr_advanced_y",
+      "value": 0.464172067618247,
+      "se": 0.03362242226587041,
+      "n": 696
+    },
+    {
+      "name": "corr_high_y",
+      "value": 0.38903640139212836,
+      "se": 0.04583252656213671,
+      "n": 406
+    },
+    {
+      "name": "corr_middle_y",
+      "value": 0.22521753845822823,
+      "se": 0.03698424503674201,
+      "n": 696
+    },
+    {
+      "name": "corr_low_y",
+      "value": 0.008291499257620124,
+      "se": 0.05892353952840721,
+      "n": 290
+    },
+    {
+      "name": "corr_total_c",
+      "value": 0.20505351238087777,
+      "se": 0.021429644267521888,
+      "n": 2088
+    },
+    {
+      "name": "corr_advanced_c",
+      "value": 0.3758733640771912,
+      "se": 0.035175951598509114,
+      "n": 696
+    },
+    {
+      "name": "corr_high_c",
+      "value": 0.3402483454558304,
+      "se": 0.04678344526674113,
+      "n": 406
+    },
+    {
+      "name": "corr_middle_c",
+      "value": 0.19409529970679432,
+      "se": 0.0372375932306781,
+      "n": 696
+    },
+    {
+      "name": "corr_low_c",
+      "value": -0.026608454212098072,
+      "se": 0.058904701465482774,
+      "n": 290
+    },
+    {
+      "name": "corr_total_i",
+      "value": 0.22346750527030657,
+      "se": 0.021341202391275908,
+      "n": 2088
+    },
+    {
+      "name": "corr_advanced_i",
+      "value": 0.32131179434488977,
+      "se": 0.03594662090500693,
+      "n": 696
+    },
+    {
+      "name": "corr_high_i",
+      "value": 0.2781653376591445,
+      "se": 0.047788313252066755,
+      "n": 406
+    },
+    {
+      "name": "corr_middle_i",
+      "value": 0.1440119925200039,
+      "se": 0.03756378908916768,
+      "n": 696
+    },
+    {
+      "name": "corr_low_i",
+      "value": -0.04576024999388247,
+      "se": 0.05886383768685108,
+      "n": 290
+    },
+    {
+      "name": "corr_total_g",
+      "value": 0.021308835290286605,
+      "se": 0.021889922616285473,
+      "n": 2088
+    },
+    {
+      "name": "corr_advanced_g",
+      "value": 0.03816410741740041,
+      "se": 0.037931826852074794,
+      "n": 696
+    },
+    {
+      "name": "corr_high_g",
+      "value": 0.034538469304008154,
+      "se": 0.049722176013028974,
+      "n": 406
+    },
+    {
+      "name": "corr_middle_g",
+      "value": -0.046105141676620644,
+      "se": 0.03791911450480483,
+      "n": 696
+    },
+    {
+      "name": "corr_low_g",
+      "value": 0.12910348249046322,
+      "se": 0.05843242449167346,
+      "n": 290
+    },
+    {
+      "name": "corr_total_x",
+      "value": 0.15516266768886883,
+      "se": 0.021629723549376922,
+      "n": 2088
+    },
+    {
+      "name": "corr_advanced_x",
+      "value": 0.31199102020019154,
+      "se": 0.03606473533049775,
+      "n": 696
+    },
+    {
+      "name": "corr_high_x",
+      "value": 0.25475792808495,
+      "se": 0.048110289910186954,
+      "n": 406
+    },
+    {
+      "name": "corr_middle_x",
+      "value": 0.04688247554871745,
+      "se": 0.037917741117832915,
+      "n": 696
+    },
+    {
+      "name": "corr_low_x",
+      "value": -0.04400987589087929,
+      "se": 0.05886847188460066,
+      "n": 290
+    },
+    {
+      "name": "corr_total_m",
+      "value": 0.3193870955433506,
+      "se": 0.02074813444697873,
+      "n": 2088
+    },
+    {
+      "name": "corr_advanced_m",
+      "value": 0.4333648120217121,
+      "se": 0.03420978970098008,
+      "n": 696
+    },
+    {
+      "name": "corr_high_m",
+      "value": 0.44626504355116137,
+      "se": 0.044522980797224256,
+      "n": 406
+    },
+    {
+      "name": "corr_middle_m",
+      "value": 0.19930223355514032,
+      "se": 0.03719794042553862,
+      "n": 696
+    },
+    {
+      "name": "corr_low_m",
+      "value": 0.14144514159183752,
+      "se": 0.058333133092515393,
+      "n": 290
+    },
+    {
+      "name": "relvol_total_y",
+      "value": 0.30264727226499677,
+      "se": null,
+      "n": 2088
+    },
+    {
+      "name": "relvol_advanced_y",
+      "value": 0.25419240001127014,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_high_y",
+      "value": 0.30775200382651613,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "relvol_middle_y",
+      "value": 0.3475563384190129,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_low_y",
+      "value": 0.5301678199316298,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "relvol_total_c",
+      "value": 0.2603495717675564,
+      "se": null,
+      "n": 2088
+    },
+    {
+      "name": "relvol_advanced_c",
+      "value": 0.2552846662218818,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_high_c",
+      "value": 0.25890778956898275,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "relvol_middle_c",
+      "value": 0.26870043287607437,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_low_c",
+      "value": 0.2575189448685605,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "relvol_total_i",
+      "value": 0.10987604941854515,
+      "se": null,
+      "n": 2088
+    },
+    {
+      "name": "relvol_advanced_i",
+      "value": 0.10550770495022278,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_high_i",
+      "value": 0.11293932772453699,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "relvol_middle_i",
+      "value": 0.11478110028501733,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_low_i",
+      "value": 0.12352852845715517,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "relvol_total_g",
+      "value": 0.2975519081743638,
+      "se": null,
+      "n": 2088
+    },
+    {
+      "name": "relvol_advanced_g",
+      "value": 0.36503265361865045,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_high_g",
+      "value": 0.3840037338660812,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "relvol_middle_g",
+      "value": 0.2668208643861396,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_low_g",
+      "value": 0.13176896889819514,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "relvol_total_x",
+      "value": 0.13567151542192588,
+      "se": null,
+      "n": 2088
+    },
+    {
+      "name": "relvol_advanced_x",
+      "value": 0.10803401706056351,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_high_x",
+      "value": 0.1446050229207193,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "relvol_middle_x",
+      "value": 0.1485981278905566,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_low_x",
+      "value": 0.09513065112275945,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "relvol_total_m",
+      "value": 0.11713969400365948,
+      "se": null,
+      "n": 2088
+    },
+    {
+      "name": "relvol_advanced_m",
+      "value": 0.11671345540591906,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_high_m",
+      "value": 0.09436739795184432,
+      "se": null,
+      "n": 406
+    },
+    {
+      "name": "relvol_middle_m",
+      "value": 0.12754284061576565,
+      "se": null,
+      "n": 696
+    },
+    {
+      "name": "relvol_low_m",
+      "value": 0.10133142419293553,
+      "se": null,
+      "n": 290
+    },
+    {
+      "name": "autocorr_total",
+      "value": 0.19898237466297924,
+      "se": 0.02145706335611655,
+      "n": 2088
+    },
+    {
+      "name": "autocorr_advanced",
+      "value": 0.1340074717699568,
+      "se": 0.03761709858457902,
+      "n": 696
+    },
+    {
+      "name": "autocorr_high",
+      "value": 0.17939975550453874,
+      "se": 0.048944698226341156,
+      "n": 406
+    },
+    {
+      "name": "autocorr_middle",
+      "value": 0.24243949142253984,
+      "se": 0.036827017808020356,
+      "n": 696
+    },
+    {
+      "name": "autocorr_low",
+      "value": 0.2426115446260017,
+      "se": 0.057165076460334786,
+      "n": 290
+    },
+    {
+      "name": "param_H",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_p_lag",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_controls_lags",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_worldGDP_thresh",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_inv_GDP_ratio_median",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_yearFE_productivity",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_yearFE_financial",
+      "value": 0,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Balanced panel of small open economies with complete WDI national accounts spanning 1993-2022, classified by IMF and World Bank income mode: advanced high-income, high and upper-middle emerging, lower-middle emerging, low-income emerging. Inventory changes deflated by GDP deflator, normalized by lagged GDP trend from log-quadratic, cyclical component via country-specific quadratic filter; expenditure and trade aggregates per capita log-differenced.",
+    "n": 72,
+    "start": "1993-01-01",
+    "end": "2022-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "WDI data via api.worldbank.org vintage current; deflator NY.GDP.DEFL.ZS to deflate inventories; GDP trend log-quadratic OLS per country; median moments across countries per group; pooled SE approximated via sqrt((1-r2)/(n-2)); large economies threshold taken as paper list not re-estimated; extreme countries excluded per paper list. Tbar and obs counts reported as actually observed after transformations (29 median usable vs paper's 28)."
+  },
+  "notes": "Time index for quadratic filters set to 0..T-1 equivalent to calendar year polynomial. Deflation uses GDP deflator scaled as inv_real = inv_cur*100/deflator. Normalization uses Y_trend from log-quadratic on GDP constant LCU lagged one year. Cyclical extraction OLS quadratic in levels on ratio. Per-capita aggregates use constant LCU divided by SP.POP.TOTL logged and first-differenced. Correlations relative volatilities autocorrs as median of country-level moments per group. Volatility as percent of lagged GDP trend. Balanced definition from Table 1 list results in 72 with strict completeness a few early years missing handled by pairwise deletion. Observation counts reported as total usable country-year residuals actually computed (e.g., 696 = 24*29) rather than padded N*Tbar=672; Tbar reported as observed median 29. Financial and productivity shock identification variance shares and panel unit root tests require additional global series or proprietary code omitted."
+}

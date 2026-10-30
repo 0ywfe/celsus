@@ -1,0 +1,216 @@
+{
+ "title": "A Millennium of UK Business Cycles: Insights from Structural VAR Analysis - Replication Spec",
+ "hypothesis": "The source and propagation of UK business cycle shocks changed over time: pre-1900 supply-driven/stagflationary (output and inflation negative comovement) vs post-1900 demand-driven (positive comovement), with monetisation having large real effects in 16th-17th c. shifting to inflationary thereafter.",
+ "data_sources": [
+  "A millennium of macroeconomic data, Ryland et al. 2018 (Thomas and Dimsdale), updated to 2022",
+  "Schmelzing 2020 long-term real interest rate for DFM"
+ ],
+ "sample": "Baseline 3-variable annual UK macro data in first differences: GDP per capita (real GDP at market prices per capita; England only 1271-1700, UK 1700-; correlation of England and UK GDP growth 1700-onwards printed), CPI variation (cost of living England 1271-1869, UK 1870-), Money M0 per capita (merged M0 series 1833-; M3 estimate variation 1271-1832). Broad money M4x used in robustness. First 50 observations used as training sample. Sample sizes (N) not printed as counts.",
+ "period_start": "1271",
+ "period_end": "2022",
+ "method": [
+  "1. Sample: Annual data 1271-2022. Use Y_t = {Delta y_t, Delta p_t, Delta m_t} = first differences of log GDP per capita, log CPI, log M0 per capita. First 50 observations as pre-sample training for OLS prior.",
+  "2. Model: Time-varying VAR with stochastic volatility and fat tails, lag length P=2: Y_t = c_t + sum_{j=1}^{P} b_{j,t} Y_{t-j} + Sigma_t^{1/2} e_t, e~N(0,1). Coefficients random walk Phi_t = Phi_{t-1} + Q^{1/2} eta_t where Phi_t=vec([c_t,b_{j,t}]). Covariance factored Sigma_t = A_t^{-1} H_t A_t^{-1}', non-zero elements of A_t random walk, H_t diagonal with sigma_{i,t}^2 * 1/lambda_{i,t}, ln sigma_{i,t}^2 = ln sigma_{i,t-1}^2 + g_i^{1/2} z_t, lambda_{i,t} scale mixture of normals yielding orthogonalised residuals A_t u_t ~ t(0, sigma_{i,t}, v_{lambda,i}).",
+  "3. Priors: phi_0 from OLS on pre-sample; sigma_0^2 from diagonal of v^{ols}; A_0 ~ N(a^{ols}, V(a^{ols})) diagonal V = 10*|a^{ols}|; Q_0 ~ IW(Qbar_0,T0) Qbar_0=var(phi^{OLS})*1e-4; S_{i,0} ~ IW(Sbar_i,K_i) Sbar diagonal = a^{ols}*1e-3; sigma_i^2 ~ IG(1e-4/2,1/2); p(lambda_k)=prod Gamma(1,v_{lambda,k}), p(v_{lambda,k}) ~ Gamma(v0,2) with v0=20.",
+  "4. Estimation: Gibbs sampling cycling 8 conditional posteriors: G(lambda_{i,t}|Psi), G(v_{lambda,i}|lambda), G(g_{i,t}|Psi), G(sigma_{i,t}^2|Psi), G(A_t|Psi), G(Phi_t|Psi), G(Q|Psi), G(Q_A|Psi) using Carter-Kohn 2005 forward-filter backward-sampler for Phi_t, Jacquier-Polson-Rossi 2004 Metropolis-Hastings for H_t, block-diagonal state-space for A_t, Geweke 1993 gamma for lambda and Random Walk MH for v_{lambda}.",
+  "5. Identification: Business cycle shock = VAR innovation explaining largest share of forecast error variance (FEV) of Delta y_t at horizon K=1. Decompose Sigma=Omega Omega', Omega=tilde Omega Q with tilde Omega Cholesky and Q orthonormal rotation. Structural MA Y_t = B(L)Omega epsilon_t. Maximize e1'[sum_{k=0}^{K} sum_{j=0}^{k-1} B_j tilde Omega Q1 Q1' tilde Omega' B_j']e1 s.t. Q1'Q1=1. Normalized to unit standard deviation. Equivalent to shock dominating business-cycle frequencies 1.5-8 years (Angeletos et al 2020). Compute IRFs cumulated over 5-year horizon, FEVDs, conditional vs unconditional stochastic volatilities. Report medians and 68% credible sets.",
+  "6. Extensions: 4-variable VAR with nominal interest rate (post-1700 only) with sign restrictions to decompose pure aggregate demand vs money supply shocks; Robustness with M4 per capita, aggregate non-per-capita variables, Dynamic Factor Model with 11 variables (real wages, GDP deflator, CPI, exports, commodity prices, GDP, GDP per capita, M4, share prices, dollar rate, real rate) in first differences except rate, unbalanced panel, r-star as 5-year-ahead forecast of real rate."
+ ],
+ "claims": [
+  {
+   "name": "irf_gdp_peak_17th_century",
+   "description": "IRF of GDP per capita cumulated over 5-year to unit SD business-cycle shock, peak 17th century median",
+   "value": "approximately 5%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Figure 1, text: changes of approximately 5% and -4%, respectively"
+  },
+  {
+   "name": "irf_cpi_peak_17th_century",
+   "description": "IRF of CPI cumulated over 5-year to unit SD business-cycle shock, peak 17th century median (negative comovement)",
+   "value": "-4%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Figure 1, text: changes of approximately 5% and -4%, respectively"
+  },
+  {
+   "name": "fevd_inflation_max_16th_century",
+   "description": "Max FEVD of inflation explained by business-cycle shock during 16th century",
+   "value": "around 20%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: at most, around 20% during 16th century"
+  },
+  {
+   "name": "fevd_inflation_max_17th_century",
+   "description": "Max FEVD of inflation explained by business-cycle shock during 17th century",
+   "value": "approximately 40%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: approximately 40% during 17th century"
+  },
+  {
+   "name": "fevd_money_start_mid16th",
+   "description": "FEVD of money explained by business-cycle shock, mid-16th century starting level",
+   "value": "around 20%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: rises from around 20%"
+  },
+  {
+   "name": "fevd_money_peak_1600",
+   "description": "FEVD of money explained by business-cycle shock, peak by 1600 and elevated through 17th c",
+   "value": "nearly 80%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: to nearly 80% by 1600"
+  },
+  {
+   "name": "m4_m0_ratio_1833",
+   "description": "M4/M0 ratio in 1833",
+   "value": "1.9",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "text: ratio rose from 1.9 in 1833"
+  },
+  {
+   "name": "m4_m0_ratio_1900",
+   "description": "M4/M0 ratio by 1900",
+   "value": "4.8",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "text: to 4.8 by 1900"
+  },
+  {
+   "name": "fevd_output_pure_ad_lower",
+   "description": "FEVD of output variation by pure aggregate demand shock (4-var sign-restricted VAR), lower median",
+   "value": "20%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: 20--30% of output variation"
+  },
+  {
+   "name": "fevd_output_pure_ad_upper",
+   "description": "FEVD of output variation by pure aggregate demand shock, upper median",
+   "value": "30%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: 20--30%"
+  },
+  {
+   "name": "fevd_output_money_supply_lower",
+   "description": "FEVD of output variation by money supply shock, lower median",
+   "value": "approximately 10%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: approximately 10--20%"
+  },
+  {
+   "name": "fevd_output_money_supply_upper",
+   "description": "FEVD of output variation by money supply shock, upper median",
+   "value": "20%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: approximately 10--20%"
+  },
+  {
+   "name": "fevd_money_money_supply_shock",
+   "description": "FEVD of money variation explained by money supply shock (modern period)",
+   "value": "nearly 60%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: explain nearly 60% of variation in money"
+  },
+  {
+   "name": "rstar_peak_1974",
+   "description": "Estimated natural rate of interest (DFM, 5-year ahead forecast of real rate) peak value",
+   "value": "11.5%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text: peaking at 11.5% in 1974"
+  },
+  {
+   "name": "correlation_gdp_growth_england_uk_post1700",
+   "description": "Correlation of GDP growth England vs UK where both series available 1700 onwards",
+   "value": "99%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Appendix Data: correlation 99%"
+  },
+  {
+   "name": "var_lag_length",
+   "description": "Lag length L in baseline TVP-VAR",
+   "value": "2",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Equation 1: L=2 represents lag length"
+  },
+  {
+   "name": "pre_sample_training_observations",
+   "description": "Number of initial observations used as training sample for OLS prior",
+   "value": "50",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Appendix: first 50 observations as training sample"
+  },
+  {
+   "name": "fevd_identification_horizon",
+   "description": "Horizon K for maximizing FEV contribution of Delta y",
+   "value": "1",
+   "unit": "periods",
+   "kind": "parameter",
+   "where": "text: horizon 1"
+  },
+  {
+   "name": "irf_cumulation_horizon",
+   "description": "Cumulation horizon for IRFs displayed",
+   "value": "5-year",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "text: IRFs cumulated over 5-year horizon"
+  },
+  {
+   "name": "credible_set_level",
+   "description": "Credible set level for IRFs, FEVDs, volatilities",
+   "value": "68%",
+   "unit": "percent",
+   "kind": "parameter",
+   "where": "Figures: pink shaded 68 percent credible sets"
+  },
+  {
+   "name": "bc_frequency_band_lower",
+   "description": "Business-cycle frequency band lower bound for equivalence",
+   "value": "1.5 years",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "text: 1.5-8 years"
+  },
+  {
+   "name": "bc_frequency_band_upper",
+   "description": "Business-cycle frequency band upper bound",
+   "value": "8 years",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "text: 1.5-8 years"
+  },
+  {
+   "name": "prior_v0_degrees_freedom",
+   "description": "Prior hyperparameter v0 for p(v_{lambda,k}) ~ Gamma(v0,2)",
+   "value": "20",
+   "unit": "not stated",
+   "kind": "parameter",
+   "where": "Appendix: v0=20"
+  },
+  {
+   "name": "dfm_n_variables",
+   "description": "Number of variables in Dynamic Factor Model",
+   "value": "11",
+   "unit": "variables",
+   "kind": "parameter",
+   "where": "DFM: 11 variables"
+  }
+ ],
+ "headline": "irf_cpi_peak_17th_century",
+ "partitions": [],
+ "tests": []
+}

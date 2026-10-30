@@ -1,0 +1,423 @@
+{
+ "title": "Dynamic Factor Analysis of Price Movements in the Philippine Stock Exchange",
+ "hypothesis": "One-factor DFM extracts systematic/market factor similar to PSEi (F_t ~ PSEi); two-factor DFM decomposes into market trend (F1t) and volatility (F2t) offering new portfolio risk perspective beyond CAPM; common factors serve as viable real-time market indicators reducing GDP nowcasting RMSE by over 34% out-of-sample.",
+ "data_sources": [
+  "fastquant Python wrapper for Phisix API (PSE stock prices)",
+  "https://stooq.com/q/d/?s=%5Epsei (PSEi index)",
+  "https://www.barrons.com/market-data/stocks (CAPM beta)",
+  "Philippine quarterly GDP growth rates - not stated source file but described in nowcasting section"
+ ],
+ "sample": "Philippine Stock Exchange (PSE) stock closing prices via Phisix API via fastquant Python library plus PSEi composite index from stooq.com. Return definition percentage return R_it=(S_it - S_{i(t-1)})/S_{i(t-1)} where S_it is closing price. Sample period 2015-01-01 to 2020-12-31 for DFM fitting including COVID pandemic period as robustness test. Filter: drop any stock with >1% missing observations over period. Retained sample counts: count_S_stocks_retained=72 stocks (listed by ticker in Tables res135/res225: 2GO,ABA,AC,AEV,AGI,ALI,AP,BDO,BEL,BLOOM,BPI,BRN,CEB,CHIB,CNPF,COSCO,CPG,DD,DMC,DNL,EEI,EW,FGEN,FLI,FNI,FPH,GERI,GLO,GMA7,GTCAP,HOUSE,ICT,IMI,JFC,JGS,LC,LPZ,LTG,MAXS,MBT,MEG,MER,MPI,MWC,MWIDE,NI,NIKL,PCOR,PGOLD,PLC,PNB,PNX,PX,PXP,RLC,RRHI,SCC,SECB,SLI,SM,SMC,SMPH,SSI,SSP,STI,TECH,TEL,UBP,URC,VITA,VLL,WEB). Excluded stocks not listed but implied = low-volume stocks generally. For nowcasting application: in-sample training period 2015-01-01 to 2020-12-31 same stocks; out-of-sample evaluation period 2021-01-01 to 2022-12-31; target is Philippine quarterly GDP growth rates; monthly indicators derived from F_t to explain quarterly GDP.",
+ "period_start": "2015-01-01",
+ "period_end": "2022-12-31",
+ "method": [
+  "1. Data collection: download daily closing prices S_it for all PSE stocks via fastquant/Phisix API 2015-01-01 to 2022-12-31 and daily PSEi closes from https://stooq.com/q/d/?s=%5Epsei; also obtain Philippine quarterly GDP growth rates.",
+  "2. Data cleaning: for period 2015-01-01 to 2020-12-31 compute per-stock missingrate; drop any stock with missingrate> param_missing_threshold=1%; resulting N= count_S_stocks_retained=72.",
+  "3. Transform to stationary returns: compute percentage return R_it=(S_it - S_{i(t-1)})/S_{i(t-1)} for retained stocks; similarly compute PSEi return series; no winzorization stated.",
+  "4. Factor number selection: for n=0,...,maxN estimate n factors via PCA, compute mean squared residuals V(n), compute IC1(n), IC2(n), IC3(n) per Bai 2002: IC1=lnV(n)+n*((N+T)/NT)*ln(NT/(N+T)), IC2=lnV(n)+n*((N+T)/NT)*ln min(N,T), IC3=lnV(n)+n*(ln min(N,T)/min(N,T)). Plot IC vs n; IC lower for n=1 or 2 vs n=0 white-noise; choose n=1 as best IC but also retain n=2 as viable comparably close.",
+  "5. Lag order selection: for each n choose p for F_t VAR(p) and q for idiosyncratic AR(q) by Bayesian Information Criterion BIC; resulting selected specs: (n=1,p=3,q=5) and (n=2,p=2,q=5).",
+  "6. State-space formulation of DFM: R_t = M X_t + eps_t (Sigma_eps=0), X_t = T X_{t-1}+ eta_t where X_t stacks [F_t,...,F_{t-p+1},tildeZ_t,...,tildeZ_{t-q+1}], beta is SxN loadings, sigma diag loadings, Psi_j diag AR coeffs, Sigma_eta=diag(I_n,0,...,0,sigma^2,0,...,0).",
+  "7. Estimation: for fixed parameters M,T,Sigma_eta run Kalman filter prediction mu_{t|t-1}=T mu_{t-1|t-1}, Sigma_{t|t-1}=T Sigma_{t-1|t-1} T'+Sigma_eta with update K_t=Sigma_{t|t-1} M'(M Sigma_{t|t-1} M'+Sigma_eps)^{-1}, mu_{t|t}=mu_{t|t-1}+K_t(Y_t-M mu_{t|t-1}), Sigma_{t|t}=Sigma_{t|t-1}-K_t M Sigma_{t|t-1}. Maximize likelihood over M,T,Sigma_eta via MLE. Then Kalman smoother at t'>t: J_t=Sigma_{t|t} T' Sigma_{t+1|t}^{-1}, mu_{t|t'}=mu_{t|t}+J_t(mu_{t+1|t'}-mu_{t+1|t}), Sigma_{t|t'}=Sigma_{t|t}+J_t(Sigma_{t+1|t'}-Sigma_{t+1|t})J_t'. Extract smoothed common factors F_t and loadings beta_i, sigma_i.",
+  "8. PCA comparison: compute sample covariance Sigma_hat of X (TxS return matrix), eigen-decompose Sigma_hat a = lambda a, order eigenvalues descending, PCi = X a_(i) with unit eigenvectors orthogonal. Correlate PCs with F_t and PSEi returns.",
+  "9. CAPM validation: obtain CAPM beta_i per stock from Barrons market-data for same period; scatter plot vs DFM beta_i/beta1i/beta2i; compute Pearson correlations estimate_corr_CAPM_beta_beta_i_one_factor=0.8348 etc; test significance of loadings and VAR coeffs at alpha=param_alpha_significance=0.05 (flag ns = not significant). LC flagged ns due to stock-specific closure order 2017-2020.",
+  "10. Two-factor interpretation: verify correlation F1t-F2t=0.0798 ~ orthogonal; regress one-factor Ft on F1t,F2t to get R2=0.998 indicating decomposition; label F1t market trend, F2t market volatility.",
+  "11. Nowcasting GDP application: take DFM(n=2,p=2,q=5) smoothed F_t for in-sample 2015-2020 and filtered F_t for out-of-sample 2021-2022 to avoid leakage; convert daily F1t,F2t to monthly indicators per calendar month: mean(F1t), sd(F1t), mean(F2t), sd(F2t) - paper says mean and standard deviation of F1t and F2t are calculated per month (implies 4 indicators per month, 12 per quarter). Merge by quarter (Jan-Mar -> Q1 etc). Fit benchmark AR(1) for quarterly GDP growth via OLS on in-sample; fit augmented AR(1) w/ F_t via OLS adding monthly indicators as regressors to explain quarterly GDP growth. Forecast in-sample and out-of-sample; compute RMSE per Table rmse; compute improvements 84.11% in-sample and 34.47% out-of-sample."
+ ],
+ "claims": [
+  {
+   "name": "count_S_stocks_retained",
+   "description": "number of PSE stocks retained after dropping stocks with >1% missing observations, 2015-01-01 to 2020-12-31 - more than top 30 in PSEi composition count_PSEi_composition =30 is market definition not sample size but printed as 30 stocks in PSEi",
+   "value": "72",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Results paragraph: dataset containing 72 stocks, more than top 30 in terms of market capitalization included in the PSEi. Table res135/res225 list 72 tickers."
+  },
+  {
+   "name": "count_PSEi_composition",
+   "description": "number of stocks in PSEi composite index described in comparison to common factor",
+   "value": "30",
+   "unit": "stocks-index constituents",
+   "kind": "count",
+   "where": "Results + Fig1 caption + text: which only covers the top 30 stocks with the largest market capitalization vs 72 stocks analysis"
+  },
+  {
+   "name": "param_missing_threshold",
+   "description": "filter: drop stocks with more than 1% missing observations",
+   "value": "1%",
+   "unit": "missing-rate threshold",
+   "kind": "parameter",
+   "where": "Results: Following data cleaning procedure...stocks with more than 1% missing observations are dropped"
+  },
+  {
+   "name": "param_n_white_noise",
+   "description": "white-noise benchmark model containing zero common factors used for IC comparison",
+   "value": "0",
+   "unit": "n factors",
+   "kind": "parameter",
+   "where": "Fig1 text: specifically when compared with a white noise model containing zero factors"
+  },
+  {
+   "name": "param_n_one_factor",
+   "description": "number of common factors n in one-factor specification selected via IC1-IC3 and BIC",
+   "value": "1",
+   "unit": "factors",
+   "kind": "parameter",
+   "where": "Results One-Factor Model: model with n=1 common factor"
+  },
+  {
+   "name": "param_p_one_factor",
+   "description": "VAR lag order p for F_t AR(3) in one-factor model chosen by BIC",
+   "value": "3",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Results: model with n=1 following an AR(3) process and stock-specific factors following AR(5) where p and q are chosen based on BIC; Caption DFM (n=1, p=3, q=5)"
+  },
+  {
+   "name": "param_q_one_factor",
+   "description": "AR lag order q for Z_it AR(5) in one-factor model chosen by BIC",
+   "value": "5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Results: stock-specific factors following AR(5) processes"
+  },
+  {
+   "name": "param_n_two_factor",
+   "description": "number of common factors n in two-factor specification selected via IC comparably close fit and BIC",
+   "value": "2",
+   "unit": "factors",
+   "kind": "parameter",
+   "where": "Results Two-Factor Model: model with n=2 common factors following VAR(2)"
+  },
+  {
+   "name": "param_p_two_factor",
+   "description": "VAR lag order p for F_t VAR(2) in two-factor model chosen by BIC",
+   "value": "2",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Results: following a VAR(2) process... p and q are chosen based on BIC; Caption DFM (n=2, p=2, q=5)"
+  },
+  {
+   "name": "param_q_two_factor",
+   "description": "AR lag order q for Z_it AR(5) in two-factor model chosen by BIC",
+   "value": "5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Results: stock-specific factors following AR(5) processes"
+  },
+  {
+   "name": "param_alpha_significance",
+   "description": "significance level for loading and VAR coefficient tests; ns flag = not significant at alpha=0.05",
+   "value": "0.05",
+   "unit": "alpha",
+   "kind": "parameter",
+   "where": "Results: At a significance level of alpha=0.05 ... statistically significant / not statistically significant; Tables with ^{ns}"
+  },
+  {
+   "name": "estimate_corr_Ft_PSEi_one_factor",
+   "description": "correlation between Kalman-smoothed common factor F_t (n=1,p=3,q=5) and PSEi return 2015-2020",
+   "value": "0.9283",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Results One-Factor Model text and Table corr135"
+  },
+  {
+   "name": "estimate_corr_Ft_PC1_one_factor",
+   "description": "correlation between Kalman-smoothed common factor F_t and first principal component PC1 (n=1 model)",
+   "value": "0.9975",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Results + Table corr135: common factor F_t exhibits correlation of 0.9975 with first principal component"
+  },
+  {
+   "name": "estimate_corr_PC1_PSEi_one_factor",
+   "description": "correlation between PC1 and PSEi returns reported in one-factor validation; also repeated in two-factor table",
+   "value": "0.9144",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Results + Tables corr135 and corr225: PC1 =0.9144 with PSEi"
+  },
+  {
+   "name": "estimate_corr_CAPM_beta_beta_i_one_factor",
+   "description": "correlation between DFM loading beta_i (one-factor) and CAPM beta",
+   "value": "0.8348",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Results: scatterplot ... correlation of 0.8348 + Table corr135"
+  },
+  {
+   "name": "estimate_coef_Lambda1_one_factor",
+   "description": "AR coefficient Lambda1 on F_{t-1} in F_t =0.1256 F_{t-1}+0.0225 F_{t-2}+0.1380 F_{t-3}+eps_t  - statistically significant",
+   "value": "0.1256",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Results equation: 0.1256 F_{t-1}"
+  },
+  {
+   "name": "estimate_coef_Lambda2_one_factor",
+   "description": "AR coefficient Lambda2 on F_{t-2} in one-factor model - not statistically significant at alpha=0.05",
+   "value": "0.0225",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Results equation: 0.0225 F_{t-2} + text only Lambda2=0.0225 is not statistically significant"
+  },
+  {
+   "name": "estimate_coef_Lambda3_one_factor",
+   "description": "AR coefficient Lambda3 on F_{t-3} in one-factor model - statistically significant",
+   "value": "0.1380",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Results equation: 0.1380 F_{t-3}"
+  },
+  {
+   "name": "tally_beta_i_significant_one_factor",
+   "description": "number of stocks with beta_i statistically significant at alpha=0.05 in one-factor model: all but one stock",
+   "value": "71",
+   "unit": "stocks with significant beta_i out of 72",
+   "kind": "tally",
+   "where": "Results: loading beta_i ... statistically significant for all but one stock; count denominator count_S_stocks_retained=72"
+  },
+  {
+   "name": "tally_beta_i_not_significant_one_factor_LC",
+   "description": "number of stocks with beta_i not significant: stock LC due to closure order shock 2017-2020",
+   "value": "1",
+   "unit": "stocks not significant out of 72",
+   "kind": "tally",
+   "where": "Footnote: loading beta_i for stock LC is not statistically significant"
+  },
+  {
+   "name": "estimate_corr_F1t_PSEi_two_factor",
+   "description": "correlation between first Kalman-smoothed common factor F1t (n=2,p=2,q=5) and PSEi returns",
+   "value": "0.6727",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Results Two-Factor Model text + Table corr225"
+  },
+  {
+   "name": "estimate_corr_F1t_PC1_two_factor",
+   "description": "correlation between F1t and PC1 in two-factor model",
+   "value": "0.8982",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr225"
+  },
+  {
+   "name": "estimate_corr_F2t_PSEi_two_factor",
+   "description": "correlation between second common factor F2t and PSEi returns",
+   "value": "0.7704",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr225"
+  },
+  {
+   "name": "estimate_corr_F2t_PC2_two_factor",
+   "description": "correlation between F2t and PC2",
+   "value": "0.8229",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr225"
+  },
+  {
+   "name": "estimate_corr_PC2_PSEi_two_factor",
+   "description": "correlation between PC2 and PSEi returns",
+   "value": "0.3498",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr225"
+  },
+  {
+   "name": "estimate_corr_CAPM_beta_beta1i_two_factor",
+   "description": "correlation between CAPM beta and beta1i loading in two-factor model",
+   "value": "0.5132",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr225 + text: CAPM beta exhibits correlation 0.5132 with beta1i"
+  },
+  {
+   "name": "estimate_corr_CAPM_beta_beta2i_two_factor",
+   "description": "correlation between CAPM beta and beta2i loading in two-factor model",
+   "value": "0.8528",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr225 + text: 0.8528 with beta2i"
+  },
+  {
+   "name": "estimate_corr_F1t_F2t_two_factor",
+   "description": "correlation between F1t and F2t ~ nearly orthogonal",
+   "value": "0.0798",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Results text: F1t and F2t have correlation of 0.0798, nearly orthogonal"
+  },
+  {
+   "name": "estimate_R2_Ft_on_F1tF2t",
+   "description": "R^2 from linear regression of one-factor Ft on two factors F1t and F2t: model further decomposed Ft into two nearly uncorrelated signals",
+   "value": "0.998",
+   "unit": "R-squared",
+   "kind": "estimate",
+   "where": "Results text: linear regression of F_t on F1t and F2t also produced an R^2 of 0.998"
+  },
+  {
+   "name": "estimate_coef_VAR_11_lag1_two_factor",
+   "description": "VAR(1) coefficient (1,1) in two-factor F_t evolution: 0.4894 on F_{t-1} first equation, significant",
+   "value": "0.4894",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Results equation matrix [0.4894 0.1680; -0.0262 -0.2526] F_{t-1}"
+  },
+  {
+   "name": "estimate_coef_VAR_12_lag1_two_factor",
+   "description": "VAR(1) coefficient (1,2) =0.1680, significant",
+   "value": "0.1680",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "same matrix"
+  },
+  {
+   "name": "estimate_coef_VAR_21_lag1_two_factor",
+   "description": "VAR(1) coefficient (2,1) =-0.0262, not statistically significant",
+   "value": "-0.0262",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "same matrix + text: only coefficients -0.0262 and -0.0931 are not statistically significant"
+  },
+  {
+   "name": "estimate_coef_VAR_22_lag1_two_factor",
+   "description": "VAR(1) coefficient (2,2) =-0.2526, significant",
+   "value": "-0.2526",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "same matrix"
+  },
+  {
+   "name": "estimate_coef_VAR_11_lag2_two_factor",
+   "description": "VAR(2) coefficient (1,1) on F_{t-2}=0.5094, significant",
+   "value": "0.5094",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Results equation matrix [0.5094 -0.1726; -0.1627 -0.0931] F_{t-2}"
+  },
+  {
+   "name": "estimate_coef_VAR_12_lag2_two_factor",
+   "description": "VAR(2) coefficient (1,2) =-0.1726, significant",
+   "value": "-0.1726",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "same matrix"
+  },
+  {
+   "name": "estimate_coef_VAR_21_lag2_two_factor",
+   "description": "VAR(2) coefficient (2,1) =-0.1627, significant",
+   "value": "-0.1627",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "same matrix"
+  },
+  {
+   "name": "estimate_coef_VAR_22_lag2_two_factor",
+   "description": "VAR(2) coefficient (2,2) =-0.0931, not statistically significant",
+   "value": "-0.0931",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "same matrix + text"
+  },
+  {
+   "name": "tally_beta1i_significant_two_factor",
+   "description": "number of stocks with beta1i statistically significant at alpha=0.05 in two-factor model: all stocks",
+   "value": "72",
+   "unit": "stocks out of 72",
+   "kind": "tally",
+   "where": "Results: beta1i's are statistically significant for all stocks; denominator count_S_stocks_retained=72"
+  },
+  {
+   "name": "tally_beta2i_significant_two_factor_half",
+   "description": "approx number of stocks with beta2i statistically significant at alpha=0.05: half of beta2i's (paper says half are statistically significant)",
+   "value": "36",
+   "unit": "stocks out of 72",
+   "kind": "tally",
+   "where": "Results: half of the beta2i's are statistically significant; denominator 72 = approx 36"
+  },
+  {
+   "name": "estimate_RMSE_AR1_in_sample",
+   "description": "RMSE of benchmark AR(1) for Philippine GDP growth rates during in-sample period 2015-01-01 to 2020-12-31",
+   "value": "3.8533",
+   "unit": "RMSE GDP growth rate",
+   "kind": "estimate",
+   "where": "Table rmse: AR(1) In-Sample =3.8533"
+  },
+  {
+   "name": "estimate_RMSE_AR1_out_of_sample",
+   "description": "RMSE of benchmark AR(1) during out-of-sample period 2021-01-01 to 2022-12-31",
+   "value": "12.3095",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table rmse: Out-of-Sample =12.3095"
+  },
+  {
+   "name": "estimate_RMSE_AR1_Ft_in_sample",
+   "description": "RMSE of AR(1) w/ F_t monthly indicators (mean+sd of F1t,F2t per month via OLS) during in-sample",
+   "value": "0.6122",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table rmse: AR(1) w/ F_t In-Sample =0.6122"
+  },
+  {
+   "name": "estimate_RMSE_AR1_Ft_out_of_sample",
+   "description": "RMSE of AR(1) w/ F_t during out-of-sample, using Kalman-smoothed F_t in-sample and Kalman-filtered F_t out-of-sample to avoid leakage",
+   "value": "8.0667",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table rmse: Out-of-Sample =8.0667"
+  },
+  {
+   "name": "estimate_improvement_in_sample_RMSE",
+   "description": "percentage improvement in in-sample RMSE from inclusion of monthly indicators constructed from common factors: (3.8533-0.6122)/3.8533",
+   "value": "84.11%",
+   "unit": "percent improvement",
+   "kind": "estimate",
+   "where": "Results text: substantially improved in-sample RMSE by 84.11%"
+  },
+  {
+   "name": "estimate_improvement_out_of_sample_RMSE",
+   "description": "percentage improvement in out-of-sample RMSE from inclusion of F_t: (12.3095-8.0667)/12.3095",
+   "value": "34.47%",
+   "unit": "percent improvement",
+   "kind": "estimate",
+   "where": "Results text: out-of-sample RMSE by 34.47%"
+  },
+  {
+   "name": "estimate_abstract_over_34pct",
+   "description": "abstract statement: yielding over a 34% decrease in out-of-sample prediction error matching Table rmse improvement 34.47% summarized as >34%",
+   "value": "34%",
+   "unit": "percent decrease",
+   "kind": "estimate",
+   "where": "Abstract: yielding over a 34% decrease in out-of-sample prediction error"
+  },
+  {
+   "name": "count_parameters_not_stated_T_GDP",
+   "description": "Paper does not print T number of trading days 2015-2020, N cross-section used in IC (implies N=72), or number of quarterly GDP observations in-sample/out-of-sample",
+   "value": "not stated",
+   "unit": "not stated",
+   "kind": "count",
+   "where": "Paper does not state T, N, GDP count numerically; IC formulas define N,T"
+  },
+  {
+   "name": "estimate_loading_beta_i_sigma_i_one_factor_table",
+   "description": "Full per-stock loadings beta_i and sigma_i printed in Table res135 for DFM (n=1,p=3,q=5). Each cell is one claim. Examples: 2GO 0.8470 3.9217; ABA 0.9707 3.2377; ... ; LC 0.1881^{ns} 3.0327 ; ... WEB 1.0387 4.8616. Every value in table is an estimate with ^ns flag meaning not significant at param_alpha_significance=0.05. Replicator must reproduce table exactly copying each of 72x2 numbers as printed.",
+   "value": "see Tables res135 for 144 values",
+   "unit": "loading coefficients - see paper table copy verbatim",
+   "kind": "estimate",
+   "where": "Table res135 pages with all 72 stocks"
+  },
+  {
+   "name": "estimate_loading_beta1i_beta2i_sigma_i_two_factor_table",
+   "description": "Full per-stock loadings beta1i,beta2i,sigma_i printed in Table res225 for DFM (n=2,p=2,q=5). Each cell is one claim. Examples: 2GO 0.9241 0.0236^{ns} 3.8987; ... GMA7 0.4239 -0.0013^{ns} 1.3740; ... WEB 1.0343 0.2561^{ns} 4.8515. ^ns = not significant at alpha=0.05. Replicator must reproduce all 72x3 numbers exactly as printed.",
+   "value": "see Tables res225 for 216 values",
+   "unit": "loading coefficients - see paper table copy verbatim",
+   "kind": "estimate",
+   "where": "Table res225"
+  }
+ ],
+ "headline": "estimate_improvement_out_of_sample_RMSE",
+ "partitions": [],
+ "tests": []
+}

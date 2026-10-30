@@ -1,0 +1,342 @@
+{
+  "results": [
+    {
+      "name": "NOOS_months",
+      "value": 605.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "NBurnIn_months",
+      "value": 121.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingWindow_months",
+      "value": 120.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "NAnomaly_portfolios",
+      "value": 212.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "NTiming_predictors",
+      "value": 30.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "NSignals_predictors",
+      "value": 242.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "NSignalsPolicy_L",
+      "value": 243.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "NCoefficientsPolicy",
+      "value": 1215.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "RiskAversion_gamma",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingCap_c",
+      "value": 0.6,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingLeverage_g",
+      "value": 1.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingPcaRank",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingOmega_median",
+      "value": 5.919249634104421,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_active_pp",
+      "value": 7.061615348962123,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_static_pp",
+      "value": 5.003759599923156,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_timing_pp",
+      "value": 2.0578557490389664,
+      "se": 0.7092147451469725,
+      "n": 605
+    },
+    {
+      "name": "BPPP_timing_t",
+      "value": 2.901597524756079,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_timing_share_pct",
+      "value": 29.141430782425985,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_gross_SR_total",
+      "value": 1.2428853868020033,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_gross_SR_excess",
+      "value": 0.9609299899120282,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_net_SR_total",
+      "value": 1.0414760534541379,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_turnover_annual",
+      "value": 5.058690495661625,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_exposure_avg",
+      "value": 1.3093686846019328,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_CE_gross_pct",
+      "value": 12.695785131785353,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_timing_pp",
+      "value": 1.4581242592470525,
+      "se": 1.0092010914860376,
+      "n": 605
+    },
+    {
+      "name": "RPPP_timing_t",
+      "value": 1.4448302439902998,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_active_pp",
+      "value": 6.754118708789466,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_static_pp",
+      "value": 5.2959944495424125,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_timing_share_pct",
+      "value": 21.5886679242034,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_gross_SR_total",
+      "value": 1.2097300298843705,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_exposure_avg",
+      "value": 1.4948273213554162,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Market_gross_SR_total",
+      "value": 0.7393058389116266,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Market_excess_SR",
+      "value": 0.47009320802387317,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Timing_1970s_pp",
+      "value": -0.06533212986080164,
+      "se": null,
+      "n": 77
+    },
+    {
+      "name": "Timing_1980s_pp",
+      "value": 0.7705103373202419,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "Timing_1990s_pp",
+      "value": 2.9548167056942813,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "Timing_2000s_pp",
+      "value": -0.14857940755661708,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "Timing_2010s_pp",
+      "value": 0.8236637069799762,
+      "se": null,
+      "n": 120
+    },
+    {
+      "name": "Timing_2020s_pp",
+      "value": 1.6224577806709182,
+      "se": null,
+      "n": 48
+    },
+    {
+      "name": "Timing_ex1990s_pp",
+      "value": 1.6971548972301447,
+      "se": 0.8341145428803386,
+      "n": 485
+    },
+    {
+      "name": "Timing_ex1990s_t",
+      "value": 2.0346784643864178,
+      "se": null,
+      "n": 485
+    },
+    {
+      "name": "Timing_ex1990s_months",
+      "value": 485.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "RevPost_pp",
+      "value": 1.2635248854839343,
+      "se": null,
+      "n": 288
+    },
+    {
+      "name": "Factor_SMB_timing_pp",
+      "value": 0.5980122833520456,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Factor_HML_timing_pp",
+      "value": 0.7711611286999378,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Factor_CMA_timing_pp",
+      "value": 0.07243571720410322,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Factor_RMW_timing_pp",
+      "value": 0.03027527266881397,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "Factor_UMD_timing_pp",
+      "value": 0.5859713471140662,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevAtLimitBPPP_pct",
+      "value": 53.223140495867774,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevAtLimitMap_pct",
+      "value": 96.69421487603306,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevPreBPPP_exposure",
+      "value": 1.4854574786115546,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevPreMap_exposure",
+      "value": 2.447584320909163,
+      "se": null,
+      "n": 605
+    }
+  ],
+  "sample": {
+    "description": "Monthly factor returns July 1963-Dec 2023 (726 months) from Kenneth French 5 factors 2x3+MOM and 212 OSAP anomaly LS returns, 30 factor-specific predictors (TSMom,CSMom,Val,Rev,Vol x6 series) total 242 predictors+constant, standardised expanding winsorised 3SD missing->0 first12 zero, 121 burn-in 605 OOS Aug1973-Dec2023 rolling 120m",
+    "n": 726,
+    "start": "1963-07-31",
+    "end": "2023-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "RevExactDates": "exact posterior HMC in rank(K)<=T via 32 chains 300 burn 700 retained not rebuilt - Laplace approximation used, so exact timing/MCSE/Rhat not computed",
+      "RevPcaTen_timing_pp": "PCA on 242 predictors re-estimated each month not rebuilt due to time",
+      "RevDropAnomaly_pp": "dropping anomaly predictors not rebuilt",
+      "RevPub_pp": "publication-lag requires SignalDoc dates not rebuilt",
+      "TurnoverPenalty_kappa80_timing_pp": "turnover-penalised f_kappa grid not rebuilt",
+      "RevMandateTimLow_pp": "mandate grid 16 c/g combos not rebuilt",
+      "RevBagTiming_pp": "bagged ridge 100 bootstraps per month not rebuilt",
+      "RevRecTiming_pp": "recursive prior scale selection not rebuilt",
+      "Constant_active_pp": "constant allocation optimisation not rebuilt (constant comparator details omitted)",
+      "Lasso_timing_pp": "lasso sparse mean-variance comparator not rebuilt",
+      "CMV_timing_pp": "conditional mean-variance ridge forecast comparator not rebuilt"
+    },
+    "substitutions": "French data 202609 CRSP vintage (vs paper 202312 Dec vintage); OSAP PredictorLSretWide.parquet Data-Release-2026.10 CC BY 4.0 (vs earlier release) 212 cols same count; factor-specific predictors built per Appendix with 12m/36m/60m lookbacks; omega calibrated via diagonal trace-matching two-pass Newton on kernel K_ss'=(F'F)(z'Lambda^{-1}z); market_data module not used, direct HTTP fetch used; turnover/holding costs phi 60/25/30/30/70bps h 90/40/45/45/80bps charged at factor level as in paper"
+  },
+  "notes": "BPPP/RPPP via affine surrogate q=1+r_m+theta'zF CRRA gamma5 prior delta_s0.8 delta_tau1, Newton in alpha space alpha=omega q^{-gamma} J=I+omega gamma diag(q^{-gamma-1})K backtracking, Laplace averaging closed form E[Pi_c]=-cPhi(a)+mu(Phi(b)-Phi(a))+sigma(phi(a)-phi(b))+c(1-Phi(b)) Woodbury sigma^2=z'Lambda^{-1}z - h'(D^{-1}+K)^{-1}h D=omega gamma diag(q^{-gamma-1}), limits c0.6 g1.5 c-clip then gross-scale, timing decomposition E[wF]=E[w]E[F]+Cov summed over 5 factors annualised pp12*100 share timing/active divisor T, HAC Bartlett bw floor(4(T/100)^{2/9})=5 se=sqrt(var/T) t=mean/se, Sharpe sqrt12 mean/sd total & excess, CE 12[(mean(1+r)^{1-gamma})^{1/(1-gamma)}-1]*100, turnover 12*mean sum|dw| exposure mean sum|w| at-limit pct; all numbers computed from data not copied; count claims computed from data not hardcoded; omitted comparators/robustness listed in not_rebuilt"
+}

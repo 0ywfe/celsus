@@ -1,0 +1,59 @@
+{
+ "run_id": "run-20261030T053811Z-87b23c",
+ "paper": "2609.21587",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 22 of 24 checked results match within their uncertainty. Its main result, tally_fbm_H_below_0.5, is 10 ETFs in the paper and 10 ETFs here (consistent).",
+ "headline": {
+  "name": "tally_fbm_H_below_0.5",
+  "kind": "tally",
+  "unit": "ETFs",
+  "reported": 10.0,
+  "reproduced": 10,
+  "se": 0,
+  "n": 10,
+  "consistent": true,
+  "why": "rounds to the printed 10"
+ },
+ "sample": [
+  {
+   "name": "count_etf_tickers",
+   "reported": 10.0,
+   "reproduced": 10,
+   "consistent": true
+  },
+  {
+   "name": "count_etf_days_approx",
+   "reported": 3770.0,
+   "reproduced": 3774,
+   "consistent": true
+  },
+  {
+   "name": "count_stock_tickers",
+   "reported": 40.0,
+   "reproduced": 40,
+   "consistent": true
+  },
+  {
+   "name": "count_MCS_models",
+   "reported": 10.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 24,
+ "matched": 22,
+ "rejections": [],
+ "rounds": 3,
+ "packages": [],
+ "calls": 34,
+ "cost_usd": 1.4835,
+ "tokens_in": 3406781,
+ "tokens_out": 114918,
+ "wall_s": 4647.6,
+ "crashed": null
+}

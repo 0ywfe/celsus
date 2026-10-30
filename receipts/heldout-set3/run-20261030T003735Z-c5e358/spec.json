@@ -1,0 +1,1677 @@
+{
+ "title": "Panel regression for GDP of CEE countries using time-varying coefficients",
+ "hypothesis": "H1 effects vary over time around 2008 and COVID, H2 private debt strong adverse post-2008, H3 private debt explains Baltic divergence; supported by beta_X7 coefficients and kappa Table1 and lambda(t) Figure6",
+ "data_sources": [
+  "Eurostat PPP/price/GDPpc PPS EU27=100",
+  "World Bank FDI, trade, GCF",
+  "ESTAT gov debt and private debt consolidated tipspd20",
+  "IMF WEO April 2025 for rank illustration Figure2 not used in regression"
+ ],
+ "sample": "Panel of 11 EU-acceding CEE countries: Bulgaria, Czechia, Estonia, Croatia, Latvia, Lithuania, Hungary, Poland, Romania, Slovenia, Slovakia. Annual observations 1995-2024. Regressed variables matrix x is 11 countries x 29 time steps {1995,...,2023} x 7 factors. Dependent delta_y is 11 countries x 29 intervals 1996-2024. Total pooled observations 11*29=319. Sources: Eurostat PPP/price/GDPpc PPS EU27=100 and ESTAT gov debt and private debt consolidated, World Bank FDI net inflows %GDP, trade %GDP, GCF %GDP (X3 and X5 accumulated over period considered). Filters: period 1995-2024 only, as reliable CEE data available from 1995.",
+ "period_start": "1995",
+ "period_end": "2024",
+ "method": [
+  "1. Define delta_y_{i,t}=x_{i,t,1}-x_{i,t-1,1} as annual change in GDP per capita PPP PPS EU27=100. Regressor vector x_{i,t-1} = [X1 GDPpc PPS, X2 price level index EU27=100, X3 accumulated FDI cum.%GDP, X4 trade %GDP, X5 accumulated GCF cum.%GDP, X6 central gov debt %GDP, X7 private sector debt consolidated %GDP] lagged t-1.",
+  "2. Pooled standardization: mu_j = 1/NT sum x_{i,t,j}, sigma_j^2 = 1/(NT-1) sum (x_{i,t,j}-mu_j)^2, z_{i,t,j}=(x_{i,t,j}-mu_j)/sigma_j with NT=319. Pooled correlation Omega = cor(z) eigendecomposition Omega = W Lambda W^T, W^T W=I, Lambda=diag(lambda_k). Orthogonal regressors p_{i,t,k}= sum_j W_{j,k} z_{i,t,j}. By construction 1/(NT-1) sum p_{i,t,k} p_{i,t,l}=lambda_k delta_kl.",
+  "3. Estimate LRVC in orthogonal basis year-by-year cross-section OLS N=11: delta_y_{i,t}= alpha_t^P + sum_{k=1}^d gamma_{t-1,k} p_{i,t-1,k} + e_{i,t} for t=1996..2024 (29 regressions, d=7, df=n-d-1=3). Report R2, Adjusted R2=1-(1-R2)(n-1)/(n-d-1), residual SD, F-statistic per year.",
+  "4. Back-transformation to original X-space: beta_{t-1,j}=1/sigma_j sum_k W_{j,k} gamma_{t-1,k}, alpha_t=alpha_t^P - sum_j mu_j beta_{t-1,j} i.e. beta=diag(sigma)^{-1} W gamma, alpha=alpha^P - mu^T beta. Standard errors by delta method from P-space covariance through linear transformation. t-significance stars *p<0.10 **p<0.05 ***p<0.01. VIFs for X1-X7 range thresholds referenced.",
+  "5. Decomposition: delta_y_{i,t,j}=alpha_t/d + beta_{t-1,j} x_{i,t-1,j}, delta_y=sum_j delta_y_j. Cumulative component kappa_{i,t,j}=GDP_{1995}/d + sum_{tau=1996}^t delta_y_{i,tau,j}. Relative private debt lambda(t)=sgn(kappa_{i,t,7}) kappa_{i,t,7}^2 / sum_j kappa_{i,t,j}^2. Full regressed delta_y^{fr} replaces lagged x_{t-1,1} by accumulated delta_y. Three GDP paths: GDP Data(t)=GDP1995+sum delta_y^e, GDP Regr.(t)=GDP1995+sum delta_y^r, GDP Regr.Full(t)=GDP1995+sum delta_y^{fr}, accumulated error e^a_{i,t}=sum e_{i,tau}=GDP Regr.-GDP Data.",
+  "6. Diagnostics on residuals e_{i,t}: pooled 319 and per-country 29 descriptive stats (mean, SD, median, skew, kurt, Q25, Q75, IQR, RMSE/MAE, IQR/SD), Jarque-Bera normality, Bartlett heteroskedasticity across 29 yearly cross-sections, variance ratio max/min."
+ ],
+ "claims": [
+  {
+   "name": "count_N_countries",
+   "description": "Number of CEE countries in panel: Bulgaria, Czechia, Estonia, Croatia, Latvia, Lithuania, Hungary, Poland, Romania, Slovenia, Slovakia.",
+   "value": "11",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Abstract, Sec 3, Table1"
+  },
+  {
+   "name": "count_T_intervals",
+   "description": "Number of annual intervals 1996-2024 and regressor years 1995-2023; T=29 for every country.",
+   "value": "29",
+   "unit": "years",
+   "kind": "count",
+   "where": "Sec 3 Eq1, Tab descr, Tab countrystats note"
+  },
+  {
+   "name": "count_pooled_319",
+   "description": "Total pooled observations N*T =11*29=319 for correlation, residuals, etc.",
+   "value": "319",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab corr n=11*29=319, Tab stat residuals 319 obs"
+  },
+  {
+   "name": "count_yearly_cross_section_N",
+   "description": "Cross-section size per yearly regression.",
+   "value": "11",
+   "unit": "countries per year",
+   "kind": "count",
+   "where": "Sec 3 N=11, Tab tvcoefs n=11"
+  },
+  {
+   "name": "count_Bulgaria_29",
+   "description": "Bulgaria country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats T=29 every country, Tab stat residuals 29 per country"
+  },
+  {
+   "name": "count_Czechia_29",
+   "description": "Czechia country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Estonia_29",
+   "description": "Estonia country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Croatia_29",
+   "description": "Croatia country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Latvia_29",
+   "description": "Latvia country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Lithuania_29",
+   "description": "Lithuania country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Hungary_29",
+   "description": "Hungary country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Poland_29",
+   "description": "Poland country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Romania_29",
+   "description": "Romania country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Slovenia_29",
+   "description": "Slovenia country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "count_Slovakia_29",
+   "description": "Slovakia country time series length.",
+   "value": "29",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Tab countrystats, Tab stat residuals"
+  },
+  {
+   "name": "param_d_regressors",
+   "description": "Number of regressors X1-X7, requirement d<N.",
+   "value": "7",
+   "unit": "regressors",
+   "kind": "parameter",
+   "where": "Sec 3 d=7, Sec 5.1 d<N=11, Discussion d=7 N=11 N-d-1=3, Tab tvcoefs d=7 original X-space recovered from principal-components regression Eq L RVC_P."
+  },
+  {
+   "name": "param_df",
+   "description": "Degrees of freedom n-d-1 =11-7-1=3 for yearly cross-section.",
+   "value": "3",
+   "unit": "df",
+   "kind": "parameter",
+   "where": "Tab tvcoefs note (n-1)/(n-d-1), Discussion N-d-1=3, Bartlett df=28 separate."
+  },
+  {
+   "name": "param_VIF_threshold",
+   "description": "Conventional VIF threshold referenced for no harmful multicollinearity.",
+   "value": "5",
+   "unit": "VIF",
+   "kind": "parameter",
+   "where": "Sec 4 VIF range 1.1 to 4.0 mean 2.6 all below threshold of 5"
+  },
+  {
+   "name": "raw_X1_mean",
+   "description": "Pooled mean X1 GDP/pc PPS EU27=100 raw units.",
+   "value": "62.492",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X1 GDP/pc 62.492 (SD 17.035)"
+  },
+  {
+   "name": "raw_X1_SD",
+   "description": "SD X1 raw",
+   "value": "17.035",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X1_Min",
+   "description": "Min X1 raw",
+   "value": "26.000",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X1_Median",
+   "description": "Median X1 raw",
+   "value": "63.000",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X1_Max",
+   "description": "Max X1 raw",
+   "value": "96.000",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X1_Skew",
+   "description": "Skew X1 raw",
+   "value": "-0.209",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X1_Kurt",
+   "description": "Kurt X1 raw",
+   "value": "2.129",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X2_mean",
+   "description": "Mean X2 raw",
+   "value": "59.906",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X2 Price Level 59.906"
+  },
+  {
+   "name": "raw_X2_SD",
+   "description": "SD X2 raw",
+   "value": "13.704",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X2_Min",
+   "description": "Min X2 raw",
+   "value": "20.300",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X2_Median",
+   "description": "Median X2 raw",
+   "value": "60.500",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X2_Max",
+   "description": "Max X2 raw",
+   "value": "91.800",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X2_Skew",
+   "description": "Skew X2",
+   "value": "-0.253",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X2_Kurt",
+   "description": "Kurt X2",
+   "value": "2.690",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X3_mean",
+   "description": "Mean X3 raw",
+   "value": "77.057",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X3 FDI 77.057"
+  },
+  {
+   "name": "raw_X3_SD",
+   "description": "SD X3",
+   "value": "66.436",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X3_Min",
+   "description": "Min X3",
+   "value": "0.474",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X3_Median",
+   "description": "Median X3",
+   "value": "65.521",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X3_Max",
+   "description": "Max X3",
+   "value": "393.995",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X3_Skew",
+   "description": "Skew X3",
+   "value": "1.745",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X3_Kurt",
+   "description": "Kurt X3",
+   "value": "7.455",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X4_mean",
+   "description": "Mean X4 trade",
+   "value": "115.017",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X4 Trade 115.017"
+  },
+  {
+   "name": "raw_X4_SD",
+   "description": "SD X4",
+   "value": "34.865",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X4_Min",
+   "description": "Min X4",
+   "value": "43.555",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X4_Median",
+   "description": "Median X4",
+   "value": "116.296",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X4_Max",
+   "description": "Max X4",
+   "value": "203.929",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X4_Skew",
+   "description": "Skew X4",
+   "value": "0.113",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X4_Kurt",
+   "description": "Kurt X4",
+   "value": "2.117",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X5_mean",
+   "description": "Mean X5 GCF",
+   "value": "378.169",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X5 GCF 378.169"
+  },
+  {
+   "name": "raw_X5_SD",
+   "description": "SD X5",
+   "value": "216.927",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X5_Min",
+   "description": "Min X5",
+   "value": "16.081",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X5_Median",
+   "description": "Median X5",
+   "value": "387.136",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X5_Max",
+   "description": "Max X5",
+   "value": "844.834",
+   "unit": "cum.%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X5_Skew",
+   "description": "Skew X5",
+   "value": "0.032",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X5_Kurt",
+   "description": "Kurt X5",
+   "value": "1.917",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X6_mean",
+   "description": "Mean X6 gov debt",
+   "value": "38.370",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X6 Gov Debt 38.370"
+  },
+  {
+   "name": "raw_X6_SD",
+   "description": "SD X6",
+   "value": "21.711",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X6_Min",
+   "description": "Min X6",
+   "value": "3.900",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X6_Median",
+   "description": "Median X6",
+   "value": "37.400",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X6_Max",
+   "description": "Max X6",
+   "value": "99.000",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X6_Skew",
+   "description": "Skew X6",
+   "value": "0.492",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X6_Kurt",
+   "description": "Kurt X6",
+   "value": "2.511",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X7_mean",
+   "description": "Mean X7 private debt",
+   "value": "69.996",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A X7 Priv debt 69.996"
+  },
+  {
+   "name": "raw_X7_SD",
+   "description": "SD X7",
+   "value": "28.545",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X7_Min",
+   "description": "Min X7",
+   "value": "9.900",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X7_Median",
+   "description": "Median X7",
+   "value": "68.400",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X7_Max",
+   "description": "Max X7",
+   "value": "146.700",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X7_Skew",
+   "description": "Skew X7",
+   "value": "0.334",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "raw_X7_Kurt",
+   "description": "Kurt X7",
+   "value": "2.610",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab descrptstats Panel A"
+  },
+  {
+   "name": "corr_X1_X2",
+   "description": "Pooled correlation X1-X2",
+   "value": "0.801***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X1-X2 0.801***"
+  },
+  {
+   "name": "corr_X1_X3",
+   "description": "corr X1-X3",
+   "value": "0.349***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X1-X3"
+  },
+  {
+   "name": "corr_X2_X3",
+   "description": "corr X2-X3",
+   "value": "0.338***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X2-X3"
+  },
+  {
+   "name": "corr_X1_X4",
+   "description": "corr X1-X4",
+   "value": "0.589***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X1-X4"
+  },
+  {
+   "name": "corr_X2_X4",
+   "description": "corr X2-X4",
+   "value": "0.588***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X2-X4"
+  },
+  {
+   "name": "corr_X3_X4",
+   "description": "corr X3-X4",
+   "value": "0.543***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X3-X4"
+  },
+  {
+   "name": "corr_X1_X5",
+   "description": "corr X1-X5",
+   "value": "0.692***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X1-X5"
+  },
+  {
+   "name": "corr_X2_X5",
+   "description": "corr X2-X5",
+   "value": "0.698***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X2-X5"
+  },
+  {
+   "name": "corr_X3_X5",
+   "description": "corr X3-X5",
+   "value": "0.690***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X3-X5"
+  },
+  {
+   "name": "corr_X4_X5",
+   "description": "corr X4-X5",
+   "value": "0.638***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X4-X5"
+  },
+  {
+   "name": "corr_X1_X6",
+   "description": "corr X1-X6",
+   "value": "0.220***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X1-X6"
+  },
+  {
+   "name": "corr_X2_X6",
+   "description": "corr X2-X6",
+   "value": "0.164***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X2-X6"
+  },
+  {
+   "name": "corr_X3_X6",
+   "description": "corr X3-X6",
+   "value": "0.192***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X3-X6"
+  },
+  {
+   "name": "corr_X4_X6",
+   "description": "corr X4-X6",
+   "value": "0.176***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X4-X6"
+  },
+  {
+   "name": "corr_X5_X6",
+   "description": "corr X5-X6",
+   "value": "0.274***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X5-X6"
+  },
+  {
+   "name": "corr_X1_X7",
+   "description": "corr X1-X7",
+   "value": "0.364***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X1-X7"
+  },
+  {
+   "name": "corr_X2_X7",
+   "description": "corr X2-X7",
+   "value": "0.490***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X2-X7"
+  },
+  {
+   "name": "corr_X3_X7",
+   "description": "corr X3-X7",
+   "value": "0.540***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X3-X7"
+  },
+  {
+   "name": "corr_X4_X7",
+   "description": "corr X4-X7",
+   "value": "0.426***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X4-X7"
+  },
+  {
+   "name": "corr_X5_X7",
+   "description": "corr X5-X7",
+   "value": "0.532***",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X5-X7"
+  },
+  {
+   "name": "corr_X6_X7",
+   "description": "corr X6-X7 (gov vs private debt)",
+   "value": "0.054",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab corr X6-X7 0.054 no stars"
+  },
+  {
+   "name": "VIF_min",
+   "description": "Minimum VIF among X1-X7",
+   "value": "1.1",
+   "unit": "VIF",
+   "kind": "estimate",
+   "where": "Sec 4 VIF range from 1.1 to 4.0 (mean 2.6)"
+  },
+  {
+   "name": "VIF_max",
+   "description": "Maximum VIF",
+   "value": "4.0",
+   "unit": "VIF",
+   "kind": "estimate",
+   "where": "Sec 4 VIF range"
+  },
+  {
+   "name": "VIF_mean",
+   "description": "Mean VIF",
+   "value": "2.6",
+   "unit": "VIF",
+   "kind": "estimate",
+   "where": "Sec 4 mean 2.6"
+  },
+  {
+   "name": "resid_pooled_mean",
+   "description": "Pooled residual mean",
+   "value": "0.000",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals Panel A e_it all mean 0.000"
+  },
+  {
+   "name": "resid_pooled_SD",
+   "description": "Pooled residual SD",
+   "value": "0.747",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals Panel A SD 0.747"
+  },
+  {
+   "name": "resid_pooled_median",
+   "description": "Pooled median",
+   "value": "0.013",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals Panel A median 0.013"
+  },
+  {
+   "name": "resid_pooled_skew",
+   "description": "Pooled skew",
+   "value": "0.037",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab stat residuals skew 0.037"
+  },
+  {
+   "name": "resid_pooled_kurt",
+   "description": "Pooled kurtosis",
+   "value": "4.549",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab stat residuals kurt 4.549 vs Normal 3"
+  },
+  {
+   "name": "resid_pooled_Q25",
+   "description": "25th percentile",
+   "value": "-0.359",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals Q25 -0.359"
+  },
+  {
+   "name": "resid_pooled_Q75",
+   "description": "75th percentile",
+   "value": "0.372",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals Q75 0.372"
+  },
+  {
+   "name": "resid_pooled_IQR",
+   "description": "IQR",
+   "value": "0.731",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals IQR 0.731 = Q75-Q25"
+  },
+  {
+   "name": "resid_pooled_RMSE_over_MAE",
+   "description": "RMSE/MAE ratio",
+   "value": "1.402",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab stat residuals RMSE/MAE 1.402 vs Normal 1.25"
+  },
+  {
+   "name": "resid_pooled_IQR_over_SD",
+   "description": "IQR/SD",
+   "value": "0.98",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Text IQR/SD ratio 0.98 below 1.35"
+  },
+  {
+   "name": "resid_median_deviation_pct_SD",
+   "description": "Median deviation as %SD",
+   "value": "1.7",
+   "unit": "% of SD",
+   "kind": "estimate",
+   "where": "Text median deviates from zero only by 1.7% of SD"
+  },
+  {
+   "name": "JB_p_pooled",
+   "description": "JB normality p-value pooled 319 obs",
+   "value": "0.0172",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Text Jarque-Bera test p=0.0172"
+  },
+  {
+   "name": "Bartlett_B",
+   "description": "Bartlett test statistic",
+   "value": "193.09",
+   "unit": "B statistic",
+   "kind": "estimate",
+   "where": "Text Bartlett B =193.09 df=28 p<0.001"
+  },
+  {
+   "name": "Bartlett_df",
+   "description": "Bartlett degrees of freedom",
+   "value": "28",
+   "unit": "df",
+   "kind": "parameter",
+   "where": "Text Bartlett df=28 (29 yearly cross-sections minus 1)"
+  },
+  {
+   "name": "Bartlett_p",
+   "description": "Bartlett p-value",
+   "value": "p < 0.001",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Text Bartlett p<0.001 rejects equal variances"
+  },
+  {
+   "name": "variance_ratio_max_min",
+   "description": "Max/min country variance ratio",
+   "value": "9.8",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Text ratio of largest to smallest country variance (1.275/0.407)^2 approx 9.8"
+  },
+  {
+   "name": "resid_Bulgaria_mean",
+   "description": "Bulgaria residual mean (29 obs)",
+   "value": "0.062",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab stat residuals Bulgaria mean 0.062"
+  },
+  {
+   "name": "resid_Bulgaria_SD",
+   "description": "Bulgaria SD",
+   "value": "0.643",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Bulgaria SD 0.643"
+  },
+  {
+   "name": "resid_Bulgaria_median",
+   "description": "Bulgaria median",
+   "value": "0.011",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Bulgaria median 0.011"
+  },
+  {
+   "name": "resid_Czechia_mean",
+   "description": "Czechia residual mean",
+   "value": "0.192",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Czechia mean 0.192"
+  },
+  {
+   "name": "resid_Czechia_SD",
+   "description": "Czechia SD",
+   "value": "0.492",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Czechia SD 0.492"
+  },
+  {
+   "name": "resid_Latvia_mean",
+   "description": "Latvia residual mean",
+   "value": "-0.207",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Latvia mean -0.207"
+  },
+  {
+   "name": "resid_Latvia_SD",
+   "description": "Latvia SD",
+   "value": "0.654",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Latvia SD 0.654"
+  },
+  {
+   "name": "resid_Hungary_SD",
+   "description": "Hungary SD min country variance",
+   "value": "0.407",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Hungary SD 0.407 smallest"
+  },
+  {
+   "name": "resid_Poland_SD",
+   "description": "Poland SD max country variance",
+   "value": "1.275",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab residuals Poland SD 1.275 largest"
+  },
+  {
+   "name": "alpha_1997",
+   "description": "Intercept alpha 1997",
+   "value": "-5.799***",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha_t 1997 -5.799*** (0.407)"
+  },
+  {
+   "name": "alpha_1997_SE",
+   "description": "SE alpha 1997",
+   "value": "0.407",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs SE in parentheses 0.407"
+  },
+  {
+   "name": "alpha_2002",
+   "description": "alpha 2002",
+   "value": "0.300",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha 2002 0.300 (2.354)"
+  },
+  {
+   "name": "alpha_2002_SE",
+   "description": "SE alpha 2002",
+   "value": "2.354",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs 2002 SE"
+  },
+  {
+   "name": "alpha_2009",
+   "description": "alpha 2009",
+   "value": "12.081",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha 2009 12.081 (5.949)"
+  },
+  {
+   "name": "alpha_2009_SE",
+   "description": "SE alpha 2009",
+   "value": "5.949",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs SE 5.949"
+  },
+  {
+   "name": "alpha_2013",
+   "description": "alpha 2013",
+   "value": "3.788",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha 2013 3.788 (2.053)"
+  },
+  {
+   "name": "alpha_2018",
+   "description": "alpha 2018",
+   "value": "7.586***",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha 2018 7.586*** (0.477)"
+  },
+  {
+   "name": "alpha_2018_SE",
+   "description": "SE alpha 2018",
+   "value": "0.477",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs SE 0.477"
+  },
+  {
+   "name": "alpha_2021",
+   "description": "alpha 2021",
+   "value": "16.146**",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha 2021 16.146** (3.362)"
+  },
+  {
+   "name": "alpha_2021_SE",
+   "description": "SE alpha 2021",
+   "value": "3.362",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs SE 3.362"
+  },
+  {
+   "name": "alpha_2024",
+   "description": "alpha 2024",
+   "value": "4.713",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs alpha 2024 4.713 (4.429)"
+  },
+  {
+   "name": "beta_X1_1997",
+   "description": "beta X1 1997",
+   "value": "-0.128***",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 1997 -0.128*** (0.007)"
+  },
+  {
+   "name": "beta_X1_2002",
+   "description": "beta X1 2002",
+   "value": "-0.105**",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 2002 -0.105**"
+  },
+  {
+   "name": "beta_X1_2009",
+   "description": "beta X1 2009",
+   "value": "0.125",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 2009 0.125 (0.108)"
+  },
+  {
+   "name": "beta_X1_2013",
+   "description": "beta X1 2013",
+   "value": "-0.186**",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 2013 -0.186**"
+  },
+  {
+   "name": "beta_X1_2018",
+   "description": "beta X1 2018",
+   "value": "-0.013*",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 2018 -0.013*"
+  },
+  {
+   "name": "beta_X1_2021",
+   "description": "beta X1 2021",
+   "value": "-0.168**",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 2021 -0.168**"
+  },
+  {
+   "name": "beta_X1_2024",
+   "description": "beta X1 2024",
+   "value": "0.034",
+   "unit": "PPS per PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X1 2024 0.034"
+  },
+  {
+   "name": "beta_X2_1997",
+   "description": "beta X2 1997",
+   "value": "0.149***",
+   "unit": "PPS per index",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X2 1997 0.149***"
+  },
+  {
+   "name": "beta_X2_2009",
+   "description": "beta X2 2009",
+   "value": "-0.526*",
+   "unit": "PPS per index",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X2 2009 -0.526*"
+  },
+  {
+   "name": "beta_X2_2013",
+   "description": "beta X2 2013",
+   "value": "0.512***",
+   "unit": "PPS per index",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X2 2013 0.512***"
+  },
+  {
+   "name": "beta_X2_2018",
+   "description": "beta X2 2018",
+   "value": "0.123***",
+   "unit": "PPS per index",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X2 2018 0.123***"
+  },
+  {
+   "name": "beta_X2_2021",
+   "description": "beta X2 2021",
+   "value": "0.223**",
+   "unit": "PPS per index",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X2 2021 0.223**"
+  },
+  {
+   "name": "beta_X2_2024",
+   "description": "beta X2 2024",
+   "value": "-0.104",
+   "unit": "PPS per index",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X2 2024 -0.104"
+  },
+  {
+   "name": "beta_X7_1997",
+   "description": "beta private debt 1997",
+   "value": "-0.082***",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 1997 -0.082*** (0.006)"
+  },
+  {
+   "name": "beta_X7_2002",
+   "description": "beta X7 2002",
+   "value": "0.069",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 2002 0.069 (0.040)"
+  },
+  {
+   "name": "beta_X7_2009",
+   "description": "beta X7 2009",
+   "value": "0.009",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 2009 0.009 (0.042)"
+  },
+  {
+   "name": "beta_X7_2013",
+   "description": "beta X7 2013",
+   "value": "-0.125**",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 2013 -0.125** (0.021)"
+  },
+  {
+   "name": "beta_X7_2018",
+   "description": "beta X7 2018",
+   "value": "-0.068***",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 2018 -0.068*** (0.003)"
+  },
+  {
+   "name": "beta_X7_2021",
+   "description": "beta X7 2021",
+   "value": "-0.012",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 2021 -0.012 (0.021)"
+  },
+  {
+   "name": "beta_X7_2024",
+   "description": "beta X7 2024",
+   "value": "0.039",
+   "unit": "PPS per %GDP",
+   "kind": "estimate",
+   "where": "Tab tvcoefs X7 2024 0.039 (0.033)"
+  },
+  {
+   "name": "R2_1997",
+   "description": "R2 1997 yearly fit n=11 d=7",
+   "value": "0.999",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 1997 0.999"
+  },
+  {
+   "name": "R2_2002",
+   "description": "R2 2002",
+   "value": "0.935",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 2002 0.935"
+  },
+  {
+   "name": "R2_2009",
+   "description": "R2 2009",
+   "value": "0.886",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 2009 0.886"
+  },
+  {
+   "name": "R2_2013",
+   "description": "R2 2013",
+   "value": "0.959",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 2013 0.959"
+  },
+  {
+   "name": "R2_2018",
+   "description": "R2 2018",
+   "value": "0.995",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 2018 0.995"
+  },
+  {
+   "name": "R2_2021",
+   "description": "R2 2021",
+   "value": "0.943",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 2021 0.943"
+  },
+  {
+   "name": "R2_2024",
+   "description": "R2 2024",
+   "value": "0.642",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs R2 2024 0.642"
+  },
+  {
+   "name": "adjR2_1997",
+   "description": "Adj R2 1997",
+   "value": "0.997",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Adjusted R2 1997 0.997"
+  },
+  {
+   "name": "adjR2_2009",
+   "description": "Adj R2 2009",
+   "value": "0.620",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Adj R2 2009 0.620"
+  },
+  {
+   "name": "adjR2_2024",
+   "description": "Adj R2 2024",
+   "value": "-0.193",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Adj R2 2024 -0.193"
+  },
+  {
+   "name": "ResidSD_1997",
+   "description": "Residual SD 1997",
+   "value": "0.162",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Residual SD 1997 0.162"
+  },
+  {
+   "name": "ResidSD_2009",
+   "description": "Residual SD 2009 spike crisis",
+   "value": "2.109",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Residual SD 2009 2.109"
+  },
+  {
+   "name": "ResidSD_2018",
+   "description": "Residual SD 2018",
+   "value": "0.124",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Residual SD 2018 0.124"
+  },
+  {
+   "name": "ResidSD_2024",
+   "description": "Residual SD 2024",
+   "value": "1.021",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab tvcoefs Residual SD 2024 1.021"
+  },
+  {
+   "name": "F_1997",
+   "description": "F-statistic 1997 d=7 n=11",
+   "value": "428.1",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 1997 428.1"
+  },
+  {
+   "name": "F_2002",
+   "description": "F 2002",
+   "value": "6.165",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 2002 6.165"
+  },
+  {
+   "name": "F_2009",
+   "description": "F 2009",
+   "value": "3.331",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 2009 3.331"
+  },
+  {
+   "name": "F_2013",
+   "description": "F 2013",
+   "value": "10.02",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 2013 10.02"
+  },
+  {
+   "name": "F_2018",
+   "description": "F 2018",
+   "value": "85.29",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 2018 85.29"
+  },
+  {
+   "name": "F_2021",
+   "description": "F 2021",
+   "value": "7.090",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 2021 7.090"
+  },
+  {
+   "name": "F_2024",
+   "description": "F 2024",
+   "value": "0.769",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Tab tvcoefs F 2024 0.769"
+  },
+  {
+   "name": "kappa_Bulgaria_X2_2024",
+   "description": "Cumulative contribution X2 price level Bulgaria 2024",
+   "value": "143.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Bulgaria X2 143.0"
+  },
+  {
+   "name": "kappa_Bulgaria_Total_2024",
+   "description": "Total kappa sum Bulgaria 2024",
+   "value": "64.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Bulgaria Total 64.2"
+  },
+  {
+   "name": "kappa_Bulgaria_X7_2024",
+   "description": "Cumulative private debt contribution Bulgaria",
+   "value": "-84.7",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Bulgaria X7 -84.7"
+  },
+  {
+   "name": "kappa_Bulgaria_X1_2024",
+   "description": "Cumulative GDP level contribution Bulgaria",
+   "value": "-78.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Bulgaria X1 -78.2"
+  },
+  {
+   "name": "kappa_Bulgaria_errAccum_2024",
+   "description": "Accumulated error e^a 2024 Bulgaria",
+   "value": "1.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Bulgaria accumulated error 1.8"
+  },
+  {
+   "name": "kappa_Czechia_Total_2024",
+   "description": "Czechia total",
+   "value": "85.4",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Czechia Total 85.4"
+  },
+  {
+   "name": "kappa_Czechia_X7_2024",
+   "description": "Czechia private debt",
+   "value": "-52.7",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Czechia X7 -52.7"
+  },
+  {
+   "name": "kappa_Czechia_X1_2024",
+   "description": "Czechia GDP level",
+   "value": "-169.9",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Czechia X1 -169.9"
+  },
+  {
+   "name": "kappa_Czechia_errAccum_2024",
+   "description": "Czechia accumulated error",
+   "value": "5.6",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Czechia err 5.6 highest along Latvia"
+  },
+  {
+   "name": "kappa_Estonia_Total_2024",
+   "description": "Estonia total",
+   "value": "79.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Estonia Total 79.8"
+  },
+  {
+   "name": "kappa_Estonia_X2_2024",
+   "description": "Estonia X2",
+   "value": "200.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Estonia X2 200.2"
+  },
+  {
+   "name": "kappa_Estonia_X7_2024",
+   "description": "Estonia private debt 2024 - highest drag",
+   "value": "-93.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Estonia X7 -93.0 most negative private debt contribution"
+  },
+  {
+   "name": "kappa_Estonia_X1_2024",
+   "description": "Estonia X1",
+   "value": "-130.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Estonia X1 -130.8"
+  },
+  {
+   "name": "kappa_Estonia_errAccum_2024",
+   "description": "Estonia accumulated error",
+   "value": "-0.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Estonia err -0.8"
+  },
+  {
+   "name": "kappa_Latvia_Total_2024",
+   "description": "Latvia total",
+   "value": "77.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Latvia Total 77.0"
+  },
+  {
+   "name": "kappa_Latvia_X7_2024",
+   "description": "Latvia private debt",
+   "value": "-75.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Latvia X7 -75.8"
+  },
+  {
+   "name": "kappa_Latvia_errAccum_2024",
+   "description": "Latvia accumulated error -6.0",
+   "value": "-6.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Latvia err -6.0 highest magnitude negative"
+  },
+  {
+   "name": "kappa_Lithuania_Total_2024",
+   "description": "Lithuania total highest total among Baltics",
+   "value": "86.5",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Lithuania Total 86.5"
+  },
+  {
+   "name": "kappa_Lithuania_X2_2024",
+   "description": "Lithuania X2",
+   "value": "174.4",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Lithuania X2 174.4"
+  },
+  {
+   "name": "kappa_Lithuania_X7_2024",
+   "description": "Lithuania private debt - explains Baltic divergence",
+   "value": "-39.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Lithuania X7 -39.2 least negative private debt among Baltics"
+  },
+  {
+   "name": "kappa_Lithuania_errAccum_2024",
+   "description": "Lithuania accumulated error",
+   "value": "1.5",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Lithuania err 1.5"
+  },
+  {
+   "name": "kappa_Poland_X7_2024",
+   "description": "Poland private debt",
+   "value": "-41.3",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Poland X7 -41.3"
+  },
+  {
+   "name": "kappa_Romania_X7_2024",
+   "description": "Romania private debt",
+   "value": "-42.7",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Romania X7 -42.7"
+  },
+  {
+   "name": "kappa_Slovenia_X2_2024",
+   "description": "Slovenia X2",
+   "value": "248.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Slovenia X2 248.0 highest price contribution"
+  },
+  {
+   "name": "kappa_Slovenia_X7_2024",
+   "description": "Slovenia private debt",
+   "value": "-66.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Slovenia X7 -66.2"
+  },
+  {
+   "name": "kappa_Slovakia_X7_2024",
+   "description": "Slovakia private debt",
+   "value": "-48.3",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Slovakia X7 -48.3"
+  },
+  {
+   "name": "kappa_Hungary_X7_2024",
+   "description": "Hungary private debt",
+   "value": "-70.5",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Hungary X7 -70.5"
+  },
+  {
+   "name": "kappa_Croatia_X7_2024",
+   "description": "Croatia private debt",
+   "value": "-80.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Croatia X7 -80.0"
+  },
+  {
+   "name": "X1_Bulgaria_mean_1996_2024",
+   "description": "Country mean 1996-2024 Bulgaria GDPpc",
+   "value": "43.59",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Tab countrystats Bulgaria X1 mean 43.59 (SD 10.39)"
+  },
+  {
+   "name": "Delta_y_Estonia_mean",
+   "description": "Estonia mean annual delta_y",
+   "value": "1.48",
+   "unit": "PPS p.a.",
+   "kind": "estimate",
+   "where": "Tab countrystats Estonia delta_y mean 1.48 (SD 2.79)"
+  },
+  {
+   "name": "Delta_y_Lithuania_mean",
+   "description": "Lithuania mean delta_y",
+   "value": "1.86",
+   "unit": "PPS p.a.",
+   "kind": "estimate",
+   "where": "Tab countrystats Lithuania delta_y mean 1.86 (SD 2.37) highest among Baltics"
+  },
+  {
+   "name": "Delta_y_Latvia_mean",
+   "description": "Latvia mean delta_y",
+   "value": "1.41",
+   "unit": "PPS p.a.",
+   "kind": "estimate",
+   "where": "Tab countrystats Latvia delta_y mean 1.41"
+  }
+ ],
+ "headline": "kappa_Estonia_X7_2024",
+ "partitions": [
+  {
+   "split": "by_country: 11 CEE countries each T=29 years 1996-2024, total 319 pooled",
+   "total": "count_pooled_319",
+   "parts": [
+    "count_Bulgaria_29 is count for Bulgaria 29 observations 1996-2024",
+    "count_Czechia_29 is count for Czechia 29 observations",
+    "count_Estonia_29 is count for Estonia 29 observations",
+    "count_Croatia_29 is count for Croatia 29 observations",
+    "count_Latvia_29 is count for Latvia 29 observations",
+    "count_Lithuania_29 is count for Lithuania 29 observations",
+    "count_Hungary_29 is count for Hungary 29 observations",
+    "count_Poland_29 is count for Poland 29 observations",
+    "count_Romania_29 is count for Romania 29 observations",
+    "count_Slovenia_29 is count for Slovenia 29 observations",
+    "count_Slovakia_29 is count for Slovakia 29 observations"
+   ]
+  },
+  {
+   "split": "by_year: 29 yearly cross-sectional regressions 1996-2024 each N=11, illustrated with 7 reported years",
+   "total": "count_pooled_319",
+   "parts": [
+    "count_yearly_cross_section_N is count per yearly cross-section N=11 for selected years 1997,2002,2009,2013,2018,2021,2024 (each of 29 yearly regressions has N=11)"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Bartlett heteroskedasticity: B=193.09 df=28 p < 0.001 rejects equal residual variances across 29 yearly cross-sections; variance ratio max/min 9.8 from Table stat residuals, variance spikes 2008-09 and 2020 Figure 3-2.",
+   "statistic": "Bartlett_B",
+   "p_value": "Bartlett_p",
+   "group_sizes": [
+    "count_pooled_319",
+    "count_yearly_cross_section_N"
+   ]
+  },
+  {
+   "test": "Jarque-Bera normality on pooled residuals e_it n=319: JB p =0.0172 rejects Normal at 5%, with pooled descriptors IQR/SD=0.98 (<1.35), RMSE/MAE=1.402 (>1.25), skew 0.037 kurt 4.549, Q25 -0.359 Q75 0.372 IQR 0.731.",
+   "statistic": "not stated",
+   "p_value": "JB_p_pooled",
+   "group_sizes": [
+    "count_pooled_319"
+   ]
+  }
+ ]
+}

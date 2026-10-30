@@ -1,0 +1,1258 @@
+{
+ "title": "Selecting and Testing Asset Pricing Models: A Stepwise Approach (Management Science, first draft Apr 2023 this draft Jan 2026)",
+ "hypothesis": "Optimal 8-factor model spans joint efficient frontier of test assets and all candidate factors: SR2(f_SEL)=SR2(r,F) equivalently alpha_tilde(M)=0 for LHS unselected factors and unselected candidate factors enhance test assets (reject implicit SR2(r)=SR2(r,f_UNS))",
+ "data_sources": [
+  "97 factor returns (FF6, Q5, DHS3, BS6, BAB, QMJ, BETA, LTR, STR, LIQ, VOL, IMD, SUE, NI, S^PLS, plus 74 HXZ factors) from authors websites and Lu Zhang website",
+  "285 bivariate-sorted basis portfolios (25 size-BM, 25 size-OP, 25 size-INV, 25 size-MOM, 25 size-beta, 25 size-STR, 25 size-LTR, 25 size-var, 25 size-resvar, 35 size-NSI, 25 size-accruals) from Ken French website",
+  "Sentiment S^PLS from Huang et al.2015 website for high/low sentiment split"
+ ],
+ "sample": "monthly U.S. equity returns of 97 traded candidate factors and 285 bivariate-sorted basis portfolios, seven baseline models CAPM(1) FF3(3) FF5(5) FF6(6) Q5(5) DHS3(3) BS6(6), expanded efficient models (CAPM^F 8, FF3^F 11, FF5^F 11, FF6^F 12, Q5^F 10, DHS3^F 9, BS6^F 12) and reduced optimal 8-factor model M8 = MKT REG PEAD HMLM STR ILR SMB EPRD, 588 months, factors one-month holding period, portfolio returns value-weighted, factors as long-short decile spreads",
+ "period_start": "January 1973",
+ "period_end": "December 2021",
+ "method": [
+  "1. Data: construct 97 factor returns F_t, 285 basis portfolio returns R_t, baseline models M_b subsets of F (e.g., CAPM {MKT}); sample T=588 months Jan 1973-Dec 2021, one-month holding, excess returns in %.",
+  "2. Spanning regression for any candidate model M: F_tilde(M)_t = alpha_tilde(M) + beta_tilde(M)' F(M)_t + eps_tilde(M)_t, where tilde(M)=F\\M size N-|M| are LHS unselected candidate factors (and optionally 285 basis portfolios), RHS=M. Estimate by OLS per LHS asset.",
+  "3. Model comparison: compute GRS(M)= (T-N)/(N-|M|) * ((1+SR2{F})/(1+SR2{F(M)}) -1) ~ F(N-|M|, T-N) under H0, and equivalently SR2{M}=mu_M' Sigma_M^{-1} mu_M, GRS decrease = SR2 increase * constant; maximal SR2 increment from adding factor j is alpha_j^2/sigma_eps,jj. HDA(M)= [T * alpha_hat' Diag(Sigma_eps_hat)^{-1} alpha_hat/(1+SR2{M}) - N1] / sqrt(2 N1[1+(N1-1) rho_hat^2]) -> N(0,1) under H0, N1=N-|M|, rho_hat sparsity correction; reject H0: alpha_tilde=0 if GRS p<0.05 or HDA>z_lambda with z_0.05=1.645 parameter.",
+  "4. Forward Stepwise Evaluation (FSE) expansion: initialize S(0)=M_b. For k=1 to N-|M_b|-1 enumerate all J=N-|S(k-1)| one-factor expansions M_j(k-1)=S(k-1) U {j}, estimate spanning regression of F_tilde(M_j) on F(M_j), compute GRS(M_j) (Eq GRS_j) and SR2{F(M_j)}; pick a_k = argmin GRS = argmax SR2; update S(k)=S(k-1)U{a_k}; compute HDA{S(k)}; stop when HDA<z_lambda (fail to reject) at k_hat, return M_b^F=S(k_hat). Guarantees screening consistency P(T subset M_b^F)->1, |M_b^F|=O(N^{n1+2n2}) with N^{1+n2} log N=o(T).",
+  "5. Backward Stepwise Evaluation (BSE) reduction: initialize S(0)=M_b^F efficient large model. For m=1 to |M_b^F|-1 enumerate all J=|S(m-1)| one-factor reductions M_j(m-1)=S(m-1)\\{j}, compute GRS and SR2, pick b_m = argmin GRS = argmax SR2; update S(m)=S(m-1)\\{b_m}; compute HDA{S(m)}; stop when HDA>z_lambda (reject) at m_hat, return M_b^{F+B}=S(m_hat-1). Guarantees selection consistency P(M_b^{F+B}=T)->1 if sqrt(N) log N <~ z^2 <~ T N^{-1/2-n2}.",
+  "6. Performance evaluation: asset pricing A|alpha|=N^{-1} sum|alpha_i|, A|t(alpha)|, #sign2 = sum I(|t|>1.96) tally, Total R2 =1- sum sum (R_it - beta_i' f_t)^2 / sum sum (R_it - CAPM_fit)^2, CS R2 =1- sum (R_bar_i - beta_i' lambda)^2 / sum (R_bar_i - CAPM_ER)^2; investment AVG, Ann.SR = sqrt(12)* mean/std of tangency portfolio (max SR2)^{1/2}, alpha_CAPM and alpha_FF5 from time-series regression of tangency on benchmark.",
+  "7. Out-of-sample: split 588 months into 3 sequential folds Time1 1973/01-1989/04 (196), Time2 1989/05-2005/08 (196), Time3 2005/09-2021/12 (196); for each fold train on other 392 months to select M^{F+B} and estimate mean/Sigma and tangency weights, apply to test 196 months constant, report INS/OOS Total/CS R2 and Ann.SR; bootstrap INS vs OOS SR2: split into 294 adjacent month-pairs (1,2)...(587,588), each bootstrap randomly assign one of pair to INS other to OOS, draw 294 pairs with replacement, 1000 replications parameter, compute INS SR2 and OOS SR2 with INS weights, report M-SR2 average, pairwise outperformance probability % and Best %.",
+  "8. Robustness: subtract transaction costs from factor returns before evaluation: 2 bps/month for annually rebalanced factors (MKT buy-hold 0, SMB, EPRD), 12 or 24 bps/month for monthly rebalanced (REG PEAD HMLM STR ILR); repeat FSE/BSE; individual factor test: for each row factor form baseline MKT+row (96) or FF3+row (94) 2- or 4-factor baseline, run FSE to efficient then BSE to optimal, record if row factor survives in reduced model and selection rate."
+ ],
+ "claims": [
+  {
+   "name": "T_588_count",
+   "description": "months Jan 1973-Dec 2021",
+   "value": "588",
+   "unit": "months",
+   "kind": "count",
+   "where": "Table Model_test note T-N df, 588=49*12 (Jan 1973-Dec 2021)"
+  },
+  {
+   "name": "N_97_count",
+   "description": "candidate factors",
+   "value": "97",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Data 97 (23+74) factors, Table Model_test 97 candidate factors excluding row model"
+  },
+  {
+   "name": "Nbasis_285_count",
+   "description": "bivariate-sorted basis portfolios test assets",
+   "value": "285",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 285 basis portfolios"
+  },
+  {
+   "name": "N_core_23_count",
+   "description": "core factors from popular models + industry factors",
+   "value": "23",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Data 97 (23+74)"
+  },
+  {
+   "name": "N_HXZ_74_count",
+   "description": "HXZ 74 factors 1-month holding",
+   "value": "74",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Data additional 74 factors from Hou et al.2020"
+  },
+  {
+   "name": "N_basis_sizeBM_25_count",
+   "description": "25 sorted size-BM",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 sorted by size and book-to-market"
+  },
+  {
+   "name": "N_basis_sizeOP_25_count",
+   "description": "25 size-OP",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and operating profitability"
+  },
+  {
+   "name": "N_basis_sizeINV_25_count",
+   "description": "25 size-INV",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and investment"
+  },
+  {
+   "name": "N_basis_sizeMOM_25_count",
+   "description": "25 size-MOM",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and momentum"
+  },
+  {
+   "name": "N_basis_sizeBeta_25_count",
+   "description": "25 size-beta",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and market beta"
+  },
+  {
+   "name": "N_basis_sizeSTR_25_count",
+   "description": "25 size-short-term reversal",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and short-term reversal"
+  },
+  {
+   "name": "N_basis_sizeLTR_25_count",
+   "description": "25 size-long-term reversal",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and long-term reversal"
+  },
+  {
+   "name": "N_basis_sizeVar_25_count",
+   "description": "25 size-variance",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and variance"
+  },
+  {
+   "name": "N_basis_sizeResVar_25_count",
+   "description": "25 size-residual variance",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and residual variance"
+  },
+  {
+   "name": "N_basis_sizeNSI_35_count",
+   "description": "35 size-net share issuance",
+   "value": "35",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 35 by size and net share issuance"
+  },
+  {
+   "name": "N_basis_sizeAccruals_25_count",
+   "description": "25 size-accruals",
+   "value": "25",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Data 25 by size and accruals"
+  },
+  {
+   "name": "CAPM_numFactors_count",
+   "description": "#M baseline CAPM",
+   "value": "1",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test Panel A CAPM # M=1"
+  },
+  {
+   "name": "FF3_numFactors_count",
+   "description": "#M FF3",
+   "value": "3",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test FF3 # M=3"
+  },
+  {
+   "name": "FF5_numFactors_count",
+   "description": "#M FF5",
+   "value": "5",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test FF5 # M=5"
+  },
+  {
+   "name": "FF6_numFactors_count",
+   "description": "#M FF6",
+   "value": "6",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test FF6 # M=6"
+  },
+  {
+   "name": "Q5_numFactors_count",
+   "description": "#M Q5",
+   "value": "5",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test Q5 # M=5"
+  },
+  {
+   "name": "DHS3_numFactors_count",
+   "description": "#M DHS3",
+   "value": "3",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test DHS3 # M=3"
+  },
+  {
+   "name": "BS6_numFactors_count",
+   "description": "#M BS6",
+   "value": "6",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test BS6 # M=6"
+  },
+  {
+   "name": "CAPM_F_numFactors_count",
+   "description": "#M^F expanded CAPM^F",
+   "value": "8",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test Panel B CAPM^F # M=8"
+  },
+  {
+   "name": "FF3_F_numFactors_count",
+   "description": "#M^F FF3^F",
+   "value": "11",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test FF3^F # M=11"
+  },
+  {
+   "name": "FF5_F_numFactors_count",
+   "description": "#M^F FF5^F",
+   "value": "11",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test FF5^F # M=11"
+  },
+  {
+   "name": "FF6_F_numFactors_count",
+   "description": "#M^F FF6^F",
+   "value": "12",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test FF6^F # M=12"
+  },
+  {
+   "name": "Q5_F_numFactors_count",
+   "description": "#M^F Q5^F",
+   "value": "10",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test Q5^F # M=10"
+  },
+  {
+   "name": "DHS3_F_numFactors_count",
+   "description": "#M^F DHS3^F",
+   "value": "9",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test DHS3^F # M=9"
+  },
+  {
+   "name": "BS6_F_numFactors_count",
+   "description": "#M^F BS6^F",
+   "value": "12",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Model_test BS6^F # M=12"
+  },
+  {
+   "name": "M8_numFactors_count",
+   "description": "#M 8-factor model M8",
+   "value": "8",
+   "unit": "factors",
+   "kind": "count",
+   "where": "Table Reduced M8 # M^{F+B}=8, text 8-factor model MKT REG PEAD HMLM STR ILR SMB EPRD"
+  },
+  {
+   "name": "CAPM_N1_96_count",
+   "description": "LHS N-|M| for CAPM 97-1",
+   "value": "96",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Eq GRS N1=N-|M| Table Model_test GRS df1"
+  },
+  {
+   "name": "FF3_N1_94_count",
+   "description": "LHS 97-3",
+   "value": "94",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "FF5_N1_92_count",
+   "description": "LHS 97-5",
+   "value": "92",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "FF6_N1_91_count",
+   "description": "LHS 97-6",
+   "value": "91",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "Q5_N1_92_count",
+   "description": "LHS 97-5",
+   "value": "92",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "DHS3_N1_94_count",
+   "description": "LHS 97-3",
+   "value": "94",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "BS6_N1_91_count",
+   "description": "LHS 97-6",
+   "value": "91",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "CAPM_F_N1_89_count",
+   "description": "LHS 97-8",
+   "value": "89",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "FF3_F_N1_86_count",
+   "description": "LHS 97-11",
+   "value": "86",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "FF5_F_N1_86_count",
+   "description": "LHS 97-11",
+   "value": "86",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "FF6_F_N1_85_count",
+   "description": "LHS 97-12",
+   "value": "85",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "Q5_F_N1_87_count",
+   "description": "LHS 97-10",
+   "value": "87",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "DHS3_F_N1_88_count",
+   "description": "LHS 97-9",
+   "value": "88",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "BS6_F_N1_85_count",
+   "description": "LHS 97-12",
+   "value": "85",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "GRS df"
+  },
+  {
+   "name": "T_minus_N_491_count",
+   "description": "GRS df2 T-N 588-97",
+   "value": "491",
+   "unit": "months",
+   "kind": "count",
+   "where": "Eq GRS (T-N) df2"
+  },
+  {
+   "name": "T_Time1_196_count",
+   "description": "Time1 OOS fold 1973/01-1989/04",
+   "value": "196",
+   "unit": "months",
+   "kind": "count",
+   "where": "Table OOS Time1 196 months test"
+  },
+  {
+   "name": "T_Time2_196_count",
+   "description": "Time2 1989/05-2005/08",
+   "value": "196",
+   "unit": "months",
+   "kind": "count",
+   "where": "Table OOS Time2 196 months"
+  },
+  {
+   "name": "T_Time3_196_count",
+   "description": "Time3 2005/09-2021/12",
+   "value": "196",
+   "unit": "months",
+   "kind": "count",
+   "where": "Table OOS Time3 196 months"
+  },
+  {
+   "name": "T_train_392_count",
+   "description": "training 2 folds",
+   "value": "392",
+   "unit": "months",
+   "kind": "count",
+   "where": "OOS text remaining 392 months used for training"
+  },
+  {
+   "name": "N_tests_CAPM_row_96_count",
+   "description": "96 2-factor baselines MKT+row factor",
+   "value": "96",
+   "unit": "models",
+   "kind": "count",
+   "where": "Table bench_row_CAPM 96 (97-1) models"
+  },
+  {
+   "name": "N_tests_FF3_row_94_count",
+   "description": "94 4-factor baselines FF3+row factor",
+   "value": "94",
+   "unit": "models",
+   "kind": "count",
+   "where": "Table bench_row_FF3 94 (97-3) models"
+  },
+  {
+   "name": "CAPM_GRS_5.40",
+   "description": "GRS baseline CAPM",
+   "value": "5.40",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test Panel A CAPM GRS 5.40"
+  },
+  {
+   "name": "CAPM_pGRS_0.000",
+   "description": "pGRS CAPM",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "CAPM_HDA_35.02",
+   "description": "HDA CAPM",
+   "value": "35.02",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 35.02"
+  },
+  {
+   "name": "CAPM_pHDA_0.000",
+   "description": "pHDA CAPM",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "FF3_GRS_5.35",
+   "description": "GRS FF3",
+   "value": "5.35",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test FF3 GRS 5.35"
+  },
+  {
+   "name": "FF3_pGRS_0.000",
+   "description": "pGRS FF3",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "FF3_HDA_52.51",
+   "description": "HDA FF3",
+   "value": "52.51",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 52.51"
+  },
+  {
+   "name": "FF3_pHDA_0.000",
+   "description": "pHDA FF3",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "FF5_GRS_4.80",
+   "description": "GRS FF5",
+   "value": "4.80",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test FF5 GRS 4.80"
+  },
+  {
+   "name": "FF5_pGRS_0.000",
+   "description": "pGRS FF5",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "FF5_HDA_36.29",
+   "description": "HDA FF5",
+   "value": "36.29",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 36.29"
+  },
+  {
+   "name": "FF5_pHDA_0.000",
+   "description": "pHDA FF5",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "FF6_GRS_4.59",
+   "description": "GRS FF6",
+   "value": "4.59",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test FF6 GRS 4.59"
+  },
+  {
+   "name": "FF6_pGRS_0.000",
+   "description": "pGRS FF6",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "FF6_HDA_27.83",
+   "description": "HDA FF6",
+   "value": "27.83",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 27.83"
+  },
+  {
+   "name": "FF6_pHDA_0.000",
+   "description": "pHDA FF6",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "Q5_GRS_2.95",
+   "description": "GRS Q5",
+   "value": "2.95",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test Q5 GRS 2.95"
+  },
+  {
+   "name": "Q5_pGRS_0.000",
+   "description": "pGRS Q5",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "Q5_HDA_4.55",
+   "description": "HDA Q5",
+   "value": "4.55",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 4.55"
+  },
+  {
+   "name": "Q5_pHDA_0.000",
+   "description": "pHDA Q5",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "DHS3_GRS_3.67",
+   "description": "GRS DHS3",
+   "value": "3.67",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test DHS3 GRS 3.67"
+  },
+  {
+   "name": "DHS3_pGRS_0.000",
+   "description": "pGRS DHS3",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "DHS3_HDA_7.26",
+   "description": "HDA DHS3",
+   "value": "7.26",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 7.26"
+  },
+  {
+   "name": "DHS3_pHDA_0.000",
+   "description": "pHDA DHS3",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "BS6_GRS_4.04",
+   "description": "GRS BS6",
+   "value": "4.04",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test BS6 GRS 4.04"
+  },
+  {
+   "name": "BS6_pGRS_0.000",
+   "description": "pGRS BS6",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.000"
+  },
+  {
+   "name": "BS6_HDA_29.05",
+   "description": "HDA BS6",
+   "value": "29.05",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 29.05"
+  },
+  {
+   "name": "BS6_pHDA_0.000",
+   "description": "pHDA BS6",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.000"
+  },
+  {
+   "name": "CAPM_F_GRS_1.60",
+   "description": "GRS CAPM^F",
+   "value": "1.60",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test Panel B CAPM^F GRS 1.60"
+  },
+  {
+   "name": "CAPM_F_pGRS_0.001",
+   "description": "pGRS CAPM^F",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.001"
+  },
+  {
+   "name": "CAPM_F_HDA_1.28",
+   "description": "HDA CAPM^F",
+   "value": "1.28",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.28"
+  },
+  {
+   "name": "CAPM_F_pHDA_0.101",
+   "description": "pHDA CAPM^F not rejected at 5%",
+   "value": "0.101",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.101"
+  },
+  {
+   "name": "FF3_F_GRS_1.40",
+   "description": "GRS FF3^F",
+   "value": "1.40",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test FF3^F GRS 1.40"
+  },
+  {
+   "name": "FF3_F_pGRS_0.017",
+   "description": "pGRS FF3^F",
+   "value": "0.017",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.017"
+  },
+  {
+   "name": "FF3_F_HDA_1.28",
+   "description": "HDA FF3^F",
+   "value": "1.28",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.28"
+  },
+  {
+   "name": "FF3_F_pHDA_0.100",
+   "description": "pHDA FF3^F",
+   "value": "0.100",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.100"
+  },
+  {
+   "name": "FF5_F_GRS_1.57",
+   "description": "GRS FF5^F",
+   "value": "1.57",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test FF5^F GRS 1.57"
+  },
+  {
+   "name": "FF5_F_pGRS_0.002",
+   "description": "pGRS FF5^F",
+   "value": "0.002",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.002"
+  },
+  {
+   "name": "FF5_F_HDA_1.57",
+   "description": "HDA FF5^F",
+   "value": "1.57",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.57"
+  },
+  {
+   "name": "FF5_F_pHDA_0.058",
+   "description": "pHDA FF5^F",
+   "value": "0.058",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.058"
+  },
+  {
+   "name": "FF6_F_GRS_1.51",
+   "description": "GRS FF6^F",
+   "value": "1.51",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test FF6^F GRS 1.51"
+  },
+  {
+   "name": "FF6_F_pGRS_0.004",
+   "description": "pGRS FF6^F",
+   "value": "0.004",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.004"
+  },
+  {
+   "name": "FF6_F_HDA_1.12",
+   "description": "HDA FF6^F",
+   "value": "1.12",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.12"
+  },
+  {
+   "name": "FF6_F_pHDA_0.131",
+   "description": "pHDA FF6^F",
+   "value": "0.131",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.131"
+  },
+  {
+   "name": "Q5_F_GRS_1.57",
+   "description": "GRS Q5^F",
+   "value": "1.57",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test Q5^F GRS 1.57"
+  },
+  {
+   "name": "Q5_F_pGRS_0.002",
+   "description": "pGRS Q5^F",
+   "value": "0.002",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.002"
+  },
+  {
+   "name": "Q5_F_HDA_1.36",
+   "description": "HDA Q5^F",
+   "value": "1.36",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.36"
+  },
+  {
+   "name": "Q5_F_pHDA_0.087",
+   "description": "pHDA Q5^F",
+   "value": "0.087",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.087"
+  },
+  {
+   "name": "DHS3_F_GRS_1.61",
+   "description": "GRS DHS3^F",
+   "value": "1.61",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test DHS3^F GRS 1.61"
+  },
+  {
+   "name": "DHS3_F_pGRS_0.001",
+   "description": "pGRS DHS3^F",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.001"
+  },
+  {
+   "name": "DHS3_F_HDA_1.30",
+   "description": "HDA DHS3^F",
+   "value": "1.30",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.30"
+  },
+  {
+   "name": "DHS3_F_pHDA_0.097",
+   "description": "pHDA DHS3^F",
+   "value": "0.097",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.097"
+  },
+  {
+   "name": "BS6_F_GRS_1.49",
+   "description": "GRS BS6^F",
+   "value": "1.49",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Table Model_test BS6^F GRS 1.49"
+  },
+  {
+   "name": "BS6_F_pGRS_0.006",
+   "description": "pGRS BS6^F",
+   "value": "0.006",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pGRS 0.006"
+  },
+  {
+   "name": "BS6_F_HDA_1.41",
+   "description": "HDA BS6^F",
+   "value": "1.41",
+   "unit": "z",
+   "kind": "estimate",
+   "where": "Table Model_test HDA 1.41"
+  },
+  {
+   "name": "BS6_F_pHDA_0.079",
+   "description": "pHDA BS6^F",
+   "value": "0.079",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Model_test pHDA 0.079"
+  },
+  {
+   "name": "CAPM_AnnSR_0.47",
+   "description": "CAPM Ann SR",
+   "value": "0.47",
+   "unit": "AnnSR",
+   "kind": "estimate",
+   "where": "Abstract/text CAPM annualized Sharpe 0.47, Table FSE_performance CAPM Ann.SR 0.47"
+  },
+  {
+   "name": "CAPM_REG_AnnSR_1.76",
+   "description": "CAPM+REG Ann SR",
+   "value": "1.76",
+   "unit": "AnnSR",
+   "kind": "estimate",
+   "where": "Text when REG added to CAPM AnnSR increases from 0.47 to 1.76"
+  },
+  {
+   "name": "M8_AnnSR_2.73_full",
+   "description": "M8 full sample Ann SR",
+   "value": "2.73",
+   "unit": "AnnSR",
+   "kind": "estimate",
+   "where": "Abstract optimal 8-factor model Ann SR 2.73 over five decades, Table FSE_performance M8 Ann.SR 2.73"
+  },
+  {
+   "name": "M8_AnnSR_1.53_OOS_Time3",
+   "description": "M8 OOS Time3 Ann SR",
+   "value": "1.53",
+   "unit": "AnnSR",
+   "kind": "estimate",
+   "where": "Abstract 1.53 in recent 16-year OOS period, Table performance_remaining_oos Panel B Time3 M8 Ann.SR 1.53"
+  },
+  {
+   "name": "M8_AvgRet_1.16",
+   "description": "M8 AVG return",
+   "value": "1.16",
+   "unit": "% per month",
+   "kind": "estimate",
+   "where": "Table FSE_performance M8 AVG 1.16%"
+  },
+  {
+   "name": "M8_alphaCAPM_1.12",
+   "description": "M8 CAPM alpha",
+   "value": "1.12",
+   "unit": "% per month",
+   "kind": "estimate",
+   "where": "Table FSE_performance M8 alpha_CAPM 1.12***"
+  },
+  {
+   "name": "M8_MS_R2_0.65_INS",
+   "description": "M8 mean SR2 INS bootstrap",
+   "value": "0.65",
+   "unit": "SR2",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr_boot Panel A M8 M-SR2 0.65 INS"
+  },
+  {
+   "name": "M8_MS_R2_0.56_OOS",
+   "description": "M8 mean SR2 OOS bootstrap",
+   "value": "0.56",
+   "unit": "SR2",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr_boot Panel B M8 M-SR2 0.56 OOS"
+  },
+  {
+   "name": "pairwise_CAPM_vs_M8_0.60",
+   "description": "CAPM vs M8 SR2 diff",
+   "value": "0.60",
+   "unit": "SR2 diff",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr CAPM vs M8 diff 0.60***"
+  },
+  {
+   "name": "Q5_vs_M8_0.27",
+   "description": "Q5 vs M8 SR2 diff",
+   "value": "0.27",
+   "unit": "SR2 diff",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr Q5 vs M8 diff 0.27***"
+  },
+  {
+   "name": "pairwise_CAPM_vs_M8_p_0.01",
+   "description": "p for CAPM vs M8 ***",
+   "value": "0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr *** 1% significance for 0.60 diff"
+  },
+  {
+   "name": "pairwise_Q5_vs_M8_p_0.01",
+   "description": "p for Q5 vs M8 ***",
+   "value": "0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr *** 1% for 0.27 diff"
+  },
+  {
+   "name": "M8_selection_REG_1.00",
+   "description": "REG selection rate",
+   "value": "1.00",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table bench_row_CAPM REG selection rate 1.00 (100%)"
+  },
+  {
+   "name": "M8_selection_PEAD_1.00",
+   "description": "PEAD selection rate",
+   "value": "1.00",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table bench_row_CAPM PEAD 1.00"
+  },
+  {
+   "name": "REG_alpha_0.91_CAPM",
+   "description": "REG alpha vs CAPM",
+   "value": "0.91",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table sufficient_model CAPM^F REG alpha 0.91***"
+  },
+  {
+   "name": "CAPM_F_Aabs_alpha_0.15_unselected",
+   "description": "CAPM^F A|alpha| unselected",
+   "value": "0.15",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table FSE_performance CAPM^F A|alpha| 0.15 unselected factors"
+  },
+  {
+   "name": "CAPM_Aabs_alpha_0.51_unselected",
+   "description": "CAPM A|alpha| unselected",
+   "value": "0.51",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table FSE_performance CAPM A|alpha| 0.51 unselected"
+  },
+  {
+   "name": "sign2_CAPM_unselected_81_tally",
+   "description": "# sign2 CAPM unselected",
+   "value": "81",
+   "unit": "factors",
+   "kind": "tally",
+   "where": "Table FSE_performance CAPM #sign2 81 unselected"
+  },
+  {
+   "name": "sign2_M8_unselected_11_tally",
+   "description": "# sign2 M8 unselected",
+   "value": "11",
+   "unit": "factors",
+   "kind": "tally",
+   "where": "Table FSE_performance M8 #sign2 11 unselected"
+  },
+  {
+   "name": "CAPM_F_numAdded_7_tally",
+   "description": "# Added CAPM^F",
+   "value": "7",
+   "unit": "factors",
+   "kind": "tally",
+   "where": "Table sufficient_model CAPM^F # Added 7"
+  },
+  {
+   "name": "FF5_F_numAdded_6_tally",
+   "description": "# Added FF5^F",
+   "value": "6",
+   "unit": "factors",
+   "kind": "tally",
+   "where": "Table sufficient_model FF5^F # Added 6"
+  },
+  {
+   "name": "CAPM_FB_numRemoved_0_tally",
+   "description": "# Removed CAPM^{F+B}",
+   "value": "0",
+   "unit": "factors",
+   "kind": "tally",
+   "where": "Table Reduced CAPM^{F+B} # Removed 0"
+  },
+  {
+   "name": "FF3_FB_numRemoved_3_tally",
+   "description": "# Removed FF3^{F+B}",
+   "value": "3",
+   "unit": "factors",
+   "kind": "tally",
+   "where": "Table Reduced FF3^{F+B} # Removed 3"
+  },
+  {
+   "name": "M8_OOS_Best_Prob_99.8",
+   "description": "M8 OOS Best probability",
+   "value": "99.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table model_comparison_sr_boot Panel B M8 Best 99.8% OOS"
+  },
+  {
+   "name": "oos_Time3_M8_TotalR2_18.9",
+   "description": "OOS Time3 M8 Total R2",
+   "value": "18.9",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table performance_remaining_oos Panel B OOS Time3 M8 Total R2 18.9% unselected"
+  },
+  {
+   "name": "oos_Time3_Q5_TotalR2_23.4",
+   "description": "OOS Q5 Total R2",
+   "value": "23.4",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table performance_remaining_oos Panel B OOS Time3 Q5 Total R2 23.4%"
+  },
+  {
+   "name": "significance_5pct_parameter",
+   "description": "significance level 5% main, robustness 1% 10%",
+   "value": "5",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Method HDA threshold z_lambda 5% level Section 2.2.2"
+  },
+  {
+   "name": "z_1.645_parameter",
+   "description": "upper 5% quantile N(0,1) HDA critical value",
+   "value": "1.645",
+   "unit": "z",
+   "kind": "parameter",
+   "where": "Eq HDA reject if HDA>z_lambda z0.05=1.645"
+  },
+  {
+   "name": "n_bootstrap_1000_parameter",
+   "description": "bootstrap runs for INS/OOS SR2 comparison",
+   "value": "1000",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Table model_comparison_sr_boot note 1,000 INS and OOS simulation runs"
+  },
+  {
+   "name": "n_pairs_294_parameter",
+   "description": "294 adjacent month pairs (1,2)...(587,588) bootstrap",
+   "value": "294",
+   "unit": "pairs",
+   "kind": "parameter",
+   "where": "Table model_comparison_sr_boot note 294 pairs"
+  },
+  {
+   "name": "n_simulation_1000_parameter",
+   "description": "Monte Carlo simulations",
+   "value": "1000",
+   "unit": "replications",
+   "kind": "parameter",
+   "where": "Appendix Simulation 1000 simulations Table simulation"
+  },
+  {
+   "name": "transaction_cost_2bps_parameter",
+   "description": "one-way trading cost annually rebalanced",
+   "value": "2",
+   "unit": "bps",
+   "kind": "parameter",
+   "where": "Section Robustness 2 bps per month annually rebalanced"
+  },
+  {
+   "name": "transaction_cost_12bps_parameter",
+   "description": "monthly rebalanced cost",
+   "value": "12",
+   "unit": "bps",
+   "kind": "parameter",
+   "where": "Section Robustness 12 bps"
+  },
+  {
+   "name": "transaction_cost_24bps_parameter",
+   "description": "monthly rebalanced cost",
+   "value": "24",
+   "unit": "bps",
+   "kind": "parameter",
+   "where": "Section Robustness 24 bps"
+  }
+ ],
+ "headline": "CAPM_F_pHDA_0.101",
+ "partitions": [
+  {
+   "split": "97 candidate factors into 23 core (FF6/Q5/DHS3/BS6/BAB/QMJ etc) and 74 HXZ factors",
+   "total": "N_97_count",
+   "parts": [
+    "N_core_23_count",
+    "N_HXZ_74_count"
+   ]
+  },
+  {
+   "split": "285 basis portfolios by 11 bivariate sorts on size + characteristic",
+   "total": "Nbasis_285_count",
+   "parts": [
+    "N_basis_sizeBM_25_count",
+    "N_basis_sizeOP_25_count",
+    "N_basis_sizeINV_25_count",
+    "N_basis_sizeMOM_25_count",
+    "N_basis_sizeBeta_25_count",
+    "N_basis_sizeSTR_25_count",
+    "N_basis_sizeLTR_25_count",
+    "N_basis_sizeVar_25_count",
+    "N_basis_sizeResVar_25_count",
+    "N_basis_sizeNSI_35_count",
+    "N_basis_sizeAccruals_25_count"
+   ]
+  },
+  {
+   "split": "588 months into 3 OOS folds Time1 1973/01-1989/04, Time2 1989/05-2005/08, Time3 2005/09-2021/12",
+   "total": "T_588_count",
+   "parts": [
+    "T_Time1_196_count",
+    "T_Time2_196_count",
+    "T_Time3_196_count"
+   ]
+  },
+  {
+   "split": "individual factor testing 96 two-factor baselines MKT+row (97-1) and 94 four-factor baselines FF3+row (97-3)",
+   "total": "N_97_count",
+   "parts": [
+    "N_tests_CAPM_row_96_count",
+    "N_tests_FF3_row_94_count"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "GRS spanning regression H0: alpha_tilde(M)=0 for LHS N-|M| unselected factors, GRS(M)=(T-N)/(N-|M|)*((1+SR2{F})/(1+SR2{F(M)})-1) ~F(N-|M|,T-N), reject if p<0.05; Baseline CAPM rejected GRS 5.40 p 0.000 (N1 96, T 588), all baselines rejected Panel A",
+   "statistic": "CAPM_GRS_5.40",
+   "p_value": "CAPM_pGRS_0.000",
+   "group_sizes": [
+    "T_588_count",
+    "T_minus_N_491_count",
+    "N_97_count",
+    "CAPM_numFactors_count",
+    "CAPM_N1_96_count"
+   ]
+  },
+  {
+   "test": "HDA high-dimensional alpha test Pesaran2023 H0: alpha_tilde=0, HDA=[T alpha' Diag(Sigma_eps)^{-1} alpha/(1+SR2{M})-N1]/sqrt(2 N1[1+(N1-1)rho^2]) ->N(0,1), reject if HDA>z_0.05=1.645 parameter; CAPM HDA 35.02 p 0.000 rejected, power >GRS in high dimension, used as FSE stop (stop when HDA<z) and BSE stop (stop when HDA>z)",
+   "statistic": "CAPM_HDA_35.02",
+   "p_value": "CAPM_pHDA_0.000",
+   "group_sizes": [
+    "T_588_count",
+    "CAPM_N1_96_count"
+   ]
+  },
+  {
+   "test": "HDA for expanded efficient CAPM^F H0 alpha=0 for remaining N1=89 unselected factors, HDA 1.28 p 0.101 not rejected at 5% (also GRS 1.60 p 0.001, FF3^F HDA 1.28 p 0.100, FF6^F HDA 1.12 p 0.131 etc Panel B all not rejected at 5% HDA)",
+   "statistic": "CAPM_F_HDA_1.28",
+   "p_value": "CAPM_F_pHDA_0.101",
+   "group_sizes": [
+    "T_588_count",
+    "CAPM_F_N1_89_count",
+    "CAPM_F_numFactors_count"
+   ]
+  },
+  {
+   "test": "Pairwise equality of SR2 Barillas et al.2020, nested case GRS, non-nested SR2 diff test, models sorted by SR2; CAPM vs M8 SR2 diff 0.60 p 0.01 *** , FF3 vs M8 0.59 ***, Q5 vs M8 0.27 *** all significant at 1%, Table model_comparison_sr; M8 99.8% Best OOS bootstrap vs Q5 0.2%",
+   "statistic": "pairwise_CAPM_vs_M8_0.60",
+   "p_value": "pairwise_CAPM_vs_M8_p_0.01",
+   "group_sizes": [
+    "T_588_count",
+    "CAPM_numFactors_count",
+    "M8_numFactors_count"
+   ]
+  },
+  {
+   "test": "Q5 vs M8 SR2 diff 0.27 p 0.01 *** confirms M8 spans investment opportunity set best, OOS M-SR2 0.56 vs Q5 0.32 INS 0.65 vs 0.36",
+   "statistic": "Q5_vs_M8_0.27",
+   "p_value": "pairwise_Q5_vs_M8_p_0.01",
+   "group_sizes": [
+    "T_588_count",
+    "Q5_numFactors_count",
+    "M8_numFactors_count"
+   ]
+  }
+ ]
+}

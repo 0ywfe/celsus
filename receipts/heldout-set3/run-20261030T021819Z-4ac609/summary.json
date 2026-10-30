@@ -1,0 +1,74 @@
+{
+ "run_id": "run-20261030T021819Z-4ac609",
+ "paper": "2610.10043",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication never produced results",
+ "first_line": "We could not check this paper: the replication never produced results. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "ip_peak_assembled_high_0_32pct",
+  "kind": "estimate",
+  "unit": "percent",
+  "reported": 0.32,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "count_national_panel_5",
+   "reported": 5.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "count_regional_panel_34",
+   "reported": 34.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "count_noaa_panel_82",
+   "reported": 82.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "count_aci_regions_7",
+   "reported": 7.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "count_noaa_zones_10",
+   "reported": 10.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 0,
+ "matched": 0,
+ "rejections": [
+  {
+   "round": 2,
+   "reason": "the code that writes these results contains the number the paper reports for them (ip_kim_matthes_phan_0_15pp (0.15 percentage-point) at line 238). Compute each result from the data; the paper's value never goes into it."
+  },
+  {
+   "round": 3,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (count_noaa_panel_82 (82) at line 121). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 63,
+ "cost_usd": 1.4346,
+ "tokens_in": 5242121,
+ "tokens_out": 101668,
+ "wall_s": 3060.7,
+ "crashed": null
+}

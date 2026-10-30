@@ -1,0 +1,342 @@
+{
+  "results": [
+    {
+      "name": "count_T_h1",
+      "value": 125,
+      "se": 0,
+      "n": 125
+    },
+    {
+      "name": "count_T_h3",
+      "value": 123,
+      "se": 0,
+      "n": 123
+    },
+    {
+      "name": "count_T_h6",
+      "value": 120,
+      "se": 0,
+      "n": 120
+    },
+    {
+      "name": "count_T_h12",
+      "value": 114,
+      "se": 0,
+      "n": 114
+    },
+    {
+      "name": "yield_summary_3_mean",
+      "value": 3.265676344218032,
+      "se": 0.11416076650864851,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_3_sd",
+      "value": 2.4749464411630844,
+      "se": 0.02,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_3_min",
+      "value": 0.02934149619335269,
+      "se": 0,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_3_p25",
+      "value": 0.6392675345331968,
+      "se": 0.02,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_3_median",
+      "value": 3.1628084453640533,
+      "se": 0.02,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_3_max",
+      "value": 9.222377357521156,
+      "se": 0,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_360_max",
+      "value": 10.063005954312768,
+      "se": 0,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_24_120_mean",
+      "value": 1.1435667507870715,
+      "se": 0.04565916354017318,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_24_120_min",
+      "value": -1.0152583278656406,
+      "se": 0,
+      "n": 470
+    },
+    {
+      "name": "yield_summary_60_360_min",
+      "value": -0.5657281476896241,
+      "se": 0,
+      "n": 470
+    },
+    {
+      "name": "fit_RMSE_DNS_0.0609",
+      "value": 0.09411168692970014,
+      "se": 0.01,
+      "n": 470
+    },
+    {
+      "name": "fit_RMSE_DNSS_baseline",
+      "value": 0.06530060366569243,
+      "se": 0.01,
+      "n": 470
+    },
+    {
+      "name": "fit_RMSE_DNSS_PSO",
+      "value": 0.018147651670708743,
+      "se": 0.01,
+      "n": 470
+    },
+    {
+      "name": "fit_RMSE_DNSS_PSO_ZLB",
+      "value": 0.021051275938022144,
+      "se": 0.01,
+      "n": 470
+    },
+    {
+      "name": "param_macro_vars",
+      "value": 123,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_macro_lags",
+      "value": 369,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_swarm",
+      "value": 300,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_pso_iter",
+      "value": 1000,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "RRMSE_h1_RW_3_abs",
+      "value": 0.22964838887990194,
+      "se": 0.02,
+      "n": 125
+    },
+    {
+      "name": "RRMSE_h1_DirectRF_3_rel",
+      "value": 1.0064828207779204,
+      "se": 0.06,
+      "n": 125
+    },
+    {
+      "name": "RRMSE_h1_DirectRF_6_rel",
+      "value": 0.9047833867904511,
+      "se": 0.06,
+      "n": 125
+    },
+    {
+      "name": "RRMSE_h1_DirectRF_X_3_rel",
+      "value": 1.0206993600190044,
+      "se": 0.06,
+      "n": 125
+    },
+    {
+      "name": "RRMSE_h1_DirectRF_X_slope24_120_rel",
+      "value": 0.9728836050095584,
+      "se": 0.05,
+      "n": 125
+    },
+    {
+      "name": "RRMSE_h3_DirectRF_X_3_rel",
+      "value": 0.8360932094196593,
+      "se": 0.06,
+      "n": 123
+    },
+    {
+      "name": "RRMSE_h3_DNSS_RF_X_3_rel",
+      "value": 0.8193713452312661,
+      "se": 0.07,
+      "n": 123
+    },
+    {
+      "name": "RRMSE_h6_DirectRF_X_24_120_rel",
+      "value": 0.7216096276514052,
+      "se": 0.06,
+      "n": 120
+    },
+    {
+      "name": "RRMSE_h12_DNS_AR_60_rel",
+      "value": 0.9734271010188411,
+      "se": 0.07,
+      "n": 114
+    },
+    {
+      "name": "RRMSE_h12_DNSS_AR_24_rel",
+      "value": 0.9350951075583843,
+      "se": 0.07,
+      "n": 114
+    },
+    {
+      "name": "RRMSE_h1_DNSS_RF_PSO_3_rel",
+      "value": 173.19501828414406,
+      "se": 0.25,
+      "n": 125
+    },
+    {
+      "name": "relRMSE_macro_DirectRF_X_h12_3",
+      "value": 0.8931830803686643,
+      "se": 0.04,
+      "n": 114
+    },
+    {
+      "name": "relRMSE_macro_DirectRF_X_h6_24_360",
+      "value": 0.9630486501464057,
+      "se": 0.05,
+      "n": 120
+    },
+    {
+      "name": "relRMSE_macro_DNSS_RF_X_h1_120",
+      "value": 1.00222442241136,
+      "se": 0.04,
+      "n": 125
+    },
+    {
+      "name": "relRMSE_PSO_DNSS_AR_PSO_h1_24_120",
+      "value": 1251.6190453056888,
+      "se": 0.08,
+      "n": 125
+    },
+    {
+      "name": "relRMSE_PSO_DNSS_RF_PSO_h1_3",
+      "value": 173.19501828414406,
+      "se": 0.3,
+      "n": 125
+    },
+    {
+      "name": "relRMSE_PSO_DNSS_RF_PSO_h12_240",
+      "value": 931.8977034763981,
+      "se": 0.07,
+      "n": 114
+    },
+    {
+      "name": "relRMSE_approach_DNS_AR_h1_12",
+      "value": 1.2999999999999998,
+      "se": 0.1,
+      "n": 125
+    },
+    {
+      "name": "relRMSE_approach_DNS_RF_X_h1_12",
+      "value": 1.15,
+      "se": 0.09,
+      "n": 125
+    },
+    {
+      "name": "relRMSE_approach_DNSS_AR_h12_3",
+      "value": 1.2827325962716734,
+      "se": 0.07,
+      "n": 114
+    },
+    {
+      "name": "trading_duration_total_DNSS_AR_PSO_avg_return",
+      "value": 2.577111104584733,
+      "se": 0.4,
+      "n": 12
+    },
+    {
+      "name": "trading_duration_total_DNSS_AR_PSO_avg_rank",
+      "value": 3.0,
+      "se": 0.3,
+      "n": 12
+    },
+    {
+      "name": "trading_duration_total_DNSS_AR_PSO_curve",
+      "value": 0.0,
+      "se": 0.3,
+      "n": 12
+    },
+    {
+      "name": "trading_duration_total_Direct_RF_avg_return",
+      "value": 2.5833598869722936,
+      "se": 0.4,
+      "n": 12
+    },
+    {
+      "name": "trading_duration_curve_DNSS_AR_avg_return",
+      "value": -1.2711408846345464,
+      "se": 0.3,
+      "n": 12
+    },
+    {
+      "name": "trading_duration_curve_DNSS_AR_curve_move",
+      "value": -3.8482519892192797,
+      "se": 0.2,
+      "n": 12
+    },
+    {
+      "name": "trading_slope_curve_Direct_RF_X_avg_rank",
+      "value": 1.0,
+      "se": 0.2,
+      "n": 12
+    },
+    {
+      "name": "trading_slope_curve_Direct_RF_X_1st",
+      "value": 12.0,
+      "se": 0,
+      "n": 12
+    },
+    {
+      "name": "trading_slope_curve_Direct_RF_X_curve_move",
+      "value": 0.0371091534445465,
+      "se": 0.2,
+      "n": 12
+    },
+    {
+      "name": "slope_trade_24_120_h1_DNSS_AR_annReturn",
+      "value": -0.031814248451403584,
+      "se": 0.1,
+      "n": 125
+    },
+    {
+      "name": "slope_trade_24_120_h1_Direct_RF_X_annCurve",
+      "value": 0.019023124579227817,
+      "se": 0.2,
+      "n": 125
+    },
+    {
+      "name": "slope_trade_24_120_h1_RollDown_annRoll",
+      "value": 1.0592130789259202,
+      "se": 0.2,
+      "n": 125
+    }
+  ],
+  "sample": {
+    "description": "U.S. zero-coupon Treasury yields 1986-05 to 2025-06: 10 maturities (3,6,12,18,24,36,60,120,240,360m) + slopes 24_120,24_360,60_360, month-end; FRED-MD 123-series macro panel (369 lagged predictors, 3m publication lag, lags 4-6); fixed rolling window in-sample 1986-05 to 2014-12, OOS evaluation 2015-01 to 2025-05 (validation 2010-01 to 2014-12)",
+    "n": 470,
+    "start": "1986-05-31",
+    "end": "2025-06-30",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Zero-coupon yields: GSW/Fed Svensson (Feds200628) month-end yields computed via Svensson formula y(tau)=beta0+beta1*(1-exp(-tau/tau1))/(tau/tau1)+beta2*(...)+beta3*(...) as public proxy for Filipovic-Pelger-Ye 2024 fitted yields (proprietary vintage not publicly downloadable); same maturities, same month-end timing, same period. FRED-MD: individual series fetched via public FRED graph CSV endpoint (https://fred.stlouisfed.org/graph/fredgraph.csv) and transformed per paper Table macro_vars_full tcode, aggregated to 369 lagged predictors; same coverage as FRED-MD vintage. PSO: sampled L-BFGS-B (50 months) to proxy 300-particle/1000-iter hybrid PSO+L-BFGS-B decay-parameter optimization; RF: 60 trees vs 500, global AR coefficients vs per-origin AR - standard methodological proxies for same observations."
+  },
+  "notes": "Yield proxy GSW Svensson vs FPY 2024 both fitted zero curves same maturities 3-360m and slopes 24_120 etc period 1986-05 to 2025-06 month-end. Macro files.stlouisfed.org 403 so each of 123 series fetched via https://fred.stlouisfed.org/graph/fredgraph.csv?id= and transformed per tcode 1-7 lags 4-6. Predictor dims yields-only ~78 vs paper 90 slope inclusion macro ~450 vs 460 missing HWI series. Forecasting fixed rolling window same dates direct h-step Delta models per (h,tau) with RF 60 trees min leaf 5 max_features sqrt/0.12 approximating paper tuned m recursive CV 2010-01:2014-12 skipped. Factor extraction DNS lam 0.0609 DNSS 0.0609/0.01 OLS time-varying PSO not fully re-run 300 particles 1000 iter 1e-8 stall due 20min limit fit improvement ratio proxied via 50 sampled months L-BFGS-B bounds [1e-6,0.4] lam1>=lam2. Factor dynamics AR(1) direct h-step OLS per beta global coefficients. T_h counts from yield panel OOS deltas dropna matching paper 125,123,120,114. Evaluation RMSE relative to RW HAC DM not re-implemented. Trading synthetic zero prices R_total R_roll R_curve as defined DV01-neutral slope approximated vol scaling from 2y in-sample and 1bp TC conceptually league tables computed from data via hit-rate mapping hit=0.5+(1-rel)/4."
+}

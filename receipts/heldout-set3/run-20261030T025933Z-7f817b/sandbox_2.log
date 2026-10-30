@@ -1,0 +1,15 @@
+exit 0 in 41.9s
+--- stdout
+Sample after date filter: 726 months from 1963-07-31 to 2023-12-31
+Anomaly cols from data: 212
+Factor pred cols from construction: 30
+All predictors (NSignals) from data: 242
+L (NSignalsPolicy) from data: 243, NCoefficients 1215
+OOS months from data: 605 from 1973-08-31 to 2023-12-31
+Burn-in months from data: 121
+Running OOS loop over 605 months...
+Decade vals: {'Timing_1970s_pp': (np.float64(-0.06533212986080164), 77), 'Timing_1980s_pp': (np.float64(0.7705103373202419), 120), 'Timing_1990s_pp': (np.float64(2.9548167056942813), 120), 'Timing_2000s_pp': (np.float64(-0.14857940755661708), 120), 'Timing_2010s_pp': (np.float64(0.8236637069799762), 120), 'Timing_2020s_pp': (np.float64(1.6224577806709182), 48)}
+Ex1990s months from data: 485
+done median omega 5.919 wrote 52 results n_oos 605
+
+--- stderr

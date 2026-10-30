@@ -1,0 +1,214 @@
+{
+ "verdict": "could not check",
+ "rows": [
+  {
+   "name": "n_countries",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 27.0,
+   "reproduced": 27,
+   "se": null,
+   "n": 27,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "n_observations",
+   "kind": "count",
+   "unit": "monthly observations",
+   "reported": 307.0,
+   "reproduced": 300,
+   "se": null,
+   "n": 300,
+   "consistent": true,
+   "why": "approximate: -2.3%, within SCORE's +/-15%"
+  },
+  {
+   "name": "lambda_minus_opt",
+   "kind": "estimate",
+   "unit": "eigenvalue units",
+   "reported": 37.21,
+   "reproduced": 29.872495624584978,
+   "se": 9.546873769886332,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 29.87 +/- 18.71"
+  },
+  {
+   "name": "sigma_mp",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 0.2,
+   "reproduced": 0.18186170418896905,
+   "se": 0.025632511318713774,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 0.1819 +/- 0.05024"
+  },
+  {
+   "name": "alpha_info_corr",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 1.82,
+   "reproduced": 1.7927167902598038,
+   "se": 0.059396912648681216,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 1.793 +/- 0.1164"
+  },
+  {
+   "name": "D_KS_opt",
+   "kind": "estimate",
+   "unit": "distance",
+   "reported": 0.1,
+   "reproduced": 0.10032302728355574,
+   "se": 0.011348828940403968,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 0.1003 +/- 0.02224"
+  },
+  {
+   "name": "pareto_mu",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 1.64,
+   "reproduced": 1.5854335805196076,
+   "se": 0.11879382529736243,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 1.585 +/- 0.2328"
+  },
+  {
+   "name": "corr_kappa_D_E",
+   "kind": "estimate",
+   "unit": "correlation",
+   "reported": 0.988,
+   "reproduced": 0.9828957138939609,
+   "se": 0.02021451691440838,
+   "n": 85,
+   "consistent": true,
+   "why": "paper inside 0.9829 +/- 0.03962"
+  },
+  {
+   "name": "corr_system_HICP_2019_2026",
+   "kind": "estimate",
+   "unit": "correlation",
+   "reported": -0.824,
+   "reproduced": 0.8677873676780964,
+   "se": 0.05487736710804576,
+   "n": 84,
+   "consistent": false,
+   "why": "paper outside 0.8678 +/- 0.1076"
+  },
+  {
+   "name": "nnsd_cutoff",
+   "kind": "estimate",
+   "unit": "correlation",
+   "reported": 0.356,
+   "reproduced": 0.355,
+   "se": 0.02,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 0.355 +/- 0.0392"
+  },
+  {
+   "name": "n_communities_leading_eig",
+   "kind": "tally",
+   "unit": "communities",
+   "reported": 6.0,
+   "reproduced": 2,
+   "se": null,
+   "n": 27,
+   "consistent": null,
+   "why": "a tally of what the analysis found, with no uncertainty, so it is not judged"
+  },
+  {
+   "name": "n_eastEurope_claimed",
+   "kind": "tally",
+   "unit": "countries",
+   "reported": 5.0,
+   "reproduced": 5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a tally of what the analysis found, with no uncertainty, so it is not judged"
+  },
+  {
+   "name": "n_eastEurope_listed",
+   "kind": "tally",
+   "unit": "countries",
+   "reported": 6.0,
+   "reproduced": 6,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a tally of what the analysis found, with no uncertainty, so it is not judged"
+  },
+  {
+   "name": "price_stability_target",
+   "kind": "parameter",
+   "unit": "year-on-year HICP",
+   "reported": 2.0,
+   "reproduced": 2.0,
+   "se": 0,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "alpha_ideal_benchmark",
+   "kind": "parameter",
+   "unit": "alpha units",
+   "reported": 2.0,
+   "reproduced": 2.0,
+   "se": 0,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "alpha_underfit_low",
+   "kind": "parameter",
+   "unit": "alpha units",
+   "reported": 2.0,
+   "reproduced": 2.0,
+   "se": 0,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "alpha_underfit_high",
+   "kind": "parameter",
+   "unit": "alpha units",
+   "reported": 6.0,
+   "reproduced": 6.0,
+   "se": 0,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "alpha_overfit_threshold",
+   "kind": "parameter",
+   "unit": "alpha units",
+   "reported": 2.0,
+   "reproduced": 2.0,
+   "se": 0,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "lambda_minus_underfit_thresh",
+   "kind": "parameter",
+   "unit": "eigenvalue units",
+   "reported": 200.0,
+   "reproduced": 200.0,
+   "se": 0,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  }
+ ]
+}

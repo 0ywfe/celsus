@@ -1,0 +1,2160 @@
+{
+ "title": "Replication Spec: Granger Causality in Expectiles - M-vine copula test",
+ "hypothesis": "H0: no Granger causality in tau-expectile: E[R_tau(X_t-mu_tau(X_t|I_X))]=E[R_tau(X_t-mu_tau(X_t|I_{X,Z}))] i.e. GC_tau=0 and hat GC_tau not significantly >0; H1: Z Granger-causes X in tau-expectile i.e. E[R_tau with Z] < E[R_tau without Z] i.e. GC_tau>0.",
+ "data_sources": [
+  "Simulated DGPs S1,S2,P1-P4 as defined; Empirical Yahoo Finance S&P500, FTSE100, Nikkei225, SSE Composite, Hang Seng Index; daily  September 2012 - October 2014; Not stated otherwise."
+ ],
+ "sample": "Simulation: stationary strictly stationary k-Markov (k=1) process (X_t,Y_t,Z_t) with d=2, d+1=3 series; 6 DGPs: S1 three independent AR(1) eta ~ N(0,1), S2 three independent GARCH(1,1) with sstd(0,1,nu=5,xi=-1.5), P1 linear AR+ lags, P2/P3/P4 interaction 5*Y_{t-1}Z_{t-1} with Gaussian or GARCH sstd innovations; S=500 Monte Carlo replications per DGP for T=100,200,500. Empirical Global: S&P500 (SP), FTSE100 (FTSE), Nikkei225 (NK) daily Yahoo Finance log-returns r_t=(log(s_t)-log(s_{t-1}))*100, T=500. Empirical Asian: Shanghai Composite (SSE), Hang Seng (HSI), Nikkei225 (NK) daily Yahoo Finance log-returns same transform, T=500. Filters: square-integrable, strictly stationary, Markov order k=1, stationarity via log-returns. Sizes from claims count_S, count_T100, count_T200, count_T500_sim, count_T500_emp.",
+ "period_start": "September 2012",
+ "period_end": "October 2014",
+ "method": [
+  "1. Define tau-th expectile Granger causality measure GC_tau(Z->X)=log( E[R_tau(X_t-mu_tau(X_t|I_X))]/E[R_tau(X_t-mu_tau(X_t|I_{X,Z}))] ) with R_tau(u)=|tau-I{u<0}| u^2 = tau(u)_+^2+(1-tau)(u)_-^2, reduces to GC_mean for tau=0.5.",
+  "2. Assume k=1 Markov square-integrable strictly stationary process (X,Z1..Zd). Sample {(x_t,z1_t..zd_t):t=1..T}.",
+  "3. Part A: Fit M-vine copula model to M_x=(x_t) via Nagler et al. 2022 selection/estimation; for each t=T0..T generate N=200 i.i.d. predictions {tilde x^{M_x}_{i,t}} of X_t|X_{t-1}=x_{t-1} and compute empirical conditional tau-expectile hat mu_{tau,N}(X_t|X_{t-1}=x_{t-1})=argmin_m sum_{i=1}^N R_tau(tilde x_{i,t}-m).",
+  "4. Repeat A1-A2 for M_{x,z}=(x_t,z_t) to get hat mu_{tau,N}(X_t|X_{t-1}=x_{t-1},Z_{t-1}=z_{t-1}).",
+  "5. Compute test statistic hat GC_tau(Z->X)=log( sum_{t=T0}^T R_tau(x_t-hat mu_tau(X_t|X_{t-1}))/sum_{t=T0}^T R_tau(x_t-hat mu_tau(X_t|X_{t-1},Z_{t-1})) ), with T0=T/2.",
+  "6. Part B p-value: Fit M-vine to full sample M_{x,z}; extract from Tree1 copulas c_{X_t,X_{t+1}} and c_{X_t,Z1,t}; using marginal estimates hat F_X, hat F_{Z1} generate x_t^0 and x_{t+1}^0| x_t^0 and z1_t^0| x_t^0.",
+  "7. For i=2..d extract c_{X_t,Zi,t; Z1..Zi-1} from Tree i, using hat F_{Zi} sequentially draw zi,t^0| x_t^0,z1_t^0..zi-1_t^0 to form full vector z_t^0.",
+  "8. Using generated sample {(x_t^0,z_t^0):t=1..T} compute hat GC^{0}_tau; repeat B=200 times to get hat GC^{0}_{tau,j} j=1..B; compute p=1/B sum_j I(hat GC^{0}_{tau,j} >= hat GC_tau); reject null of no Granger causality in tau-expectile if p<alpha=0.05.",
+  "9. Simulation: tau in {0.1,0.5,0.9} and {0.05,0.1,0.25,0.5,0.75,0.9,0.95} for empirical; S=500 replications; report empirical size/power as rejection rates at alpha=0.05; compare with linear F-test (restricted vs unrestricted AR) and with pairwise M-vine and KNP quantile tests from Balcilar et al.2016.",
+  "10. Empirical: apply steps 2-8 with N=200, T0=T/2, B=200, alpha=0.05 to global and Asian indices at stated taus; report bootstrap p-values."
+ ],
+ "claims": [
+  {
+   "name": "count_S",
+   "description": "Monte Carlo replications S per DGP and per T and tau combination for size/power tables and P3 verification and power comparison.",
+   "value": "500",
+   "unit": "replications",
+   "kind": "count",
+   "where": "Simulation study S=500"
+  },
+  {
+   "name": "count_T100",
+   "description": "Simulation sample size T=100",
+   "value": "100",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Simulation sample size T=100 column Table sizeres powerres powercomp linear_granger"
+  },
+  {
+   "name": "count_T200",
+   "description": "Simulation sample size T=200",
+   "value": "200",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Simulation T=200"
+  },
+  {
+   "name": "count_T500_sim",
+   "description": "Simulation sample size T=500",
+   "value": "500",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Simulation T=500 and empirical T=500 use same number; Table sizeres powerres etc column T=500"
+  },
+  {
+   "name": "count_T500_emp",
+   "description": "Empirical sample size T=500 daily log-returns",
+   "value": "500",
+   "unit": "daily log-returns",
+   "kind": "count",
+   "where": "Empirical applications Global and Asian T=500 Sept2012-Oct2014"
+  },
+  {
+   "name": "param_alpha",
+   "description": "Significance level for size/power and decision rule p<alpha",
+   "value": "0.05",
+   "unit": "level",
+   "kind": "parameter",
+   "where": "Simulation significance level alpha=0.05"
+  },
+  {
+   "name": "param_N",
+   "description": "Number of i.i.d. M-vine predictions per t to compute empirical conditional expectile",
+   "value": "200",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Specification N=200 predictions per series Part A"
+  },
+  {
+   "name": "param_B",
+   "description": "Number of bootstrap/null simulated samples for p-value",
+   "value": "200",
+   "unit": "samples",
+   "kind": "parameter",
+   "where": "Specification B=200 generated samples under null Part B for p-value"
+  },
+  {
+   "name": "param_T0",
+   "description": "Start index for mean tau-expectile loss computation",
+   "value": "T/2",
+   "unit": "index",
+   "kind": "parameter",
+   "where": "Specification T0=T/2 in hat GC_tau definition"
+  },
+  {
+   "name": "param_k",
+   "description": "Markov order k=1",
+   "value": "1",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Assume k=1 Markov for test description; extended to any k"
+  },
+  {
+   "name": "param_d",
+   "description": "Number of causing series d=2",
+   "value": "2",
+   "unit": "series",
+   "kind": "parameter",
+   "where": "Simulation d=2 i.e. d+1=3 series (X,Y,Z)"
+  },
+  {
+   "name": "stat_Mvine_GC",
+   "description": "M-vine GC_tau test statistic hat GC_tau; p-values reported in empirical tables, rejection rates in simulation tables",
+   "value": "not stated",
+   "unit": "log ratio",
+   "kind": "parameter",
+   "where": "M-vine hat GC_tau test statistic formula; numeric values not printed, inference via bootstrap p-values"
+  },
+  {
+   "name": "stat_Linear_F",
+   "description": "Linear F-test statistic formula not printed; size/power reported",
+   "value": "not stated",
+   "unit": "F",
+   "kind": "parameter",
+   "where": "Classical linear Granger causality in mean F-test (restricted vs unrestricted AR) for comparison Table linear_granger"
+  },
+  {
+   "name": "size_S1_tau0.1_T100",
+   "description": "Empirical size M-vine tau=0.1 S1 T=100",
+   "value": "0.056",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.1 S1 T=100"
+  },
+  {
+   "name": "size_S1_tau0.1_T200",
+   "description": "Empirical size M-vine tau=0.1 S1 T=200",
+   "value": "0.062",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.1 S1 T=200"
+  },
+  {
+   "name": "size_S1_tau0.1_T500",
+   "description": "Empirical size M-vine tau=0.1 S1 T=500",
+   "value": "0.056",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.1 S1 T=500"
+  },
+  {
+   "name": "size_S2_tau0.1_T100",
+   "description": "Empirical size tau=0.1 S2 T=100",
+   "value": "0.056",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.1 S2 T=100"
+  },
+  {
+   "name": "size_S2_tau0.1_T200",
+   "description": "Empirical size tau=0.1 S2 T=200",
+   "value": "0.040",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.1 S2 T=200"
+  },
+  {
+   "name": "size_S2_tau0.1_T500",
+   "description": "Empirical size tau=0.1 S2 T=500",
+   "value": "0.046",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.1 S2 T=500"
+  },
+  {
+   "name": "size_S1_tau0.5_T100",
+   "description": "Empirical size tau=0.5 S1 T=100",
+   "value": "0.042",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.5 S1 T=100"
+  },
+  {
+   "name": "size_S1_tau0.5_T200",
+   "description": "Empirical size tau=0.5 S1 T=200",
+   "value": "0.040",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.5 S1 T=200"
+  },
+  {
+   "name": "size_S1_tau0.5_T500",
+   "description": "Empirical size tau=0.5 S1 T=500",
+   "value": "0.046",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.5 S1 T=500"
+  },
+  {
+   "name": "size_S2_tau0.5_T100",
+   "description": "Empirical size tau=0.5 S2 T=100",
+   "value": "0.056",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.5 S2 T=100"
+  },
+  {
+   "name": "size_S2_tau0.5_T200",
+   "description": "Empirical size tau=0.5 S2 T=200",
+   "value": "0.042",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.5 S2 T=200"
+  },
+  {
+   "name": "size_S2_tau0.5_T500",
+   "description": "Empirical size tau=0.5 S2 T=500",
+   "value": "0.052",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.5 S2 T=500"
+  },
+  {
+   "name": "size_S1_tau0.9_T100",
+   "description": "Empirical size tau=0.9 S1 T=100",
+   "value": "0.064",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.9 S1 T=100"
+  },
+  {
+   "name": "size_S1_tau0.9_T200",
+   "description": "Empirical size tau=0.9 S1 T=200",
+   "value": "0.050",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.9 S1 T=200"
+  },
+  {
+   "name": "size_S1_tau0.9_T500",
+   "description": "Empirical size tau=0.9 S1 T=500",
+   "value": "0.042",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.9 S1 T=500"
+  },
+  {
+   "name": "size_S2_tau0.9_T100",
+   "description": "Empirical size tau=0.9 S2 T=100",
+   "value": "0.060",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.9 S2 T=100"
+  },
+  {
+   "name": "size_S2_tau0.9_T200",
+   "description": "Empirical size tau=0.9 S2 T=200",
+   "value": "0.042",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.9 S2 T=200"
+  },
+  {
+   "name": "size_S2_tau0.9_T500",
+   "description": "Empirical size tau=0.9 S2 T=500",
+   "value": "0.044",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table sizeres tau=0.9 S2 T=500"
+  },
+  {
+   "name": "power_P1_tau0.1_T100",
+   "description": "Empirical power tau=0.1 P1 T=100",
+   "value": "0.420",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P1 T=100"
+  },
+  {
+   "name": "power_P1_tau0.1_T200",
+   "description": "Empirical power tau=0.1 P1 T=200",
+   "value": "0.586",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P1 T=200"
+  },
+  {
+   "name": "power_P1_tau0.1_T500",
+   "description": "Empirical power tau=0.1 P1 T=500",
+   "value": "0.882",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P1 T=500"
+  },
+  {
+   "name": "power_P2_tau0.1_T100",
+   "description": "Empirical power tau=0.1 P2 T=100",
+   "value": "0.640",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P2 T=100"
+  },
+  {
+   "name": "power_P2_tau0.1_T200",
+   "description": "Empirical power tau=0.1 P2 T=200",
+   "value": "0.924",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P2 T=200"
+  },
+  {
+   "name": "power_P2_tau0.1_T500",
+   "description": "Empirical power tau=0.1 P2 T=500",
+   "value": "0.998",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P2 T=500"
+  },
+  {
+   "name": "power_P3_tau0.1_T100",
+   "description": "Empirical power tau=0.1 P3 T=100",
+   "value": "0.676",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P3 T=100"
+  },
+  {
+   "name": "power_P3_tau0.1_T200",
+   "description": "Empirical power tau=0.1 P3 T=200",
+   "value": "0.934",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P3 T=200"
+  },
+  {
+   "name": "power_P3_tau0.1_T500",
+   "description": "Empirical power tau=0.1 P3 T=500",
+   "value": "1.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P3 T=500"
+  },
+  {
+   "name": "power_P4_tau0.1_T100",
+   "description": "Empirical power tau=0.1 P4 T=100",
+   "value": "0.796",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P4 T=100"
+  },
+  {
+   "name": "power_P4_tau0.1_T200",
+   "description": "Empirical power tau=0.1 P4 T=200",
+   "value": "0.908",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P4 T=200"
+  },
+  {
+   "name": "power_P4_tau0.1_T500",
+   "description": "Empirical power tau=0.1 P4 T=500",
+   "value": "0.982",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.1 P4 T=500"
+  },
+  {
+   "name": "power_P1_tau0.5_T100",
+   "description": "Empirical power tau=0.5 P1 T=100",
+   "value": "0.516",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P1 T=100"
+  },
+  {
+   "name": "power_P1_tau0.5_T200",
+   "description": "Empirical power tau=0.5 P1 T=200",
+   "value": "0.724",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P1 T=200"
+  },
+  {
+   "name": "power_P1_tau0.5_T500",
+   "description": "Empirical power tau=0.5 P1 T=500",
+   "value": "0.978",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P1 T=500"
+  },
+  {
+   "name": "power_P2_tau0.5_T100",
+   "description": "Empirical power tau=0.5 P2 T=100",
+   "value": "0.288",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P2 T=100"
+  },
+  {
+   "name": "power_P2_tau0.5_T200",
+   "description": "Empirical power tau=0.5 P2 T=200",
+   "value": "0.594",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P2 T=200"
+  },
+  {
+   "name": "power_P2_tau0.5_T500",
+   "description": "Empirical power tau=0.5 P2 T=500",
+   "value": "0.942",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P2 T=500"
+  },
+  {
+   "name": "power_P3_tau0.5_T100",
+   "description": "Empirical power tau=0.5 P3 T=100",
+   "value": "0.296",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P3 T=100"
+  },
+  {
+   "name": "power_P3_tau0.5_T200",
+   "description": "Empirical power tau=0.5 P3 T=200",
+   "value": "0.610",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P3 T=200"
+  },
+  {
+   "name": "power_P3_tau0.5_T500",
+   "description": "Empirical power tau=0.5 P3 T=500",
+   "value": "0.972",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P3 T=500"
+  },
+  {
+   "name": "power_P4_tau0.5_T100",
+   "description": "Empirical power tau=0.5 P4 T=100",
+   "value": "0.944",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P4 T=100"
+  },
+  {
+   "name": "power_P4_tau0.5_T200",
+   "description": "Empirical power tau=0.5 P4 T=200",
+   "value": "0.988",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P4 T=200"
+  },
+  {
+   "name": "power_P4_tau0.5_T500",
+   "description": "Empirical power tau=0.5 P4 T=500",
+   "value": "1.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.5 P4 T=500"
+  },
+  {
+   "name": "power_P1_tau0.9_T100",
+   "description": "Empirical power tau=0.9 P1 T=100",
+   "value": "0.412",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P1 T=100"
+  },
+  {
+   "name": "power_P1_tau0.9_T200",
+   "description": "Empirical power tau=0.9 P1 T=200",
+   "value": "0.624",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P1 T=200"
+  },
+  {
+   "name": "power_P1_tau0.9_T500",
+   "description": "Empirical power tau=0.9 P1 T=500",
+   "value": "0.886",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P1 T=500"
+  },
+  {
+   "name": "power_P2_tau0.9_T100",
+   "description": "Empirical power tau=0.9 P2 T=100",
+   "value": "0.652",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P2 T=100"
+  },
+  {
+   "name": "power_P2_tau0.9_T200",
+   "description": "Empirical power tau=0.9 P2 T=200",
+   "value": "0.934",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P2 T=200"
+  },
+  {
+   "name": "power_P2_tau0.9_T500",
+   "description": "Empirical power tau=0.9 P2 T=500",
+   "value": "1.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P2 T=500"
+  },
+  {
+   "name": "power_P3_tau0.9_T100",
+   "description": "Empirical power tau=0.9 P3 T=100",
+   "value": "0.672",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P3 T=100"
+  },
+  {
+   "name": "power_P3_tau0.9_T200",
+   "description": "Empirical power tau=0.9 P3 T=200",
+   "value": "0.958",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P3 T=200"
+  },
+  {
+   "name": "power_P3_tau0.9_T500",
+   "description": "Empirical power tau=0.9 P3 T=500",
+   "value": "1.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P3 T=500"
+  },
+  {
+   "name": "power_P4_tau0.9_T100",
+   "description": "Empirical power tau=0.9 P4 T=100",
+   "value": "0.900",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P4 T=100"
+  },
+  {
+   "name": "power_P4_tau0.9_T200",
+   "description": "Empirical power tau=0.9 P4 T=200",
+   "value": "0.986",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P4 T=200"
+  },
+  {
+   "name": "power_P4_tau0.9_T500",
+   "description": "Empirical power tau=0.9 P4 T=500",
+   "value": "1.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powerres tau=0.9 P4 T=500"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.1_T100",
+   "description": "Power comparison tau0.1 M-vine joint P1 T100",
+   "value": "0.420",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine (Y,Z)->X T=100"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.1_T200",
+   "description": "Power comparison tau0.1 M-vine joint P1 T200",
+   "value": "0.586",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine (Y,Z)->X T=200"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.1_T500",
+   "description": "Power comparison tau0.1 M-vine joint P1 T500",
+   "value": "0.882",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine (Y,Z)->X T=500"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.1_T100",
+   "description": "Pairwise M-vine Y->X tau0.1 T100",
+   "value": "0.196",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine Y->X T100"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.1_T200",
+   "description": "Pairwise M-vine Y->X tau0.1 T200",
+   "value": "0.356",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine Y->X T200"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.1_T500",
+   "description": "Pairwise M-vine Y->X tau0.1 T500",
+   "value": "0.650",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine Y->X T500"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.1_T100",
+   "description": "Pairwise M-vine Z->X tau0.1 T100",
+   "value": "0.280",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine Z->X T100"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.1_T200",
+   "description": "Pairwise M-vine Z->X tau0.1 T200",
+   "value": "0.388",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine Z->X T200"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.1_T500",
+   "description": "Pairwise M-vine Z->X tau0.1 T500",
+   "value": "0.530",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 M-vine Z->X T500"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.1_T100",
+   "description": "KNP quantile Y->X tau0.1 T100",
+   "value": "0.041",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 KNP Y->X T100"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.1_T200",
+   "description": "KNP quantile Y->X tau0.1 T200",
+   "value": "0.048",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 KNP Y->X T200"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.1_T500",
+   "description": "KNP quantile Y->X tau0.1 T500",
+   "value": "0.084",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 KNP Y->X T500"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.1_T100",
+   "description": "KNP quantile Z->X tau0.1 T100",
+   "value": "0.033",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 KNP Z->X T100"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.1_T200",
+   "description": "KNP quantile Z->X tau0.1 T200",
+   "value": "0.040",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 KNP Z->X T200"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.1_T500",
+   "description": "KNP quantile Z->X tau0.1 T500",
+   "value": "0.094",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.1 KNP Z->X T500"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.5_T100",
+   "description": "Power comparison tau0.5 M-vine joint P1 T100",
+   "value": "0.516",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine (Y,Z)->X T100"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.5_T200",
+   "description": "Power comparison tau0.5 M-vine joint P1 T200",
+   "value": "0.724",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine (Y,Z)->X T200"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.5_T500",
+   "description": "Power comparison tau0.5 M-vine joint P1 T500",
+   "value": "0.978",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine (Y,Z)->X T500"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.5_T100",
+   "description": "Pairwise M-vine Y->X tau0.5 T100",
+   "value": "0.300",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine Y->X T100"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.5_T200",
+   "description": "Pairwise M-vine Y->X tau0.5 T200",
+   "value": "0.468",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine Y->X T200"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.5_T500",
+   "description": "Pairwise M-vine Y->X tau0.5 T500",
+   "value": "0.740",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine Y->X T500"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.5_T100",
+   "description": "Pairwise M-vine Z->X tau0.5 T100",
+   "value": "0.344",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine Z->X T100"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.5_T200",
+   "description": "Pairwise M-vine Z->X tau0.5 T200",
+   "value": "0.464",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine Z->X T200"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.5_T500",
+   "description": "Pairwise M-vine Z->X tau0.5 T500",
+   "value": "0.720",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 M-vine Z->X T500"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.5_T100",
+   "description": "KNP quantile Y->X tau0.5 T100",
+   "value": "0.154",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 KNP Y->X T100"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.5_T200",
+   "description": "KNP quantile Y->X tau0.5 T200",
+   "value": "0.340",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 KNP Y->X T200"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.5_T500",
+   "description": "KNP quantile Y->X tau0.5 T500",
+   "value": "0.709",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 KNP Y->X T500"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.5_T100",
+   "description": "KNP quantile Z->X tau0.5 T100",
+   "value": "0.180",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 KNP Z->X T100"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.5_T200",
+   "description": "KNP quantile Z->X tau0.5 T200",
+   "value": "0.344",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 KNP Z->X T200"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.5_T500",
+   "description": "KNP quantile Z->X tau0.5 T500",
+   "value": "0.705",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.5 KNP Z->X T500"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.9_T100",
+   "description": "Power comparison tau0.9 M-vine joint P1 T100",
+   "value": "0.412",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine (Y,Z)->X T100"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.9_T200",
+   "description": "Power comparison tau0.9 M-vine joint P1 T200",
+   "value": "0.624",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine (Y,Z)->X T200"
+  },
+  {
+   "name": "comp_Mvine_joint_P1_tau0.9_T500",
+   "description": "Power comparison tau0.9 M-vine joint P1 T500",
+   "value": "0.886",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine (Y,Z)->X T500"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.9_T100",
+   "description": "Pairwise M-vine Y->X tau0.9 T100",
+   "value": "0.264",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine Y->X T100"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.9_T200",
+   "description": "Pairwise M-vine Y->X tau0.9 T200",
+   "value": "0.388",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine Y->X T200"
+  },
+  {
+   "name": "comp_Mvine_Y_P1_tau0.9_T500",
+   "description": "Pairwise M-vine Y->X tau0.9 T500",
+   "value": "0.620",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine Y->X T500"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.9_T100",
+   "description": "Pairwise M-vine Z->X tau0.9 T100",
+   "value": "0.268",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine Z->X T100"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.9_T200",
+   "description": "Pairwise M-vine Z->X tau0.9 T200",
+   "value": "0.352",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine Z->X T200"
+  },
+  {
+   "name": "comp_Mvine_Z_P1_tau0.9_T500",
+   "description": "Pairwise M-vine Z->X tau0.9 T500",
+   "value": "0.560",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 M-vine Z->X T500"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.9_T100",
+   "description": "KNP quantile Y->X tau0.9 T100",
+   "value": "0.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 KNP Y->X T100"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.9_T200",
+   "description": "KNP quantile Y->X tau0.9 T200",
+   "value": "0.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 KNP Y->X T200"
+  },
+  {
+   "name": "comp_KNP_Y_P1_tau0.9_T500",
+   "description": "KNP quantile Y->X tau0.9 T500",
+   "value": "0.082",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 KNP Y->X T500"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.9_T100",
+   "description": "KNP quantile Z->X tau0.9 T100",
+   "value": "0.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 KNP Z->X T100"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.9_T200",
+   "description": "KNP quantile Z->X tau0.9 T200",
+   "value": "0.014",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 KNP Z->X T200"
+  },
+  {
+   "name": "comp_KNP_Z_P1_tau0.9_T500",
+   "description": "KNP quantile Z->X tau0.9 T500",
+   "value": "0.052",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table powercomp tau0.9 KNP Z->X T500"
+  },
+  {
+   "name": "linear_size_S1_T100",
+   "description": "Linear F-test size S1 T100",
+   "value": "0.028",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Size S1 T100"
+  },
+  {
+   "name": "linear_size_S1_T200",
+   "description": "Linear F-test size S1 T200",
+   "value": "0.052",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Size S1 T200"
+  },
+  {
+   "name": "linear_size_S1_T500",
+   "description": "Linear F-test size S1 T500",
+   "value": "0.060",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Size S1 T500"
+  },
+  {
+   "name": "linear_size_S2_T100",
+   "description": "Linear F-test size S2 T100",
+   "value": "0.042",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Size S2 T100"
+  },
+  {
+   "name": "linear_size_S2_T200",
+   "description": "Linear F-test size S2 T200",
+   "value": "0.062",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Size S2 T200"
+  },
+  {
+   "name": "linear_size_S2_T500",
+   "description": "Linear F-test size S2 T500",
+   "value": "0.060",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Size S2 T500"
+  },
+  {
+   "name": "linear_power_P1_T100",
+   "description": "Linear F-test power P1 T100",
+   "value": "0.810",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P1 T100"
+  },
+  {
+   "name": "linear_power_P1_T200",
+   "description": "Linear F-test power P1 T200",
+   "value": "0.988",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P1 T200"
+  },
+  {
+   "name": "linear_power_P1_T500",
+   "description": "Linear F-test power P1 T500",
+   "value": "1.000",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P1 T500"
+  },
+  {
+   "name": "linear_power_P2_T100",
+   "description": "Linear F-test power P2 T100",
+   "value": "0.454",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P2 T100"
+  },
+  {
+   "name": "linear_power_P2_T200",
+   "description": "Linear F-test power P2 T200",
+   "value": "0.438",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P2 T200"
+  },
+  {
+   "name": "linear_power_P2_T500",
+   "description": "Linear F-test power P2 T500",
+   "value": "0.448",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P2 T500"
+  },
+  {
+   "name": "linear_power_P3_T100",
+   "description": "Linear F-test power P3 T100",
+   "value": "0.350",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P3 T100"
+  },
+  {
+   "name": "linear_power_P3_T200",
+   "description": "Linear F-test power P3 T200",
+   "value": "0.338",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P3 T200"
+  },
+  {
+   "name": "linear_power_P3_T500",
+   "description": "Linear F-test power P3 T500",
+   "value": "0.340",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P3 T500"
+  },
+  {
+   "name": "linear_power_P4_T100",
+   "description": "Linear F-test power P4 T100",
+   "value": "0.388",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P4 T100"
+  },
+  {
+   "name": "linear_power_P4_T200",
+   "description": "Linear F-test power P4 T200",
+   "value": "0.410",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P4 T200"
+  },
+  {
+   "name": "linear_power_P4_T500",
+   "description": "Linear F-test power P4 T500",
+   "value": "0.500",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Table linear_granger Power P4 T500"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.05",
+   "description": "Bootstrap p-value M-vine GC_tau SP->FTSE tau0.05",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.05"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.10",
+   "description": "Bootstrap p-value SP->FTSE tau0.10",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.10"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.25",
+   "description": "Bootstrap p-value SP->FTSE tau0.25",
+   "value": "0.003",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.25"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.50",
+   "description": "Bootstrap p-value SP->FTSE tau0.50",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.50"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.75",
+   "description": "Bootstrap p-value SP->FTSE tau0.75",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.75"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.90",
+   "description": "Bootstrap p-value SP->FTSE tau0.90",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.90"
+  },
+  {
+   "name": "p_SP_to_FTSE_tau0.95",
+   "description": "Bootstrap p-value SP->FTSE tau0.95",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->FTSE tau0.95"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.05",
+   "description": "Bootstrap p-value SP->NK tau0.05",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.05"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.10",
+   "description": "Bootstrap p-value SP->NK tau0.10",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.10"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.25",
+   "description": "Bootstrap p-value SP->NK tau0.25",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.25"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.50",
+   "description": "Bootstrap p-value SP->NK tau0.50",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.50"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.75",
+   "description": "Bootstrap p-value SP->NK tau0.75",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.75"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.90",
+   "description": "Bootstrap p-value SP->NK tau0.90",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.90"
+  },
+  {
+   "name": "p_SP_to_NK_tau0.95",
+   "description": "Bootstrap p-value SP->NK tau0.95",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global SP->NK tau0.95"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.05",
+   "description": "Bootstrap p-value FTSE->SP tau0.05",
+   "value": "0.030",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.05"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.10",
+   "description": "Bootstrap p-value FTSE->SP tau0.10",
+   "value": "0.003",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.10"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.25",
+   "description": "Bootstrap p-value FTSE->SP tau0.25",
+   "value": "0.150",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.25"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.50",
+   "description": "Bootstrap p-value FTSE->SP tau0.50",
+   "value": "0.290",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.50"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.75",
+   "description": "Bootstrap p-value FTSE->SP tau0.75",
+   "value": "0.500",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.75"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.90",
+   "description": "Bootstrap p-value FTSE->SP tau0.90",
+   "value": "0.035",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.90"
+  },
+  {
+   "name": "p_FTSE_to_SP_tau0.95",
+   "description": "Bootstrap p-value FTSE->SP tau0.95",
+   "value": "0.025",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->SP tau0.95"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.05",
+   "description": "Bootstrap p-value FTSE->NK tau0.05",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.05"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.10",
+   "description": "Bootstrap p-value FTSE->NK tau0.10",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.10"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.25",
+   "description": "Bootstrap p-value FTSE->NK tau0.25",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.25"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.50",
+   "description": "Bootstrap p-value FTSE->NK tau0.50",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.50"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.75",
+   "description": "Bootstrap p-value FTSE->NK tau0.75",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.75"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.90",
+   "description": "Bootstrap p-value FTSE->NK tau0.90",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.90"
+  },
+  {
+   "name": "p_FTSE_to_NK_tau0.95",
+   "description": "Bootstrap p-value FTSE->NK tau0.95",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global FTSE->NK tau0.95"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.05",
+   "description": "Bootstrap p-value NK->SP tau0.05",
+   "value": "0.340",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.05"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.10",
+   "description": "Bootstrap p-value NK->SP tau0.10",
+   "value": "0.453",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.10"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.25",
+   "description": "Bootstrap p-value NK->SP tau0.25",
+   "value": "0.470",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.25"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.50",
+   "description": "Bootstrap p-value NK->SP tau0.50",
+   "value": "0.525",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.50"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.75",
+   "description": "Bootstrap p-value NK->SP tau0.75",
+   "value": "0.248",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.75"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.90",
+   "description": "Bootstrap p-value NK->SP tau0.90",
+   "value": "0.575",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.90"
+  },
+  {
+   "name": "p_NK_to_SP_tau0.95",
+   "description": "Bootstrap p-value NK->SP tau0.95",
+   "value": "0.233",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->SP tau0.95"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.05",
+   "description": "Bootstrap p-value NK->FTSE tau0.05",
+   "value": "0.260",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.05"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.10",
+   "description": "Bootstrap p-value NK->FTSE tau0.10",
+   "value": "0.472",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.10"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.25",
+   "description": "Bootstrap p-value NK->FTSE tau0.25",
+   "value": "0.165",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.25"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.50",
+   "description": "Bootstrap p-value NK->FTSE tau0.50",
+   "value": "0.145",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.50"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.75",
+   "description": "Bootstrap p-value NK->FTSE tau0.75",
+   "value": "0.295",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.75"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.90",
+   "description": "Bootstrap p-value NK->FTSE tau0.90",
+   "value": "0.470",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.90"
+  },
+  {
+   "name": "p_NK_to_FTSE_tau0.95",
+   "description": "Bootstrap p-value NK->FTSE tau0.95",
+   "value": "0.123",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global NK->FTSE tau0.95"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.05",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.05",
+   "value": "0.008",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.05"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.10",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.10",
+   "value": "0.001",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.10"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.25",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.25",
+   "value": "0.135",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.25"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.50",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.50",
+   "value": "0.340",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.50"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.75",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.75",
+   "value": "0.128",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.75"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.90",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.90",
+   "value": "0.030",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.90"
+  },
+  {
+   "name": "p_FTSE_NK_to_SP_tau0.95",
+   "description": "Bootstrap p-value (FTSE,NK)->SP tau0.95",
+   "value": "0.022",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (FTSE,NK)->SP tau0.95"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.05",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.05",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.05"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.10",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.10",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.10"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.25",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.25",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.25"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.50",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.50",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.50"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.75",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.75",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.75"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.90",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.90",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.90"
+  },
+  {
+   "name": "p_SP_NK_to_FTSE_tau0.95",
+   "description": "Bootstrap p-value (SP,NK)->FTSE tau0.95",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,NK)->FTSE tau0.95"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.05",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.05",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.05"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.10",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.10",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.10"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.25",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.25",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.25"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.50",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.50",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.50"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.75",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.75",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.75"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.90",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.90",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.90"
+  },
+  {
+   "name": "p_SP_FTSE_to_NK_tau0.95",
+   "description": "Bootstrap p-value (SP,FTSE)->NK tau0.95",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres Global (SP,FTSE)->NK tau0.95"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.05",
+   "description": "Bootstrap p-value NK->HSI tau0.05",
+   "value": "0.080",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.05"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.10",
+   "description": "Bootstrap p-value NK->HSI tau0.10",
+   "value": "0.080",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.10"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.25",
+   "description": "Bootstrap p-value NK->HSI tau0.25",
+   "value": "0.145",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.25"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.50",
+   "description": "Bootstrap p-value NK->HSI tau0.50",
+   "value": "0.470",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.50"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.75",
+   "description": "Bootstrap p-value NK->HSI tau0.75",
+   "value": "0.365",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.75"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.90",
+   "description": "Bootstrap p-value NK->HSI tau0.90",
+   "value": "0.305",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.90"
+  },
+  {
+   "name": "p_NK_to_HSI_tau0.95",
+   "description": "Bootstrap p-value NK->HSI tau0.95",
+   "value": "0.370",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->HSI tau0.95"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.05",
+   "description": "Bootstrap p-value NK->SSE tau0.05",
+   "value": "0.410",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.05"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.10",
+   "description": "Bootstrap p-value NK->SSE tau0.10",
+   "value": "0.520",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.10"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.25",
+   "description": "Bootstrap p-value NK->SSE tau0.25",
+   "value": "0.325",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.25"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.50",
+   "description": "Bootstrap p-value NK->SSE tau0.50",
+   "value": "0.345",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.50"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.75",
+   "description": "Bootstrap p-value NK->SSE tau0.75",
+   "value": "0.285",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.75"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.90",
+   "description": "Bootstrap p-value NK->SSE tau0.90",
+   "value": "0.340",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.90"
+  },
+  {
+   "name": "p_NK_to_SSE_tau0.95",
+   "description": "Bootstrap p-value NK->SSE tau0.95",
+   "value": "0.425",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian NK->SSE tau0.95"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.05",
+   "description": "Bootstrap p-value HSI->NK tau0.05",
+   "value": "0.440",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.05"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.10",
+   "description": "Bootstrap p-value HSI->NK tau0.10",
+   "value": "0.275",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.10"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.25",
+   "description": "Bootstrap p-value HSI->NK tau0.25",
+   "value": "0.330",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.25"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.50",
+   "description": "Bootstrap p-value HSI->NK tau0.50",
+   "value": "0.365",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.50"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.75",
+   "description": "Bootstrap p-value HSI->NK tau0.75",
+   "value": "0.310",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.75"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.90",
+   "description": "Bootstrap p-value HSI->NK tau0.90",
+   "value": "0.305",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.90"
+  },
+  {
+   "name": "p_HSI_to_NK_tau0.95",
+   "description": "Bootstrap p-value HSI->NK tau0.95",
+   "value": "0.360",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->NK tau0.95"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.05",
+   "description": "Bootstrap p-value HSI->SSE tau0.05",
+   "value": "0.150",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.05"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.10",
+   "description": "Bootstrap p-value HSI->SSE tau0.10",
+   "value": "0.370",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.10"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.25",
+   "description": "Bootstrap p-value HSI->SSE tau0.25",
+   "value": "0.255",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.25"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.50",
+   "description": "Bootstrap p-value HSI->SSE tau0.50",
+   "value": "0.240",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.50"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.75",
+   "description": "Bootstrap p-value HSI->SSE tau0.75",
+   "value": "0.235",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.75"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.90",
+   "description": "Bootstrap p-value HSI->SSE tau0.90",
+   "value": "0.515",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.90"
+  },
+  {
+   "name": "p_HSI_to_SSE_tau0.95",
+   "description": "Bootstrap p-value HSI->SSE tau0.95",
+   "value": "0.195",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian HSI->SSE tau0.95"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.05",
+   "description": "Bootstrap p-value SSE->NK tau0.05",
+   "value": "0.445",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.05"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.10",
+   "description": "Bootstrap p-value SSE->NK tau0.10",
+   "value": "0.370",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.10"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.25",
+   "description": "Bootstrap p-value SSE->NK tau0.25",
+   "value": "0.325",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.25"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.50",
+   "description": "Bootstrap p-value SSE->NK tau0.50",
+   "value": "0.410",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.50"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.75",
+   "description": "Bootstrap p-value SSE->NK tau0.75",
+   "value": "0.365",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.75"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.90",
+   "description": "Bootstrap p-value SSE->NK tau0.90",
+   "value": "0.305",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.90"
+  },
+  {
+   "name": "p_SSE_to_NK_tau0.95",
+   "description": "Bootstrap p-value SSE->NK tau0.95",
+   "value": "0.360",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->NK tau0.95"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.05",
+   "description": "Bootstrap p-value SSE->HSI tau0.05",
+   "value": "0.340",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.05"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.10",
+   "description": "Bootstrap p-value SSE->HSI tau0.10",
+   "value": "0.155",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.10"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.25",
+   "description": "Bootstrap p-value SSE->HSI tau0.25",
+   "value": "0.260",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.25"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.50",
+   "description": "Bootstrap p-value SSE->HSI tau0.50",
+   "value": "0.535",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.50"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.75",
+   "description": "Bootstrap p-value SSE->HSI tau0.75",
+   "value": "0.450",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.75"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.90",
+   "description": "Bootstrap p-value SSE->HSI tau0.90",
+   "value": "0.325",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.90"
+  },
+  {
+   "name": "p_SSE_to_HSI_tau0.95",
+   "description": "Bootstrap p-value SSE->HSI tau0.95",
+   "value": "0.275",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian SSE->HSI tau0.95"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.05",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.05",
+   "value": "0.005",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.05 headline joint left-tail causality"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.10",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.10",
+   "value": "0.025",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.10"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.25",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.25",
+   "value": "0.080",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.25"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.50",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.50",
+   "value": "0.545",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.50"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.75",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.75",
+   "value": "0.340",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.75"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.90",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.90",
+   "value": "0.235",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.90"
+  },
+  {
+   "name": "p_NK_SSE_to_HSI_tau0.95",
+   "description": "Bootstrap p-value (NK,SSE)->HSI tau0.95",
+   "value": "0.195",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (NK,SSE)->HSI tau0.95"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.05",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.05",
+   "value": "0.225",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.05"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.10",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.10",
+   "value": "0.395",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.10"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.25",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.25",
+   "value": "0.305",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.25"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.50",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.50",
+   "value": "0.220",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.50"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.75",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.75",
+   "value": "0.305",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.75"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.90",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.90",
+   "value": "0.385",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.90"
+  },
+  {
+   "name": "p_HSI_NK_to_SSE_tau0.95",
+   "description": "Bootstrap p-value (HSI,NK)->SSE tau0.95",
+   "value": "0.575",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,NK)->SSE tau0.95"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.05",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.05",
+   "value": "0.325",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.05"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.10",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.10",
+   "value": "0.200",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.10"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.25",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.25",
+   "value": "0.210",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.25"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.50",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.50",
+   "value": "0.230",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.50"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.75",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.75",
+   "value": "0.335",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.75"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.90",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.90",
+   "value": "0.270",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.90"
+  },
+  {
+   "name": "p_HSI_SSE_to_NK_tau0.95",
+   "description": "Bootstrap p-value (HSI,SSE)->NK tau0.95",
+   "value": "0.185",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table appres2 Asian (HSI,SSE)->NK tau0.95"
+  },
+  {
+   "name": "p3_Mvine_Y_to_X_T500",
+   "description": "Empirical rejection rate pairwise M-vine tau=1/2 Y->X P3 T500 verifying no pairwise Granger causality",
+   "value": "0.072",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Appendix Table p3sims M-vine test Y->X T=500"
+  },
+  {
+   "name": "p3_Mvine_Z_to_X_T500",
+   "description": "Empirical rejection rate pairwise M-vine tau=1/2 Z->X P3 T500",
+   "value": "0.048",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Appendix Table p3sims M-vine test Z->X T=500"
+  },
+  {
+   "name": "p3_Linear_Y_to_X_T500",
+   "description": "Empirical rejection rate linear F-test Y->X P3 T500 size distortion",
+   "value": "0.244",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Appendix Table p3sims Linear F-test Y->X T=500"
+  },
+  {
+   "name": "p3_Linear_Z_to_X_T500",
+   "description": "Empirical rejection rate linear F-test Z->X P3 T500",
+   "value": "0.246",
+   "unit": "rejection rate",
+   "kind": "estimate",
+   "where": "Appendix Table p3sims Linear F-test Z->X T=500"
+  }
+ ],
+ "headline": "p_NK_SSE_to_HSI_tau0.05",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "M-vine Granger causality in expectiles size assessment S1 S2",
+   "statistic": "stat_Mvine_GC",
+   "p_value": "size_S1_tau0.1_T100",
+   "group_sizes": [
+    "count_S",
+    "count_T100"
+   ]
+  },
+  {
+   "test": "M-vine Granger causality in expectiles power assessment P1-P4",
+   "statistic": "stat_Mvine_GC",
+   "p_value": "power_P1_tau0.5_T500",
+   "group_sizes": [
+    "count_S",
+    "count_T500_sim"
+   ]
+  },
+  {
+   "test": "Linear F-test Granger causality in mean size and power",
+   "statistic": "stat_Linear_F",
+   "p_value": "linear_size_S1_T100",
+   "group_sizes": [
+    "count_S",
+    "count_T500_sim"
+   ]
+  },
+  {
+   "test": "Empirical Global pairwise and joint SP FTSE NK",
+   "statistic": "stat_Mvine_GC",
+   "p_value": "p_SP_to_FTSE_tau0.05",
+   "group_sizes": [
+    "count_T500_emp"
+   ]
+  },
+  {
+   "test": "Empirical Asian pairwise and joint HSI NK SSE including joint left-tail",
+   "statistic": "stat_Mvine_GC",
+   "p_value": "p_NK_SSE_to_HSI_tau0.05",
+   "group_sizes": [
+    "count_T500_emp"
+   ]
+  },
+  {
+   "test": "Appendix P3 pairwise verification M-vine vs linear",
+   "statistic": "stat_Mvine_GC",
+   "p_value": "p3_Mvine_Y_to_X_T500",
+   "group_sizes": [
+    "count_S",
+    "count_T500_sim"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1731 @@
+{
+ "title": "First-passage horizons in HVG: rank-invariant path-roughness estimator verified from first-passage persistence and HVG; rough Bergomi H=0.1, verification via fBm/RB numeric experiments; deployment on 20plus years VIX rolling W1024 step126 with overlapping-window iid Monte Carlo nulls (single-window 95% envelope and rolling-mean/count Monte Carlo p) and block bootstrap CIs; sensitivity for ties/censoring/additive noise/thinning; control processes i.i.d./BM/GBM/OU and benchmark vol models Heston/GARCH/FIGARCH.",
+ "hypothesis": "Uncensored forward visibility horizon Lp = first-passage time Tp, iid null Pr[Lp>=k]=1/k theta_iid=1 infinite mean/variance diverges via harmonic series and sum (2k-1)Pr>=k, discrete-grid persistence theory gives theta(H)=1-H for fBm and conditional theta(H)=1-H for rBergomi-type vol under persistence hypothesis Eq hyp-rl that RL-fBm increments below 0 scales like fBm etc. All fBm validations done using Davies-Harte exact sampling where Lp=Tp holds by definition of uncensored horizons. Method inputs: window W, T, N draws/paths/replicates/permutations, lags, thresholds ell0, caps, weights, null values, benchmarks 1/k, 1-H.",
+ "data_sources": [
+  "Federal Reserve Economic Data (FRED) series VIXCLS daily CBOE VIX level, publicly available without licence, used as implied volatility proxy not realized variance"
+ ],
+ "sample": "Multiple Monte Carlo and empirical samples reported separately: 1) fBm Davies-Harte ensemble Sec4.2 N=10,000 paths per H in {0.1,...,0.9} length T=2^{16}, N=50 for control Table1 and N=30 for T-bias FigA; 2) Rough Bergomi heatmap Sec5.2 grid H x eta H in {0.05,0.10,0.15,0.20,0.30} eta in {0.2,0.4} xi0=0.04 hybrid scheme kappa=1 T=2^{16} N=10,000 per cell, N=500 for heatmap caption correction cells mean of 10000; 3) Model comparison Sec5.3 four volatility models T=2^{16} N=10,000 rough Bergomi H=0.1 eta=0.3, Heston kappa=2 theta_var=0.04 sigma=0.5 rho=-0.7 V0=0.04, GARCH omega1e-6 alpha0.05 beta0.94 persistence0.99, FIGARCH d0.4 phi0.10 beta0.60 truncation250 warmup250; 4) VIX empirical Sec6 FRED VIXCLS daily level 2000-01-03 to 2026-04-30 n=6651 trading days rolling W=1024 step126 four-year windows N_windows=45; 5) iid null Sec6-AppB single-window W=2^9 to 2^16 N=1000/500 uniform replicates and overlapping-window null 1000 paths length6651 rolling W=1024 step126; 6) iid uniform decay Sec4.2 N=50 each T=2^14/2^16/2^18/2^20. Filters: paths with no ties, time-order tie breaking if xt+k==xt later is crossing, finite-sample terminal non-crossings right-censored complete-case Hill main with censored-Pareto and lower-bound sensitivity checks, rank-invariant monotone stack O(T) next-greater-or-equal. Censoring: average 24.4 censored per 1024-day VIX window 21.8 above threshold.",
+ "period_start": "2000-01-03",
+ "period_end": "2026-04-30",
+ "method": [
+  "1. Compute forward visibility horizon Lp(t)=sup{k>=1:(t,t+k) in E[HVG(x)], x_{t+k}>=x_t, t+k<=T}; Lemma1 uncensored Lp=Tp=inf{k>=1:x_{t+k}>=x_t} HVG condition x_{t+m}<min(x_t,x_{t+k}); if empty right-censored infinite-path prob0; O(T) monotone stack next-greater-or-equal; ties deterministic time-order later counts as crossing, stricter equal-not-cross shift 0.003 on VIX.",
+  "2. Sample L=(Lp(t_i))_{i=1}^n with n<=T-1 uncensored only; main Hill complete-case; tail exponent via Hill-MLE theta(ell0)= n_{ell0} / sum_{L_i>=ell0} log(L_i/ell0) n_{ell0}=#{L_i>=ell0}; asymptotic SE theta/sqrt(n_{ell0}) replaced by stationary block bootstrap Politis-Romano mean block b=ceil(T^{1/3}) B=200 resamples for dependence-aware CIs.",
+  "3. Threshold ell0 selected by Clauset-Shalizi-Newman: candidate set all integer thresholds 1 to min(19, floor(q0.9)) plus 30 logarithmically spaced integer thresholds between 20 and empirical 90% quantile q0.9 duplicates removed; for each compute theta(ell0) and KS distance between empirical tail above ell0 and continuous-Pareto reference with exponent theta(ell0); minimizer reported ell0star; FigA Hill plot flat [10,60] move <0.02; practitioner report theta with ell0star and tail size n_{ell0star}.",
+  "4. Right-censoring sensitivity at ell0star: censored Pareto likelihood theta_cens = n_u / ( sum_{i in u} log(L_i/ell0star) + sum_{j in c} log(C_j/ell0star)) u uncensored c censored lower bounds C_j; conservative lower-bound fit treats each C_j as exact horizon; per VIX window mean 24.4 censored 21.8 above threshold; including censored lowers theta so complete-case conservative for heavy-tail.",
+  "5. i.i.d. null Prop1: X_i i.i.d. continuous Lp>=k iff X_t max of block size k Prob=1/k =Renyi record; series sum1/k diverges E=inf Var=inf via sum(2k-1)Pr>=k; power-law survival exponent theta_iid=1 closed-form null.",
+  "6. fBm prediction Cor1: fb m H sampled on integer grid persistence p_k(H)=Prob[fbm_1<0...fbm_k<0]=k^{-(1-H)+o(1)} Molchan1999 discrete counterpart sup<=1 barrier; stationarity increments event {Tp>k}={fbm_{t+j}-fbm_t<0 j=1..k} Prob =p_k => theta(H)=1-H; intuition small H thin tail large theta large H smooth heavy tail.",
+  "7. Rough Bergomi Eq rb v_t=xi0 exp(eta Z^H_t -0.5 eta^2 t^{2H}) Z^H_t= sqrt(2H)int_0^t (t-s)^{H-1/2} dW_s hybrid scheme BennedsenLundePakkanen kappa=1; rank-invariance Lp(v)=Lp(log v) since log uniform but Lp(log v)!=Lp(Z^H) due to t-dependent drift -0.5 eta^2 t^{2H}; first-passage event {Tp>k}={Z^H_{t+j}-Z^H_t < eta/2[(t+j)^{2H}-t^{2H}] } persistence RL-fBm increment below g_t(s)=eta/2[(t+s)^{2H}-t^{2H}]. Prop3 conditional result fix H in (0,0.5] eta>0 xi0>0 window [t0,t1] subset(0,1) sstar(t)=(c_H/(eta H) t^{1-2H})^{1/(1-H)} c_H coeff sqrtVar=c_H s^H+o(s^H) hypothesis persistence of RL-fBm increment below zero scales k^{-(1-H)+o(1)} Eq hyp-rl then for 1<<k<<T sstar Prob[Tp>=k]=k^{-(1-H)+o(1)} theta=1-H; Step1 drift g_t(s)=eta H t^{2H-1} s+O(s^2) ratio r(s,t)=eta H t^{2H-1}/c_H s^{1-H}+o(s^{1-H}) vanishing s->0 set r=1 => sstar rigorous Volterra; Step2 transfer hypothesis only non-rigorous input discussed Remark1 locally self-similar index H covariance asymptotes stationary fBm; Step3 drift positive deterministic sub-leading asymptotically indistinguishable from zero by AurzadaDereichLifshits Thm1.3 exponent unchanged only prefactor; Caveat H>1/2 not pursued; Remark2 numeric check eta0.3 T2^16 H[0.05,0.30] sstar>1 for t[0.1,0.9] r<=0.28 uniformly max(1,0.1) r<=1e-3 at s~3e-4 ell0~20 operative.",
+  "8. Validation fBm Davies-Harte exact circulant embedding fractional Gaussian noise spectral sampling real/imag Gaussians; N10000 T2^16 per H Fig2 bars Monte-Carlo 95% envelopes; Table1 reports cross-replicate mean hat sigma bias ellbar; recovers within 1 sigma for H<=0.2 bias positive from H0.3 upward heavy tails rare events scarce at available T; App FigA bias decay monotonic H0.1 +0.078 at 2^12 to -0.010 at 2^18 H0.5 +0.200 at 2^12 to +0.046 at 2^18 N30 each; no length <2^18 bias <0.1 for H>=0.7.",
+  "9. Controls T2^16 N50 SE=sigma/sqrt(N): iid uniform 1.021±0.002 sigma0.012 predicted1.00 Prop finite-sample discrete tail bias ~0.02 decays log W 1.041,1.024,1.016,1.014 at 2^14,2^16,2^18,2^20 N50 each; iid Gaussian 1.024; BM 0.569 fBm H0.5 0.50; OU dense dt0.01 0.653 locally BM vs sparse dt1.0 1.052 near independent; GBM sigma0.2 mu0.05 0.570 same as BM rank-invariance strictly increasing transformation uniform across t; add noise moderate sigma<=0.3std bias<0.02 sigma1.0 0.984 to iid null; thinning to 50% unchanged.",
+  "10. Rough Bergomi heatmap Sec5.2 H in {0.05,0.10,0.15,0.20,0.30} eta0.2,0.4 xi00.04 T2^16 N10000 per cell: max eta diff 4.8e-4 negligible, H dependence matches 1-H within 0.003 for H<=0.15 within 0.01 for H0.2 bias for H0.3 consistent Table1.",
+  "11. Model comparison Sec5.3 SPX-like calibrated four models T2^16 N10000 roughness diagnostic on variance trajectory v_t: rB H0.1 eta0.3, Heston kappa2 thetavar0.04 sigma0.5 rho-0.7 V00.04 full-truncation Euler reflection, GARCH omega1e-6 alpha0.05 beta0.94 persistence0.99 standard recursion, FIGARCH d0.4 phi0.10 beta0.60 truncated ARCH250 weights pi_j=pi_{j-1}(j-1-d)/j lambda(L)=1-(1-betaL)^{-1}(1-phiL)(1-L)^d warmup250; Table3 hat SE 95% MC envelope; contrasts hat_rB-hat_Heston 0.3355 combined SE0.00024, GARCH between, FIGARCH 0.840 delicate closer to rB than GARCH long memory mimics roughness, separation rB-FIGARCH 0.0580 combined SE0.00020 small caveat insufficient to falsify long-memory on <10y daily; reference lines BM iid from Table2.",
+  "12. VIX empirical Sec6 FRED VIXCLS level daily n6651 2000-01-03 to2026-04-30 rank-invariant directly on level; stress test of implied proxy not latent instantaneous variance; rolling W1024 step126 45 windows Fig5; stats mean0.91 SD0.19 range [0.72,1.51] Table4 [0.723,1.506] 43/45 above0.7 consistent Hvol(0,0.3) horizontal lines theta0.9 rough and 0.5 BM grey band single-window 95% iid envelope W1024; censor sensitivity Table4 complete-case 0.910±0.190, censored Pareto 0.674±0.102, lower-bound 0.757±0.099 including censored lowers exponent conservative; single-window null N1000 uniform W1024 mean1.166 SD0.091 95%[1.017,1.376] Table null; overlapping-window null 1000 iid paths length6651 rolling same scheme count below 1.017: VIX 35/45 vs null mean1.35 99%7 max10 p~=0.001 add-one smoothing, rolling mean VIX0.910 vs null1.160±0.026 p~=0.001; deployment ordinal deviation from locally i.i.d. not proof of rough instantaneous variance; discussion bias grows with H, asymptotic distribution under dependence unknown block bootstrap surrogate, terminal censoring matters short windows, separability rB-FIGARCH ~0.06.",
+  "13. Appendix sensitivity FigA-D and Table null W2^9-2^16 decay ~0.21 at 512 to0.02 at 65536 slow log W Hill discrete Pareto at theta=1 max reached ~logk times effective tail log smaller support ellstar<=W biases small-W bulk; Simulation details fBm Davies-Harte, RB hybrid first lag exact 2x2 joint Gaussian (dWk,Yk) remaining lags left Riemann sum optimal b_j=((j^{H+1/2}-(j-1)^{H+1/2})/(H+1/2))^{1/(H-1/2)}, Heston full-trunc Euler, GARCH/FIGARCH recursion truncation etc."
+ ],
+ "claims": [
+  {
+   "name": "fBm_N_per_H",
+   "description": "fBm Davies-Harte paths per H, Table 1 and Sec 4.2, T=2^16, H in {0.1,...,0.9}",
+   "value": "10,000",
+   "unit": "paths",
+   "kind": "count",
+   "where": "Table 1 caption, Sec 4.2; Fig 2 N=10,000 per H; Sec 5.2 heatmap N=10,000 per cell; Table 3 N=10,000 per model; App Fig A N=30 per T; App Table null N=1000/500 per W; VIX null Sec 6 N=1000 W=1024 and N=1000 length 6651 rolling; control Table 2 N=50 per process (GBM row 50); iid decay N=50 per T; also 45 VIX windows and null single-window 1000 at W=1024 etc."
+  },
+  {
+   "name": "fBm_T_validation",
+   "description": "Main synthetic length: fBm validation, controls, rough Bergomi and model comparison evaluated at T=2^16 (65536). Additional T values 2^12,2^14,2^18,2^20 for bias decay and iid uniform decay runs.",
+   "value": "2^{16}",
+   "unit": "timesteps",
+   "kind": "parameter",
+   "where": "Sec 4.2, Table 1, Fig 2, Table 2, Fig 3, heatmap, Table 3; also Appendix Fig 3 panel a T=2^18 etc."
+  },
+  {
+   "name": "fBm_H01_hat_theta",
+   "description": "fBm H=0.1 hat theta cross-replicate mean N=10000 T2^16 via Hill-MLE with CSN threshold complete-case on uncensored Lp=Tp",
+   "value": "0.900",
+   "unit": "Hill-CSN cross-replicate mean at T=2^16 N=10,000 fBm H=0.1 predicted 0.90 vs bias -0.0003 etc.",
+   "kind": "estimate",
+   "where": "Table 1 row H=0.1, Fig 2a, Sec 4.2 text recovers within 1 sigma for H<=0.2, App bias decay H=0.1 -0.010 at T=2^18"
+  },
+  {
+   "name": "fBm_H01_sigma",
+   "description": "fBm H=0.1 sigma cross-replicate SD",
+   "value": "0.013",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma cross-replicate SD H=0.1"
+  },
+  {
+   "name": "fBm_H01_predicted",
+   "description": "predicted theta=1-H for H=0.1",
+   "value": "0.90",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted 1-H H=0.1; Cor 1 theta=1-H; Sec 4.1 Prop iid null 1/k harmonic series and Molchan persistence; heatmap b slices dashed line 1-H etc."
+  },
+  {
+   "name": "fBm_H01_bias",
+   "description": "bias hat - predicted H=0.1",
+   "value": "-0.0003",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.1; Sec 4.2 text Fig A bias -0.010 at T=2^18 and +0.078 at T=2^12 etc."
+  },
+  {
+   "name": "fBm_H01_ell0star_bar",
+   "description": "mean CSN threshold ell0star H=0.1",
+   "value": "20",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 bar ell0star H=0.1"
+  },
+  {
+   "name": "fBm_H02_hat",
+   "description": "fBm H=0.2 hat theta",
+   "value": "0.810",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.2 hat 0.810 sigma 0.013 predicted 0.80 bias +0.010 ell 20"
+  },
+  {
+   "name": "fBm_H02_sigma",
+   "description": "sigma H=0.2",
+   "value": "0.013",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.2 sigma"
+  },
+  {
+   "name": "fBm_H02_pred",
+   "description": "predicted 0.80",
+   "value": "0.80",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.2"
+  },
+  {
+   "name": "fBm_H02_bias",
+   "description": "bias +0.010 H=0.2",
+   "value": "+0.010",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.2"
+  },
+  {
+   "name": "fBm_H02_ell",
+   "description": "ell H=0.2",
+   "value": "20",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.2"
+  },
+  {
+   "name": "fBm_H03_hat",
+   "description": "fBm H=0.3 hat",
+   "value": "0.728",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.3 hat 0.728 sigma 0.015 predicted 0.70 bias +0.028 ell 20"
+  },
+  {
+   "name": "fBm_H03_sigma",
+   "description": "sigma H=0.3",
+   "value": "0.015",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.3 sigma"
+  },
+  {
+   "name": "fBm_H03_pred",
+   "description": "predicted H=0.3",
+   "value": "0.70",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.3"
+  },
+  {
+   "name": "fBm_H03_bias",
+   "description": "bias H=0.3",
+   "value": "+0.028",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.3"
+  },
+  {
+   "name": "fBm_H03_ell",
+   "description": "ell H=0.3",
+   "value": "20",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.3"
+  },
+  {
+   "name": "fBm_H04_hat",
+   "description": "hat H=0.4",
+   "value": "0.650",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.4 hat 0.650 sigma 0.019 predicted 0.60 bias +0.050 ell 20"
+  },
+  {
+   "name": "fBm_H04_sigma",
+   "description": "sigma H=0.4",
+   "value": "0.019",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma H=0.4"
+  },
+  {
+   "name": "fBm_H04_pred",
+   "description": "predicted H=0.4",
+   "value": "0.60",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.4"
+  },
+  {
+   "name": "fBm_H04_bias",
+   "description": "bias H=0.4",
+   "value": "+0.050",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.4"
+  },
+  {
+   "name": "fBm_H04_ell",
+   "description": "ell H=0.4",
+   "value": "20",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.4"
+  },
+  {
+   "name": "fBm_H05_hat",
+   "description": "hat H=0.5 fBm",
+   "value": "0.575",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.5 hat 0.575 sigma 0.024 predicted 0.50 bias +0.075 ell 19; also Table 2 BM 0.569 SE 0.004 sigma 0.025 pred 0.50 fBm H=0.5"
+  },
+  {
+   "name": "fBm_H05_sigma",
+   "description": "sigma H=0.5",
+   "value": "0.024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma H=0.5"
+  },
+  {
+   "name": "fBm_H05_pred",
+   "description": "predicted H=0.5",
+   "value": "0.50",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.5"
+  },
+  {
+   "name": "fBm_H05_bias",
+   "description": "bias H=0.5",
+   "value": "+0.075",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.5"
+  },
+  {
+   "name": "fBm_H05_ell",
+   "description": "ell H=0.5",
+   "value": "19",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.5"
+  },
+  {
+   "name": "fBm_H06_hat",
+   "description": "hat H=0.6",
+   "value": "0.505",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.6 hat 0.505 sigma 0.032 predicted 0.40 bias +0.105 ell 14"
+  },
+  {
+   "name": "fBm_H06_sigma",
+   "description": "sigma H=0.6",
+   "value": "0.032",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma H=0.6"
+  },
+  {
+   "name": "fBm_H06_pred",
+   "description": "predicted H=0.6",
+   "value": "0.40",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.6"
+  },
+  {
+   "name": "fBm_H06_bias",
+   "description": "bias H=0.6",
+   "value": "+0.105",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.6"
+  },
+  {
+   "name": "fBm_H06_ell",
+   "description": "ell H=0.6",
+   "value": "14",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.6"
+  },
+  {
+   "name": "fBm_H07_hat",
+   "description": "hat H=0.7",
+   "value": "0.445",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.7 hat 0.445 sigma 0.046 predicted 0.30 bias +0.145 ell 9"
+  },
+  {
+   "name": "fBm_H07_sigma",
+   "description": "sigma H=0.7",
+   "value": "0.046",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma H=0.7"
+  },
+  {
+   "name": "fBm_H07_pred",
+   "description": "predicted H=0.7",
+   "value": "0.30",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.7"
+  },
+  {
+   "name": "fBm_H07_bias",
+   "description": "bias H=0.7",
+   "value": "+0.145",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.7"
+  },
+  {
+   "name": "fBm_H07_ell",
+   "description": "ell H=0.7",
+   "value": "9",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.7"
+  },
+  {
+   "name": "fBm_H08_hat",
+   "description": "hat H=0.8",
+   "value": "0.405",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.8 hat 0.405 sigma 0.075 predicted 0.20 bias +0.205 ell 7"
+  },
+  {
+   "name": "fBm_H08_sigma",
+   "description": "sigma H=0.8",
+   "value": "0.075",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma H=0.8"
+  },
+  {
+   "name": "fBm_H08_pred",
+   "description": "predicted H=0.8",
+   "value": "0.20",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.8"
+  },
+  {
+   "name": "fBm_H08_bias",
+   "description": "bias H=0.8",
+   "value": "+0.205",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.8"
+  },
+  {
+   "name": "fBm_H08_ell",
+   "description": "ell H=0.8",
+   "value": "7",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.8"
+  },
+  {
+   "name": "fBm_H09_hat",
+   "description": "hat H=0.9",
+   "value": "0.423",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 H=0.9 hat 0.423 sigma 0.183 predicted 0.10 bias +0.323 ell 15"
+  },
+  {
+   "name": "fBm_H09_sigma",
+   "description": "sigma H=0.9",
+   "value": "0.183",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 sigma H=0.9"
+  },
+  {
+   "name": "fBm_H09_pred",
+   "description": "predicted H=0.9",
+   "value": "0.10",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 predicted H=0.9"
+  },
+  {
+   "name": "fBm_H09_bias",
+   "description": "bias H=0.9",
+   "value": "+0.323",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 1 bias H=0.9"
+  },
+  {
+   "name": "fBm_H09_ell",
+   "description": "ell H=0.9",
+   "value": "15",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 ell H=0.9"
+  },
+  {
+   "name": "control_iid_uniform_hat",
+   "description": "control iid uniform",
+   "value": "1.021",
+   "unit": "theta_hat",
+   "kind": "estimate",
+   "where": "Table 2 control i.i.d. uniform hat 1.021 SE 0.002 sigma 0.012 predicted 1.00 Prop iid; T=2^16 N=50"
+  },
+  {
+   "name": "control_iid_uniform_SE",
+   "description": "SE iid uniform",
+   "value": "0.002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SE = sigma/sqrt(N) N=50 iid uniform"
+  },
+  {
+   "name": "control_iid_uniform_sigma",
+   "description": "sigma iid uniform",
+   "value": "0.012",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 sigma iid uniform"
+  },
+  {
+   "name": "control_iid_uniform_pred",
+   "description": "predicted iid",
+   "value": "1.00",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 2 predicted 1.00 Prop iid; Prop 2 Pr[Lp>=k]=1/k theta_iid=1"
+  },
+  {
+   "name": "control_iid_gaussian_hat",
+   "description": "control iid Gaussian",
+   "value": "1.024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 iid Gaussian hat 1.024 SE 0.002 sigma 0.014 predicted 1.00"
+  },
+  {
+   "name": "control_iid_gaussian_SE",
+   "description": "SE Gaussian",
+   "value": "0.002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SE iid Gaussian"
+  },
+  {
+   "name": "control_iid_gaussian_sigma",
+   "description": "sigma Gaussian",
+   "value": "0.014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 sigma Gaussian"
+  },
+  {
+   "name": "control_iid_gaussian_pred",
+   "description": "predicted Gaussian",
+   "value": "1.00",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 2 predicted Gaussian"
+  },
+  {
+   "name": "control_BM_hat",
+   "description": "BM hat",
+   "value": "0.569",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 Brownian motion hat 0.569 SE 0.004 sigma 0.025 predicted 0.50 fBm H=0.5"
+  },
+  {
+   "name": "control_BM_SE",
+   "description": "SE BM",
+   "value": "0.004",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SE BM"
+  },
+  {
+   "name": "control_BM_sigma",
+   "description": "sigma BM",
+   "value": "0.025",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 sigma BM"
+  },
+  {
+   "name": "control_BM_pred",
+   "description": "predicted BM",
+   "value": "0.50",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 2 predicted BM fBm H=0.5"
+  },
+  {
+   "name": "control_OU_001_hat",
+   "description": "OU dense hat",
+   "value": "0.653",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 OU Delta t=0.01 hat 0.653 SE 0.002 sigma 0.014 predicted locally BM"
+  },
+  {
+   "name": "control_OU_001_SE",
+   "description": "SE OU dense",
+   "value": "0.002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SE OU 0.01"
+  },
+  {
+   "name": "control_OU_001_sigma",
+   "description": "sigma OU dense",
+   "value": "0.014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 sigma OU 0.01"
+  },
+  {
+   "name": "control_OU_10_hat",
+   "description": "OU sparse hat",
+   "value": "1.052",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 OU Delta t=1.0 hat 1.052 SE 0.002 sigma 0.011 predicted 1.00 sparse"
+  },
+  {
+   "name": "control_OU_10_SE",
+   "description": "SE OU sparse",
+   "value": "0.002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SE OU 1.0"
+  },
+  {
+   "name": "control_OU_10_sigma",
+   "description": "sigma OU sparse",
+   "value": "0.011",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 sigma OU 1.0"
+  },
+  {
+   "name": "control_OU_10_pred",
+   "description": "predicted sparse",
+   "value": "1.00",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 2 predicted sparse 1.00"
+  },
+  {
+   "name": "control_GBM_hat",
+   "description": "GBM hat",
+   "value": "0.570",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 GBM sigma=0.2 mu=0.05 hat 0.570 SE 0.004 sigma 0.025 predicted 0.50 rank-inv"
+  },
+  {
+   "name": "control_GBM_SE",
+   "description": "SE GBM",
+   "value": "0.004",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SE GBM"
+  },
+  {
+   "name": "control_GBM_sigma",
+   "description": "sigma GBM",
+   "value": "0.025",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 sigma GBM"
+  },
+  {
+   "name": "control_GBM_pred",
+   "description": "predicted GBM",
+   "value": "0.50",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 2 predicted GBM 0.50 rank-inv"
+  },
+  {
+   "name": "iid_uniform_decay_T14",
+   "description": "iid decay T2^14",
+   "value": "1.041",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.2 text separate run iid uniform hat 1.041 at T=2^14 N=50 replicates"
+  },
+  {
+   "name": "iid_uniform_decay_T16",
+   "description": "iid decay T2^16",
+   "value": "1.024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.2 iid uniform 1.024 at T=2^16 agrees Table 2"
+  },
+  {
+   "name": "iid_uniform_decay_T18",
+   "description": "iid decay T2^18",
+   "value": "1.016",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.2 iid uniform 1.016 at T=2^18"
+  },
+  {
+   "name": "iid_uniform_decay_T20",
+   "description": "iid decay T2^20",
+   "value": "1.014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.2 iid uniform 1.014 at T=2^20"
+  },
+  {
+   "name": "rb_heatmap_max_eta_diff",
+   "description": "max eta diff heatmap",
+   "value": "4.8×10^{-4}",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.2 heatmap max cell-wise difference between eta=0.2 and eta=0.4 negligible"
+  },
+  {
+   "name": "rb_heatmap_H015_match",
+   "description": "match H<=0.15",
+   "value": "0.003",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.2 dependence on H matches Cor within about 0.003 for H <=0.15"
+  },
+  {
+   "name": "rb_heatmap_H02_match",
+   "description": "match H=0.2",
+   "value": "0.01",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.2 within about 0.01 for H=0.2 small positive finite-size bias for H=0.3"
+  },
+  {
+   "name": "cmp_rBergomi_hat",
+   "description": "rough Bergomi hat",
+   "value": "0.8989",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 model comparison rough Bergomi H=0.1 hat 0.8989 SE 0.0001 95% [0.874,0.924] Fig 3; Discussion separation"
+  },
+  {
+   "name": "cmp_rBergomi_SE",
+   "description": "SE rB",
+   "value": "0.0001",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 SE rB"
+  },
+  {
+   "name": "cmp_rBergomi_95lo",
+   "description": "rB 95 lo",
+   "value": "0.874",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95% MC lo rB"
+  },
+  {
+   "name": "cmp_rBergomi_95hi",
+   "description": "rB 95 hi",
+   "value": "0.924",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95% MC hi rB"
+  },
+  {
+   "name": "cmp_FIGARCH_hat",
+   "description": "FIGARCH hat",
+   "value": "0.8409",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 FIGARCH d=0.4 hat 0.8409 SE 0.0002 95% [0.810,0.870]"
+  },
+  {
+   "name": "cmp_FIGARCH_SE",
+   "description": "SE FIGARCH",
+   "value": "0.0002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 SE FIGARCH"
+  },
+  {
+   "name": "cmp_FIGARCH_95lo",
+   "description": "FIGARCH lo",
+   "value": "0.810",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95 lo FIGARCH"
+  },
+  {
+   "name": "cmp_FIGARCH_95hi",
+   "description": "FIGARCH hi",
+   "value": "0.870",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95 hi FIGARCH"
+  },
+  {
+   "name": "cmp_GARCH_hat",
+   "description": "GARCH hat",
+   "value": "0.7234",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 GARCH(1,1) hat 0.7234 SE 0.0007 95% [0.640,0.838]"
+  },
+  {
+   "name": "cmp_GARCH_SE",
+   "description": "SE GARCH",
+   "value": "0.0007",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 SE GARCH"
+  },
+  {
+   "name": "cmp_GARCH_95lo",
+   "description": "GARCH lo",
+   "value": "0.640",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95 lo GARCH"
+  },
+  {
+   "name": "cmp_GARCH_95hi",
+   "description": "GARCH hi",
+   "value": "0.838",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95 hi GARCH"
+  },
+  {
+   "name": "cmp_Heston_hat",
+   "description": "Heston hat",
+   "value": "0.5635",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 classical Heston hat 0.5635 SE 0.0002 95% [0.528,0.606]"
+  },
+  {
+   "name": "cmp_Heston_SE",
+   "description": "SE Heston",
+   "value": "0.0002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 SE Heston"
+  },
+  {
+   "name": "cmp_Heston_95lo",
+   "description": "Heston lo",
+   "value": "0.528",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95 lo Heston"
+  },
+  {
+   "name": "cmp_Heston_95hi",
+   "description": "Heston hi",
+   "value": "0.606",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 95 hi Heston"
+  },
+  {
+   "name": "cmp_diff_rB_Heston",
+   "description": "diff rB-Heston",
+   "value": "0.3355",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3 text hat_rB - hat_Heston =0.3355 combined Monte-Carlo SE 0.00024; Discussion separates by 0.3355"
+  },
+  {
+   "name": "cmp_diff_rB_Heston_SE",
+   "description": "SE diff rB-Heston",
+   "value": "0.00024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3 combined SE rB-Heston"
+  },
+  {
+   "name": "cmp_diff_rB_FIGARCH",
+   "description": "diff rB-FIGARCH",
+   "value": "0.0580",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3 separation rB-FIGARCH 0.0580 combined SE 0.00020; caveat 0.06"
+  },
+  {
+   "name": "cmp_diff_rB_FIGARCH_SE",
+   "description": "SE diff rB-FIGARCH",
+   "value": "0.00020",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3 combined SE rB-FIGARCH"
+  },
+  {
+   "name": "VIX_n_days",
+   "description": "VIX sample length trading days",
+   "value": "6651",
+   "unit": "days",
+   "kind": "count",
+   "where": "Sec 6 FRED VIXCLS 2000-01-03 to 2026-04-30 n=6651 trading days; App to support Sec 6"
+  },
+  {
+   "name": "VIX_windows_count",
+   "description": "number of rolling windows VIX",
+   "value": "45",
+   "unit": "windows",
+   "kind": "count",
+   "where": "Sec 6 across 45 four-year windows; Abstract across 45 four-year windows; Sec 6 Fig 5 rolling W=1024 step126 45 windows count of 45 below etc."
+  },
+  {
+   "name": "VIX_W_length",
+   "description": "rolling window length VIX",
+   "value": "1024",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec 6 W=1024 days approx four years; Table 5 W=1024 step126; App Table null W=1024 row"
+  },
+  {
+   "name": "VIX_step_length",
+   "description": "rolling step",
+   "value": "126",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec 6 step 126 days approx six months"
+  },
+  {
+   "name": "VIX_rolling_mean_complete",
+   "description": "VIX rolling mean complete-case Hill",
+   "value": "0.91",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec 6 across 45 windows mean hat 0.91 SD 0.19 range [0.72,1.51]; Table 5 complete-case Hill mean 0.910 sigma 0.190 range [0.723,1.506]; Discussion mean 0.910 vs null"
+  },
+  {
+   "name": "VIX_rolling_sigma_complete",
+   "description": "SD across windows complete-case",
+   "value": "0.19",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 SD 0.19; Table 5 sigma 0.190 complete-case"
+  },
+  {
+   "name": "VIX_rolling_range_lo_complete",
+   "description": "range lo complete-case Table 5",
+   "value": "0.723",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5 complete-case range lo 0.723"
+  },
+  {
+   "name": "VIX_rolling_range_hi_complete",
+   "description": "range hi complete-case Table 5",
+   "value": "1.506",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5 complete-case range hi 1.506"
+  },
+  {
+   "name": "VIX_rolling_range_lo_text",
+   "description": "text range lo",
+   "value": "0.72",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 text range [0.72,1.51]"
+  },
+  {
+   "name": "VIX_rolling_range_hi_text",
+   "description": "text range hi",
+   "value": "1.51",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 text range hi 1.51"
+  },
+  {
+   "name": "VIX_windows_above07_tally",
+   "description": "tally above 0.7",
+   "value": "43",
+   "unit": "windows",
+   "kind": "tally",
+   "where": "Sec 6 43 of 45 windows lie above 0.7 consistent with Hvol in (0,0.3)"
+  },
+  {
+   "name": "VIX_windows_total_45",
+   "description": "denominator windows",
+   "value": "45",
+   "unit": "windows",
+   "kind": "count",
+   "where": "Sec 6 denominator 43 of 45, 35/45 etc."
+  },
+  {
+   "name": "VIX_censored_mean_per_window",
+   "description": "mean censored per window",
+   "value": "24.4",
+   "unit": "horizons",
+   "kind": "estimate",
+   "where": "Sec 6 Table 5 text On average 1024-day VIX window contains 24.4 right-censored horizons"
+  },
+  {
+   "name": "VIX_censored_above_threshold",
+   "description": "censored above threshold",
+   "value": "21.8",
+   "unit": "horizons",
+   "kind": "estimate",
+   "where": "Sec 6 of which 21.8 lie above selected tail threshold"
+  },
+  {
+   "name": "VIX_tie_break_shift",
+   "description": "tie break shift VIX",
+   "value": "0.003",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec 3 ties deterministic time-order tie breaking replacing stricter convention changes rolling mean by 0.003"
+  },
+  {
+   "name": "censor_complete_mean",
+   "description": "censoring sensitivity complete-case mean",
+   "value": "0.910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 complete-case Hill mean 0.910 duplicate of VIX_rolling_mean_complete"
+  },
+  {
+   "name": "censor_complete_sigma",
+   "description": "sigma complete-case",
+   "value": "0.190",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 sigma complete-case 0.190"
+  },
+  {
+   "name": "censor_complete_range_lo",
+   "description": "range lo complete-case censor table",
+   "value": "0.723",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 range lo complete-case"
+  },
+  {
+   "name": "censor_complete_range_hi",
+   "description": "range hi complete-case censor table",
+   "value": "1.506",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 range hi complete-case"
+  },
+  {
+   "name": "censor_censored_mean",
+   "description": "censored Pareto mean",
+   "value": "0.674",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 censored Pareto likelihood mean 0.674 sigma 0.102 range [0.507,0.985]"
+  },
+  {
+   "name": "censor_censored_sigma",
+   "description": "sigma censored",
+   "value": "0.102",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 sigma censored 0.102"
+  },
+  {
+   "name": "censor_censored_lo",
+   "description": "lo censored",
+   "value": "0.507",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 lo censored"
+  },
+  {
+   "name": "censor_censored_hi",
+   "description": "hi censored",
+   "value": "0.985",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 hi censored"
+  },
+  {
+   "name": "censor_lower_mean",
+   "description": "lower-bound mean",
+   "value": "0.757",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 lower-bound treatment mean 0.757 sigma 0.099 range [0.603,1.030]"
+  },
+  {
+   "name": "censor_lower_sigma",
+   "description": "sigma lower-bound",
+   "value": "0.099",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 sigma lower-bound"
+  },
+  {
+   "name": "censor_lower_lo",
+   "description": "lo lower-bound",
+   "value": "0.603",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 lo lower-bound"
+  },
+  {
+   "name": "censor_lower_hi",
+   "description": "hi lower-bound",
+   "value": "1.030",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 hi lower-bound"
+  },
+  {
+   "name": "iid_null_W1024_mean",
+   "description": "single-window iid null mean W1024",
+   "value": "1.166",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 At single-window level N=1000 iid uniform replicates length W=1024 give mean 1.166 SD 0.091 95% [1.017,1.376] Table null W=1024; grey band Fig 5; App Table null row 1024 mean 1.166"
+  },
+  {
+   "name": "iid_null_W1024_sigma",
+   "description": "sigma W1024 iid null",
+   "value": "0.091",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 SD 0.091 W1024 iid null; App Table null sigma 0.091"
+  },
+  {
+   "name": "iid_null_W1024_95lo",
+   "description": "95 lo single-window iid null W1024 also threshold for count test",
+   "value": "1.017",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 95% envelope lo 1.017 W1024; App Table null 2.5% 1.017"
+  },
+  {
+   "name": "iid_null_W1024_95hi",
+   "description": "95 hi single-window W1024",
+   "value": "1.376",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 95 hi 1.376"
+  },
+  {
+   "name": "iid_null_W1024_N",
+   "description": "N single-window null W1024",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "count",
+   "where": "Sec 6 N=1000 iid uniform replicates length W=1024; App Table null N=1000 row 1024"
+  },
+  {
+   "name": "overlap_null_windows_below_tally",
+   "description": "VIX tally below 1.017 threshold",
+   "value": "35",
+   "unit": "windows",
+   "kind": "tally",
+   "where": "Sec 6 In VIX data 35/45 windows fall below single-window 2.5% null quantile 1.017; Discussion Monte-Carlo p ~=0.001 for both rolling mean and number below"
+  },
+  {
+   "name": "overlap_null_threshold",
+   "description": "threshold single-window 2.5% quantile",
+   "value": "1.017",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 6 single-window 2.5% null quantile 1.017 threshold"
+  },
+  {
+   "name": "overlap_null_count_mean",
+   "description": "null count mean overlapping windows",
+   "value": "1.35",
+   "unit": "windows",
+   "kind": "estimate",
+   "where": "Sec 6 Under overlapping-window iid null corresponding count has mean 1.35 99% quantile 7 max 10 across 1000 sims; length 6651 rolling W=1024 step126"
+  },
+  {
+   "name": "overlap_null_count_99q",
+   "description": "99% quantile null count",
+   "value": "7",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 99% quantile 7 null count"
+  },
+  {
+   "name": "overlap_null_count_max",
+   "description": "max null count",
+   "value": "10",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 maximum 10 across 1000 sims overlapping null count"
+  },
+  {
+   "name": "overlap_null_count_p",
+   "description": "p for count >=35 under overlapping iid null add-one smoothing",
+   "value": "0.001",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Sec 6 Monte-Carlo tail p ~=0.001 with add-one smoothing for observing at least 35 such windows; Abstract p<0.001"
+  },
+  {
+   "name": "overlap_null_rolling_mean",
+   "description": "overlapping null rolling mean",
+   "value": "1.160",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 overlapping-window iid null has mean 1.160 SD 0.026 whereas VIX gives 0.910; App Table null full-sample ~1.023 at W=65536 vs log slow decay"
+  },
+  {
+   "name": "overlap_null_rolling_sigma",
+   "description": "sigma overlapping null rolling mean",
+   "value": "0.026",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 SD 0.026 overlapping null rolling mean"
+  },
+  {
+   "name": "VIX_overall_mean_091_vs_null",
+   "description": "VIX overall mean vs null duplicate",
+   "value": "0.910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 6 VIX gives 0.910 vs overlapping null 1.160; Discussion rolling estimator has mean 0.910 vs overlapping iid null mean 1.160"
+  },
+  {
+   "name": "overlap_rollmean_p",
+   "description": "p for rolling mean under overlapping null",
+   "value": "0.001",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Sec 6 p ~=0.001 for mean this small add-one smoothing"
+  },
+  {
+   "name": "abstract_hat_theta_mean",
+   "description": "abstract rolling mean",
+   "value": "0.91",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Abstract rolling estimate hat theta=0.91±0.19 across 45 four-year windows; also Sec 6 mean 0.91"
+  },
+  {
+   "name": "abstract_hat_theta_sigma",
+   "description": "abstract sigma cross-window",
+   "value": "0.19",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Abstract ±0.19 across 45 windows; Sec 6 SD 0.19"
+  },
+  {
+   "name": "abstract_p_lt_001",
+   "description": "abstract p",
+   "value": "<0.001",
+   "unit": "",
+   "kind": "p_value",
+   "where": "Abstract lies far below overlapping-window iid Monte-Carlo null p<0.001; Sec 6 p~=0.001 add-one smoothing for count and mean"
+  },
+  {
+   "name": "null_table_W512_mean",
+   "description": "null table W512 mean",
+   "value": "1.211",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W=512 mean 1.211 sigma 0.118 2.5%1.010 97.5%1.465 median1.198 N1000"
+  },
+  {
+   "name": "null_table_W512_sigma",
+   "description": "sigma W512",
+   "value": "0.118",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W512 sigma"
+  },
+  {
+   "name": "null_table_W512_25",
+   "description": "2.5% W512",
+   "value": "1.010",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W512 2.5%"
+  },
+  {
+   "name": "null_table_W512_975",
+   "description": "97.5% W512",
+   "value": "1.465",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W512 97.5%"
+  },
+  {
+   "name": "null_table_W512_median",
+   "description": "median W512",
+   "value": "1.198",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W512 median"
+  },
+  {
+   "name": "null_table_W512_N",
+   "description": "N W512",
+   "value": "1000",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table null W512 N=1000"
+  },
+  {
+   "name": "null_table_W1024_mean2",
+   "description": "null table mean W1024",
+   "value": "1.166",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W1024 mean 1.166 sigma0.091 2.5%1.017 97.5%1.376 median1.157 N1000 duplicate of iid_null_W1024_mean"
+  },
+  {
+   "name": "null_table_W1024_sigma2",
+   "description": "sigma W1024 table",
+   "value": "0.091",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W1024 sigma"
+  },
+  {
+   "name": "null_table_W1024_25",
+   "description": "2.5% W1024",
+   "value": "1.017",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W1024 2.5%"
+  },
+  {
+   "name": "null_table_W1024_975",
+   "description": "97.5% W1024",
+   "value": "1.376",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W1024 97.5%"
+  },
+  {
+   "name": "null_table_W1024_med",
+   "description": "median W1024",
+   "value": "1.157",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W1024 median"
+  },
+  {
+   "name": "null_table_W1024_N2",
+   "description": "N W1024",
+   "value": "1000",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table null W1024 N"
+  },
+  {
+   "name": "null_table_W2048_mean",
+   "description": "mean W2048",
+   "value": "1.136",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table null W2048 mean1.136 sigma0.084 2.5%0.994 97.5%1.310 median1.130 N1000"
+  },
+  {
+   "name": "null_table_W2048_sigma",
+   "description": "sigma W2048",
+   "value": "0.084",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W2048 sigma"
+  },
+  {
+   "name": "null_table_W2048_25",
+   "description": "2.5% W2048",
+   "value": "0.994",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W2048 2.5%"
+  },
+  {
+   "name": "null_table_W2048_975",
+   "description": "97.5% W2048",
+   "value": "1.310",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W2048 97.5%"
+  },
+  {
+   "name": "null_table_W2048_med",
+   "description": "median W2048",
+   "value": "1.130",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W2048 median"
+  },
+  {
+   "name": "null_table_W2048_N",
+   "description": "N W2048",
+   "value": "1000",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table W2048 N"
+  },
+  {
+   "name": "null_table_W4096_mean",
+   "description": "mean W4096",
+   "value": "1.090",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W4096 mean1.090 sigma0.056 2.5%0.985 97.5%1.201 median1.087 N1000"
+  },
+  {
+   "name": "null_table_W4096_sigma",
+   "description": "sigma W4096",
+   "value": "0.056",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W4096 sigma"
+  },
+  {
+   "name": "null_table_W4096_25",
+   "description": "2.5% W4096",
+   "value": "0.985",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W4096 2.5%"
+  },
+  {
+   "name": "null_table_W4096_975",
+   "description": "97.5% W4096",
+   "value": "1.201",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W4096 97.5%"
+  },
+  {
+   "name": "null_table_W4096_med",
+   "description": "median W4096",
+   "value": "1.087",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W4096 median"
+  },
+  {
+   "name": "null_table_W4096_N",
+   "description": "N W4096",
+   "value": "1000",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table W4096 N"
+  },
+  {
+   "name": "null_table_W8192_mean",
+   "description": "mean W8192",
+   "value": "1.060",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W8192 mean1.060 sigma0.039 2.5%0.988 97.5%1.136 median1.058 N1000"
+  },
+  {
+   "name": "null_table_W8192_sigma",
+   "description": "sigma W8192",
+   "value": "0.039",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W8192 sigma"
+  },
+  {
+   "name": "null_table_W8192_25",
+   "description": "2.5% W8192",
+   "value": "0.988",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W8192 2.5%"
+  },
+  {
+   "name": "null_table_W8192_975",
+   "description": "97.5% W8192",
+   "value": "1.136",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W8192 97.5%"
+  },
+  {
+   "name": "null_table_W8192_med",
+   "description": "median W8192",
+   "value": "1.058",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W8192 median"
+  },
+  {
+   "name": "null_table_W8192_N",
+   "description": "N W8192",
+   "value": "1000",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table W8192 N"
+  },
+  {
+   "name": "null_table_W16384_mean",
+   "description": "mean W16384",
+   "value": "1.042",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W16384 mean1.042 sigma0.025 2.5%0.994 97.5%1.092 median1.042 N1000"
+  },
+  {
+   "name": "null_table_W16384_sigma",
+   "description": "sigma W16384",
+   "value": "0.025",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W16384 sigma"
+  },
+  {
+   "name": "null_table_W16384_25",
+   "description": "2.5% W16384",
+   "value": "0.994",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W16384 2.5%"
+  },
+  {
+   "name": "null_table_W16384_975",
+   "description": "97.5% W16384",
+   "value": "1.092",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W16384 97.5%"
+  },
+  {
+   "name": "null_table_W16384_med",
+   "description": "median W16384",
+   "value": "1.042",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W16384 median"
+  },
+  {
+   "name": "null_table_W16384_N",
+   "description": "N W16384",
+   "value": "1000",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table W16384 N"
+  },
+  {
+   "name": "null_table_W32768_mean",
+   "description": "mean W32768",
+   "value": "1.030",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W32768 mean1.030 sigma0.016 2.5%0.999 97.5%1.062 median1.030 N500"
+  },
+  {
+   "name": "null_table_W32768_sigma",
+   "description": "sigma W32768",
+   "value": "0.016",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W32768 sigma"
+  },
+  {
+   "name": "null_table_W32768_25",
+   "description": "2.5% W32768",
+   "value": "0.999",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W32768 2.5%"
+  },
+  {
+   "name": "null_table_W32768_975",
+   "description": "97.5% W32768",
+   "value": "1.062",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W32768 97.5%"
+  },
+  {
+   "name": "null_table_W32768_med",
+   "description": "median W32768",
+   "value": "1.030",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W32768 median"
+  },
+  {
+   "name": "null_table_W32768_N",
+   "description": "N W32768",
+   "value": "500",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table W32768 N=500"
+  },
+  {
+   "name": "null_table_W65536_mean",
+   "description": "mean W65536",
+   "value": "1.023",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W65536 mean1.023 sigma0.012 2.5%1.000 97.5%1.048 median1.023 N500"
+  },
+  {
+   "name": "null_table_W65536_sigma",
+   "description": "sigma W65536",
+   "value": "0.012",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W65536 sigma"
+  },
+  {
+   "name": "null_table_W65536_25",
+   "description": "2.5% W65536",
+   "value": "1.000",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W65536 2.5%"
+  },
+  {
+   "name": "null_table_W65536_975",
+   "description": "97.5% W65536",
+   "value": "1.048",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W65536 97.5%"
+  },
+  {
+   "name": "null_table_W65536_med",
+   "description": "median W65536",
+   "value": "1.023",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Table W65536 median"
+  },
+  {
+   "name": "null_table_W65536_N",
+   "description": "N W65536",
+   "value": "500",
+   "unit": "",
+   "kind": "count",
+   "where": "App Table W65536 N=500"
+  },
+  {
+   "name": "sens_bias_H01_T12",
+   "description": "bias H0.1 T2^12",
+   "value": "+0.078",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig A bias H=0.1 +0.078 at T=2^12"
+  },
+  {
+   "name": "sens_bias_H01_T18",
+   "description": "bias H0.1 T2^18",
+   "value": "-0.010",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig A bias H=0.1 -0.010 at T=2^18; text below 0.01 at T=2^18 H=0.1"
+  },
+  {
+   "name": "sens_bias_H05_T12",
+   "description": "bias H0.5 T2^12",
+   "value": "+0.200",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig A bias H=0.5 +0.200 at T=2^12"
+  },
+  {
+   "name": "sens_bias_H05_T18",
+   "description": "bias H0.5 T2^18",
+   "value": "+0.046",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig A bias H=0.5 +0.046 at T=2^18"
+  },
+  {
+   "name": "sens_Hill_plateau_range",
+   "description": "plateau lo",
+   "value": "10",
+   "unit": "",
+   "kind": "parameter",
+   "where": "App Fig B Hill plot flat across ell0 in [10,60] estimate moves by <0.02"
+  },
+  {
+   "name": "sens_Hill_plateau_range_hi",
+   "description": "plateau hi",
+   "value": "60",
+   "unit": "",
+   "kind": "parameter",
+   "where": "App Fig B plateau hi 60"
+  },
+  {
+   "name": "sens_Hill_move",
+   "description": "Hill move over plateau",
+   "value": "0.02",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig B across ell0 [10,60] estimate moves by less than 0.02"
+  },
+  {
+   "name": "sens_noise_sigma10_hat",
+   "description": "noise sigma1.0 hat",
+   "value": "0.984",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig C additive Gaussian noise sigma=1.0 hat theta=0.984 pushes toward iid null as expected"
+  },
+  {
+   "name": "sens_noise_bias_thresh",
+   "description": "noise thresh 0.3",
+   "value": "0.3",
+   "unit": "relative scale",
+   "kind": "parameter",
+   "where": "App Fig C for moderate noise sigma <=0.3*std(x) bias below 0.02"
+  },
+  {
+   "name": "sens_noise_bias_limit",
+   "description": "bias limit moderate noise",
+   "value": "0.02",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Fig C bias below 0.02 at sigma<=0.3"
+  },
+  {
+   "name": "sens_thinning_rate",
+   "description": "thinning rate",
+   "value": "50%",
+   "unit": "",
+   "kind": "parameter",
+   "where": "App Fig D random thinning at rates up to 50% leaves hat unchanged within Monte-Carlo SE"
+  },
+  {
+   "name": "rb_s_star_lower",
+   "description": "s_star lower bound",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Remark 2 For params Fig heatmap eta=0.3 xi0=0.04 T=2^16 H in [0.05,0.30] one has s_star(t)>1 for all t in [0.1,0.9] simulated horizon unit interval"
+  },
+  {
+   "name": "rb_r_max",
+   "description": "r max",
+   "value": "0.28",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Remark 2 drift-to-noise ratio r(s,t) <=0.28 uniformly over (s,t) in [0,1]x[0.1,0.9] max at (1,0.1)"
+  },
+  {
+   "name": "rb_r_small_scale",
+   "description": "r at micro scale",
+   "value": "10^{-3}",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Remark 2 Hill-MLE CSN ell0~20 samples concentrates at s=ell0/T ~3e-4 where r <=1e-3 noise-dominated regime"
+  },
+  {
+   "name": "rb_micro_scale",
+   "description": "micro scale s",
+   "value": "3×10^{-4}",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Remark 2 s=ell0/T ~3e-4; T=2^16=65536 ell0~20 => 20/65536=3.05e-4"
+  },
+  {
+   "name": "theory_survival_iid",
+   "description": "iid survival law",
+   "value": "1/k",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Prop 1 iid null Pr[Lp>=k]=1/k for every integer k>=1; E[Lp]=inf Var=inf; Sec 1 asymptotic theta_iid=1; Sec 2 closed-form power-law"
+  },
+  {
+   "name": "theory_theta_iid",
+   "description": "theta iid",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Prop 1 theta_iid=1 power-law scale; Discussion infinite mean variance necessity tail exponent"
+  },
+  {
+   "name": "theory_theta_H",
+   "description": "theta(H) predicted",
+   "value": "1-H",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Cor 1 For fBm Hurst H Pr[Lp>=k]=k^{-(1-H)+o(1)} survival-tail exponent theta(H)=1-H; Prop 2 conditional persistence result for rough Bergomi under hypothesis Eq hyp-rl; Sec 1 prediction theta(H)=1-H; heatmap dashed line theta=1-H"
+  },
+  {
+   "name": "block_B",
+   "description": "block bootstrap B",
+   "value": "200",
+   "unit": "resamples",
+   "kind": "parameter",
+   "where": "Sec 3 stationary block bootstrap with mean block length b=ceil(T^{1/3}) and B=200 resamples dependence-aware CIs"
+  },
+  {
+   "name": "block_b_formula",
+   "description": "block length formula",
+   "value": "⌈T^{1/3}⌉",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec 3 mean block length b=ceil(T^{1/3})"
+  }
+ ],
+ "headline": "abstract_hat_theta_mean",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "VIX rolling mean vs overlapping-window iid null",
+   "statistic": "VIX_rolling_mean_complete",
+   "p_value": "overlap_rollmean_p",
+   "group_sizes": [
+    "VIX_n_days",
+    "VIX_windows_count",
+    "iid_null_W1024_N"
+   ]
+  },
+  {
+   "test": "VIX count of windows below single-window 2.5% quantile vs overlapping-window iid null",
+   "statistic": "overlap_null_windows_below_tally",
+   "p_value": "overlap_null_count_p",
+   "group_sizes": [
+    "VIX_windows_count",
+    "VIX_windows_total_45",
+    "iid_null_W1024_N"
+   ]
+  }
+ ]
+}

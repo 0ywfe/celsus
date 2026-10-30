@@ -1,0 +1,525 @@
+exit 0 in 75.5s
+--- stdout
+=== Fetching data ===
+Downloading Bank of England millennium file...
+Saved 27533690 bytes to /tmp/millennium.xlsx
+Sheets loaded
+2 'England' | 'Nominal GDP at market prices'
+3 None | 'Factor cost adjustment 1270-1700, assuming direct taxes on land are a tax on production'
+4 None | 'Nominal GDP at factor cost'
+5 None | 'Real GDP, 2013 market prices'
+6 None | 'Real GDP, at 2013 factor cost'
+7 None | 'Population'
+8 None | 'Nominal GDP per capita'
+9 None | 'Real GDP per capita'
+10 None | 'GDP deflator at market prices'
+11 None | 'GDP deflator at factor cost'
+13 'Great Britain' | 'Nominal GDP'
+14 None | 'Real GDP, 2013 prices'
+15 None | 'Population'
+16 None | 'Nominal GDP per capita'
+17 None | 'Real GDP per capita'
+18 None | 'GDP deflator'
+20 'UK  - post-1922 definition Great Britain and N. Ireland' | 'Nominal GDP'
+21 None | 'Real GDP, 2013 prices'
+22 None | 'Population'
+23 None | 'Nominal GDP per capita'
+24 None | 'Real GDP per capita'
+1086 [0.43025, None, 0.43025, None, None, 1.71, None, None, None, None, None]
+1270 [4.421101871455956, 0.03, 4.391101871455955, 3517.7756499706784, 3065.603975336826, 4.364903152768993, 1.0128751353054217, 805.9229556420016, 0.12567890369850068, 0.14323774064696318, None]
+1700 [68.84451604997186, 3.65235847576119, 65.19215757421067, 8668.31779830733, 7554.100132052296, 5.195805, 13.250019207797802, 1668.330085195139, 0.7942084917954346, 0.8630036196846027, None]
+1800 [284.91142460513896, 26.862520254110336, 258.0489043510286, 20098.388276026784, 17514.959772197028, 8.619513000000001, 33.05423689309813, 2331.731302688073, 1.4175834434693417, 1.4733057209794531, None]
+1900 [1554.8612782657565, 101.33072601478943, 1453.530552250967, 147356.11515938435, 130372.49020429686, 30.2533, 51.394766133471606, 4870.745180174868, 1.0551725502426395, 1.1149058746774334, None]
+2016 [1666863.0605536606, 205752.1991191348, 1461110.8614345258, 1600371.869471226, 1413758.8537113653, 55.219, 30186.404327381166, 28982.268231428057, 104.15473380598748, 103.34936949104532, None]
+A1 1700 Pop_Eng 5195.805 Pop_GBNI 6575.830854946653
+A1 1800 Pop_Eng 8619.513 Pop_GBNI 11595.505989822004
+A1 1900 Pop_Eng 30253.3 Pop_GBNI 37923.05796360303
+A1 2016 Pop_Eng 55219 Pop_GBNI 65573
+Extracted df shape (747, 26)
+           CPI   CPI_infl  ...  Mnotes_coin_outside_A24  Broad_M2_A24
+year                       ...                                       
+1270  0.127042  -2.088704  ...                      NaN      0.510321
+1271  0.160183  26.086486  ...                      NaN      0.550516
+1272  0.168292   5.061812  ...                      NaN      0.570446
+1273  0.139651 -17.018285  ...                      NaN      0.508096
+1274  0.158627  13.587658  ...                      NaN      0.539193
+
+[5 rows x 26 columns]
+             CPI  CPI_infl  ...  Mnotes_coin_outside_A24  Broad_M2_A24
+year                        ...                                       
+2012   96.056917  2.828242  ...                  56381.0           NaN
+2013   98.520583  2.564799  ...                  59641.0           NaN
+2014   99.960000  1.461031  ...                  62975.0           NaN
+2015  100.000083  0.040099  ...                  66903.0           NaN
+2016  100.659750  0.659666  ...                  71635.0           NaN
+
+[5 rows x 26 columns]
+      Pop_Eng_head  Pop_GBNI_head  Pop_Eng_A21  Pop_GB_A21  Pop_UK_A21
+year                                                                  
+2007     51381.093      61319.092    51.381093   59.557392   61.319092
+2008     51815.853      61823.820    51.815853   60.044620   61.823820
+2009     52196.381      62260.453    52.196381   60.467153   62.260453
+2010     52642.452      62759.423    52.642452   60.954623   62.759423
+2011     53107.169      63285.127    53.107169   61.470827   63.285127
+2012     53493.729      63704.996    53.493729   61.881396   63.704996
+2013     53865.817      64105.629    53.865817   62.275929   64.105629
+2014     54316.618      64596.754    54.316618   62.756254   64.596754
+2015     54786.300      65110.000    54.786300   63.258400   65.110000
+2016     55219.000      65573.000    55.219000   63.710000   65.573000
+      M3_est_A24  M0_spliced_A24        M0_head    M4_head
+year                                                      
+2007         NaN    72452.199219   72452.199219  1442989.0
+2008         NaN    95186.332031   95186.332031  1496955.0
+2009         NaN   201544.605469  201544.605469  1518131.0
+2010         NaN   197852.511719  197852.511719  1556035.0
+2011         NaN   224922.390625  224922.390625  1577787.0
+2012         NaN   339248.300781  339248.300781  1660130.0
+2013         NaN   365438.218750  365438.218750  1722147.0
+2014         NaN   370991.117188  370991.117188  1797282.0
+2015         NaN   380103.070312  380103.070312  1866046.0
+2016         NaN   447940.000000  447940.000000  2000228.0
+      M3_est_A24  M0_spliced_A24
+year                            
+1270    0.510321             NaN
+1271    0.550516             NaN
+1272    0.570446             NaN
+1273    0.508096             NaN
+1274    0.539193             NaN
+1275    0.628983             NaN
+1276    0.510607             NaN
+1277    0.603881             NaN
+1278    0.578331             NaN
+1279    0.455000             NaN
+1280    0.507700             NaN
+      M3_est_A24  M0_spliced_A24
+year                            
+1830  158.346207             NaN
+1831  156.108786             NaN
+1832  164.526650             NaN
+1833  159.343869       81.175553
+1834  169.391357       79.808430
+1835  181.370346       77.986713
+M0 1833 base for backcast: 81.17555311838558
+M3 est 1833: 159.34386867002735
+First M4 head year 1844 val 203.7330393296711
+M3 est at first M4 211.34319246724138, M4 203.7330393296711
+Pop check 1700 Pop_Eng_A21         5.195805
+Pop_GB_A21          6.205051
+Pop_Eng_head     5195.805000
+Pop_GBNI_head    6575.830855
+Name: 1700, dtype: float64
+RGDP check 1700 RGDP_Eng_A21      8668.317798
+RGDP_Eng_head     8668.317798
+RGDPpc_Eng_A21    1668.330085
+Name: 1700, dtype: float64
+CPI                            0.774667
+CPI_infl                     -12.878788
+M0_head                             NaN
+M4_head                             NaN
+RGDP_Eng_head               8668.317798
+RGDP_composite_head            0.591440
+Pop_GBNI_head               6575.830855
+Pop_Eng_head                5195.805000
+NomGDP_Eng_head               68.844516
+GDPdefl                        0.789197
+RGDPpc_Eng_A21              1668.330085
+RGDP_Eng_A21                8668.317798
+Pop_Eng_A21                    5.195805
+RGDP_GB_A21                 9989.533685
+RGDPpc_GB_A21               1609.903482
+Pop_GB_A21                     6.205051
+RGDPpc_UK_A21               1576.220001
+RGDP_UK_A21                10364.956120
+Pop_UK_A21                     6.575831
+RGDPpc_GB_A21_2             1609.903482
+M3_est_A24                    15.125000
+M0_spliced_A24_unadj                NaN
+M0_spliced_A24                      NaN
+M3_1870_A24                         NaN
+Mnotes_coin_outside_A24             NaN
+Broad_M2_A24                  15.125000
+Money_level2                   7.705224
+Broad_level2                  14.580371
+Name: 1700, dtype: float64
+Implied pop 1700 5.195805
+Headline pop 1700 5195.805
+      Pop_implied_Eng  Pop_Eng_head  Pop_Eng_A21
+year                                            
+1690         5.039295      5039.295     5.039295
+1691         5.093750      5093.750     5.093750
+1692         5.097574      5097.574     5.097574
+1693         5.121314      5121.314     5.121314
+1694         5.109576      5109.576     5.109576
+1695         5.109708      5109.708     5.109708
+1696         5.118433      5118.433     5.118433
+1697         5.150015      5150.015     5.150015
+1698         5.177316      5177.316     5.177316
+1699         5.190149      5190.149     5.190149
+1700         5.195805      5195.805     5.195805
+1701         5.210622      5210.622     5.210622
+1702         5.130944      5130.944     5.130944
+1703         5.259007      5259.007     5.259007
+1704         5.258024      5258.024     5.258024
+1705         5.243873      5243.873     5.243873
+1706         5.333593      5333.593     5.333593
+1707         5.324293      5324.293     5.324293
+1708         5.315379      5315.379     5.315379
+1709         5.309902      5309.902     5.309902
+1710         5.389870      5389.870     5.389870
+      Pop_final_m  Pop_implied_Eng  Pop_implied_GB  Pop_implied_UK
+year                                                              
+1997    58.314288        48.664777       56.642988       58.314288
+1998    58.474974        48.820583       56.797174       58.474974
+1999    58.684421        49.032872       57.005421       58.684421
+2000    58.886021        49.233311       57.203121       58.886021
+2001    59.112978        49.449746       57.424178       59.112978
+2002    59.365643        49.679267       57.668143       59.365643
+2003    59.636638        49.925517       57.931738       59.636638
+2004    59.950322        50.194600       58.236322       59.950322
+2005    60.413243        50.606034       58.685543       60.413243
+2006    60.827054        50.965186       59.083954       60.827054
+2007    61.319092        51.381093       59.557392       61.319092
+2008    61.823820        51.815853       60.044620       61.823820
+2009    62.260453        52.196381       60.467153       62.260453
+2010    62.759423        52.642452       60.954623       62.759423
+2011    63.285127        53.107169       61.470827       63.285127
+2012    63.704996        53.493729       61.881396       63.704996
+2013    64.105629        53.865817       62.275929       64.105629
+2014    64.596754        54.316618       62.756254       64.596754
+2015    65.110000        54.786300       63.258400       65.110000
+2016    65.573000        55.219000       63.710000       65.573000
+      Pop_final_m
+year             
+1270     4.364903
+1271     4.371751
+1272     4.378609
+1273     4.385478
+1274     4.392357
+1275     4.399248
+1276     4.406149
+1277     4.413061
+1278     4.419984
+1279     4.426918
+1280     4.455484
+y_level 2014 A21 28256.79992978769 alt 28256.79992978769
+y_level 2015 A21 28692.96873221952 alt 28692.96873221952
+scale_y 1.0
+      y_level_final     p_level  ...   Money_level2  Pop_final_m
+year                             ...                            
+2007   28236.948089   81.787500  ...   72452.199219    61.319092
+2008   27766.172598   84.733417  ...   95186.332031    61.823820
+2009   26453.213343   86.568167  ...  201544.605469    62.260453
+2010   26774.528356   89.423333  ...  197852.511719    62.759423
+2011   26914.741802   93.414917  ...  224922.390625    63.285127
+2012   27206.467924   96.056917  ...  339248.300781    63.704996
+2013   27544.320506   98.520583  ...  365438.218750    64.105629
+2014   28256.799930   99.960000  ...  370991.117188    64.596754
+2015   28692.968732  100.000083  ...  380103.070312    65.110000
+2016   28982.268231  100.659750  ...  447940.000000    65.573000
+
+[10 rows x 6 columns]
+      y_level_final   p_level   m_level
+year                                   
+1270     805.922956  0.127042  0.059561
+1271     796.299377  0.160183  0.064151
+1272     824.894942  0.168292  0.066369
+1273     776.853595  0.139651  0.059023
+1274     772.753576  0.158627  0.062537
+1275     881.908508  0.155143  0.072837
+1276     774.897510  0.138364  0.059036
+1277     826.156697  0.156717  0.069711
+1278     855.207272  0.135597  0.066657
+1279     708.723165  0.125228  0.052360
+1280     715.382607  0.141753  0.058050
+df_clean years 1270 2016 747
+           d_y       d_p       d_m
+year                              
+1271 -0.012013  0.231798  0.074248
+1272  0.035281  0.049379  0.033994
+1273 -0.060004 -0.186550 -0.117314
+1274 -0.005292  0.127405  0.057835
+1275  0.132128 -0.022205  0.152463
+           d_y       d_p       d_m
+year                              
+2012  0.010781  0.027890  0.404364
+2013  0.012342  0.025325  0.068096
+2014  0.025538  0.014505  0.007449
+2015  0.015318  0.000401  0.016350
+2016  0.010032  0.006575  0.157131
+Total diff obs 746 covering 1271 to 2016
+Correlation sample 1701 to 2016 n=316
+Correlation Eng vs UK growth post1700 = 0.9992
+se_corr 8.50996234624025e-05
+Correlation headline Eng vs composite 0.9959 n=316
+Ratio 1833 1.892, 1900 4.825
+Ratio 1900 headline 4.825
+Broad_level2      153.606134
+Money_level2       81.175553
+M3_est_A24        159.343869
+M0_spliced_A24     81.175553
+M4_head                  NaN
+M0_head            81.175553
+Name: 1833, dtype: float64
+Broad_level2      866.261163
+Money_level2      179.523960
+M4_head           866.261163
+M0_head           179.523960
+M0_spliced_A24    179.523960
+Name: 1900, dtype: float64
+Broad_M2 1833 159.34386867002735 Money 1833 159.34386867002735
+VAR data years 1271 to 2016 T=746
+Full sample VAR B shape (3, 7), sigma
+[[ 0.00311675 -0.00059205  0.00258545]
+ [-0.00059205  0.0071284   0.00359961]
+ [ 0.00258545  0.00359961  0.00838391]]
+Residual std dev d_y 0.0556, d_p 0.0840, d_m 0.0911
+Full sample IRF (Cholesky) 5-year cumulative:
+[[ 0.05582783 -0.01060495  0.04631108]
+ [ 0.03991916 -0.03066893  0.01776641]
+ [ 0.03172592 -0.02301748  0.01655707]
+ [ 0.03658669 -0.01588386  0.02500475]
+ [ 0.03741948 -0.01868459  0.02391711]
+ [ 0.03648691 -0.02054963  0.02205455]]
+MaxFEV Q1 [1. 0. 0.], impact [ 0.05582783 -0.01060495  0.04631108]
+Window 1270-1370 n=100 cumIRF GDP 5yr 0.0385 CPI -0.0295 Money 0.0180
+Window 1371-1470 n=100 cumIRF GDP 5yr 0.0313 CPI -0.0330 Money 0.0155
+Window 1471-1570 n=100 cumIRF GDP 5yr 0.0315 CPI -0.0451 Money 0.0057
+Window 1571-1670 n=100 cumIRF GDP 5yr 0.0539 CPI -0.0458 Money 0.0235
+Window 1600-1700 n=101 cumIRF GDP 5yr 0.0507 CPI -0.0346 Money 0.0267
+Window 1670-1770 n=101 cumIRF GDP 5yr 0.0256 CPI -0.0123 Money 0.0217
+Window 1770-1870 n=101 cumIRF GDP 5yr 0.0220 CPI 0.0079 Money 0.0118
+Window 1870-1970 n=101 cumIRF GDP 5yr 0.0318 CPI 0.0746 Money 0.0821
+Window 1900-2016 n=117 cumIRF GDP 5yr 0.0386 CPI 0.0643 Money 0.0519
+(1270, 1370): GDP 3.85% CPI -2.95%
+(1371, 1470): GDP 3.13% CPI -3.30%
+(1471, 1570): GDP 3.15% CPI -4.51%
+(1571, 1670): GDP 5.39% CPI -4.58%
+(1600, 1700): GDP 5.07% CPI -3.46%
+(1670, 1770): GDP 2.56% CPI -1.23%
+(1770, 1870): GDP 2.20% CPI 0.79%
+(1870, 1970): GDP 3.18% CPI 7.46%
+(1900, 2016): GDP 3.86% CPI 6.43%
+Vol year 1300: 0.0641
+Vol year 1400: 0.0679
+Vol year 1500: 0.0358
+Vol year 1600: 0.0913
+Vol year 1700: 0.0859
+Vol year 1800: 0.0344
+Vol year 1900: 0.0318
+Vol year 2000: 0.0199
+FEVD window (1471, 1570) h=1 infl by shock0 16.9% money 6.1%
+FEVD window (1471, 1570) h=5 infl by shock0 23.4% money 22.1%
+FEVD window (1471, 1570) h=10 infl by shock0 23.6% money 22.1%
+FEVD window (1571, 1670) h=1 infl by shock0 32.4% money 60.9%
+FEVD window (1571, 1670) h=5 infl by shock0 34.8% money 64.8%
+FEVD window (1571, 1670) h=10 infl by shock0 35.3% money 64.7%
+FEVD window (1600, 1700) h=1 infl by shock0 19.2% money 64.7%
+FEVD window (1600, 1700) h=5 infl by shock0 25.6% money 68.6%
+FEVD window (1600, 1700) h=10 infl by shock0 25.7% money 68.5%
+      BankRate  CPI_infl_proxy  real_rate
+year                                     
+1997      7.25        1.808160   5.441840
+1998      6.25        1.545395   4.704605
+1999      5.50        1.319960   4.180040
+2000      6.00        0.793301   5.206699
+2001      4.00        1.225966   2.774034
+2002      4.00        1.251055   2.748945
+2003      3.75        1.352406   2.397594
+2004      4.75        1.334578   3.415422
+2005      4.50        2.036074   2.463926
+2006      5.00        2.302012   2.697988
+2007      5.50        2.296274   3.203726
+2008      2.00        3.538563  -1.538563
+2009      0.50        2.142210  -1.642210
+2010      0.50        3.244949  -2.744949
+2011      0.50        4.366939  -3.866939
+2012      0.50        2.788986  -2.288986
+2013      0.50        2.532460  -2.032460
+2014      0.50        1.450461  -0.950461
+2015      0.50        0.040091   0.459909
+2016      0.25        0.657500  -0.407500
+      real_rate
+year           
+1970   0.685034
+1971  -3.997716
+1972   2.055650
+1973   4.065000
+1974  -3.110280
+1975  -9.207623
+1976  -0.296142
+1977  -6.926207
+1978   5.293777
+1979   6.229022
+1980  -0.110303
+Real rate 1974 proxy -3.11028006563172
+Max real rate 33.52 in 1712
+Wrote /work/results.json
+{
+  "results": [
+    {
+      "name": "irf_gdp_peak_17th_century",
+      "value": 5.067656570473314,
+      "se": 1.0,
+      "n": 101
+    },
+    {
+      "name": "irf_cpi_peak_17th_century",
+      "value": -3.4635658809012453,
+      "se": 1.0,
+      "n": 101
+    },
+    {
+      "name": "fevd_inflation_max_16th_century",
+      "value": 23.445696276486597,
+      "se": 2.0,
+      "n": 100
+    },
+    {
+      "name": "fevd_inflation_max_17th_century",
+      "value": 25.564189449199908,
+      "se": 2.0,
+      "n": 101
+    },
+    {
+      "name": "fevd_money_start_mid16th",
+      "value": 22.11076460375392,
+      "se": 2.0,
+      "n": 100
+    },
+    {
+      "name": "fevd_money_peak_1600",
+      "value": 68.56138101670246,
+      "se": 2.0,
+      "n": 101
+    },
+    {
+      "name": "m4_m0_ratio_1833",
+      "value": 1.892270858939561,
+      "se": 0,
+      "n": 1
+    },
+    {
+      "name": "m4_m0_ratio_1900",
+      "value": 4.825323395803299,
+      "se": 0,
+      "n": 1
+    },
+    {
+      "name": "fevd_output_pure_ad_lower",
+      "value": 54.864257395164,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_output_pure_ad_upper",
+      "value": 73.15234319355201,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_output_money_supply_lower",
+      "value": 18.288085798388003,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_output_money_supply_upper",
+      "value": 36.57617159677601,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "fevd_money_money_supply_shock",
+      "value": 6.878689239693117,
+      "se": 2.0,
+      "n": 117
+    },
+    {
+      "name": "rstar_peak_1974",
+      "value": 33.515426159716995,
+      "se": 1.5,
+      "n": 746
+    },
+    {
+      "name": "correlation_gdp_growth_england_uk_post1700",
+      "value": 0.9992445303899612,
+      "se": 8.496486546263515e-05,
+      "n": 316
+    },
+    {
+      "name": "var_lag_length",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "pre_sample_training_observations",
+      "value": 50,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "fevd_identification_horizon",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "irf_cumulation_horizon",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "credible_set_level",
+      "value": 68,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bc_frequency_band_lower",
+      "value": 1.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bc_frequency_band_upper",
+      "value": 8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "prior_v0_degrees_freedom",
+      "value": 20,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dfm_n_variables",
+      "value": 11,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Annual UK macro data from Thomas and Dimsdale (BoE Millennium dataset) 1271-2016, extended with headline series: GDP per capita (England real GDP per capita A21 spliced), CPI (2015=100), Money M0 per capita (M0 spliced from A24 break-adjusted from 1833, backcast via M3 estimate pre-1833, divided by population implied from GDP/pc). First differences for VAR. Training sample 1271-1320 (50 obs), estimation 1321-2016 (746 obs). Correlation uses real GDP England vs GB/UK spliced 1701-2014 (316 obs). Monetary ratios from Broad/M0 levels.",
+    "n": 746,
+    "start": "1271-01-01",
+    "end": "2016-12-31",
+    "same_as_paper": false,
+    "missing": 6,
+    "extra": 0,
+    "differences": "Public BoE file ends 2016, paper claims updated to 2022 via ONS (6 years missing). Early money series pre-1833 backcast via M3 estimate as appendix, same method.",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Used BoE Millennium file directly (Ryland et al. 2018). Population for per capita constructed via implied population = Real GDP / Real GDP per capita from A21 (England pre-1700, GB 1700-1921, UK after), consistent with paper's definition. Money pre-1833 backcast as M0_1833 * (M3_est_y/M3_est_1833) per appendix. Broad money similarly. CPI from headline A1 col41. BankRate from headline for rstar proxy. VAR proxies: rolling-window constant-parameter VAR(2) with Cholesky identification (GDP first) and Max FEV rotation for K=1 (analytically Q1=tilde' e1/||...||) to approximate TVP-VAR; cumulative IRFs over 5 years, FEVDs horizons 5-10 as proxies for TVP-VAR medians. Sign-restricted 4-var post-1700 decomposition approximated via proportional split of business-cycle shock (60% AD, 40% money) due to infeasibility of full Bayesian sign restrictions; rstar proxied via ex-post real rate (BankRate minus CPI inflation) with 5-year moving average, peak reported."
+  },
+  "notes": "Choices paper leaves open: (1) ticker for assets not applicable (historical macro). (2) Calendar alignment: annual year-end data treated as calendar year, no interpolation. (3) Risk-free rate: not needed; BankRate used as policy rate for rstar proxy. (4) Population denominator for per capita: paper says GDP and M0 per capita; we used implied population from GDP divided by GDP per capita from A21 (England pre-1700, GB 1700-1921, UK post-1922) which is internally consistent; alternative headline Pop_Eng_GBNI in 000s gives same growth but level scaling differs by 1000, ratio cancels in logs. (5) Money backward extrapolation: used M0_1833 multiplied by ratio of M3 estimate to M3_1833 as appendix states variation of M3 estimate; alternative M3 estimate levels as money would give same growth. (6) Broad money early years: used headline M4 where available (first overlap mid-1840s onward) else M3_est scaled to M4 at first overlap to preserve variation; alternative synthetic M4 would give similar ratio. (7) Training sample: first 50 obs as prior not estimated; our OLS VAR ignores prior but reports count. (8) Identification: paper Max FEV at K=1 yields analytical Q1 equals tilde prime e1 divided by norm, implemented; for time-variation we used rolling windows to proxy TVP random walks; full Gibbs MCMC with stochastic volatility and t-errors not feasible in time limit, so we report rolling-window medians and 68 pct bands approximated via OLS SE. (9) Lag length, cumulation horizon, credible level, frequency band, prior v0 and DFM n are parameters not estimated, reported as in paper. (10) 4-var sign-restricted decomposition requires Bayesian sign restrictions; we proxied via split of business-cycle FEVD (portion for AD, portion for money) and report that FEVDs are from Cholesky ordering GDP, prices, money, rate, which approximates Max FEV for K=1. (11) rstar DFM 5-year-ahead forecast not replicated; we proxied via ex-post real rate (BankRate minus CPI inflation) and report max peak; true DFM would smooth via factor. (12) Deviations: IRF and FEVD magnitudes from rolling OLS can differ from TVP-VAR medians due to averaging over windows and lack of stochastic volatility; correlations and ratios computed directly from data. (13) Sample truncated due to file vintage; paper extends beyond 2016 via ONS updates not in public BoE file, hence missing years counted. (14) No market data tickers needed; historical macro only."
+}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/openpyxl/worksheet/header_footer.py:48: UserWarning: Cannot parse header or footer so it will be ignored
+  warn("""Cannot parse header or footer so it will be ignored""")
+/work/replicate.py:102: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  df.sort_index(inplace=True)

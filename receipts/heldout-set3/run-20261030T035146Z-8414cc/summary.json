@@ -1,0 +1,71 @@
+{
+ "run_id": "run-20261030T035146Z-8414cc",
+ "paper": "2608.23064",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 23 of 24 checked results match within their uncertainty. Its main result, us_h1_bvar_min_maxe, was not computed.",
+ "headline": {
+  "name": "us_h1_bvar_min_maxe",
+  "kind": "estimate",
+  "unit": "e",
+  "reported": 1.91e+22,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "us_total_obs",
+   "reported": 784.0,
+   "reproduced": 784.0,
+   "consistent": true
+  },
+  {
+   "name": "us_eval_N_h1",
+   "reported": 470.0,
+   "reproduced": 470.0,
+   "consistent": true
+  },
+  {
+   "name": "ch_total_obs",
+   "reported": 508.0,
+   "reproduced": 508.0,
+   "consistent": true
+  },
+  {
+   "name": "ch_eval_N_h1",
+   "reported": 305.0,
+   "reproduced": 304.0,
+   "consistent": true
+  },
+  {
+   "name": "ea_total_obs",
+   "reported": 292.0,
+   "reproduced": 292.0,
+   "consistent": true
+  },
+  {
+   "name": "ea_eval_N_h1",
+   "reported": 175.0,
+   "reproduced": 175.0,
+   "consistent": true
+  }
+ ],
+ "judged": 24,
+ "matched": 23,
+ "rejections": [],
+ "rounds": 1,
+ "packages": [],
+ "calls": 31,
+ "cost_usd": 0.9591,
+ "tokens_in": 2000163,
+ "tokens_out": 86649,
+ "wall_s": 736.6,
+ "crashed": null
+}

@@ -1,0 +1,660 @@
+{
+  "results": [
+    {
+      "name": "n_assets",
+      "value": 50,
+      "se": 0,
+      "n": 50
+    },
+    {
+      "name": "approx_trading_days_per_asset",
+      "value": 3774,
+      "se": null,
+      "n": 50
+    },
+    {
+      "name": "n_strategies",
+      "value": 3,
+      "se": 0,
+      "n": 3
+    },
+    {
+      "name": "n_walkforward_splits_per_asset",
+      "value": 9,
+      "se": 0,
+      "n": 9
+    },
+    {
+      "name": "n_monte_carlo_seeds",
+      "value": 15,
+      "se": 0,
+      "n": 15
+    },
+    {
+      "name": "n_monte_carlo_trials_total",
+      "value": 9000,
+      "se": 0,
+      "n": 9000
+    },
+    {
+      "name": "n_walkforward_trials_total",
+      "value": 5400,
+      "se": 0,
+      "n": 5400
+    },
+    {
+      "name": "mc_gt_n",
+      "value": 2250,
+      "se": 0,
+      "n": 2250
+    },
+    {
+      "name": "mc_sharpe_n",
+      "value": 2250,
+      "se": 0,
+      "n": 2250
+    },
+    {
+      "name": "mc_sortino_n",
+      "value": 2250,
+      "se": 0,
+      "n": 2250
+    },
+    {
+      "name": "mc_simple_n",
+      "value": 2250,
+      "se": 0,
+      "n": 2250
+    },
+    {
+      "name": "wf_gt_n",
+      "value": 1350,
+      "se": 0,
+      "n": 1350
+    },
+    {
+      "name": "wf_sharpe_n",
+      "value": 1350,
+      "se": 0,
+      "n": 1350
+    },
+    {
+      "name": "wf_sortino_n",
+      "value": 1350,
+      "se": 0,
+      "n": 1350
+    },
+    {
+      "name": "wf_simple_n",
+      "value": 1350,
+      "se": 0,
+      "n": 1350
+    },
+    {
+      "name": "mc_gt_test_mean",
+      "value": 85.67149590908882,
+      "se": 3.4109986918103483,
+      "n": 2250
+    },
+    {
+      "name": "mc_gt_test_std",
+      "value": 161.79787442963146,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_gt_train_mean",
+      "value": 140.36773649363928,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_gt_gen_ratio",
+      "value": 0.6103360932444116,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_sharpe_test_mean",
+      "value": 111.50147116289118,
+      "se": 5.489434035658692,
+      "n": 2250
+    },
+    {
+      "name": "mc_sharpe_test_std",
+      "value": 260.38671926897143,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_sharpe_train_mean",
+      "value": 245.66722832883306,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_sharpe_gen_ratio",
+      "value": 0.4538719792680001,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_sortino_test_mean",
+      "value": 101.48541475344798,
+      "se": 5.0968195079511815,
+      "n": 2250
+    },
+    {
+      "name": "mc_sortino_test_std",
+      "value": 241.7633770185662,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_sortino_train_mean",
+      "value": 228.66440483953983,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_sortino_gen_ratio",
+      "value": 0.4438181571139729,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_simple_test_mean",
+      "value": 115.79535109339778,
+      "se": 5.194039913172632,
+      "n": 2250
+    },
+    {
+      "name": "mc_simple_test_std",
+      "value": 246.3749457517308,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_simple_train_mean",
+      "value": 256.7509751475678,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_simple_gen_ratio",
+      "value": 0.4510025756546565,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_gen_ratio_improvement_56pct",
+      "value": 35.761709349513126,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "wf_gt_val_mean",
+      "value": 19.374509924658984,
+      "se": 0.7803175207859471,
+      "n": 1350
+    },
+    {
+      "name": "wf_gt_val_std",
+      "value": 28.670696449187655,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_gt_train_mean",
+      "value": 44.58991196311361,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_gt_gen_ratio",
+      "value": 0.4345043322957507,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_sharpe_val_mean",
+      "value": 19.785945479567282,
+      "se": 0.8420876673842932,
+      "n": 1350
+    },
+    {
+      "name": "wf_sharpe_val_std",
+      "value": 30.940276556730584,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_sharpe_train_mean",
+      "value": 102.03176624007999,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_sharpe_gen_ratio",
+      "value": 0.19391946458136478,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_sortino_val_mean",
+      "value": 19.476149584075284,
+      "se": 0.8689824534247744,
+      "n": 1350
+    },
+    {
+      "name": "wf_sortino_val_std",
+      "value": 31.928454094838187,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_sortino_train_mean",
+      "value": 94.32781370422109,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_sortino_gen_ratio",
+      "value": 0.20647303079816576,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_simple_val_mean",
+      "value": 22.9463551370945,
+      "se": 0.9163992901469628,
+      "n": 1350
+    },
+    {
+      "name": "wf_simple_val_std",
+      "value": 33.670659922631565,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_simple_train_mean",
+      "value": 108.23176278801283,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_simple_gen_ratio",
+      "value": 0.21201128528265933,
+      "se": null,
+      "n": 1350
+    },
+    {
+      "name": "wf_baseline_avg_gen_ratio",
+      "value": 0.20413459355406327,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "wf_gen_ratio_improvement_98pct",
+      "value": 112.85188596937931,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ttest_gt_vs_sharpe_mean_diff",
+      "value": -0.25829975253802373,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sharpe_tstat",
+      "value": -4.659261304948342,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sharpe_p",
+      "value": 3.3588446748077446e-06,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sharpe_d",
+      "value": -0.0982258529168341,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "wilcoxon_gt_vs_sharpe_p",
+      "value": 7.331044779209264e-17,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sortino_mean_diff",
+      "value": -0.1581391884435918,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sortino_tstat",
+      "value": -3.1718426662310155,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sortino_p",
+      "value": 0.001535168658166646,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_sortino_d",
+      "value": -0.06686831469994167,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "wilcoxon_gt_vs_sortino_p",
+      "value": 3.858248982620336e-07,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_simple_mean_diff",
+      "value": -0.30123855184308984,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_simple_tstat",
+      "value": -6.443237820538983,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_simple_p",
+      "value": 1.426039636604935e-10,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "ttest_gt_vs_simple_d",
+      "value": -0.13583538012694948,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "wilcoxon_gt_vs_simple_p",
+      "value": 3.9030426709662576e-24,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "regime_2014_2016_gt",
+      "value": 9.51640624436331,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2014_2016_baseline",
+      "value": 8.298673765617307,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2014_2016_delta",
+      "value": 1.2177324787460018,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2015_2017_gt",
+      "value": 15.125913904700832,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2015_2017_baseline",
+      "value": 18.229279272980477,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2015_2017_delta",
+      "value": -3.103365368279645,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2016_2018_gt",
+      "value": 27.00925656105482,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2016_2018_baseline",
+      "value": 29.667280318861717,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2016_2018_delta",
+      "value": -2.658023757806899,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2017_2019_gt",
+      "value": 14.824519569144673,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2017_2019_baseline",
+      "value": 15.637473774268976,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2017_2019_delta",
+      "value": -0.8129542051243027,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2018_2020_gt",
+      "value": 19.13832682003967,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2018_2020_baseline",
+      "value": 20.594235557153286,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2018_2020_delta",
+      "value": -1.4559087371136177,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2019_2021_gt",
+      "value": 27.849656966536646,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2019_2021_baseline",
+      "value": 26.703020962561137,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2019_2021_delta",
+      "value": 1.1466360039755097,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2020_2022_gt",
+      "value": 32.022461271533295,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2020_2022_baseline",
+      "value": 36.74975231772608,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2020_2022_delta",
+      "value": -4.727291046192788,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2021_2023_gt",
+      "value": 14.020615902332919,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2021_2023_baseline",
+      "value": 13.205673656230369,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2021_2023_delta",
+      "value": 0.8149422461025513,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2022_2024_gt",
+      "value": 14.863432082224692,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2022_2024_baseline",
+      "value": 17.539960976811862,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "regime_2022_2024_delta",
+      "value": -2.6765288945871712,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_rsi_gt",
+      "value": 81.55633514775553,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_rsi_sharpe",
+      "value": 144.20046785976385,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_rsi_sortino",
+      "value": 123.23357563315567,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_rsi_simple",
+      "value": 165.5106605422707,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_macd_gt",
+      "value": 98.04527422298442,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_macd_sharpe",
+      "value": 104.4014542433378,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_macd_sortino",
+      "value": 100.33717213610444,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_macd_simple",
+      "value": 98.41316255653219,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_boll_gt",
+      "value": 77.41287835652648,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_boll_sharpe",
+      "value": 85.90249138557189,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_boll_sortino",
+      "value": 80.88549649108387,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "strat_boll_simple",
+      "value": 83.46223018139051,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "mc_mean_trades_gt",
+      "value": 38.294222222222224,
+      "se": null,
+      "n": 2250
+    },
+    {
+      "name": "mc_mean_trades_baseline",
+      "value": 29.45925925925926,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "abstract_p_lt_01_sortino_simple",
+      "value": 1,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Top 50 S&P 500 by market cap (current) with daily OHLCV 2010-2024 via yFinance; filtered to 50 with full history (2010-01-04 to 2024-12-31). Strategies RSI (period 5-30, overbought 60-85, oversold 15-40), MACD (fast 5-20 slow 20-40 signal 5-15), Bollinger (window 10-50, num_std 0.5-3.0). Walk-forward 4y train/2y val 1y step embargo 30d 9 splits; Monte Carlo 1 train 2010-2018 test 2019-2024 single split with 15 seeds random search 25 evals.",
+    "n": 50,
+    "start": "2010-01-01",
+    "end": "2024-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 0,
+    "differences": "Universe filtered to tickers with data since 2010; 0 of paper's top 50 excluded due to IPO/spinoff after 2010 (e.g., ABBV, META, NOW, ANET, ZTS, PANW replaced by next largest with history). Parameter search spaces proxied (paper not stated). Monte Carlo train/test window fixed to 2010-2018/2019-2024 as proxy for paper's unspecified MC split. Walk-forward exact embargo implementation approximated.",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Market-cap ranking as of fetch date (proxied top 50 with history). Parameter search spaces not stated in paper \u2013 used standard ranges. Monte Carlo split window not stated \u2013 used 2010-2018 train, 2019-2024 test with 30d embargo. Bollinger position logic vectorized, RSI smoothed via Wilder EMA, downside deviation target 0, risk-free 0. Standard Sharpe/Sortino annualized sqrt252."
+  },
+  "notes": "Choices paper leaves open: top-50 market-cap ranking date (used current caps); RSI/MACD/Bollinger parameter ranges not stated \u2013 used RSI period 5-30 overbought 60-85 oversold 15-40, MACD fast5-20 slow20-40 signal5-15, Bollinger window10-50 num_std0.5-3.0; return definitions per-observation trade-level mu/sigma/N, benchmark daily mean, r2 log-equity linear fit, downside deviation target 0; risk-free 0 for Sharpe/Sortino; GT piecewise penalty thresholds and n_min 50 applied; Monte Carlo train/test window not stated \u2013 used 9y/5y split 2010-2018 train 2019-2024 test embargo30d; walk-forward exact calendar alignment approximated to paper's 2014-2024 validation. Deviations: universe required full 2010 history replacement for post-2010 IPOs; 360k backtests vectorized via numba; embargo implemented as +31 days."
+}

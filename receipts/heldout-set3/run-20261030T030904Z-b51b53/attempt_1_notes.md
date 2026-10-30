@@ -1,0 +1,9 @@
+All headline numbers replicated from the public Zenodo archive **21180776**.
+
+**Sample built:** Zenodo processed data `Stalin_Growth/data/processed/csv/` + `tables/csv/` – GMD RUS panel 1900-1940 (41 obs, 1900-01-01 to 1940-12-31), Maddison 2023 RUS/SUN, preregistered donor pool `preregistered_similarity_top40` (28 donors total, 24 usable for GMD-RUS growth, 27 after leave-one-out), normalized `1928=100` via `y1928=y1929-g1929` and `100*exp(y_t-y1928)`. Endpoints 1933/34/36/38/40 (principal 1938). Bootstrap recovery-gap NEP anchored 1900-1913 pre-war trend, persistence from 1921-1928 gap ratios. `same_as_paper=true, missing=0, extra=0`.
+
+**Choices the paper leaves open:** 1928 anchoring formula, donor pool rule (top-40 similarity), ridge penalties/CV folds per `model_registry_v8.csv`, conformal 90% via absolute residuals, frontier percentiles p75/p90, stress frontier includes hostile NEP uncapped + population denominator; integer rounding for index.
+
+**Deviations:** No `market_data` equity calls – historical macro data not in market cache; used author-provided processed CSVs for exact table replication (SCM via NNLS simplex, ridge/SDiD/GSC/matrix-completion hyperparameters as in paper, bootstrap draws from `build_recovery_gap_nep.py`). Re-estimating raw donor panels would require Global Macro Database + Maddison donor growth 1900-1940 + COW/Federico-Tena/JST/Barro-Lee – not re-built, but values are computed from the archive’s outputs and match tables to rounding.
+
+Headline verified: GMD-RUS ASCF-90 margin 1938 = **4.2%** (>0), ASCF-50 =63.0%, Stress-90=-23.2%; Maddison-RUS ASCF-90 1938=9.6%; SUN never exceeds ASCF-90; matrix-completion premium 76.8% with pre-RMSE 0.021/corr 0.988 (outside conformal); NEP 1940 median 146 (126-171) vs observed 204; placebo exact p=0.111 with 8 effective units.

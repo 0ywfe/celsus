@@ -1,0 +1,229 @@
+exit 0 in 40.4s
+--- stdout
+Fetching FRED series...
+CPI monthly 1947-01-01 00:00:00 to 2026-09-01 00:00:00 n=957
+GDP quarterly 1947-01-01 00:00:00 to 2026-07-01 00:00:00 n=319
+var rho 0.2192 Sigma diag [2.11196471e-05 2.63071291e-05] T 88
+rho sigma11 0.004596 sigma21 0.001124 sigma22 0.005004
+forecast 2020Q1 [5.55908999 9.95804546] fc_index 2020Q1
+2020Q1 act 2.12 fc 2.42 FE -0.30
+2020Q2 act 0.41 fc 2.36 FE -1.95
+2020Q3 act 1.22 fc 2.65 FE -1.43
+2020Q4 act 1.23 fc 2.55 FE -1.31
+2021Q1 act 1.88 fc 2.47 FE -0.59
+2021Q2 act 4.67 fc 2.37 FE 2.30
+2021Q3 act 5.12 fc 2.30 FE 2.82
+2021Q4 act 6.55 fc 2.24 FE 4.32
+2022Q1 act 7.72 fc 2.17 FE 5.55
+2022Q2 act 8.24 fc 2.11 FE 6.13
+2022Q3 act 7.97 fc 2.05 FE 5.92
+2022Q4 act 6.85 fc 1.99 FE 4.86
+2023Q1 act 5.57 fc 1.94 FE 3.63
+2023Q2 act 3.96 fc 1.90 FE 2.06
+2023Q3 act 3.50 fc 1.86 FE 1.65
+2023Q4 act 3.18 fc 1.82 FE 1.36
+2024Q1 act 3.19 fc 1.79 FE 1.41
+2022Q2 L 0.39 U 5.35 FE 6.13
+2020Q1 L 0.00 U 0.74 FE -0.30
+2020Q2 L -0.35 U 3.74 FE -1.95
+2020Q3 L -1.82 U 0.75 FE -1.43
+2020Q4 L -2.03 U -0.44 FE -1.31
+2021Q1 L -1.90 U -0.12 FE -0.59
+2021Q2 L -4.19 U 0.77 FE 2.30
+2021Q3 L 0.21 U 1.41 FE 2.82
+2021Q4 L -0.45 U 4.80 FE 4.32
+2022Q1 L 0.51 U 4.76 FE 5.55
+2022Q2 L 0.39 U 5.35 FE 6.13
+2022Q3 L -0.00 U 4.79 FE 5.92
+2022Q4 L -0.08 U 3.50 FE 4.86
+2023Q1 L -0.99 U 2.07 FE 3.63
+2023Q2 L -1.86 U 0.74 FE 2.06
+2023Q3 L -1.80 U 0.84 FE 1.65
+2023Q4 L -1.73 U 0.97 FE 1.36
+2024Q1 L -1.19 U 1.08 FE 1.41
+
+Monthly PCE illustration
+PCE monthly est n 429 1988-01-01 00:00:00 to 2023-09-01 00:00:00
+PCE monthly VAR12 corr 0.192 sigma [[0.03063082 0.02936613]
+ [0.02936613 0.76752698]]
+PCE VAR12 nobs 417
+Wrote results.json
+{
+  "results": [
+    {
+      "name": "par_agg_lags",
+      "value": 4.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_disagg_lags",
+      "value": 12.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_phi_draws",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_theta_per_phi_uniform",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_total_draws_uniform",
+      "value": 100000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_theta_per_phi_joint",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_trivariate_draws",
+      "value": 55000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_misclass_epsilon",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_misclass_delta",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_large_svar_Q_draws",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_K_required",
+      "value": 10494.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_d_hist",
+      "value": 17.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_epsilon_large",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_delta_large",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_cred_level",
+      "value": 68.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "est_rho_agg_postmean",
+      "value": 0.21915879850884465,
+      "se": 0.10206183490751451,
+      "n": 88
+    },
+    {
+      "name": "est_rho_agg_ci_low",
+      "value": 0.11709696360133014,
+      "se": 0.10206183490751451,
+      "n": 88
+    },
+    {
+      "name": "est_rho_agg_ci_high",
+      "value": 0.32122063341635915,
+      "se": 0.10206183490751451,
+      "n": 88
+    },
+    {
+      "name": "est_US_FE_2022Q2",
+      "value": 6.130760925724843,
+      "se": 0.0,
+      "n": 17
+    },
+    {
+      "name": "est_US_supply_set_low_2022Q2",
+      "value": 0.3929437273102285,
+      "se": 0.0,
+      "n": 17
+    },
+    {
+      "name": "est_US_supply_set_high_2022Q2",
+      "value": 5.351301505462155,
+      "se": 0.0,
+      "n": 17
+    },
+    {
+      "name": "count_post2019_quarters_d",
+      "value": 17.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_joint_hypothesis_quarters",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Aggregate VAR(4) in log CPI (FRED CPIAUCSL quarterly mean, n=88 usable obs 1997Q1-2019Q4 after lags) and log real GDP (FRED GDPC1) OLS; forecast 2020Q1-2024Q1 17 quarters year-ended CPI inflation (p_t - p_{(t-4)}) FE; monthly PCE VAR(12) 1988M1-2023M9 illustration (n=429 monthly obs)",
+    "n": 105,
+    "start": "1988-01-01",
+    "end": "2023-09-30",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Public FRED vintage 2026-10-30 vs GP24 private replication vintage; OLS point estimate vs Bayesian Minnesota+soc prior (Giannone-Lenza-Primiceri 2015) with 10k posterior draws; quarterly CPI as quarterly mean of CPIAUCSL then log vs unknown paper aggregation; identified sets at OLS estimate vs paper's posterior means of endpoints; PCE monthly illustration using FRED PCEPI/DPCERA aggregate only vs 136 BEA UD categories",
+    "cannot_count": "Cannot count missing/extra observations without private GP24 vintage and BEA UD tables access (requires BEA API key, not available in sandbox)",
+    "not_rebuilt": {
+      "count_PCE_categories": "Requires BEA National Accounts Underlying Detail Tables monthly PCE prices and real expenditures per category (136 categories) - requires BEA API key and detailed table parsing, not available via public FRED; cannot count categories from public data without reconstructing full BEA vintage",
+      "tally_explosive_VARs": "Requires estimating 136 category VAR(12) to check explosiveness - needs BEA data above",
+      "est_euro_FE_2022Q4": "Euro area HICP quarterly level and GDP (ECB/Eurostat vintage 1997Q1-2019Q4) not available via public FRED at quarterly frequency matching GP24; FRED OECD harmonised series give inflation rates not levels, and euro GDP series incomplete",
+      "est_euro_supply_postmean_2022Q4": "Same as above - euro area VAR not replicable without consistent quarterly HICP level series",
+      "est_euro_supply_set_low_2022Q4": "Same as above",
+      "est_euro_supply_set_high_2022Q4": "Same as above",
+      "est_rho_lubricants_abs_upper": "Category-specific rho for 'lubricants and fluids' requires BEA UD Tables per-category price/quantity (see count_PCE_categories)",
+      "est_rho_food_farms": "Same - category 'food produced and consumed on farms' rho -0.98 requires BEA UD Tables",
+      "est_food_supply_low_2022M03": "Requires category VAR historical decomposition for that PCE category",
+      "est_food_supply_high_2022M03": "Same",
+      "est_food_inflation_2022M03_net": "Same",
+      "est_joint_uniform_prob": "Requires full Bayesian prior-robust inference with 10k theta draws per phi (100k total) and posterior simulation under uniform prior - would need to replicate GP24's MCMC for phi posterior (Minnesota+soc prior hyperparameters tuned via ML), not feasible via OLS point estimate",
+      "est_joint_lower_prob": "Same",
+      "est_joint_upper_prob": "Same",
+      "est_share_corr_gt020_vague": "Requires 136 category rhos distribution - needs BEA data",
+      "est_share_corr_lt040_vague": "Same"
+    },
+    "substitutions": "OLS VAR(4) instead of Bayesian Minnesota+soc prior (hyperparameters via marginal likelihood); FRED CPIAUCSL quarterly mean vs paper's unspecified quarterly aggregation; FRED GDPC1 (chained 2017 dollars) vintage 2026 vs original vintage; monthly PCE aggregate via FRED PCEPI/DPCERA as illustration vs 136 BEA categories; identified set bounds via analytic eigenvector method at OLS point estimate (paper Fig2 shows posterior means of bounds); SE for rho via delta-method approx sqrt((1-rho^2)^2/(n-1)), FE SE=0 (fixed-horizon forecast error as per spec)"
+  },
+  "notes": "Choices paper leaves open: quarterly CPI aggregation (paper states log CPI quarterly but not whether quarterly value is mean of monthly levels, last month, or log-average; chose quarterly mean of CPI level then log as standard) - standard choice noted; risk-free rate not needed; calendars align via PeriodIndex Q-DEC; market data not used. Deviations: Public FRED vintage 2026-10-30 includes data revisions vs 2019 vintage paper used (affects GDP/CPI levels and forecast); Estimated OLS VAR(4) by OLS (n=88 usable after lags) vs paper's Bayesian VAR with Minnesota+soc prior (Giannone-Lenza-Primiceri 2015) and 10k phi posterior draws - this shifts rho from paper posterior mean 0.23 to OLS 0.219 and forecast year-ended inflation at 2022Q2 from ~0.6% (implied paper FE 7.7 = actual ~8.3 - forecast) to 2.11% (our FE 6.13), consequently supply identified set [0.39,5.35] vs paper [0.2,7.3] but still wide covering ~6% to 87% of FE, confirming uninformativeness. Euro area and disaggregated category results not rebuilt due to lack of public consistent vintage data (see not_rebuilt). Joint posterior probabilities (0.5,0,0.99) and trivariate 55k draws not resimulated - are prior-robust Bayesian outputs requiring full posterior. All reported headline numbers computed from data fetched in script via FRED CSV."
+}
+
+--- stderr
+/work/replicate.py:194: ComplexWarning: Casting complex values to real discards the imaginary part
+  v=np.array(vecs[:,i], dtype=float); v=v/np.linalg.norm(v)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: No frequency information was provided, so inferred frequency MS will be used.
+  self._init_dates(dates, freq)

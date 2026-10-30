@@ -1,0 +1,1236 @@
+{
+  "results": [
+    {
+      "name": "count_N_countries",
+      "value": 11,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_T_intervals",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_pooled_319",
+      "value": 319,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_yearly_cross_section_N",
+      "value": 11,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Bulgaria_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Czechia_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Estonia_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Croatia_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Latvia_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Lithuania_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Hungary_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Poland_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Romania_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Slovenia_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_Slovakia_29",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_d_regressors",
+      "value": 7,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_df",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_VIF_threshold",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "raw_X1_mean",
+      "value": 62.492,
+      "se": 0.954,
+      "n": 319
+    },
+    {
+      "name": "raw_X1_SD",
+      "value": 17.035,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X1_Min",
+      "value": 26.0,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X1_Median",
+      "value": 63.0,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X1_Max",
+      "value": 96.0,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X1_Skew",
+      "value": -0.21,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X1_Kurt",
+      "value": 2.134,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_mean",
+      "value": 59.906,
+      "se": 0.767,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_SD",
+      "value": 13.704,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_Min",
+      "value": 20.3,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_Median",
+      "value": 60.5,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_Max",
+      "value": 91.8,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_Skew",
+      "value": -0.254,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X2_Kurt",
+      "value": 2.704,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_mean",
+      "value": 78.408,
+      "se": 3.721,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_SD",
+      "value": 66.456,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_Min",
+      "value": 0.474,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_Median",
+      "value": 67.313,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_Max",
+      "value": 393.972,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_Skew",
+      "value": 1.695,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X3_Kurt",
+      "value": 7.379,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_mean",
+      "value": 115.038,
+      "se": 1.953,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_SD",
+      "value": 34.884,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_Min",
+      "value": 43.555,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_Median",
+      "value": 116.296,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_Max",
+      "value": 204.056,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_Skew",
+      "value": 0.116,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X4_Kurt",
+      "value": 2.128,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_mean",
+      "value": 378.18,
+      "se": 12.146,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_SD",
+      "value": 216.932,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_Min",
+      "value": 16.081,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_Median",
+      "value": 387.136,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_Max",
+      "value": 841.687,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_Skew",
+      "value": 0.032,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X5_Kurt",
+      "value": 1.918,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_mean",
+      "value": 38.757,
+      "se": 1.356,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_SD",
+      "value": 24.216,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_Min",
+      "value": 3.9,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_Median",
+      "value": 37.4,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_Max",
+      "value": 244.5,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_Skew",
+      "value": 2.175,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X6_Kurt",
+      "value": 18.076,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_mean",
+      "value": 69.998,
+      "se": 1.598,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_SD",
+      "value": 28.535,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_Min",
+      "value": 9.9,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_Median",
+      "value": 68.4,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_Max",
+      "value": 146.7,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_Skew",
+      "value": 0.335,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "raw_X7_Kurt",
+      "value": 2.622,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "corr_X1_X2",
+      "value": 0.801,
+      "se": 0.0336,
+      "n": 319
+    },
+    {
+      "name": "corr_X1_X3",
+      "value": 0.358,
+      "se": 0.0524,
+      "n": 319
+    },
+    {
+      "name": "corr_X2_X3",
+      "value": 0.348,
+      "se": 0.0526,
+      "n": 319
+    },
+    {
+      "name": "corr_X1_X4",
+      "value": 0.588,
+      "se": 0.0454,
+      "n": 319
+    },
+    {
+      "name": "corr_X2_X4",
+      "value": 0.587,
+      "se": 0.0455,
+      "n": 319
+    },
+    {
+      "name": "corr_X3_X4",
+      "value": 0.575,
+      "se": 0.046,
+      "n": 319
+    },
+    {
+      "name": "corr_X1_X5",
+      "value": 0.692,
+      "se": 0.0406,
+      "n": 319
+    },
+    {
+      "name": "corr_X2_X5",
+      "value": 0.698,
+      "se": 0.0402,
+      "n": 319
+    },
+    {
+      "name": "corr_X3_X5",
+      "value": 0.703,
+      "se": 0.04,
+      "n": 319
+    },
+    {
+      "name": "corr_X4_X5",
+      "value": 0.638,
+      "se": 0.0432,
+      "n": 319
+    },
+    {
+      "name": "corr_X1_X6",
+      "value": 0.172,
+      "se": 0.0553,
+      "n": 319
+    },
+    {
+      "name": "corr_X2_X6",
+      "value": 0.099,
+      "se": 0.0559,
+      "n": 319
+    },
+    {
+      "name": "corr_X3_X6",
+      "value": 0.161,
+      "se": 0.0554,
+      "n": 319
+    },
+    {
+      "name": "corr_X4_X6",
+      "value": 0.147,
+      "se": 0.0556,
+      "n": 319
+    },
+    {
+      "name": "corr_X5_X6",
+      "value": 0.219,
+      "se": 0.0548,
+      "n": 319
+    },
+    {
+      "name": "corr_X1_X7",
+      "value": 0.364,
+      "se": 0.0523,
+      "n": 319
+    },
+    {
+      "name": "corr_X2_X7",
+      "value": 0.49,
+      "se": 0.049,
+      "n": 319
+    },
+    {
+      "name": "corr_X3_X7",
+      "value": 0.542,
+      "se": 0.0472,
+      "n": 319
+    },
+    {
+      "name": "corr_X4_X7",
+      "value": 0.427,
+      "se": 0.0508,
+      "n": 319
+    },
+    {
+      "name": "corr_X5_X7",
+      "value": 0.533,
+      "se": 0.0475,
+      "n": 319
+    },
+    {
+      "name": "corr_X6_X7",
+      "value": 0.04,
+      "se": 0.0561,
+      "n": 319
+    },
+    {
+      "name": "VIF_min",
+      "value": 1.072,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "VIF_max",
+      "value": 4.101,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "VIF_mean",
+      "value": 2.679,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_mean",
+      "value": 0.0,
+      "se": 0.0436,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_SD",
+      "value": 0.779,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_median",
+      "value": 0.005,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_skew",
+      "value": -0.097,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_kurt",
+      "value": 4.911,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_Q25",
+      "value": -0.334,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_Q75",
+      "value": 0.386,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_IQR",
+      "value": 0.72,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_RMSE_over_MAE",
+      "value": 1.416,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_pooled_IQR_over_SD",
+      "value": 0.924,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "resid_median_deviation_pct_SD",
+      "value": 0.67,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "JB_p_pooled",
+      "value": 0.0,
+      "se": null,
+      "n": 319
+    },
+    {
+      "name": "Bartlett_B",
+      "value": 186.18,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "Bartlett_df",
+      "value": 28,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "Bartlett_p",
+      "value": 0.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "variance_ratio_max_min",
+      "value": 9.38,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "resid_Bulgaria_mean",
+      "value": 0.014,
+      "se": 0.1313,
+      "n": 29
+    },
+    {
+      "name": "resid_Bulgaria_SD",
+      "value": 0.707,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Bulgaria_median",
+      "value": -0.0,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Czechia_mean",
+      "value": 0.222,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Czechia_SD",
+      "value": 0.479,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Latvia_mean",
+      "value": -0.185,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Latvia_SD",
+      "value": 0.638,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Hungary_SD",
+      "value": 0.424,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "resid_Poland_SD",
+      "value": 1.299,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "alpha_1997",
+      "value": -5.833,
+      "se": 0.514,
+      "n": 11
+    },
+    {
+      "name": "alpha_1997_SE",
+      "value": 0.514,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "alpha_2002",
+      "value": 0.131,
+      "se": 2.24,
+      "n": 11
+    },
+    {
+      "name": "alpha_2002_SE",
+      "value": 2.24,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "alpha_2009",
+      "value": 12.141,
+      "se": 5.844,
+      "n": 11
+    },
+    {
+      "name": "alpha_2009_SE",
+      "value": 5.844,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "alpha_2013",
+      "value": 4.378,
+      "se": 3.537,
+      "n": 11
+    },
+    {
+      "name": "alpha_2013_SE",
+      "value": 3.537,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "alpha_2018",
+      "value": 7.767,
+      "se": 0.763,
+      "n": 11
+    },
+    {
+      "name": "alpha_2018_SE",
+      "value": 0.763,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "alpha_2021",
+      "value": 16.315,
+      "se": 3.281,
+      "n": 11
+    },
+    {
+      "name": "alpha_2021_SE",
+      "value": 3.281,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "alpha_2024",
+      "value": 4.771,
+      "se": 4.482,
+      "n": 11
+    },
+    {
+      "name": "alpha_2024_SE",
+      "value": 4.482,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_1997",
+      "value": -0.128,
+      "se": 0.01,
+      "n": 11
+    },
+    {
+      "name": "beta_X2_1997",
+      "value": 0.148,
+      "se": 0.01,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_1997",
+      "value": -0.083,
+      "se": 0.007,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_2002",
+      "value": -0.109,
+      "se": 0.026,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_2002",
+      "value": 0.071,
+      "se": 0.039,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_2009",
+      "value": 0.112,
+      "se": 0.109,
+      "n": 11
+    },
+    {
+      "name": "beta_X2_2009",
+      "value": -0.567,
+      "se": 0.235,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_2009",
+      "value": 0.012,
+      "se": 0.043,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_2013",
+      "value": -0.186,
+      "se": 0.069,
+      "n": 11
+    },
+    {
+      "name": "beta_X2_2013",
+      "value": 0.54,
+      "se": 0.156,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_2013",
+      "value": -0.127,
+      "se": 0.039,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_2018",
+      "value": -0.01,
+      "se": 0.009,
+      "n": 11
+    },
+    {
+      "name": "beta_X2_2018",
+      "value": 0.128,
+      "se": 0.016,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_2018",
+      "value": -0.069,
+      "se": 0.005,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_2021",
+      "value": -0.168,
+      "se": 0.035,
+      "n": 11
+    },
+    {
+      "name": "beta_X2_2021",
+      "value": 0.23,
+      "se": 0.071,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_2021",
+      "value": -0.014,
+      "se": 0.021,
+      "n": 11
+    },
+    {
+      "name": "beta_X1_2024",
+      "value": 0.033,
+      "se": 0.072,
+      "n": 11
+    },
+    {
+      "name": "beta_X2_2024",
+      "value": -0.102,
+      "se": 0.095,
+      "n": 11
+    },
+    {
+      "name": "beta_X7_2024",
+      "value": 0.039,
+      "se": 0.034,
+      "n": 11
+    },
+    {
+      "name": "R2_1997",
+      "value": 0.999,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "adjR2_1997",
+      "value": 0.997,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "ResidSD_1997",
+      "value": 0.168,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_1997",
+      "value": 496.808,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "R2_2002",
+      "value": 0.938,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_2002",
+      "value": 6.47,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "R2_2009",
+      "value": 0.89,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "adjR2_2009",
+      "value": 0.632,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "ResidSD_2009",
+      "value": 2.071,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_2009",
+      "value": 3.458,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "R2_2013",
+      "value": 0.886,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_2013",
+      "value": 3.342,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "R2_2018",
+      "value": 0.988,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "ResidSD_2018",
+      "value": 0.199,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_2018",
+      "value": 34.322,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "R2_2021",
+      "value": 0.946,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_2021",
+      "value": 7.449,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "R2_2024",
+      "value": 0.632,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "adjR2_2024",
+      "value": -0.227,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "ResidSD_2024",
+      "value": 1.035,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "F_2024",
+      "value": 0.736,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "kappa_Bulgaria_X2_2024",
+      "value": 129.0,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Bulgaria_Total_2024",
+      "value": 65.6,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Bulgaria_X7_2024",
+      "value": -73.3,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Bulgaria_X1_2024",
+      "value": -69.5,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Bulgaria_errAccum_2024",
+      "value": 0.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Czechia_Total_2024",
+      "value": 84.6,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Czechia_X7_2024",
+      "value": -46.1,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Czechia_X1_2024",
+      "value": -152.9,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Czechia_errAccum_2024",
+      "value": 6.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Estonia_Total_2024",
+      "value": 79.1,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Estonia_X2_2024",
+      "value": 180.0,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Estonia_X7_2024",
+      "value": -82.3,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Estonia_X1_2024",
+      "value": -116.6,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Estonia_errAccum_2024",
+      "value": -0.1,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Croatia_X7_2024",
+      "value": -69.3,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Latvia_Total_2024",
+      "value": 76.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Latvia_X7_2024",
+      "value": -65.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Latvia_errAccum_2024",
+      "value": -5.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Lithuania_Total_2024",
+      "value": 85.1,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Lithuania_X2_2024",
+      "value": 156.5,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Lithuania_X7_2024",
+      "value": -33.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Lithuania_errAccum_2024",
+      "value": 2.9,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Hungary_X7_2024",
+      "value": -60.7,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Poland_X7_2024",
+      "value": -34.9,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Romania_X7_2024",
+      "value": -36.6,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Slovenia_X2_2024",
+      "value": 224.2,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Slovenia_X7_2024",
+      "value": -56.4,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "kappa_Slovakia_X7_2024",
+      "value": -42.6,
+      "se": null,
+      "n": 29
+    },
+    {
+      "name": "X1_Bulgaria_mean_1996_2024",
+      "value": 43.59,
+      "se": 1.929,
+      "n": 29
+    },
+    {
+      "name": "Delta_y_Estonia_mean",
+      "value": 1.48,
+      "se": 0.517,
+      "n": 29
+    },
+    {
+      "name": "Delta_y_Lithuania_mean",
+      "value": 1.86,
+      "se": 0.44,
+      "n": 29
+    },
+    {
+      "name": "Delta_y_Latvia_mean",
+      "value": 1.41,
+      "se": 0.338,
+      "n": 29
+    }
+  ],
+  "sample": {
+    "description": "Panel of 11 EU-acceding CEE countries (Bulgaria, Czechia, Estonia, Croatia, Latvia, Lithuania, Hungary, Poland, Romania, Slovenia, Slovakia) observed annually 1995-2024. Regressor matrix x: 11x29 (1995-2023) x7 factors (X1 GDPpc PPS EU27=100, X2 price level, X3 cum FDI %GDP, X4 trade %GDP, X5 cum GCF %GDP, X6 gov debt %GDP (S13 proxy), X7 private debt). Dependent delta_y: 11x29 annual changes 1996-2024. Total pooled NT=319.",
+    "n": 319,
+    "start": "1995-01-01",
+    "end": "2024-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Eurostat prc_ppp_ind EU27_2020 for X1 (VI_PPS_EU27_2020_HAB GDP) and X2 (PLI_EU27_2020 GDP); ESTAT gov_10dd_edpt1 S13 general government debt used as proxy for X6 central government debt due to missing S1311 history for 5 countries (BG,CZ,EE,LV,SK pre-2022) in current ESTAT vintage; World Bank WDI BX.KLT.DINV.WD.GD.ZS, NE.TRD.GNFS.ZS, NE.GDI.TOTL.ZS for X3/X4/X5 with X3/X5 accumulated as cumulative sum from 1995 inclusive; Eurostat tipspd20 (S11_S14_S15 consolidated, PC_GDP) for X7. Standardization pooled NT=n_pooled_computed, Omega eigendecomposition, orthogonal preconditioner, yearly OLS N=11 per t, delta-method SEs as in paper. Data vintage July 2026 may include post-publication revisions (notably BG 1996 gov debt outlier 244.5% and Slovakia FDI revisions) causing small mean/corr deviations."
+  },
+  "notes": "Eurostat API choice: prc_ppp_ind dataset, freq A, ppp_cat GDP, na_item VI_PPS_EU27_2020_HAB for X1 and PLI_EU27_2020 for X2, geo BG etc, time 1995-2024. Eurostat tipspd20 for X7 private debt consolidated S11_S14_S15 F3_F4 PC_GDP. Gov debt: paper specifies central S1311 GD PC_GDP from gov_10dd_edpt1, but current API returns only 4 years (2022-2025) for BG/CZ/EE/LV/SK, implying 152 missing pooled obs if used; we substitute S13 general government debt (GD) which yields complete obs and country means within 1-2 pts of paper, median identical 37.4. BG 1996 outlier 244.5% remains in S13 series, raising pooled SD/kurt vs paper max 99; capping not applied to keep raw public vintage.\n\nWorld Bank WDI: FDI net inflows %GDP, trade %GDP, GCF %GDP fetched 1995-2024. Accumulation: X3 and X5 cumulative sum inclusive from 1995 (X_{1995}= flow_{1995}, X_t = sum_{1995}^{t} flow), matching Table country means for window 1995-2023 (paper note says 1996-2024 but numbers match 1995-2023). Trade X4 used as level (not accumulated).\n\nStandardization: mu_j = mean over pooled sample, sigma_j = sample SD ddof1, z = (x-mu)/sigma, Omega = cor(z). Eigendecomposition with descending eigenvalues, W orthogonal, P = Z W, cov(P)=Lambda.\n\nRegression: For each t 1996-2024, cross-section N=11, regress delta_y on 1+P_{t-1}, d=7, df=3. Back-transform beta = diag(sigma)^{-1} W gamma, alpha = alpha^P - mu beta. SEs via delta method M cov M^T (M as in paper). R2, adjR2=1-(1-R2)(n-1)/(n-d-1), Residual SD = sqrt(mse_resid), F.\n\nDecomposition: delta_y_{j}=alpha_t/d + beta_{t-1,j} x_{t-1,j}, kappa_{t,j}=GDP1995/d + sum delta_j, Total= sum kappa, err^a = sum resid = GDP Regr - GDP Data. Lambda(t) relative debt not needed for headline claims.\n\nDeviations: Pooled X3 mean 78.41 vs paper 77.06, X6 mean 38.76 vs 38.37, corr X1-X6 0.172 vs 0.220 etc due to BG outlier and latest WDI revisions (SK FDI). Residual pooled SD 0.779 vs 0.747, JB p <0.001 vs 0.017 due to same outlier, Bartlett B 186 vs 193. Kappa components within ~10 PPS of Table1 (e.g., BG X2 129 vs 143, EE X7 -82 vs -93) directionally same, Baltic divergence preserved (LT -33 vs EE -82). Choices paper leaves open: no risk-free rate, standard calendar year, EU27_2020 base."
+}

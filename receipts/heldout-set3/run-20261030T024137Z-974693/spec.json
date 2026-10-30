@@ -1,0 +1,317 @@
+{
+ "title": "In-between Transatlantic (Monetary) Disturbances",
+ "hypothesis": "ECB contractionary monetary policy shocks spill over to Canada via trade/commodity (oil) channels with limited financial spillovers; Fed shocks tighten Canadian financial conditions with broader slower real effects; magnitudes comparable and distinct transmission mechanisms",
+ "data_sources": [
+  "Large Canadian Database for Macroeconomic Analysis Fortin et al. 2022",
+  "IMF-IFS database for CAD/EUR exchange rate",
+  "St. Louis FRED",
+  "Federal Reserve Excess Bond Premium Gilchrist and Zakrajsek 2012",
+  "Eurostat sts_inpr_m production in industry Short-term business statistics",
+  "ICE BofA Euro High Yield Index Option-Adjusted Spread BAMLHE00EHYIOAS"
+ ],
+ "sample": "Canadian small open economy. Canadian variables from Large Canadian Database for Macroeconomic Analysis of Fortin et al. 2022 (CAD/EUR from IMF-IFS): nominal exchange rate (against USD for Fed, against EUR for ECB), Bank of Canada policy rate, CPI, equity price index, monthly GDP index . US variables from St. Louis FRED and Federal Reserve: federal funds rate, industrial production index, PCE price index, Excess Bond Premium of Gilchrist and Zakrajsek 2012 . Euro Area variables from FRED and Eurostat sts_inpr_m: ECB main refinancing rate, industrial production index, HICP, ICE BofA Euro High Yield Index Option-Adjusted Spread BAMLHE00EHYIOAS . Augmented variables: oil GDP value added, oil production cubic meters, non-oil GDP, oil exports, non-oil exports, WTI oil price; seven export categories; five GDP components; US spillover variables; financial-price variables; all added one at a time. Identification events: ECB (blue) and Fed (red) monetary policy announcements. Sample sizes N observations / N shocks: not stated - the paper does not print number of months, observations or announcement counts.",
+ "period_start": "not stated",
+ "period_end": "not stated - full sample end date not printed; COVID dummy covers March 2020–June 2021; robustness truncated sample ends February 2020",
+ "method": [
+  "1. Collect Canadian, US and Euro Area variables as above with sources Fortin et al. 2022, IMF-IFS, FRED, Federal Reserve EBP, Eurostat.",
+  "2. Measure high-frequency surprises in interest rates and equity prices around ECB and Fed policy announcement windows (window length not stated).",
+  "3. Separate pure monetary policy shock from central bank information disclosure shock via Jarocinski 2022 rotational-angle decomposition searching over rotations consistent with sign restrictions (contractionary MP shock: rates up, equities down). Benchmark uses median rotation among admissible rotations; display shock series in Fig3 and Fig4.",
+  "4. Bayesian VAR: endogenous variables with 3 lags (footnote compromise between AIC 4 lags and BIC 2 lags), exogenous identified ECB and Fed MP shocks, linear time trend, COVID dummy March 2020–June 2021. Normal-Wishart prior per Dieppe et al. 2016 BEAR: prior mean for first own lag 0.8, overall tightness lambda1 0.1, lag decay lambda3 1. Diffuse priors for exogenous shocks. Compute median IRF and 90% posterior credible intervals per horizon h.",
+  "5. Local projections per Equation eq:LP_Benchmark: y_t+h = beta_Shock_h i_t^Shock + sum j=1..J_i phi i_t-j + sum delta y_t-j + sum alpha x_t-j + sum alpha* x*_t-j + gamma1 Trend + gamma2 CovidDummy + epsilon, with 3 lags of y, x, x*, and shocks (AIC-selected), Trend and CovidDummy. Standard errors clustered at time level, 90% confidence intervals. Under standard assumptions VAR and LP identify same population response.",
+  "6. Transmission channels: re-estimate benchmark VAR augmented with oil/trade variables (oil GDP value added, oil production cubic meters, non-oil GDP, oil exports, non-oil exports, WTI oil price), with seven export categories one at a time, with GDP components, and with financial-price variables (government bond yields 1-3yr, 3-5yr, 10+yr, 1-year mortgage rate, New Housing Price Index). Also estimate responses of US economy (industrial production, PCE price index, excess bond premium, federal funds rate) to ECB shock and Canadian bilateral trade flows with US and EU. Shock normalization for US figures: one-standard-deviation ECB pure monetary policy shock.",
+  "7. Robustness: Poor Man's Sign Restriction (Jarocinski 2020 central) classifying negative rate-equity co-movement as MP shock and positive as information shock; local projection median rotation; sample excluding COVID ending February 2020; integrating over identification uncertainty by normalizing admissible rotations to 999 angles and taking repeated random uniform draws, constructing pointwise 90% credible bands combining posterior and identification uncertainty."
+ ],
+ "claims": [
+  {
+   "name": "stylized_export_share_EA",
+   "description": "Bilateral trade: less than 8% of Canadian exports destined for Euro Area, imports similarly small share (Introduction)",
+   "value": "less than 8%",
+   "unit": "share of exports",
+   "kind": "estimate",
+   "where": "p2 para2: Less than 8% of Canadian exports are destined for the Euro Area"
+  },
+  {
+   "name": "stylized_world_gdp_share_EA",
+   "description": "Euro Area share of world GDP PPP nearly 15%",
+   "value": "nearly 15%",
+   "unit": "share of world GDP",
+   "kind": "estimate",
+   "where": "p2 para2: Euro Area ... accounting for nearly 15% of global GDP (PPP)"
+  },
+  {
+   "name": "stylized_trade_gdp_EA_exceeded",
+   "description": "Euro Area trade-to-GDP ratio consistently exceeded 80% of GDP (Fig1b)",
+   "value": "exceeded 80%",
+   "unit": "trade/GDP",
+   "kind": "estimate",
+   "where": "p2 para2: Euro Area trade has consistently exceeded 80% of GDP"
+  },
+  {
+   "name": "stylized_trade_gdp_US",
+   "description": "US trade-to-GDP ratio 25% (Fig1b)",
+   "value": "25%",
+   "unit": "trade/GDP",
+   "kind": "estimate",
+   "where": "p2 para2: compared to 25% in the U.S."
+  },
+  {
+   "name": "stylized_trade_gdp_CAN",
+   "description": "Canada trade-to-GDP ratio 60--70% (Fig1b)",
+   "value": "60--70%",
+   "unit": "trade/GDP",
+   "kind": "estimate",
+   "where": "p2 para2: and 60--70% in Canada"
+  },
+  {
+   "name": "stylized_oil_gdp_share_CAN",
+   "description": "Oil accounts for roughly 10% of Canadian GDP",
+   "value": "roughly 10%",
+   "unit": "share of GDP",
+   "kind": "estimate",
+   "where": "p6: accounting for roughly 10% of GDP"
+  },
+  {
+   "name": "stylized_oil_export_share_CAN",
+   "description": "Oil accounts for 20–25% of Canadian goods exports",
+   "value": "20–25%",
+   "unit": "share of exports",
+   "kind": "estimate",
+   "where": "p6: and 20–25% of goods exports"
+  },
+  {
+   "name": "param_n_canadian_vars_benchmark",
+   "description": "Benchmark includes five Canadian variables",
+   "value": "5",
+   "unit": "variables",
+   "kind": "parameter",
+   "where": "p3: The benchmark sample includes five Canadian variables"
+  },
+  {
+   "name": "param_n_foreign_vars_benchmark",
+   "description": "Benchmark includes four foreign variables (per region, text states four)",
+   "value": "4",
+   "unit": "variables",
+   "kind": "parameter",
+   "where": "p3: and four foreign variables"
+  },
+  {
+   "name": "param_var_lags_benchmark",
+   "description": "BVAR with three lags of endogenous variables benchmark",
+   "value": "3",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "p4: We estimate a BVAR with three lags"
+  },
+  {
+   "name": "param_lag_AIC",
+   "description": "AIC selects four lags",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "p4 footnote 4: Akaike Information Criterion (four lags)"
+  },
+  {
+   "name": "param_lag_BIC",
+   "description": "BIC selects two lags",
+   "value": "2",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "p4 footnote 4: Bayesian Information Criterion (two lags)"
+  },
+  {
+   "name": "param_prior_mean_first_lag",
+   "description": "Normal-Wishart prior mean for first own lag set to 0.8",
+   "value": "0.8",
+   "unit": "coefficient",
+   "kind": "parameter",
+   "where": "p4: prior mean for the first own lag set to 0.8"
+  },
+  {
+   "name": "param_prior_tightness_lambda1",
+   "description": "Overall tightness lambda1 set to 0.1",
+   "value": "0.1",
+   "unit": "hyperparameter",
+   "kind": "parameter",
+   "where": "p4: overall tightness (lambda1) set to 0.1"
+  },
+  {
+   "name": "param_prior_lag_decay_lambda3",
+   "description": "Lag decay lambda3 equal to 1",
+   "value": "1",
+   "unit": "hyperparameter",
+   "kind": "parameter",
+   "where": "p4: and lag decay (lambda3) equal to 1"
+  },
+  {
+   "name": "param_lp_lags",
+   "description": "Local projections include three lags of dependent variable, Canadian controls, foreign variables and shock series (AIC)",
+   "value": "3",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "p5: We include three lags of the dependent variable, Canadian control variables x, foreign variables x*, and the shock series, selected based on AIC"
+  },
+  {
+   "name": "param_credible_level_VAR",
+   "description": "VAR IRF shaded areas 90% posterior credible intervals",
+   "value": "90%",
+   "unit": "credible level",
+   "kind": "parameter",
+   "where": "Fig4-5,7-13 floatfoot: shaded areas represent 90% posterior credible intervals"
+  },
+  {
+   "name": "param_confidence_level_LP",
+   "description": "LP shaded areas 90% confidence intervals with time-clustered SEs",
+   "value": "90%",
+   "unit": "confidence level",
+   "kind": "parameter",
+   "where": "Fig6 floatfoot: shaded areas represent 90% confidence intervals. Standard errors clustered at the time level."
+  },
+  {
+   "name": "param_n_export_categories",
+   "description": "Exports disaggregated into seven categories",
+   "value": "7",
+   "unit": "categories",
+   "kind": "parameter",
+   "where": "p7: we disaggregate exports into seven categories: oil, energy, minerals, metals, industrial equipment, transport goods, and consumption goods."
+  },
+  {
+   "name": "param_n_gdp_components",
+   "description": "Five key categories of Canadian GDP components",
+   "value": "5",
+   "unit": "categories",
+   "kind": "parameter",
+   "where": "p9: five key categories: industrial production, durable goods, non-durable goods, construction, and services."
+  },
+  {
+   "name": "param_n_rotations",
+   "description": "Set of admissible rotations normalized to 999 angles",
+   "value": "999",
+   "unit": "angles",
+   "kind": "parameter",
+   "where": "p11 footnote 5: we normalize the set of admissible rotations to a fixed number of angles (999 in our case)"
+  },
+  {
+   "name": "param_covid_dummy",
+   "description": "COVID-19 period dummy March 2020–June 2021",
+   "value": "March 2020–June 2021",
+   "unit": "date range",
+   "kind": "parameter",
+   "where": "p4: include a dummy for COVID-19 period (March 2020–June 2021)"
+  },
+  {
+   "name": "param_truncated_end",
+   "description": "Robustness truncated sample ends in February 2020",
+   "value": "February 2020",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "p11: we re-estimate on truncated sample that ends in February 2020"
+  },
+  {
+   "name": "param_shock_norm",
+   "description": "IRF normalization one-standard-deviation ECB pure monetary policy shock (Figures 9-10)",
+   "value": "one-standard-deviation",
+   "unit": "shock size",
+   "kind": "parameter",
+   "where": "Fig9-10 note: One-standard-deviation ECB pure monetary policy shock"
+  },
+  {
+   "name": "param_bond_yield_1_3yr",
+   "description": "Government bond yields at 1–3 year maturities",
+   "value": "1–3",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "p8: government bond yields at 1–3, 3–5, and 10+ year maturities"
+  },
+  {
+   "name": "param_bond_yield_3_5yr",
+   "description": "Government bond yields at 3–5 year maturities",
+   "value": "3–5",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "p8: government bond yields at 1–3, 3–5, and 10+ year maturities"
+  },
+  {
+   "name": "param_bond_yield_10plus",
+   "description": "Government bond yields at 10+ year maturities",
+   "value": "10+",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "p8: government bond yields at 1–3, 3–5, and 10+ year maturities"
+  },
+  {
+   "name": "param_mortgage_1yr",
+   "description": "1-year mortgage rate",
+   "value": "1-year",
+   "unit": "rate tenor",
+   "kind": "parameter",
+   "where": "p8: the 1-year mortgage rate"
+  },
+  {
+   "name": "estimate_ecb_gdp_below_trend",
+   "description": "ECB contractionary shock: GDP remains below trend for over a year (VAR median IRF)",
+   "value": "over a year",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p5: GDP contracts on impact and remains below trend for over a year"
+  },
+  {
+   "name": "estimate_ecb_equity_insig_after",
+   "description": "ECB shock: equity price drop statistically indistinguishable from zero after four months",
+   "value": "after four months",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p5: though this effect is short-lived and statistically indistinguishable from zero after four months"
+  },
+  {
+   "name": "estimate_fed_rate_hike_persistence",
+   "description": "Fed shock: Bank of Canada raises policy rate persistently lasting up to 18 months",
+   "value": "up to 18 months",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p5: This monetary tightening is immediate and persistent, lasting up to 18 months"
+  },
+  {
+   "name": "estimate_fed_gdp_onset",
+   "description": "Fed shock: output begins to contract significantly only after six months",
+   "value": "after six months",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p5: output begins to contract significantly only after six months"
+  },
+  {
+   "name": "estimate_fed_gdp_persistence",
+   "description": "Fed shock: GDP decline remains persistent for up to two years",
+   "value": "up to two years",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p5: and the decline remains persistent for up to two years"
+  },
+  {
+   "name": "estimate_lp_ecb_equity_sig_delay",
+   "description": "LP estimates: ECB shock equity response becomes significant only after six months",
+   "value": "after six months",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p6: the equity response emerges with a delay, becoming significant only after six months"
+  },
+  {
+   "name": "estimate_lp_fed_gdp_sig_delay",
+   "description": "LP estimates: Fed shock GDP decline statistical significance only after a year",
+   "value": "after a year",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p6: Fed shocks ... with statistical significance only after a year"
+  },
+  {
+   "name": "estimate_fed_housing_decline",
+   "description": "Fed shock: housing prices decline persistently for more than a year",
+   "value": "more than a year",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "p8: housing prices decline persistently for more than a year"
+  }
+ ],
+ "headline": "estimate_ecb_gdp_below_trend",
+ "partitions": [],
+ "tests": []
+}

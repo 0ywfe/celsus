@@ -1,0 +1,38 @@
+{
+ "run_id": "run-20261030T022146Z-4af3f5",
+ "paper": "2511.15643",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 9 of 15 checked results match within their uncertainty. Its main result, gdp_irf_17c_approx_5pct, is 5 percent in the paper and 4.835 percent here (consistent).",
+ "headline": {
+  "name": "gdp_irf_17c_approx_5pct",
+  "kind": "estimate",
+  "unit": "percent",
+  "reported": 5.0,
+  "reproduced": 4.834969448768589,
+  "se": 0.8490307789934844,
+  "n": 100,
+  "consistent": true,
+  "why": "paper inside 4.835 +/- 1.664"
+ },
+ "sample": [],
+ "judged": 15,
+ "matched": 9,
+ "rejections": [],
+ "rounds": 2,
+ "packages": [
+  "et_xmlfile==2.0.0",
+  "openpyxl==3.1.5",
+  "xlrd==2.0.2"
+ ],
+ "calls": 54,
+ "cost_usd": 1.1074,
+ "tokens_in": 3358620,
+ "tokens_out": 79000,
+ "wall_s": 1440.7,
+ "crashed": null
+}

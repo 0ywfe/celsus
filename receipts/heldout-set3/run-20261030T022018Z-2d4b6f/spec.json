@@ -1,0 +1,121 @@
+{
+ "title": "Price Stability in the European Union: A Systemic Approach Using Random Matrix Theory - Replication Spec",
+ "hypothesis": "H_A",
+ "data_sources": [
+  "https://ec.europa.eu/eurostat/databrowser/product/page/prc_hicp_minr__custom_22494633"
+ ],
+ "sample": "Monthly inflation rate variations (HICP / Consumption Price indices) for 27 Eurozone member countries. System matrix W = T x N with no pre-processing or transformation on normalized inputs tilde(W). Correlation matrix X = 1/N tilde(W)^T tilde(W) for eigenvalue extraction. Sample sizes as printed: N_countries=27, T_observations=307 covering period January 2001 - July 2026 per Section 4. Note inconsistency: Abstract states January 2021 to July 2026. Filters: none stated. Per-country and per-period filters: not stated.",
+ "period_start": "January 2001",
+ "period_end": "July 2026",
+ "method": [
+  "1. Build T x N system W with N=27 countries, T=307 monthly HICP inflation variations January 2001-July 2026 from Eurostat. No pre-processing. Tilde(W) = normalized W.",
+  "2. Compute sample correlation WISHART X = 1/N tilde(W)^T tilde(W). Extract eigenvalues lambda_i ordered bar(lambda)_1 > ... > bar(lambda)_n > 0.",
+  "3. MP null benchmark: f(lambda)=N/T sqrt((lambda_+-lambda)(lambda-lambda_-))/(2pi sigma^2) for lambda in [lambda_-,lambda_+], 0 otherwise, with lambda_- = sigma^2(1-sqrt(T/N))^2, lambda_+ = sigma^2(1+sqrt(T/N))^2, Wigner semicircle asymptotic. Aspect ratio Q = T/N.",
+  "4. SETOL via WeightWatcher https://github.com/CalculatedContent/WeightWatcher: empirical spectral density (ESD) log-log regression, Power-law fit rho(lambda) ~ lambda^{-(a mu + b)} with a=1/2,b=1 for ideal alpha~2, Pareto w_ij(mu) ~ C/x^{mu+1}. Determine lambda_- optimal by lowest Kolmogorov-Smirnov distance D_KS to theoretical Power-law. Report lambda_minus_opt, sigma_MP, alpha_info_corr, D_KS_alpha, mu_Pareto. Scan lambda_- in [100,160] perfect fit, >200 underfitting.",
+  "5. Random MP comparison: compare ESD to randomly generated theoretical max rand lambda_+^{rand}. Spikes > lambda_+^{rand} interpreted as Dragon-kings / correlation trap, phase transition.",
+  "6. Iterative stability: condition numbers kappa_E(X)=sqrt(bar(lambda)_1/bar(lambda)_n) and kappa_D(X)=sqrt(sum bar(lambda)_i / bar(lambda)_n) computed expanding monthly on new data 2019-2026 with base estimation 2001-2018. Report corr_kappa_D_E and corr_HICP_2019_2026.",
+  "7. Denoising: NNSD s_i=|bar(lambda)_i-bar(lambda)_{i-1}|. Theoretical GOE P_GOE(s)=pi/2 s exp(-pi/4 s^2) vs modular Exp P_Exp(s)=exp(-s). Iterative negative log-likelihood distances to both; threshold = regime change point. Report NNSD_cutoff. Clean correlation matrix at cutoff.",
+  "8. Clustering on denoised X: leading eigenvector of modularity matrix Newman 2006 and Walktrap short random walks Harel 2001 / Pons 2005 for communities. Report num_communities_lead_eig and community_East_size_stated."
+ ],
+ "claims": [
+  {
+   "name": "N_countries",
+   "description": "Number of Eurozone countries in system W",
+   "value": "27",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 4, para1; Fig1 title"
+  },
+  {
+   "name": "T_observations",
+   "description": "Number of monthly observations in system W January 2001-July 2026",
+   "value": "307",
+   "unit": "months",
+   "kind": "count",
+   "where": "Section 4, para1"
+  },
+  {
+   "name": "lambda_minus_opt",
+   "description": "Optimal lower MP edge selected by minimal D_KS for Power-law fit",
+   "value": "37.21",
+   "unit": "eigenvalue",
+   "kind": "estimate",
+   "where": "Figure 1 caption, Section 4.1"
+  },
+  {
+   "name": "sigma_MP",
+   "description": "MP sigma used at optimal lambda_-",
+   "value": "0.2",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Figure 1 caption, Section 4.1"
+  },
+  {
+   "name": "alpha_info_corr",
+   "description": "Information correlation / Power-law index from log-log ESD fit at lambda_minus_opt",
+   "value": "1.82",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Figure 1 caption, Section 4.1"
+  },
+  {
+   "name": "D_KS_alpha",
+   "description": "Kolmogorov-Smirnov distance of Power-law fit vs theoretical Power-law at lambda_minus_opt",
+   "value": "0.10",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Section 4.1, Figure 1 text"
+  },
+  {
+   "name": "mu_Pareto",
+   "description": "Pareto shape parameter derived from alpha=1.82 via rho~lambda^{-(a mu+b)}",
+   "value": "1.64",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "corr_kappa_D_E",
+   "description": "Correlation between Demmel and standard condition number series iterative 2019-2026",
+   "value": "0.988",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.1 footnote"
+  },
+  {
+   "name": "corr_HICP_2019_2026",
+   "description": "Overall sample correlation 2019-2026 of system with HICP",
+   "value": "-0.824",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "NNSD_cutoff",
+   "description": "NNSD log-likelihood regime-change threshold to clean correlation matrix",
+   "value": "0.356",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.2, Figure 5"
+  },
+  {
+   "name": "num_communities_lead_eig",
+   "description": "Number of distinct communities via leading eigenvector on denoised matrix",
+   "value": "6",
+   "unit": "communities",
+   "kind": "tally",
+   "where": "Section 4.2, Figure 6"
+  },
+  {
+   "name": "community_East_size_stated",
+   "description": "Stated size of east-European community: Slovakia, Czechia, Hungary, Poland, Latvia, Estonia - text states 5 but enumerates 6 names",
+   "value": "5",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 4.2"
+  }
+ ],
+ "headline": "alpha_info_corr",
+ "partitions": [],
+ "tests": []
+}

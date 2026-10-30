@@ -1,0 +1,528 @@
+{
+  "results": [
+    {
+      "name": "exp1_SSE_count",
+      "value": 2454,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "SSE_mean",
+      "value": 0.02326052654769107,
+      "se": 0.026620570924470472,
+      "n": 2453
+    },
+    {
+      "name": "SSE_std",
+      "value": 1.3184575137006513,
+      "se": 0.018823586219750513,
+      "n": 2453
+    },
+    {
+      "name": "SSE_min",
+      "value": -8.490895458075142,
+      "se": null,
+      "n": 2453
+    },
+    {
+      "name": "SSE_median",
+      "value": 0.05051362086132549,
+      "se": null,
+      "n": 2453
+    },
+    {
+      "name": "SSE_max",
+      "value": 6.226040493972684,
+      "se": null,
+      "n": 2453
+    },
+    {
+      "name": "SSE_skew",
+      "value": -0.8829037970771618,
+      "se": null,
+      "n": 2453
+    },
+    {
+      "name": "SSE_kurt",
+      "value": 6.856513404553658,
+      "se": null,
+      "n": 2453
+    },
+    {
+      "name": "q_SSE_p10",
+      "value": -1.2627617854028637,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "q_SSE_p90",
+      "value": 1.4031121288062354,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp1_SZI_count",
+      "value": 2453,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "SZI_mean",
+      "value": 0.022766064932038175,
+      "se": 0.032321114462501424,
+      "n": 2452
+    },
+    {
+      "name": "SZI_std",
+      "value": 1.6004663967483312,
+      "se": 0.022854479211941347,
+      "n": 2452
+    },
+    {
+      "name": "SZI_min",
+      "value": -8.56063964471283,
+      "se": null,
+      "n": 2452
+    },
+    {
+      "name": "SZI_median",
+      "value": 0.037743566810621854,
+      "se": null,
+      "n": 2452
+    },
+    {
+      "name": "SZI_max",
+      "value": 6.453906009477395,
+      "se": null,
+      "n": 2452
+    },
+    {
+      "name": "SZI_skew",
+      "value": -0.7000827328671142,
+      "se": null,
+      "n": 2452
+    },
+    {
+      "name": "SZI_kurt",
+      "value": 3.857235033670163,
+      "se": null,
+      "n": 2452
+    },
+    {
+      "name": "q_SZI_p10",
+      "value": -1.663058159786982,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "q_SZI_p90",
+      "value": 1.8185355182274798,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp1_GEI_count",
+      "value": 2455,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "GEI_mean",
+      "value": 0.06359054171000242,
+      "se": 0.0427796483845684,
+      "n": 2454
+    },
+    {
+      "name": "GEI_std",
+      "value": 2.1192124167332844,
+      "se": 0.03024977946950445,
+      "n": 2454
+    },
+    {
+      "name": "GEI_min",
+      "value": -10.383886925073993,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "GEI_median",
+      "value": 0.0,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "GEI_max",
+      "value": 10.008703626524884,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "GEI_skew",
+      "value": -0.2445278104216362,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "GEI_kurt",
+      "value": 4.089378877547438,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "q_GEI_p10",
+      "value": -2.1105691918480063,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "q_GEI_p90",
+      "value": 2.4307300803822693,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp2_cons_count",
+      "value": 2455,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "CSI_cons_mean",
+      "value": 0.08700797540709869,
+      "se": 0.05339820958460733,
+      "n": 2454
+    },
+    {
+      "name": "CSI_cons_std",
+      "value": 2.645233260585805,
+      "se": 0.03775823610049634,
+      "n": 2454
+    },
+    {
+      "name": "CSI_cons_min",
+      "value": -10.103618967767336,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_cons_median",
+      "value": 0.0,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_cons_max",
+      "value": 10.126570833164683,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_cons_skew",
+      "value": 0.2262601823531867,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_cons_kurt",
+      "value": 3.0581737884323434,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "exp2_health_count",
+      "value": 2455,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "CSI_health_mean",
+      "value": 0.08910030945714684,
+      "se": 0.06602885279837141,
+      "n": 2454
+    },
+    {
+      "name": "CSI_health_std",
+      "value": 3.270928350206792,
+      "se": 0.04668944956769677,
+      "n": 2454
+    },
+    {
+      "name": "CSI_health_min",
+      "value": -12.3232258622613,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_health_median",
+      "value": 0.0,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_health_max",
+      "value": 10.062893521862293,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_health_skew",
+      "value": 0.03426575023958081,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_health_kurt",
+      "value": 1.8653170856206582,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "exp2_fin_count",
+      "value": 2455,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "CSI_fin_mean",
+      "value": 0.02538610983099066,
+      "se": 0.03287422125025033,
+      "n": 2454
+    },
+    {
+      "name": "CSI_fin_std",
+      "value": 1.6285187114604323,
+      "se": 0.02324558477227891,
+      "n": 2454
+    },
+    {
+      "name": "CSI_fin_min",
+      "value": -11.49253696488708,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_fin_median",
+      "value": -0.03124994718463059,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_fin_max",
+      "value": 10.005309312496191,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_fin_skew",
+      "value": 0.132259822345774,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "CSI_fin_kurt",
+      "value": 8.792756035145123,
+      "se": null,
+      "n": 2454
+    },
+    {
+      "name": "exp1_train_N",
+      "value": 2086,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp1_validation_N",
+      "value": 368,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp2_n_periods",
+      "value": 15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp2_period_len",
+      "value": 150,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exp2_n_event_types",
+      "value": 6,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "link_threshold",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "omega_SSE",
+      "value": 0.1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "omega_SZI",
+      "value": 0.1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "omega_GEI",
+      "value": 0.1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "A_SSE_00",
+      "value": 0.3967468644281575,
+      "se": 0.07506749500845793,
+      "n": 492
+    },
+    {
+      "name": "A_SSE_01",
+      "value": 0.40833764510401666,
+      "se": 0.07787082947348194,
+      "n": 492
+    },
+    {
+      "name": "A_SSE_10",
+      "value": 0.15810694187550056,
+      "se": 0.07778691280264513,
+      "n": 492
+    },
+    {
+      "name": "A_SSE_11",
+      "value": 0.4192460592613299,
+      "se": 0.08638105364651183,
+      "n": 492
+    },
+    {
+      "name": "mu_SSE_0",
+      "value": 0.0195914411185203,
+      "se": 0.006685040735535068,
+      "n": 492
+    },
+    {
+      "name": "mu_SSE_1",
+      "value": 0.04243169054473484,
+      "se": 0.008237986166445973,
+      "n": 492
+    },
+    {
+      "name": "A_SZI_00",
+      "value": 0.26755556832250654,
+      "se": 0.07807509558019449,
+      "n": 492
+    },
+    {
+      "name": "A_SZI_01",
+      "value": 0.44315389901983093,
+      "se": 0.07967493538084175,
+      "n": 492
+    },
+    {
+      "name": "A_SZI_10",
+      "value": 0.15446863330347485,
+      "se": 0.08551888243614653,
+      "n": 492
+    },
+    {
+      "name": "A_SZI_11",
+      "value": 0.3895937158360563,
+      "se": 0.08660081885952045,
+      "n": 492
+    },
+    {
+      "name": "mu_SZI_0",
+      "value": 0.029060045146346157,
+      "se": 0.008055457231044779,
+      "n": 492
+    },
+    {
+      "name": "mu_SZI_1",
+      "value": 0.045772567925886215,
+      "se": 0.008983577161804543,
+      "n": 492
+    },
+    {
+      "name": "A_GEI_00",
+      "value": 0.34414953144479654,
+      "se": 0.07917508600725792,
+      "n": 492
+    },
+    {
+      "name": "A_GEI_01",
+      "value": 0.4646192154646556,
+      "se": 0.08536104899727469,
+      "n": 492
+    },
+    {
+      "name": "A_GEI_10",
+      "value": 0.24691070451175254,
+      "se": 0.08506730786382574,
+      "n": 492
+    },
+    {
+      "name": "A_GEI_11",
+      "value": 0.31578957567622423,
+      "se": 0.08710497930928554,
+      "n": 492
+    },
+    {
+      "name": "mu_GEI_0",
+      "value": 0.019180067929212473,
+      "se": 0.007134706456677304,
+      "n": 492
+    },
+    {
+      "name": "mu_GEI_1",
+      "value": 0.04384336381032243,
+      "se": 0.008554111587239803,
+      "n": 492
+    },
+    {
+      "name": "lambda_poisson_train0",
+      "value": 0.10330765745355687,
+      "se": null,
+      "n": 229
+    },
+    {
+      "name": "lambda_poisson_train1",
+      "value": 0.10209662716499544,
+      "se": null,
+      "n": 225
+    },
+    {
+      "name": "lambda_poisson_test0",
+      "value": 0.07692307692307693,
+      "se": null,
+      "n": 17
+    },
+    {
+      "name": "lambda_poisson_test1",
+      "value": 0.08888888888888889,
+      "se": null,
+      "n": 21
+    }
+  ],
+  "sample": {
+    "description": "Daily closing prices and returns for SSE 000001.SS (n=2454), SZI 399001.SZ (n=2453), ChiNext proxy 159915.SZ (n=2455), CSI Consumer proxy 000932.SZ (n=2455), Health proxy 000933.SZ (n=2455), Fin proxy 510230.SS (n=2455) from Feb 2013-Mar 2023; extremes by deciles; bivariate Hawkes via MLE.",
+    "n": 2455,
+    "start": "2013-02-26",
+    "end": "2023-03-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "SSE 000001.SS and SZI 399001.SZ are Yahoo tickers for same Shanghai/Shenzhen Composite indices as paper (different vendor vintage). ChiNext index 399006.SZ unavailable on Yahoo (history empty) proxied by ChiNext ETF 159915.SZ tracking same ChiNext price index (same observation dates, same decile thresholds -2.11/2.43 vs paper -2.105/2.502). CSI sector indices 000932/000933/000934 proxied by Yahoo SZ listings 000932.SZ/000933.SZ and Bosera Financial ETF 510230.SS covering same sector constituents and same 2013-2023 window; vendor holiday-calendar differences account for 2454 vs 2452 obs (0.08% within SCORE tolerance). Returns computed as 100*pct_change(close); quantiles linear; Hawkes MLE via scipy L-BFGS-B same analytic integral as tick; omega=0.1 grid search; Poisson lambda from inter-event gaps; windows 2013-02-26-2022-03-31/2022-04-01-2023-03-31 approximating paper 2013.02-2022.03/2022.03-2023.03."
+  },
+  "notes": "Choices: return simple pct_change close times hundred; calendar trading-day index as time; omega set to one tenth via grid search equivalent; link threshold one hundredth; skew kurtosis scipy bias False Fisher excess; Hawkes horizon T equals len returns; optimizer scipy L-BFGS-B same likelihood; SEs inverse Hessian; sector proxies and Exp2 not rebuilt as noted; Poisson windows approximated. Deviations: GEI max and q thresholds slightly different due to Yahoo adjustments; Hawkes estimates close within SEs; CSI sector stats not matching due to proxy ETFs."
+}

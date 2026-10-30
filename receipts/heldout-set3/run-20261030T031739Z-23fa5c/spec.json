@@ -1,0 +1,1774 @@
+{
+ "title": "First-passage horizons in HVG rank-invariant estimator of path roughness - replication spec",
+ "hypothesis": "theta(H)=1-H for fBm integer-grid persistence Molchan 1999 and conditional on RL-fBm increment hypothesis Eq hyp-rl for rough Bergomi; exact uncensored Lp=Tp Lemma and i.i.d. null P[Lp>=k]=1/k Prop Renyi record.",
+ "data_sources": [
+  "Monte Carlo: fBm, rough Bergomi, Heston, GARCH, FIGARCH simulated via authors code from paper description",
+  "Real: FRED VIXCLS daily CBOE VIX 2000-01-03 to 2026-04-30 via FRED API"
+ ],
+ "sample": "FRED daily CBOE VIX (VIXCLS) 2000-01-03 to 2026-04-30 n=6651 trading days, no licence filter. Rolling estimator W=1024 days (~4y) step 126 days (~6m) =45 windows. Synthetic validation: fBm Davies-Harte T=2^16 per path, N per H cell; rough Bergomi hybrid kappa=1 xi0=0.04, H x eta grid; control processes T=2^16; empirical i.i.d. null W=512..65536 with N=1000/500 replicates; overlapping-window i.i.d. null 1000 paths length 6651.",
+ "period_start": "2000-01-03",
+ "period_end": "2026-04-30",
+ "method": [
+  "1. For path x[1..T] with no ties compute forward visibility horizon Lp(t)=sup{k>=1:(t,t+k) in HVG, x[t+k]>=x[t]} = Tp(t)=inf{k>=1:x[t+k]>=x[t]} by monotone stack next-greater-or-equal O(T). If set empty before T, observation at t is right-censored, not assigned value. Deterministic time-order tie break: x[t+k]==x[t] counts as crossing; sensitivity checked with stricter convention.",
+  "2. Main estimate complete-case on uncensored Lp: L=(Lp(t_i)) i=1..n <=T-1. Hill-MLE theta_hat(l0)=n_l0 / sum_{L_i>=l0} log(L_i/l0), n_l0=#{L_i>=l0}. Asymptotic SE theta_hat/sqrt(n_l0) replaced by stationary block bootstrap Politis-Romano 1994 with mean block b=ceil(T^{1/3}), B=200 resamples.",
+  "3. Threshold l0* by Clauset-Shalizi-Newman 2009: for each candidate integer l0 compute theta_hat(l0) and KS distance between empirical tail of L above l0 and Pareto(theta_hat(l0)). Minimiser = l0*. Candidate set = integers 1..min(19,floor(q0.9)) plus 30 log-spaced integers 20..q0.9 with duplicates removed, q0.9=empirical 90% quantile.",
+  "4. Censoring sensitivity at l0*: censored Pareto likelihood theta_cens=n_u/[sum_u log(L_i/l0*)+sum_c log(C_j/l0*)] and lower-bound fit treating C_j as exact, u=uncensored, c=censored tail.",
+  "5. fBm validation: Davies-Harte for H=0.1..0.9 N=10000 T=2^16 each; control processes T=2^16 N=50; rough Bergomi Eq.v_t=xi0 exp(eta Z^H_t -0.5 eta^2 t^{2H}) RL-fBm hybrid kappa=1; model comparison rough Bergomi H0.1, Heston, GARCH(1,1), FIGARCH(1,d,1) N=10000 T=2^16; heatmap H=0.05,0.10,0.15,0.20,0.30 x eta=0.2,0.4 N=10000 per cell.",
+  "6. VIX rolling: Hill-CSN per 1024-day window step 126. Single-window i.i.d. null N=1000 uniform length 1024; overlapping-window i.i.d. null 1000 paths length 6651 with same rolling scheme. Count windows with theta_hat <2.5% null quantile and rolling mean vs null mean, Monte-Carlo p with add-one smoothing."
+ ],
+ "claims": [
+  {
+   "name": "fbm_H0.1_hat",
+   "description": "Table1 fBm H0.1 cross-replicate mean Hill-MLE T2^16 N10000 =0.900 vs predicted 0.90 bias -0.0003 l0*20 sigma 0.013.",
+   "value": "0.900",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.1"
+  },
+  {
+   "name": "fbm_H0.1_sigma",
+   "description": "Table1 H0.1 cross-replicate sd 0.013.",
+   "value": "0.013",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.1 col sigma"
+  },
+  {
+   "name": "fbm_H0.1_pred",
+   "description": "predicted theta=1-H=0.90 for H0.1 Corollary Molchan",
+   "value": "0.90",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 predicted col 0.90"
+  },
+  {
+   "name": "fbm_H0.1_bias",
+   "description": "bias -0.0003 for H0.1",
+   "value": "-0.0003",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 bias col"
+  },
+  {
+   "name": "fbm_H0.1_l0star",
+   "description": "mean l0* 20 for H0.1",
+   "value": "20",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 l0star col"
+  },
+  {
+   "name": "fbm_H0.2_hat",
+   "description": "Table1 H0.2 hat 0.810",
+   "value": "0.810",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.2"
+  },
+  {
+   "name": "fbm_H0.2_sigma",
+   "description": "Table1 H0.2 sigma 0.013",
+   "value": "0.013",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.2"
+  },
+  {
+   "name": "fbm_H0.2_pred",
+   "description": "predicted 0.80",
+   "value": "0.80",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.2 predicted"
+  },
+  {
+   "name": "fbm_H0.2_bias",
+   "description": "bias +0.010",
+   "value": "+0.010",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.2 bias"
+  },
+  {
+   "name": "fbm_H0.2_l0star",
+   "description": "l0* 20",
+   "value": "20",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.2 l0*"
+  },
+  {
+   "name": "fbm_H0.3_hat",
+   "description": "Table1 H0.3 hat 0.728",
+   "value": "0.728",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.3"
+  },
+  {
+   "name": "fbm_H0.3_sigma",
+   "description": "H0.3 sigma 0.015",
+   "value": "0.015",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.3 sigma"
+  },
+  {
+   "name": "fbm_H0.3_pred",
+   "description": "predicted 0.70",
+   "value": "0.70",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.3 predicted"
+  },
+  {
+   "name": "fbm_H0.3_bias",
+   "description": "bias +0.028",
+   "value": "+0.028",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.3 bias"
+  },
+  {
+   "name": "fbm_H0.3_l0star",
+   "description": "l0* 20",
+   "value": "20",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.3 l0*"
+  },
+  {
+   "name": "fbm_H0.4_hat",
+   "description": "H0.4 hat 0.650",
+   "value": "0.650",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.4"
+  },
+  {
+   "name": "fbm_H0.4_sigma",
+   "description": "H0.4 sigma 0.019",
+   "value": "0.019",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.4 sigma"
+  },
+  {
+   "name": "fbm_H0.4_pred",
+   "description": "predicted 0.60",
+   "value": "0.60",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.4 predicted"
+  },
+  {
+   "name": "fbm_H0.4_bias",
+   "description": "bias +0.050",
+   "value": "+0.050",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.4 bias"
+  },
+  {
+   "name": "fbm_H0.4_l0star",
+   "description": "l0* 20",
+   "value": "20",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.4 l0*"
+  },
+  {
+   "name": "fbm_H0.5_hat",
+   "description": "H0.5 hat 0.575",
+   "value": "0.575",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.5"
+  },
+  {
+   "name": "fbm_H0.5_sigma",
+   "description": "H0.5 sigma 0.024",
+   "value": "0.024",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.5 sigma"
+  },
+  {
+   "name": "fbm_H0.5_pred",
+   "description": "predicted 0.50",
+   "value": "0.50",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.5 predicted"
+  },
+  {
+   "name": "fbm_H0.5_bias",
+   "description": "bias +0.075",
+   "value": "+0.075",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.5 bias"
+  },
+  {
+   "name": "fbm_H0.5_l0star",
+   "description": "l0* 19",
+   "value": "19",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.5 l0*"
+  },
+  {
+   "name": "fbm_H0.6_hat",
+   "description": "H0.6 hat 0.505",
+   "value": "0.505",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.6"
+  },
+  {
+   "name": "fbm_H0.6_sigma",
+   "description": "H0.6 sigma 0.032",
+   "value": "0.032",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.6 sigma"
+  },
+  {
+   "name": "fbm_H0.6_pred",
+   "description": "predicted 0.40",
+   "value": "0.40",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.6 predicted"
+  },
+  {
+   "name": "fbm_H0.6_bias",
+   "description": "bias +0.105",
+   "value": "+0.105",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.6 bias"
+  },
+  {
+   "name": "fbm_H0.6_l0star",
+   "description": "l0* 14",
+   "value": "14",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.6 l0*"
+  },
+  {
+   "name": "fbm_H0.7_hat",
+   "description": "H0.7 hat 0.445",
+   "value": "0.445",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.7"
+  },
+  {
+   "name": "fbm_H0.7_sigma",
+   "description": "H0.7 sigma 0.046",
+   "value": "0.046",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.7 sigma"
+  },
+  {
+   "name": "fbm_H0.7_pred",
+   "description": "predicted 0.30",
+   "value": "0.30",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.7 predicted"
+  },
+  {
+   "name": "fbm_H0.7_bias",
+   "description": "bias +0.145",
+   "value": "+0.145",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.7 bias"
+  },
+  {
+   "name": "fbm_H0.7_l0star",
+   "description": "l0* 9",
+   "value": "9",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.7 l0*"
+  },
+  {
+   "name": "fbm_H0.8_hat",
+   "description": "H0.8 hat 0.405",
+   "value": "0.405",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.8"
+  },
+  {
+   "name": "fbm_H0.8_sigma",
+   "description": "H0.8 sigma 0.075",
+   "value": "0.075",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.8 sigma"
+  },
+  {
+   "name": "fbm_H0.8_pred",
+   "description": "predicted 0.20",
+   "value": "0.20",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.8 predicted"
+  },
+  {
+   "name": "fbm_H0.8_bias",
+   "description": "bias +0.205",
+   "value": "+0.205",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.8 bias"
+  },
+  {
+   "name": "fbm_H0.8_l0star",
+   "description": "l0* 7",
+   "value": "7",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.8 l0*"
+  },
+  {
+   "name": "fbm_H0.9_hat",
+   "description": "H0.9 hat 0.423",
+   "value": "0.423",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.9"
+  },
+  {
+   "name": "fbm_H0.9_sigma",
+   "description": "H0.9 sigma 0.183",
+   "value": "0.183",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.9 sigma"
+  },
+  {
+   "name": "fbm_H0.9_pred",
+   "description": "predicted 0.10",
+   "value": "0.10",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table1 row 0.9 predicted"
+  },
+  {
+   "name": "fbm_H0.9_bias",
+   "description": "bias +0.323",
+   "value": "+0.323",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table1 row 0.9 bias"
+  },
+  {
+   "name": "fbm_H0.9_l0star",
+   "description": "l0* 15",
+   "value": "15",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Table1 row 0.9 l0*"
+  },
+  {
+   "name": "ctrl_uniform_hat",
+   "description": "Table2 i.i.d. uniform hat 1.021",
+   "value": "1.021",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 row i.i.d. uniform"
+  },
+  {
+   "name": "ctrl_uniform_SE",
+   "description": "SE 0.002 for uniform",
+   "value": "0.002",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 row uniform SE"
+  },
+  {
+   "name": "ctrl_uniform_sigma",
+   "description": "sigma 0.012 uniform",
+   "value": "0.012",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 sigma uniform"
+  },
+  {
+   "name": "ctrl_uniform_pred",
+   "description": "predicted theta_iid 1.00",
+   "value": "1.00",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table2 predicted uniform"
+  },
+  {
+   "name": "ctrl_gauss_hat",
+   "description": "i.i.d. Gaussian 1.024",
+   "value": "1.024",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 Gaussian"
+  },
+  {
+   "name": "ctrl_gauss_SE",
+   "description": "SE 0.002 Gaussian",
+   "value": "0.002",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 Gaussian SE"
+  },
+  {
+   "name": "ctrl_gauss_sigma",
+   "description": "sigma 0.014 Gaussian",
+   "value": "0.014",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 sigma Gaussian"
+  },
+  {
+   "name": "ctrl_gauss_pred",
+   "description": "predicted 1.00",
+   "value": "1.00",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table2 predicted Gaussian"
+  },
+  {
+   "name": "ctrl_BM_hat",
+   "description": "BM hat 0.569",
+   "value": "0.569",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 BM"
+  },
+  {
+   "name": "ctrl_BM_SE",
+   "description": "SE 0.004 BM",
+   "value": "0.004",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 BM SE"
+  },
+  {
+   "name": "ctrl_BM_sigma",
+   "description": "sigma 0.025 BM",
+   "value": "0.025",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 BM sigma"
+  },
+  {
+   "name": "ctrl_BM_pred",
+   "description": "predicted 0.50 fBm H0.5",
+   "value": "0.50",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table2 predicted BM"
+  },
+  {
+   "name": "ctrl_OU01_hat",
+   "description": "OU dt0.01 hat 0.653",
+   "value": "0.653",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 OU 0.01"
+  },
+  {
+   "name": "ctrl_OU01_SE",
+   "description": "SE 0.002 OU 0.01",
+   "value": "0.002",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 OU 0.01 SE"
+  },
+  {
+   "name": "ctrl_OU01_sigma",
+   "description": "sigma 0.014 OU 0.01",
+   "value": "0.014",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 OU 0.01 sigma"
+  },
+  {
+   "name": "ctrl_OU10_hat",
+   "description": "OU dt1.0 hat 1.052",
+   "value": "1.052",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 OU 1.0"
+  },
+  {
+   "name": "ctrl_OU10_SE",
+   "description": "SE 0.002 OU 1.0",
+   "value": "0.002",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 OU 1.0 SE"
+  },
+  {
+   "name": "ctrl_OU10_sigma",
+   "description": "sigma 0.011 OU 1.0",
+   "value": "0.011",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 OU 1.0 sigma"
+  },
+  {
+   "name": "ctrl_OU10_pred",
+   "description": "predicted sparse 1.00",
+   "value": "1.00",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table2 predicted OU1.0"
+  },
+  {
+   "name": "ctrl_GBM_hat",
+   "description": "GBM hat 0.570",
+   "value": "0.570",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 GBM"
+  },
+  {
+   "name": "ctrl_GBM_SE",
+   "description": "SE 0.004 GBM",
+   "value": "0.004",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 GBM SE"
+  },
+  {
+   "name": "ctrl_GBM_sigma",
+   "description": "sigma 0.025 GBM",
+   "value": "0.025",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table2 GBM sigma"
+  },
+  {
+   "name": "ctrl_GBM_pred",
+   "description": "predicted rank-inv 0.50",
+   "value": "0.50",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Table2 predicted GBM"
+  },
+  {
+   "name": "iid_uniform_T14_hat",
+   "description": "i.i.d. uniform T2^14 hat 1.041 N50",
+   "value": "1.041",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4.2 text T14"
+  },
+  {
+   "name": "iid_uniform_T16_hat",
+   "description": "uniform T2^16 hat 1.024",
+   "value": "1.024",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4.2 text T16"
+  },
+  {
+   "name": "iid_uniform_T18_hat",
+   "description": "uniform T2^18 hat 1.016",
+   "value": "1.016",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4.2 text T18"
+  },
+  {
+   "name": "iid_uniform_T20_hat",
+   "description": "uniform T2^20 hat 1.014",
+   "value": "1.014",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4.2 text T20"
+  },
+  {
+   "name": "bias_decay_H01_T12",
+   "description": "AppA Fig bias H0.1 T2^12 +0.078",
+   "value": "0.078",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig a H0.1 T12"
+  },
+  {
+   "name": "bias_decay_H01_T18",
+   "description": "bias H0.1 T2^18 -0.010",
+   "value": "-0.010",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig a H0.1 T18"
+  },
+  {
+   "name": "bias_decay_H05_T12",
+   "description": "bias H0.5 T2^12 +0.200",
+   "value": "0.200",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig a H0.5 T12"
+  },
+  {
+   "name": "bias_decay_H05_T18",
+   "description": "bias H0.5 T2^18 +0.046",
+   "value": "0.046",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig a H0.5 T18"
+  },
+  {
+   "name": "hill_plateau_move",
+   "description": "Hill plot moves <0.02 across l0 10..60",
+   "value": "0.02",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig b"
+  },
+  {
+   "name": "noise_s1_hat",
+   "description": "noise sigma=1.0 hat 0.984 fBm H0.1",
+   "value": "0.984",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig c sigma1.0"
+  },
+  {
+   "name": "noise_bias_le0.3",
+   "description": "bias <0.02 for sigma <=0.3 std",
+   "value": "0.02",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig c moderate noise"
+  },
+  {
+   "name": "thinning_50pct_unchanged",
+   "description": "thinning up to 50% leaves theta unchanged within MC SE",
+   "value": "0.000",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Appendix Fig d"
+  },
+  {
+   "name": "heatmap_max_eta_diff",
+   "description": "max cell diff eta0.2 vs 0.4 4.8e-04",
+   "value": "0.00048",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4 heatmap text"
+  },
+  {
+   "name": "drift_noise_ratio_max",
+   "description": "drift-to-noise r <=0.28 uniform on [0,1]x[0.1,0.9] eta0.3",
+   "value": "0.28",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Remark rb-numeric"
+  },
+  {
+   "name": "drift_noise_ratio_tail",
+   "description": "r <=1e-3 at tail scale l0/T~3e-04",
+   "value": "0.001",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Remark rb-numeric"
+  },
+  {
+   "name": "tie_break_delta",
+   "description": "tie break stricter vs time-order changes rolling mean by 0.003 on VIX",
+   "value": "0.003",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec3 tie break text"
+  },
+  {
+   "name": "model_rB_hat",
+   "description": "Table3 rough Bergomi H0.1 hat 0.8989",
+   "value": "0.8989",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 rough Bergomi"
+  },
+  {
+   "name": "model_rB_SE",
+   "description": "SE 0.0001 rough Bergomi",
+   "value": "0.0001",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 rough Bergomi SE"
+  },
+  {
+   "name": "model_rB_CI_low",
+   "description": "95% MC low 0.874",
+   "value": "0.874",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 rough Bergomi 95% low"
+  },
+  {
+   "name": "model_rB_CI_high",
+   "description": "95% MC high 0.924",
+   "value": "0.924",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 rough Bergomi high"
+  },
+  {
+   "name": "model_FIG_hat",
+   "description": "FIGARCH d0.4 hat 0.8409",
+   "value": "0.8409",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 FIGARCH"
+  },
+  {
+   "name": "model_FIG_SE",
+   "description": "SE 0.0002 FIG",
+   "value": "0.0002",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 FIG SE"
+  },
+  {
+   "name": "model_FIG_low",
+   "description": "95% low 0.810 FIG",
+   "value": "0.810",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 FIG low"
+  },
+  {
+   "name": "model_FIG_high",
+   "description": "95% high 0.870 FIG",
+   "value": "0.870",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 FIG high"
+  },
+  {
+   "name": "model_GARCH_hat",
+   "description": "GARCH(1,1) hat 0.7234",
+   "value": "0.7234",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 GARCH"
+  },
+  {
+   "name": "model_GARCH_SE",
+   "description": "SE 0.0007 GARCH",
+   "value": "0.0007",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 GARCH SE"
+  },
+  {
+   "name": "model_GARCH_low",
+   "description": "low 0.640 GARCH",
+   "value": "0.640",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 GARCH low"
+  },
+  {
+   "name": "model_GARCH_high",
+   "description": "high 0.838 GARCH",
+   "value": "0.838",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 GARCH high"
+  },
+  {
+   "name": "model_Heston_hat",
+   "description": "classical Heston hat 0.5635",
+   "value": "0.5635",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 Heston"
+  },
+  {
+   "name": "model_Heston_SE",
+   "description": "SE 0.0002 Heston",
+   "value": "0.0002",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 Heston SE"
+  },
+  {
+   "name": "model_Heston_low",
+   "description": "low 0.528 Heston",
+   "value": "0.528",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 Heston low"
+  },
+  {
+   "name": "model_Heston_high",
+   "description": "high 0.606 Heston",
+   "value": "0.606",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table3 Heston high"
+  },
+  {
+   "name": "sep_rB_Heston",
+   "description": "difference rB-Heston 0.3355",
+   "value": "0.3355",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4 text sep rB-Heston"
+  },
+  {
+   "name": "sep_rB_Heston_SE",
+   "description": "combined MC SE 0.00024 rB-Heston",
+   "value": "0.00024",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4 sep SE"
+  },
+  {
+   "name": "sep_rB_FIG",
+   "description": "difference rB-FIG 0.0580",
+   "value": "0.0580",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4 sep rB-FIG"
+  },
+  {
+   "name": "sep_rB_FIG_SE",
+   "description": "combined SE 0.00020 rB-FIG",
+   "value": "0.00020",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec4 sep rB-FIG SE"
+  },
+  {
+   "name": "vix_n_days",
+   "description": "n=6651 trading days 2000-01-03 to 2026-04-30 VIXCLS",
+   "value": "6651",
+   "unit": "days",
+   "kind": "count",
+   "where": "Sec5 n=6651"
+  },
+  {
+   "name": "vix_W",
+   "description": "rolling window W=1024 days ~4y",
+   "value": "1024",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec5 W=1024"
+  },
+  {
+   "name": "vix_step",
+   "description": "step 126 days ~6m",
+   "value": "126",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec5 step 126"
+  },
+  {
+   "name": "vix_n_windows",
+   "description": "45 four-year windows",
+   "value": "45",
+   "unit": "windows",
+   "kind": "count",
+   "where": "Sec5 45 windows"
+  },
+  {
+   "name": "vix_roll_mean_text",
+   "description": "mean 0.91 across 45 windows Sec5 text",
+   "value": "0.91",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 text mean 0.91"
+  },
+  {
+   "name": "vix_roll_sd_text",
+   "description": "sd 0.19 across windows text",
+   "value": "0.19",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 text sd 0.19"
+  },
+  {
+   "name": "vix_roll_range_low_text",
+   "description": "range low 0.72 text",
+   "value": "0.72",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 range [0.72,1.51]"
+  },
+  {
+   "name": "vix_roll_range_high_text",
+   "description": "range high 1.51 text",
+   "value": "1.51",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 range high 1.51"
+  },
+  {
+   "name": "vix_roll_mean_table",
+   "description": "Table3 censoring complete-case mean 0.910",
+   "value": "0.910",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor complete-case mean"
+  },
+  {
+   "name": "vix_roll_sd_table",
+   "description": "sd 0.190 complete-case",
+   "value": "0.190",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor complete-case sigma"
+  },
+  {
+   "name": "vix_roll_min_table",
+   "description": "range low 0.723 Table censor",
+   "value": "0.723",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor complete-case range low"
+  },
+  {
+   "name": "vix_roll_max_table",
+   "description": "range high 1.506",
+   "value": "1.506",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor complete-case range high"
+  },
+  {
+   "name": "vix_above07_count",
+   "description": "43 of 45 windows >0.7",
+   "value": "43",
+   "unit": "windows",
+   "kind": "tally",
+   "where": "Sec5 43/45 above 0.7"
+  },
+  {
+   "name": "vix_above07_total",
+   "description": "total 45 windows for above 0.7",
+   "value": "45",
+   "unit": "windows",
+   "kind": "count",
+   "where": "Sec5 total 45"
+  },
+  {
+   "name": "vix_cens_complete_mean",
+   "description": "censor complete-case mean 0.910 duplicate of vix roll",
+   "value": "0.910",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor row complete-case mean"
+  },
+  {
+   "name": "vix_cens_pareto_mean",
+   "description": "censored Pareto likelihood mean 0.674",
+   "value": "0.674",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor pareto mean"
+  },
+  {
+   "name": "vix_cens_pareto_sd",
+   "description": "sd 0.102 censored Pareto",
+   "value": "0.102",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor pareto sigma"
+  },
+  {
+   "name": "vix_cens_pareto_low",
+   "description": "range low 0.507 pareto",
+   "value": "0.507",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor pareto low"
+  },
+  {
+   "name": "vix_cens_pareto_high",
+   "description": "range high 0.985 pareto",
+   "value": "0.985",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor pareto high"
+  },
+  {
+   "name": "vix_cens_lower_mean",
+   "description": "lower-bound mean 0.757",
+   "value": "0.757",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor lower-bound mean"
+  },
+  {
+   "name": "vix_cens_lower_sd",
+   "description": "sd 0.099 lower-bound",
+   "value": "0.099",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor lower sd"
+  },
+  {
+   "name": "vix_cens_lower_low",
+   "description": "low 0.603 lower-bound",
+   "value": "0.603",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor lower low"
+  },
+  {
+   "name": "vix_cens_lower_high",
+   "description": "high 1.030 lower-bound",
+   "value": "1.030",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table censor lower high"
+  },
+  {
+   "name": "vix_avg_censored_per_window",
+   "description": "average 24.4 right-censored horizons per 1024-day window",
+   "value": "24.4",
+   "unit": "horizons",
+   "kind": "estimate",
+   "where": "Sec5 average censored 24.4"
+  },
+  {
+   "name": "vix_avg_censored_above_thresh",
+   "description": "21.8 above tail threshold",
+   "value": "21.8",
+   "unit": "horizons",
+   "kind": "estimate",
+   "where": "Sec5 21.8 above thresh"
+  },
+  {
+   "name": "null_single_W1024_mean",
+   "description": "single-window i.i.d. null mean 1.166 W1024 N1000",
+   "value": "1.166",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 N1000 uniform W1024 mean"
+  },
+  {
+   "name": "null_single_W1024_sd",
+   "description": "sd 0.091",
+   "value": "0.091",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 null sd 0.091"
+  },
+  {
+   "name": "null_single_W1024_low",
+   "description": "2.5% 1.017",
+   "value": "1.017",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 95% low 1.017"
+  },
+  {
+   "name": "null_single_W1024_high",
+   "description": "97.5% 1.376",
+   "value": "1.376",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 95% high 1.376"
+  },
+  {
+   "name": "null_single_W1024_N",
+   "description": "N=1000 i.i.d. uniform replicates length W1024",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Sec5 N=1000"
+  },
+  {
+   "name": "vix_below_null_quant_count",
+   "description": "35/45 windows below 2.5% null quantile 1.017",
+   "value": "35",
+   "unit": "windows",
+   "kind": "tally",
+   "where": "Sec5 35/45 below 1.017"
+  },
+  {
+   "name": "vix_below_null_total",
+   "description": "total 45 windows for count",
+   "value": "45",
+   "unit": "windows",
+   "kind": "count",
+   "where": "Sec5 total 45 windows"
+  },
+  {
+   "name": "vix_below_null_quant_value",
+   "description": "single-window 2.5% null quantile 1.017 W1024",
+   "value": "1.017",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Sec5 quantile 1.017"
+  },
+  {
+   "name": "null_overlap_count_mean",
+   "description": "overlapping-window i.i.d. null count mean 1.35",
+   "value": "1.35",
+   "unit": "windows",
+   "kind": "estimate",
+   "where": "Sec5 null overlap count mean 1.35"
+  },
+  {
+   "name": "null_overlap_count_q99",
+   "description": "99% quantile 7",
+   "value": "7",
+   "unit": "windows",
+   "kind": "estimate",
+   "where": "Sec5 99% quantile 7"
+  },
+  {
+   "name": "null_overlap_count_max",
+   "description": "maximum 10 across 1000 simulations",
+   "value": "10",
+   "unit": "windows",
+   "kind": "estimate",
+   "where": "Sec5 max 10"
+  },
+  {
+   "name": "null_overlap_count_N",
+   "description": "1000 i.i.d. paths length 6651 overlapping-window null",
+   "value": "1000",
+   "unit": "paths",
+   "kind": "parameter",
+   "where": "Sec5 1000 i.i.d. paths length 6651"
+  },
+  {
+   "name": "null_overlap_p_count",
+   "description": "Monte-Carlo tail p ~=0.001 for >=35 windows",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Sec5 p ~=0.001 count"
+  },
+  {
+   "name": "null_overlap_roll_mean_null",
+   "description": "overlapping-window null rolling mean 1.160 sd 0.026",
+   "value": "1.160",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 null mean 1.160"
+  },
+  {
+   "name": "null_overlap_roll_sd_null",
+   "description": "sd 0.026 null overlapping",
+   "value": "0.026",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 null sd 0.026"
+  },
+  {
+   "name": "null_overlap_vix_roll_mean",
+   "description": "VIX rolling mean 0.910 vs null 1.160",
+   "value": "0.910",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec5 VIX 0.910 vs null"
+  },
+  {
+   "name": "null_overlap_p_mean",
+   "description": "p ~=0.001 for mean this small",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Sec5 p ~=0.001 mean"
+  },
+  {
+   "name": "p_abstract",
+   "description": "abstract p<0.001 overlapping-window i.i.d. Monte-Carlo null across 45 four-year windows 0.91+-0.19",
+   "value": "<0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Abstract p<0.001"
+  },
+  {
+   "name": "null_empirical_W512_mean",
+   "description": "Table null W512 mean 1.211 sigma 0.118 low 1.010 high 1.465 median 1.198 N1000",
+   "value": "1.211",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W512 mean"
+  },
+  {
+   "name": "null_empirical_W512_sigma",
+   "description": "sigma 0.118 W512",
+   "value": "0.118",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W512 sigma"
+  },
+  {
+   "name": "null_empirical_W512_low",
+   "description": "2.5% 1.010 W512",
+   "value": "1.010",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W512 2.5%"
+  },
+  {
+   "name": "null_empirical_W512_high",
+   "description": "97.5% 1.465 W512",
+   "value": "1.465",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W512 97.5%"
+  },
+  {
+   "name": "null_empirical_W512_median",
+   "description": "median 1.198 W512",
+   "value": "1.198",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W512 median"
+  },
+  {
+   "name": "null_empirical_W512_N",
+   "description": "N1000 replicates W512",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W512 N"
+  },
+  {
+   "name": "null_empirical_W1024_mean",
+   "description": "W1024 mean 1.166",
+   "value": "1.166",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W1024 mean"
+  },
+  {
+   "name": "null_empirical_W1024_sigma",
+   "description": "sigma 0.091 W1024",
+   "value": "0.091",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W1024 sigma"
+  },
+  {
+   "name": "null_empirical_W1024_low",
+   "description": "2.5% 1.017 W1024",
+   "value": "1.017",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W1024 low"
+  },
+  {
+   "name": "null_empirical_W1024_high",
+   "description": "97.5% 1.376 W1024",
+   "value": "1.376",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W1024 high"
+  },
+  {
+   "name": "null_empirical_W1024_median",
+   "description": "median 1.157 W1024",
+   "value": "1.157",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W1024 median"
+  },
+  {
+   "name": "null_empirical_W1024_N",
+   "description": "N1000 W1024",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W1024 N"
+  },
+  {
+   "name": "null_empirical_W2048_mean",
+   "description": "W2048 mean 1.136",
+   "value": "1.136",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W2048 mean"
+  },
+  {
+   "name": "null_empirical_W2048_sigma",
+   "description": "sigma 0.084 W2048",
+   "value": "0.084",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W2048 sigma"
+  },
+  {
+   "name": "null_empirical_W2048_low",
+   "description": "2.5% 0.994 W2048",
+   "value": "0.994",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W2048 low"
+  },
+  {
+   "name": "null_empirical_W2048_high",
+   "description": "97.5% 1.310 W2048",
+   "value": "1.310",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W2048 high"
+  },
+  {
+   "name": "null_empirical_W2048_median",
+   "description": "median 1.130 W2048",
+   "value": "1.130",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W2048 median"
+  },
+  {
+   "name": "null_empirical_W2048_N",
+   "description": "N1000 W2048",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W2048 N"
+  },
+  {
+   "name": "null_empirical_W4096_mean",
+   "description": "W4096 mean 1.090",
+   "value": "1.090",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W4096 mean"
+  },
+  {
+   "name": "null_empirical_W4096_sigma",
+   "description": "sigma 0.056 W4096",
+   "value": "0.056",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W4096 sigma"
+  },
+  {
+   "name": "null_empirical_W4096_low",
+   "description": "2.5% 0.985 W4096",
+   "value": "0.985",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W4096 low"
+  },
+  {
+   "name": "null_empirical_W4096_high",
+   "description": "97.5% 1.201 W4096",
+   "value": "1.201",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W4096 high"
+  },
+  {
+   "name": "null_empirical_W4096_median",
+   "description": "median 1.087 W4096",
+   "value": "1.087",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W4096 median"
+  },
+  {
+   "name": "null_empirical_W4096_N",
+   "description": "N1000 W4096",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W4096 N"
+  },
+  {
+   "name": "null_empirical_W8192_mean",
+   "description": "W8192 mean 1.060",
+   "value": "1.060",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W8192 mean"
+  },
+  {
+   "name": "null_empirical_W8192_sigma",
+   "description": "sigma 0.039 W8192",
+   "value": "0.039",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W8192 sigma"
+  },
+  {
+   "name": "null_empirical_W8192_low",
+   "description": "2.5% 0.988 W8192",
+   "value": "0.988",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W8192 low"
+  },
+  {
+   "name": "null_empirical_W8192_high",
+   "description": "97.5% 1.136 W8192",
+   "value": "1.136",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W8192 high"
+  },
+  {
+   "name": "null_empirical_W8192_median",
+   "description": "median 1.058 W8192",
+   "value": "1.058",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W8192 median"
+  },
+  {
+   "name": "null_empirical_W8192_N",
+   "description": "N1000 W8192",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W8192 N"
+  },
+  {
+   "name": "null_empirical_W16384_mean",
+   "description": "W16384 mean 1.042",
+   "value": "1.042",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W16384 mean"
+  },
+  {
+   "name": "null_empirical_W16384_sigma",
+   "description": "sigma 0.025 W16384",
+   "value": "0.025",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W16384 sigma"
+  },
+  {
+   "name": "null_empirical_W16384_low",
+   "description": "2.5% 0.994 W16384",
+   "value": "0.994",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W16384 low"
+  },
+  {
+   "name": "null_empirical_W16384_high",
+   "description": "97.5% 1.092 W16384",
+   "value": "1.092",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W16384 high"
+  },
+  {
+   "name": "null_empirical_W16384_median",
+   "description": "median 1.042 W16384",
+   "value": "1.042",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W16384 median"
+  },
+  {
+   "name": "null_empirical_W16384_N",
+   "description": "N1000 W16384",
+   "value": "1000",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W16384 N"
+  },
+  {
+   "name": "null_empirical_W32768_mean",
+   "description": "W32768 mean 1.030",
+   "value": "1.030",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W32768 mean"
+  },
+  {
+   "name": "null_empirical_W32768_sigma",
+   "description": "sigma 0.016 W32768",
+   "value": "0.016",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W32768 sigma"
+  },
+  {
+   "name": "null_empirical_W32768_low",
+   "description": "2.5% 0.999 W32768",
+   "value": "0.999",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W32768 low"
+  },
+  {
+   "name": "null_empirical_W32768_high",
+   "description": "97.5% 1.062 W32768",
+   "value": "1.062",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W32768 high"
+  },
+  {
+   "name": "null_empirical_W32768_median",
+   "description": "median 1.030 W32768",
+   "value": "1.030",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W32768 median"
+  },
+  {
+   "name": "null_empirical_W32768_N",
+   "description": "N500 W32768",
+   "value": "500",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W32768 N"
+  },
+  {
+   "name": "null_empirical_W65536_mean",
+   "description": "W65536 mean 1.023",
+   "value": "1.023",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W65536 mean"
+  },
+  {
+   "name": "null_empirical_W65536_sigma",
+   "description": "sigma 0.012 W65536",
+   "value": "0.012",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W65536 sigma"
+  },
+  {
+   "name": "null_empirical_W65536_low",
+   "description": "2.5% 1.000 W65536",
+   "value": "1.000",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W65536 low"
+  },
+  {
+   "name": "null_empirical_W65536_high",
+   "description": "97.5% 1.048 W65536",
+   "value": "1.048",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W65536 high"
+  },
+  {
+   "name": "null_empirical_W65536_median",
+   "description": "median 1.023 W65536",
+   "value": "1.023",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Table null W65536 median"
+  },
+  {
+   "name": "null_empirical_W65536_N",
+   "description": "N500 W65536",
+   "value": "500",
+   "unit": "replicates",
+   "kind": "parameter",
+   "where": "Table null W65536 N"
+  },
+  {
+   "name": "iid_null_excess_W512",
+   "description": "mean exceeds theta_iid=1 by ~0.21 at W512",
+   "value": "0.21",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec AppB text excess 0.21 at W512"
+  },
+  {
+   "name": "iid_null_excess_W65536",
+   "description": "decays to 0.02 at W65536",
+   "value": "0.02",
+   "unit": "theta",
+   "kind": "estimate",
+   "where": "Sec AppB excess 0.02 at W65536"
+  },
+  {
+   "name": "theoretical_iid_theta",
+   "description": "Prop iid null survival exponent theta_iid=1 exact P[Lp>=k]=1/k infinite mean variance",
+   "value": "1",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Prop iid null"
+  },
+  {
+   "name": "theoretical_fbm_theta_1_minus_H",
+   "description": "Corollary Molchan predicted fBm theta(H)=1-H discrete persistence pk(H)=k^{-(1-H)+o1}",
+   "value": "1-H",
+   "unit": "theta",
+   "kind": "parameter",
+   "where": "Corollary Molchan"
+  },
+  {
+   "name": "sim_T",
+   "description": "synthetic path length T=2^16=65536",
+   "value": "65536",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Sec4 T=2^16"
+  },
+  {
+   "name": "sim_N_fbm",
+   "description": "N=10000 fBm paths per H",
+   "value": "10000",
+   "unit": "paths",
+   "kind": "parameter",
+   "where": "Sec4 N=10000 fBm"
+  },
+  {
+   "name": "sim_N_ctrl",
+   "description": "N=50 per control process and per T-level uniform sweep",
+   "value": "50",
+   "unit": "paths",
+   "kind": "parameter",
+   "where": "Table2 N=50"
+  },
+  {
+   "name": "sim_N_cmp",
+   "description": "N=10000 per volatility model Table3",
+   "value": "10000",
+   "unit": "paths",
+   "kind": "parameter",
+   "where": "Table3 N=10000"
+  },
+  {
+   "name": "sim_N_heatmap",
+   "description": "N=10000 per heatmap cell Hxeta",
+   "value": "10000",
+   "unit": "paths",
+   "kind": "parameter",
+   "where": "Fig heatmap N=10000 per cell"
+  },
+  {
+   "name": "sim_B_bootstrap",
+   "description": "B=200 stationary block bootstrap resamples",
+   "value": "200",
+   "unit": "resamples",
+   "kind": "parameter",
+   "where": "Sec3 B=200"
+  },
+  {
+   "name": "sim_block_len",
+   "description": "mean block length b=ceil(T^{1/3})",
+   "value": "ceil(T^{1/3})",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Sec3 b=ceil(T^{1/3})"
+  },
+  {
+   "name": "candidate_thresh_low",
+   "description": "candidate thresholds integers 1..min(19,floor(q0.9))",
+   "value": "1",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Sec3 candidate set low"
+  },
+  {
+   "name": "candidate_thresh_high",
+   "description": "30 log-spaced integers 20..q0.9",
+   "value": "30",
+   "unit": "thresholds",
+   "kind": "parameter",
+   "where": "Sec3 candidate 30 log-spaced"
+  }
+ ],
+ "headline": "p_abstract",
+ "partitions": [
+  {
+   "split": "fBm Davies-Harte validation by H=0.1..0.9, each subgroup N=10000 T=65536; reported estimates fbm_H0.1_hat..fbm_H0.9_hat etc.",
+   "total": "sim_N_fbm",
+   "parts": [
+    "sim_N_fbm"
+   ]
+  },
+  {
+   "split": "Control processes: i.i.d. uniform, i.i.d. Gaussian, BM, OU dt0.01, OU dt1.0, GBM each N=50 T=65536; plus uniform T-sweep 2^14,2^16,2^18,2^20 N=50; estimates ctrl_*_hat and iid_uniform_T*_hat.",
+   "total": "sim_N_ctrl",
+   "parts": [
+    "sim_N_ctrl"
+   ]
+  },
+  {
+   "split": "Volatility models: model comparison 4 groups rough Bergomi H0.1, FIGARCH d0.4, GARCH(1,1), classical Heston each N=10000 T=65536; heatmap H 0.05,0.10,0.15,0.20,0.30 x eta 0.2,0.4 xi0 0.04 each cell N=10000; estimates model_*_hat, heatmap_max_eta_diff.",
+   "total": "sim_N_cmp",
+   "parts": [
+    "sim_N_cmp",
+    "sim_N_heatmap"
+   ]
+  },
+  {
+   "split": "Empirical i.i.d. null distribution by window length W=512..65536, each subgroup N=1000 or 500 uniform replicates; reported null_empirical_W*_mean/sigma/low/high/median/N.",
+   "total": "null_empirical_W1024_N",
+   "parts": [
+    "null_empirical_W512_N",
+    "null_empirical_W1024_N",
+    "null_empirical_W2048_N",
+    "null_empirical_W4096_N",
+    "null_empirical_W8192_N",
+    "null_empirical_W16384_N",
+    "null_empirical_W32768_N",
+    "null_empirical_W65536_N"
+   ]
+  },
+  {
+   "split": "VIX rolling windows W=1024 step126 2000-01-03 to 2026-04-30 n=6651, 45 windows; tallies 43/45 above 0.7 and 35/45 below 1.017; estimates vix_roll_mean_table etc.",
+   "total": "vix_n_windows",
+   "parts": [
+    "vix_above07_count",
+    "vix_below_null_quant_count"
+   ]
+  },
+  {
+   "split": "VIX empirical n=6651 vs i.i.d. Monte-Carlo nulls: single-window N=1000 length1024 and overlapping-window N=1000 length6651 rolling; counts vix_below_null_total 45 vs null_overlap_count_N/mean/q99/max.",
+   "total": "vix_n_days",
+   "parts": [
+    "vix_n_windows",
+    "null_single_W1024_N",
+    "null_overlap_count_N"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "VIX count below single-window 2.5% i.i.d. quantile: observed 35/45 windows with theta_hat <1.017 vs overlapping-window i.i.d. null mean 1.35 99%q=7 max10 across 1000 sims p~=0.001 add-one smoothing; single-window null at W1024 N1000 mean 1.166 sd0.091 envelope [1.017,1.376].",
+   "statistic": "vix_below_null_quant_count",
+   "p_value": "null_overlap_p_count",
+   "group_sizes": [
+    "vix_below_null_total",
+    "null_overlap_count_N",
+    "null_single_W1024_N"
+   ]
+  },
+  {
+   "test": "VIX rolling mean vs overlapping-window i.i.d. null mean: VIX mean 0.910 vs null mean 1.160 sd0.026 on 45 windows within 6651 days vs 1000 null paths length6651 p~=0.001 for mean this small.",
+   "statistic": "vix_roll_mean_table",
+   "p_value": "null_overlap_p_mean",
+   "group_sizes": [
+    "vix_n_windows",
+    "vix_n_days",
+    "null_overlap_count_N"
+   ]
+  },
+  {
+   "test": "Abstract headline rolling estimate 0.91+-0.19 across 45 four-year windows vs overlapping-window i.i.d. Monte-Carlo null p<0.001; null_single 95% envelope [1.017,1.376] at W1024, null_overlap mean1.160 sd0.026.",
+   "statistic": "vix_roll_mean_text",
+   "p_value": "p_abstract",
+   "group_sizes": [
+    "vix_n_days",
+    "vix_n_windows",
+    "null_single_W1024_N",
+    "null_overlap_count_N"
+   ]
+  }
+ ]
+}

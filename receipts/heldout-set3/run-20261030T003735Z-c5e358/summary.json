@@ -1,0 +1,118 @@
+{
+ "run_id": "run-20261030T003735Z-c5e358",
+ "paper": "2510.04211",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 62 of 62 checked results match within their uncertainty. Its main result, kappa_Estonia_X7_2024, is -93 PPS in the paper and -82.3 PPS here (not judged: no standard error).",
+ "headline": {
+  "name": "kappa_Estonia_X7_2024",
+  "kind": "estimate",
+  "unit": "PPS",
+  "reported": -93.0,
+  "reproduced": -82.3,
+  "se": null,
+  "n": 29,
+  "consistent": null,
+  "why": "no standard error"
+ },
+ "sample": [
+  {
+   "name": "count_N_countries",
+   "reported": 11.0,
+   "reproduced": 11,
+   "consistent": true
+  },
+  {
+   "name": "count_T_intervals",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_pooled_319",
+   "reported": 319.0,
+   "reproduced": 319,
+   "consistent": true
+  },
+  {
+   "name": "count_yearly_cross_section_N",
+   "reported": 11.0,
+   "reproduced": 11,
+   "consistent": true
+  },
+  {
+   "name": "count_Bulgaria_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Czechia_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Estonia_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Croatia_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Latvia_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Lithuania_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Hungary_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Poland_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "count_Romania_29",
+   "reported": 29.0,
+   "reproduced": 29,
+   "consistent": true
+  }
+ ],
+ "judged": 62,
+ "matched": 62,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (count_pooled_319 (319) at line 540). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 35,
+ "cost_usd": 1.0808,
+ "tokens_in": 2810962,
+ "tokens_out": 103255,
+ "wall_s": 2643.7,
+ "crashed": null
+}

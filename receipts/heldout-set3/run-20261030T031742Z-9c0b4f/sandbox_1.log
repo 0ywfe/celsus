@@ -1,0 +1,95 @@
+exit 0 in 57.7s
+--- stdout
+Fetching Eurostat prc_ppp_ind...
+Fetching World Bank indicators...
+Fetching Eurostat gov debt...
+Fetching Eurostat private debt...
+Built X matrix (319, 7), any NaN? False
+mu [ 62.49216301  59.90626959  78.40832867 115.03762212 378.1795431
+  38.75736677  69.99780564]
+sigma [ 17.03453119  13.70366607  66.45600528  34.88361801 216.9322338
+  24.2159779   28.53505008]
+Descriptive X1 mean 62.492163009404386 paper 62.492
+X1 SD 17.034531189728924 paper 17.035
+X2 mean 59.906269592476484 paper 59.906
+X3 mean 78.40832866758966 paper 77.057? our 78.408
+Corr X1X2 0.8007074743924281 paper 0.801
+VIF [np.float64(3.303573800228223), np.float64(3.735875651315415), np.float64(2.7525810309371237), np.float64(2.0933515264079494), np.float64(4.101124628568795), np.float64(1.072224402134156), np.float64(1.6971603908452468)] paper 1.1-4.0 mean 2.6
+Omega eigenvalues [3.84961169 0.9872119  0.88966534 0.55299807 0.38133277 0.18765223
+ 0.15152801]
+W shape (7, 7)
+P orthogonal check diag [3.84961169 0.9872119  0.88966534] off diag max 7.736812374004602e-16
+Residual pooled mean 0.0000 sd 0.7787 median 0.0052 skew -0.0972 kurt 4.9110 IQR 0.7196 IQR/SD 0.9242 RMSE/MAE 1.4164 JB p 0.0000
+Bartlett B 186.18 df 28 p 0
+var ratio 9.38 max 1.299 min 0.424
+{'BG': np.float64(0.7073323570721815), 'CZ': np.float64(0.4788100935035618), 'EE': np.float64(0.5963362711451257), 'HR': np.float64(0.8061816058244297), 'LV': np.float64(0.6379622798872746), 'LT': np.float64(0.6971643260951238), 'HU': np.float64(0.42422473785976905), 'PL': np.float64(1.2989728027315977), 'RO': np.float64(0.7945416321390498), 'SI': np.float64(0.8039131077464113), 'SK': np.float64(0.9983258033348594)}
+YR1997 alpha -5.833 SE 0.514 R2 0.999 adj 0.997 sd 0.168 F 496.808
+  beta X1 -0.128 SE 0.010
+  beta X2 0.148 SE 0.010
+  beta X3 -0.027 SE 0.013
+  beta X4 0.022 SE 0.003
+  beta X5 0.167 SE 0.016
+  beta X6 -0.001 SE 0.002
+  beta X7 -0.083 SE 0.007
+YR2002 alpha 0.131 SE 2.240 R2 0.938 adj 0.793 sd 0.592 F 6.470
+  beta X1 -0.109 SE 0.026
+  beta X2 0.035 SE 0.041
+  beta X3 -0.028 SE 0.023
+  beta X4 0.026 SE 0.013
+  beta X5 0.000 SE 0.012
+  beta X6 0.016 SE 0.015
+  beta X7 0.071 SE 0.039
+YR2009 alpha 12.141 SE 5.844 R2 0.890 adj 0.632 sd 2.071 F 3.458
+  beta X1 0.112 SE 0.109
+  beta X2 -0.567 SE 0.235
+  beta X3 -0.043 SE 0.047
+  beta X4 -0.054 SE 0.036
+  beta X5 0.051 SE 0.035
+  beta X6 0.244 SE 0.098
+  beta X7 0.012 SE 0.043
+YR2013 alpha 4.378 SE 3.537 R2 0.886 adj 0.621 sd 0.924 F 3.342
+  beta X1 -0.186 SE 0.069
+  beta X2 0.540 SE 0.156
+  beta X3 0.062 SE 0.020
+  beta X4 -0.022 SE 0.020
+  beta X5 -0.032 SE 0.011
+  beta X6 -0.050 SE 0.024
+  beta X7 -0.127 SE 0.039
+YR2018 alpha 7.767 SE 0.763 R2 0.988 adj 0.959 sd 0.199 F 34.322
+  beta X1 -0.010 SE 0.009
+  beta X2 0.128 SE 0.016
+  beta X3 0.015 SE 0.002
+  beta X4 -0.025 SE 0.003
+  beta X5 -0.010 SE 0.002
+  beta X6 -0.022 SE 0.004
+  beta X7 -0.069 SE 0.005
+YR2021 alpha 16.315 SE 3.281 R2 0.946 adj 0.819 sd 0.880 F 7.449
+  beta X1 -0.168 SE 0.035
+  beta X2 0.230 SE 0.071
+  beta X3 0.007 SE 0.005
+  beta X4 -0.038 SE 0.019
+  beta X5 -0.020 SE 0.006
+  beta X6 -0.010 SE 0.014
+  beta X7 -0.014 SE 0.021
+YR2024 alpha 4.771 SE 4.482 R2 0.632 adj -0.227 sd 1.035 F 0.736
+  beta X1 0.033 SE 0.072
+  beta X2 -0.102 SE 0.095
+  beta X3 -0.005 SE 0.005
+  beta X4 0.014 SE 0.023
+  beta X5 -0.003 SE 0.006
+  beta X6 -0.022 SE 0.025
+  beta X7 0.039 SE 0.034
+BG kappa Total 65.6 X1 -69.5 X2 129.0 X3 59.1 X4 15.9 X5 -1.8 X6 6.2 X7 -73.3 e_acc 0.4
+CZ kappa Total 84.6 X1 -152.9 X2 184.6 X3 55.0 X4 18.9 X5 10.6 X6 14.4 X7 -46.1 e_acc 6.4
+EE kappa Total 79.1 X1 -116.6 X2 180.0 X3 61.9 X4 15.5 X5 -0.4 X6 21.1 X7 -82.3 e_acc -0.1
+HR kappa Total 76.4 X1 -104.1 X2 183.0 X3 43.0 X4 20.5 X5 5.0 X6 -1.7 X7 -69.3 e_acc 0.6
+LV kappa Total 76.4 X1 -88.5 X2 166.7 X3 45.7 X4 13.9 X5 -5.4 X6 9.3 X7 -65.4 e_acc -5.4
+LT kappa Total 85.1 X1 -107.0 X2 156.5 X3 40.9 X4 12.8 X5 6.9 X6 8.5 X7 -33.4 e_acc 2.9
+HU kappa Total 78.2 X1 -113.0 X2 164.1 X3 76.0 X4 15.3 X5 6.3 X6 -9.8 X7 -60.7 e_acc -1.2
+PL kappa Total 79.3 X1 -107.8 X2 156.5 X3 42.3 X4 16.7 X5 7.4 X6 -0.9 X7 -34.9 e_acc -0.3
+RO kappa Total 78.3 X1 -83.7 X2 130.0 X3 39.8 X4 16.3 X5 2.0 X6 10.5 X7 -36.6 e_acc -0.3
+SI kappa Total 90.5 X1 -152.0 X2 224.2 X3 38.3 X4 18.3 X5 9.8 X6 8.3 X7 -56.4 e_acc 0.5
+SK kappa Total 78.7 X1 -123.7 X2 175.4 X3 47.8 X4 12.1 X5 5.9 X6 3.7 X7 -42.6 e_acc -3.7
+Wrote /work/results.json with 120 results
+
+--- stderr

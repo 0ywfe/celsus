@@ -1,0 +1,36 @@
+{
+ "run_id": "run-20261030T034802Z-5eecfc",
+ "paper": "2601.11201",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 1 of 1 checked results match within their uncertainty. Its main result is none of the numbers checked, so it was not judged.",
+ "headline": null,
+ "sample": [
+  {
+   "name": "g10_basket_size_implied",
+   "reported": 10.0,
+   "reproduced": 10,
+   "consistent": true
+  }
+ ],
+ "judged": 1,
+ "matched": 1,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (g10_basket_size_implied (10) at line 227). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 45,
+ "cost_usd": 0.8063,
+ "tokens_in": 1640693,
+ "tokens_out": 98157,
+ "wall_s": 587.5,
+ "crashed": null
+}

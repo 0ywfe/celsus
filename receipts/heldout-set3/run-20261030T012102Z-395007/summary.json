@@ -1,0 +1,56 @@
+{
+ "run_id": "run-20261030T012102Z-395007",
+ "paper": "2510.15942",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication could not rebuild the paper's sample (Exact paper NASDAQ-100 vintage (wiki_nasdaq) not archived and quarterly rebalancing means nominal 100 list changes; fetched 98 vs union 101 vs nominal 100 differences cannot be precisely counted against unknown vintage); and the replication could not rebuild the paper's sample (N_NASDAQ100_nominal: 98 here, 100 in the paper)",
+ "first_line": "We could not check this paper: the replication could not rebuild the paper's sample (Exact paper NASDAQ-100 vintage (wiki_nasdaq) not archived and quarterly rebalancing means nominal 100 list changes; fetched 98 vs union 101 vs nominal 100 differences cannot be precisely counted against unknown vintage); and the replication could not rebuild the paper's sample (N_NASDAQ100_nominal: 98 here, 100 in the paper). This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "surgery_edge_weight_around",
+  "kind": "estimate",
+  "unit": "distance",
+  "reported": 3.0,
+  "reproduced": 1.5160725779665342e-06,
+  "se": 2.2020993010317637e-09,
+  "n": 4753,
+  "consistent": false,
+  "why": "1.516e-06 +/- 4.316e-09 outside the paper's bound > 3"
+ },
+ "sample": [
+  {
+   "name": "N_NASDAQ100_nominal",
+   "reported": 100.0,
+   "reproduced": 98,
+   "consistent": false
+  }
+ ],
+ "judged": 4,
+ "matched": 2,
+ "rejections": [
+  {
+   "round": 2,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (N_NASDAQ100_nominal (>100) at line 161). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "Cython==3.3.0",
+  "GraphRicciCurvature==0.6.1",
+  "POT==0.9.7.post1",
+  "networkit==11.2.2",
+  "networkx==3.7",
+  "numpy==2.2.6",
+  "python-louvain==0.16",
+  "scipy==1.13.1",
+  "tabulate==0.10.0"
+ ],
+ "calls": 46,
+ "cost_usd": 0.9721,
+ "tokens_in": 1910688,
+ "tokens_out": 133153,
+ "wall_s": 1843.4,
+ "crashed": null
+}

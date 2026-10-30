@@ -1,0 +1,1860 @@
+{
+ "title": "Robust enhanced index tracking portfolio selection under distributional uncertainty",
+ "hypothesis": "not stated",
+ "data_sources": [
+  "Yahoo! Finance monthly adjusted closing prices January 2015 to December 2024 for 25 tickers listed"
+ ],
+ "sample": "25 U.S. stocks: 5 largest by market capitalization from each of 5 sectors - Technology (AAPL, NVDA, MSFT, AVGO, ORCL), Healthcare (JNJ, ABBV, LLY, UNH, ABT), Financial Services (BRK-B, JPM, V, BAC, MA), Consumer Cyclical (AMZN, TSLA, HD, MCD, BKNG), Consumer Defensive (WMT, COST, KO, PG, PM). Monthly loss data from Yahoo! Finance. In-sample training 60-month rolling window; out-of-sample evaluation 60 months. Short-selling allowed (W=R^n) and prohibited (W=A^n, omega>=0) regimes reported separately. Uncertainty sets M_{n+1}(mu,Sigma) and D_{n+1}(gamma1,gamma2) evaluated separately.",
+ "period_start": "2015-01",
+ "period_end": "2024-12",
+ "method": [
+  "1. Universe: select 25 stocks as 5 largest market-cap per 5 sectors listed above.",
+  "2. Data: download monthly adjusted closing price P_{i,t} from Yahoo! Finance for January 2015 to December 2024. Compute monthly loss x_{i,t}=-(P_{i,t+1}-P_{i,t})/P_{i,t}; return is -x_{i,t}; vector x_t=(x_{1,t},...,x_{25,t}).",
+  "3. Parameters: set alpha=-0.04 (-alpha=0.04 excess over index), r0=0.02 (M_{n+1} minimum expected return), r=-0.01 (D_{n+1} minimum worst-case expected return), kappa=5 (kappa0=4.65 lower bound for M-ER existence requiring kappa>kappa0 where kappa0=(2+2*sqrt(b0+1))/b0), gamma1=0.22 and gamma2=0.025 (D_{n+1} size; figure captions also print gamma1=0.21). Empirical calibrations: -bar(alpha)=0.0075 average historical excess over index, bar(r)=0.0176 average portfolio return from in-sample data. Window =60 months (5 years).",
+  "4. Estimation: for each out-of-sample month t=1..60 (January 2020 to December 2024), estimate mu_hat and Sigma_hat from preceding 60-month window. For D_{n+1}, calibrate gamma1,gamma2 via rolling 60-month windows: gamma1_i=(mu_hat_{n,i}-mu_hat_n)' Sigma_hat_n^{-1} (mu_hat_{n,i}-mu_hat_n), gamma2_i=||Sigma_hat_i - Sigma_hat||_F; set gamma1,gamma2 to averages of gamma1_i,gamma2_i.",
+  "5. Optimization: solve M-ER, ER, M-TSV, TSV, M-V, V models. Under M_{n+1}(mu,Sigma) use closed-form solutions Theorem 1 and Proposition 1 (m=1 ER and m=2 TSV) and solutions for MV (1) and V (2) with omega in R^n. Under D_{n+1}(gamma1,gamma2) solve equivalent convex SOCP problems (3)-(6) with/without constraint omega>=0. Also compute equal-weighted portfolio EWP (1/n).",
+  "6. Backtest: initial optimal portfolio omega0* from January 2015-December 2019 training data; out-of-sample return R_t= -omega_{t-1}* ' * x_t for t=1..60 rolling window forward by one month each step.",
+  "7. Performance metrics: compute out-of-sample cumulative wealth CW, mean return, standard deviation SD, expected regret ER=E[(omega'X - X0 - alpha)_+], target semi-variance TSV=E[(omega'X - X0 - alpha)_+^2], Sharpe ratio, Sortino ratio, Omega ratio as defined in cited references. Report Table M (M_{n+1}) and Table D (D_{n+1}) with/without short selling; best per criterion boxed. Plot CW and ratios versus kappa to assess sensitivity and locate optima."
+ ],
+ "claims": [
+  {
+   "name": "count_n_assets",
+   "description": "total number of stocks in portfolio (5 per 5 sectors)",
+   "value": "25",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec. 5 selection paragraph and Table headings models (a)-(g)"
+  },
+  {
+   "name": "count_n_sectors",
+   "description": "number of sectors (Technology, Healthcare, Financial Services, Consumer Cyclical, Consumer Defensive)",
+   "value": "5",
+   "unit": "sectors",
+   "kind": "count",
+   "where": "Sec. 5 selection list"
+  },
+  {
+   "name": "count_per_sector",
+   "description": "assets per sector as printed",
+   "value": "5",
+   "unit": "assets per sector",
+   "kind": "count",
+   "where": "Sec. 5 selection"
+  },
+  {
+   "name": "count_Technology_assets",
+   "description": "Technology assets: AAPL NVDA MSFT AVGO ORCL",
+   "value": "5",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec. 5 selection list"
+  },
+  {
+   "name": "count_Healthcare_assets",
+   "description": "Healthcare assets: JNJ ABBV LLY UNH ABT",
+   "value": "5",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec. 5 selection list"
+  },
+  {
+   "name": "count_FinancialServices_assets",
+   "description": "Financial Services assets: BRK-B JPM V BAC MA",
+   "value": "5",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec. 5 selection list"
+  },
+  {
+   "name": "count_ConsumerCyclical_assets",
+   "description": "Consumer Cyclical assets: AMZN TSLA HD MCD BKNG",
+   "value": "5",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec. 5 selection list"
+  },
+  {
+   "name": "count_ConsumerDefensive_assets",
+   "description": "Consumer Defensive assets: WMT COST KO PG PM",
+   "value": "5",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec. 5 selection list"
+  },
+  {
+   "name": "count_insample_months",
+   "description": "in-sample training period January 2015 to December 2019 (five-year window)",
+   "value": "60",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec. 5 paragraph"
+  },
+  {
+   "name": "count_outsample_months",
+   "description": "out-of-sample backtest period January 2020 to December 2024 (60 months)",
+   "value": "60",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec. 5 paragraph Fig.1 caption"
+  },
+  {
+   "name": "param_alpha",
+   "description": "alpha in threshold X_alpha = X0 + alpha; -alpha is excess return target",
+   "value": "-0.04",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (i) and Fig.1 caption alpha=-0.04"
+  },
+  {
+   "name": "param_minus_alpha",
+   "description": "-alpha target excess return over index",
+   "value": "0.04",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (i) -alpha=0.04"
+  },
+  {
+   "name": "param_r0",
+   "description": "minimum expected portfolio return constraint under M_{n+1}",
+   "value": "0.02",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (ii) r0=0.02, Fig.1a,b caption"
+  },
+  {
+   "name": "param_r",
+   "description": "minimum worst-case expected portfolio return under D_{n+1}",
+   "value": "-0.01",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Sec. 5.2 (i) r=-0.01, Fig.1c,d caption Table D caption"
+  },
+  {
+   "name": "param_gamma1",
+   "description": "size of mean uncertainty in D_{n+1}(gamma1,gamma2) from in-sample rolling averages",
+   "value": "0.22",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec. 5.2 (ii) gamma1=0.22, Table D header"
+  },
+  {
+   "name": "param_gamma1_fig",
+   "description": "gamma1 value as printed in Fig.3-5 captions for D plots (0.21 vs text 0.22)",
+   "value": "0.21",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Fig.3-5 captions gamma1=0.21"
+  },
+  {
+   "name": "param_gamma2",
+   "description": "size of covariance uncertainty in D_{n+1} (Frobenius norm)",
+   "value": "0.025",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec. 5.2 (ii) gamma2=0.025"
+  },
+  {
+   "name": "param_kappa",
+   "description": "weight balancing mean loss and downside risk/variance in M-ER, M-TSV, M-V models",
+   "value": "5",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (iii) kappa=5, Fig.1 captions"
+  },
+  {
+   "name": "param_kappa0",
+   "description": "feasibility threshold kappa0=(2+2*sqrt(b0+1))/b0 for M-ER model existence",
+   "value": "4.65",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (iii) based on in-sample data kappa0=4.65"
+  },
+  {
+   "name": "param_bar_r",
+   "description": "historical average portfolio return from in-sample data",
+   "value": "0.0176",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (ii) bar(r)=0.0176"
+  },
+  {
+   "name": "param_minus_bar_alpha",
+   "description": "average historical excess return over index -bar(alpha)",
+   "value": "0.0075",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Sec. 5.1 (i) -bar(alpha)=0.0075"
+  },
+  {
+   "name": "param_window_months",
+   "description": "rolling window length (five-year)",
+   "value": "60",
+   "unit": "months",
+   "kind": "parameter",
+   "where": "Sec. 5 backtest description and Sec. 5.2 gamma calibration"
+  },
+  {
+   "name": "TabM_withSS_MER_MeanRet",
+   "description": "out-of-sample mean return M-ER with SS under M_{n+1}",
+   "value": "0.038021",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row Mean Return"
+  },
+  {
+   "name": "TabM_withSS_MER_SD",
+   "description": "out-of-sample SD M-ER with SS under M",
+   "value": "0.110156",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row SD"
+  },
+  {
+   "name": "TabM_withSS_MER_ER",
+   "description": "expected regret M-ER with SS under M",
+   "value": "0.043788",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row ER"
+  },
+  {
+   "name": "TabM_withSS_MER_TSV",
+   "description": "target semi-variance M-ER with SS under M",
+   "value": "0.005928",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row TSV"
+  },
+  {
+   "name": "TabM_withSS_MER_Sharpe",
+   "description": "Sharpe M-ER with SS under M",
+   "value": "0.345155",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row Sharpe"
+  },
+  {
+   "name": "TabM_withSS_MER_Sortino",
+   "description": "Sortino M-ER with SS under M",
+   "value": "0.493813",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row Sortino"
+  },
+  {
+   "name": "TabM_withSS_MER_Omega",
+   "description": "Omega M-ER with SS under M",
+   "value": "0.954801",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-ER row Omega"
+  },
+  {
+   "name": "TabM_withSS_ER_MeanRet",
+   "description": "mean return ER with SS under M",
+   "value": "0.030584",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row Mean Return"
+  },
+  {
+   "name": "TabM_withSS_ER_SD",
+   "description": "SD ER with SS under M",
+   "value": "0.079341",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row SD"
+  },
+  {
+   "name": "TabM_withSS_ER_ER",
+   "description": "ER ER with SS under M",
+   "value": "0.036200",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row ER"
+  },
+  {
+   "name": "TabM_withSS_ER_TSV",
+   "description": "TSV ER with SS under M",
+   "value": "0.003655",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row TSV"
+  },
+  {
+   "name": "TabM_withSS_ER_Sharpe",
+   "description": "Sharpe ER with SS under M",
+   "value": "0.385482",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row Sharpe"
+  },
+  {
+   "name": "TabM_withSS_ER_Sortino",
+   "description": "Sortino ER with SS under M (boxed best with SS)",
+   "value": "0.505900",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row Sortino boxed"
+  },
+  {
+   "name": "TabM_withSS_ER_Omega",
+   "description": "Omega ER with SS under M",
+   "value": "0.739903",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling ER row Omega"
+  },
+  {
+   "name": "TabM_withSS_MTSV_MeanRet",
+   "description": "mean return M-TSV with SS under M",
+   "value": "0.048939",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row Mean Return"
+  },
+  {
+   "name": "TabM_withSS_MTSV_SD",
+   "description": "SD M-TSV with SS under M",
+   "value": "0.150532",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row SD"
+  },
+  {
+   "name": "TabM_withSS_MTSV_ER",
+   "description": "ER M-TSV with SS under M",
+   "value": "0.052809",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row ER"
+  },
+  {
+   "name": "TabM_withSS_MTSV_TSV",
+   "description": "TSV M-TSV with SS under M",
+   "value": "0.009546",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row TSV"
+  },
+  {
+   "name": "TabM_withSS_MTSV_Sharpe",
+   "description": "Sharpe M-TSV with SS under M",
+   "value": "0.325107",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row Sharpe"
+  },
+  {
+   "name": "TabM_withSS_MTSV_Sortino",
+   "description": "Sortino M-TSV with SS under M",
+   "value": "0.500902",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row Sortino"
+  },
+  {
+   "name": "TabM_withSS_MTSV_Omega",
+   "description": "Omega M-TSV with SS under M boxed",
+   "value": "1.169271",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-TSV row Omega boxed"
+  },
+  {
+   "name": "TabM_withSS_TSV_MeanRet",
+   "description": "mean return TSV with SS under M",
+   "value": "0.023855",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row Mean Return"
+  },
+  {
+   "name": "TabM_withSS_TSV_SD",
+   "description": "SD TSV with SS under M",
+   "value": "0.060104",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row SD"
+  },
+  {
+   "name": "TabM_withSS_TSV_ER",
+   "description": "ER TSV with SS under M",
+   "value": "0.032059",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row ER"
+  },
+  {
+   "name": "TabM_withSS_TSV_TSV",
+   "description": "TSV TSV with SS under M",
+   "value": "0.002714",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row TSV"
+  },
+  {
+   "name": "TabM_withSS_TSV_Sharpe",
+   "description": "Sharpe TSV with SS under M",
+   "value": "0.396902",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row Sharpe"
+  },
+  {
+   "name": "TabM_withSS_TSV_Sortino",
+   "description": "Sortino TSV with SS under M",
+   "value": "0.457940",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row Sortino"
+  },
+  {
+   "name": "TabM_withSS_TSV_Omega",
+   "description": "Omega TSV with SS under M",
+   "value": "0.496404",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling TSV row Omega"
+  },
+  {
+   "name": "TabM_withSS_MV_MeanRet",
+   "description": "mean return M-V with SS under M boxed",
+   "value": "0.050084",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row Mean Return boxed"
+  },
+  {
+   "name": "TabM_withSS_MV_SD",
+   "description": "SD M-V with SS under M",
+   "value": "0.155359",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row SD"
+  },
+  {
+   "name": "TabM_withSS_MV_ER",
+   "description": "ER M-V with SS under M",
+   "value": "0.053195",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row ER"
+  },
+  {
+   "name": "TabM_withSS_MV_TSV",
+   "description": "TSV M-V with SS under M",
+   "value": "0.010652",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row TSV"
+  },
+  {
+   "name": "TabM_withSS_MV_Sharpe",
+   "description": "Sharpe M-V with SS under M",
+   "value": "0.322376",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row Sharpe"
+  },
+  {
+   "name": "TabM_withSS_MV_Sortino",
+   "description": "Sortino M-V with SS under M",
+   "value": "0.485271",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row Sortino"
+  },
+  {
+   "name": "TabM_withSS_MV_Omega",
+   "description": "Omega M-V with SS under M",
+   "value": "1.189569",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V row Omega"
+  },
+  {
+   "name": "TabM_withSS_V_MeanRet",
+   "description": "mean return V with SS under M",
+   "value": "0.021873",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling V row Mean Return"
+  },
+  {
+   "name": "TabM_withSS_V_SD",
+   "description": "SD V with SS under M",
+   "value": "0.056794",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling V row SD"
+  },
+  {
+   "name": "TabM_withSS_V_ER",
+   "description": "ER V with SS under M",
+   "value": "0.032461",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling V row ER"
+  },
+  {
+   "name": "TabM_withSS_V_TSV",
+   "description": "TSV V with SS under M",
+   "value": "0.002751",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling V row TSV"
+  },
+  {
+   "name": "TabM_withSS_V_Sharpe",
+   "description": "Sharpe V with SS under M",
+   "value": "0.385127",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling V row Sharpe"
+  },
+  {
+   "name": "TabM_withSS_V_Sortino",
+   "description": "Sortino V with SS under M",
+   "value": "0.416900",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling V row Sortino"
+  },
+  {
+   "name": "TabM_withSS_V_Omega",
+   "description": "Omega V with SS under M",
+   "value": "0.441582",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling V row Omega"
+  },
+  {
+   "name": "TabM_withSS_EWP_MeanRet",
+   "description": "mean return EWP under M (same with/without SS)",
+   "value": "0.020299",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row Mean Return"
+  },
+  {
+   "name": "TabM_withSS_EWP_SD",
+   "description": "SD EWP under M boxed lowest with SS",
+   "value": "0.050758",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row SD boxed"
+  },
+  {
+   "name": "TabM_withSS_EWP_ER",
+   "description": "ER EWP under M boxed",
+   "value": "0.031082",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row ER boxed"
+  },
+  {
+   "name": "TabM_withSS_EWP_TSV",
+   "description": "TSV EWP under M boxed",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row TSV boxed"
+  },
+  {
+   "name": "TabM_withSS_EWP_Sharpe",
+   "description": "Sharpe EWP under M boxed",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row Sharpe boxed"
+  },
+  {
+   "name": "TabM_withSS_EWP_Sortino",
+   "description": "Sortino EWP under M",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row Sortino"
+  },
+  {
+   "name": "TabM_withSS_EWP_Omega",
+   "description": "Omega EWP under M",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling EWP row Omega"
+  },
+  {
+   "name": "TabM_withoutSS_MER_MeanRet",
+   "description": "mean return M-ER without SS under M",
+   "value": "0.027183",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row Mean Return"
+  },
+  {
+   "name": "TabM_withoutSS_MER_SD",
+   "description": "SD M-ER without SS under M",
+   "value": "0.064414",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row SD"
+  },
+  {
+   "name": "TabM_withoutSS_MER_ER",
+   "description": "ER M-ER without SS under M",
+   "value": "0.032721",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row ER"
+  },
+  {
+   "name": "TabM_withoutSS_MER_TSV",
+   "description": "TSV M-ER without SS under M",
+   "value": "0.002856",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row TSV"
+  },
+  {
+   "name": "TabM_withoutSS_MER_Sharpe",
+   "description": "Sharpe M-ER without SS under M",
+   "value": "0.422011",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row Sharpe"
+  },
+  {
+   "name": "TabM_withoutSS_MER_Sortino",
+   "description": "Sortino M-ER without SS under M",
+   "value": "0.508637",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row Sortino"
+  },
+  {
+   "name": "TabM_withoutSS_MER_Omega",
+   "description": "Omega M-ER without SS under M",
+   "value": "0.608300",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-ER row Omega"
+  },
+  {
+   "name": "TabM_withoutSS_ER_MeanRet",
+   "description": "mean return ER without SS under M",
+   "value": "0.024979",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row Mean Return"
+  },
+  {
+   "name": "TabM_withoutSS_ER_SD",
+   "description": "SD ER without SS under M",
+   "value": "0.061403",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row SD"
+  },
+  {
+   "name": "TabM_withoutSS_ER_ER",
+   "description": "ER ER without SS under M",
+   "value": "0.032544",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row ER"
+  },
+  {
+   "name": "TabM_withoutSS_ER_TSV",
+   "description": "TSV ER without SS under M",
+   "value": "0.002817",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row TSV"
+  },
+  {
+   "name": "TabM_withoutSS_ER_Sharpe",
+   "description": "Sharpe ER without SS under M",
+   "value": "0.406812",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row Sharpe"
+  },
+  {
+   "name": "TabM_withoutSS_ER_Sortino",
+   "description": "Sortino ER without SS under M",
+   "value": "0.470651",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row Sortino"
+  },
+  {
+   "name": "TabM_withoutSS_ER_Omega",
+   "description": "Omega ER without SS under M",
+   "value": "0.538451",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling ER row Omega"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_MeanRet",
+   "description": "mean return M-TSV without SS under M boxed",
+   "value": "0.033821",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row Mean Return boxed"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_SD",
+   "description": "SD M-TSV without SS under M",
+   "value": "0.074642",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row SD"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_ER",
+   "description": "ER M-TSV without SS under M",
+   "value": "0.033818",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row ER"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_TSV",
+   "description": "TSV M-TSV without SS under M",
+   "value": "0.003061",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row TSV"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_Sharpe",
+   "description": "Sharpe M-TSV without SS under M boxed",
+   "value": "0.453109",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row Sharpe boxed"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_Sortino",
+   "description": "Sortino M-TSV without SS under M boxed",
+   "value": "0.611352",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row Sortino boxed"
+  },
+  {
+   "name": "TabM_withoutSS_MTSV_Omega",
+   "description": "Omega M-TSV without SS under M boxed",
+   "value": "0.817288",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-TSV row Omega boxed"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_MeanRet",
+   "description": "mean return TSV without SS under M",
+   "value": "0.021018",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row Mean Return"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_SD",
+   "description": "SD TSV without SS under M",
+   "value": "0.055961",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row SD"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_ER",
+   "description": "ER TSV without SS under M",
+   "value": "0.032370",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row ER"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_TSV",
+   "description": "TSV TSV without SS under M",
+   "value": "0.002723",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row TSV"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_Sharpe",
+   "description": "Sharpe TSV without SS under M",
+   "value": "0.375585",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row Sharpe"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_Sortino",
+   "description": "Sortino TSV without SS under M",
+   "value": "0.402786",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row Sortino"
+  },
+  {
+   "name": "TabM_withoutSS_TSV_Omega",
+   "description": "Omega TSV without SS under M",
+   "value": "0.413597",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling TSV row Omega"
+  },
+  {
+   "name": "TabM_withoutSS_MV_MeanRet",
+   "description": "mean return M-V without SS under M",
+   "value": "0.026298",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row Mean Return"
+  },
+  {
+   "name": "TabM_withoutSS_MV_SD",
+   "description": "SD M-V without SS under M",
+   "value": "0.063587",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row SD"
+  },
+  {
+   "name": "TabM_withoutSS_MV_ER",
+   "description": "ER M-V without SS under M",
+   "value": "0.034140",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row ER"
+  },
+  {
+   "name": "TabM_withoutSS_MV_TSV",
+   "description": "TSV M-V without SS under M",
+   "value": "0.002796",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row TSV"
+  },
+  {
+   "name": "TabM_withoutSS_MV_Sharpe",
+   "description": "Sharpe M-V without SS under M",
+   "value": "0.413580",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row Sharpe"
+  },
+  {
+   "name": "TabM_withoutSS_MV_Sortino",
+   "description": "Sortino M-V without SS under M",
+   "value": "0.497338",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row Sortino"
+  },
+  {
+   "name": "TabM_withoutSS_MV_Omega",
+   "description": "Omega M-V without SS under M",
+   "value": "0.598669",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling M-V row Omega"
+  },
+  {
+   "name": "TabM_withoutSS_V_MeanRet",
+   "description": "mean return V without SS under M",
+   "value": "0.018312",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row Mean Return"
+  },
+  {
+   "name": "TabM_withoutSS_V_SD",
+   "description": "SD V without SS under M boxed",
+   "value": "0.046906",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row SD boxed"
+  },
+  {
+   "name": "TabM_withoutSS_V_ER",
+   "description": "ER V without SS under M",
+   "value": "0.031722",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row ER"
+  },
+  {
+   "name": "TabM_withoutSS_V_TSV",
+   "description": "TSV V without SS under M boxed",
+   "value": "0.002219",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row TSV boxed"
+  },
+  {
+   "name": "TabM_withoutSS_V_Sharpe",
+   "description": "Sharpe V without SS under M",
+   "value": "0.390402",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row Sharpe"
+  },
+  {
+   "name": "TabM_withoutSS_V_Sortino",
+   "description": "Sortino V without SS under M",
+   "value": "0.388780",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row Sortino"
+  },
+  {
+   "name": "TabM_withoutSS_V_Omega",
+   "description": "Omega V without SS under M",
+   "value": "0.316313",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling V row Omega"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_MeanRet",
+   "description": "mean return EWP without SS under M",
+   "value": "0.020299",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row Mean Return"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_SD",
+   "description": "SD EWP without SS under M",
+   "value": "0.050758",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row SD"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_ER",
+   "description": "ER EWP without SS under M boxed",
+   "value": "0.031082",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row ER boxed"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_TSV",
+   "description": "TSV EWP without SS under M",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row TSV"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_Sharpe",
+   "description": "Sharpe EWP without SS under M",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row Sharpe"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_Sortino",
+   "description": "Sortino EWP without SS under M",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row Sortino"
+  },
+  {
+   "name": "TabM_withoutSS_EWP_Omega",
+   "description": "Omega EWP without SS under M",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling EWP row Omega"
+  },
+  {
+   "name": "TabD_withSS_MER_MeanRet",
+   "description": "mean return M-ER with SS under D boxed",
+   "value": "0.023264",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row Mean Return boxed"
+  },
+  {
+   "name": "TabD_withSS_MER_SD",
+   "description": "SD M-ER with SS under D",
+   "value": "0.053799",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row SD"
+  },
+  {
+   "name": "TabD_withSS_MER_ER",
+   "description": "ER M-ER with SS under D",
+   "value": "0.030781",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row ER"
+  },
+  {
+   "name": "TabD_withSS_MER_TSV",
+   "description": "TSV M-ER with SS under D",
+   "value": "0.002346",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row TSV"
+  },
+  {
+   "name": "TabD_withSS_MER_Sharpe",
+   "description": "Sharpe M-ER with SS under D boxed",
+   "value": "0.432424",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row Sharpe boxed"
+  },
+  {
+   "name": "TabD_withSS_MER_Sortino",
+   "description": "Sortino M-ER with SS under D boxed",
+   "value": "0.480342",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row Sortino boxed"
+  },
+  {
+   "name": "TabD_withSS_MER_Omega",
+   "description": "Omega M-ER with SS under D boxed",
+   "value": "0.456294",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER row Omega boxed"
+  },
+  {
+   "name": "TabD_withSS_ER_MeanRet",
+   "description": "mean return ER with SS under D",
+   "value": "0.022533",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row Mean Return"
+  },
+  {
+   "name": "TabD_withSS_ER_SD",
+   "description": "SD ER with SS under D",
+   "value": "0.052189",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row SD"
+  },
+  {
+   "name": "TabD_withSS_ER_ER",
+   "description": "ER ER with SS under D",
+   "value": "0.030456",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row ER"
+  },
+  {
+   "name": "TabD_withSS_ER_TSV",
+   "description": "TSV ER with SS under D",
+   "value": "0.002304",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row TSV"
+  },
+  {
+   "name": "TabD_withSS_ER_Sharpe",
+   "description": "Sharpe ER with SS under D",
+   "value": "0.431760",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row Sharpe"
+  },
+  {
+   "name": "TabD_withSS_ER_Sortino",
+   "description": "Sortino ER with SS under D",
+   "value": "0.469414",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row Sortino"
+  },
+  {
+   "name": "TabD_withSS_ER_Omega",
+   "description": "Omega ER with SS under D",
+   "value": "0.426487",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling ER row Omega"
+  },
+  {
+   "name": "TabD_withSS_MTSV_MeanRet",
+   "description": "mean return M-TSV with SS under D",
+   "value": "0.021712",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row Mean Return"
+  },
+  {
+   "name": "TabD_withSS_MTSV_SD",
+   "description": "SD M-TSV with SS under D",
+   "value": "0.050744",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row SD"
+  },
+  {
+   "name": "TabD_withSS_MTSV_ER",
+   "description": "ER M-TSV with SS under D boxed",
+   "value": "0.030381",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row ER boxed"
+  },
+  {
+   "name": "TabD_withSS_MTSV_TSV",
+   "description": "TSV M-TSV with SS under D",
+   "value": "0.002281",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row TSV"
+  },
+  {
+   "name": "TabD_withSS_MTSV_Sharpe",
+   "description": "Sharpe M-TSV with SS under D",
+   "value": "0.427870",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row Sharpe"
+  },
+  {
+   "name": "TabD_withSS_MTSV_Sortino",
+   "description": "Sortino M-TSV with SS under D",
+   "value": "0.454599",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row Sortino"
+  },
+  {
+   "name": "TabD_withSS_MTSV_Omega",
+   "description": "Omega M-TSV with SS under D",
+   "value": "0.398040",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-TSV row Omega"
+  },
+  {
+   "name": "TabD_withSS_TSV_MeanRet",
+   "description": "mean return TSV with SS under D",
+   "value": "0.020297",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row Mean Return"
+  },
+  {
+   "name": "TabD_withSS_TSV_SD",
+   "description": "SD TSV with SS under D",
+   "value": "0.049517",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row SD"
+  },
+  {
+   "name": "TabD_withSS_TSV_ER",
+   "description": "ER TSV with SS under D",
+   "value": "0.030621",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row ER"
+  },
+  {
+   "name": "TabD_withSS_TSV_TSV",
+   "description": "TSV TSV with SS under D",
+   "value": "0.002316",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row TSV"
+  },
+  {
+   "name": "TabD_withSS_TSV_Sharpe",
+   "description": "Sharpe TSV with SS under D",
+   "value": "0.409908",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row Sharpe"
+  },
+  {
+   "name": "TabD_withSS_TSV_Sortino",
+   "description": "Sortino TSV with SS under D",
+   "value": "0.421810",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row Sortino"
+  },
+  {
+   "name": "TabD_withSS_TSV_Omega",
+   "description": "Omega TSV with SS under D",
+   "value": "0.356556",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling TSV row Omega"
+  },
+  {
+   "name": "TabD_withSS_MV_MeanRet",
+   "description": "mean return M-V with SS under D",
+   "value": "0.018856",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row Mean Return"
+  },
+  {
+   "name": "TabD_withSS_MV_SD",
+   "description": "SD M-V with SS under D",
+   "value": "0.047087",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row SD"
+  },
+  {
+   "name": "TabD_withSS_MV_ER",
+   "description": "ER M-V with SS under D",
+   "value": "0.031181",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row ER"
+  },
+  {
+   "name": "TabD_withSS_MV_TSV",
+   "description": "TSV M-V with SS under D boxed",
+   "value": "0.002204",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row TSV boxed"
+  },
+  {
+   "name": "TabD_withSS_MV_Sharpe",
+   "description": "Sharpe M-V with SS under D",
+   "value": "0.400460",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row Sharpe"
+  },
+  {
+   "name": "TabD_withSS_MV_Sortino",
+   "description": "Sortino M-V with SS under D",
+   "value": "0.401616",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row Sortino"
+  },
+  {
+   "name": "TabD_withSS_MV_Omega",
+   "description": "Omega M-V with SS under D",
+   "value": "0.321904",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-V row Omega"
+  },
+  {
+   "name": "TabD_withSS_V_MeanRet",
+   "description": "mean return V with SS under D",
+   "value": "0.016176",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling V row Mean Return"
+  },
+  {
+   "name": "TabD_withSS_V_SD",
+   "description": "SD V with SS under D boxed",
+   "value": "0.045302",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling V row SD boxed"
+  },
+  {
+   "name": "TabD_withSS_V_ER",
+   "description": "ER V with SS under D",
+   "value": "0.031771",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling V row ER"
+  },
+  {
+   "name": "TabD_withSS_V_TSV",
+   "description": "TSV V with SS under D",
+   "value": "0.002256",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling V row TSV"
+  },
+  {
+   "name": "TabD_withSS_V_Sharpe",
+   "description": "Sharpe V with SS under D",
+   "value": "0.357065",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling V row Sharpe"
+  },
+  {
+   "name": "TabD_withSS_V_Sortino",
+   "description": "Sortino V with SS under D",
+   "value": "0.340532",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling V row Sortino"
+  },
+  {
+   "name": "TabD_withSS_V_Omega",
+   "description": "Omega V with SS under D",
+   "value": "0.250130",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling V row Omega"
+  },
+  {
+   "name": "TabD_withSS_EWP_MeanRet",
+   "description": "mean return EWP under D",
+   "value": "0.020299",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row Mean Return"
+  },
+  {
+   "name": "TabD_withSS_EWP_SD",
+   "description": "SD EWP under D",
+   "value": "0.050758",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row SD"
+  },
+  {
+   "name": "TabD_withSS_EWP_ER",
+   "description": "ER EWP under D",
+   "value": "0.031082",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row ER"
+  },
+  {
+   "name": "TabD_withSS_EWP_TSV",
+   "description": "TSV EWP under D",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row TSV"
+  },
+  {
+   "name": "TabD_withSS_EWP_Sharpe",
+   "description": "Sharpe EWP under D",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row Sharpe"
+  },
+  {
+   "name": "TabD_withSS_EWP_Sortino",
+   "description": "Sortino EWP under D",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row Sortino"
+  },
+  {
+   "name": "TabD_withSS_EWP_Omega",
+   "description": "Omega EWP under D",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling EWP row Omega"
+  },
+  {
+   "name": "TabD_withoutSS_MER_MeanRet",
+   "description": "mean return M-ER without SS under D boxed",
+   "value": "0.023280",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row Mean Return boxed"
+  },
+  {
+   "name": "TabD_withoutSS_MER_SD",
+   "description": "SD M-ER without SS under D",
+   "value": "0.052341",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row SD"
+  },
+  {
+   "name": "TabD_withoutSS_MER_ER",
+   "description": "ER M-ER without SS under D",
+   "value": "0.030257",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row ER"
+  },
+  {
+   "name": "TabD_withoutSS_MER_TSV",
+   "description": "TSV M-ER without SS under D",
+   "value": "0.002261",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row TSV"
+  },
+  {
+   "name": "TabD_withoutSS_MER_Sharpe",
+   "description": "Sharpe M-ER without SS under D boxed",
+   "value": "0.444768",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row Sharpe boxed"
+  },
+  {
+   "name": "TabD_withoutSS_MER_Sortino",
+   "description": "Sortino M-ER without SS under D boxed",
+   "value": "0.489637",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row Sortino boxed"
+  },
+  {
+   "name": "TabD_withoutSS_MER_Omega",
+   "description": "Omega M-ER without SS under D boxed",
+   "value": "0.447392",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-ER row Omega boxed"
+  },
+  {
+   "name": "TabD_withoutSS_ER_MeanRet",
+   "description": "mean return ER without SS under D",
+   "value": "0.022586",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row Mean Return"
+  },
+  {
+   "name": "TabD_withoutSS_ER_SD",
+   "description": "SD ER without SS under D",
+   "value": "0.051537",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row SD"
+  },
+  {
+   "name": "TabD_withoutSS_ER_ER",
+   "description": "ER ER without SS under D boxed",
+   "value": "0.030261",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row ER boxed"
+  },
+  {
+   "name": "TabD_withoutSS_ER_TSV",
+   "description": "TSV ER without SS under D",
+   "value": "0.002262",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row TSV"
+  },
+  {
+   "name": "TabD_withoutSS_ER_Sharpe",
+   "description": "Sharpe ER without SS under D",
+   "value": "0.438237",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row Sharpe"
+  },
+  {
+   "name": "TabD_withoutSS_ER_Sortino",
+   "description": "Sortino ER without SS under D",
+   "value": "0.474836",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row Sortino"
+  },
+  {
+   "name": "TabD_withoutSS_ER_Omega",
+   "description": "Omega ER without SS under D",
+   "value": "0.424523",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling ER row Omega"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_MeanRet",
+   "description": "mean return M-TSV without SS under D",
+   "value": "0.021762",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row Mean Return"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_SD",
+   "description": "SD M-TSV without SS under D",
+   "value": "0.050701",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row SD"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_ER",
+   "description": "ER M-TSV without SS under D",
+   "value": "0.030357",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row ER"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_TSV",
+   "description": "TSV M-TSV without SS under D",
+   "value": "0.002277",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row TSV"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_Sharpe",
+   "description": "Sharpe M-TSV without SS under D",
+   "value": "0.429233",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row Sharpe"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_Sortino",
+   "description": "Sortino M-TSV without SS under D",
+   "value": "0.456087",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row Sortino"
+  },
+  {
+   "name": "TabD_withoutSS_MTSV_Omega",
+   "description": "Omega M-TSV without SS under D",
+   "value": "0.399229",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-TSV row Omega"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_MeanRet",
+   "description": "mean return TSV without SS under D",
+   "value": "0.020297",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row Mean Return"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_SD",
+   "description": "SD TSV without SS under D",
+   "value": "0.049517",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row SD"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_ER",
+   "description": "ER TSV without SS under D",
+   "value": "0.030621",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row ER"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_TSV",
+   "description": "TSV TSV without SS under D",
+   "value": "0.002316",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row TSV"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_Sharpe",
+   "description": "Sharpe TSV without SS under D",
+   "value": "0.409908",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row Sharpe"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_Sortino",
+   "description": "Sortino TSV without SS under D",
+   "value": "0.421810",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row Sortino"
+  },
+  {
+   "name": "TabD_withoutSS_TSV_Omega",
+   "description": "Omega TSV without SS under D",
+   "value": "0.356556",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling TSV row Omega"
+  },
+  {
+   "name": "TabD_withoutSS_MV_MeanRet",
+   "description": "mean return M-V without SS under D",
+   "value": "0.018905",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row Mean Return"
+  },
+  {
+   "name": "TabD_withoutSS_MV_SD",
+   "description": "SD M-V without SS under D",
+   "value": "0.047072",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row SD"
+  },
+  {
+   "name": "TabD_withoutSS_MV_ER",
+   "description": "ER M-V without SS under D",
+   "value": "0.031067",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row ER"
+  },
+  {
+   "name": "TabD_withoutSS_MV_TSV",
+   "description": "TSV M-V without SS under D boxed",
+   "value": "0.002202",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row TSV boxed"
+  },
+  {
+   "name": "TabD_withoutSS_MV_Sharpe",
+   "description": "Sharpe M-V without SS under D",
+   "value": "0.401610",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row Sharpe"
+  },
+  {
+   "name": "TabD_withoutSS_MV_Sortino",
+   "description": "Sortino M-V without SS under D",
+   "value": "0.402831",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row Sortino"
+  },
+  {
+   "name": "TabD_withoutSS_MV_Omega",
+   "description": "Omega M-V without SS under D",
+   "value": "0.320983",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling M-V row Omega"
+  },
+  {
+   "name": "TabD_withoutSS_V_MeanRet",
+   "description": "mean return V without SS under D",
+   "value": "0.016281",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row Mean Return"
+  },
+  {
+   "name": "TabD_withoutSS_V_SD",
+   "description": "SD V without SS under D boxed",
+   "value": "0.045175",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row SD boxed"
+  },
+  {
+   "name": "TabD_withoutSS_V_ER",
+   "description": "ER V without SS under D",
+   "value": "0.031731",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row ER"
+  },
+  {
+   "name": "TabD_withoutSS_V_TSV",
+   "description": "TSV V without SS under D",
+   "value": "0.002243",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row TSV"
+  },
+  {
+   "name": "TabD_withoutSS_V_Sharpe",
+   "description": "Sharpe V without SS under D",
+   "value": "0.360401",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row Sharpe"
+  },
+  {
+   "name": "TabD_withoutSS_V_Sortino",
+   "description": "Sortino V without SS under D",
+   "value": "0.343776",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row Sortino"
+  },
+  {
+   "name": "TabD_withoutSS_V_Omega",
+   "description": "Omega V without SS under D",
+   "value": "0.252501",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling V row Omega"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_MeanRet",
+   "description": "mean return EWP without SS under D",
+   "value": "0.020299",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row Mean Return"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_SD",
+   "description": "SD EWP without SS under D",
+   "value": "0.050758",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row SD"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_ER",
+   "description": "ER EWP without SS under D",
+   "value": "0.031082",
+   "unit": "rate",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row ER"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_TSV",
+   "description": "TSV EWP without SS under D",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row TSV"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_Sharpe",
+   "description": "Sharpe EWP without SS under D",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row Sharpe"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_Sortino",
+   "description": "Sortino EWP without SS under D",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row Sortino"
+  },
+  {
+   "name": "TabD_withoutSS_EWP_Omega",
+   "description": "Omega EWP without SS under D",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling EWP row Omega"
+  },
+  {
+   "name": "kappa_opt_Sharpe_withSS_MV",
+   "description": "kappa* maximizing Sharpe M-V with SS under M_{n+1}",
+   "value": "20.9",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 paragraph with short selling Sharpe optimum for M-V under M"
+  },
+  {
+   "name": "kappa_thresh_Sharpe_withSS_12p3",
+   "description": "Sharpe crossover threshold 12.3 with SS under M",
+   "value": "12.3",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 kappa<12.3 M-ER higher Sharpe, kappa>12.3 M-TSV outperforms with SS under M"
+  },
+  {
+   "name": "kappa_opt_Sortino_withSS_MER",
+   "description": "kappa* maximizing Sortino M-ER with SS under M",
+   "value": "7.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 Sortino optima with SS under M: kappa*=7.1 for M-ER"
+  },
+  {
+   "name": "kappa_opt_Sortino_withSS_MTSV",
+   "description": "kappa* maximizing Sortino M-TSV with SS under M",
+   "value": "7.5",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 Sortino optima with SS under M: kappa*=7.5 for M-TSV"
+  },
+  {
+   "name": "kappa_opt_Sortino_withSS_MV",
+   "description": "kappa* maximizing Sortino M-V with SS under M",
+   "value": "8.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 Sortino optima with SS under M: kappa*=8.1 for M-V"
+  },
+  {
+   "name": "kappa_thresh_Sortino_Omega_5p2",
+   "description": "Sortino/Omega crossover threshold 5.2 with SS under M",
+   "value": "5.2",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 for kappa<5.2 M-TSV higher Sortino, kappa>5.2 M-ER best with SS under M"
+  },
+  {
+   "name": "kappa_opt_Sharpe_withoutSS_MTSV",
+   "description": "kappa* maximizing Sharpe M-TSV without SS under M",
+   "value": "2.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 without SS Sharpe optima: kappa*=2.1 for M-TSV under M"
+  },
+  {
+   "name": "kappa_opt_Sharpe_withoutSS_MV",
+   "description": "kappa* maximizing Sharpe M-V without SS under M",
+   "value": "1.7",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 without SS Sharpe optima: kappa*=1.7 for M-V under M"
+  },
+  {
+   "name": "kappa_thresh_withoutSS_2p2",
+   "description": "Sharpe threshold 2.2 without SS under M",
+   "value": "2.2",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 without SS kappa<2.2 M-V higher Sharpe under M"
+  },
+  {
+   "name": "kappa_thresh_withoutSS_13p5",
+   "description": "Sharpe threshold 13.5 without SS under M",
+   "value": "13.5",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec. 5.3.1 without SS kappa>13.5 M-ER outperforms under M"
+  }
+ ],
+ "headline": "TabM_withoutSS_MTSV_Sharpe",
+ "partitions": [
+  {
+   "split": "by sector (5 sectors x5 assets) as listed",
+   "total": "count_n_assets",
+   "parts": [
+    "count_Technology_assets",
+    "count_Healthcare_assets",
+    "count_FinancialServices_assets",
+    "count_ConsumerCyclical_assets",
+    "count_ConsumerDefensive_assets"
+   ]
+  }
+ ],
+ "tests": []
+}

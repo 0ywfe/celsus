@@ -1,0 +1,12 @@
+exit 0 in 111.6s
+--- stdout
+US naive h1 rmse 0.397 n 470
+US naive h3 rmse 0.857 n 468
+US arima h1 rmse 0.361 n 470
+US arima h3 rmse 0.842 n 468
+US roll h1 rmse 1.333 n 470
+EA arima h1 rmse 0.360 n 175
+CH arima h1 rmse 0.284 n 304
+Wrote 30 results, 74 not_rebuilt
+
+--- stderr

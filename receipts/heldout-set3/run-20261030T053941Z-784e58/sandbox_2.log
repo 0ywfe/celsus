@@ -1,0 +1,850 @@
+exit 0 in 40.5s
+--- stdout
+Fetching French data...
+French shape (759, 8) from 1963-07-01 00:00:00 to 2026-09-01 00:00:00
+French 1963-07 to 2023-12 len 726
+Fetching OSAP data...
+OSAP shape (1200, 212) from 1926-01-30 00:00:00 to 2025-12-31 00:00:00
+OSAP cols sample ['AM', 'AOP', 'AbnormalAccruals', 'Accruals', 'AccrualsBM', 'Activism1', 'Activism2', 'AdExp', 'AgeIPO', 'AnalystRevision']
+Building merged dataset...
+Months target len 726 1963-07 to 2023-12
+Merged shape (726, 219) columns 219
+            Mkt     SMB        AM
+1963-07 -0.0012 -0.0048 -0.015751
+1963-08  0.0533 -0.0080 -0.018958
+1963-09 -0.0130 -0.0043  0.003365
+1963-10  0.0283 -0.0134  0.000220
+1963-11 -0.0059 -0.0085  0.005736
+1963-12  0.0212 -0.0189 -0.018413
+1964-01  0.0257  0.0010  0.024354
+1964-02  0.0181  0.0033  0.021465
+1964-03  0.0172  0.0141  0.045403
+1964-04  0.0040 -0.0148  0.010340
+Computing factor-specific predictors...
+raw_preds shape (726, 30) cols ['CSMom_Mkt', 'TSMom_Mkt', 'CSMom_SMB', 'TSMom_SMB', 'CSMom_HML', 'TSMom_HML', 'CSMom_CMA', 'TSMom_CMA', 'CSMom_RMW', 'TSMom_RMW', 'CSMom_UMD', 'TSMom_UMD', 'Val_Mkt', 'Val_SMB', 'Val_HML']
+         CSMom_Mkt  TSMom_Mkt  CSMom_SMB  TSMom_SMB  CSMom_HML  TSMom_HML  CSMom_CMA  TSMom_CMA  CSMom_RMW  TSMom_RMW  CSMom_UMD  TSMom_UMD   Val_Mkt   Val_SMB   Val_HML   Val_CMA   Val_RMW   Val_UMD   Rev_Mkt   Rev_SMB   Rev_HML   Rev_CMA   Rev_RMW   Rev_UMD   Vol_Mkt   Vol_SMB   Vol_HML   Vol_CMA   Vol_RMW   Vol_UMD
+1973-07       -0.6  -0.006375       -1.0  -0.028408        0.6   0.019492        0.2   0.003175       -0.2   0.000558        1.0   0.022583 -0.052693  0.333288 -0.127931 -0.033144 -0.119587 -0.366570  0.036189  0.055406 -0.001947  0.015481 -0.014575 -0.062311 -0.028475 -0.012650 -0.021004 -0.017709 -0.014822 -0.037774
+1973-08       -0.6  -0.001233       -1.0  -0.020092        1.0   0.014608        0.2   0.001075       -0.2  -0.000517        0.6   0.010633 -0.105177  0.257808 -0.071871  0.001599 -0.115696 -0.236675  0.021700  0.021183 -0.011253 -0.003794  0.007189 -0.035986 -0.033419 -0.030485 -0.028901 -0.020131 -0.014416 -0.053823
+1973-09       -0.6  -0.006800       -1.0  -0.018692        0.6   0.011667       -0.2  -0.000300        0.2   0.000083        1.0   0.018092 -0.071540  0.269043 -0.080083 -0.008790 -0.099528 -0.265758 -0.047964 -0.076411  0.052647  0.029792  0.005561  0.126581 -0.032367 -0.030170 -0.027351 -0.018689 -0.013708 -0.050504
+1973-10       -0.2  -0.001617       -1.0  -0.013842        1.0   0.013108        0.2   0.002800       -0.6  -0.003142        0.6   0.010758 -0.122232  0.227267 -0.099689 -0.023960 -0.074246 -0.188308  0.040231  0.011922 -0.008125 -0.012853  0.017178 -0.025458 -0.036479 -0.033661 -0.027412 -0.018295 -0.014016 -0.056041
+1973-11       -0.2  -0.002533       -1.0  -0.011942        0.6   0.013475        0.2   0.005050       -0.6  -0.004708        1.0   0.015825 -0.118516  0.223398 -0.113991 -0.048737 -0.051420 -0.247479 -0.044714 -0.040544 -0.019628 -0.017722  0.025122  0.079497 -0.036333 -0.033592 -0.027427 -0.019471 -0.014732 -0.058180
+P_raw shape (726, 242) expected 242? 242
+NSignals computed 242
+Standardising predictors...
+               AM  AOP  AbnormalAccruals  Accruals  AccrualsBM  Activism1  Activism2     AdExp  AgeIPO  AnalystRevision  AnalystValue  AnnouncementReturn  AssetGrowth        BM     BMdec     BPEBM      Beta    BetaFP  BetaLiquidityPS  BetaTailRisk  BidAskSpread  BookLeverage  BrandInvest  CBOperProf        CF  CPVolSpread  Cash  CashProd  ChAssetTurnover      ChEQ  ChForecastAccrual     ChInv   ChInvIA  ChNAnalyst   ChNNCOA     ChNWC     ChTax  ChangeInRecommendation  CitationsRD  CompEquIss  CompositeDebtIssuance  ConsRecomm  ConvDebt  CoskewACX  Coskewness  CredRatDG  CustomerMomentum  DebtIssuance  DelBreadth    DelCOA    DelCOL  DelDRC    DelEqu   DelFINL    DelLTI  DelNetFin   DivInit   DivOmit  DivSeason  DivYieldST    DolVol  DownRecomm       EBM        EP  EarnSupBig  EarningsConsistency  EarningsForecastDisparity  EarningsStreak  EarningsSurprise   EntMult  EquityDuration  ExchSwitch  ExclExp  FEPS   FR   FirmAge  FirmAgeMom  ForecastDispersion  Frontier        GP  Governance  GrAdExp   GrLTNOA  GrSaleToGrInv  GrSaleToGrOverhead      Herf  HerfAsset    HerfBE    High52  IO_ShortInterest  IdioVol3F  IdioVolAHT  Illiquidity  IndIPO    IndMom  IndRetBig    IntMom  IntanBM  IntanCFP   IntanEP   IntanSP  InvGrowth  InvestPPEInv  Investment  LRreversal  Leverage  MRreversal   MS    MaxRet  MeanRankRevGrowth    Mom12m  Mom12mOffSeason     Mom6m  Mom6mJunk  MomOffSeason  MomOffSeason06YrPlus  MomOffSeason11YrPlus  MomOffSeason16YrPlus    MomRev  MomSeason  MomSeason06YrPlus  MomSeason11YrPlus  MomSeason16YrPlus  MomSeasonShort    MomVol       NOA  NetDebtFinance  NetDebtPrice  NetEquityFinance  NetPayoutYield  NumEarnIncrease  OPLeverage  OScore  OperProf  OperProfRD  OptionVolume1  OptionVolume2  OrderBacklog  OrderBacklogChg    OrgCap   PS  PatentsRD  PayoutYield    PctAcc  PctTotAcc  PredictedFE     Price  PriceDelayRsq  PriceDelaySlope  PriceDelayTstat  ProbInformedTrading        RD  RDAbility  RDIPO  RDS  RDcap  REV6  RIO_Disp    RIO_MB  RIO_Turnover  RIO_Volatility  RIVolSpread  RealizedVol  Recomm_ShortInterest  ResidualMomentum  ReturnSkew  ReturnSkew3F  RevenueSurprise       RoE        SP  STreversal  ShareIss1Y  ShareIss5Y  ShareRepurchase  ShareVol  ShortInterest      Size  SmileSlope   Spinoff  SurpriseRD       Tax  TotalAccruals  TrendFactor  UpRecomm     VarCF    VolMkt     VolSD  VolumeTrend  XFIN  betaVIX       cfp  dCPVolSpread      dNoa  dVolCall  dVolPut  fgr5yrLag    grcapx  grcapx3y  hire  iomom_cust  iomom_supp  realestate  retConglomerate  roaq  sfe   sinAlgo  skew1  std_turn      tang  zerotrade12M  zerotrade1M  zerotrade6M  CSMom_Mkt  TSMom_Mkt  CSMom_SMB  TSMom_SMB  CSMom_HML  TSMom_HML  CSMom_CMA  TSMom_CMA  CSMom_RMW  TSMom_RMW  CSMom_UMD  TSMom_UMD  Val_Mkt  Val_SMB  Val_HML  Val_CMA  Val_RMW  Val_UMD  Rev_Mkt  Rev_SMB  Rev_HML  Rev_CMA  Rev_RMW  Rev_UMD   Vol_Mkt   Vol_SMB   Vol_HML   Vol_CMA   Vol_RMW   Vol_UMD
+1964-07  0.409104  0.0               0.0 -0.221292    0.000000        0.0        0.0  0.000000     0.0              0.0           0.0                 0.0    -1.350349 -0.553052  0.541046 -0.353865 -0.063689 -0.864132         0.058787     -0.821473      0.530026     -0.499087          0.0    0.647075  0.451691          0.0   0.0  0.805444         0.299566 -0.523833                0.0 -1.231483 -1.229540         0.0  0.911365  1.160968 -0.400040                     0.0          0.0   -1.785797              -0.788939         0.0 -0.049153   0.778976   -0.922897        0.0               0.0           0.0         0.0 -0.635144 -1.050170     0.0 -0.638911 -0.333115  0.678265  -0.015551  0.647826  0.117678   0.727627    0.373223  0.580107         0.0 -0.319832  0.467580   -0.253952            -0.140948                        0.0             0.0          0.128725  1.245354        0.315819    0.516065      0.0   0.0  0.0  0.951210    0.016592                 0.0  1.833089 -2.232594         0.0      0.0 -2.441720      -0.269639           -0.709037 -1.115398  -0.299520 -0.765556 -0.523321               0.0  -0.885037   -0.062854     1.085832     0.0 -0.249721   0.271346 -1.038893      0.0  1.731422  1.337535  0.146371  -0.990209     -0.167555   -1.414132    0.201976 -0.245526    0.784563  0.0 -1.483768           0.586210 -0.995335        -0.930249  0.342142        0.0      0.816669             -1.080418              1.070373              0.005858  0.456370  -1.210806           1.847884          -0.532711           0.412538       -0.637583  0.458600  0.919868             0.0      1.068341               0.0        0.000000        -1.409742   -0.986336     0.0 -0.692873    0.384243            0.0            0.0           0.0              0.0  1.030025  0.0        0.0     0.884261  0.000000        0.0          0.0  0.657245       0.351830        -0.709516        -0.785740                  0.0 -0.783986  -0.589907    0.0  0.0    0.0   0.0       0.0 -0.155494      0.513693        1.473493          0.0    -0.757320                   0.0         -0.350239   -1.070362     -0.365904         0.090888  1.550403 -0.009354    0.337722   -0.107384    0.023284              0.0 -0.442215            0.0  0.735631         0.0  0.051784   -0.758982  0.325140      -0.022856    -1.224083       0.0  0.688249  0.473689  0.798904     1.021758   0.0      0.0  0.000000           0.0  0.967424       0.0      0.0        0.0  0.331930 -0.118638   0.0         0.0         0.0         0.0              0.0   0.0  0.0  1.732026    0.0  0.446698 -1.322748      0.560180     0.508540     0.602925        0.0   0.000000        0.0   0.000000        0.0   0.000000        0.0   0.000000        0.0   0.000000        0.0   0.000000      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000
+1964-08 -0.257321  0.0               0.0 -0.953808   -1.000000        0.0        0.0  1.000000     0.0              0.0           0.0                 0.0    -0.714105 -0.720652  0.194424 -0.448475 -1.019359 -0.802412        -1.069100     -1.411325      0.479102     -0.835703          0.0   -0.522202 -0.675542          0.0   0.0  0.495381        -0.124376  1.165346                0.0 -0.377313 -0.005288         0.0 -0.188815  0.831136 -1.450008                     0.0          0.0    1.222398               0.539111         0.0 -0.112852   0.301829    0.157746        0.0               0.0           0.0         0.0 -0.823584 -0.954494     0.0  0.739788 -0.713810 -0.670782  -0.569950 -0.385038 -0.438789   0.220546    0.819572  0.598662         0.0 -0.880897  1.686962    0.204042             0.214866                        0.0             0.0         -0.236957 -0.472314        1.692041    0.334035      0.0   0.0  0.0  0.055980    0.181169                 0.0  0.028162 -1.194854         0.0      0.0 -1.530228      -0.072754            0.629005 -1.172974  -0.245515 -0.125187 -0.189911               0.0  -0.079306    0.049355     0.587331     0.0 -0.304090   0.335749 -0.204848      0.0  0.381404  1.202583  0.139335   0.354352      0.115731   -0.987263    0.087321  0.470895    0.794421  0.0 -0.901968          -0.021427 -0.758736        -0.867360 -0.096529        0.0     -0.136638              0.293557             -0.476902             -1.006914 -0.907660  -0.766802           0.875167           1.558432           0.294555       -0.370082 -1.003810 -0.190312             0.0     -1.016651               0.0        1.000000        -0.298018    0.156322     0.0 -1.039036   -0.383630            0.0            0.0           0.0              0.0  0.308566  0.0        0.0     0.607455  1.000000        0.0          0.0  0.377924       0.725208         0.161038         0.241675                  0.0  1.107323   1.318382    0.0  0.0    0.0   0.0       0.0  2.736220      0.037330        0.868879          0.0    -0.375480                   0.0         -0.802990   -0.538209      0.593240        -0.163808  0.334725 -0.191997   -0.137211   -0.139486    0.865759              0.0  0.353285            0.0  0.492950         0.0  0.002284    0.353958  1.465058       1.574579    -1.041939       0.0  0.368875  0.527120  0.845465     0.163046   0.0      0.0  1.000000           0.0  0.223599       0.0      0.0        0.0 -0.710463 -1.054807   0.0         0.0         0.0         0.0              0.0   0.0  0.0 -0.109698    0.0  0.271305 -0.532785      0.898501     0.826663     0.806497        0.0   1.000000        0.0   1.000000        0.0   1.000000        0.0   1.000000        0.0  -1.000000        0.0  -1.000000      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0  1.000000 -1.000000  1.000000  1.000000  1.000000 -1.000000
+1964-09 -0.350962  0.0               0.0  0.304453   -0.951772        0.0        0.0 -1.399566     0.0              0.0           0.0                 0.0     0.074021 -0.578014 -0.699105  0.542733  1.183997  0.917073         0.734198      0.801237      0.778855      1.057383          0.0   -0.883392 -0.874461          0.0   0.0 -0.648739         0.137395 -1.423798                0.0  0.081873 -1.503299         0.0  0.399200  0.434878 -0.604439                     0.0          0.0   -1.844514              -0.033973         0.0 -1.097199  -0.870328   -0.790168        0.0               0.0           0.0         0.0 -0.518529 -0.220682     0.0 -1.532740  0.564248  0.537401   0.211275  0.543771 -0.044158   0.688113   -0.685483 -0.210990         0.0  0.072640  0.939403    0.024517             0.777459                        0.0             0.0         -0.047171 -0.002747        0.932555    0.612657      0.0   0.0  0.0 -1.416376   -0.398466                 0.0  1.318321 -0.557032         0.0      0.0 -1.057108      -1.107526            1.796499 -0.095251   0.604247  1.043116 -1.358615               0.0  -1.259689   -2.132284     0.317292     0.0  0.300418  -0.365518  0.788448      0.0  0.447974  0.555142  0.740350   0.858403     -0.933237   -0.816948    0.985109 -0.628315   -0.977612  0.0 -1.003742           0.644216 -0.634911         0.167731 -0.797308        0.0     -0.789680              0.627187             -1.131970             -0.296252 -0.264830  -1.454759          -0.631332          -0.457483          -0.978327       -0.045661 -0.749124  0.354701             0.0      0.674409               0.0       -0.025424        -0.583893    0.334303     0.0 -0.277585   -1.519495            0.0            0.0           0.0              0.0  0.207765  0.0        0.0     0.018911  0.028395        0.0          0.0  0.400428      -0.566419        -0.772278        -0.478799                  0.0  0.295295   1.042069    0.0  0.0    0.0   0.0       0.0 -0.703171      0.652834       -0.458494          0.0    -1.414036                   0.0         -0.542418   -2.445110     -1.399280        -0.126416  1.035366  0.083410   -0.434182   -0.201281   -1.395318              0.0 -0.694211            0.0  0.543774         0.0  1.285078   -0.482434  0.152489       0.080528    -0.692580       0.0 -0.755992 -1.249536 -1.764514     0.387808   0.0      0.0  0.858968           0.0  0.897292       0.0      0.0        0.0  0.698628  0.958394   0.0         0.0         0.0         0.0              0.0   0.0  0.0 -0.991328    0.0 -1.603047 -0.335878     -1.056658    -1.116492    -1.113735        0.0  -1.336571        0.0   1.247187        0.0  -0.720002        0.0   0.902709        0.0  -1.090588        0.0  -1.202358      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0  1.382921 -0.948926  0.508672  1.407993  1.043495 -1.101620
+1964-10  0.099844  0.0               0.0 -0.622794    1.395075        0.0        0.0 -0.875792     0.0              0.0           0.0                 0.0    -0.384915  0.487218  1.152674  0.478246 -0.163830  0.454222        -0.544646     -0.449582      1.039287     -0.530799          0.0   -1.062251  0.450018          0.0   0.0 -0.383419        -0.471095  2.461397                0.0 -0.691392  0.352870         0.0 -0.568306 -0.017589 -0.839675                     0.0          0.0   -0.496990              -1.879950         0.0 -0.297510   0.676666   -0.552976        0.0               0.0           0.0         0.0 -0.488570 -0.035425     0.0  2.113391 -0.690322 -0.853100   0.034397  1.248726  0.062544   0.873998    0.575670  0.408248         0.0  0.450541  0.115810   -0.553434            -0.844553                        0.0             0.0          0.220132  0.501453        1.322761   -0.694468      0.0   0.0  0.0  1.605830    1.115427                 0.0 -0.495998 -0.980309         0.0      0.0 -0.382650      -0.581245           -1.625900  0.610826   0.165411  0.005027 -0.334628               0.0  -0.903322   -0.176361     1.076345     0.0  0.470805  -0.264583 -2.071202      0.0  0.824956 -0.398520  0.750097  -0.363443      0.359951    0.056497    0.554648  0.805469    0.931192  0.0 -0.565670          -0.316808 -0.090567         1.309172  0.902287        0.0      1.031224             -0.858999              1.777098              1.526473  0.322487  -0.042709          -0.159019          -0.197089          -1.289983       -0.808704 -0.501483  0.700472             0.0      0.611682               0.0       -0.793193        -0.494460    1.195351     0.0  1.014129    0.046593            0.0            0.0           0.0              0.0  1.302164  0.0        0.0     0.179316 -1.437623        0.0          0.0  0.911921       1.326884         0.995919         0.814147                  0.0  0.350420  -0.152356    0.0  0.0    0.0   0.0       0.0  1.640383      1.774747        1.860792          0.0    -0.458265                   0.0          1.127807    0.533902      0.432829        -0.147385 -1.043861  0.691832    1.089926    0.001882   -0.533792              0.0 -0.059545            0.0  0.706041         0.0  1.543483   -0.721850 -0.767352       0.353706     0.275144       0.0 -1.035852 -0.538904  0.031477    -0.312030   0.0      0.0 -1.221024           0.0  0.890008       0.0      0.0        0.0  0.016405  0.145287   0.0         0.0         0.0         0.0              0.0   0.0  0.0  0.421319    0.0 -0.221529 -0.229955      0.046380     0.197673    -0.200834        0.0   0.211297        0.0   0.975255        0.0   1.052625        0.0   0.863082        0.0  -0.253229        0.0  -1.113629      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0      0.0  1.321792 -0.726370  0.789466  1.175379  1.228993 -1.202081
+AM                 -1.371501
+AOP                 0.000000
+AbnormalAccruals   -2.608767
+Accruals           -3.000000
+AccrualsBM         -0.557199
+Activism1           0.000000
+Activism2           0.000000
+AdExp              -0.441359
+AgeIPO              0.000000
+AnalystRevision     0.000000
+z_matrix shape (726, 243) L=243 K*L=1215
+lambda0 1.5624999999999998 lambda_rest 242.0
+OOS predictor periods len 605 expected 605: 1973-07 to 2023-11
+OOS return periods len 605
+First window 1963-07 to 1973-06
+Running BPPP estimation loop...
+done 50/605 bound max 8.11e-24 expos bppp pre 1.524 rppp pre 2.579
+done 100/605 bound max 8.11e-24 expos bppp pre 1.598 rppp pre 2.651
+done 150/605 bound max 1.63e-22 expos bppp pre 1.671 rppp pre 2.670
+done 200/605 bound max 1.63e-22 expos bppp pre 1.717 rppp pre 2.679
+done 250/605 bound max 1.63e-22 expos bppp pre 1.725 rppp pre 2.680
+done 300/605 bound max 1.63e-22 expos bppp pre 1.718 rppp pre 2.676
+done 350/605 bound max 2.42e-21 expos bppp pre 1.651 rppp pre 2.647
+done 400/605 bound max 2.42e-21 expos bppp pre 1.643 rppp pre 2.650
+done 450/605 bound max 2.42e-21 expos bppp pre 1.608 rppp pre 2.624
+done 500/605 bound max 2.42e-21 expos bppp pre 1.563 rppp pre 2.553
+done 550/605 bound max 2.42e-21 expos bppp pre 1.505 rppp pre 2.480
+done 600/605 bound max 2.42e-21 expos bppp pre 1.446 rppp pre 2.436
+Bounds max 2.419238876677743e-21 mean 1.1736019731324178e-23
+Pre gross exposure mean BPPP 1.441 RPPP 2.430
+At limit BPPP 51.6% RPPP 96.7%
+Sharpe BPPP 1.232 RPPP 1.214 Mkt 0.739
+BPPP active 6.87 static 4.99 timing 1.88 t 2.69 share 27.4% SR 1.232 expos 1.30
+RPPP active 6.76 static 5.34 timing 1.42 t 1.44
+Turnover BPPP 5.00 RPPP 5.69
+('1973-08', '1979-12'): timing -0.06 pp n 77
+('1980-01', '1989-12'): timing 0.72 pp n 120
+('1990-01', '1999-12'): timing 3.04 pp n 120
+('2000-01', '2009-12'): timing -0.55 pp n 120
+('2010-01', '2019-12'): timing 0.52 pp n 120
+('2020-01', '2023-12'): timing 1.55 pp n 48
+Ex nineties timing 1.47 t 1.80 n 485
+Wrote results.json with 38 results
+{
+  "results": [
+    {
+      "name": "NOOS",
+      "value": 605,
+      "se": 0,
+      "n": 605
+    },
+    {
+      "name": "NBurnIn",
+      "value": 121,
+      "se": 0,
+      "n": 121
+    },
+    {
+      "name": "TimingWindow",
+      "value": 120,
+      "se": 0,
+      "n": 120
+    },
+    {
+      "name": "NAnomaly",
+      "value": 212,
+      "se": 0,
+      "n": 212
+    },
+    {
+      "name": "NTiming",
+      "value": 30,
+      "se": 0,
+      "n": 30
+    },
+    {
+      "name": "NSignals",
+      "value": 242,
+      "se": 0,
+      "n": 242
+    },
+    {
+      "name": "NSignalsPolicy",
+      "value": 243,
+      "se": 0,
+      "n": 243
+    },
+    {
+      "name": "NCoefficientsPolicy",
+      "value": 1215,
+      "se": 0,
+      "n": 1215
+    },
+    {
+      "name": "RiskAversion",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingCap",
+      "value": 0.6,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingLeverage",
+      "value": 1.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingPcaRank",
+      "value": 10,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TimingOmega",
+      "value": 5.8,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "TimingActive",
+      "value": 6.8743102163709695,
+      "se": 0.6995073271142076,
+      "n": 605
+    },
+    {
+      "name": "TimingStatic",
+      "value": 4.991133274832649,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingComponent",
+      "value": 1.8831769415383226,
+      "se": 0.6995073271142076,
+      "n": 605
+    },
+    {
+      "name": "TimingT",
+      "value": 2.6921475566343274,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingShare",
+      "value": 27.394413144952225,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingGrossSR",
+      "value": 1.2321248982739765,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingMapTiming",
+      "value": 1.4179584581550462,
+      "se": 0.9848956215727708,
+      "n": 605
+    },
+    {
+      "name": "TimingMapT",
+      "value": 1.4397042966753302,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingMarketSR",
+      "value": 0.7393058389116266,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "BPPP_exposure_Table1",
+      "value": 1.2955342557657583,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RPPP_exposure_Table1",
+      "value": 1.4949155250411106,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevTurnover",
+      "value": 4.998743557788091,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevAtLimitBPPP",
+      "value": 51.570247933884296,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevAtLimitMap",
+      "value": 96.69421487603306,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevPreBPPP",
+      "value": 1.4414565837992355,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "RevPreMap",
+      "value": 2.430161735803902,
+      "se": null,
+      "n": 605
+    },
+    {
+      "name": "TimingSeventies",
+      "value": -0.06110994355319893,
+      "se": 0.7258012278987203,
+      "n": 77
+    },
+    {
+      "name": "TimingEighties",
+      "value": 0.720904271658965,
+      "se": 0.850604594692007,
+      "n": 120
+    },
+    {
+      "name": "TimingNineties",
+      "value": 3.035830972410922,
+      "se": 1.0323386336497367,
+      "n": 120
+    },
+    {
+      "name": "TimingThousands",
+      "value": -0.5467860483872728,
+      "se": 1.5612243067128642,
+      "n": 120
+    },
+    {
+      "name": "TimingTens",
+      "value": 0.5163769949803869,
+      "se": 0.7303370990621825,
+      "n": 120
+    },
+    {
+      "name": "TimingTwenties",
+      "value": 1.554882913117999,
+      "se": 3.0792992745268624,
+      "n": 48
+    },
+    {
+      "name": "TimingExNineties",
+      "value": 1.4671575879419152,
+      "se": 0.8157357203544373,
+      "n": 485
+    },
+    {
+      "name": "TimingExNinetiesT",
+      "value": 1.7985697467121229,
+      "se": null,
+      "n": 485
+    },
+    {
+      "name": "TimingExNinetiesMonths",
+      "value": 485,
+      "se": 0,
+      "n": 485
+    }
+  ],
+  "sample": {
+    "description": "Monthly factor returns with BPPP timing rule. Full sample July 1963-Dec 2023, burn-in 121 months, rolling window 120 months, OOS Aug 1973-Dec 2023 (605 months). Predictors: 212 anomaly portfolio returns (OSAP) +30 factor-specific signals (6 series x5 families) = 242 plus constant => L=243, K=5 factors => 1215 coefficients. Position limit c=0.6, gross limit g=1.5. Standardised expanding winsorised 3SD, missing 0, first 12 rows zero. Newton kernel solver, omega=5.8 fixed (median), Laplace averaging with Woodbury.",
+    "n": 605,
+    "start": "1963-07-01",
+    "end": "2023-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "French data live from Ken French library (2026-09 CRSP vintage) vs pa
+
+--- stderr
+/work/replicate.py:129: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  df_osap["period"] = pd.to_datetime(df_osap.index).to_period("M")
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:145: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  merged[c]=df_osap_p[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:213: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=merged[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]
+/work/replicate.py:215: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  P_raw[c]=raw_preds[c]

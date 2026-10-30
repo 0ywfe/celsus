@@ -1,0 +1,3237 @@
+{
+ "title": "Dynamic Factor Analysis of Price Movements in the Philippine Stock Exchange",
+ "hypothesis": "not stated: paper does not state a formal null hypothesis with numeric null value; model validation via correlation with PSEi and CAPM beta and significance at alpha=0.05 is descriptive, not a hypothesis test with test statistic and p-value printed.",
+ "data_sources": [
+  "Phisix API via fastquant (PSE daily closing prices S_it)",
+  "https://stooq.com/q/d/?s=%5Epsei (PSEi)",
+  "Barrons market-data stocks for CAPM beta (footnote p.9)",
+  "Philippine quarterly GDP growth rates (source not stated beyond nowcasting application period 2015-2022)"
+ ],
+ "sample": "Philippine Stock Exchange (PSE) daily stock prices and Philippine Stock Exchange Index (PSEi) composite returns. Historical stock price data via Python library fastquant wrapping Phisix API; PSEi data from https://stooq.com/q/d/?s=%5Epsei. Filter: drop stocks with more than 1% missing observations. Resulting analysis sample: 72 stocks (described as more than the top 30 in terms of market capitalization included in the PSEi). Percentage return R_it = (S_it - S_i(t-1))/S_i(t-1) where S_it is closing price of stock i at time t. GDP nowcasting uses Philippine quarterly GDP growth rates.",
+ "period_start": "January 1, 2015",
+ "period_end": "December 31, 2020; nowcasting out-of-sample period to December 31, 2022",
+ "method": [
+  "1. Obtain daily closing prices S_it for PSE stocks 2015-01-01 to 2020-12-31 via fastquant/Phisix and PSEi index same period via stooq.com.",
+  "2. Apply sample filter: parameter threshold 1%: drop any stock with >1% missing observations.",
+  "3. Compute percentage return R_it = (S_it - S_i(t-1))/S_i(t-1).",
+  "4. Determine number of common factors n using Bai-Ng information criteria IC1, IC2, IC3 as in Eq.2-4: ln V(n) + penalty where V(n) is mean of squared residuals when n common factors estimated via PCA. Evaluate n=0 (white noise) vs n=1,2. Select n=1 as best, n=2 as viable alternative.",
+  "5. Determine lag orders p (VAR for F_t) and q (AR for Z_it) via Bayesian Information Criterion (BIC): DFM(n=1,p=3,q=5) and DFM(n=2,p=2,q=5).",
+  "6. Formulate DFM as linear Gaussian state-space: Y_t = M X_t + eps_t, X_t = T X_{t-1} + eta_t with Sigma_eps=0 and Sigma_eta=diag(I_n,0,...,0, sigma^2,0,...,0). Estimate parameters M,T,Sigma by maximum likelihood using Kalman filter prediction/update and Rauch-Tung-Striebel smoother: mu_{t|t-1}=T mu_{t-1|t-1}, Sigma_{t|t-1}=T Sigma_{t-1|t-1} T'+Sigma_eta; K_t=Sigma_{t|t-1}M'(M Sigma_{t|t-1}M'+Sigma_eps)^{-1}; mu_{t|t}=mu_{t|t-1}+K_t(Y_t-M mu_{t|t-1}); Sigma_{t|t}=Sigma_{t|t-1}-K_t M Sigma_{t|t-1}; J_t=Sigma_{t|t}T' Sigma_{t+1|t}^{-1}; mu_{t|t'}=mu_{t|t}+J_t(mu_{t+1|t'}-mu_{t+1|t}).",
+  "7. Extract Kalman-smoothed common factors F_t (n=1) and F_t=[F1t,F2t]' (n=2) and idiosyncratic factors Z_it, and loadings beta_i, sigma_i. Estimate VAR coefficients Lambda_j and AR coefficients Psi_j.",
+  "8. Validation: compute Pearson correlations between (Kalman-smoothed) F_t and PSEi returns, between F_t and principal components, and between loadings beta_i and CAPM beta. Test significance of Lambda, beta_i, sigma_i at alpha=0.05 (ns = not significant).",
+  "9. GDP nowcasting: in-sample training January 1, 2015 to December 31, 2020; out-of-sample evaluation January 1, 2021 to December 31, 2022. Benchmark AR(1) for quarterly GDP growth. Augmented model: transform daily F_t into monthly indicators per calendar month (mean and standard deviation of F1t and F2t) to match quarterly frequency; to avoid leakage use Kalman-smoothed F_t in-sample and Kalman-filtered F_t out-of-sample; regress GDP growth on AR(1) plus monthly indicators via OLS. Evaluate via RMSE in-sample and out-of-sample."
+ ],
+ "claims": [
+  {
+   "name": "count_stocks_retained_after_filter",
+   "description": "number of stocks retained after dropping stocks with >1% missing observations 2015-2020, more than top 30 PSEi constituents used in analysis; basis for all loading tables and correlations.",
+   "value": "72",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Results preamble p.7 and Table 3/4 (72 rows)"
+  },
+  {
+   "name": "param_missing_threshold",
+   "description": "filter threshold, not judged",
+   "value": "1%",
+   "unit": "% missing observations threshold for exclusion",
+   "kind": "parameter",
+   "where": "Results p.7: stocks with more than 1% missing observations are dropped"
+  },
+  {
+   "name": "param_n_1_factor",
+   "description": "model order n",
+   "value": "1",
+   "unit": "number of common factors in one-factor specification",
+   "kind": "parameter",
+   "where": "Sec Results: DFM (n=1,p=3,q=5)"
+  },
+  {
+   "name": "param_n_2_factor",
+   "description": "model order n",
+   "value": "2",
+   "unit": "number of common factors in two-factor specification",
+   "kind": "parameter",
+   "where": "Sec Results: DFM (n=2,p=2,q=5)"
+  },
+  {
+   "name": "param_p_3_q_5_one_factor",
+   "description": "lag orders for one-factor DFM",
+   "value": "p=3, q=5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Sec Results One-Factor Model: model with n=1 common factor following AR(3) process and stock-specific factors following AR(5) processes, where p and q are chosen based on BIC"
+  },
+  {
+   "name": "param_p_2_q_5_two_factor",
+   "description": "lag orders for two-factor DFM",
+   "value": "p=2, q=5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Sec Results Two-Factor Model: model with n=2 common factors following VAR(2) process and stock-specific factors following AR(5) processes, where p and q chosen based on BIC"
+  },
+  {
+   "name": "param_alpha_significance",
+   "description": "significance level for testing loadings and VAR coefficients",
+   "value": "0.05",
+   "unit": "alpha",
+   "kind": "parameter",
+   "where": "Sec One-Factor Model p.9 and Two-Factor p.11: at significance level alpha=0.05; footnote ns = not significant"
+  },
+  {
+   "name": "estimate_corr_Ft_PSEi_one_factor",
+   "description": "systematic market dynamics proxy validation one-factor",
+   "value": "0.9283",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.8 Fig.3 text and Table 1: (Kalman smoothed) common factor F_t and PSEi returns exhibit correlation 0.9283 for DFM(n=1,p=3,q=5)"
+  },
+  {
+   "name": "estimate_corr_Ft_PC1_one_factor",
+   "description": "DFM vs PCA one-factor",
+   "value": "0.9975",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.9 Table1: F_t correlation with PC1 0.9975 for DFM(n=1,p=3,q=5)"
+  },
+  {
+   "name": "estimate_corr_PC1_PSEi_one_factor",
+   "description": "PCA vs market one-factor",
+   "value": "0.9144",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.9 Table1: PC1 correlation with PSEi returns 0.9144 (same in Table2)"
+  },
+  {
+   "name": "estimate_corr_CAPM_beta_beta_i_one_factor",
+   "description": "loading validation one-factor",
+   "value": "0.8348",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.9 Table1: CAPM beta correlation with beta_i 0.8348"
+  },
+  {
+   "name": "estimate_VAR_Ft_Lambda1_one_factor",
+   "description": "VAR lag1 one-factor significant",
+   "value": "0.1256",
+   "unit": "AR coefficient",
+   "kind": "estimate",
+   "where": "p.9 Eq: F_t =0.1256 F_{t-1}+0.0225 F_{t-2}+0.1380 F_{t-3}+ eps_t (Lambda1 coefficient on F_{t-1})"
+  },
+  {
+   "name": "estimate_VAR_Ft_Lambda2_one_factor_ns",
+   "description": "AR lag2 one-factor not significant at 0.05",
+   "value": "0.0225",
+   "unit": "AR coefficient ns",
+   "kind": "estimate",
+   "where": "p.9 Eq: coefficient on F_{t-2}=0.0225 only parameter not statistically significant"
+  },
+  {
+   "name": "estimate_VAR_Ft_Lambda3_one_factor",
+   "description": "AR lag3 one-factor significant",
+   "value": "0.1380",
+   "unit": "AR coefficient",
+   "kind": "estimate",
+   "where": "p.9 Eq: coefficient on F_{t-3}=0.1380"
+  },
+  {
+   "name": "tally_beta_i_significant_71_of_72_one_factor",
+   "description": "count significant loadings one-factor; one failure is LC due to closure order 2017-2020",
+   "value": "71",
+   "unit": "stocks with significant beta_i",
+   "kind": "tally",
+   "where": "p.9: loading beta_i for common factor F_t statistically significant for all but one stock (LC) at alpha=0.05 out of 72"
+  },
+  {
+   "name": "estimate_corr_F1t_PSEi_two_factor",
+   "description": "two-factor first common factor vs market",
+   "value": "0.6727",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: F1t correlation with PSEi 0.6727 for DFM(n=2,p=2,q=5)"
+  },
+  {
+   "name": "estimate_corr_F1t_PC1_two_factor",
+   "description": "two-factor F1t vs PC1",
+   "value": "0.8982",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: F1t correlation with PC1 0.8982"
+  },
+  {
+   "name": "estimate_corr_F2t_PSEi_two_factor",
+   "description": "two-factor second common factor vs market",
+   "value": "0.7704",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: F2t correlation with PSEi 0.7704"
+  },
+  {
+   "name": "estimate_corr_F2t_PC2_two_factor",
+   "description": "two-factor F2t vs PC2",
+   "value": "0.8229",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: F2t correlation with PC2 0.8229"
+  },
+  {
+   "name": "estimate_corr_PC2_PSEi_two_factor",
+   "description": "PCA PC2 vs market two-factor context",
+   "value": "0.3498",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: PC2 correlation with PSEi returns 0.3498"
+  },
+  {
+   "name": "estimate_corr_CAPM_beta_beta1i_two_factor",
+   "description": "loading validation beta1i two-factor",
+   "value": "0.5132",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: CAPM beta correlation with beta1i 0.5132"
+  },
+  {
+   "name": "estimate_corr_CAPM_beta_beta2i_two_factor",
+   "description": "loading validation beta2i two-factor",
+   "value": "0.8528",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 Table2: CAPM beta correlation with beta2i 0.8528"
+  },
+  {
+   "name": "estimate_corr_F1t_F2t_two_factor",
+   "description": "orthogonality of two-factor decomposition",
+   "value": "0.0798",
+   "unit": "Pearson correlation",
+   "kind": "estimate",
+   "where": "p.10 text: F1t and F2t have correlation 0.0798 nearly orthogonal"
+  },
+  {
+   "name": "estimate_R2_Ft_on_F1tF2t",
+   "description": "one-factor factor decomposed into two nearly uncorrelated signals",
+   "value": "0.998",
+   "unit": "R-squared",
+   "kind": "estimate",
+   "where": "p.10 text: linear regression of F_t on F1t and F2t produced R2 of 0.998"
+  },
+  {
+   "name": "estimate_VAR_Ft_11_lag1_two_factor",
+   "description": "VAR(2) lag1 (1,1) significant",
+   "value": "0.4894",
+   "unit": "VAR coefficient",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag1 row1col1 =0.4894"
+  },
+  {
+   "name": "estimate_VAR_Ft_12_lag1_two_factor",
+   "description": "VAR(2) lag1 (1,2) significant",
+   "value": "0.1680",
+   "unit": "VAR coefficient",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag1 row1col2 =0.1680"
+  },
+  {
+   "name": "estimate_VAR_Ft_21_lag1_two_factor_ns",
+   "description": "VAR(2) lag1 (2,1) not significant",
+   "value": "-0.0262",
+   "unit": "VAR coefficient ns",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag1 row2col1 =-0.0262 not statistically significant"
+  },
+  {
+   "name": "estimate_VAR_Ft_22_lag1_two_factor",
+   "description": "VAR(2) lag1 (2,2) significant",
+   "value": "-0.2526",
+   "unit": "VAR coefficient",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag1 row2col2 =-0.2526"
+  },
+  {
+   "name": "estimate_VAR_Ft_11_lag2_two_factor",
+   "description": "VAR(2) lag2 (1,1) significant",
+   "value": "0.5094",
+   "unit": "VAR coefficient",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag2 row1col1 =0.5094"
+  },
+  {
+   "name": "estimate_VAR_Ft_12_lag2_two_factor",
+   "description": "VAR(2) lag2 (1,2) significant",
+   "value": "-0.1726",
+   "unit": "VAR coefficient",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag2 row1col2 =-0.1726"
+  },
+  {
+   "name": "estimate_VAR_Ft_21_lag2_two_factor",
+   "description": "VAR(2) lag2 (2,1) significant",
+   "value": "-0.1627",
+   "unit": "VAR coefficient",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag2 row2col1 =-0.1627"
+  },
+  {
+   "name": "estimate_VAR_Ft_22_lag2_two_factor_ns",
+   "description": "VAR(2) lag2 (2,2) not significant",
+   "value": "-0.0931",
+   "unit": "VAR coefficient ns",
+   "kind": "estimate",
+   "where": "p.11 Eq VAR(2) matrix lag2 row2col2 =-0.0931 not statistically significant"
+  },
+  {
+   "name": "tally_beta1i_significant_72_of_72_two_factor",
+   "description": "count significant beta1i two-factor",
+   "value": "72",
+   "unit": "stocks with significant beta1i",
+   "kind": "tally",
+   "where": "p.11: beta1i's statistically significant for all stocks at alpha=0.05 in two-factor model"
+  },
+  {
+   "name": "tally_beta2i_significant_36_of_72_two_factor",
+   "description": "count significant beta2i two-factor = half",
+   "value": "36",
+   "unit": "stocks with significant beta2i",
+   "kind": "tally",
+   "where": "p.11: half of the beta2i's statistically significant at alpha=0.05 (72/2=36)"
+  },
+  {
+   "name": "estimate_RMSE_AR1_insample_2015_2020",
+   "description": "benchmark AR1 in-sample GDP nowcast error",
+   "value": "3.8533",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "p.13 Table3: AR(1) in-sample RMSE 3.8533 (in-sample period Jan1 2015-Dec31 2020)"
+  },
+  {
+   "name": "estimate_RMSE_AR1_outsample_2021_2022",
+   "description": "benchmark AR1 out-of-sample GDP error",
+   "value": "12.3095",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "p.13 Table3: AR(1) out-of-sample RMSE 12.3095 (out-of-sample Jan1 2021-Dec31 2022)"
+  },
+  {
+   "name": "estimate_RMSE_AR1_with_Ft_insample",
+   "description": "DFM-augmented in-sample GDP error",
+   "value": "0.6122",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "p.13 Table3: AR(1) w/ F_t in-sample RMSE 0.6122"
+  },
+  {
+   "name": "estimate_RMSE_AR1_with_Ft_outsample",
+   "description": "DFM-augmented out-of-sample GDP error",
+   "value": "8.0667",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "p.13 Table3: AR(1) w/ F_t out-of-sample RMSE 8.0667"
+  },
+  {
+   "name": "estimate_RMSE_improvement_insample_pct",
+   "description": "in-sample improvement",
+   "value": "84.11%",
+   "unit": "percent reduction in RMSE",
+   "kind": "estimate",
+   "where": "p.13 text: inclusion of derived monthly indicators substantially improved in-sample RMSE by 84.11%"
+  },
+  {
+   "name": "estimate_RMSE_improvement_outsample_pct",
+   "description": "out-of-sample improvement headline nowcasting result",
+   "value": "34.47%",
+   "unit": "percent reduction in RMSE",
+   "kind": "estimate",
+   "where": "p.13 text: out-of-sample RMSE by 34.47% ; abstract: yielding over a 34% decrease in out-of-sample prediction error"
+  },
+  {
+   "name": "estimate_RMSE_improvement_over_34pct_abstract",
+   "description": "abstract headline nowcasting claim",
+   "value": "34%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Abstract p.1: yielding over a 34% decrease in out-of-sample prediction error (same as 34.47% in body)"
+  },
+  {
+   "name": "loading_beta_2GO_one_factor",
+   "description": "",
+   "value": "0.8470",
+   "unit": "loading beta_i",
+   "kind": "estimate",
+   "where": "Table3 p.10 DFM(1,3,5) loadings: 2GO beta_i 0.8470"
+  },
+  {
+   "name": "loading_sigma_2GO_one_factor",
+   "description": "",
+   "value": "3.9217",
+   "unit": "loading sigma_i",
+   "kind": "estimate",
+   "where": "Table3 p.10 DFM(1,3,5): 2GO sigma_i 3.9217"
+  },
+  {
+   "name": "loading_beta_ABA_one_factor",
+   "description": "",
+   "value": "0.9707",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: ABA beta_i 0.9707"
+  },
+  {
+   "name": "loading_sigma_ABA_one_factor",
+   "description": "",
+   "value": "3.2377",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: ABA sigma_i 3.2377"
+  },
+  {
+   "name": "loading_beta_AC_one_factor",
+   "description": "",
+   "value": "1.2704",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AC beta_i 1.2704"
+  },
+  {
+   "name": "loading_sigma_AC_one_factor",
+   "description": "",
+   "value": "1.4373",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AC sigma_i 1.4373"
+  },
+  {
+   "name": "loading_beta_AEV_one_factor",
+   "description": "",
+   "value": "1.0996",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AEV 1.0996"
+  },
+  {
+   "name": "loading_sigma_AEV_one_factor",
+   "description": "",
+   "value": "1.8298",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AEV sigma 1.8298"
+  },
+  {
+   "name": "loading_beta_AGI_one_factor",
+   "description": "",
+   "value": "1.2715",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AGI 1.2715"
+  },
+  {
+   "name": "loading_sigma_AGI_one_factor",
+   "description": "",
+   "value": "1.7219",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AGI sigma 1.7219"
+  },
+  {
+   "name": "loading_beta_ALI_one_factor",
+   "description": "",
+   "value": "1.8711",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: ALI 1.8711"
+  },
+  {
+   "name": "loading_sigma_ALI_one_factor",
+   "description": "",
+   "value": "1.6140",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: ALI sigma 1.6140"
+  },
+  {
+   "name": "loading_beta_AP_one_factor",
+   "description": "",
+   "value": "0.7276",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AP 0.7276"
+  },
+  {
+   "name": "loading_sigma_AP_one_factor",
+   "description": "",
+   "value": "1.5130",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: AP sigma 1.5130"
+  },
+  {
+   "name": "loading_beta_BDO_one_factor",
+   "description": "",
+   "value": "1.2555",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BDO 1.2555"
+  },
+  {
+   "name": "loading_sigma_BDO_one_factor",
+   "description": "",
+   "value": "1.4833",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BDO sigma 1.4833"
+  },
+  {
+   "name": "loading_beta_BEL_one_factor",
+   "description": "",
+   "value": "0.8189",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BEL 0.8189"
+  },
+  {
+   "name": "loading_sigma_BEL_one_factor",
+   "description": "",
+   "value": "1.6531",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BEL sigma 1.6531"
+  },
+  {
+   "name": "loading_beta_BLOOM_one_factor",
+   "description": "",
+   "value": "1.5229",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BLOOM 1.5229"
+  },
+  {
+   "name": "loading_sigma_BLOOM_one_factor",
+   "description": "",
+   "value": "2.7239",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BLOOM sigma 2.7239"
+  },
+  {
+   "name": "loading_beta_BPI_one_factor",
+   "description": "",
+   "value": "1.0013",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BPI 1.0013"
+  },
+  {
+   "name": "loading_sigma_BPI_one_factor",
+   "description": "",
+   "value": "1.4661",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BPI sigma 1.4661"
+  },
+  {
+   "name": "loading_beta_BRN_one_factor",
+   "description": "",
+   "value": "1.2399",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BRN 1.2399"
+  },
+  {
+   "name": "loading_sigma_BRN_one_factor",
+   "description": "",
+   "value": "3.3060",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: BRN sigma 3.3060"
+  },
+  {
+   "name": "loading_beta_CEB_one_factor",
+   "description": "",
+   "value": "1.3312",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CEB 1.3312"
+  },
+  {
+   "name": "loading_sigma_CEB_one_factor",
+   "description": "",
+   "value": "2.4174",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CEB sigma 2.4174"
+  },
+  {
+   "name": "loading_beta_CHIB_one_factor",
+   "description": "",
+   "value": "0.4127",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CHIB 0.4127"
+  },
+  {
+   "name": "loading_sigma_CHIB_one_factor",
+   "description": "",
+   "value": "0.9347",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CHIB sigma 0.9347"
+  },
+  {
+   "name": "loading_beta_CNPF_one_factor",
+   "description": "",
+   "value": "0.6633",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CNPF 0.6633"
+  },
+  {
+   "name": "loading_sigma_CNPF_one_factor",
+   "description": "",
+   "value": "1.7277",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CNPF sigma 1.7277"
+  },
+  {
+   "name": "loading_beta_COSCO_one_factor",
+   "description": "",
+   "value": "0.7777",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: COSCO 0.7777"
+  },
+  {
+   "name": "loading_sigma_COSCO_one_factor",
+   "description": "",
+   "value": "1.4535",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: COSCO sigma 1.4535"
+  },
+  {
+   "name": "loading_beta_CPG_one_factor",
+   "description": "",
+   "value": "0.8730",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CPG 0.8730"
+  },
+  {
+   "name": "loading_sigma_CPG_one_factor",
+   "description": "",
+   "value": "2.2062",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: CPG sigma 2.2062"
+  },
+  {
+   "name": "loading_beta_DD_one_factor",
+   "description": "",
+   "value": "0.7787",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: DD 0.7787"
+  },
+  {
+   "name": "loading_sigma_DD_one_factor",
+   "description": "",
+   "value": "2.4391",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: DD sigma 2.4391"
+  },
+  {
+   "name": "loading_beta_DMC_one_factor",
+   "description": "",
+   "value": "1.2795",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: DMC 1.2795"
+  },
+  {
+   "name": "loading_sigma_DMC_one_factor",
+   "description": "",
+   "value": "1.8911",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: DMC sigma 1.8911"
+  },
+  {
+   "name": "loading_beta_DNL_one_factor",
+   "description": "",
+   "value": "1.1504",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: DNL 1.1504"
+  },
+  {
+   "name": "loading_sigma_DNL_one_factor",
+   "description": "",
+   "value": "2.2307",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: DNL sigma 2.2307"
+  },
+  {
+   "name": "loading_beta_EEI_one_factor",
+   "description": "",
+   "value": "0.8018",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: EEI 0.8018"
+  },
+  {
+   "name": "loading_sigma_EEI_one_factor",
+   "description": "",
+   "value": "2.1847",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: EEI sigma 2.1847"
+  },
+  {
+   "name": "loading_beta_EW_one_factor",
+   "description": "",
+   "value": "1.0251",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: EW 1.0251"
+  },
+  {
+   "name": "loading_sigma_EW_one_factor",
+   "description": "",
+   "value": "1.8732",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: EW sigma 1.8732"
+  },
+  {
+   "name": "loading_beta_FGEN_one_factor",
+   "description": "",
+   "value": "0.8139",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FGEN 0.8139"
+  },
+  {
+   "name": "loading_sigma_FGEN_one_factor",
+   "description": "",
+   "value": "1.8883",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FGEN sigma 1.8883"
+  },
+  {
+   "name": "loading_beta_FLI_one_factor",
+   "description": "",
+   "value": "1.0034",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FLI 1.0034"
+  },
+  {
+   "name": "loading_sigma_FLI_one_factor",
+   "description": "",
+   "value": "1.5730",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FLI sigma 1.5730"
+  },
+  {
+   "name": "loading_beta_FNI_one_factor",
+   "description": "",
+   "value": "1.2429",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FNI 1.2429"
+  },
+  {
+   "name": "loading_sigma_FNI_one_factor",
+   "description": "",
+   "value": "6.0448",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FNI sigma 6.0448"
+  },
+  {
+   "name": "loading_beta_FPH_one_factor",
+   "description": "",
+   "value": "0.7029",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FPH 0.7029"
+  },
+  {
+   "name": "loading_sigma_FPH_one_factor",
+   "description": "",
+   "value": "1.2352",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: FPH sigma 1.2352"
+  },
+  {
+   "name": "loading_beta_GERI_one_factor",
+   "description": "",
+   "value": "1.0278",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GERI 1.0278"
+  },
+  {
+   "name": "loading_sigma_GERI_one_factor",
+   "description": "",
+   "value": "2.1231",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GERI sigma 2.1231"
+  },
+  {
+   "name": "loading_beta_GLO_one_factor",
+   "description": "",
+   "value": "0.7262",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GLO 0.7262"
+  },
+  {
+   "name": "loading_sigma_GLO_one_factor",
+   "description": "",
+   "value": "1.8556",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GLO sigma 1.8556"
+  },
+  {
+   "name": "loading_beta_GMA7_one_factor",
+   "description": "",
+   "value": "0.3908",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GMA7 0.3908"
+  },
+  {
+   "name": "loading_sigma_GMA7_one_factor",
+   "description": "",
+   "value": "1.3900",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GMA7 sigma 1.3900"
+  },
+  {
+   "name": "loading_beta_GTCAP_one_factor",
+   "description": "",
+   "value": "1.2195",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GTCAP 1.2195"
+  },
+  {
+   "name": "loading_sigma_GTCAP_one_factor",
+   "description": "",
+   "value": "1.8579",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: GTCAP sigma 1.8579"
+  },
+  {
+   "name": "loading_beta_HOUSE_one_factor",
+   "description": "",
+   "value": "0.3541",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: HOUSE 0.3541"
+  },
+  {
+   "name": "loading_sigma_HOUSE_one_factor",
+   "description": "",
+   "value": "1.8103",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: HOUSE sigma 1.8103"
+  },
+  {
+   "name": "loading_beta_ICT_one_factor",
+   "description": "",
+   "value": "1.1416",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: ICT 1.1416"
+  },
+  {
+   "name": "loading_sigma_ICT_one_factor",
+   "description": "",
+   "value": "1.8282",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: ICT sigma 1.8282"
+  },
+  {
+   "name": "loading_beta_IMI_one_factor",
+   "description": "",
+   "value": "0.9508",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: IMI 0.9508"
+  },
+  {
+   "name": "loading_sigma_IMI_one_factor",
+   "description": "",
+   "value": "2.4919",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: IMI sigma 2.4919"
+  },
+  {
+   "name": "loading_beta_JFC_one_factor",
+   "description": "",
+   "value": "1.1580",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: JFC 1.1580"
+  },
+  {
+   "name": "loading_sigma_JFC_one_factor",
+   "description": "",
+   "value": "1.7656",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: JFC sigma 1.7656"
+  },
+  {
+   "name": "loading_beta_JGS_one_factor",
+   "description": "",
+   "value": "1.4660",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: JGS 1.4660"
+  },
+  {
+   "name": "loading_sigma_JGS_one_factor",
+   "description": "",
+   "value": "1.8076",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: JGS sigma 1.8076"
+  },
+  {
+   "name": "loading_beta_LC_one_factor_ns",
+   "description": "only non-significant beta_i one-factor",
+   "value": "0.1881",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table3 p.10: LC beta_i 0.1881 with ns superscript (not significant due to closure order 2017-2020)"
+  },
+  {
+   "name": "loading_sigma_LC_one_factor",
+   "description": "",
+   "value": "3.0327",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: LC sigma_i 3.0327"
+  },
+  {
+   "name": "loading_beta_LPZ_one_factor",
+   "description": "",
+   "value": "0.7766",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: LPZ 0.7766"
+  },
+  {
+   "name": "loading_sigma_LPZ_one_factor",
+   "description": "",
+   "value": "2.0411",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: LPZ sigma 2.0411"
+  },
+  {
+   "name": "loading_beta_LTG_one_factor",
+   "description": "",
+   "value": "0.9536",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: LTG 0.9536"
+  },
+  {
+   "name": "loading_sigma_LTG_one_factor",
+   "description": "",
+   "value": "2.1000",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: LTG sigma 2.1000"
+  },
+  {
+   "name": "loading_beta_MAXS_one_factor",
+   "description": "",
+   "value": "1.1587",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MAXS 1.1587"
+  },
+  {
+   "name": "loading_sigma_MAXS_one_factor",
+   "description": "",
+   "value": "2.0482",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MAXS sigma 2.0482"
+  },
+  {
+   "name": "loading_beta_MBT_one_factor",
+   "description": "",
+   "value": "1.1226",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MBT 1.1226"
+  },
+  {
+   "name": "loading_sigma_MBT_one_factor",
+   "description": "",
+   "value": "1.5110",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MBT sigma 1.5110"
+  },
+  {
+   "name": "loading_beta_MEG_one_factor",
+   "description": "",
+   "value": "1.5200",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MEG 1.5200"
+  },
+  {
+   "name": "loading_sigma_MEG_one_factor",
+   "description": "",
+   "value": "1.7571",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MEG sigma 1.7571"
+  },
+  {
+   "name": "loading_beta_MER_one_factor",
+   "description": "",
+   "value": "0.6730",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MER 0.6730"
+  },
+  {
+   "name": "loading_sigma_MER_one_factor",
+   "description": "",
+   "value": "1.5231",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MER sigma 1.5231"
+  },
+  {
+   "name": "loading_beta_MPI_one_factor",
+   "description": "",
+   "value": "1.2415",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MPI 1.2415"
+  },
+  {
+   "name": "loading_sigma_MPI_one_factor",
+   "description": "",
+   "value": "1.9402",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MPI sigma 1.9402"
+  },
+  {
+   "name": "loading_beta_MWC_one_factor",
+   "description": "",
+   "value": "0.7810",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MWC 0.7810"
+  },
+  {
+   "name": "loading_sigma_MWC_one_factor",
+   "description": "",
+   "value": "2.2912",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MWC sigma 2.2912"
+  },
+  {
+   "name": "loading_beta_MWIDE_one_factor",
+   "description": "",
+   "value": "0.9886",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MWIDE 0.9886"
+  },
+  {
+   "name": "loading_sigma_MWIDE_one_factor",
+   "description": "",
+   "value": "2.3709",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: MWIDE sigma 2.3709"
+  },
+  {
+   "name": "loading_beta_NI_one_factor",
+   "description": "",
+   "value": "0.3982",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: NI 0.3982"
+  },
+  {
+   "name": "loading_sigma_NI_one_factor",
+   "description": "",
+   "value": "2.5281",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: NI sigma 2.5281"
+  },
+  {
+   "name": "loading_beta_NIKL_one_factor",
+   "description": "",
+   "value": "1.3189",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: NIKL 1.3189"
+  },
+  {
+   "name": "loading_sigma_NIKL_one_factor",
+   "description": "",
+   "value": "3.6951",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: NIKL sigma 3.6951"
+  },
+  {
+   "name": "loading_beta_PCOR_one_factor",
+   "description": "",
+   "value": "0.9497",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PCOR 0.9497"
+  },
+  {
+   "name": "loading_sigma_PCOR_one_factor",
+   "description": "",
+   "value": "2.1039",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PCOR sigma 2.1039"
+  },
+  {
+   "name": "loading_beta_PGOLD_one_factor",
+   "description": "",
+   "value": "0.7605",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PGOLD 0.7605"
+  },
+  {
+   "name": "loading_sigma_PGOLD_one_factor",
+   "description": "",
+   "value": "1.6123",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PGOLD sigma 1.6123"
+  },
+  {
+   "name": "loading_beta_PLC_one_factor",
+   "description": "",
+   "value": "1.1563",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PLC 1.1563"
+  },
+  {
+   "name": "loading_sigma_PLC_one_factor",
+   "description": "",
+   "value": "2.4863",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PLC sigma 2.4863"
+  },
+  {
+   "name": "loading_beta_PNB_one_factor",
+   "description": "",
+   "value": "0.7994",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PNB 0.7994"
+  },
+  {
+   "name": "loading_sigma_PNB_one_factor",
+   "description": "",
+   "value": "1.5993",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PNB sigma 1.5993"
+  },
+  {
+   "name": "loading_beta_PNX_one_factor",
+   "description": "",
+   "value": "0.4600",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PNX 0.4600"
+  },
+  {
+   "name": "loading_sigma_PNX_one_factor",
+   "description": "",
+   "value": "1.9619",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PNX sigma 1.9619"
+  },
+  {
+   "name": "loading_beta_PX_one_factor",
+   "description": "",
+   "value": "0.5659",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PX 0.5659"
+  },
+  {
+   "name": "loading_sigma_PX_one_factor",
+   "description": "",
+   "value": "2.4845",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PX sigma 2.4845"
+  },
+  {
+   "name": "loading_beta_PXP_one_factor",
+   "description": "",
+   "value": "1.3042",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PXP 1.3042"
+  },
+  {
+   "name": "loading_sigma_PXP_one_factor",
+   "description": "",
+   "value": "5.2152",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: PXP sigma 5.2152"
+  },
+  {
+   "name": "loading_beta_RLC_one_factor",
+   "description": "",
+   "value": "1.4767",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: RLC 1.4767"
+  },
+  {
+   "name": "loading_sigma_RLC_one_factor",
+   "description": "",
+   "value": "1.9403",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: RLC sigma 1.9403"
+  },
+  {
+   "name": "loading_beta_RRHI_one_factor",
+   "description": "",
+   "value": "0.7599",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: RRHI 0.7599"
+  },
+  {
+   "name": "loading_sigma_RRHI_one_factor",
+   "description": "",
+   "value": "1.7353",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: RRHI sigma 1.7353"
+  },
+  {
+   "name": "loading_beta_SCC_one_factor",
+   "description": "",
+   "value": "0.9913",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SCC 0.9913"
+  },
+  {
+   "name": "loading_sigma_SCC_one_factor",
+   "description": "",
+   "value": "2.8519",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SCC sigma 2.8519"
+  },
+  {
+   "name": "loading_beta_SECB_one_factor",
+   "description": "",
+   "value": "1.0943",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SECB 1.0943"
+  },
+  {
+   "name": "loading_sigma_SECB_one_factor",
+   "description": "",
+   "value": "1.7228",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SECB sigma 1.7228"
+  },
+  {
+   "name": "loading_beta_SLI_one_factor",
+   "description": "",
+   "value": "0.3344",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SLI 0.3344"
+  },
+  {
+   "name": "loading_sigma_SLI_one_factor",
+   "description": "",
+   "value": "2.0121",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SLI sigma 2.0121"
+  },
+  {
+   "name": "loading_beta_SM_one_factor",
+   "description": "",
+   "value": "1.1180",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SM 1.1180"
+  },
+  {
+   "name": "loading_sigma_SM_one_factor",
+   "description": "",
+   "value": "1.6795",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SM sigma 1.6795"
+  },
+  {
+   "name": "loading_beta_SMC_one_factor",
+   "description": "",
+   "value": "0.7581",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SMC 0.7581"
+  },
+  {
+   "name": "loading_sigma_SMC_one_factor",
+   "description": "",
+   "value": "1.7769",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SMC sigma 1.7769"
+  },
+  {
+   "name": "loading_beta_SMPH_one_factor",
+   "description": "",
+   "value": "1.2124",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SMPH 1.2124"
+  },
+  {
+   "name": "loading_sigma_SMPH_one_factor",
+   "description": "",
+   "value": "1.5934",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SMPH sigma 1.5934"
+  },
+  {
+   "name": "loading_beta_SSI_one_factor",
+   "description": "",
+   "value": "1.4767",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SSI 1.4767"
+  },
+  {
+   "name": "loading_sigma_SSI_one_factor",
+   "description": "",
+   "value": "2.7815",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SSI sigma 2.7815"
+  },
+  {
+   "name": "loading_beta_SSP_one_factor",
+   "description": "",
+   "value": "0.9031",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SSP 0.9031"
+  },
+  {
+   "name": "loading_sigma_SSP_one_factor",
+   "description": "",
+   "value": "3.6809",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: SSP sigma 3.6809"
+  },
+  {
+   "name": "loading_beta_STI_one_factor",
+   "description": "",
+   "value": "0.6874",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: STI 0.6874"
+  },
+  {
+   "name": "loading_sigma_STI_one_factor",
+   "description": "",
+   "value": "2.6140",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: STI sigma 2.6140"
+  },
+  {
+   "name": "loading_beta_TECH_one_factor",
+   "description": "",
+   "value": "0.9746",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: TECH 0.9746"
+  },
+  {
+   "name": "loading_sigma_TECH_one_factor",
+   "description": "",
+   "value": "3.7055",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: TECH sigma 3.7055"
+  },
+  {
+   "name": "loading_beta_TEL_one_factor",
+   "description": "",
+   "value": "0.8290",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: TEL 0.8290"
+  },
+  {
+   "name": "loading_sigma_TEL_one_factor",
+   "description": "",
+   "value": "1.9001",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: TEL sigma 1.9001"
+  },
+  {
+   "name": "loading_beta_UBP_one_factor",
+   "description": "",
+   "value": "0.2162",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: UBP 0.2162"
+  },
+  {
+   "name": "loading_sigma_UBP_one_factor",
+   "description": "",
+   "value": "1.0130",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: UBP sigma 1.0130"
+  },
+  {
+   "name": "loading_beta_URC_one_factor",
+   "description": "",
+   "value": "1.0050",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: URC 1.0050"
+  },
+  {
+   "name": "loading_sigma_URC_one_factor",
+   "description": "",
+   "value": "1.7758",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: URC sigma 1.7758"
+  },
+  {
+   "name": "loading_beta_VITA_one_factor",
+   "description": "",
+   "value": "1.1404",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: VITA 1.1404"
+  },
+  {
+   "name": "loading_sigma_VITA_one_factor",
+   "description": "",
+   "value": "3.6114",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: VITA sigma 3.6114"
+  },
+  {
+   "name": "loading_beta_VLL_one_factor",
+   "description": "",
+   "value": "1.1170",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: VLL 1.1170"
+  },
+  {
+   "name": "loading_sigma_VLL_one_factor",
+   "description": "",
+   "value": "2.1362",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: VLL sigma 2.1362"
+  },
+  {
+   "name": "loading_beta_WEB_one_factor",
+   "description": "",
+   "value": "1.0387",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: WEB 1.0387"
+  },
+  {
+   "name": "loading_sigma_WEB_one_factor",
+   "description": "",
+   "value": "4.8616",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table3 p.10: WEB sigma 4.8616"
+  },
+  {
+   "name": "loading_beta1_2GO_two_factor",
+   "description": "",
+   "value": "0.9241",
+   "unit": "loading beta1i",
+   "kind": "estimate",
+   "where": "Table4 p.12 DFM(2,2,5): 2GO beta1i 0.9241"
+  },
+  {
+   "name": "loading_beta2_2GO_two_factor_ns",
+   "description": "",
+   "value": "0.0236",
+   "unit": "loading beta2i ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: 2GO beta2i 0.0236 ns"
+  },
+  {
+   "name": "loading_sigma_2GO_two_factor",
+   "description": "",
+   "value": "3.8987",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: 2GO sigma_i 3.8987"
+  },
+  {
+   "name": "loading_beta1_ABA_two_factor",
+   "description": "",
+   "value": "1.0070",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ABA beta1i 1.0070"
+  },
+  {
+   "name": "loading_beta2_ABA_two_factor_ns",
+   "description": "",
+   "value": "0.1693",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: ABA beta2i 0.1693 ns"
+  },
+  {
+   "name": "loading_sigma_ABA_two_factor",
+   "description": "",
+   "value": "3.2195",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ABA sigma 3.2195"
+  },
+  {
+   "name": "loading_beta1_AC_two_factor",
+   "description": "",
+   "value": "0.9129",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AC beta1i 0.9129"
+  },
+  {
+   "name": "loading_beta2_AC_two_factor",
+   "description": "",
+   "value": "0.8448",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AC beta2i 0.8448"
+  },
+  {
+   "name": "loading_sigma_AC_two_factor",
+   "description": "",
+   "value": "1.3988",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AC sigma 1.3988"
+  },
+  {
+   "name": "loading_beta1_AEV_two_factor",
+   "description": "",
+   "value": "0.7433",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AEV beta1i 0.7433"
+  },
+  {
+   "name": "loading_beta2_AEV_two_factor",
+   "description": "",
+   "value": "0.9720",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AEV beta2i 0.9720"
+  },
+  {
+   "name": "loading_sigma_AEV_two_factor",
+   "description": "",
+   "value": "1.7430",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AEV sigma 1.7430"
+  },
+  {
+   "name": "loading_beta1_AGI_two_factor",
+   "description": "",
+   "value": "1.2384",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AGI beta1i 1.2384"
+  },
+  {
+   "name": "loading_beta2_AGI_two_factor",
+   "description": "",
+   "value": "0.4100",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AGI beta2i 0.4100"
+  },
+  {
+   "name": "loading_sigma_AGI_two_factor",
+   "description": "",
+   "value": "1.7036",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AGI sigma 1.7036"
+  },
+  {
+   "name": "loading_beta1_ALI_two_factor",
+   "description": "",
+   "value": "1.0328",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ALI beta1i 1.0328"
+  },
+  {
+   "name": "loading_beta2_ALI_two_factor",
+   "description": "",
+   "value": "0.9285",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ALI beta2i 0.9285"
+  },
+  {
+   "name": "loading_sigma_ALI_two_factor",
+   "description": "",
+   "value": "1.5250",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ALI sigma 1.5250"
+  },
+  {
+   "name": "loading_beta1_AP_two_factor",
+   "description": "",
+   "value": "0.4345",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AP beta1i 0.4345"
+  },
+  {
+   "name": "loading_beta2_AP_two_factor",
+   "description": "",
+   "value": "0.7176",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AP beta2i 0.7176"
+  },
+  {
+   "name": "loading_sigma_AP_two_factor",
+   "description": "",
+   "value": "1.4191",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: AP sigma 1.4191"
+  },
+  {
+   "name": "loading_beta1_BDO_two_factor",
+   "description": "",
+   "value": "0.9548",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BDO beta1i 0.9548"
+  },
+  {
+   "name": "loading_beta2_BDO_two_factor",
+   "description": "",
+   "value": "0.9023",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BDO beta2i 0.9023"
+  },
+  {
+   "name": "loading_sigma_BDO_two_factor",
+   "description": "",
+   "value": "1.4394",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BDO sigma 1.4394"
+  },
+  {
+   "name": "loading_beta1_BEL_two_factor",
+   "description": "",
+   "value": "0.8462",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BEL beta1i 0.8462"
+  },
+  {
+   "name": "loading_beta2_BEL_two_factor",
+   "description": "",
+   "value": "0.1517",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BEL beta2i 0.1517"
+  },
+  {
+   "name": "loading_sigma_BEL_two_factor",
+   "description": "",
+   "value": "1.6286",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BEL sigma 1.6286"
+  },
+  {
+   "name": "loading_beta1_BLOOM_two_factor",
+   "description": "",
+   "value": "1.5024",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BLOOM beta1i 1.5024"
+  },
+  {
+   "name": "loading_beta2_BLOOM_two_factor",
+   "description": "",
+   "value": "0.4127",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BLOOM beta2i 0.4127"
+  },
+  {
+   "name": "loading_sigma_BLOOM_two_factor",
+   "description": "",
+   "value": "2.6979",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BLOOM sigma 2.6979"
+  },
+  {
+   "name": "loading_beta1_BPI_two_factor",
+   "description": "",
+   "value": "0.7470",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BPI beta1i 0.7470"
+  },
+  {
+   "name": "loading_beta2_BPI_two_factor",
+   "description": "",
+   "value": "0.7162",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BPI beta2i 0.7162"
+  },
+  {
+   "name": "loading_sigma_BPI_two_factor",
+   "description": "",
+   "value": "1.4348",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BPI sigma 1.4348"
+  },
+  {
+   "name": "loading_beta1_BRN_two_factor",
+   "description": "",
+   "value": "1.2011",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BRN beta1i 1.2011"
+  },
+  {
+   "name": "loading_beta2_BRN_two_factor",
+   "description": "",
+   "value": "0.3564",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BRN beta2i 0.3564"
+  },
+  {
+   "name": "loading_sigma_BRN_two_factor",
+   "description": "",
+   "value": "3.2954",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: BRN sigma 3.2954"
+  },
+  {
+   "name": "loading_beta1_CEB_two_factor",
+   "description": "",
+   "value": "1.2868",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CEB beta1i 1.2868"
+  },
+  {
+   "name": "loading_beta2_CEB_two_factor",
+   "description": "",
+   "value": "0.3642",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CEB beta2i 0.3642"
+  },
+  {
+   "name": "loading_sigma_CEB_two_factor",
+   "description": "",
+   "value": "2.3957",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CEB sigma 2.3957"
+  },
+  {
+   "name": "loading_beta1_CHIB_two_factor",
+   "description": "",
+   "value": "0.3963",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CHIB beta1i 0.3963"
+  },
+  {
+   "name": "loading_beta2_CHIB_two_factor",
+   "description": "",
+   "value": "0.1341",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CHIB beta2i 0.1341"
+  },
+  {
+   "name": "loading_sigma_CHIB_two_factor",
+   "description": "",
+   "value": "0.9321",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CHIB sigma 0.9321"
+  },
+  {
+   "name": "loading_beta1_CNPF_two_factor",
+   "description": "",
+   "value": "0.6854",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CNPF beta1i 0.6854"
+  },
+  {
+   "name": "loading_beta2_CNPF_two_factor_ns",
+   "description": "",
+   "value": "0.0993",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: CNPF beta2i 0.0993 ns"
+  },
+  {
+   "name": "loading_sigma_CNPF_two_factor",
+   "description": "",
+   "value": "1.7111",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CNPF sigma 1.7111"
+  },
+  {
+   "name": "loading_beta1_COSCO_two_factor",
+   "description": "",
+   "value": "0.7646",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: COSCO beta1i 0.7646"
+  },
+  {
+   "name": "loading_beta2_COSCO_two_factor",
+   "description": "",
+   "value": "0.1666",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: COSCO beta2i 0.1666"
+  },
+  {
+   "name": "loading_sigma_COSCO_two_factor",
+   "description": "",
+   "value": "1.4362",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: COSCO sigma 1.4362"
+  },
+  {
+   "name": "loading_beta1_CPG_two_factor",
+   "description": "",
+   "value": "0.8825",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CPG beta1i 0.8825"
+  },
+  {
+   "name": "loading_beta2_CPG_two_factor_ns",
+   "description": "",
+   "value": "0.1603",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: CPG beta2i 0.1603 ns"
+  },
+  {
+   "name": "loading_sigma_CPG_two_factor",
+   "description": "",
+   "value": "2.1836",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: CPG sigma 2.1836"
+  },
+  {
+   "name": "loading_beta1_DD_two_factor",
+   "description": "",
+   "value": "0.7264",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DD beta1i 0.7264"
+  },
+  {
+   "name": "loading_beta2_DD_two_factor",
+   "description": "",
+   "value": "0.2518",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DD beta2i 0.2518"
+  },
+  {
+   "name": "loading_sigma_DD_two_factor",
+   "description": "",
+   "value": "2.4382",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DD sigma 2.4382"
+  },
+  {
+   "name": "loading_beta1_DMC_two_factor",
+   "description": "",
+   "value": "1.1218",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DMC beta1i 1.1218"
+  },
+  {
+   "name": "loading_beta2_DMC_two_factor",
+   "description": "",
+   "value": "0.5568",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DMC beta2i 0.5568"
+  },
+  {
+   "name": "loading_sigma_DMC_two_factor",
+   "description": "",
+   "value": "1.8945",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DMC sigma 1.8945"
+  },
+  {
+   "name": "loading_beta1_DNL_two_factor",
+   "description": "",
+   "value": "1.2014",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DNL beta1i 1.2014"
+  },
+  {
+   "name": "loading_beta2_DNL_two_factor_ns",
+   "description": "",
+   "value": "0.1748",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: DNL beta2i 0.1748 ns"
+  },
+  {
+   "name": "loading_sigma_DNL_two_factor",
+   "description": "",
+   "value": "2.1834",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: DNL sigma 2.1834"
+  },
+  {
+   "name": "loading_beta1_EEI_two_factor",
+   "description": "",
+   "value": "0.8138",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: EEI beta1i 0.8138"
+  },
+  {
+   "name": "loading_beta2_EEI_two_factor_ns",
+   "description": "",
+   "value": "0.1628",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: EEI beta2i 0.1628 ns"
+  },
+  {
+   "name": "loading_sigma_EEI_two_factor",
+   "description": "",
+   "value": "2.1700",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: EEI sigma 2.1700"
+  },
+  {
+   "name": "loading_beta1_EW_two_factor",
+   "description": "",
+   "value": "1.0218",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: EW beta1i 1.0218"
+  },
+  {
+   "name": "loading_beta2_EW_two_factor",
+   "description": "",
+   "value": "0.2420",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: EW beta2i 0.2420"
+  },
+  {
+   "name": "loading_sigma_EW_two_factor",
+   "description": "",
+   "value": "1.8502",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: EW sigma 1.8502"
+  },
+  {
+   "name": "loading_beta1_FGEN_two_factor",
+   "description": "",
+   "value": "0.7343",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FGEN beta1i 0.7343"
+  },
+  {
+   "name": "loading_beta2_FGEN_two_factor",
+   "description": "",
+   "value": "0.3185",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FGEN beta2i 0.3185"
+  },
+  {
+   "name": "loading_sigma_FGEN_two_factor",
+   "description": "",
+   "value": "1.8883",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FGEN sigma 1.8883"
+  },
+  {
+   "name": "loading_beta1_FLI_two_factor",
+   "description": "",
+   "value": "0.9935",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FLI beta1i 0.9935"
+  },
+  {
+   "name": "loading_beta2_FLI_two_factor",
+   "description": "",
+   "value": "0.2374",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FLI beta2i 0.2374"
+  },
+  {
+   "name": "loading_sigma_FLI_two_factor",
+   "description": "",
+   "value": "1.5466",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FLI sigma 1.5466"
+  },
+  {
+   "name": "loading_beta1_FNI_two_factor",
+   "description": "",
+   "value": "1.1952",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FNI beta1i 1.1952"
+  },
+  {
+   "name": "loading_beta2_FNI_two_factor_ns",
+   "description": "",
+   "value": "0.3580",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: FNI beta2i 0.3580 ns"
+  },
+  {
+   "name": "loading_sigma_FNI_two_factor",
+   "description": "",
+   "value": "6.0388",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FNI sigma 6.0388"
+  },
+  {
+   "name": "loading_beta1_FPH_two_factor",
+   "description": "",
+   "value": "0.7587",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FPH beta1i 0.7587"
+  },
+  {
+   "name": "loading_beta2_FPH_two_factor_ns",
+   "description": "",
+   "value": "0.0554",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: FPH beta2i 0.0554 ns"
+  },
+  {
+   "name": "loading_sigma_FPH_two_factor",
+   "description": "",
+   "value": "1.1902",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: FPH sigma 1.1902"
+  },
+  {
+   "name": "loading_beta1_GERI_two_factor",
+   "description": "",
+   "value": "1.0304",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GERI beta1i 1.0304"
+  },
+  {
+   "name": "loading_beta2_GERI_two_factor_ns",
+   "description": "",
+   "value": "0.1669",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: GERI beta2i 0.1669 ns"
+  },
+  {
+   "name": "loading_sigma_GERI_two_factor",
+   "description": "",
+   "value": "2.0919",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GERI sigma 2.0919"
+  },
+  {
+   "name": "loading_beta1_GLO_two_factor",
+   "description": "",
+   "value": "0.4331",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GLO beta1i 0.4331"
+  },
+  {
+   "name": "loading_beta2_GLO_two_factor",
+   "description": "",
+   "value": "0.6612",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GLO beta2i 0.6612"
+  },
+  {
+   "name": "loading_sigma_GLO_two_factor",
+   "description": "",
+   "value": "1.8105",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GLO sigma 1.8105"
+  },
+  {
+   "name": "loading_beta1_GMA7_two_factor",
+   "description": "",
+   "value": "0.4239",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GMA7 beta1i 0.4239"
+  },
+  {
+   "name": "loading_beta2_GMA7_two_factor_ns",
+   "description": "",
+   "value": "-0.0013",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: GMA7 beta2i -0.0013 ns"
+  },
+  {
+   "name": "loading_sigma_GMA7_two_factor",
+   "description": "",
+   "value": "1.3740",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GMA7 sigma 1.3740"
+  },
+  {
+   "name": "loading_beta1_GTCAP_two_factor",
+   "description": "",
+   "value": "0.9541",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GTCAP beta1i 0.9541"
+  },
+  {
+   "name": "loading_beta2_GTCAP_two_factor",
+   "description": "",
+   "value": "0.7777",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GTCAP beta2i 0.7777"
+  },
+  {
+   "name": "loading_sigma_GTCAP_two_factor",
+   "description": "",
+   "value": "1.8355",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: GTCAP sigma 1.8355"
+  },
+  {
+   "name": "loading_beta1_HOUSE_two_factor",
+   "description": "",
+   "value": "0.4075",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: HOUSE beta1i 0.4075"
+  },
+  {
+   "name": "loading_beta2_HOUSE_two_factor_ns",
+   "description": "",
+   "value": "-0.0132",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: HOUSE beta2i -0.0132 ns"
+  },
+  {
+   "name": "loading_sigma_HOUSE_two_factor",
+   "description": "",
+   "value": "1.7982",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: HOUSE sigma 1.7982"
+  },
+  {
+   "name": "loading_beta1_ICT_two_factor",
+   "description": "",
+   "value": "0.8903",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ICT beta1i 0.8903"
+  },
+  {
+   "name": "loading_beta2_ICT_two_factor",
+   "description": "",
+   "value": "0.7307",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ICT beta2i 0.7307"
+  },
+  {
+   "name": "loading_sigma_ICT_two_factor",
+   "description": "",
+   "value": "1.8127",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: ICT sigma 1.8127"
+  },
+  {
+   "name": "loading_beta1_IMI_two_factor",
+   "description": "",
+   "value": "1.1230",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: IMI beta1i 1.1230"
+  },
+  {
+   "name": "loading_beta2_IMI_two_factor_ns",
+   "description": "",
+   "value": "-0.0340",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: IMI beta2i -0.0340 ns"
+  },
+  {
+   "name": "loading_sigma_IMI_two_factor",
+   "description": "",
+   "value": "2.4140",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: IMI sigma 2.4140"
+  },
+  {
+   "name": "loading_beta1_JFC_two_factor",
+   "description": "",
+   "value": "1.0451",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: JFC beta1i 1.0451"
+  },
+  {
+   "name": "loading_beta2_JFC_two_factor",
+   "description": "",
+   "value": "0.5168",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: JFC beta2i 0.5168"
+  },
+  {
+   "name": "loading_sigma_JFC_two_factor",
+   "description": "",
+   "value": "1.7643",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: JFC sigma 1.7643"
+  },
+  {
+   "name": "loading_beta1_JGS_two_factor",
+   "description": "",
+   "value": "1.0386",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: JGS beta1i 1.0386"
+  },
+  {
+   "name": "loading_beta2_JGS_two_factor",
+   "description": "",
+   "value": "1.1688",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: JGS beta2i 1.1688"
+  },
+  {
+   "name": "loading_sigma_JGS_two_factor",
+   "description": "",
+   "value": "1.7109",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: JGS sigma 1.7109"
+  },
+  {
+   "name": "loading_beta1_LC_two_factor",
+   "description": "",
+   "value": "0.3592",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LC beta1i 0.3592"
+  },
+  {
+   "name": "loading_beta2_LC_two_factor_ns",
+   "description": "",
+   "value": "-0.2497",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: LC beta2i -0.2497 ns"
+  },
+  {
+   "name": "loading_sigma_LC_two_factor",
+   "description": "",
+   "value": "3.0048",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LC sigma 3.0048"
+  },
+  {
+   "name": "loading_beta1_LPZ_two_factor",
+   "description": "",
+   "value": "0.8387",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LPZ beta1i 0.8387"
+  },
+  {
+   "name": "loading_beta2_LPZ_two_factor_ns",
+   "description": "",
+   "value": "0.0945",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: LPZ beta2i 0.0945 ns"
+  },
+  {
+   "name": "loading_sigma_LPZ_two_factor",
+   "description": "",
+   "value": "2.0117",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LPZ sigma 2.0117"
+  },
+  {
+   "name": "loading_beta1_LTG_two_factor",
+   "description": "",
+   "value": "0.8529",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LTG beta1i 0.8529"
+  },
+  {
+   "name": "loading_beta2_LTG_two_factor",
+   "description": "",
+   "value": "0.3950",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LTG beta2i 0.3950"
+  },
+  {
+   "name": "loading_sigma_LTG_two_factor",
+   "description": "",
+   "value": "2.0992",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: LTG sigma 2.0992"
+  },
+  {
+   "name": "loading_beta1_MAXS_two_factor",
+   "description": "",
+   "value": "1.2711",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MAXS beta1i 1.2711"
+  },
+  {
+   "name": "loading_beta2_MAXS_two_factor_ns",
+   "description": "",
+   "value": "0.1540",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: MAXS beta2i 0.1540 ns"
+  },
+  {
+   "name": "loading_sigma_MAXS_two_factor",
+   "description": "",
+   "value": "1.9789",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MAXS sigma 1.9789"
+  },
+  {
+   "name": "loading_beta1_MBT_two_factor",
+   "description": "",
+   "value": "0.9099",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MBT beta1i 0.9099"
+  },
+  {
+   "name": "loading_beta2_MBT_two_factor",
+   "description": "",
+   "value": "0.6560",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MBT beta2i 0.6560"
+  },
+  {
+   "name": "loading_sigma_MBT_two_factor",
+   "description": "",
+   "value": "1.5007",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MBT sigma 1.5007"
+  },
+  {
+   "name": "loading_beta1_MEG_two_factor",
+   "description": "",
+   "value": "1.2877",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MEG beta1i 1.2877"
+  },
+  {
+   "name": "loading_beta2_MEG_two_factor",
+   "description": "",
+   "value": "0.7545",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MEG beta2i 0.7545"
+  },
+  {
+   "name": "loading_sigma_MEG_two_factor",
+   "description": "",
+   "value": "1.7593",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MEG sigma 1.7593"
+  },
+  {
+   "name": "loading_beta1_MER_two_factor",
+   "description": "",
+   "value": "0.4251",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MER beta1i 0.4251"
+  },
+  {
+   "name": "loading_beta2_MER_two_factor",
+   "description": "",
+   "value": "0.6250",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MER beta2i 0.6250"
+  },
+  {
+   "name": "loading_sigma_MER_two_factor",
+   "description": "",
+   "value": "1.4782",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MER sigma 1.4782"
+  },
+  {
+   "name": "loading_beta1_MPI_two_factor",
+   "description": "",
+   "value": "0.9654",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MPI beta1i 0.9654"
+  },
+  {
+   "name": "loading_beta2_MPI_two_factor",
+   "description": "",
+   "value": "0.7626",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MPI beta2i 0.7626"
+  },
+  {
+   "name": "loading_sigma_MPI_two_factor",
+   "description": "",
+   "value": "1.9291",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MPI sigma 1.9291"
+  },
+  {
+   "name": "loading_beta1_MWC_two_factor",
+   "description": "",
+   "value": "0.7678",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MWC beta1i 0.7678"
+  },
+  {
+   "name": "loading_beta2_MWC_two_factor_ns",
+   "description": "",
+   "value": "0.1878",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: MWC beta2i 0.1878 ns"
+  },
+  {
+   "name": "loading_sigma_MWC_two_factor",
+   "description": "",
+   "value": "2.2833",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MWC sigma 2.2833"
+  },
+  {
+   "name": "loading_beta1_MWIDE_two_factor",
+   "description": "",
+   "value": "1.1309",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MWIDE beta1i 1.1309"
+  },
+  {
+   "name": "loading_beta2_MWIDE_two_factor_ns",
+   "description": "",
+   "value": "0.0369",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: MWIDE beta2i 0.0369 ns"
+  },
+  {
+   "name": "loading_sigma_MWIDE_two_factor",
+   "description": "",
+   "value": "2.3085",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: MWIDE sigma 2.3085"
+  },
+  {
+   "name": "loading_beta1_NI_two_factor",
+   "description": "",
+   "value": "0.5448",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: NI beta1i 0.5448"
+  },
+  {
+   "name": "loading_beta2_NI_two_factor_ns",
+   "description": "",
+   "value": "-0.1908",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: NI beta2i -0.1908 ns"
+  },
+  {
+   "name": "loading_sigma_NI_two_factor",
+   "description": "",
+   "value": "2.4880",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: NI sigma 2.4880"
+  },
+  {
+   "name": "loading_beta1_NIKL_two_factor",
+   "description": "",
+   "value": "1.3530",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: NIKL beta1i 1.3530"
+  },
+  {
+   "name": "loading_beta2_NIKL_two_factor_ns",
+   "description": "",
+   "value": "0.2689",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: NIKL beta2i 0.2689 ns"
+  },
+  {
+   "name": "loading_sigma_NIKL_two_factor",
+   "description": "",
+   "value": "3.6684",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: NIKL sigma 3.6684"
+  },
+  {
+   "name": "loading_beta1_PCOR_two_factor",
+   "description": "",
+   "value": "0.9715",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PCOR beta1i 0.9715"
+  },
+  {
+   "name": "loading_beta2_PCOR_two_factor_ns",
+   "description": "",
+   "value": "0.1949",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: PCOR beta2i 0.1949 ns"
+  },
+  {
+   "name": "loading_sigma_PCOR_two_factor",
+   "description": "",
+   "value": "2.0778",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PCOR sigma 2.0778"
+  },
+  {
+   "name": "loading_beta1_PGOLD_two_factor",
+   "description": "",
+   "value": "0.7043",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PGOLD beta1i 0.7043"
+  },
+  {
+   "name": "loading_beta2_PGOLD_two_factor",
+   "description": "",
+   "value": "0.2572",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PGOLD beta2i 0.2572"
+  },
+  {
+   "name": "loading_sigma_PGOLD_two_factor",
+   "description": "",
+   "value": "1.6095",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PGOLD sigma 1.6095"
+  },
+  {
+   "name": "loading_beta1_PLC_two_factor",
+   "description": "",
+   "value": "1.1682",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PLC beta1i 1.1682"
+  },
+  {
+   "name": "loading_beta2_PLC_two_factor",
+   "description": "",
+   "value": "0.2474",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PLC beta2i 0.2474"
+  },
+  {
+   "name": "loading_sigma_PLC_two_factor",
+   "description": "",
+   "value": "2.4584",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PLC sigma 2.4584"
+  },
+  {
+   "name": "loading_beta1_PNB_two_factor",
+   "description": "",
+   "value": "0.8758",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PNB beta1i 0.8758"
+  },
+  {
+   "name": "loading_beta2_PNB_two_factor_ns",
+   "description": "",
+   "value": "0.0977",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: PNB beta2i 0.0977 ns"
+  },
+  {
+   "name": "loading_sigma_PNB_two_factor",
+   "description": "",
+   "value": "1.5576",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PNB sigma 1.5576"
+  },
+  {
+   "name": "loading_beta1_PNX_two_factor",
+   "description": "",
+   "value": "0.3580",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PNX beta1i 0.3580"
+  },
+  {
+   "name": "loading_beta2_PNX_two_factor",
+   "description": "",
+   "value": "0.2852",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PNX beta2i 0.2852"
+  },
+  {
+   "name": "loading_sigma_PNX_two_factor",
+   "description": "",
+   "value": "1.9598",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PNX sigma 1.9598"
+  },
+  {
+   "name": "loading_beta1_PX_two_factor",
+   "description": "",
+   "value": "0.6711",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PX beta1i 0.6711"
+  },
+  {
+   "name": "loading_beta2_PX_two_factor_ns",
+   "description": "",
+   "value": "-0.0153",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: PX beta2i -0.0153 ns"
+  },
+  {
+   "name": "loading_sigma_PX_two_factor",
+   "description": "",
+   "value": "2.4571",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PX sigma 2.4571"
+  },
+  {
+   "name": "loading_beta1_PXP_two_factor",
+   "description": "",
+   "value": "1.2902",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PXP beta1i 1.2902"
+  },
+  {
+   "name": "loading_beta2_PXP_two_factor_ns",
+   "description": "",
+   "value": "0.3148",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: PXP beta2i 0.3148 ns"
+  },
+  {
+   "name": "loading_sigma_PXP_two_factor",
+   "description": "",
+   "value": "5.2036",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: PXP sigma 5.2036"
+  },
+  {
+   "name": "loading_beta1_RLC_two_factor",
+   "description": "",
+   "value": "1.1662",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: RLC beta1i 1.1662"
+  },
+  {
+   "name": "loading_beta2_RLC_two_factor",
+   "description": "",
+   "value": "0.9296",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: RLC beta2i 0.9296"
+  },
+  {
+   "name": "loading_sigma_RLC_two_factor",
+   "description": "",
+   "value": "1.9170",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: RLC sigma 1.9170"
+  },
+  {
+   "name": "loading_beta1_RRHI_two_factor",
+   "description": "",
+   "value": "0.6137",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: RRHI beta1i 0.6137"
+  },
+  {
+   "name": "loading_beta2_RRHI_two_factor",
+   "description": "",
+   "value": "0.4181",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: RRHI beta2i 0.4181"
+  },
+  {
+   "name": "loading_sigma_RRHI_two_factor",
+   "description": "",
+   "value": "1.7350",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: RRHI sigma 1.7350"
+  },
+  {
+   "name": "loading_beta1_SCC_two_factor",
+   "description": "",
+   "value": "0.9616",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SCC beta1i 0.9616"
+  },
+  {
+   "name": "loading_beta2_SCC_two_factor_ns",
+   "description": "",
+   "value": "0.2731",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: SCC beta2i 0.2731 ns"
+  },
+  {
+   "name": "loading_sigma_SCC_two_factor",
+   "description": "",
+   "value": "2.8422",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SCC sigma 2.8422"
+  },
+  {
+   "name": "loading_beta1_SECB_two_factor",
+   "description": "",
+   "value": "0.9898",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SECB beta1i 0.9898"
+  },
+  {
+   "name": "loading_beta2_SECB_two_factor",
+   "description": "",
+   "value": "0.4194",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SECB beta2i 0.4194"
+  },
+  {
+   "name": "loading_sigma_SECB_two_factor",
+   "description": "",
+   "value": "1.7240",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SECB sigma 1.7240"
+  },
+  {
+   "name": "loading_beta1_SLI_two_factor",
+   "description": "",
+   "value": "0.3454",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SLI beta1i 0.3454"
+  },
+  {
+   "name": "loading_beta2_SLI_two_factor_ns",
+   "description": "",
+   "value": "0.0164",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: SLI beta2i 0.0164 ns"
+  },
+  {
+   "name": "loading_sigma_SLI_two_factor",
+   "description": "",
+   "value": "2.0057",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SLI sigma 2.0057"
+  },
+  {
+   "name": "loading_beta1_SM_two_factor",
+   "description": "",
+   "value": "0.7241",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SM beta1i 0.7241"
+  },
+  {
+   "name": "loading_beta2_SM_two_factor",
+   "description": "",
+   "value": "1.0227",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SM beta2i 1.0227"
+  },
+  {
+   "name": "loading_sigma_SM_two_factor",
+   "description": "",
+   "value": "1.5732",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SM sigma 1.5732"
+  },
+  {
+   "name": "loading_beta1_SMC_two_factor",
+   "description": "",
+   "value": "0.6562",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SMC beta1i 0.6562"
+  },
+  {
+   "name": "loading_beta2_SMC_two_factor",
+   "description": "",
+   "value": "0.3536",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SMC beta2i 0.3536"
+  },
+  {
+   "name": "loading_sigma_SMC_two_factor",
+   "description": "",
+   "value": "1.7768",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SMC sigma 1.7768"
+  },
+  {
+   "name": "loading_beta1_SMPH_two_factor",
+   "description": "",
+   "value": "0.8483",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SMPH beta1i 0.8483"
+  },
+  {
+   "name": "loading_beta2_SMPH_two_factor",
+   "description": "",
+   "value": "1.0137",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SMPH beta2i 1.0137"
+  },
+  {
+   "name": "loading_sigma_SMPH_two_factor",
+   "description": "",
+   "value": "1.5017",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SMPH sigma 1.5017"
+  },
+  {
+   "name": "loading_beta1_SSI_two_factor",
+   "description": "",
+   "value": "1.3420",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SSI beta1i 1.3420"
+  },
+  {
+   "name": "loading_beta2_SSI_two_factor",
+   "description": "",
+   "value": "0.5626",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SSI beta2i 0.5626"
+  },
+  {
+   "name": "loading_sigma_SSI_two_factor",
+   "description": "",
+   "value": "2.7782",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SSI sigma 2.7782"
+  },
+  {
+   "name": "loading_beta1_SSP_two_factor",
+   "description": "",
+   "value": "0.9091",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SSP beta1i 0.9091"
+  },
+  {
+   "name": "loading_beta2_SSP_two_factor_ns",
+   "description": "",
+   "value": "0.1473",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: SSP beta2i 0.1473 ns"
+  },
+  {
+   "name": "loading_sigma_SSP_two_factor",
+   "description": "",
+   "value": "3.6650",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: SSP sigma 3.6650"
+  },
+  {
+   "name": "loading_beta1_STI_two_factor",
+   "description": "",
+   "value": "0.7093",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: STI beta1i 0.7093"
+  },
+  {
+   "name": "loading_beta2_STI_two_factor_ns",
+   "description": "",
+   "value": "0.1038",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: STI beta2i 0.1038 ns"
+  },
+  {
+   "name": "loading_sigma_STI_two_factor",
+   "description": "",
+   "value": "2.6003",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: STI sigma 2.6003"
+  },
+  {
+   "name": "loading_beta1_TECH_two_factor",
+   "description": "",
+   "value": "0.9719",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: TECH beta1i 0.9719"
+  },
+  {
+   "name": "loading_beta2_TECH_two_factor_ns",
+   "description": "",
+   "value": "0.2527",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: TECH beta2i 0.2527 ns"
+  },
+  {
+   "name": "loading_sigma_TECH_two_factor",
+   "description": "",
+   "value": "3.6977",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: TECH sigma 3.6977"
+  },
+  {
+   "name": "loading_beta1_TEL_two_factor",
+   "description": "",
+   "value": "0.5027",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: TEL beta1i 0.5027"
+  },
+  {
+   "name": "loading_beta2_TEL_two_factor",
+   "description": "",
+   "value": "0.7467",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: TEL beta2i 0.7467"
+  },
+  {
+   "name": "loading_sigma_TEL_two_factor",
+   "description": "",
+   "value": "1.8468",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: TEL sigma 1.8468"
+  },
+  {
+   "name": "loading_beta1_UBP_two_factor",
+   "description": "",
+   "value": "0.2440",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: UBP beta1i 0.2440"
+  },
+  {
+   "name": "loading_beta2_UBP_two_factor_ns",
+   "description": "",
+   "value": "-0.0131",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: UBP beta2i -0.0131 ns"
+  },
+  {
+   "name": "loading_sigma_UBP_two_factor",
+   "description": "",
+   "value": "1.0038",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: UBP sigma 1.0038"
+  },
+  {
+   "name": "loading_beta1_URC_two_factor",
+   "description": "",
+   "value": "0.6913",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: URC beta1i 0.6913"
+  },
+  {
+   "name": "loading_beta2_URC_two_factor",
+   "description": "",
+   "value": "0.7876",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: URC beta2i 0.7876"
+  },
+  {
+   "name": "loading_sigma_URC_two_factor",
+   "description": "",
+   "value": "1.7318",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: URC sigma 1.7318"
+  },
+  {
+   "name": "loading_beta1_VITA_two_factor",
+   "description": "",
+   "value": "1.1600",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: VITA beta1i 1.1600"
+  },
+  {
+   "name": "loading_beta2_VITA_two_factor_ns",
+   "description": "",
+   "value": "0.2145",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: VITA beta2i 0.2145 ns"
+  },
+  {
+   "name": "loading_sigma_VITA_two_factor",
+   "description": "",
+   "value": "3.5918",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: VITA sigma 3.5918"
+  },
+  {
+   "name": "loading_beta1_VLL_two_factor",
+   "description": "",
+   "value": "1.2861",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: VLL beta1i 1.2861"
+  },
+  {
+   "name": "loading_beta2_VLL_two_factor_ns",
+   "description": "",
+   "value": "-0.0188",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: VLL beta2i -0.0188 ns"
+  },
+  {
+   "name": "loading_sigma_VLL_two_factor",
+   "description": "",
+   "value": "2.0218",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: VLL sigma 2.0218"
+  },
+  {
+   "name": "loading_beta1_WEB_two_factor",
+   "description": "",
+   "value": "1.0343",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: WEB beta1i 1.0343"
+  },
+  {
+   "name": "loading_beta2_WEB_two_factor_ns",
+   "description": "",
+   "value": "0.2561",
+   "unit": "loading ns",
+   "kind": "estimate",
+   "where": "Table4 p.12: WEB beta2i 0.2561 ns"
+  },
+  {
+   "name": "loading_sigma_WEB_two_factor",
+   "description": "",
+   "value": "4.8515",
+   "unit": "loading",
+   "kind": "estimate",
+   "where": "Table4 p.12: WEB sigma 4.8515"
+  }
+ ],
+ "headline": "estimate_RMSE_improvement_outsample_pct",
+ "partitions": [],
+ "tests": []
+}

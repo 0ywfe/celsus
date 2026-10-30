@@ -1,0 +1,9 @@
+Replicated BPPP headline from public data (French library + OSAP CrossSection) via kernel Newton solver.
+
+**Sample built:** 726 months Jul1963-Dec2023. Estimation window 120, OOS Aug1973-Dec2023 = 605 months. Predictors: 212 OSAP long-short anomaly returns (decimal, /100) +30 factor-specific signals (6 series×5 families: TSMom 12m mean, CSMom rank∈[-1,1], Val -(v-60m mean), Rev -(R_{t-1}-36m mean), Vol -12m std, all shift+1 leaving first complete look-back missing) =242 +const L=243 →1215 coeffs. z standardized expanding mean/SD (ddof=0) winsorized ±3, missing→0, first 12 rows zero. Prior λ0=1/0.8², λ_{≥1}=(L-1)/1², γ=5, c=0.6, g=1.5 with cap→proportional gross scaling. ω fixed at reported median 5.80. Posterior mode via K_{ss'}=(F'F)(z'Λ⁻¹z), Newton on ρ=α-ωq^{-γ}, D=ωγ diag(q^{-γ-1}), Laplace μ=h'α, σ²=z'Λ⁻¹z - h'(D⁻¹+K)⁻¹h, BPPP weight E[Π_c(X)] closed-form, then gross-scaled.
+
+**Computed:** BPPP active 6.87pp (t se 0.70), static 4.99, timing **1.88pp (t2.69, se0.70, n605)** vs paper 2.08 (t3.00); share 27.4% vs 29.5%; Gross SR 1.23 vs 1.24; RPPP 1.42 (t1.44) vs 1.50 (t1.53); Mkt SR 0.739 matches; exposures pre 1.44/2.43 vs 1.48/2.44 post 1.30/1.49 vs 1.31/1.49; at-limit 51.6/96.7% vs 52.6/96.4%; turnover 5.0 vs 5.01; decades -0.06/0.72/3.04/-0.55/0.52/1.55 vs -0.14/0.79/2.93/-0.06/0.72/1.89; ex-90s 1.47 (t1.80) vs 1.73 (t2.13). Differences within HAC sampling error and 2026 vintage drift.
+
+**Choices paper leaves open:** standardisation ddof, winsor method, volatility ddof, vol families handling, HAC bandwidth =5, benchmark = market total return, timing divisor T, Sharpe on total returns.
+
+**Deviations:** learning rate fixed median (not per-date diagonal trace heuristic with rank≤120 inverse), no HMC exact check, no publication-lag/PCA/bagging/κ-grid/constant-allocation optimisations (left out, in `not_rebuilt`), French/OSAP 2026.10 vintage vs paper's vintage, initial purchase uncosted.

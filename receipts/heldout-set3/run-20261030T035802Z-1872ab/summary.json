@@ -1,0 +1,112 @@
+{
+ "run_id": "run-20261030T035802Z-1872ab",
+ "paper": "2609.19455",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 38 of 39 checked results match within their uncertainty. Its main result, corr_advanced_y, is 0.48 correlation in the paper and 0.4642 correlation here (consistent).",
+ "headline": {
+  "name": "corr_advanced_y",
+  "kind": "estimate",
+  "unit": "correlation",
+  "reported": 0.48,
+  "reproduced": 0.464172067618247,
+  "se": 0.03362242226587041,
+  "n": 696,
+  "consistent": true,
+  "why": "paper inside 0.4642 +/- 0.0659"
+ },
+ "sample": [
+  {
+   "name": "N_total_balanced_panel",
+   "reported": 72.0,
+   "reproduced": 72,
+   "consistent": true
+  },
+  {
+   "name": "N_advanced",
+   "reported": 24.0,
+   "reproduced": 24,
+   "consistent": true
+  },
+  {
+   "name": "N_high_em",
+   "reported": 14.0,
+   "reproduced": 14,
+   "consistent": true
+  },
+  {
+   "name": "N_middle_em",
+   "reported": 24.0,
+   "reproduced": 24,
+   "consistent": true
+  },
+  {
+   "name": "N_low_em",
+   "reported": 10.0,
+   "reproduced": 10,
+   "consistent": true
+  },
+  {
+   "name": "N_large_excluded",
+   "reported": 6.0,
+   "reproduced": 6,
+   "consistent": true
+  },
+  {
+   "name": "N_extreme_excluded",
+   "reported": 4.0,
+   "reproduced": 4,
+   "consistent": true
+  },
+  {
+   "name": "Tbar_panel_estimation",
+   "reported": 28.0,
+   "reproduced": 29,
+   "consistent": true
+  },
+  {
+   "name": "obs_advanced_ps",
+   "reported": 672.0,
+   "reproduced": 696,
+   "consistent": true
+  },
+  {
+   "name": "obs_high_em_ps",
+   "reported": 392.0,
+   "reproduced": 406,
+   "consistent": true
+  },
+  {
+   "name": "obs_middle_em_ps",
+   "reported": 672.0,
+   "reproduced": 696,
+   "consistent": true
+  },
+  {
+   "name": "obs_low_em_ps",
+   "reported": 280.0,
+   "reproduced": 290,
+   "consistent": true
+  }
+ ],
+ "judged": 39,
+ "matched": 38,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (obs_middle_em_ps (672) at line 468). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 31,
+ "cost_usd": 0.907,
+ "tokens_in": 1964308,
+ "tokens_out": 102161,
+ "wall_s": 566.2,
+ "crashed": null
+}

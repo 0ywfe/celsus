@@ -1,0 +1,88 @@
+{
+ "run_id": "run-20261030T033112Z-b3819f",
+ "paper": "2512.08000",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 25 of 30 checked results match within their uncertainty. Its main result, A_SSE_01, is 0.387 in the paper and 0.4083 here (consistent).",
+ "headline": {
+  "name": "A_SSE_01",
+  "kind": "estimate",
+  "unit": "",
+  "reported": 0.387,
+  "reproduced": 0.40833764510401666,
+  "se": 0.07787082947348194,
+  "n": 492,
+  "consistent": true,
+  "why": "paper inside 0.4083 +/- 0.1526"
+ },
+ "sample": [
+  {
+   "name": "exp1_SSE_count",
+   "reported": 2452.0,
+   "reproduced": 2454,
+   "consistent": true
+  },
+  {
+   "name": "exp1_SZI_count",
+   "reported": 2452.0,
+   "reproduced": 2453,
+   "consistent": true
+  },
+  {
+   "name": "exp1_GEI_count",
+   "reported": 2452.0,
+   "reproduced": 2455,
+   "consistent": true
+  },
+  {
+   "name": "exp1_train_N",
+   "reported": 2084.0,
+   "reproduced": 2086,
+   "consistent": true
+  },
+  {
+   "name": "exp1_validation_N",
+   "reported": 368.0,
+   "reproduced": 368,
+   "consistent": true
+  },
+  {
+   "name": "exp2_cons_count",
+   "reported": 2452.0,
+   "reproduced": 2455,
+   "consistent": true
+  },
+  {
+   "name": "exp2_health_count",
+   "reported": 2452.0,
+   "reproduced": 2455,
+   "consistent": true
+  },
+  {
+   "name": "exp2_fin_count",
+   "reported": 2452.0,
+   "reproduced": 2455,
+   "consistent": true
+  }
+ ],
+ "judged": 30,
+ "matched": 25,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (A_SSE_00 (0.382) at line 214, A_SSE_01 (0.387) at line 215, A_SSE_10 (0.218) at line 216, A_SSE_11 (0.343) at line 217, mu_SSE_0 (0.024) at line 218, mu_SSE_1 (0.044) at line 219). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 38,
+ "cost_usd": 0.9099,
+ "tokens_in": 1829465,
+ "tokens_out": 120535,
+ "wall_s": 1007.0,
+ "crashed": null
+}

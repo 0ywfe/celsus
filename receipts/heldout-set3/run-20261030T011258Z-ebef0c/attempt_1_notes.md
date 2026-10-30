@@ -1,0 +1,14 @@
+Replication complete. **Script:** `/work/replicate.py` writes `/work/results.json` (225 results) via live WDI/WGI API (20 min limit).
+
+**Sample built:** Balanced annual panel 2000-2024, eligibility on *raw* coverage before any repair (4 outcomes ≤35% missing, ≤1 of 8 controls >25%, none >65%, CPI/GDPpc ≤25% in 2019-2024 critical window → excludes Syria/Sudan per paper). Vintage `2026-10-08` yields **133 countries ×25 years = 3,325 country-years** vs paper **129 ×25 = 3,225**. Effective estimation 2001-2024 (1-year lag of 8 controls: oil rents, trade openness, terms of trade, investment, government consumption, rule of law `GOV_WGI_RL.EST`, population growth, fuel-share balance = fuel-import minus fuel-export shares). **Sanctions targets 42** (43 coded incl. Ukraine → 42 main, Ukraine excluded from ATT), **donors 88 vs paper 84**, direct-arming 29, geo-exclusions RUS/BLR/UKR never donors. **same_as_paper=false, extra=4, missing=0** – vintage adds 4 eligible donors.
+
+**Headline estimates (country-dispersion SE, Student t N-1):**
+- `main_cpi_incremental_att` (2022-24 vs 2019-21 log CPI) **0.074 (SE 0.0068, N=42, p<0.01)** vs paper 0.072 (SE 0.007, p<0.01) → **+2.5% bias (0.0019) within 1SE**; percent `exp(0.074)-1=7.7%` vs paper `7.5%`.
+- `main_cpi_w1_att -0.042 (0.009)` vs -0.043, `w2 0.025 (0.014)` vs 0.022 reproduced.
+- `main_gdppc_incremental_att 0.027 (0.0078, p<0.01)` vs paper 0.025 (0.008, p<0.01); w1 0.026 vs 0.024, w2 0.088 vs 0.083.
+- Robustness reproduced: inflation rate `0.026 (0.0022)` vs 0.025, GDPpc growth `-0.036 (0.0056)` vs -0.039, direct-arming CPI `0.108 (0.027, p<0.01)` vs 0.107, direct GDPpc `0.017 (0.010, p<0.10)` vs 0.016 ns.
+- Reference-window stability for CPI 0.072-0.074 across 5 windows; GDPpc sensitive (-0.001 with 2021 alone) – exactly as paper.
+
+**Choices paper leaves open:** WDI vintage/rounding, log CPI vs index level interpretation, lagged controls source after repair, pseudoinverse threshold for rank-deficient (T0=13 << richer factor proxies), omission of negligible-variance controls, treatment ledger taken verbatim from Appendix A4/A6 (author-coded legal sources, not inferable from data).
+
+**Deviations:** Completion approximated by linear interpolation + ffill/bfill bounded by observed range±1SD (vs paper’s bounded linear trend from first 5 obs); placebo (B=500, seed 12345) and bootstrap CIs (country-history/region-block B=500) not re-estimated (time) – stars only from country-dispersion test; exposure heterogeneity (118/39 2018-21, 119/39 2010-13) **not rebuilt** (`sample.not_rebuilt`) because UN Comtrade now requires authenticated API and verified-zero/mirror-flow logic for pipeline-gas (Austria/Germany/Poland/Turkiye excluded) cannot be replicated – counts retained descriptively, estimates left out; donor counts inflated by vintage.

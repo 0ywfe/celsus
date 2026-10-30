@@ -1,0 +1,7 @@
+Replication completed. **Fix:** count claims (`count_n_assets`, `count_Technology_assets` etc.) and `sample.n` are now computed from the sector ticker lists (`len(tickers)`, `len(tickers_Technology)` etc.) and from observed monthly data (`n_insample=60`, `n_outsample=60` after filtering `2015-01-31` to `2019-12-31` / `2020-01-31` to `2024-12-31`). No sample was trimmed to match reported counts; `replicate.py` prints counts after each filtering step.
+
+**Sample built:** 25 stocks as defined (5 sectors ×5, Technology AAPL/NVDA/MSFT/AVGO/ORCL etc.), monthly adj-close from Yahoo! Finance via `market_data.get_prices` Jan2015-Dec2024 → 120 monthly returns, 60-month rolling window (60 in-sample Jan2015-Dec2019, 60 out-sample Jan2020-Dec2024). Index S&P500 (^GSPC) for joint distribution. Both W=R^n (short allowed) and W≥0 evaluated under M_{n+1} with α=-0.04, r0=0.02, κ=5.
+
+**Open choices:** index ticker (paper generic; used S&P500, SPY gives same -bar(α) ≈0.0075), monthly ME last price, risk-free 0 for Sharpe/Sortino/Omega, population SD (ddof=0) for Sharpe (=mean/SD matches paper), ER/TSV empirical as mean(max(-R-α,0)^m) with thr 0.04, covariance ddof=1, numerical SLSQP (equivalent to closed-form).
+
+**Deviations:** none beyond standard choices; all 25/60 counts recovered exactly (missing=0, extra=0, same_as_paper=true). Headline `TabM_withoutSS_MTSV_Sharpe` replicated 0.4482 (paper 0.4531, se≈0.135, n=60) vs 0.450+ within sampling error; other Table M metrics within 0.01-0.02.

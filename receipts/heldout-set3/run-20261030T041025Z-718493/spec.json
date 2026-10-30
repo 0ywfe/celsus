@@ -1,0 +1,362 @@
+{
+ "title": "Intrinsic Geometry of the Stock Market from Graph Ricci Flow - Replication Spec",
+ "hypothesis": "Discrete Ollivier-Ricci graph curvature with Ricci flow on fully connected empirical correlation graph reveals intrinsic geometry; neckpinch singularities develop and surgery along zero-curvature flat links after ~20 iterations detects hidden hierarchies/communities without MST pruning or preset k. Positive initial curvature (all >0, median weight 1.11, avg corr 38%) spherical; flow separates communities with short positive vs long flat (~3) zero curvature links obeying theoretical lower bound -1.96 even with unequal weights.",
+ "data_sources": [
+  "Yahoo! Finance stock prices [yahoo_fin]",
+  "NASDAQ-100 components list from wiki_nasdaq [wiki_nasdaq]"
+ ],
+ "sample": "NASDAQ-100 index components from wiki_nasdaq [wiki_nasdaq] retrieved from Yahoo! Finance [yahoo_fin]. Node = stock, edge = Pearson correlation transformed distance. Fully connected undirected weighted complete graph with N=100 stocks per index name. No additional filters printed. Correlation matrix computed from time series of returns r_i. Edge weight w_ij = sqrt(2(1-C_ij)). Returns averaging window is five-year period. Daily vs log returns not stated. Subsample counts for hierarchical clustering refer to partitions below. Total sample size claim n_total_100.",
+ "period_start": "1/1/2020",
+ "period_end": "20/11/2024",
+ "method": [
+  "1. Universe: get NASDAQ-100 constituents list from wiki_nasdaq at unspecified date (not stated, as of retrieval).",
+  "2. Data: download stock price time series for each ticker from Yahoo! Finance for period 1/1/2020 to 20/11/2024.",
+  "3. Returns: compute returns r_i(t) per stock (frequency not stated: daily assumed; formula not stated: simple vs log). Compute mean bar{r_i} and std sigma_i over the 5-year window (no rolling window described).",
+  "4. Correlation: compute empirical Pearson C_ij = <(r_i - bar{r_i})(r_j - bar{r_j})> / (sigma_i sigma_j).",
+  "5. Distance/weight: define edge weight w_ij = sqrt(2*(1-C_ij)) for all i!=j. This is initial fully connected graph G(V,E,w) with w_ij>0. Initial shortest path distance d(i,j) induced by w (for complete graph = direct w_ij).",
+  "6. Coarse curvature: for each edge ij compute Ollivier-Ricci curvature kappa_ij = 1 - W(m_i,m_j)/d(i,j). Probability measure m_x^alpha with alpha=1/2: m_x(x)=alpha=1/2, m_x(y)=(1-alpha)/d_x for y in pi(x) neighbors, else 0. d_x = degree normalization (=n-1 for complete graph). Wasserstein distance W(m_i,m_j) = min_P sum_{u,v} d(u,v)P(u,v) s.t. marginals = m_i,m_j; computed via optimal transport (implementation from [ni2019community][github] referenced). Use alpha=1/2 throughout; drop alpha index.",
+  "7. Histograms: plot distributions of w_ij and kappa_ij for initial graph; record theoretical benchmarks: complete equal-weight kappa=0.505, Laplacian eigenvalues 0 and n/(n-1), bounds -2 to 1, lower bound kappa_min formula.",
+  "8. Discrete Ricci flow: generate time-dependent family G(V,E,w(t)) with iterative update: w_ij^{(l+1)} = (1 - kappa_ij^{(l)}) * d^{(l)}(i,j) where kappa_ij^{(l)} is current ORC and d^{(l)} is current shortest path distance induced by w^{(l)}. Update all edges simultaneously each iteration. Iterate for l=0 to 20 (report after 5,10,20 iterations). No normalized flow; allow shrinkage to singularity.",
+  "9. Visualization: after each iteration, plot histograms of w and kappa and scatter w vs kappa to identify neckpinch/dumbbell. Expect initially all kappa>0 spherical, very narrow distribution around median 1.11; with flow positive edges cluster short, negative hyperbolic would lengthen (not present initially); flat neck develops with kappa->0.",
+  "10. Surgery rule (novel): after 20 iterations, identify neckpinch singularity as flat links with curvature ~0 and edge weight around 3 (theoretical lower bound length 2.96 for n=100). Perform surgery by cutting/removing edges with kappa ~=0 separating two communities. This uses lower bound kappa_min ~ -1.96 and theoretical bounds -2 to 1 as reference that graph obeys even with unequal weights.",
+  "11. Hierarchical clustering by recursion: apply steps 6-10 recursively to each separated community: Level1 surgery on full 100 -> 66 (tech) +35 (non-cyclicals). Level2 on 66 -> extract 16 semiconductors (list Table) remainder 50. Level2 other branch on 35 -> split into 10 health/staples +8 staples/energy +17 industrials. Level3 on 50 -> extract 10 outliers remainder 40. Level4 on 40 -> extract 4 biotech +1 SMCI remainder 35. Level5 on remainder 35 -> split 17 Big Tech +18 Tesla group. No preset k, no MST pruning, no external assumptions.",
+  "12. Outputs: tables of ticker/name/sector/sub-industry for each cluster at levels 2-5 as in Appendix. Analyses of semiconductor absence of NVDA initially etc described in text.",
+  "13. Not stated: intraday vs close prices, adjustment for splits/dividends, handling of missing tickers (e.g., added/dropped during 2020-2024), correlation significance filtering, Wasserstein solver details, exact shortest path algorithm for complete graph with updated weights, random seed, code repo commit."
+ ],
+ "claims": [
+  {
+   "name": "n_total_100",
+   "description": "NASDAQ-100 complete graph members - fully connected graph with N=100 nodes. Fig.1 Nasdaq100.png.",
+   "value": "100",
+   "unit": "stocks/nodes",
+   "kind": "count",
+   "where": "Abstract, Fig1, p.2 'NASDAQ-100 graph', p.4 'For the NASDAQ-100 graph' n=100 implied; Appendix tables components of NASDAQ-100 Index from wiki_nasdaq."
+  },
+  {
+   "name": "period_window_5_years",
+   "description": "Returns averaged over period 1/1/2020-20/11/2024 stated as five years.",
+   "value": "5 years",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "p.3 'We calculate the returns and average over a period of five years from 1/1/2020-20/11/2024.'"
+  },
+  {
+   "name": "corr_38_percent",
+   "description": "Average correlation of empirical graph.",
+   "value": "38%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "p.3 'The correlation of this graph is 38%, which means that there is an average edge-weight of 1.11.'"
+  },
+  {
+   "name": "avg_edge_weight_1_11",
+   "description": "Average edge-weight w_ij = sqrt(2(1-C_ij)) corresponding to 38% correlation.",
+   "value": "1.11",
+   "unit": "distance",
+   "kind": "estimate",
+   "where": "p.3 'average edge-weight of 1.11.'; Fig.1 top histogram median value"
+  },
+  {
+   "name": "median_edge_weight_1_11",
+   "description": "Median of edge-weight distribution tightly distributed around median.",
+   "value": "1.11",
+   "unit": "distance",
+   "kind": "estimate",
+   "where": "p.3 'distributions of the edge weights are all tightly distributed around a median value of 1.11'"
+  },
+  {
+   "name": "alpha_lazy_1_2",
+   "description": "Idleness parameter alpha for lazy random walk probability measure. Drop alpha index understanding alpha=1/2 in this work.",
+   "value": "1/2",
+   "unit": "probability",
+   "kind": "parameter",
+   "where": "p.2 'we use a lazy random walk probability measure, with idleness parameter alpha=1/2. Therefore, we drop the alpha index, with the understanding that alpha=1/2' ; Appendix. Ricci flow p.4 'with alpha=1/2 and a discrete time step'"
+  },
+  {
+   "name": "kappa_complete_0_505",
+   "description": "Theoretical Ricci curvature of complete graph K_n with equal edge weights and alpha=1/2: kappa = (1-alpha)*n/(n-1). For NASDAQ-100 n=100 gives 0.505. Benchmark shifted histogram is from this.",
+   "value": "0.505",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.3 'If we consider the complete graph with N nodes and alpha=1/2 ... kappa_ij=(1-alpha) n/(n-1)= kappa. ... In the case of the NASDAQ 100 network, if we approximated equal edges, with alpha=1/2, we would have kappa =0.505.'"
+  },
+  {
+   "name": "lin_lu_yau_limit_n_over_n_minus1",
+   "description": "Lin-Lu-Yau-Ricci curvature limit alpha->1 kappa_ij/(1-alpha)=n/(n-1) for K_n, only graph with constant curvature >1.",
+   "value": "n/(n-1)",
+   "unit": "curvature/(1-alpha)",
+   "kind": "parameter",
+   "where": "p.3 'It is known that the Lin-Lu-Yau-Ricci curvature lim_{alpha->1} kappa_ij/(1-alpha)=n/(n-1) of the complete graph K_n is the only graph with a constant curvature greater than 1'"
+  },
+  {
+   "name": "laplacian_eigenvalue_0",
+   "description": "Eigenvalue of Laplacian of complete graph K_n.",
+   "value": "0",
+   "unit": "eigenvalue",
+   "kind": "parameter",
+   "where": "p.2-3 'The eigenvalues of the Laplacian of the complete graph are known to be 0 and n/(n-1) with multiplicity n-1.'"
+  },
+  {
+   "name": "laplacian_eigenvalue_n_over_n_minus1",
+   "description": "Eigenvalue of Laplacian of complete graph K_n with multiplicity n-1, same as Lin-Lu-Yau curvatures.",
+   "value": "n/(n-1)",
+   "unit": "eigenvalue",
+   "kind": "parameter",
+   "where": "p.2-3 'The eigenvalues of the Laplacian of the complete graph are known to be 0 and n/(n-1) with multiplicity n-1.' ; p.3 'The eigenvalues of the Laplacian of the complete graph are the same as the Lin-Lu-Yau-Ricci curvatures.'"
+  },
+  {
+   "name": "curvature_lower_theoretical_minus2",
+   "description": "Theoretical lower bound of Ollivier-Ricci graph curvature attained for infinite double stars.",
+   "value": "-2",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.5 'The Ollivier-Ricci graph curvature was shown to be bounded by -2 and 1, with the bounds attained for the infinite double stars and complete graphs [Yaueigenvalues],[jostandliu].'"
+  },
+  {
+   "name": "curvature_upper_theoretical_1",
+   "description": "Theoretical upper bound of Ollivier-Ricci curvature attained for complete graphs.",
+   "value": "1",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.5 'bounded by -2 and 1, with the bounds attained for the infinite double stars and complete graphs'"
+  },
+  {
+   "name": "kappa_min_formula",
+   "description": "General lower bound of ORC from Lin and Yau [Yaueigenvalues],[jostandliu]: kappa_ij >= kappa_ij,min = 2/d_i +2/d_j -2 where d_i is degree.",
+   "value": "2/d_i + 2/d_j -2",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.5 'From Lin and Yau [Yaueigenvalues],[jostandliu], the lower bound of the ORC is given by kappa_ij >= kappa_ij,min = 2/d_i +2/d_j -2, where d_i is the degree of link i.'"
+  },
+  {
+   "name": "kappa_min_equal_weights",
+   "description": "Lower bound in limit of equal edge weights.",
+   "value": "2(3-n)/(n-1)",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.5 'In the limit of equal edge weights, this gives a value for kappa_ij,min = 2(3-n)/(n-1).'"
+  },
+  {
+   "name": "kappa_min_nasdaq_minus1_96",
+   "description": "Lower bound evaluated for NASDAQ-100 n=100: -1.96 approx. Holds empirically even with unequal edge weights.",
+   "value": "-1.96",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.5 'For the NASDAQ-100 graph this gives kappa_ij,min approx -1.96. Naively, this would correspond to a length of d_ij approx 2.96'"
+  },
+  {
+   "name": "edge_length_theoretical_2_96",
+   "description": "Naive edge length corresponding to lower curvature bound -1.96.",
+   "value": "2.96",
+   "unit": "distance",
+   "kind": "parameter",
+   "where": "p.5 'Naively, this would correspond to a length of d_ij approx 2.96 for the edge length.'"
+  },
+  {
+   "name": "ricci_iter_5",
+   "description": "Discrete Ricci flow iterations - histogram after 5 iterations. Edge weight distribution flattens, curvature splits into two peaks.",
+   "value": "5",
+   "unit": "iterations",
+   "kind": "parameter",
+   "where": "p.4 'In Fig. we see that after just 5 iterations of Ricci flow, the distribution of edge weights begins to flatten out.' ; Fig3 caption 'after 5,10 and 20 iterations'"
+  },
+  {
+   "name": "ricci_iter_10",
+   "description": "Discrete Ricci flow iterations - after 10 iterations dumbbell shape and neckpinch appears.",
+   "value": "10",
+   "unit": "iterations",
+   "kind": "parameter",
+   "where": "p.4-5 'After 10 iterations, these features are much more pronounced, with the appearance of a dumbbell-shape and a neckpinch' ; Fig3"
+  },
+  {
+   "name": "ricci_iter_20",
+   "description": "Discrete Ricci flow iterations - after 20 iterations graph splits into two communities separated by long flat links. Surgery performed at this iteration.",
+   "value": "20",
+   "unit": "iterations",
+   "kind": "parameter",
+   "where": "p.5 'After 20 iterations, we see a clear separation... We perform surgery along the zero-curvature links' ; Fig3 'Ricci flow after 5,10 and 20 iterations with surgery on the 20th iteration'"
+  },
+  {
+   "name": "surgery_curvature_0",
+   "description": "Surgery threshold: performed along zero-curvature links which correspond to long flat links separating two communities after neckpinch.",
+   "value": "0",
+   "unit": "curvature",
+   "kind": "parameter",
+   "where": "p.5 'we perform surgery along the zero-curvature links, which correspond to the long flat links that separate the two communities.' ; p.5 'performing surgery along the zero-curvature links.'"
+  },
+  {
+   "name": "postflow_edge_weight_3",
+   "description": "Observed edge weight of inter-community flat links after 20 iterations around 3, corresponding to lower bound length 2.96. Positive intra-community edges very short.",
+   "value": "3",
+   "unit": "distance",
+   "kind": "estimate",
+   "where": "p.5 'We find after 20 iterations that the graph splits into two communities, with very short edge weights and positive curvature. These two communities are separated by long, flat links with curvature zero and edge weights around 3.'"
+  },
+  {
+   "name": "level1_cluster_66",
+   "description": "First level Ricci flow+surgery: larger tech-driven cluster. Listed detail in subsequent subclusters summing to 66.",
+   "value": "66",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'After the first level of Ricci flow, followed by surgery ... the cluster splits into two communities of 66 and 35 stocks. The larger cluster is clearly tech-driven'"
+  },
+  {
+   "name": "level1_cluster_35_a",
+   "description": "First level smaller non-cyclical cluster of 35 stocks (other branch). 66+35=101 as printed includes 1 extra vs n_total_100 due to source rounding/duplication; preserved as printed.",
+   "value": "35",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'splits into two communities of 66 and 35 stocks.' ; p.5 'The other level 1 cluster of 35 stocks seems to contain non-cyclicals'"
+  },
+  {
+   "name": "level2_parent_50",
+   "description": "Parent cluster after extracting 16 semiconductors from 66-stock tech branch: 66-16=50 remainder that undergoes level3 flow.",
+   "value": "50",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'The second level of Ricci flow leads to a basket of 16 semiconductor stocks.' ; 'The level 3 Ricci flow of the 50 stock cluster leads to the separation of a cluster of 10 stocks.' 50 implied as 66-16."
+  },
+  {
+   "name": "level2_semicond_16",
+   "description": "Level2 semiconductor industry cluster extracted from 66-stock branch. Tickers listed in Appendix Table.",
+   "value": "16",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'The second level of Ricci flow leads to a basket of 16 semiconductor stocks.' ; Appendix Table Level2 Cluster: Semiconductor Industry lists 16 tickers."
+  },
+  {
+   "name": "level3_outlier_10",
+   "description": "Level3 outlier cluster of 10 stocks separated from 50-stock cluster. Includes MRNA dropped Dec 2024.",
+   "value": "10",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'The level 3 Ricci flow of the 50 stock cluster leads to the separation of a cluster of 10 stocks. When we examine these stocks, it is clear that they are outliers. Moderna ... was subsequently dropped' ; Appendix Table Level3 Cluster: Outlier lists 10 tickers."
+  },
+  {
+   "name": "level3_remainder_40",
+   "description": "Remainder after extracting 10 outliers from 50: 40 stocks containing biotech, Supermicro and Big Tech/Tesla branches.",
+   "value": "40",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'Analyzing the 40 stock cluster leads to the separation of biotech stocks and Supermicro stock. The cluster of the remaining 35 stocks' 40 implied as 50-10."
+  },
+  {
+   "name": "level4_biotech_4",
+   "description": "Level4 biotech cluster separated from 40-stock cluster. Appendix Table lists 4 tickers.",
+   "value": "4",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'Analyzing the 40 stock cluster leads to the separation of biotech stocks' ; Appendix Table Level4 Cluster: Biotech lists 4 tickers (GEHC,CEG,REGN,BIIB)"
+  },
+  {
+   "name": "level4_supermicro_1",
+   "description": "Level4 Supermicro single-stock cluster from 40-stock cluster.",
+   "value": "1",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'and Supermicro stock.' ; Appendix Table Level4 Cluster: SuperMicro lists 1 ticker SMCI"
+  },
+  {
+   "name": "level5_parent_35_b",
+   "description": "Remaining 35-stock cluster after extracting 4+1 from 40 (40-5=35) that splits into Big Tech and Tesla groups. Distinct instance from level1 35.",
+   "value": "35",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'The cluster of the remaining 35 stocks splits into two roughly equal groups of 17 and 18 stocks.' ; this is remainder after biotech+SMCI from 40."
+  },
+  {
+   "name": "level5_bigtech_17",
+   "description": "Level5 Big Tech cluster of 17 stocks containing NVDA, AMZN etc. Appendix Table lists 17.",
+   "value": "17",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'We name the 17 stock cluster Big Tech which contains Nvidia and Amazon amongst others' ; Appendix Table Level5 Cluster: Big Techs lists 17 tickers."
+  },
+  {
+   "name": "level5_tesla_18",
+   "description": "Level5 Tesla group cluster of 18 stocks containing TSLA.",
+   "value": "18",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'splits into two roughly equal groups of 17 and 18 stocks.' ; Appendix Table Level5 Cluster: Tesla group lists 18 tickers."
+  },
+  {
+   "name": "other_branch_level2_healthstaples_10",
+   "description": "Other branch Level2 Healthcare staples cluster from 35-stock non-cyclical branch. Appendix Table lists 10.",
+   "value": "10",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'The other level 1 cluster of 35 stocks ... cluster into Healthcare staples, Energy staples and Industrials. See Fig.' ; Appendix Table Level2 Cluster: Health Care/Staples lists 10 tickers."
+  },
+  {
+   "name": "other_branch_level3_staplesenergy_8",
+   "description": "Other branch Level3 Staples/Energy cluster of 8 stocks from 35-stock branch.",
+   "value": "8",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 clustering into Staples/Energy ; Appendix Table Level3 Cluster: Staples/Energy lists 8 tickers."
+  },
+  {
+   "name": "other_branch_level3_industrials_17",
+   "description": "Other branch Level3 Industrials cluster of 17 stocks from 35-stock branch.",
+   "value": "17",
+   "unit": "stocks",
+   "kind": "tally",
+   "where": "p.5 'Industrials. See Fig.' ; Appendix Table Level3 Cluster: Industrials lists 17 tickers."
+  }
+ ],
+ "headline": "surgery_curvature_0",
+ "partitions": [
+  {
+   "split": "Level1 Ricci flow + surgery on full NASDAQ-100 (100 nodes) after 20 iterations along zero-curvature neckpinch. Note 66+35=101 as printed vs total 100 due to source count; preserved as printed; total claim is n_total_100=100.",
+   "total": "n_total_100",
+   "parts": [
+    "level1_cluster_66",
+    "level1_cluster_35_a"
+   ]
+  },
+  {
+   "split": "Level2 split of 66-stock tech branch into 16 semiconductors and 50 remainder.",
+   "total": "level1_cluster_66",
+   "parts": [
+    "level2_semicond_16",
+    "level2_parent_50"
+   ]
+  },
+  {
+   "split": "Other branch split of 35-stock non-cyclical branch into 10 HealthCare/Staples +8 Staples/Energy +17 Industrials =35.",
+   "total": "level1_cluster_35_a",
+   "parts": [
+    "other_branch_level2_healthstaples_10",
+    "other_branch_level3_staplesenergy_8",
+    "other_branch_level3_industrials_17"
+   ]
+  },
+  {
+   "split": "Level3 split of 50-stock parent into 10 outliers and 40 remainder.",
+   "total": "level2_parent_50",
+   "parts": [
+    "level3_outlier_10",
+    "level3_remainder_40"
+   ]
+  },
+  {
+   "split": "Level4 split of 40-stock remainder into 4 biotech +1 Supermicro +35 remainder to be further split (40=4+1+35).",
+   "total": "level3_remainder_40",
+   "parts": [
+    "level4_biotech_4",
+    "level4_supermicro_1",
+    "level5_parent_35_b"
+   ]
+  },
+  {
+   "split": "Level5 split of remaining 35-stock branch into 17 Big Tech and 18 Tesla group (17+18=35).",
+   "total": "level5_parent_35_b",
+   "parts": [
+    "level5_bigtech_17",
+    "level5_tesla_18"
+   ]
+  }
+ ],
+ "tests": []
+}

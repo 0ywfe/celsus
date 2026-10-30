@@ -1,0 +1,13 @@
+PyYAML==6.0.3
+cryptography==50.0.2
+flatbuffers==25.12.19
+networkx==3.7
+onnxruntime==1.31.1
+pdfminer.six==20260107
+pillow==13.0.0
+psutil==7.2.2
+pymupdf4llm==2.0
+pymupdf==2.0
+pymupdf_layout==2.0
+pytesseract==0.3.13
+tabulate==0.10.0

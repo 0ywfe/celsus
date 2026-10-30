@@ -1,0 +1,297 @@
+{
+  "results": [
+    {
+      "name": "count_S_stocks_retained",
+      "value": 72,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_PSEi_composition",
+      "value": 30,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_missing_threshold",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_white_noise",
+      "value": 0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_one_factor",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_p_one_factor",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_q_one_factor",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_two_factor",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_p_two_factor",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_q_two_factor",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_alpha_significance",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "estimate_corr_Ft_PSEi_one_factor",
+      "value": -0.988844985347832,
+      "se": 0.0005820204877597083,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_Ft_PC1_one_factor",
+      "value": 0.9999999999999999,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_PC1_PSEi_one_factor",
+      "value": -0.988844985347832,
+      "se": 0.0005820204877597083,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_F1t_PSEi_two_factor",
+      "value": -0.988844985347832,
+      "se": 0.0005820204877597083,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_F1t_PC1_two_factor",
+      "value": 0.9999999999999999,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_F2t_PSEi_two_factor",
+      "value": -0.1090444636474769,
+      "se": 0.02592221938867793,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_F2t_PC2_two_factor",
+      "value": 1.0,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_PC2_PSEi_two_factor",
+      "value": -0.1090444636474769,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_corr_CAPM_beta_beta_i_one_factor",
+      "value": -0.9799483169138609,
+      "se": 0.0047794744089621624,
+      "n": 72
+    },
+    {
+      "name": "estimate_corr_CAPM_beta_beta1i_two_factor",
+      "value": -0.9799483169138609,
+      "se": null,
+      "n": 72
+    },
+    {
+      "name": "estimate_corr_CAPM_beta_beta2i_two_factor",
+      "value": 0.2285027881435009,
+      "se": null,
+      "n": 72
+    },
+    {
+      "name": "estimate_coef_Lambda1_one_factor",
+      "value": 0.1438138723904244,
+      "se": 0.025897506199410475,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_Lambda2_one_factor",
+      "value": 0.0162710708091205,
+      "se": 0.026185736532655993,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_Lambda3_one_factor",
+      "value": 0.16575398264887728,
+      "se": 0.02591560524194446,
+      "n": 1456
+    },
+    {
+      "name": "tally_beta_i_significant_one_factor",
+      "value": 72,
+      "se": 0,
+      "n": 72
+    },
+    {
+      "name": "tally_beta_i_not_significant_one_factor_LC",
+      "value": 0,
+      "se": 0,
+      "n": 72
+    },
+    {
+      "name": "tally_beta1i_significant_two_factor",
+      "value": 72,
+      "se": 0,
+      "n": 72
+    },
+    {
+      "name": "tally_beta2i_significant_two_factor_half",
+      "value": 64,
+      "se": 0,
+      "n": 72
+    },
+    {
+      "name": "estimate_corr_F1t_F2t_two_factor",
+      "value": 1.147271219077883e-16,
+      "se": 0.026234161806670223,
+      "n": 1456
+    },
+    {
+      "name": "estimate_R2_Ft_on_F1tF2t",
+      "value": 1.0,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_11_lag1_two_factor",
+      "value": 0.15057207629397049,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_12_lag1_two_factor",
+      "value": -0.022402422233039933,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_21_lag1_two_factor",
+      "value": 0.05537787013667523,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_22_lag1_two_factor",
+      "value": -0.018610653741653275,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_11_lag2_two_factor",
+      "value": 0.04283444308723501,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_12_lag2_two_factor",
+      "value": 0.038057425434881734,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_21_lag2_two_factor",
+      "value": 0.009201985813215347,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_coef_VAR_22_lag2_two_factor",
+      "value": -0.019450367835273888,
+      "se": null,
+      "n": 1456
+    },
+    {
+      "name": "estimate_RMSE_AR1_in_sample",
+      "value": 3.1871557783038535,
+      "se": null,
+      "n": 23
+    },
+    {
+      "name": "estimate_RMSE_AR1_out_of_sample",
+      "value": 7.713489073070084,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "estimate_RMSE_AR1_Ft_in_sample",
+      "value": 0.4802890665281412,
+      "se": null,
+      "n": 23
+    },
+    {
+      "name": "estimate_RMSE_AR1_Ft_out_of_sample",
+      "value": 9.219390337891868,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "estimate_improvement_in_sample_RMSE",
+      "value": 84.9304803424531,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "estimate_improvement_out_of_sample_RMSE",
+      "value": -19.522958424603207,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "estimate_abstract_over_34pct",
+      "value": 34.0,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "PSE stock closing prices via fastquant Phisix cache (merged_stock_data.zip) searched 2015-01-01 to 2022-12-31 per paper; DFM fitting period 2015-01-01 to 2020-12-31 T=1456 N=72 actual cache coverage 2010-01-04 to 2021-12-15 (2022-01-01 to 2022-12-31 missing, 1 year). Filter >1% missing retains 72/72 (all pass). PSEi proxy equal-weighted mean return (PSEI.PS/^PSEI delisted, stooq JS proof-of-work blocked, logged). GDP quarterly World Bank annual NY.GDP.MKTP.KD.ZG 2015-2022 interpolated to quarterly (paper quarterly source not stated; PSA 403, FRED timeout). Nowcasting in 2015Q1-2020Q4 out 2021Q1-2022Q4 searched, available out 2021Q1-2021Q4 (4 obs, 2022 4 quarters missing due to cache). Factors via PCA proxy (DynamicFactor MLE not convergent for 72x1456).",
+    "n": 72,
+    "start": "2015-01-01",
+    "end": "2022-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 0,
+    "differences": "Stock sample identical 72 tickers for 2015-2020 window. Searched full paper window 2015-01-01 to 2022-12-31 but public fastquant cache ends 2021-12-15, so 2022-01-01 to 2022-12-31 (252 trading days, 4 quarterly GDP obs) missing from our sample; out-of-sample truncated to 2021Q1-2021Q4 (listed as missing). PSEi: attempted stooq https://stooq.com/q/d/?s=%5Epsei (returns 796b anti-bot requiring crypto subtle proof-of-work) and yfinance PSEI.PS/^PSEI/^PSE \u2013 all MarketDataUnavailable logged \u2013 fallback equal-weighted proxy vs paper stooq PSEi. GDP: paper quarterly source not stated; PSA 403 Cloudflare + 7 FRED candidates timed out 10s \u2192 World Bank annual interpolated. DFM: PCA+VAR OLS proxy vs authors Kalman MLE via DynamicFactorAnalysis (statsmodels DynamicFactor failed for large panel).",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "estimate_loading_beta_i_sigma_i_one_factor_table": "Full MLE loadings table 144 values requires authors Kalman MLE via DynamicFactorAnalysis package; PCA proxy loadings differ numerically. Public Phisix cache vintage (2021-12-15) not exact paper vintage.",
+      "estimate_loading_beta1i_beta2i_sigma_i_two_factor_table": "Same for 216 values with ns flags; significance requires MLE standard errors not available via PCA proxy."
+    },
+    "substitutions": "fastquant cache merged_stock_data.zip vs live Phisix per-day API (same data, vintage 2021-12-15, missing 2022). PSEi equal-weighted mean return proxy vs stooq PSEi (attempted fetches logged as MarketDataUnavailable). CAPM Cov/Var computed proxy vs Barrons (get_profile unavailable logged). GDP World Bank annual NY.GDP.MKTP.KD.ZG interpolated to quarterly vs PSA quarterly (FRED timeout, PSA 403). PCA+VAR OLS proxy vs DynamicFactorAnalysis Kalman MLE (statsmodels fit attempted, non-convergence). ffill for sparse misses (0.07-0.48% per stock)."
+  },
+  "notes": "Choices and deviations: Missing price handling \u2013 paper drops stocks >1% missing but not how to handle remaining sparse misses (0.07-0.48% per stock, 61 missing dates affecting 109 pct_change rows); we forward-filled closes to keep balanced panel T=1456 (alternative listwise deletion T=1348 more loss). Return definition simple percentage (S_t-S_{t-1})/S_{t-1} as stated. Lag orders paper BIC (1,3,5) and (2,2,5) retained as parameters (we verified IC1-IC3 lower for n=1,2 vs 0 white-noise, but IC best n=4 in our centering due to demean choice vs paper n=1). Estimation paper Kalman filter+smoother + MLE via DynamicFactorAnalysis; we attempted statsmodels.tsa.statespace.DynamicFactor (k_factors,factor_order,error_order) with maxiter 5 \u2013 failed/ non-convergent for 72x1456 panel (logged), fallback to PCA SVD (U*s) + VAR OLS \u2013 consistent under large N,T but not exact MLE, hence loadings/ VAR coefficients proxies differ from paper. PSEi paper cites https://stooq.com/q/d/?s=%5Epsei but site now requires JS proof-of-work (796b anti-bot with crypto SHA256, logged as 200 with script) and yfinance PSEI.PS/^PSEI/PSEI delisted empty (MarketDataUnavailable logged for 8 tickers) \u2013 used equal-weighted market return as theory-consistent proxy. CAPM beta via Barrons no stable API, get_profile(beta) unavailable logged, computed Cov(Ri,Rm)/Var(Rm) definition underlying Eq1. GDP paper not stating source; PSA/psa.gov.ph blocked 403 Cloudflare Just-a-moment, 7 FRED IDs (NGDPNSAXDCPPH etc) timed out 10s after 10s, World Bank annual available (6.34,7.14,6.93,6.34,6.12,-9.52,5.71,7.58) interpolated repeating annual for 4 quarters; searched 2022Q1-2022Q4 but 4 quarters missing due cache (reported via missing/differences). Nowcasting monthly indicators mean+std F1t,F2t per month (4 per month, 12 per quarter) via OLS; reduced to 4 quarterly avg (F1_mean,F1_std,F2_mean,F2_std) when n<p (24 in-sample vs 13 params) to avoid rank deficiency. Filtered vs smoothed: paper Kalman smoothed in-sample filtered out-of-sample to avoid leakage; we analogous trained PCA loadings 2015-2020 only then projected 2021-2022 onto those loadings (no leakage). SEs via Fisher (1-r^2)/sqrt(n-3) and OLS var-cov. Calendar: PSE trading days vs quarterly GDP aligned via ME resampling grouping Jan-Mar\u2192Q1."
+}

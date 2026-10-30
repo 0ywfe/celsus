@@ -1,0 +1,52 @@
+{
+ "run_id": "run-20261030T043556Z-493a3a",
+ "paper": "2604.26063",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 10 of 54 checked results match within their uncertainty. Its main result, qqq_vpmacd_total_pnl, is 8.832e+04 USD in the paper and 4.312e+04 USD here (not consistent).",
+ "headline": {
+  "name": "qqq_vpmacd_total_pnl",
+  "kind": "estimate",
+  "unit": "USD",
+  "reported": 88324.48,
+  "reproduced": 43119.45547294922,
+  "se": 0,
+  "n": 791,
+  "consistent": false,
+  "why": "51.2% apart, beyond 10%"
+ },
+ "sample": [
+  {
+   "name": "training_observations",
+   "reported": 1259.0,
+   "reproduced": 1259,
+   "consistent": true
+  },
+  {
+   "name": "testing_observations_per_instrument",
+   "reported": 791.0,
+   "reproduced": 791,
+   "consistent": true
+  }
+ ],
+ "judged": 54,
+ "matched": 10,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (training_observations (1,259) at line 491). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 40,
+ "cost_usd": 1.1646,
+ "tokens_in": 2410991,
+ "tokens_out": 145558,
+ "wall_s": 2868.4,
+ "crashed": null
+}

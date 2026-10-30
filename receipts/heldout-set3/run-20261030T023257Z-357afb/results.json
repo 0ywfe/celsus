@@ -1,0 +1,1080 @@
+{
+  "results": [
+    {
+      "name": "total_countries_172",
+      "value": 172,
+      "se": 0,
+      "n": 172
+    },
+    {
+      "name": "countries_with_interior_maxima_23",
+      "value": 38,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "full_income_countries_72",
+      "value": 69,
+      "se": 0,
+      "n": 172
+    },
+    {
+      "name": "full_consumption_countries_100",
+      "value": 103,
+      "se": 0,
+      "n": 172
+    },
+    {
+      "name": "vis_income_countries_12",
+      "value": 12,
+      "se": 0,
+      "n": 12
+    },
+    {
+      "name": "vis_consumption_countries_12",
+      "value": 12,
+      "se": 0,
+      "n": 12
+    },
+    {
+      "name": "crossover_p_1.87",
+      "value": 1.8738738590966608,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "max_rank_shift_2",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "pairs_switch_positions_schemes_2",
+      "value": 15,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_I1_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_G_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_A0.5_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_K_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_T1_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_P90P10_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Australia_Wolfson_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_I1_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_G_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_A0.5_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_K_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_T1_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_P90P10_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Brazil_Wolfson_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_I1_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_G_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_A0.5_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_K_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_T1_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_P90P10_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Chile_Wolfson_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_I1_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_G_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_A0.5_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_K_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_T1_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_P90P10_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Colombia_Wolfson_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_I1_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_G_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_A0.5_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_K_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_T1_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_P90P10_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_France_Wolfson_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_I1_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_G_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_A0.5_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_K_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_T1_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_P90P10_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Germany_Wolfson_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_I1_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_G_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_A0.5_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_K_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_T1_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_P90P10_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Mexico_Wolfson_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_I1_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_G_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_A0.5_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_K_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_T1_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_P90P10_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Poland_Wolfson_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_I1_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_G_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_A0.5_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_K_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_T1_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_P90P10_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Sweden_Wolfson_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_I1_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_G_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_A0.5_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_K_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_T1_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_P90P10_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_Turkey_Wolfson_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_I1_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_G_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_A0.5_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_K_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_T1_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_P90P10_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedKingdom_Wolfson_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_I1_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_G_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_A0.5_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_K_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_T1_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_P90P10_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "income_UnitedStates_Wolfson_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_I1_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_G_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_A0.5_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_K_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_T1_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_P90P10_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_China_Wolfson_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_I1_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_G_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_A0.5_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_K_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_T1_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_P90P10_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Egypt_Wolfson_rank",
+      "value": 2,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_I1_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_G_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_A0.5_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_K_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_T1_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_P90P10_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Ethiopia_Wolfson_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_I1_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_G_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_A0.5_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_K_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_T1_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_P90P10_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_India_Wolfson_rank",
+      "value": 1,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_I1_rank",
+      "value": 3,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_G_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_A0.5_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_K_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_T1_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_P90P10_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Indonesia_Wolfson_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_I1_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_G_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_A0.5_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_K_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_T1_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_P90P10_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_CoteDIvoire_Wolfson_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_I1_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_G_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_A0.5_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_K_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_T1_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_P90P10_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Kenya_Wolfson_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_I1_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_G_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_A0.5_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_K_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_T1_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_P90P10_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Morocco_Wolfson_rank",
+      "value": 10,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_I1_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_G_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_A0.5_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_K_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_T1_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_P90P10_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Nigeria_Wolfson_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_I1_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_G_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_A0.5_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_K_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_T1_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_P90P10_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_SouthAfrica_Wolfson_rank",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_I1_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_G_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_A0.5_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_K_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_T1_rank",
+      "value": 4,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_P90P10_rank",
+      "value": 5,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Thailand_Wolfson_rank",
+      "value": 6,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_I1_rank",
+      "value": 11,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_G_rank",
+      "value": 8,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_A0.5_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_K_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_T1_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_P90P10_rank",
+      "value": 9,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "cons_Vietnam_Wolfson_rank",
+      "value": 7,
+      "se": null,
+      "n": 12
+    }
+  ],
+  "sample": {
+    "description": "PIP latest year per country, N=172 (income=69, consumption=103), Bernstein M=20 convex fits",
+    "n": 172,
+    "start": "1992-01-01",
+    "end": "2025-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Decile shares (11 Lorenz points) used as proxy for 100 percentiles; Bernstein fit with dense grid and analytic derivatives; PIP vintage 20250922_2021_01_02_PROD via API - same 172 countries, income/consumption split variation (69 vs 72, 103 vs 100) within vintage reclassification."
+  },
+  "notes": "Choices the paper leaves open: Bernstein polynomial order M set as described, decile points normalized to unit sum, grid and integration choices as implemented, I1 via endpoint derivatives.\nDeviations: public API provides decile aggregates not percentiles, used as proxy; this affects tail-sensitive I1 rankings. Vintage differences: full income and consumption counts shift in newer PIP release due to welfare_type reclassification. Interior maxima count evaluated on decile proxy differs from paper due to coarse tail resolution. Crossover computed numerically via integration and brentq root finding. Robustness metrics computed from Bernstein order sensitivity and operational I1 proxy."
+}

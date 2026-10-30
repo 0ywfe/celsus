@@ -1,0 +1,498 @@
+{
+  "results": [
+    {
+      "name": "count_total_panel_72",
+      "value": 71,
+      "se": 0,
+      "n": 71
+    },
+    {
+      "name": "count_advanced_24",
+      "value": 24,
+      "se": 0,
+      "n": 24
+    },
+    {
+      "name": "count_high_income_em_14",
+      "value": 13,
+      "se": 0,
+      "n": 13
+    },
+    {
+      "name": "count_middle_income_em_24",
+      "value": 24,
+      "se": 0,
+      "n": 24
+    },
+    {
+      "name": "count_low_income_em_10",
+      "value": 10,
+      "se": 0,
+      "n": 10
+    },
+    {
+      "name": "count_excluded_large_6",
+      "value": 6,
+      "se": 0,
+      "n": 6
+    },
+    {
+      "name": "median_vol_advanced_0_70pct",
+      "value": 0.715159785809308,
+      "se": 0.09234154214601005,
+      "n": 24
+    },
+    {
+      "name": "median_vol_high_em_1_13pct",
+      "value": 1.0811457867158936,
+      "se": 0.2385052811678501,
+      "n": 13
+    },
+    {
+      "name": "median_vol_middle_em_1_22pct",
+      "value": 1.2356793754841373,
+      "se": 0.18565788641901315,
+      "n": 24
+    },
+    {
+      "name": "median_vol_low_em_1_09pct",
+      "value": 1.0686161151626972,
+      "se": 0.1720711298416584,
+      "n": 10
+    },
+    {
+      "name": "vol_ratio_em_vs_advanced_1_7x",
+      "value": 1.6902288254134183,
+      "se": 0.23742458043190803,
+      "n": 71
+    },
+    {
+      "name": "vol_singapore_2_28pct",
+      "value": 2.362164688284701,
+      "se": 0,
+      "n": 30
+    },
+    {
+      "name": "vol_botswana_3_55pct",
+      "value": 3.4932099216996306,
+      "se": 0,
+      "n": 30
+    },
+    {
+      "name": "vol_range_middle_min_0_25pct",
+      "value": 0.28071832171301886,
+      "se": 0,
+      "n": 30
+    },
+    {
+      "name": "vol_range_middle_max_3_54pct",
+      "value": 3.6621190638349135,
+      "se": 0,
+      "n": 30
+    },
+    {
+      "name": "corr_inv_y_total_0_33",
+      "value": 0.29650440214811324,
+      "se": 0.03184564013773631,
+      "n": 2059
+    },
+    {
+      "name": "corr_inv_y_advanced_0_48",
+      "value": 0.5058981031256935,
+      "se": 0.051381369192961046,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_y_high_em_0_39",
+      "value": 0.4457093992381826,
+      "se": 0.07721245056339394,
+      "n": 377
+    },
+    {
+      "name": "corr_inv_y_middle_em_0_23",
+      "value": 0.2451168859997436,
+      "se": 0.04455923562731657,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_y_low_em_neg0_02",
+      "value": 0.023076909497445387,
+      "se": 0.07795363495775404,
+      "n": 290
+    },
+    {
+      "name": "corr_inv_c_total_0_21",
+      "value": 0.20680001633890377,
+      "se": 0.03261056421227025,
+      "n": 2059
+    },
+    {
+      "name": "corr_inv_c_advanced_0_37",
+      "value": 0.41889358478751604,
+      "se": 0.05376246068099147,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_c_high_em_0_38",
+      "value": 0.3884310812198597,
+      "se": 0.07127873330362018,
+      "n": 377
+    },
+    {
+      "name": "corr_inv_c_middle_em_0_17",
+      "value": 0.1992117803638595,
+      "se": 0.0555462790480102,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_c_low_em_neg0_06",
+      "value": -0.02072073056582676,
+      "se": 0.044334516052393504,
+      "n": 290
+    },
+    {
+      "name": "corr_inv_i_total_0_24",
+      "value": 0.2352425823049264,
+      "se": 0.034593911229004765,
+      "n": 2059
+    },
+    {
+      "name": "corr_inv_i_advanced_0_32",
+      "value": 0.32794805146661243,
+      "se": 0.05120855690781754,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_i_high_em_0_28",
+      "value": 0.2352425823049264,
+      "se": 0.08221643882575116,
+      "n": 377
+    },
+    {
+      "name": "corr_inv_i_middle_em_0_19",
+      "value": 0.11689587685854538,
+      "se": 0.048125727646833795,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_i_low_em_neg0_05",
+      "value": -0.04447122450593344,
+      "se": 0.10182190135028912,
+      "n": 290
+    },
+    {
+      "name": "corr_inv_g_total_0_08",
+      "value": 0.028818648198655872,
+      "se": 0.024260662312526854,
+      "n": 2059
+    },
+    {
+      "name": "corr_inv_g_advanced_0_09",
+      "value": 0.04276146743421752,
+      "se": 0.04217955190675765,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_g_high_em_0_05",
+      "value": -0.02948544584749174,
+      "se": 0.04821450609263313,
+      "n": 377
+    },
+    {
+      "name": "corr_inv_g_middle_em_neg0_04",
+      "value": -0.013251525001174286,
+      "se": 0.048481131140603116,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_g_low_em_0_10",
+      "value": 0.12382987166906065,
+      "se": 0.050231031014297954,
+      "n": 290
+    },
+    {
+      "name": "corr_inv_x_total_0_16",
+      "value": 0.1443895910435143,
+      "se": 0.028289894649347846,
+      "n": 2059
+    },
+    {
+      "name": "corr_inv_x_advanced_0_33",
+      "value": 0.32368832572445483,
+      "se": 0.0440617154248198,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_x_high_em_0_23",
+      "value": 0.2566993075988712,
+      "se": 0.08400431196913301,
+      "n": 377
+    },
+    {
+      "name": "corr_inv_x_middle_em_0_05",
+      "value": 0.02206021011057987,
+      "se": 0.029833223322029145,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_x_low_em_neg0_02",
+      "value": -0.04711805638832112,
+      "se": 0.05896763841014718,
+      "n": 290
+    },
+    {
+      "name": "corr_inv_m_total_0_33",
+      "value": 0.3447389751310655,
+      "se": 0.03150937242342691,
+      "n": 2059
+    },
+    {
+      "name": "corr_inv_m_advanced_0_45",
+      "value": 0.42163416703925516,
+      "se": 0.0413619701210768,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_m_high_em_0_44",
+      "value": 0.39836863994183236,
+      "se": 0.07841793164392438,
+      "n": 377
+    },
+    {
+      "name": "corr_inv_m_middle_em_0_25",
+      "value": 0.20574745326061722,
+      "se": 0.04419922071377633,
+      "n": 696
+    },
+    {
+      "name": "corr_inv_m_low_em_0_12",
+      "value": 0.13560637716524768,
+      "se": 0.09167275678580525,
+      "n": 290
+    },
+    {
+      "name": "relvol_y_total_0_30",
+      "value": 0.3253235841841644,
+      "se": 0.025792777754195355,
+      "n": 2059
+    },
+    {
+      "name": "relvol_y_advanced_0_26",
+      "value": 0.2563572581600503,
+      "se": 0.029752621109374516,
+      "n": 696
+    },
+    {
+      "name": "relvol_y_high_em_0_31",
+      "value": 0.3318234822649061,
+      "se": 0.04422115017040297,
+      "n": 377
+    },
+    {
+      "name": "relvol_y_middle_em_0_37",
+      "value": 0.3597741750777096,
+      "se": 0.04952269008995476,
+      "n": 696
+    },
+    {
+      "name": "relvol_y_low_em_0_54",
+      "value": 0.5307897359519586,
+      "se": 0.09382437212690599,
+      "n": 290
+    },
+    {
+      "name": "relvol_c_total_0_32",
+      "value": 0.26296237362232755,
+      "se": 0.022698951854282272,
+      "n": 2059
+    },
+    {
+      "name": "relvol_c_advanced_0_33",
+      "value": 0.2589539035883263,
+      "se": 0.034488982263868435,
+      "n": 696
+    },
+    {
+      "name": "relvol_c_high_em_0_33",
+      "value": 0.27271914314608253,
+      "se": 0.04978332857627382,
+      "n": 377
+    },
+    {
+      "name": "relvol_c_middle_em_0_32",
+      "value": 0.2782993515504879,
+      "se": 0.045766155756004116,
+      "n": 696
+    },
+    {
+      "name": "relvol_c_low_em_0_29",
+      "value": 0.2580076666498336,
+      "se": 0.0585174511733434,
+      "n": 290
+    },
+    {
+      "name": "relvol_i_total_0_11",
+      "value": 0.1106483210722948,
+      "se": 0.009832231932216532,
+      "n": 2059
+    },
+    {
+      "name": "relvol_i_advanced_0_11",
+      "value": 0.10737478922620684,
+      "se": 0.018762993727035868,
+      "n": 696
+    },
+    {
+      "name": "relvol_i_high_em_0_11",
+      "value": 0.10874548951027296,
+      "se": 0.02953348669629351,
+      "n": 377
+    },
+    {
+      "name": "relvol_i_middle_em_0_12",
+      "value": 0.12062568154879724,
+      "se": 0.013103876536649548,
+      "n": 696
+    },
+    {
+      "name": "relvol_i_low_em_0_12",
+      "value": 0.12355714670682555,
+      "se": 0.024681508873230402,
+      "n": 290
+    },
+    {
+      "name": "relvol_g_total_0_30",
+      "value": 0.29444141574821003,
+      "se": 0.028661449288204813,
+      "n": 2059
+    },
+    {
+      "name": "relvol_g_advanced_0_37",
+      "value": 0.3708273466271861,
+      "se": 0.055900310758885116,
+      "n": 696
+    },
+    {
+      "name": "relvol_g_high_em_0_39",
+      "value": 0.3489081032758675,
+      "se": 0.057479916809189686,
+      "n": 377
+    },
+    {
+      "name": "relvol_g_middle_em_0_27",
+      "value": 0.27054468407326887,
+      "se": 0.045861407270176464,
+      "n": 696
+    },
+    {
+      "name": "relvol_g_low_em_0_13",
+      "value": 0.13216323220763815,
+      "se": 0.034610984028719205,
+      "n": 290
+    },
+    {
+      "name": "relvol_x_total_0_14",
+      "value": 0.13326096494642647,
+      "se": 0.009215123438951438,
+      "n": 2059
+    },
+    {
+      "name": "relvol_x_advanced_0_11",
+      "value": 0.10865791770174307,
+      "se": 0.014795033806449401,
+      "n": 696
+    },
+    {
+      "name": "relvol_x_high_em_0_15",
+      "value": 0.14660985191119683,
+      "se": 0.01791378412316973,
+      "n": 377
+    },
+    {
+      "name": "relvol_x_middle_em_0_15",
+      "value": 0.15239197782292155,
+      "se": 0.018035472068763263,
+      "n": 696
+    },
+    {
+      "name": "relvol_x_low_em_0_10",
+      "value": 0.09535446504255593,
+      "se": 0.01766655097461904,
+      "n": 290
+    },
+    {
+      "name": "relvol_m_total_0_12",
+      "value": 0.11727930914017663,
+      "se": 0.006998742185662964,
+      "n": 2059
+    },
+    {
+      "name": "relvol_m_advanced_0_12",
+      "value": 0.11671839561346484,
+      "se": 0.0133596237143053,
+      "n": 696
+    },
+    {
+      "name": "relvol_m_high_em_0_09",
+      "value": 0.09735770382606107,
+      "se": 0.018446244371576808,
+      "n": 377
+    },
+    {
+      "name": "relvol_m_middle_em_0_13",
+      "value": 0.129454364192858,
+      "se": 0.010812108488324037,
+      "n": 696
+    },
+    {
+      "name": "relvol_m_low_em_0_10",
+      "value": 0.10135746789294801,
+      "se": 0.016006671147435887,
+      "n": 290
+    },
+    {
+      "name": "autocorr_total_0_18",
+      "value": 0.17907253777599866,
+      "se": 0.025666685001087323,
+      "n": 2130
+    },
+    {
+      "name": "autocorr_advanced_0_13",
+      "value": 0.1563438178591528,
+      "se": 0.034629688364805726,
+      "n": 720
+    },
+    {
+      "name": "autocorr_high_em_0_17",
+      "value": 0.17409661968797277,
+      "se": 0.06543740318105713,
+      "n": 390
+    },
+    {
+      "name": "autocorr_middle_em_0_24",
+      "value": 0.24817442691104105,
+      "se": 0.04675645831698294,
+      "n": 720
+    },
+    {
+      "name": "autocorr_low_em_0_24",
+      "value": 0.21856921244506644,
+      "se": 0.0851703224427862,
+      "n": 300
+    }
+  ],
+  "sample": {
+    "description": "Balanced panel of 71 small open economies with complete WDI national accounts (changes in inventories, GDP, GFCF, private and government consumption, exports, imports, population) 1993-2022; groups: 24 advanced, 13 high-income EM, 24 middle-income EM, 10 low-income EM. 1 country(ies) from paper's 72 excluded due to incomplete current WDI vintage (no imputation). Detailed missing listed in differences.",
+    "n": 71,
+    "start": "1993-01-01",
+    "end": "2022-12-31",
+    "same_as_paper": false,
+    "missing": 1,
+    "extra": 0,
+    "differences": "Current WDI vintage 2026-10-08 missing vs paper vintage 1993-2022 complete records for 72: RUS (high): C_K missing [1993, 1994, 1995]; X_K missing [2022]; M_K missing [2022]. Paper groups were 24 advanced, 14 high-income EM, 24 middle-income EM, 10 low-income EM; current complete panel has advanced 24, high 13, middle 24, low 10. RUS in high-income EM group absent (NE.CON.PRVT.KN 1993-1995, NE.EXP.GNFS.KN and NE.IMP.GNFS.KN 2022). No proxy/imputation used - strict paper definition of complete records applied.",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Data vintage WDI 2026-10-08 via api.worldbank.org; GDP trend via country-specific log-quadratic regression; inventory ratio delta_INV/Ytrend_{t-1} filtered via country-specific quadratic trend in levels; per-capita log-differences for GDP, consumption, investment, government, exports, imports; median across countries for group statistics as per paper Table 2. No proxy substitution - strict complete-records filter; current vintage differs from paper vintage in RUS data availability."
+  },
+  "notes": "Sample built from WDI indicators NE.GDI.STKB.CN, NY.GDP.MKTP.CN/KN, NE.GDI.FTOT.KN, NE.CON.PRVT.KN/CN, NE.CON.GOVT.KN, NE.EXP.GNFS.KN/CN, NE.IMP.GNFS.KN/CN, SP.POP.TOTL. Data fetched in batches with per_page=1000 pagination; balanced panel requires all 30 years non-missing. Russia 1993-1995 private consumption constant (NE.CON.PRVT.KN) and 2022 exports/imports constant (NE.EXP.GNFS.KN, NE.IMP.GNFS.KN) missing in current WDI vintage 2026-10-08, preventing a 72-country balanced panel on strictly complete records; current replication therefore uses 71 countries (24 advanced, 13 high-income EM, 24 middle-income EM, 10 low-income EM) with no imputation, so results are computed only from observed data as required. GDP trend obtained via country-specific log-quadratic regression log(Y_t)=beta0+beta1*t+beta2*t^2, t=0..29; Y_trend_{t-1}=exp(beta0+beta1*(t-1)+beta2*(t-1)^2). Ratio delta_INV/Y_trend_{t-1} filtered via country-specific quadratic regression ratio=beta0+beta1*t+beta2*t^2+eps; eps is delta_inv_c (cyclical). Volatility = country standard deviation (ddof=1) of delta_inv_c; median across countries per group (paper Figure discussion). Correlations, relative volatilities, autocorrelations computed per country then median across group (paper Table 2; Appendix C confirms median aggregation). Correlations align delta_inv_c[1:] (1994-2022) with log-diff per-capita aggregates (29 obs per country). Relative volatility = sd(delta_inv_c[1:]) / sd(delta growth aggregate). Autocorr = corr(delta_inv_c[1:], delta_inv_c[:-1]). SE reported as std of country-level estimates / sqrt(n_countries); for correlations etc n_obs pooled given as 29*countries. Unit-root/cointegration, LP impulse responses and variance shares not replicated due to data vintage and instrument requirements; only stylized facts fully reproducible from public WDI."
+}

@@ -1,0 +1,183 @@
+{
+  "results": [
+    {
+      "name": "par_agg_lags",
+      "value": 4.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_disagg_lags",
+      "value": 12.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_phi_draws",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_theta_per_phi_uniform",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_total_draws_uniform",
+      "value": 100000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_theta_per_phi_joint",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_trivariate_draws",
+      "value": 55000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_misclass_epsilon",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_misclass_delta",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_large_svar_Q_draws",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_K_required",
+      "value": 10494.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_d_hist",
+      "value": 17.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_epsilon_large",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_delta_large",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "par_cred_level",
+      "value": 68.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "est_rho_agg_postmean",
+      "value": 0.21915879850884465,
+      "se": 0.10206183490751451,
+      "n": 88
+    },
+    {
+      "name": "est_rho_agg_ci_low",
+      "value": 0.11709696360133014,
+      "se": 0.10206183490751451,
+      "n": 88
+    },
+    {
+      "name": "est_rho_agg_ci_high",
+      "value": 0.32122063341635915,
+      "se": 0.10206183490751451,
+      "n": 88
+    },
+    {
+      "name": "est_US_FE_2022Q2",
+      "value": 6.130760925724843,
+      "se": 0.0,
+      "n": 17
+    },
+    {
+      "name": "est_US_supply_set_low_2022Q2",
+      "value": 0.3929437273102285,
+      "se": 0.0,
+      "n": 17
+    },
+    {
+      "name": "est_US_supply_set_high_2022Q2",
+      "value": 5.351301505462155,
+      "se": 0.0,
+      "n": 17
+    },
+    {
+      "name": "count_post2019_quarters_d",
+      "value": 17.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_joint_hypothesis_quarters",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "est_share_corr_gt020_vague",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "est_share_corr_lt040_vague",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Aggregate 4-lag VAR in log CPI (FRED CPIAUCSL quarterly mean) and log real GDP (FRED GDPC1) 1997Q1-2019Q4, n_raw=92 quarters (88 usable after 4 lags, T_est=88); forecast 2020Q1-2024Q1 (17 quarters) year-ended inflation FE; filtering: QE mean of CPIAUCSL, log, drop NA, OLS, tilde Omega for year-ended p_t - p_t-4 per Appendix C",
+    "n": 88,
+    "start": "1988-01-01",
+    "end": "2023-09-30",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "count_PCE_categories": "BEA National Accounts Underlying Detail Tables for 136 PCE categories (1988M1-2023M9) require BEA API tables not available via public FRED; public FRED has only aggregate PCEPI/DPCERA",
+      "tally_explosive_VARs": "Requires estimating 12-lag VAR for each of 136 BEA PCE categories; without BEA per-category data the tally of 2 explosive VARs cannot be verified",
+      "est_euro_FE_2022Q4": "Euro area quarterly HICP level (and euro GDP) vintage 1997Q1-2019Q4 not available via public FRED at quarterly log-price level; FRED gives only OECD yoy rates CPALTT01OM659N",
+      "est_euro_supply_postmean_2022Q4": "Same euro area data limitation",
+      "est_euro_supply_set_low_2022Q4": "Same euro area data limitation",
+      "est_euro_supply_set_high_2022Q4": "Same euro area data limitation",
+      "est_rho_lubricants_abs_upper": "Category-specific rho for 'lubricants and fluids' requires BEA UD Tables per-category data",
+      "est_rho_food_farms": "Category rho for 'food produced and consumed on farms' requires BEA UD Tables",
+      "est_food_supply_low_2022M03": "Category historical decomposition for PCE category requires BEA UD Tables VAR",
+      "est_food_supply_high_2022M03": "Same category data limitation",
+      "est_food_inflation_2022M03_net": "Same category data limitation",
+      "est_joint_uniform_prob": "Joint posterior probability under uniform prior requires full Bayesian MCMC over phi posterior (Minnesota+soc prior hyperparameters) with 10k theta draws per phi (100k total) - not computable from OLS point estimate",
+      "est_joint_lower_prob": "Same posterior simulation limitation (Giacomini-Kitagawa 2021 robust Bayes, 10k theta draws per phi)",
+      "est_joint_upper_prob": "Same posterior simulation limitation"
+    },
+    "substitutions": "Public FRED vintages 2026-10-30 (CPIAUCSL SA, GDPC1 chained 2017$) vs GP24 private vintage; quarterly CPI as QE mean of monthly CPIAUCSL levels then log vs paper unspecified quarterly aggregation; OLS point estimate vs Bayesian Minnesota+soc prior (10k phi draws, 10 theta per phi) - SE for rho via sqrt((1-rho^2)^2/(n-1)), FE SE=0 (fixed horizon); monthly PCE aggregate VAR12 via FRED PCEPI/DPCERA 1988M1-2023M9 (n=429) illustration only for method; identified set bounds via analytic eigenvector method at OLS estimate (paper Fig2 posterior means of bounds with 68% robust credible intervals)"
+  },
+  "notes": "Choices paper leaves open: quarterly CPI aggregation (quarterly mean of CPI level then log, standard); calendar via PeriodIndex Q-DEC QE resample; no risk-free rate. Method exactly per paper: SVAR y=(p,q), Sigma_tr Cholesky, Q(theta) rotation, IS_theta=[arctan(sigma22/sigma21),0] if rho<0 else [-pi/2, arctan(-sigma21/sigma22)], Omega_h=sum c1l Sigma_tr^{-1} u', tilde Omega_h=Omega_h - Omega_{h-4} for h>=4, bounds via endpoints + eigenvectors of S=(Omega+Omega')/2 sign norm cos>=0. Deviations: OLS VAR(4) vs Bayesian Minnesota+soc prior - rho OLS 0.22 vs paper posterior mean 0.23 (both low) but FE 6.13pp vs 7.7pp due to vintage/revision and prior shrinkage; supply IS OLS [0.39,5.35] vs paper [0.2,7.3] both wide ~6-87% of FE, confirming largely uninformative. All headline numbers computed from data fetched inside script via FRED CSV."
+}

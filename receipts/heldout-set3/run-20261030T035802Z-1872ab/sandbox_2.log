@@ -1,0 +1,129 @@
+exit 0 in 49.4s
+--- stdout
+Period 1993 to 2022 inclusive gives T = 30 years
+Defined sample total N = 72
+ Advanced N = 24
+ High EM N = 14
+ Middle EM N = 24
+ Low EM N = 10
+Fetching inv_cur NE.GDI.STKB.CN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+Fetching gdp_cur NY.GDP.MKTP.CN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+Fetching gdp_const NY.GDP.MKTP.KN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+Fetching gdp_defl NY.GDP.DEFL.ZS
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+Fetching cons_priv_const NE.CON.PRVT.KN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2157, iso2 unique 72
+Fetching cons_gov_const NE.CON.GOVT.KN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+Fetching gfcf_const NE.GDI.FTOT.KN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+Fetching exports_const NE.EXP.GNFS.KN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2159, iso2 unique 72
+Fetching imports_const NE.IMP.GNFS.KN
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2159, iso2 unique 72
+Fetching pop SP.POP.TOTL
+ batch 1 got 540 rows
+ batch 2 got 540 rows
+ batch 3 got 540 rows
+ batch 4 got 540 rows
+ total rows 2160, non-null 2160, iso2 unique 72
+inv_cur panel shape (72, 30) complete 72/72
+gdp_cur panel shape (72, 30) complete 72/72
+gdp_const panel shape (72, 30) complete 72/72
+gdp_defl panel shape (72, 30) complete 72/72
+cons_priv_const panel shape (72, 30) complete 71/72
+  missing countries for cons_priv_const: ['RU']
+cons_gov_const panel shape (72, 30) complete 72/72
+gfcf_const panel shape (72, 30) complete 72/72
+exports_const panel shape (72, 30) complete 71/72
+  missing countries for exports_const: ['RU']
+imports_const panel shape (72, 30) complete 71/72
+  missing countries for imports_const: ['RU']
+pop panel shape (72, 30) complete 72/72
+inv_cur complete set size 72
+gdp_cur complete set size 72
+gdp_const complete set size 72
+gdp_defl complete set size 72
+cons_priv_const complete set size 71
+cons_gov_const complete set size 72
+gfcf_const complete set size 72
+exports_const complete set size 71
+imports_const complete set size 71
+pop complete set size 72
+Balanced panel intersection size strict: 71
+ Balanced countries: ['AR', 'AT', 'AU', 'BE', 'BF', 'BG', 'BJ', 'BO', 'BR', 'BS', 'BW', 'BY', 'CA', 'CG', 'CH', 'CL', 'CM', 'CO', 'CR', 'CU', 'CZ', 'DK', 'DO', 'DZ', 'EC', 'EE', 'EG', 'FI', 'GR', 'GT', 'HK', 'HN', 'HU', 'ID', 'IE', 'IL', 'IN', 'IR', 'IS', 'KE', 'KH', 'KM', 'KR', 'KZ', 'LU', 'MA', 'ML', 'MO', 'MU', 'MX', 'MY', 'NA', 'NL', 'NO', 'NZ', 'PE', 'PK', 'PT', 'PY', 'RO', 'SE', 'SG', 'SI', 'SV', 'TH', 'TN', 'TR', 'TZ', 'UA', 'UG', 'ZA']
+ From defined 72, missing for strict balanced: {'RU'}
+Filtering steps:
+ T=30, strict balanced 71, final defined N=72
+Long panel rows 2160 expected 2160
+Actual usable inv_cyc per country: mean 29.00 median 29 min 29 max 29
+Usable counts detail: {'AU': np.int64(29), 'AT': np.int64(29), 'BE': np.int64(29), 'CA': np.int64(29), 'KR': np.int64(29), 'DK': np.int64(29), 'SI': np.int64(29), 'EE': np.int64(29), 'FI': np.int64(29), 'GR': np.int64(29), 'HK': np.int64(29), 'IE': np.int64(29), 'IS': np.int64(29), 'IL': np.int64(29), 'LU': np.int64(29), 'MO': np.int64(29), 'NO': np.int64(29), 'NZ': np.int64(29), 'NL': np.int64(29), 'PT': np.int64(29), 'CZ': np.int64(29), 'SG': np.int64(29), 'SE': np.int64(29), 'CH': np.int64(29), 'AR': np.int64(29), 'BS': np.int64(29), 'BY': np.int64(29), 'BW': np.int64(29), 'BR': np.int64(29), 'CL': np.int64(29), 'CR': np.int64(29), 'HU': np.int64(29), 'MY': np.int64(29), 'MU': np.int64(29), 'MX': np.int64(29), 'RU': np.int64(29), 'ZA': np.int64(29), 'TR': np.int64(29), 'DZ': np.int64(29), 'BO': np.int64(29), 'BG': np.int64(29), 'CM': np.int64(29), 'CO': np.int64(29), 'CG': np.int64(29), 'CU': np.int64(29), 'EC': np.int64(29), 'EG': np.int64(29), 'SV': np.int64(29), 'GT': np.int64(29), 'HN': np.int64(29), 'ID': np.int64(29), 'IR': np.int64(29), 'KZ': np.int64(29), 'MA': np.int64(29), 'NA': np.int64(29), 'PY': np.int64(29), 'PE': np.int64(29), 'DO': np.int64(29), 'RO': np.int64(29), 'TH': np.int64(29), 'TN': np.int64(29), 'UA': np.int64(29), 'BJ': np.int64(29), 'BF': np.int64(29), 'KH': np.int64(29), 'KM': np.int64(29), 'IN': np.int64(29), 'KE': np.int64(29), 'ML': np.int64(29), 'PK': np.int64(29), 'TZ': np.int64(29), 'UG': np.int64(29)}
+Tbar reported as actual median usable = 29
+Observed group Advanced: countries with data 24/24, total obs 696
+Observed group High_income_EM: countries with data 14/14, total obs 406
+Observed group Middle_income_EM: countries with data 24/24, total obs 696
+Observed group Low_income_EM: countries with data 10/10, total obs 290
+Total observed obs across all groups: 2088
+Per-country stats rows 72 expected 72
+group
+Advanced            24
+Middle_income_EM    24
+High_income_EM      14
+Low_income_EM       10
+Name: count, dtype: int64
+Total medians: {'std_inv_pct': np.float64(1.0592267048434196), 'corr_d_y': np.float64(0.3104907347404938), 'relvol_d_y': np.float64(0.30264727226499677), 'corr_d_c': np.float64(0.20505351238087777), 'relvol_d_c': np.float64(0.2603495717675564), 'corr_d_i': np.float64(0.22346750527030657), 'relvol_d_i': np.float64(0.10987604941854515), 'corr_d_g': np.float64(0.021308835290286605), 'relvol_d_g': np.float64(0.2975519081743638), 'corr_d_x': np.float64(0.15516266768886883), 'relvol_d_x': np.float64(0.13567151542192588), 'corr_d_m': np.float64(0.3193870955433506), 'relvol_d_m': np.float64(0.11713969400365948), 'autocorr': np.float64(0.19898237466297924)}
+Advanced medians: {'std_inv_pct': np.float64(0.6988771557946931), 'corr_d_y': np.float64(0.464172067618247), 'relvol_d_y': np.float64(0.25419240001127014), 'corr_d_c': np.float64(0.3758733640771912), 'relvol_d_c': np.float64(0.2552846662218818), 'corr_d_i': np.float64(0.32131179434488977), 'relvol_d_i': np.float64(0.10550770495022278), 'corr_d_g': np.float64(0.03816410741740041), 'relvol_d_g': np.float64(0.36503265361865045), 'corr_d_x': np.float64(0.31199102020019154), 'relvol_d_x': np.float64(0.10803401706056351), 'corr_d_m': np.float64(0.4333648120217121), 'relvol_d_m': np.float64(0.11671345540591906), 'autocorr': np.float64(0.1340074717699568)}
+High_income_EM medians: {'std_inv_pct': np.float64(1.1290763694524846), 'corr_d_y': np.float64(0.38903640139212836), 'relvol_d_y': np.float64(0.30775200382651613), 'corr_d_c': np.float64(0.3402483454558304), 'relvol_d_c': np.float64(0.25890778956898275), 'corr_d_i': np.float64(0.2781653376591445), 'relvol_d_i': np.float64(0.11293932772453699), 'corr_d_g': np.float64(0.034538469304008154), 'relvol_d_g': np.float64(0.3840037338660812), 'corr_d_x': np.float64(0.25475792808495), 'relvol_d_x': np.float64(0.1446050229207193), 'corr_d_m': np.float64(0.44626504355116137), 'relvol_d_m': np.float64(0.09436739795184432), 'autocorr': np.float64(0.17939975550453874)}
+Middle_income_EM medians: {'std_inv_pct': np.float64(1.2204171285541605), 'corr_d_y': np.float64(0.22521753845822823), 'relvol_d_y': np.float64(0.3475563384190129), 'corr_d_c': np.float64(0.19409529970679432), 'relvol_d_c': np.float64(0.26870043287607437), 'corr_d_i': np.float64(0.1440119925200039), 'relvol_d_i': np.float64(0.11478110028501733), 'corr_d_g': np.float64(-0.046105141676620644), 'relvol_d_g': np.float64(0.2668208643861396), 'corr_d_x': np.float64(0.04688247554871745), 'relvol_d_x': np.float64(0.1485981278905566), 'corr_d_m': np.float64(0.19930223355514032), 'relvol_d_m': np.float64(0.12754284061576565), 'autocorr': np.float64(0.24243949142253984)}
+Low_income_EM medians: {'std_inv_pct': np.float64(1.0863136283864334), 'corr_d_y': np.float64(0.008291499257620124), 'relvol_d_y': np.float64(0.5301678199316298), 'corr_d_c': np.float64(-0.026608454212098072), 'relvol_d_c': np.float64(0.2575189448685605), 'corr_d_i': np.float64(-0.04576024999388247), 'relvol_d_i': np.float64(0.12352852845715517), 'corr_d_g': np.float64(0.12910348249046322), 'relvol_d_g': np.float64(0.13176896889819514), 'corr_d_x': np.float64(-0.04400987589087929), 'relvol_d_x': np.float64(0.09513065112275945), 'corr_d_m': np.float64(0.14144514159183752), 'relvol_d_m': np.float64(0.10133142419293553), 'autocorr': np.float64(0.2426115446260017)}
+Singapore stats [{'iso2': 'SG', 'group': 'Advanced', 'country': 'Singapore', 'std_inv': 0.022717897402886423, 'n_inv': 29, 'corr_d_y': 0.27813253721803327, 'corr_d_c': 0.1781924828810737, 'corr_d_i': 0.3575373148531558, 'corr_d_g': 0.13416073152609367, 'corr_d_x': 0.2739015552057467, 'corr_d_m': 0.42916979877620626, 'relvol_d_y': 0.5176215363087725, 'relvol_d_c': 0.48196388707961013, 'relvol_d_i': 0.2777455861280706, 'relvol_d_g': 0.4666101779484267, 'relvol_d_x': 0.3237253303176727, 'relvol_d_m': 0.28499077255727323, 'autocorr': -0.03463219570800569}]
+Botswana stats [{'iso2': 'BW', 'group': 'High_income_EM', 'country': 'Botswana', 'std_inv': 0.035451812197479886, 'n_inv': 29, 'corr_d_y': -0.3116102183472201, 'corr_d_c': -0.16650946552019028, 'corr_d_i': 0.008397117410934438, 'corr_d_g': 0.15751257862568366, 'corr_d_x': -0.4492609245857182, 'corr_d_m': 0.19799406976514358, 'relvol_d_y': 0.6282497841223103, 'relvol_d_c': 0.7609603479630889, 'relvol_d_i': 0.4486011027190636, 'relvol_d_g': 0.837923494660556, 'relvol_d_x': 0.22540533432119778, 'relvol_d_m': 0.25626087050965446, 'autocorr': -0.04490419287721694}]
+Middle income std_inv % min 0.25232213449772517 max 3.5440110771911177
+n per group for SE Advanced: 696
+n per group for SE High_income_EM: 406
+n per group for SE Middle_income_EM: 696
+n per group for SE Low_income_EM: 290
+n per group for SE Total: 2088
+Results assembled count 94
+Wrote /work/results.json
+
+--- stderr

@@ -1,0 +1,23 @@
+exit 0 in 43.1s
+--- stdout
+FETCH https://gmd-releases.s3.ap-southeast-2.amazonaws.com/data/distribute/GMD_2026_09_csv.zip
+ -> /tmp/gmd.zip 8733436 bytes
+FETCH https://dataverse.nl/api/access/datafile/421302
+ -> /tmp/mpd_421302.xlsx 4903804 bytes
+FETCH https://zenodo.org/api/records/21180776/files/Stalin_Growth(3).zip/content
+ -> /tmp/stalin.zip 4958752 bytes
+Zenodo extracted: True
+GMD loaded (57392, 4) RUS 232 SUN 132
+loaded table05_nep_calibration.csv rows 3 fields ['parameter', 'q05', 'median', 'q95', 'interpretation']
+loaded nep_recovery_gap_fan_gmd_rus_1928_1940.csv rows 13 fields ['year', 'q05', 'q10', 'q25', 'q50', 'q75', 'q90', 'q95', 'observed_index']
+loaded table04_model_diagnostics_gmd_rus.csv rows 8 fields ['Estimator', 'Premium (%)', 'Pre-RMSE', 'Pre-correlation', 'Outside conformal band']
+loaded table03_main_scorecard.csv rows 15 fields ['Source', 'Treated', 'Endpoint', 'ASCF-50 margin', 'ASCF-90 margin', 'Stress-90 margin', 'Grade']
+loaded table06_top_donor_weights.csv rows 10 fields ['donor', 'weight', 'rank']
+loaded table07_leave_one_out.csv rows 10 fields ['Excluded donor', 'Remaining donors', 'Cumulative premium (%)', 'Annualised premium (%)']
+loaded table08_placebo_evidence.csv rows 6 fields ['Source', 'Treated', 'Endpoint', 'Effect (%)', 'Exact p-value', 'Effective placebos', 'Post/pre RMSPE']
+loaded table09_time_placebos.csv rows 5 fields ['Fake origin', 'Fake endpoint', 'Horizon', 'Pseudo-effect (%)', 'Pre-RMSE', 'Post-gap RMSE']
+loaded table10_cia_triangulation.csv rows 3 fields ['source', 'table', 'period', 'measure', 'estimate_A', 'estimate_B', 'source_pdf_page', 'source_report_page', 'interpretation']
+Built 163 results
+WROTE results.json
+
+--- stderr

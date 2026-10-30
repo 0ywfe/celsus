@@ -1,0 +1,3256 @@
+{
+ "title": "Replication spec for \"The \"Rough\" HAR model\" - September 2026 draft",
+ "hypothesis": "",
+ "data_sources": [],
+ "sample": "Primary sample: 10 US ETFs = SPDR S&P 500 ETF Trust (SPY) + 9 Select Sector SPDR Funds (XLB,XLE,XLF,XLI,XLK,XLP,XLU,XLV,XLY) which partition the S&P 500. Daily realized variance (RV) and realized quarticity (RQ) computed from TAQ data at 5-minute sampling frequency. M=78 intraday 5-min returns per 6.5-hour trading day. Secondary robustness sample: panel of 40 individual stocks listed in Table tab:stock_symbols from VOLARE database (http://volare.unime.it). Filters/cleaning: not stated beyond 5-min sampling and TAQ source. Sample sizes: roughly 3,770 trading days for ETFs; 500-obs rolling window for forecasting; 40 stocks from 2015-01-02 to 2026-01-30.",
+ "period_start": "January 4, 2010",
+ "period_end": "December 31, 2024",
+ "method": [
+  "1. Data construction: For each asset and day t, compute r_{t,i} i=1..M 5-min returns. RV_t = sum_{i=1}^M r_{t,i}^2. RQ_t = M/3 sum_{i=1}^M r_{t,i}^4. BPV_t = mu_1^{-2} sum_{i=1}^{M-1} |r_{t,i}||r_{t,i+1}| with mu_1=sqrt(2/pi). J_t = max(RV_t-BPV_t,0). RS_t^+ = sum r_{t,i}^2 I(r_{t,i}>0), RS_t^- = sum r_{t,i}^2 I(r_{t,i}<0). Work with y_j = log RV_j for estimation of AR/RAR/HAR/RHAR/fBm/fOU.",
+  "2. Continuous-time benchmarks: fBm y_t = sigma B^H_t with representation def-fbm; fGn autocovariance eq acf_fgn. fOU dy_t = kappa(mu-y_t)dt+sigma dB^H_t with solution and discrete exact eq fou_discrete y_{iDelta}=exp(-kappa Delta) y_{(i-1)Delta}+(1-exp(-kappa Delta))mu + eta_{iDelta}, eta_{iDelta}=sigma int_{(i-1)Delta}^{iDelta} exp(-kappa(iDelta-s)) dB^H_s, Delta=1/250 years. Estimate fBm by Whittle method of Fukasawa-Takabatake 2019; fOU by exact MLE of Wang-Xiao-Yu-Zhang 2025. SE from analytical asymptotic covariance.",
+  "3. Discrete-time “rough” models: AR: eq ar1-spec y_j = omega + rho y_{j-1}+ epsilon_j. RAR: same with epsilon_j = varepsilon_j + theta varepsilon_{j-1}. HAR: eq har-spec y_j = omega + rho1 y_{j-1}+ rho2 y_{j-1|j-5}+ rho3 y_{j-1|j-22}+ epsilon_j where y_{j-i|j-l}=1/(l-i+1) sum_{p=i}^l y_{j-p}. RHAR: HAR with epsilon_j = varepsilon_j + theta varepsilon_{j-1}. varepsilon_j ~ i.i.d. N(0,sigma^2). Estimate AR/HAR by OLS; RAR/RHAR by exact MLE via Kalman filter. SE: OLS formulas, OPG for RAR, Hessian for RHAR. HAR extensions for horse-race: HARQ RV_t = beta0+(beta1+beta1Q RQ_{t-1}^{1/2})RV_{t-1}+beta2 RV_{t-1|t-5}+beta3 RV_{t-1|t-22}+u_t; HARJ RV_t = beta0+beta1 RV_{t-1}+beta2 RV_{t-1|t-5}+beta3 RV_{t-1|t-22}+beta_j J_{t-1}+u_t; HARS RV_{t+h}=beta0+beta1^+ RS_t^+ +beta1^- RS_t^- +beta2 RV_{t|t-4}+beta3 RV_{t|t-21}+eps_{t+h}.",
+  "4. Wold approximation theory: fGn spectral density f(lambda)=2 C_H (1-cos lambda)(2pi)^{-1-2H}[zeta(1+2H,1-lambda/2pi)+zeta(1+2H,lambda/2pi)] with C_H=sigma^2(2pi)^{-1} Gamma(2H+1) sin(pi H), zeta Hurwitz. Under log f in L1 and Szego condition f admits factorization f(lambda)=sigma_eps^2/(2pi) |C(e^{-i lambda})|^2, C(z)=sum_{j>=0} c_j z^j, c0=1. Compute cepstral coefficients a_k =1/(2pi) int_{-pi}^{pi} log f(lambda) e^{-ik lambda} d lambda via FFT on fine equispaced midpoint grid wrapped to (-pi,pi] (singularity at 0 avoided). Recover Wold coefficients via recursion eq pourahmadi_recursion c_{k+1}=sum_{j=0}^k (1-j/(k+1)) a_{k+1-j} c_j. Innovation variance sigma_eps^2 =2pi exp(a0)=|h(0)|^2 2pi. Compute c_j j=0..100; report j=0..10. Approximate tail sum_{j>100} c_j^2 negligible. Share var explained by first lag = c1^2 / sum_{j=1}^{100} c_j^2. Truncate at q=1: X_t approx varepsilon_t + c1 varepsilon_{t-1}. c1 negative for H<1/2, near linear in H, range approx -1 to 0 as H 0->0.5.",
+  "5. Simulation DGP - sample paths: simulate 500 daily obs each model sigma=1, fBm/fOU H=0.2 Delta=1/250 kappa=2 mu=0 for fOU, RAR omega=0 rho=0.95 theta=-0.4, RHAR omega=0 (rho1,rho2,rho3)=(0.70,0.15,0.10) theta=-0.4 same theta for comparison.",
+  "6. Simulation - Hurst recovery: DGP1 fBm in unit-root form B^H_t=B^H_{t-1}+x_t x_t fGn; DGP2 fOU sampled at Delta=1/250 with kappa in {2,5} (additional table kappa=5), simulated on fine grid 10 sub-steps per day via AR discretization eq fou_discrete with midpoint approx of innovation integral, burn-in 500 days discarded for stationarity. Grid H in {0.1,0.2,0.3,0.4} and finer grid 0.05..0.45 for curve check. Sample sizes n in {500,4000}. 500 replications per cell. Estimate RAR/RHAR by exact MLE via Kalman filter. At each replication invert c1(.) mapping restricted to H in (0,1/2) to get implied H_imp = c1^{-1}(hat theta) then average. Exclude replications where likelihood fails to converge, at most 6 of 500 per cell. Treat boundary pile-up: re-estimate from interior start values, cap just inside invertibility boundary when no interior optimum.",
+  "7. Forecasting horse-race: horizons h =1 day, 1 week (=5 days), 1 month (=22 days). Benchmark HAR. Models: HAR,HARQ,HARJ,HARS,Log-AR,Log-RAR,Log-HAR,Log-RHAR,fBm,fOU. Fit on rolling window 500 trading days (~2 years) rolled forward 1 day, re-estimate each step. For log-models convert to level via log-normal correction hat RV_{t+h}=exp(hat y_{t+h}+ hat s_h^2/2) where hat s_h^2 model-implied forecast error variance. Insanity filter for ALL forecasts: if forecast outside [min RV, max RV] observed in estimation window replace by mean RV over that window. Losses: MSE=(hat RV_t - RV_t)^2 ; QLIKE= RV_t/hat RV_t - log(RV_t/hat RV_t)-1. Report ratio avg loss(model)/avg loss(HAR); value <1 improvement. Star notation from MCS.",
+  "8. MCS test: set M0={1..M} 10 models. Loss diff d_{ij,t}=L_{i,t}-L_{j,t}. Null H0,Ms: E d_{ij,t}=0 for all i,j in Ms. Alternative exists i,j with !=0. Statistic T_max,Ms = max studentized avg loss differential vs others. Bootstrap block length 20, 5000 replications. If not reject at level, Ms is confidence set; else eliminate worst model per Hansen-Lunde-Nason rule and iterate. MCS p-value for eliminated model e_Ms = max_{k <= s} P_{H0,Mk} where M1 superset ... superset Ms. Three stars=member of 75% set (p>0.25), two stars=90% set (p>0.10), one star=95% set (p>0.05), no star excluded. Applied per ETF/horizon/loss separately.",
+  "9. Measurement-error robustness: state-space eq logrv-noise y_j = x_j + w_j, x_j = omega + phi x_{j-1}+ v_j + theta v_{j-1}, w_j perp v_j white noise, fix sigma_w^2 =2/m =1/39 exactly (m=78) from Theorem 2.1 Fukasawa-Takabatake-Westphal asymptotic independence/normality. Estimate by MLE via Kalman filter. Testable restriction noise-only => theta=0. Report theta with 95% CI per ETF (Figure theta_noise)."
+ ],
+ "claims": [
+  {
+   "name": "count_etf_tickers",
+   "description": "Number of ETFs in primary sample (SPY + 9 sector SPDRs)",
+   "value": "10",
+   "unit": "ETFs",
+   "kind": "count",
+   "where": "Table table:etfs and text"
+  },
+  {
+   "name": "count_etf_days_approx",
+   "description": "Total trading days Jan 4 2010 - Dec 31 2024",
+   "value": "3,770",
+   "unit": "days",
+   "kind": "count",
+   "where": "Note to Table table:etfs"
+  },
+  {
+   "name": "count_stock_tickers",
+   "description": "Number of individual stocks in robustness panel",
+   "value": "40",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Appendix tab:stock_symbols"
+  },
+  {
+   "name": "parameter_M_intraday",
+   "description": "Number of 5-min returns per 6.5h day, used to fix sigma_w^2",
+   "value": "78",
+   "unit": "returns/day",
+   "kind": "parameter",
+   "where": "Sec subsec:identification"
+  },
+  {
+   "name": "parameter_sigmaw2",
+   "description": "Fixed measurement error variance 2/m",
+   "value": "1/39",
+   "unit": "variance",
+   "kind": "parameter",
+   "where": "Sec subsec:identification"
+  },
+  {
+   "name": "parameter_Delta",
+   "description": "Sampling interval for fOU discretization, per year",
+   "value": "1/250",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Table est_par note, Sec sim"
+  },
+  {
+   "name": "parameter_window",
+   "description": "Rolling estimation window trading days (~2 years)",
+   "value": "500",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec forecasting_comparison"
+  },
+  {
+   "name": "parameter_MCS_blocks",
+   "description": "Bootstrap block length for MCS",
+   "value": "20",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Appendix sec:mcs"
+  },
+  {
+   "name": "parameter_MCS_boot",
+   "description": "Bootstrap replications for MCS",
+   "value": "5,000",
+   "unit": "replications",
+   "kind": "parameter",
+   "where": "Appendix sec:mcs"
+  },
+  {
+   "name": "parameter_horizons",
+   "description": "Forecast horizons 1-day,1-week(5d),1-month(22d)",
+   "value": "3",
+   "unit": "horizons",
+   "kind": "parameter",
+   "where": "Sec forecasting_comparison"
+  },
+  {
+   "name": "parameter_sim_replications",
+   "description": "Monte Carlo replications per cell",
+   "value": "500",
+   "unit": "replications",
+   "kind": "count",
+   "where": "Table tab:sim_theta note"
+  },
+  {
+   "name": "parameter_sim_n_small",
+   "description": "Small sample size in simulation",
+   "value": "500",
+   "unit": "obs",
+   "kind": "parameter",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "parameter_sim_n_large",
+   "description": "Large sample size in simulation",
+   "value": "4,000",
+   "unit": "obs",
+   "kind": "parameter",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "parameter_sim_burnin",
+   "description": "Burn-in days discarded for fOU stationarity",
+   "value": "500",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec subsec:sim_recovery"
+  },
+  {
+   "name": "parameter_sim_substeps",
+   "description": "Fine-grid sub-steps per day for fOU simulation",
+   "value": "10",
+   "unit": "steps/day",
+   "kind": "parameter",
+   "where": "Sec subsec:sim_recovery"
+  },
+  {
+   "name": "parameter_H_grid",
+   "description": "Hurst values in main simulation tables",
+   "value": "0.1,0.2,0.3,0.4",
+   "unit": "H",
+   "kind": "parameter",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "parameter_kappa_values",
+   "description": "Mean reversion values for fOU DGP",
+   "value": "2,5",
+   "unit": "per year",
+   "kind": "parameter",
+   "where": "Sec subsec:sim_recovery + App tab:sim_theta_app"
+  },
+  {
+   "name": "parameter_q_trunc",
+   "description": "MA truncation order for approximating fGn",
+   "value": "1",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Sec subsec:arma_motivation"
+  },
+  {
+   "name": "parameter_MCS_star_75",
+   "description": "MCS p threshold for 75% set (three stars)",
+   "value": "0.25",
+   "unit": "p",
+   "kind": "parameter",
+   "where": "Tables mse_etf/qlike_etf notes"
+  },
+  {
+   "name": "parameter_MCS_star_90",
+   "description": "MCS p threshold for 90% set (two stars)",
+   "value": "0.10",
+   "unit": "p",
+   "kind": "parameter",
+   "where": "Tables notes"
+  },
+  {
+   "name": "parameter_MCS_star_95",
+   "description": "MCS p threshold for 95% set (one star)",
+   "value": "0.05",
+   "unit": "p",
+   "kind": "parameter",
+   "where": "Tables notes"
+  },
+  {
+   "name": "estimate_c1_H0.1",
+   "description": "First Wold coefficient c1(H) for H=0.1",
+   "value": "-0.657",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta col c1(H)"
+  },
+  {
+   "name": "estimate_c1_H0.2",
+   "description": "c1(H) for H=0.2",
+   "value": "-0.459",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "estimate_c1_H0.3",
+   "description": "c1(H) for H=0.3",
+   "value": "-0.293",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "estimate_c1_H0.4",
+   "description": "c1(H) for H=0.4",
+   "value": "-0.142",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "estimate_SPY_fBm_H",
+   "description": "SPY fBm H",
+   "value": "0.1891",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_fBm_H",
+   "description": "SE SPY fBm H",
+   "value": "0.0076",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par parentheses"
+  },
+  {
+   "name": "estimate_SPY_fOU_H",
+   "description": "SPY fOU H",
+   "value": "0.1967",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_fOU_H",
+   "description": "SE SPY fOU H",
+   "value": "0.0085",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_fOU_kappa",
+   "description": "SPY fOU kappa per year",
+   "value": "2.3479",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_fOU_kappa",
+   "description": "SE SPY fOU kappa",
+   "value": "0.6126",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_AR_rho",
+   "description": "SPY AR rho",
+   "value": "0.8058",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_AR_rho",
+   "description": "SE SPY AR rho",
+   "value": "0.0091",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_RAR_rho",
+   "description": "SPY RAR rho",
+   "value": "0.9331",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_RAR_rho",
+   "description": "SE",
+   "value": "0.0067",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_RAR_theta",
+   "description": "SPY RAR theta MA(1)",
+   "value": "-0.4111",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_RAR_theta",
+   "description": "SE",
+   "value": "0.0167",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_HAR_rho1",
+   "description": "SPY HAR rho1 daily",
+   "value": "0.5023",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_HAR_rho1",
+   "description": "SE",
+   "value": "0.0187",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_HAR_rho2",
+   "description": "SPY HAR rho2 weekly",
+   "value": "0.3080",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_HAR_rho2",
+   "description": "SE",
+   "value": "0.0275",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_HAR_rho3",
+   "description": "SPY HAR rho3 monthly",
+   "value": "0.1134",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_HAR_rho3",
+   "description": "SE",
+   "value": "0.0221",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_RHAR_rho1",
+   "description": "SPY RHAR rho1",
+   "value": "0.6905",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0455",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_RHAR_rho2",
+   "description": "SPY RHAR rho2",
+   "value": "0.1508",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0424",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_RHAR_rho3",
+   "description": "SPY RHAR rho3",
+   "value": "0.0969",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0189",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_SPY_RHAR_theta",
+   "description": "SPY RHAR theta",
+   "value": "-0.1789",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_SPY_RHAR_theta",
+   "description": "SE",
+   "value": "0.0425",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_fBm_H",
+   "description": "XLB fBm H",
+   "value": "0.1838",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_fBm_H",
+   "description": "SE",
+   "value": "0.0076",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_fOU_H",
+   "description": "XLB fOU H",
+   "value": "0.1887",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_fOU_H",
+   "description": "SE",
+   "value": "0.0081",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_fOU_kappa",
+   "description": "XLB fOU kappa",
+   "value": "1.4853",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_fOU_kappa",
+   "description": "SE",
+   "value": "0.4739",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_AR_rho",
+   "description": "XLB AR rho",
+   "value": "0.8266",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_AR_rho",
+   "description": "SE",
+   "value": "0.0085",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_RAR_rho",
+   "description": "XLB RAR rho",
+   "value": "0.9470",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_RAR_rho",
+   "description": "SE",
+   "value": "0.0058",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_RAR_theta",
+   "description": "XLB RAR theta",
+   "value": "-0.4393",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_RAR_theta",
+   "description": "SE",
+   "value": "0.0159",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_HAR_rho1",
+   "description": "XLB HAR rho1",
+   "value": "0.4891",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_HAR_rho1",
+   "description": "SE",
+   "value": "0.0188",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_HAR_rho2",
+   "description": "XLB HAR rho2",
+   "value": "0.3196",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_HAR_rho2",
+   "description": "SE",
+   "value": "0.0277",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_HAR_rho3",
+   "description": "XLB HAR rho3",
+   "value": "0.1275",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_HAR_rho3",
+   "description": "SE",
+   "value": "0.0217",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_RHAR_rho1",
+   "description": "XLB RHAR rho1",
+   "value": "0.7043",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0464",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_RHAR_rho2",
+   "description": "XLB RHAR rho2",
+   "value": "0.1409",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0428",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_RHAR_rho3",
+   "description": "XLB RHAR rho3",
+   "value": "0.1048",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0184",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLB_RHAR_theta",
+   "description": "XLB RHAR theta",
+   "value": "-0.2036",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLB_RHAR_theta",
+   "description": "SE",
+   "value": "0.0436",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_fBm_H",
+   "description": "XLE fBm H",
+   "value": "0.1813",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_fBm_H",
+   "description": "SE",
+   "value": "0.0075",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_fOU_H",
+   "description": "XLE fOU H",
+   "value": "0.1842",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_fOU_H",
+   "description": "SE",
+   "value": "0.0079",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_fOU_kappa",
+   "description": "XLE fOU kappa",
+   "value": "0.9564",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_fOU_kappa",
+   "description": "SE",
+   "value": "0.3731",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_AR_rho",
+   "description": "XLE AR rho",
+   "value": "0.8546",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_AR_rho",
+   "description": "SE",
+   "value": "0.0078",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_RAR_rho",
+   "description": "XLE RAR rho",
+   "value": "0.9616",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_RAR_rho",
+   "description": "SE",
+   "value": "0.0046",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_RAR_theta",
+   "description": "XLE RAR theta",
+   "value": "-0.4757",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_RAR_theta",
+   "description": "SE",
+   "value": "0.0150",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_HAR_rho1",
+   "description": "XLE HAR rho1",
+   "value": "0.4694",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_HAR_rho1",
+   "description": "SE",
+   "value": "0.0189",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_HAR_rho2",
+   "description": "XLE HAR rho2",
+   "value": "0.3514",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_HAR_rho2",
+   "description": "SE",
+   "value": "0.0281",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_HAR_rho3",
+   "description": "XLE HAR rho3",
+   "value": "0.1323",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_HAR_rho3",
+   "description": "SE",
+   "value": "0.0216",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_RHAR_rho1",
+   "description": "XLE RHAR rho1",
+   "value": "0.5572",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0518",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_RHAR_rho2",
+   "description": "XLE RHAR rho2",
+   "value": "0.2775",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0486",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_RHAR_rho3",
+   "description": "XLE RHAR rho3",
+   "value": "0.1225",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0209",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLE_RHAR_theta",
+   "description": "XLE RHAR theta",
+   "value": "-0.0817",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLE_RHAR_theta",
+   "description": "SE",
+   "value": "0.0461",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_fBm_H",
+   "description": "XLF fBm H",
+   "value": "0.1892",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_fBm_H",
+   "description": "SE",
+   "value": "0.0076",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_fOU_H",
+   "description": "XLF fOU H",
+   "value": "0.1961",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_fOU_H",
+   "description": "SE",
+   "value": "0.0084",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_fOU_kappa",
+   "description": "XLF fOU kappa",
+   "value": "2.0288",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_fOU_kappa",
+   "description": "SE",
+   "value": "0.5639",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_AR_rho",
+   "description": "XLF AR rho",
+   "value": "0.8130",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_AR_rho",
+   "description": "SE",
+   "value": "0.0083",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_RAR_rho",
+   "description": "XLF RAR rho",
+   "value": "0.9347",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_RAR_rho",
+   "description": "SE",
+   "value": "0.0064",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_RAR_theta",
+   "description": "XLF RAR theta",
+   "value": "-0.4076",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_RAR_theta",
+   "description": "SE",
+   "value": "0.0156",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_HAR_rho1",
+   "description": "XLF HAR rho1",
+   "value": "0.5130",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_HAR_rho1",
+   "description": "SE",
+   "value": "0.0187",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_HAR_rho2",
+   "description": "XLF HAR rho2",
+   "value": "0.2828",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_HAR_rho2",
+   "description": "SE",
+   "value": "0.0275",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_HAR_rho3",
+   "description": "XLF HAR rho3",
+   "value": "0.1334",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_HAR_rho3",
+   "description": "SE",
+   "value": "0.0221",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_RHAR_rho1",
+   "description": "XLF RHAR rho1",
+   "value": "0.6646",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0462",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_RHAR_rho2",
+   "description": "XLF RHAR rho2",
+   "value": "0.1592",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0426",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_RHAR_rho3",
+   "description": "XLF RHAR rho3",
+   "value": "0.1164",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0199",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLF_RHAR_theta",
+   "description": "XLF RHAR theta",
+   "value": "-0.1465",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLF_RHAR_theta",
+   "description": "SE",
+   "value": "0.0434",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_fBm_H",
+   "description": "XLI fBm H",
+   "value": "0.1852",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_fBm_H",
+   "description": "SE",
+   "value": "0.0076",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_fOU_H",
+   "description": "XLI fOU H",
+   "value": "0.1910",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_fOU_H",
+   "description": "SE",
+   "value": "0.0082",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_fOU_kappa",
+   "description": "XLI fOU kappa",
+   "value": "1.8065",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_fOU_kappa",
+   "description": "SE",
+   "value": "0.5282",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_AR_rho",
+   "description": "XLI AR rho",
+   "value": "0.8134",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_AR_rho",
+   "description": "SE",
+   "value": "0.0087",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_RAR_rho",
+   "description": "XLI RAR rho",
+   "value": "0.9402",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_RAR_rho",
+   "description": "SE",
+   "value": "0.0061",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_RAR_theta",
+   "description": "XLI RAR theta",
+   "value": "-0.4293",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_RAR_theta",
+   "description": "SE",
+   "value": "0.0159",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_HAR_rho1",
+   "description": "XLI HAR rho1",
+   "value": "0.4923",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_HAR_rho1",
+   "description": "SE",
+   "value": "0.0188",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_HAR_rho2",
+   "description": "XLI HAR rho2",
+   "value": "0.3173",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_HAR_rho2",
+   "description": "SE",
+   "value": "0.0276",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_HAR_rho3",
+   "description": "XLI HAR rho3",
+   "value": "0.1201",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_HAR_rho3",
+   "description": "SE",
+   "value": "0.0220",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_RHAR_rho1",
+   "description": "XLI RHAR rho1",
+   "value": "0.7083",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0465",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_RHAR_rho2",
+   "description": "XLI RHAR rho2",
+   "value": "0.1375",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0429",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_RHAR_rho3",
+   "description": "XLI RHAR rho3",
+   "value": "0.0992",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0185",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLI_RHAR_theta",
+   "description": "XLI RHAR theta",
+   "value": "-0.2046",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLI_RHAR_theta",
+   "description": "SE",
+   "value": "0.0438",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_fBm_H",
+   "description": "XLK fBm H",
+   "value": "0.1762",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_fBm_H",
+   "description": "SE",
+   "value": "0.0074",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_fOU_H",
+   "description": "XLK fOU H",
+   "value": "0.1806",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_fOU_H",
+   "description": "SE",
+   "value": "0.0079",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_fOU_kappa",
+   "description": "XLK fOU kappa",
+   "value": "1.2944",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_fOU_kappa",
+   "description": "SE",
+   "value": "0.4394",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_AR_rho",
+   "description": "XLK AR rho",
+   "value": "0.8034",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_AR_rho",
+   "description": "SE",
+   "value": "0.0091",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_RAR_rho",
+   "description": "XLK RAR rho",
+   "value": "0.9395",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_RAR_rho",
+   "description": "SE",
+   "value": "0.0063",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_RAR_theta",
+   "description": "XLK RAR theta",
+   "value": "-0.4414",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_RAR_theta",
+   "description": "SE",
+   "value": "0.0161",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_HAR_rho1",
+   "description": "XLK HAR rho1",
+   "value": "0.4783",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_HAR_rho1",
+   "description": "SE",
+   "value": "0.0188",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_HAR_rho2",
+   "description": "XLK HAR rho2",
+   "value": "0.3100",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_HAR_rho2",
+   "description": "SE",
+   "value": "0.0280",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_HAR_rho3",
+   "description": "XLK HAR rho3",
+   "value": "0.1426",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_HAR_rho3",
+   "description": "SE",
+   "value": "0.0227",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_RHAR_rho1",
+   "description": "XLK RHAR rho1",
+   "value": "0.7037",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0470",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_RHAR_rho2",
+   "description": "XLK RHAR rho2",
+   "value": "0.1268",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0426",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_RHAR_rho3",
+   "description": "XLK RHAR rho3",
+   "value": "0.1161",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0192",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLK_RHAR_theta",
+   "description": "XLK RHAR theta",
+   "value": "-0.2121",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLK_RHAR_theta",
+   "description": "SE",
+   "value": "0.0442",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_fBm_H",
+   "description": "XLP fBm H",
+   "value": "0.1748",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_fBm_H",
+   "description": "SE",
+   "value": "0.0074",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_fOU_H",
+   "description": "XLP fOU H",
+   "value": "0.1805",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_fOU_H",
+   "description": "SE",
+   "value": "0.0081",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_fOU_kappa",
+   "description": "XLP fOU kappa",
+   "value": "1.9327",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_fOU_kappa",
+   "description": "SE",
+   "value": "0.5485",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_AR_rho",
+   "description": "XLP AR rho",
+   "value": "0.7897",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_AR_rho",
+   "description": "SE",
+   "value": "0.0081",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_RAR_rho",
+   "description": "XLP RAR rho",
+   "value": "0.9397",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_RAR_rho",
+   "description": "SE",
+   "value": "0.0060",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_RAR_theta",
+   "description": "XLP RAR theta",
+   "value": "-0.4601",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_RAR_theta",
+   "description": "SE",
+   "value": "0.0154",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_HAR_rho1",
+   "description": "XLP HAR rho1",
+   "value": "0.4544",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_HAR_rho1",
+   "description": "SE",
+   "value": "0.0191",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_HAR_rho2",
+   "description": "XLP HAR rho2",
+   "value": "0.3682",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_HAR_rho2",
+   "description": "SE",
+   "value": "0.0280",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_HAR_rho3",
+   "description": "XLP HAR rho3",
+   "value": "0.0942",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_HAR_rho3",
+   "description": "SE",
+   "value": "0.0224",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_RHAR_rho1",
+   "description": "XLP RHAR rho1",
+   "value": "0.7394",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0497",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_RHAR_rho2",
+   "description": "XLP RHAR rho2",
+   "value": "0.1275",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0455",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_RHAR_rho3",
+   "description": "XLP RHAR rho3",
+   "value": "0.0731",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0176",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLP_RHAR_theta",
+   "description": "XLP RHAR theta",
+   "value": "-0.2636",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLP_RHAR_theta",
+   "description": "SE",
+   "value": "0.0469",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_fBm_H",
+   "description": "XLU fBm H",
+   "value": "0.1673",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_fBm_H",
+   "description": "SE",
+   "value": "0.0073",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_fOU_H",
+   "description": "XLU fOU H",
+   "value": "0.1720",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_fOU_H",
+   "description": "SE",
+   "value": "0.0079",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_fOU_kappa",
+   "description": "XLU fOU kappa",
+   "value": "1.6336",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_fOU_kappa",
+   "description": "SE",
+   "value": "0.4994",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_AR_rho",
+   "description": "XLU AR rho",
+   "value": "0.7854",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_AR_rho",
+   "description": "SE",
+   "value": "0.0080",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_RAR_rho",
+   "description": "XLU RAR rho",
+   "value": "0.9431",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_RAR_rho",
+   "description": "SE",
+   "value": "0.0059",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_RAR_theta",
+   "description": "XLU RAR theta",
+   "value": "-0.4800",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_RAR_theta",
+   "description": "SE",
+   "value": "0.0158",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_HAR_rho1",
+   "description": "XLU HAR rho1",
+   "value": "0.4403",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_HAR_rho1",
+   "description": "SE",
+   "value": "0.0191",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_HAR_rho2",
+   "description": "XLU HAR rho2",
+   "value": "0.3704",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_HAR_rho2",
+   "description": "SE",
+   "value": "0.0283",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_HAR_rho3",
+   "description": "XLU HAR rho3",
+   "value": "0.1089",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_HAR_rho3",
+   "description": "SE",
+   "value": "0.0228",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_RHAR_rho1",
+   "description": "XLU RHAR rho1",
+   "value": "0.7478",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0484",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_RHAR_rho2",
+   "description": "XLU RHAR rho2",
+   "value": "0.1161",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0437",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_RHAR_rho3",
+   "description": "XLU RHAR rho3",
+   "value": "0.0798",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0178",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLU_RHAR_theta",
+   "description": "XLU RHAR theta",
+   "value": "-0.2844",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLU_RHAR_theta",
+   "description": "SE",
+   "value": "0.0458",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_fBm_H",
+   "description": "XLV fBm H",
+   "value": "0.1844",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_fBm_H",
+   "description": "SE",
+   "value": "0.0076",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_fOU_H",
+   "description": "XLV fOU H",
+   "value": "0.1928",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_fOU_H",
+   "description": "SE",
+   "value": "0.0085",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_fOU_kappa",
+   "description": "XLV fOU kappa",
+   "value": "2.9221",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_fOU_kappa",
+   "description": "SE",
+   "value": "0.6949",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_AR_rho",
+   "description": "XLV AR rho",
+   "value": "0.7934",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_AR_rho",
+   "description": "SE",
+   "value": "0.0085",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_RAR_rho",
+   "description": "XLV RAR rho",
+   "value": "0.9328",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_RAR_rho",
+   "description": "SE",
+   "value": "0.0067",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_RAR_theta",
+   "description": "XLV RAR theta",
+   "value": "-0.4280",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_RAR_theta",
+   "description": "SE",
+   "value": "0.0161",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_HAR_rho1",
+   "description": "XLV HAR rho1",
+   "value": "0.4870",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_HAR_rho1",
+   "description": "SE",
+   "value": "0.0189",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_HAR_rho2",
+   "description": "XLV HAR rho2",
+   "value": "0.3271",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_HAR_rho2",
+   "description": "SE",
+   "value": "0.0276",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_HAR_rho3",
+   "description": "XLV HAR rho3",
+   "value": "0.1024",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_HAR_rho3",
+   "description": "SE",
+   "value": "0.0222",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_RHAR_rho1",
+   "description": "XLV RHAR rho1",
+   "value": "0.7225",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0464",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_RHAR_rho2",
+   "description": "XLV RHAR rho2",
+   "value": "0.1305",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0427",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_RHAR_rho3",
+   "description": "XLV RHAR rho3",
+   "value": "0.0833",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0182",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLV_RHAR_theta",
+   "description": "XLV RHAR theta",
+   "value": "-0.2230",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLV_RHAR_theta",
+   "description": "SE",
+   "value": "0.0439",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_fBm_H",
+   "description": "XLY fBm H",
+   "value": "0.1803",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_fBm_H",
+   "description": "SE",
+   "value": "0.0076",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_fOU_H",
+   "description": "XLY fOU H",
+   "value": "0.1839",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_fOU_H",
+   "description": "SE",
+   "value": "0.0080",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_fOU_kappa",
+   "description": "XLY fOU kappa",
+   "value": "1.1264",
+   "unit": "1/year",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_fOU_kappa",
+   "description": "SE",
+   "value": "0.4338",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_AR_rho",
+   "description": "XLY AR rho",
+   "value": "0.8313",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_AR_rho",
+   "description": "SE",
+   "value": "0.0087",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_RAR_rho",
+   "description": "XLY RAR rho",
+   "value": "0.9515",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_RAR_rho",
+   "description": "SE",
+   "value": "0.0057",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_RAR_theta",
+   "description": "XLY RAR theta",
+   "value": "-0.4549",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_RAR_theta",
+   "description": "SE",
+   "value": "0.0156",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_HAR_rho1",
+   "description": "XLY HAR rho1",
+   "value": "0.4799",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_HAR_rho1",
+   "description": "SE",
+   "value": "0.0189",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_HAR_rho2",
+   "description": "XLY HAR rho2",
+   "value": "0.3261",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_HAR_rho2",
+   "description": "SE",
+   "value": "0.0280",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_HAR_rho3",
+   "description": "XLY HAR rho3",
+   "value": "0.1364",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_HAR_rho3",
+   "description": "SE",
+   "value": "0.0220",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_RHAR_rho1",
+   "description": "XLY RHAR rho1",
+   "value": "0.6954",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_RHAR_rho1",
+   "description": "SE",
+   "value": "0.0488",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_RHAR_rho2",
+   "description": "XLY RHAR rho2",
+   "value": "0.1482",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_RHAR_rho2",
+   "description": "SE",
+   "value": "0.0445",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_RHAR_rho3",
+   "description": "XLY RHAR rho3",
+   "value": "0.1111",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_RHAR_rho3",
+   "description": "SE",
+   "value": "0.0188",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "estimate_XLY_RHAR_theta",
+   "description": "XLY RHAR theta",
+   "value": "-0.2027",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "se_XLY_RHAR_theta",
+   "description": "SE",
+   "value": "0.0457",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table est_par"
+  },
+  {
+   "name": "sim_fBm_H0.1_RAR_theta_n500",
+   "description": "fBm H=0.1 RAR hat theta n=500 mean (SD 0.070)",
+   "value": "-0.624",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta Panel A"
+  },
+  {
+   "name": "sim_fBm_H0.1_RAR_Himp_n500",
+   "description": "Implied H for above",
+   "value": "0.117",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.1_RHAR_theta_n500",
+   "description": "fBm H=0.1 RHAR hat theta n=500 mean SD 0.258",
+   "value": "-0.390",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.1_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.247",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.1_RAR_theta_n4000",
+   "description": "fBm H=0.1 RAR hat theta n=4000 mean SD 0.021",
+   "value": "-0.670",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.1_RAR_Himp_n4000",
+   "description": "Implied H n=4000",
+   "value": "0.095",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.1_RHAR_theta_n4000",
+   "description": "fBm H=0.1 RHAR n=4000 SD 0.082",
+   "value": "-0.439",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.1_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.213",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RAR_theta_n500",
+   "description": "fBm H=0.2 RAR n500 SD 0.057",
+   "value": "-0.439",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.212",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RHAR_theta_n500",
+   "description": "RHAR n500 SD0.122",
+   "value": "-0.274",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.314",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.020",
+   "value": "-0.467",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.196",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.045",
+   "value": "-0.278",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.2_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.309",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RAR_theta_n500",
+   "description": "fBm H0.3 RAR n500 SD0.054",
+   "value": "-0.281",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.308",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RHAR_theta_n500",
+   "description": "RHAR n500 SD0.103",
+   "value": "-0.166",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.383",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.017",
+   "value": "-0.298",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.297",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.035",
+   "value": "-0.172",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.3_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.380",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RAR_theta_n500",
+   "description": "fBm H0.4 RAR n500 SD0.048",
+   "value": "-0.129",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.409",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RHAR_theta_n500",
+   "description": "RHAR n500 SD0.075",
+   "value": "-0.080",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.440",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.017",
+   "value": "-0.142",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.400",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.028",
+   "value": "-0.081",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fBm_H0.4_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.442",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RAR_theta_n500",
+   "description": "fOU kappa2 H0.1 RAR n500 SD0.074",
+   "value": "-0.606",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta Panel B"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.125",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RHAR_theta_n500",
+   "description": "RHAR n500 SD0.255",
+   "value": "-0.398",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.243",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.023",
+   "value": "-0.628",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.113",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.079",
+   "value": "-0.425",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.1_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.221",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RAR_theta_n500",
+   "description": "fOU2 H0.2 RAR n500 SD0.059",
+   "value": "-0.424",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.220",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RHAR_theta_n500",
+   "description": "RHAR SD0.132",
+   "value": "-0.266",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.319",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.021",
+   "value": "-0.440",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.211",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.044",
+   "value": "-0.274",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.2_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.312",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RAR_theta_n500",
+   "description": "fOU2 H0.3 RAR n500 SD0.054",
+   "value": "-0.268",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.317",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RHAR_theta_n500",
+   "description": "RHAR SD0.101",
+   "value": "-0.164",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.384",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.017",
+   "value": "-0.280",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.308",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.032",
+   "value": "-0.168",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.3_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.383",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RAR_theta_n500",
+   "description": "fOU2 H0.4 RAR n500 SD0.049",
+   "value": "-0.132",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.407",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RHAR_theta_n500",
+   "description": "RHAR SD0.083",
+   "value": "-0.079",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RHAR_Himp_n500",
+   "description": "Implied H",
+   "value": "0.440",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RAR_theta_n4000",
+   "description": "RAR n4000 SD0.017",
+   "value": "-0.137",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.404",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RHAR_theta_n4000",
+   "description": "RHAR n4000 SD0.028",
+   "value": "-0.082",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "sim_fOU2_H0.4_RHAR_Himp_n4000",
+   "description": "Implied H",
+   "value": "0.442",
+   "unit": "H",
+   "kind": "estimate",
+   "where": "Table tab:sim_theta"
+  },
+  {
+   "name": "ck_k0_allH",
+   "description": "Wold coefficient c0=1 for all H in Table tab:fgn_ck",
+   "value": "1.0000",
+   "unit": "coef",
+   "kind": "parameter",
+   "where": "Appendix tab:fgn_ck"
+  },
+  {
+   "name": "ck_k1_H0.1",
+   "description": "Normalized Wold c1 for H=0.1",
+   "value": "-0.6568",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k1_H0.2",
+   "description": "c1 H0.2",
+   "value": "-0.4588",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k1_H0.3",
+   "description": "c1 H0.3",
+   "value": "-0.2926",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k1_H0.4",
+   "description": "c1 H0.4",
+   "value": "-0.1419",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k2_H0.1",
+   "description": "c2 H0.1",
+   "value": "-0.0622",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k2_H0.2",
+   "description": "c2 H0.2",
+   "value": "-0.0788",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k2_H0.3",
+   "description": "c2 H0.3",
+   "value": "-0.0711",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k2_H0.4",
+   "description": "c2 H0.4",
+   "value": "-0.0442",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k3_H0.1",
+   "description": "c3 H0.1",
+   "value": "-0.0337",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k3_H0.2",
+   "description": "c3 H0.2",
+   "value": "-0.0443",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k3_H0.3",
+   "description": "c3 H0.3",
+   "value": "-0.0419",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "ck_k3_H0.4",
+   "description": "c3 H0.4",
+   "value": "-0.0273",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table tab:fgn_ck"
+  },
+  {
+   "name": "avg_MSE_1d_HAR",
+   "description": "Average MSE ratio benchmark HAR 1-day",
+   "value": "1.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf Average row 1-day"
+  },
+  {
+   "name": "avg_MSE_1d_HARQ",
+   "description": "Average MSE ratio HARQ 1-day",
+   "value": "1.0288",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_HARJ",
+   "description": "Average MSE HARJ 1-day",
+   "value": "1.0311",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_HARS",
+   "description": "Average MSE HARS 1-day",
+   "value": "1.0461",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_LogAR",
+   "description": "Average MSE Log-AR 1-day",
+   "value": "0.9372",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_LogRAR",
+   "description": "Average MSE Log-RAR 1-day",
+   "value": "0.7888",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_LogHAR",
+   "description": "Average MSE Log-HAR 1-day",
+   "value": "0.8374",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_LogRHAR",
+   "description": "Average MSE Log-RHAR 1-day",
+   "value": "0.8051",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_fBm",
+   "description": "Average MSE fBm 1-day",
+   "value": "0.8044",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1d_fOU",
+   "description": "Average MSE fOU 1-day",
+   "value": "0.8223",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1w_LogRAR",
+   "description": "Average MSE Log-RAR 1-week",
+   "value": "0.7728",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1w_LogRHAR",
+   "description": "Average MSE Log-RHAR 1-week",
+   "value": "0.7773",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1w_LogHAR",
+   "description": "Average MSE Log-HAR 1-week",
+   "value": "0.8208",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1m_LogRAR",
+   "description": "Average MSE Log-RAR 1-month (underperforms)",
+   "value": "1.0185",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_MSE_1m_LogHAR",
+   "description": "Average MSE Log-HAR 1-month",
+   "value": "0.9813",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "avg_QLIKE_1d_LogRAR",
+   "description": "Average QLIKE Log-RAR 1-day",
+   "value": "0.7942",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1d_LogRHAR",
+   "description": "Average QLIKE Log-RHAR 1-day",
+   "value": "0.7925",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1d_LogHAR",
+   "description": "Average QLIKE Log-HAR 1-day",
+   "value": "0.8054",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1d_fBm",
+   "description": "Average QLIKE fBm 1-day",
+   "value": "0.7849",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1d_fOU",
+   "description": "Average QLIKE fOU 1-day",
+   "value": "0.7870",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1w_LogRAR",
+   "description": "Average QLIKE Log-RAR 1-week",
+   "value": "0.8191",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1w_LogRHAR",
+   "description": "Average QLIKE Log-RHAR 1-week",
+   "value": "0.8072",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1m_LogRHAR",
+   "description": "Average QLIKE Log-RHAR 1-month",
+   "value": "0.9110",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "avg_QLIKE_1m_fOU",
+   "description": "Average QLIKE fOU 1-month",
+   "value": "0.8939",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "mse_SPY_LogRAR_1d",
+   "description": "SPY MSE Log-RAR 1-day ratio",
+   "value": "0.8510",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "mse_SPY_LogRHAR_1d",
+   "description": "SPY MSE Log-RHAR 1-day",
+   "value": "0.8800",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "mse_SPY_LogHAR_1d",
+   "description": "SPY MSE Log-HAR 1-day",
+   "value": "0.9194",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "mse_XLE_LogRAR_1d",
+   "description": "XLE MSE Log-RAR 1-day best gain",
+   "value": "0.5515",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "mse_XLE_LogHAR_1d",
+   "description": "XLE MSE Log-HAR 1-day",
+   "value": "0.5504",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table mse_etf"
+  },
+  {
+   "name": "qlike_SPY_LogRAR_1d",
+   "description": "SPY QLIKE Log-RAR 1-day",
+   "value": "0.8695",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "qlike_SPY_LogRHAR_1d",
+   "description": "SPY QLIKE Log-RHAR 1-day",
+   "value": "0.8676",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "qlike_XLE_LogRAR_1d",
+   "description": "XLE QLIKE Log-RAR 1-day",
+   "value": "0.7085",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table qlike_etf"
+  },
+  {
+   "name": "mcs_p_SPY_HAR_MSE_1d",
+   "description": "MCS p-value SPY HAR MSE 1-day",
+   "value": "0.3878",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table mse_mcs_etf"
+  },
+  {
+   "name": "mcs_p_SPY_LogRAR_MSE_1d",
+   "description": "MCS p SPY Log-RAR MSE 1-day (best)",
+   "value": "1.0000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table mse_mcs_etf"
+  },
+  {
+   "name": "mcs_p_SPY_HAR_QLIKE_1d",
+   "description": "MCS p SPY HAR QLIKE 1-day",
+   "value": "0.0120",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table mcs_qlike_etf"
+  },
+  {
+   "name": "mcs_p_SPY_fOU_QLIKE_1d",
+   "description": "MCS p SPY fOU QLIKE 1-day",
+   "value": "1.0000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table mcs_qlike_etf"
+  },
+  {
+   "name": "mcs_p_XLB_HAR_QLIKE_1d",
+   "description": "MCS p XLB HAR QLIKE 1-day",
+   "value": "0.1148",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table mcs_qlike_etf"
+  },
+  {
+   "name": "count_MCS_models",
+   "description": "Number of models in MCS per test",
+   "value": "10",
+   "unit": "models",
+   "kind": "count",
+   "where": "Appendix sec:mcs"
+  },
+  {
+   "name": "tally_rar_negative_all_etfs",
+   "description": "Number of ETFs with RAR theta negative",
+   "value": "10",
+   "unit": "ETFs",
+   "kind": "tally",
+   "where": "Table est_par RAR theta column all <0"
+  },
+  {
+   "name": "tally_rhar_negative_all_etfs",
+   "description": "Number of ETFs with RHAR theta negative",
+   "value": "10",
+   "unit": "ETFs",
+   "kind": "tally",
+   "where": "Table est_par RHAR theta column all <0"
+  },
+  {
+   "name": "tally_fbm_H_below_0.5",
+   "description": "ETFs with fBm H <0.5",
+   "value": "10",
+   "unit": "ETFs",
+   "kind": "tally",
+   "where": "Table est_par"
+  },
+  {
+   "name": "tally_fou_H_below_0.5",
+   "description": "ETFs with fOU H <0.5",
+   "value": "10",
+   "unit": "ETFs",
+   "kind": "tally",
+   "where": "Table est_par"
+  }
+ ],
+ "headline": "tally_fbm_H_below_0.5",
+ "partitions": [],
+ "tests": []
+}

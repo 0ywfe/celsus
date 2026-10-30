@@ -1,0 +1,70 @@
+{
+ "run_id": "run-20261030T045048Z-e70b87",
+ "paper": "2607.22110",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 1 of 1 checked results match within their uncertainty. Its main result, interior_curvature_max_n, is 23 countries in the paper and 39 countries here (not judged: a tally of what the analysis found, with no uncertainty).",
+ "headline": {
+  "name": "interior_curvature_max_n",
+  "kind": "tally",
+  "unit": "countries",
+  "reported": 23.0,
+  "reproduced": 39,
+  "se": null,
+  "n": 172,
+  "consistent": null,
+  "why": "a tally of what the analysis found, with no uncertainty, so it is not judged"
+ },
+ "sample": [
+  {
+   "name": "curvature_diagnostic_total_n",
+   "reported": 172.0,
+   "reproduced": 172,
+   "consistent": true
+  },
+  {
+   "name": "full_income_n",
+   "reported": 72.0,
+   "reproduced": 69,
+   "consistent": true
+  },
+  {
+   "name": "full_consumption_n",
+   "reported": 100.0,
+   "reproduced": 103,
+   "consistent": true
+  },
+  {
+   "name": "income_vis_sample_n",
+   "reported": 12.0,
+   "reproduced": 12,
+   "consistent": true
+  },
+  {
+   "name": "consumption_vis_sample_n",
+   "reported": 12.0,
+   "reproduced": 12,
+   "consistent": true
+  }
+ ],
+ "judged": 1,
+ "matched": 1,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (income_vis_sample_n (12) at line 142). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 45,
+ "cost_usd": 0.8303,
+ "tokens_in": 2091622,
+ "tokens_out": 96743,
+ "wall_s": 3461.4,
+ "crashed": null
+}

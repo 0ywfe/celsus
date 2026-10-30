@@ -1,0 +1,68 @@
+{
+ "run_id": "run-20261030T045825Z-15ae1f",
+ "paper": "2603.23294",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication could not rebuild the paper's sample (Public Yahoo intraday calendars incomplete and paper does not disclose exact date filtering, holiday handling, or return construction to reach its claimed common size; without those rules precise missing/extra vs paper cannot be counted without fabricating, so reporting actual observed log-return counts with tickers and period as defined)",
+ "first_line": "We could not check this paper: the replication could not rebuild the paper's sample (Public Yahoo intraday calendars incomplete and paper does not disclose exact date filtering, holiday handling, or return construction to reach its claimed common size; without those rules precise missing/extra vs paper cannot be counted without fabricating, so reporting actual observed log-return counts with tickers and period as defined). This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "p_NK_SSE_to_HSI_tau0.05",
+  "kind": "p_value",
+  "unit": "p-value",
+  "reported": 0.005,
+  "reproduced": 0.005,
+  "se": 0.004987484335815001,
+  "n": 478,
+  "consistent": true,
+  "why": "both < 0.05"
+ },
+ "sample": [
+  {
+   "name": "count_S",
+   "reported": 500.0,
+   "reproduced": 500.0,
+   "consistent": null
+  },
+  {
+   "name": "count_T100",
+   "reported": 100.0,
+   "reproduced": 100.0,
+   "consistent": null
+  },
+  {
+   "name": "count_T200",
+   "reported": 200.0,
+   "reproduced": 200.0,
+   "consistent": null
+  },
+  {
+   "name": "count_T500_emp",
+   "reported": 500.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 247,
+ "matched": 145,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (count_T500_emp (500) at line 442). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  },
+  {
+   "round": 2,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (count_T500_emp (500) at line 793). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 43,
+ "cost_usd": 1.2394,
+ "tokens_in": 3498732,
+ "tokens_out": 129741,
+ "wall_s": 2135.2,
+ "crashed": null
+}

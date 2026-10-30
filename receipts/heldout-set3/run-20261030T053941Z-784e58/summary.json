@@ -1,0 +1,70 @@
+{
+ "run_id": "run-20261030T053941Z-784e58",
+ "paper": "2602.21173",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication did not report the paper's sample size (RevExactDates), so its sample cannot be compared",
+ "first_line": "We could not check this paper: the replication did not report the paper's sample size (RevExactDates), so its sample cannot be compared. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "TimingComponent",
+  "kind": "estimate",
+  "unit": "pp/year",
+  "reported": 2.08,
+  "reproduced": 1.8831769415383226,
+  "se": 0.6995073271142076,
+  "n": 605,
+  "consistent": true,
+  "why": "paper inside 1.883 +/- 1.371"
+ },
+ "sample": [
+  {
+   "name": "NOOS",
+   "reported": 605.0,
+   "reproduced": 605,
+   "consistent": true
+  },
+  {
+   "name": "NBurnIn",
+   "reported": 121.0,
+   "reproduced": 121,
+   "consistent": true
+  },
+  {
+   "name": "TimingExNinetiesMonths",
+   "reported": 485.0,
+   "reproduced": 485,
+   "consistent": true
+  },
+  {
+   "name": "RevExactDates",
+   "reported": 605.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "RevExactMinRank",
+   "reported": 113.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 13,
+ "matched": 12,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (TimingCmvTiming (0.98) at line 637). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 57,
+ "cost_usd": 1.5877,
+ "tokens_in": 4844052,
+ "tokens_out": 143427,
+ "wall_s": 782.9,
+ "crashed": null
+}

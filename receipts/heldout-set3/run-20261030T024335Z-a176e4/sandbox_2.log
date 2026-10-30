@@ -1,0 +1,81 @@
+exit 0 in 65.2s
+--- stdout
+Wrote 67 results
+{'name': 'count_ETFs', 'value': 10, 'se': None, 'n': None}
+{'name': 'count_RV_obs_primary_approx', 'value': 3774.0, 'se': None, 'n': None}
+{'name': 'count_stocks', 'value': 40, 'se': None, 'n': None}
+{'name': 'simulation_replications_per_cell', 'value': 500, 'se': None, 'n': None}
+{'name': 'simulation_max_nonconverged_per_cell', 'value': 6, 'se': None, 'n': None}
+{'name': 'param_rolling_window', 'value': 500, 'se': None, 'n': None}
+{'name': 'param_MCS_block_length', 'value': 20, 'se': None, 'n': None}
+{'name': 'param_MCS_bootstrap_reps', 'value': 5000, 'se': None, 'n': None}
+{'name': 'param_intraday_M', 'value': 78, 'se': None, 'n': None}
+{'name': 'param_sigma_w2_fixed', 'value': 0.02564102564102564, 'se': None, 'n': None}
+{'name': 'param_Delta', 'value': 0.004, 'se': None, 'n': None}
+{'name': 'param_kappa_fOU_grid_2', 'value': 2, 'se': None, 'n': None}
+{'name': 'param_kappa_fOU_grid_5', 'value': 5, 'se': None, 'n': None}
+{'name': 'count_period_start_year', 'value': 2010, 'se': None, 'n': None}
+{'name': 'count_period_end_year', 'value': 2024, 'se': None, 'n': None}
+{'name': 'param_c1_H_0p1', 'value': -0.6568273388578789, 'se': 0, 'n': None}
+{'name': 'param_c1_H_0p2', 'value': -0.4587680165498049, 'se': 0, 'n': None}
+{'name': 'param_c1_H_0p3', 'value': -0.2926339211631163, 'se': 0, 'n': None}
+{'name': 'param_c1_H_0p4', 'value': -0.14185937944071825, 'se': 0, 'n': None}
+{'name': 'param_wold_c0', 'value': 1.0, 'se': 0, 'n': None}
+{'name': 'param_wold_c1_H0p1', 'value': -0.6568273388578789, 'se': 0, 'n': 10}
+{'name': 'param_wold_c2_H0p1', 'value': -0.06215525987360829, 'se': 0, 'n': 10}
+{'name': 'param_wold_c3_H0p1', 'value': -0.03367593162249236, 'se': 0, 'n': 10}
+{'name': 'param_wold_c4_H0p1', 'value': -0.022370989611128992, 'se': 0, 'n': 10}
+{'name': 'param_wold_c5_H0p1', 'value': -0.01640221975078634, 'se': 0, 'n': 10}
+{'name': 'param_wold_c6_H0p1', 'value': -0.012760599894558878, 'se': 0, 'n': 10}
+{'name': 'param_wold_c7_H0p1', 'value': -0.010331049270511417, 'se': 0, 'n': 10}
+{'name': 'param_wold_c8_H0p1', 'value': -0.008607758293216364, 'se': 0, 'n': 10}
+{'name': 'param_wold_c9_H0p1', 'value': -0.007329441048595628, 'se': 0, 'n': 10}
+{'name': 'param_wold_c10_H0p1', 'value': -0.0063481649133622295, 'se': 0, 'n': 10}
+{'name': 'param_wold_c1_H0p2', 'value': -0.4587680165498049, 'se': 0, 'n': 10}
+{'name': 'param_wold_c2_H0p2', 'value': -0.07879370585870744, 'se': 0, 'n': 10}
+{'name': 'param_wold_c3_H0p2', 'value': -0.04427562607961846, 'se': 0, 'n': 10}
+{'name': 'param_wold_c4_H0p2', 'value': -0.03004494974352887, 'se': 0, 'n': 10}
+{'name': 'param_wold_c5_H0p2', 'value': -0.02237146590777321, 'se': 0, 'n': 10}
+{'name': 'param_wold_c6_H0p2', 'value': -0.01762057073883681, 'se': 0, 'n': 10}
+{'name': 'param_wold_c7_H0p2', 'value': -0.014414693695977419, 'se': 0, 'n': 10}
+{'name': 'param_wold_c8_H0p2', 'value': -0.012119319677143723, 'se': 0, 'n': 10}
+{'name': 'param_wold_c9_H0p2', 'value': -0.010402879629836267, 'se': 0, 'n': 10}
+{'name': 'param_wold_c10_H0p2', 'value': -0.009075908071416994, 'se': 0, 'n': 10}
+{'name': 'param_wold_c1_H0p3', 'value': -0.2926339211631163, 'se': 0, 'n': 10}
+{'name': 'param_wold_c2_H0p3', 'value': -0.07113414572902388, 'se': 0, 'n': 10}
+{'name': 'param_wold_c3_H0p3', 'value': -0.04186521298972057, 'se': 0, 'n': 10}
+{'name': 'param_wold_c4_H0p3', 'value': -0.02923512554503323, 'se': 0, 'n': 10}
+{'name': 'param_wold_c5_H0p3', 'value': -0.022233528885255288, 'se': 0, 'n': 10}
+{'name': 'param_wold_c6_H0p3', 'value': -0.017810309866797387, 'se': 0, 'n': 10}
+{'name': 'param_wold_c7_H0p3', 'value': -0.014777415107077727, 'se': 0, 'n': 10}
+{'name': 'param_wold_c8_H0p3', 'value': -0.01257675129488351, 'se': 0, 'n': 10}
+{'name': 'param_wold_c9_H0p3', 'value': -0.010912146935286283, 'se': 0, 'n': 10}
+{'name': 'param_wold_c10_H0p3', 'value': -0.00961219171692354, 'se': 0, 'n': 10}
+{'name': 'param_wold_c1_H0p4', 'value': -0.14185937944071825, 'se': 0, 'n': 10}
+{'name': 'param_wold_c2_H0p4', 'value': -0.044153214090153395, 'se': 0, 'n': 10}
+{'name': 'param_wold_c3_H0p4', 'value': -0.02728988819852263, 'se': 0, 'n': 10}
+{'name': 'param_wold_c4_H0p4', 'value': -0.019656858889334453, 'se': 0, 'n': 10}
+{'name': 'param_wold_c5_H0p4', 'value': -0.015296962502092342, 'se': 0, 'n': 10}
+{'name': 'param_wold_c6_H0p4', 'value': -0.012481131743103618, 'se': 0, 'n': 10}
+{'name': 'param_wold_c7_H0p4', 'value': -0.010516068301030315, 'se': 0, 'n': 10}
+{'name': 'param_wold_c8_H0p4', 'value': -0.009069088369534115, 'se': 0, 'n': 10}
+{'name': 'param_wold_c9_H0p4', 'value': -0.00796063223259778, 'se': 0, 'n': 10}
+{'name': 'param_wold_c10_H0p4', 'value': -0.007085306474196498, 'se': 0, 'n': 10}
+{'name': 'sim_hat_theta_fBm_H0p1_n500_RAR', 'value': -0.6325746558661037, 'se': np.float64(0.006351203617599955), 'n': 100}
+{'name': 'sim_hat_theta_sd_fBm_H0p1_n500_RAR', 'value': 0.06351203617599956, 'se': None, 'n': 100}
+{'name': 'sim_Himp_fBm_H0p1_n500_RAR', 'value': 0.11220098889569029, 'se': 0.003000183493733171, 'n': 100}
+{'name': 'sim_hat_theta_fBm_H0p2_n500_RAR', 'value': -0.44155520611441396, 'se': np.float64(0.0055479677207597765), 'n': 100}
+{'name': 'sim_hat_theta_fBm_H0p1_n4000_RAR', 'value': -0.6680337622899437, 'se': np.float64(0.002326930287865979), 'n': 100}
+{'name': 'sim_hat_theta_fOUk2_H0p1_n500_RAR', 'value': -0.6226440375803938, 'se': np.float64(0.007563613297352063), 'n': 100}
+{'name': 'sim_hat_theta_fOUk5_H0p1_n500_RAR', 'value': -0.5937130927878368, 'se': np.float64(0.008507137923128594), 'n': 100}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)

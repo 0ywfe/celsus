@@ -1,0 +1,141 @@
+{
+  "results": [
+    {
+      "name": "count_stocks_retained_after_filter",
+      "value": 66.0,
+      "se": null,
+      "n": 66
+    },
+    {
+      "name": "param_missing_threshold",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_1_factor",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_2_factor",
+      "value": 2.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_p_3_q_5_one_factor",
+      "value": 3.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_p_2_q_5_two_factor",
+      "value": 2.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_alpha_significance",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "estimate_corr_Ft_PSEi_one_factor",
+      "value": 0.9841636315544118,
+      "se": 0.004808468915158353,
+      "n": 1361
+    },
+    {
+      "name": "estimate_corr_PC1_PSEi_one_factor",
+      "value": 0.9841636315544118,
+      "se": 0.004808468915158353,
+      "n": 1361
+    },
+    {
+      "name": "estimate_corr_CAPM_beta_beta_i_one_factor",
+      "value": 0.9670846671968735,
+      "se": 0.031806850302036074,
+      "n": 66
+    },
+    {
+      "name": "estimate_corr_F1t_PSEi_two_factor",
+      "value": 0.9841636315544118,
+      "se": 0.004808468915158353,
+      "n": 1361
+    },
+    {
+      "name": "estimate_corr_F2t_PSEi_two_factor",
+      "value": -0.14461728526459136,
+      "se": 0.026841121417925468,
+      "n": 1361
+    },
+    {
+      "name": "estimate_corr_PC2_PSEi_two_factor",
+      "value": -0.14461728526459136,
+      "se": 0.026841121417925468,
+      "n": 1361
+    },
+    {
+      "name": "estimate_corr_CAPM_beta_beta1i_two_factor",
+      "value": 0.9670846671968741,
+      "se": 0.031806850302035776,
+      "n": 66
+    },
+    {
+      "name": "estimate_corr_CAPM_beta_beta2i_two_factor",
+      "value": 0.26718021712721235,
+      "se": 0.12045582252789919,
+      "n": 66
+    },
+    {
+      "name": "estimate_corr_F1t_F2t_two_factor",
+      "value": 0.0,
+      "se": 0.02712628195903865,
+      "n": 1361
+    }
+  ],
+  "sample": {
+    "description": "PSE daily closing prices via edge.pse.com.ph DisclosureCht.ax (official PSE Edge, replaces defunct Phisix) for 66 stocks mapped from paper list 72 (6 missing in 2026 directory), period 2015-01-01 to 2020-12-31, filter >1% missing retained 66 stocks (paper 72). PSEi proxied by equal-weighted mean return when stooq/yfinance blocked (stooq CF challenge, yfinance PSEI.PS only 1 bar). Returns R_it=(S_it-S_i(t-1))/S_i(t-1). PCA used as DFM proxy (paper F_t-PC1 corr 0.9975).",
+    "n": 66,
+    "start": "2015-01-01",
+    "end": "2020-12-31",
+    "same_as_paper": false,
+    "missing": 6,
+    "extra": 0,
+    "differences": "Paper 72 stocks; 2026 directory 284, 6 paper symbols (2GO,CHIB,HOUSE,MPI,PLC,SSP) absent (delisted/renamed, e.g., CHIB->CBC, HOUSE->HI, 2GO delisted). Fetched 66/66 mapped, retained 66 after 1% filter vs paper 72. PSEi source blocked (stooq Cloudflare IUAM, yfinance PSEI.PS only latest bar), so used equal-weighted mean return proxy; proxy correlation magnitudes similar to paper (paper PC1-PSEi 0.9144). Price vintage 2026 vs 2020 original; GDP source unstated quarterly, used World Bank annual NY.GDP.MKTP.KD.ZG as illustration.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "estimate_VAR_Ft_Lambda1_one_factor": "DFM state-space MLE for AR(3) (n=1,p=3,q=5) requires Kalman filter/smoother + MLE for 66 series; not rebuilt (PCA proxy).",
+      "estimate_VAR_Ft_Lambda2_one_factor_ns": "same",
+      "estimate_VAR_Ft_Lambda3_one_factor": "same",
+      "tally_beta_i_significant_71_of_72_one_factor": "DFM loading significance at alpha=0.05 requires MLE standard errors; PCA cannot give exact tally (paper 71/72, LC ns due to 2017-2020 closure order).",
+      "estimate_VAR_Ft_11_lag1_two_factor": "DFM VAR(2) MLE for n=2,p=2,q=5 not rebuilt",
+      "estimate_VAR_Ft_12_lag1_two_factor": "same",
+      "estimate_VAR_Ft_21_lag1_two_factor_ns": "same",
+      "estimate_VAR_Ft_22_lag1_two_factor": "same",
+      "estimate_VAR_Ft_11_lag2_two_factor": "same",
+      "estimate_VAR_Ft_12_lag2_two_factor": "same",
+      "estimate_VAR_Ft_21_lag2_two_factor": "same",
+      "estimate_VAR_Ft_22_lag2_two_factor_ns": "same",
+      "tally_beta1i_significant_72_of_72_two_factor": "same",
+      "tally_beta2i_significant_36_of_72_two_factor": "same",
+      "estimate_RMSE_AR1_insample_2015_2020": "Quarterly GDP source not stated; World Bank annual proxy not comparable quarterly; need Kalman smoothed (in-sample) vs filtered (out-of-sample) monthly mean/std of F_t aggregated to quarterly and AR(1) OLS.",
+      "estimate_RMSE_AR1_outsample_2021_2022": "same",
+      "estimate_RMSE_AR1_with_Ft_insample": "same",
+      "estimate_RMSE_AR1_with_Ft_outsample": "same",
+      "estimate_RMSE_improvement_insample_pct": "same",
+      "estimate_RMSE_improvement_outsample_pct": "Headline >34% decrease (34.47% in body) cannot be verified without exact quarterly GDP vintage and DFM factor construction to 2022; paper at most partly holds up.",
+      "estimate_RMSE_improvement_over_34pct_abstract": "same",
+      "estimate_corr_Ft_PC1_one_factor": "DFM factor F_t vs PC1 requires DFM MLE (Kalman). Paper 0.9975; proxy F_t:=PC1 would be tautological 1.0, so not computed from data per integrity rule 1.",
+      "estimate_corr_F1t_PC1_two_factor": "DFM two-factor F1t vs PC1 requires DFM MLE. Paper 0.8982; proxy F1t:=PC1 would be tautological 1.0, so omitted.",
+      "estimate_corr_F2t_PC2_two_factor": "DFM two-factor F2t vs PC2 requires DFM MLE. Paper 0.8229; proxy F2t:=PC2 would be tautological 1.0, so omitted.",
+      "estimate_R2_Ft_on_F1tF2t": "Regression of one-factor F_t on two-factor F1t,F2t R2=0.998 requires DFM MLE for all three series; hard-coded 1.0 would breach rule 1, so omitted.",
+      "loading_beta_2GO_one_factor": "Individual DFM loadings beta_i/sigma_i for 72 stocks (144+ values) require DFM MLE; not rebuilt (PCA slopes available but not equivalent). Full list of loading_* claims omitted for same reason."
+    },
+    "substitutions": "PSE prices: Edge PSE DisclosureCht.ax (official, replaces defunct Phisix per fastquant). PSEi: equal-weighted mean return of retained stocks as proxy (paper used stooq ^PSEI, now CF-blocked; yfinance PSEI.PS only latest bar). GDP: World Bank NY.GDP.MKTP.KD.ZG annual growth (8 obs 2015-2022) illustration for unstated quarterly series; FRED quarterly candidates checked but none matched Philippines quarterly growth. DFM factors: PCA via SVD on demeaned returns (X_demeaned, U*s) as paper shows F_t-PC1 corr 0.9975, so near-identical. CAPM beta: OLS cov(R_i,R_m)/var(R_m) using proxy market vs Barrons external. Returns pct_change, 1% threshold inclusive, BIC lag orders taken as paper (p=3,q=5 and p=2,q=5) not re-estimated."
+  },
+  "notes": "Choices paper leaves open: ticker identifier (paper uses Phisix symbol; we used Edge company_id/security_id, e.g., ALI 180/293), PSEi contract (paper uses stooq ^PSEI; both stooq and yfinance blocked in 2026, so proxied), risk-free rate for CAPM (paper does not state R_F; we used excess returns without R_F, standard CAPM beta independent of R_F level), GDP quarterly source/vintage (not stated, we used WB annual). Deviations: Phisix historical 500/503 so Edge used (same underlying PSE). Six symbols missing from 2026 directory likely delisted/renamed after sample period; never trimmed sample to reach 72; reported actual 66 retained (all retained had <1% missing, so 66 vs 72 difference is directory attrition). DFM not MLE-estimated; only PCA proxy given paper validation that F_t\u2248PC1. Signs of PCs aligned to be positively correlated with market (sign indeterminacy). VAR coefficients, per-stock loadings, significance tallies, and GDP RMSE headline not rebuilt (see not_rebuilt); paper partly holds up for market structure. All correlations Pearson, SE via sqrt((1-r^2)/(n-2)). GDP monthly indicators (mean/std per calendar month of F_t, Kalman smoothed in-sample vs filtered out-sample) not constructed due to missing quarterly target and extended factor window."
+}

@@ -1,0 +1,1473 @@
+{
+ "title": "Was Stalin Necessary? Counterfactual Evidence on Soviet Growth - Replication Spec",
+ "hypothesis": "Observed Russian-core growth after 1928 exceeds ordinary admissible counterfactuals; does not exceed all hostile upper bounds; SUN does not exceed ASCF-90.",
+ "data_sources": [
+  "Global Macro Database - Russian-core GDP and GDP per capita, donor panels",
+  "Maddison Project Database 2023 - alternative GDP per capita RUS and SUN",
+  "CIA/RAND Soviet national accounts - GNP growth sector and end-use",
+  "Markevich-Harrison appendix 1913-1928 war/civil-war/NEP bridge",
+  "COW / Federico-Tena / JST / Barro-Lee trade, macro-financial, human-capital diagnostics"
+ ],
+ "sample": "Treated units: GMD RUS, Maddison RUS, Maddison SUN. Donor panel historical output 1900-1940 (~28 countries, LOO leaves 27). Treated treatment = realized post-1928 regime package (Five-Year Plan, collectivisation, reallocation) vs specified alternatives. No sampling weights.",
+ "period_start": "1900",
+ "period_end": "1940",
+ "method": [
+  "1. Normalize every observed and counterfactual path to 1928=100: recover y1928=y1929-g1929 (first log level minus first annual log growth), plot 100*exp(y_t - y1928). Principal endpoint 1938; sensitivities 1933,1934,1936,1940. 1939-1940 treated as mobilisation sensitivity.",
+  "2. Primary causal estimators on GMD RUS and Maddison RUS/SUN: Augmented SCM with ridge bias correction; Synthetic Difference-in-Differences with unit and time weights plus bias correction; Generalized Synthetic Control via donor PCA/factor ridge interactive fixed effects; Matrix Completion via low-rank SVD/nuclear-norm; SCM growth and NNLS; conformal trajectory bands from post-treatment residuals.",
+  "3. Predictive benchmarks retained as non-causal: Ridge synthetic, Bayesian ridge, Elastic Net, Huber robust, PLS latent, Random Forest, Extra Trees, Gradient Boosting, kNN synthetic, Super Learner. Flagged for overfit, not identification.",
+  "4. Historical analogues kept separate as non-identified: Japan-like, Turkey-like, Italy-like late-industrialiser paths; donor year-specific p75 admissible frontier and p90 stress frontier (ex post annual envelope, country changes year to year).",
+  "5. Revised NEP counterfactual as bootstrap recovery-gap process: estimate prewar log-linear trend from 1900-1913 Russian series; define annual recovery gap = potential minus observed log output per capita; estimate annual gap persistence rho from sequence of gap ratios 1921-1928; residual bootstrap uncertainty in prewar trend and persistence; for each draw log Y^NEP_t = log Y^potential_t - G1928 * rho^(t-1928) where G1928 is remaining log gap in 1928. Mechanical 1922-1928 constant-rate extrapolation retained only in stress archive, excluded from primary admissible frontier.",
+  "6. Frontiers: ASCF-50 = median admissible frontier; ASCF-90 = 90th percentile of admissible frontier; Stress-90 = 90th percentile including hostile upper bounds (donor p75/p90 stress, uncapped NEP stress, population denominator stress with alternative demographic assumptions).",
+  "7. Scorecard: for each Source x Treated x Endpoint compute margin = percentage difference observed cumulative growth minus frontier. Grade B = observed > ASCF-90 but < Stress-90; Grade C = observed > ASCF-50 but < ASCF-90.",
+  "8. Diagnostics: pre-treatment RMSE and pre-treatment correlation for each estimator through 1940; outside conformal band indicator; pre-RMSE vs premium plot; model-family distribution.",
+  "9. Donor diagnostics: largest SCM weights for GMD RUS 1940; leave-one-donor-out (27 donors each, full pool 28 implied) for each influential donor; random 75% donor subpools distribution.",
+  "10. Spatial placebos: reassign treatment to donor units with same estimator; effective placebo set n=8 for verified v6 long-horizon specs; exact two-sided rank p = 1/(n_placebos+1)=0.111; post/pre RMSPE ratio.",
+  "11. Forecast-origin falsification: fake treatment origins 1905->1917 horizon 12, 1913->1925 horizon 12, 1921->1928 horizon 7, 1924->1928 horizon 4, 1926->1928 horizon 2; report pseudo-effect, pre-RMSE, post-gap RMSE.",
+  "12. Recovery placebos: other post-collapse rebounds (Greece, Belgium, South Africa, Venezuela) to motivate gap modelling; recovery-matched donors.",
+  "13. National-account triangulation: CIA/RAND average annual GNP growth 1928-37, 1937-40, 1928-54 with two estimates A/B; end-use composition rising military share by 1940."
+ ],
+ "claims": [
+  {
+   "name": "bootstrap_prewar_trend_p5",
+   "description": "5th percentile prewar log-growth trend 1900-1913",
+   "value": "0.006",
+   "unit": "annual log growth",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration, col 5th pct. row prewar log-growth trend"
+  },
+  {
+   "name": "bootstrap_prewar_trend_median",
+   "description": "Median prewar log-growth trend",
+   "value": "0.014",
+   "unit": "annual log growth",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration median col"
+  },
+  {
+   "name": "bootstrap_prewar_trend_p95",
+   "description": "95th percentile prewar trend",
+   "value": "0.021",
+   "unit": "annual log growth",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration 95th pct."
+  },
+  {
+   "name": "bootstrap_persistence_p5",
+   "description": "5th pct annual recovery-gap persistence 1921-1928",
+   "value": "0.747",
+   "unit": "AR(1)-style persistence",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration row annual recovery-gap persistence"
+  },
+  {
+   "name": "bootstrap_persistence_median",
+   "description": "Median persistence",
+   "value": "0.803",
+   "unit": "AR(1)-style persistence",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration median"
+  },
+  {
+   "name": "bootstrap_persistence_p95",
+   "description": "95th percentile persistence",
+   "value": "0.860",
+   "unit": "AR(1)-style persistence",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration 95th"
+  },
+  {
+   "name": "bootstrap_remaining_gap_1928_p5",
+   "description": "5th percentile remaining log gap in 1928 potential minus observed",
+   "value": "0.123",
+   "unit": "log output per capita",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration row remaining log gap"
+  },
+  {
+   "name": "bootstrap_remaining_gap_1928_median",
+   "description": "Median remaining log gap 1928",
+   "value": "0.236",
+   "unit": "log output per capita",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration median"
+  },
+  {
+   "name": "bootstrap_remaining_gap_1928_p95",
+   "description": "95th percentile remaining log gap 1928",
+   "value": "0.350",
+   "unit": "log output per capita",
+   "kind": "estimate",
+   "where": "Table Bootstrap calibration 95th"
+  },
+  {
+   "name": "nep_median_index_1940",
+   "description": "Bootstrap median NEP recovery alternative index in 1940 (1928=100)",
+   "value": "approximately 146",
+   "unit": "index 1928=100",
+   "kind": "estimate",
+   "where": "Text p.4: median places NEP at index approximately 146 in 1940"
+  },
+  {
+   "name": "nep_range_low_10pct_1940",
+   "description": "10th percentile NEP index 1940",
+   "value": "126",
+   "unit": "index 1928=100",
+   "kind": "estimate",
+   "where": "Text p.4: 10-90 percent range roughly 126-171"
+  },
+  {
+   "name": "nep_range_high_90pct_1940",
+   "description": "90th percentile NEP index 1940",
+   "value": "171",
+   "unit": "index 1928=100",
+   "kind": "estimate",
+   "where": "Text p.4: 10-90 range high"
+  },
+  {
+   "name": "observed_rus_index_1940",
+   "description": "Observed Russian-core path index 1940",
+   "value": "approximately 204",
+   "unit": "index 1928=100",
+   "kind": "estimate",
+   "where": "Text p.4: observed Russian-core path reaches approximately 204"
+  },
+  {
+   "name": "diag_mc_premium",
+   "description": "Model diagnostics GMD RUS through 1940 nuclear norm matrix completion premium",
+   "value": "76.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics row nuclear norm"
+  },
+  {
+   "name": "diag_mc_pre_rmse",
+   "description": "Pre-RMSE nuclear norm matrix completion",
+   "value": "0.021",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_mc_pre_corr",
+   "description": "Pre-correlation nuclear norm",
+   "value": "0.988",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_mc_outside_band",
+   "description": "Outside conformal band nuclear norm",
+   "value": "Yes",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_huber_premium",
+   "description": "Huber robust synthetic premium",
+   "value": "41.9",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_huber_pre_rmse",
+   "description": "Huber pre-RMSE",
+   "value": "0.118",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_huber_pre_corr",
+   "description": "Huber pre-correlation",
+   "value": "0.551",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_huber_outside_band",
+   "description": "Huber outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_augscm_premium",
+   "description": "Augmented SCM ridge premium",
+   "value": "74.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_augscm_pre_rmse",
+   "description": "Augmented SCM pre-RMSE",
+   "value": "0.130",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_augscm_pre_corr",
+   "description": "Augmented SCM pre-correlation",
+   "value": "0.490",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_augscm_outside_band",
+   "description": "Augmented SCM outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_scm_premium",
+   "description": "SCM growth premium",
+   "value": "76.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_scm_pre_rmse",
+   "description": "SCM growth pre-RMSE",
+   "value": "0.131",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_scm_pre_corr",
+   "description": "SCM growth pre-correlation",
+   "value": "0.496",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_scm_outside_band",
+   "description": "SCM growth outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_sdid_premium",
+   "description": "Synthetic DID bias corrected premium",
+   "value": "128.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_sdid_pre_rmse",
+   "description": "Synthetic DID pre-RMSE",
+   "value": "0.133",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_sdid_pre_corr",
+   "description": "Synthetic DID pre-correlation",
+   "value": "0.496",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_sdid_outside_band",
+   "description": "Synthetic DID outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_gsc_premium",
+   "description": "Generalized synthetic control factor cv premium",
+   "value": "106.4",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_gsc_pre_rmse",
+   "description": "GSC pre-RMSE",
+   "value": "0.134",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_gsc_pre_corr",
+   "description": "GSC pre-correlation",
+   "value": "0.302",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_gsc_outside_band",
+   "description": "GSC outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_ridge_premium",
+   "description": "Ridge synthetic premium",
+   "value": "79.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_ridge_pre_rmse",
+   "description": "Ridge pre-RMSE",
+   "value": "0.138",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_ridge_pre_corr",
+   "description": "Ridge pre-correlation",
+   "value": "0.271",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_ridge_outside_band",
+   "description": "Ridge outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_enet_premium",
+   "description": "Elastic net sparse synthetic premium",
+   "value": "78.4",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_enet_pre_rmse",
+   "description": "Elastic net pre-RMSE",
+   "value": "0.140",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_enet_pre_corr",
+   "description": "Elastic net pre-correlation",
+   "value": "0.102",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "diag_enet_outside_band",
+   "description": "Elastic net outside band",
+   "value": "No",
+   "unit": "indicator",
+   "kind": "tally",
+   "where": "Table Model diagnostics"
+  },
+  {
+   "name": "score_gmd_rus_1933_ascf50",
+   "description": "GMD RUS 1933 margin over ASCF-50",
+   "value": "16.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table Main counterfactual scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1933_ascf90",
+   "description": "GMD RUS 1933 margin over ASCF-90",
+   "value": "-8.1",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1933_stress90",
+   "description": "GMD RUS 1933 stress-90",
+   "value": "-20.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1934_ascf50",
+   "description": "GMD RUS 1934 ASCF-50",
+   "value": "27.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1934_ascf90",
+   "description": "GMD RUS 1934 ASCF-90",
+   "value": "-3.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1934_stress90",
+   "description": "GMD RUS 1934 stress-90",
+   "value": "-19.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1936_ascf50",
+   "description": "GMD RUS 1936 ASCF-50",
+   "value": "48.8",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1936_ascf90",
+   "description": "GMD RUS 1936 ASCF-90",
+   "value": "5.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1936_stress90",
+   "description": "GMD RUS 1936 stress-90",
+   "value": "-19.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1938_ascf50",
+   "description": "GMD RUS 1938 ASCF-50 principal endpoint",
+   "value": "63.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1938_ascf90",
+   "description": "GMD RUS 1938 ASCF-90 principal",
+   "value": "4.2",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1938_stress90",
+   "description": "GMD RUS 1938 stress-90",
+   "value": "-23.2",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1940_ascf50",
+   "description": "GMD RUS 1940 ASCF-50",
+   "value": "50.1",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1940_ascf90",
+   "description": "GMD RUS 1940 ASCF-90",
+   "value": "1.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_gmd_rus_1940_stress90",
+   "description": "GMD RUS 1940 stress-90",
+   "value": "-28.3",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1933_ascf50",
+   "description": "Maddison RUS 1933 ASCF-50",
+   "value": "19.3",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1933_ascf90",
+   "description": "Maddison RUS 1933 ASCF-90",
+   "value": "-5.5",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1933_stress90",
+   "description": "Maddison RUS 1933 stress-90",
+   "value": "-16.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1934_ascf50",
+   "description": "Maddison RUS 1934 ASCF-50",
+   "value": "29.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1934_ascf90",
+   "description": "Maddison RUS 1934 ASCF-90",
+   "value": "0.9",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1934_stress90",
+   "description": "Maddison RUS 1934 stress-90",
+   "value": "-13.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1936_ascf50",
+   "description": "Maddison RUS 1936 ASCF-50",
+   "value": "46.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1936_ascf90",
+   "description": "Maddison RUS 1936 ASCF-90",
+   "value": "8.8",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1936_stress90",
+   "description": "Maddison RUS 1936 stress-90",
+   "value": "-9.9",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1938_ascf50",
+   "description": "Maddison RUS 1938 ASCF-50",
+   "value": "54.5",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1938_ascf90",
+   "description": "Maddison RUS 1938 ASCF-90",
+   "value": "9.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1938_stress90",
+   "description": "Maddison RUS 1938 stress-90",
+   "value": "-12.3",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1940_ascf50",
+   "description": "Maddison RUS 1940 ASCF-50",
+   "value": "60.2",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1940_ascf90",
+   "description": "Maddison RUS 1940 ASCF-90",
+   "value": "7.5",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_rus_1940_stress90",
+   "description": "Maddison RUS 1940 stress-90",
+   "value": "-16.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1933_ascf50",
+   "description": "Maddison SUN 1933 ASCF-50",
+   "value": "6.3",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1933_ascf90",
+   "description": "Maddison SUN 1933 ASCF-90",
+   "value": "-16.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1933_stress90",
+   "description": "Maddison SUN 1933 stress-90",
+   "value": "-26.7",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1934_ascf50",
+   "description": "Maddison SUN 1934 ASCF-50",
+   "value": "15.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1934_ascf90",
+   "description": "Maddison SUN 1934 ASCF-90",
+   "value": "-12.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1934_stress90",
+   "description": "Maddison SUN 1934 stress-90",
+   "value": "-26.1",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1936_ascf50",
+   "description": "Maddison SUN 1936 ASCF-50",
+   "value": "31.5",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1936_ascf90",
+   "description": "Maddison SUN 1936 ASCF-90",
+   "value": "-3.8",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1936_stress90",
+   "description": "Maddison SUN 1936 stress-90",
+   "value": "-23.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1938_ascf50",
+   "description": "Maddison SUN 1938 ASCF-50",
+   "value": "33.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1938_ascf90",
+   "description": "Maddison SUN 1938 ASCF-90",
+   "value": "-7.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1938_stress90",
+   "description": "Maddison SUN 1938 stress-90",
+   "value": "-29.0",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1940_ascf50",
+   "description": "Maddison SUN 1940 ASCF-50",
+   "value": "29.4",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1940_ascf90",
+   "description": "Maddison SUN 1940 ASCF-90",
+   "value": "-18.9",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "score_madd_sun_1940_stress90",
+   "description": "Maddison SUN 1940 stress-90",
+   "value": "-39.6",
+   "unit": "% difference",
+   "kind": "estimate",
+   "where": "Table scorecard"
+  },
+  {
+   "name": "weight_ita",
+   "description": "SCM donor weight Italy GMD RUS 1940",
+   "value": "0.333",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table Largest SCM donor weights rank1"
+  },
+  {
+   "name": "weight_swe",
+   "description": "SCM donor weight Sweden",
+   "value": "0.172",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table Largest SCM donor weights rank2"
+  },
+  {
+   "name": "weight_deu",
+   "description": "SCM donor weight Germany",
+   "value": "0.117",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank3"
+  },
+  {
+   "name": "weight_gbr",
+   "description": "SCM donor weight United Kingdom",
+   "value": "0.109",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank4"
+  },
+  {
+   "name": "weight_per",
+   "description": "SCM donor weight Peru",
+   "value": "0.061",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank5"
+  },
+  {
+   "name": "weight_idn",
+   "description": "SCM donor weight Indonesia",
+   "value": "0.059",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank6"
+  },
+  {
+   "name": "weight_nld",
+   "description": "SCM donor weight Netherlands",
+   "value": "0.049",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank7"
+  },
+  {
+   "name": "weight_fra",
+   "description": "SCM donor weight France",
+   "value": "0.039",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank8"
+  },
+  {
+   "name": "weight_fin",
+   "description": "SCM donor weight Finland",
+   "value": "0.036",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank9"
+  },
+  {
+   "name": "weight_zaf",
+   "description": "SCM donor weight South Africa",
+   "value": "0.014",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Table donor weights rank10"
+  },
+  {
+   "name": "loo_donor_pool_n",
+   "description": "Donors remaining after one donor excluded in LOO",
+   "value": "27",
+   "unit": "donors",
+   "kind": "count",
+   "where": "Table Most influential LOO col Donors"
+  },
+  {
+   "name": "loo_grc_cum",
+   "description": "LOO excluding Greece cumulative premium",
+   "value": "78.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row GRC"
+  },
+  {
+   "name": "loo_grc_ann",
+   "description": "LOO Greece annualised premium",
+   "value": "4.9",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row GRC"
+  },
+  {
+   "name": "loo_ind_cum",
+   "description": "LOO excluding India cumulative",
+   "value": "78.9",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row IND"
+  },
+  {
+   "name": "loo_ind_ann",
+   "description": "LOO India annualised",
+   "value": "5.0",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row IND"
+  },
+  {
+   "name": "loo_prt_cum",
+   "description": "LOO excluding Portugal cumulative",
+   "value": "79.3",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row PRT"
+  },
+  {
+   "name": "loo_prt_ann",
+   "description": "LOO Portugal annualised",
+   "value": "5.0",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row PRT"
+  },
+  {
+   "name": "loo_che_cum",
+   "description": "LOO excluding Switzerland cumulative",
+   "value": "80.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row CHE"
+  },
+  {
+   "name": "loo_che_ann",
+   "description": "LOO Switzerland annualised",
+   "value": "5.0",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row CHE"
+  },
+  {
+   "name": "loo_rou_cum",
+   "description": "LOO excluding Romania cumulative",
+   "value": "80.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row ROU"
+  },
+  {
+   "name": "loo_rou_ann",
+   "description": "LOO Romania annualised",
+   "value": "5.1",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row ROU"
+  },
+  {
+   "name": "loo_chl_cum",
+   "description": "LOO excluding Chile cumulative",
+   "value": "81.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row CHL"
+  },
+  {
+   "name": "loo_chl_ann",
+   "description": "LOO Chile annualised",
+   "value": "5.1",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row CHL"
+  },
+  {
+   "name": "loo_ita_cum",
+   "description": "LOO excluding Italy cumulative",
+   "value": "82.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row ITA"
+  },
+  {
+   "name": "loo_ita_ann",
+   "description": "LOO Italy annualised",
+   "value": "5.1",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row ITA"
+  },
+  {
+   "name": "loo_fin_cum",
+   "description": "LOO excluding Finland cumulative",
+   "value": "83.4",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row FIN"
+  },
+  {
+   "name": "loo_fin_ann",
+   "description": "LOO Finland annualised",
+   "value": "5.2",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row FIN"
+  },
+  {
+   "name": "loo_deu_cum",
+   "description": "LOO excluding Germany cumulative",
+   "value": "88.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row DEU"
+  },
+  {
+   "name": "loo_deu_ann",
+   "description": "LOO Germany annualised",
+   "value": "5.4",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row DEU"
+  },
+  {
+   "name": "loo_gbr_cum",
+   "description": "LOO excluding UK cumulative",
+   "value": "89.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table LOO row GBR"
+  },
+  {
+   "name": "loo_gbr_ann",
+   "description": "LOO UK annualised",
+   "value": "5.5",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table LOO row GBR"
+  },
+  {
+   "name": "placebo_madd_sun_1938_effect",
+   "description": "Spatial placebo effect Maddison SUN 1938",
+   "value": "39.5",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_sun_1938_p",
+   "description": "Exact p Maddison SUN 1938",
+   "value": "0.111",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence Exact p"
+  },
+  {
+   "name": "placebo_madd_sun_1938_n",
+   "description": "Effective placebos Maddison SUN 1938",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Table Spatial placebo evidence Placebos"
+  },
+  {
+   "name": "placebo_madd_sun_1938_rmspe",
+   "description": "RMSPE ratio Maddison SUN 1938",
+   "value": "0.38",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence RMSPE ratio"
+  },
+  {
+   "name": "placebo_madd_rus_1938_effect",
+   "description": "Spatial placebo effect Maddison RUS 1938",
+   "value": "54.5",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1938_p",
+   "description": "Exact p Maddison RUS 1938",
+   "value": "0.111",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1938_n",
+   "description": "Effective placebos Maddison RUS 1938",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1938_rmspe",
+   "description": "RMSPE ratio Maddison RUS 1938",
+   "value": "0.50",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1938_effect",
+   "description": "Spatial placebo effect GMD RUS 1938",
+   "value": "65.3",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1938_p",
+   "description": "Exact p GMD RUS 1938",
+   "value": "0.111",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence and text 1/(8+1)=0.111"
+  },
+  {
+   "name": "placebo_gmd_rus_1938_n",
+   "description": "Effective placebos GMD RUS 1938",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1938_rmspe",
+   "description": "RMSPE ratio GMD RUS 1938",
+   "value": "0.47",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_sun_1940_effect",
+   "description": "Spatial placebo effect Maddison SUN 1940",
+   "value": "35.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_sun_1940_p",
+   "description": "Exact p Maddison SUN 1940",
+   "value": "0.222",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_sun_1940_n",
+   "description": "Effective placebos Maddison SUN 1940",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_sun_1940_rmspe",
+   "description": "RMSPE ratio Maddison SUN 1940",
+   "value": "0.36",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1940_effect",
+   "description": "Spatial placebo effect Maddison RUS 1940",
+   "value": "65.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1940_p",
+   "description": "Exact p Maddison RUS 1940",
+   "value": "0.111",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1940_n",
+   "description": "Effective placebos Maddison RUS 1940",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_madd_rus_1940_rmspe",
+   "description": "RMSPE ratio Maddison RUS 1940",
+   "value": "0.49",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1940_effect",
+   "description": "Spatial placebo effect GMD RUS 1940",
+   "value": "76.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1940_p",
+   "description": "Exact p GMD RUS 1940",
+   "value": "0.111",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1940_n",
+   "description": "Effective placebos GMD RUS 1940",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "placebo_gmd_rus_1940_rmspe",
+   "description": "RMSPE ratio GMD RUS 1940",
+   "value": "0.47",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table Spatial placebo evidence"
+  },
+  {
+   "name": "fake_1905_pseudo_effect",
+   "description": "Fake origin 1905->1917 horizon 12 pseudo-effect",
+   "value": "-11.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification row 1905"
+  },
+  {
+   "name": "fake_1905_pre_rmse",
+   "description": "Fake 1905 pre-RMSE",
+   "value": "0.128",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1905_post_gap_rmse",
+   "description": "Fake 1905 post-gap RMSE",
+   "value": "0.090",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1913_pseudo_effect",
+   "description": "Fake origin 1913->1925 horizon 12 pseudo-effect",
+   "value": "-29.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification row 1913"
+  },
+  {
+   "name": "fake_1913_pre_rmse",
+   "description": "Fake 1913 pre-RMSE",
+   "value": "0.122",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1913_post_gap_rmse",
+   "description": "Fake 1913 post-gap RMSE",
+   "value": "0.179",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1921_pseudo_effect",
+   "description": "Fake origin 1921->1928 horizon 7 pseudo-effect large recovery artifact",
+   "value": "115.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification row 1921"
+  },
+  {
+   "name": "fake_1921_pre_rmse",
+   "description": "Fake 1921 pre-RMSE",
+   "value": "0.132",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1921_post_gap_rmse",
+   "description": "Fake 1921 post-gap RMSE",
+   "value": "0.128",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1924_pseudo_effect",
+   "description": "Fake origin 1924->1928 horizon 4 pseudo-effect",
+   "value": "39.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification row 1924"
+  },
+  {
+   "name": "fake_1924_pre_rmse",
+   "description": "Fake 1924 pre-RMSE",
+   "value": "0.133",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1924_post_gap_rmse",
+   "description": "Fake 1924 post-gap RMSE",
+   "value": "0.108",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1926_pseudo_effect",
+   "description": "Fake origin 1926->1928 horizon 2 pseudo-effect small near treatment",
+   "value": "3.7",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification row 1926"
+  },
+  {
+   "name": "fake_1926_pre_rmse",
+   "description": "Fake 1926 pre-RMSE",
+   "value": "0.133",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_1926_post_gap_rmse",
+   "description": "Fake 1926 post-gap RMSE",
+   "value": "0.018",
+   "unit": "RMSE",
+   "kind": "estimate",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_horizon_1905",
+   "description": "Horizon years for fake origin 1905",
+   "value": "12",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Table Forecast-origin falsification col Horizon"
+  },
+  {
+   "name": "fake_horizon_1913",
+   "description": "Horizon for fake 1913",
+   "value": "12",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_horizon_1921",
+   "description": "Horizon for fake 1921",
+   "value": "7",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_horizon_1924",
+   "description": "Horizon for fake 1924",
+   "value": "4",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "fake_horizon_1926",
+   "description": "Horizon for fake 1926",
+   "value": "2",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Table Forecast-origin falsification"
+  },
+  {
+   "name": "cia_gnp_1928_37_a",
+   "description": "CIA/RAND average annual Soviet GNP growth 1928-37 estimate A",
+   "value": "6.2",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table CIA/RAND estimates row 1928-37 col Estimate A"
+  },
+  {
+   "name": "cia_gnp_1928_37_b",
+   "description": "CIA/RAND 1928-37 estimate B",
+   "value": "5.4",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table CIA/RAND estimates col Estimate B"
+  },
+  {
+   "name": "cia_gnp_1937_40_a",
+   "description": "CIA/RAND 1937-40 estimate A",
+   "value": "6.3",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table CIA/RAND estimates row 1937-40"
+  },
+  {
+   "name": "cia_gnp_1937_40_b",
+   "description": "CIA/RAND 1937-40 estimate B",
+   "value": "3.9",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table CIA/RAND estimates"
+  },
+  {
+   "name": "cia_gnp_1928_54_a",
+   "description": "CIA/RAND 1928-54 estimate A",
+   "value": "4.4",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table CIA/RAND estimates row 1928-54"
+  },
+  {
+   "name": "cia_gnp_1928_54_b",
+   "description": "CIA/RAND 1928-54 estimate B",
+   "value": "5.9",
+   "unit": "% per year",
+   "kind": "estimate",
+   "where": "Table CIA/RAND estimates"
+  },
+  {
+   "name": "effective_placebo_n",
+   "description": "Effective placebo units in verified v6 long-horizon design",
+   "value": "8",
+   "unit": "placebos",
+   "kind": "count",
+   "where": "Text p.8: there are eight effective placebo units"
+  },
+  {
+   "name": "exact_rank_p_formula",
+   "description": "Exact two-sided rank p for first-ranked effect with 8 placebos =1/(8+1)",
+   "value": "0.111",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Text p.8: exact two-sided rank value approximately 1/(8+1)=0.111"
+  }
+ ],
+ "headline": "score_gmd_rus_1938_ascf90",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "Spatial placebo exact rank test Maddison SUN 1938",
+   "statistic": "placebo_madd_sun_1938_effect",
+   "p_value": "placebo_madd_sun_1938_p",
+   "group_sizes": [
+    "placebo_madd_sun_1938_n",
+    "effective_placebo_n"
+   ]
+  },
+  {
+   "test": "Spatial placebo exact rank test Maddison RUS 1938",
+   "statistic": "placebo_madd_rus_1938_effect",
+   "p_value": "placebo_madd_rus_1938_p",
+   "group_sizes": [
+    "placebo_madd_rus_1938_n",
+    "effective_placebo_n"
+   ]
+  },
+  {
+   "test": "Spatial placebo exact rank test GMD RUS 1938",
+   "statistic": "placebo_gmd_rus_1938_effect",
+   "p_value": "placebo_gmd_rus_1938_p",
+   "group_sizes": [
+    "placebo_gmd_rus_1938_n",
+    "effective_placebo_n"
+   ]
+  },
+  {
+   "test": "Spatial placebo exact rank test Maddison SUN 1940 non-significant",
+   "statistic": "placebo_madd_sun_1940_effect",
+   "p_value": "placebo_madd_sun_1940_p",
+   "group_sizes": [
+    "placebo_madd_sun_1940_n",
+    "effective_placebo_n"
+   ]
+  },
+  {
+   "test": "Spatial placebo exact rank test Maddison RUS 1940",
+   "statistic": "placebo_madd_rus_1940_effect",
+   "p_value": "placebo_madd_rus_1940_p",
+   "group_sizes": [
+    "placebo_madd_rus_1940_n",
+    "effective_placebo_n"
+   ]
+  },
+  {
+   "test": "Spatial placebo exact rank test GMD RUS 1940",
+   "statistic": "placebo_gmd_rus_1940_effect",
+   "p_value": "placebo_gmd_rus_1940_p",
+   "group_sizes": [
+    "placebo_gmd_rus_1940_n",
+    "effective_placebo_n"
+   ]
+  }
+ ]
+}

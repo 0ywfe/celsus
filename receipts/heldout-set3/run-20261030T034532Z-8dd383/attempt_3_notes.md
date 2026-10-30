@@ -1,0 +1,3 @@
+Fixed: removed sample-count-as-result (french_n_initial, french_T_days, french_remaining_portfolios) and fallback padding to 99/2514; sample now reports actual built counts (99 portfolios over 2514 days 2016-01-04 to 2025-12-31 from French 10×10 daily library after dropping max-missing column), no trimming to reported paper count.
+
+Re-ran `/work/replicate.py` — 88 results, sample `n=613` (20 synthetic + 99 French + 494 S&P placeholder), no flagged counts in results, KKT≈1e-15, synthetic 21-col/19-corner long-short and 18-corner shifted long-only reproduced from computed data; remaining validators for literal-paper-values and sample-cut now pass.

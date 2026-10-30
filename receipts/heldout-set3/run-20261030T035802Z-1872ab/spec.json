@@ -1,0 +1,1821 @@
+{
+ "title": "The Behavior of Inventories over the Business Cycle: Evidence across Levels of Development",
+ "hypothesis": "Inventories are strongly procyclical in advanced economies but become acyclical at lower income levels, while volatility and persistence rise as development declines; productivity shocks generate temporary accumulation and financial shocks generate decumulation-rebound in higher-income groups but delayed unreversed decline in low-income economies.",
+ "data_sources": [
+  "World Bank World Development Indicators national accounts 1993-2022 for changes in inventories, GDP, investment, government consumption, imports, exports, population; implicit GDP deflator for deflation; Federal funds futures FF4 monetary surprises; Ludvigson et al macro-financial uncertainty index; U.S. BAA corporate bond yield and U.S. Treasury yield spread"
+ ],
+ "sample": "Balanced panel of small open economies with complete records for changes in inventories, GDP, investment, government consumption, imports, exports and population over 1993-2022. Excludes countries with GDP >2% of world GDP (Germany, United States, France, Italy, Japan, United Kingdom) and countries with recurrent institutional instability or constituted after 1993 (Mauritania, Slovakia, Togo, North Macedonia). Changes in inventories defined per SNA 1993/2008 as net variation in goods held including additions, withdrawals and recurrent losses, component of gross capital formation. Final panel 72 countries classified by IMF (advanced vs emerging) and World Bank income mode 1993-2022: 24 advanced high-income, 14 high and upper-middle-income emerging, 24 lower-middle-income emerging, 10 low-income emerging.",
+ "period_start": "1993",
+ "period_end": "2022",
+ "method": [
+  "Step 1 - Deflate changes in inventories: Delta INV = Delta INV_curr / implicit GDP price index, normalize as Delta inv_t / Y_trend,t-1 where Y_trend is GDP at constant prices trend from log-quadratic filter. Use one-period lag of trend to reduce endogeneity per Uribe 2017 variant.",
+  "Step 2 - Extract cyclical component: Estimate country-specific quadratic filter in levels: Delta inv_t / Y_trend,t-1 = beta0,i + beta1,i*t + beta2,i*t^2 + epsilon_i,t. Residual epsilon_i,t = Delta inv_t^c. Expenditure and trade aggregates expressed in per capita logs, first-differenced to obtain cyclical growth rates.",
+  "Step 3 - Compute stylized facts by country-group medians: Pearson correlations between Delta inv_t^c and Delta y,c,i,g,x,m; standard deviations absolute volatility and ratios sigma(Delta inv^c)/sigma(Delta y etc); first-order autocorrelation Corr(Delta inv_t^c; Delta inv_{t-1}^c).",
+  "Step 4 - Identify long-run productivity shock via KPSW long-run restriction: Vector X_i,t = [y^g,c,i]' in per capita logs where y^g = GDP excluding government consumption. Cointegration rank 2 with beta' = [-1 1 0; -1 0 1] so cointegrating vectors c-y^g and i-y^g stationary. Panel VECM with country fixed effects mu_i, pooled adjustment alpha and short-run Gamma: Delta X_i,t = mu_i + alpha beta' X_{i,t-1} + sum_{j=1}^p Gamma_j Delta X_{i,t-j} + u_i,t, p=1 baseline. C(1) = beta_perp [ alpha_perp' (I - sum Gamma_j) beta_perp ]^{-1} alpha_perp'. Shock shock^PS_i,t = e_y' C(1) u_i,t with e_y'=[1 0 0], sign normalized to positive long-run effect on output. Test persistence via AR(1) with country FE and country-clustered SE: shock_t on shock_{t-1}.",
+  "Step 5 - Identify financial shock via LP-IV: BAA_t = yield Baa corporate - Treasury risk-free. Instrument with Federal Reserve monetary surprises SM_t = sum_{j in t} FF4_j (high-frequency 3-month fed funds futures around FOMC) aggregated annual sum, and global macro-financial uncertainty UNC_t = annual arithmetic mean of monthly Ludvigson et al index. First stage BAA_t = gamma0 + gamma1 SM_t + gamma2 UNC_t + nu_t on annual global series 1993-2022 (30 years). Financial shock = instrumented component hat(BAA)_t. Evaluate instrument relevance via first-stage F and Montiel Olea-Pflueger effective F by group/horizon clustering by year after partialling country FE, overidentification Hansen J, endogeneity Durbin-Wu-Hausman, persistence AR(1) as above.",
+  "Step 6 - Local projections Jorda for horizons h=0..5: Delta inv^c_{i,t+h} = alpha_i + lambda_t + beta^PS_h shock^PS_i,t + Gamma^PS_h Z_{i,t-1} + epsilon^PS_{i,t+h} for productivity (includes country and year FE); Delta inv^c_{i,t+h} = alpha_i + beta^F_h hat(BAA)_t + Gamma^F_h Z_{i,t-1} + epsilon^F_{i,t+h} for financial (country FE only due to global shock; robustness with year-clustered, two-way clustered and crisis dummies 1998,2009,2020). Controls Z_{i,t-1} = two lags output growth and two lags cyclical inventory changes (robustness one lag). Estimation by OLS with country-clustered SE; productivity also robust estimator per Hamilton 1991/Rousseeuw 1987 to reduce outlier influence. Estimate separately by country group.",
+  "Step 7 - Compute LP-based variance share VS^j_{g,h} = 100 * beta^{j2}_{g,h} Var_w(tilde s^j_{i,t}) / Var_w(tilde Delta inv^c_{i,t+h}) where tilde denotes residualized with respect to baseline controls and FEs, Var_w weighted variance using robust weights for productivity and LP-IV sample for financial. Not VAR FEVD, not required to sum to 100%.",
+  "Parameters set by authors: H=5, p=1 in VECM, 2 lags controls in LP baseline, world GDP >2% threshold for large economies, median absolute Delta INV/GDP <1% benchmark, 30 annual global observations for BAA first stage, Tbar=28 after differencing/lagging."
+ ],
+ "claims": [
+  {
+   "name": "N_total_balanced_panel",
+   "description": "Balanced panel small open economies 1993-2022",
+   "value": "72",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Abstract, Sec 2, Table A"
+  },
+  {
+   "name": "N_advanced",
+   "description": "Advanced high-income economies IMF+WB mode",
+   "value": "24",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1"
+  },
+  {
+   "name": "N_high_em",
+   "description": "High and upper-middle-income emerging",
+   "value": "14",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1"
+  },
+  {
+   "name": "N_middle_em",
+   "description": "Lower-middle-income emerging",
+   "value": "24",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1"
+  },
+  {
+   "name": "N_low_em",
+   "description": "Low-income emerging",
+   "value": "10",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1"
+  },
+  {
+   "name": "N_large_excluded",
+   "description": "Large economies excluded >2% world GDP",
+   "value": "6",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 2"
+  },
+  {
+   "name": "N_extreme_excluded",
+   "description": "Extreme/institutional instability excluded",
+   "value": "4",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 2"
+  },
+  {
+   "name": "T_panel_years",
+   "description": "Years covered 1993-2022 global series",
+   "value": "30",
+   "unit": "years",
+   "kind": "count",
+   "where": "Sec 3.2 first-stage F"
+  },
+  {
+   "name": "Tbar_panel_estimation",
+   "description": "Average time observations per country after differencing/lagging",
+   "value": "28",
+   "unit": "years",
+   "kind": "count",
+   "where": "App D Table F3 notes"
+  },
+  {
+   "name": "obs_advanced_ps",
+   "description": "Country-year observations advanced for productivity VECM",
+   "value": "672",
+   "unit": "obs",
+   "kind": "count",
+   "where": "App D Table F2"
+  },
+  {
+   "name": "obs_high_em_ps",
+   "description": "Country-year observations high-income EM",
+   "value": "392",
+   "unit": "obs",
+   "kind": "count",
+   "where": "App D Table F2"
+  },
+  {
+   "name": "obs_middle_em_ps",
+   "description": "Country-year observations middle-income EM",
+   "value": "672",
+   "unit": "obs",
+   "kind": "count",
+   "where": "App D Table F2"
+  },
+  {
+   "name": "obs_low_em_ps",
+   "description": "Country-year observations low-income EM",
+   "value": "280",
+   "unit": "obs",
+   "kind": "count",
+   "where": "App D Table F2"
+  },
+  {
+   "name": "median_vol_advanced",
+   "description": "Median volatility changes in inventories advanced",
+   "value": "0.70%",
+   "unit": "% of lagged GDP trend",
+   "kind": "estimate",
+   "where": "Sec 2 Fig1 text"
+  },
+  {
+   "name": "median_vol_high_em",
+   "description": "Median volatility high-income EM",
+   "value": "1.13%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "median_vol_middle_em",
+   "description": "Median volatility middle-income EM",
+   "value": "1.22%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "median_vol_low_em",
+   "description": "Median volatility low-income EM",
+   "value": "1.09%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "vol_ratio_em_vs_advanced",
+   "description": "Average emerging inventory volatility relative to advanced",
+   "value": "1.7",
+   "unit": "times",
+   "kind": "estimate",
+   "where": "Sec 2 and Conclusions"
+  },
+  {
+   "name": "vol_Singapore",
+   "description": "Inventory-cycle volatility Singapore advanced outlier",
+   "value": "2.28%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "vol_Botswana",
+   "description": "Inventory-cycle volatility Botswana high-income EM outlier",
+   "value": "3.55%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "vol_middle_em_min",
+   "description": "Country-level volatility range middle-income min",
+   "value": "0.25%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "vol_middle_em_max",
+   "description": "Country-level volatility range middle-income max",
+   "value": "3.54%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 2"
+  },
+  {
+   "name": "corr_total_y",
+   "description": "Corr(Delta inv^c; Delta y) total sample",
+   "value": "0.33",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_advanced_y",
+   "description": "Corr(Delta inv^c; Delta y) advanced",
+   "value": "0.48",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_high_y",
+   "description": "Corr high-income EM",
+   "value": "0.39",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_middle_y",
+   "description": "Corr middle-income EM",
+   "value": "0.23",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_low_y",
+   "description": "Corr low-income EM",
+   "value": "-0.02",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_total_c",
+   "description": "Corr with private consumption total",
+   "value": "0.21",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_advanced_c",
+   "description": "Corr with consumption advanced",
+   "value": "0.37",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_high_c",
+   "description": "Corr with consumption high-income EM",
+   "value": "0.38",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_middle_c",
+   "description": "Corr with consumption middle-income",
+   "value": "0.17",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_low_c",
+   "description": "Corr with consumption low-income",
+   "value": "-0.06",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_total_i",
+   "description": "Corr with investment total",
+   "value": "0.24",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_advanced_i",
+   "description": "Corr with investment advanced",
+   "value": "0.32",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_high_i",
+   "description": "Corr with investment high-income EM",
+   "value": "0.28",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_middle_i",
+   "description": "Corr with investment middle-income",
+   "value": "0.19",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_low_i",
+   "description": "Corr with investment low-income",
+   "value": "-0.05",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_total_g",
+   "description": "Corr with government consumption total",
+   "value": "0.08",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_advanced_g",
+   "description": "Corr with g advanced",
+   "value": "0.09",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_high_g",
+   "description": "Corr with g high-income EM",
+   "value": "0.05",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_middle_g",
+   "description": "Corr with g middle-income",
+   "value": "-0.04",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_low_g",
+   "description": "Corr with g low-income",
+   "value": "0.10",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_total_x",
+   "description": "Corr with exports total",
+   "value": "0.16",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_advanced_x",
+   "description": "Corr with exports advanced",
+   "value": "0.33",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_high_x",
+   "description": "Corr with exports high-income EM",
+   "value": "0.23",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_middle_x",
+   "description": "Corr with exports middle-income",
+   "value": "0.05",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_low_x",
+   "description": "Corr with exports low-income",
+   "value": "-0.02",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_total_m",
+   "description": "Corr with imports total",
+   "value": "0.33",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_advanced_m",
+   "description": "Corr with imports advanced",
+   "value": "0.45",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_high_m",
+   "description": "Corr with imports high-income EM",
+   "value": "0.44",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_middle_m",
+   "description": "Corr with imports middle-income",
+   "value": "0.25",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "corr_low_m",
+   "description": "Corr with imports low-income",
+   "value": "0.12",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_total_y",
+   "description": "sigma(Delta inv)/sigma(Delta y) total",
+   "value": "0.30",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_advanced_y",
+   "description": "relative vol vs output advanced",
+   "value": "0.26",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_high_y",
+   "description": "relative vol vs output high-income EM",
+   "value": "0.31",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_middle_y",
+   "description": "relative vol vs output middle-income",
+   "value": "0.37",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_low_y",
+   "description": "relative vol vs output low-income",
+   "value": "0.54",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_total_c",
+   "description": "sigma ratio vs consumption total",
+   "value": "0.32",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_advanced_c",
+   "description": "vs consumption advanced",
+   "value": "0.33",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_high_c",
+   "description": "vs consumption high-income EM",
+   "value": "0.33",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_middle_c",
+   "description": "vs consumption middle-income",
+   "value": "0.32",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_low_c",
+   "description": "vs consumption low-income",
+   "value": "0.29",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_total_i",
+   "description": "vs investment total",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_advanced_i",
+   "description": "vs investment advanced",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_high_i",
+   "description": "vs investment high-income",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_middle_i",
+   "description": "vs investment middle-income",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_low_i",
+   "description": "vs investment low-income",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_total_g",
+   "description": "vs government consumption total",
+   "value": "0.30",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_advanced_g",
+   "description": "vs g advanced",
+   "value": "0.37",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_high_g",
+   "description": "vs g high-income",
+   "value": "0.39",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_middle_g",
+   "description": "vs g middle-income",
+   "value": "0.27",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_low_g",
+   "description": "vs g low-income",
+   "value": "0.13",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_total_x",
+   "description": "vs exports total",
+   "value": "0.14",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_advanced_x",
+   "description": "vs exports advanced",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_high_x",
+   "description": "vs exports high-income",
+   "value": "0.15",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_middle_x",
+   "description": "vs exports middle-income",
+   "value": "0.15",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_low_x",
+   "description": "vs exports low-income",
+   "value": "0.10",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_total_m",
+   "description": "vs imports total",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_advanced_m",
+   "description": "vs imports advanced",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_high_m",
+   "description": "vs imports high-income",
+   "value": "0.09",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_middle_m",
+   "description": "vs imports middle-income",
+   "value": "0.13",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "relvol_low_m",
+   "description": "vs imports low-income",
+   "value": "0.10",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "autocorr_total",
+   "description": "Serial corr Delta inv^c total",
+   "value": "0.18",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "autocorr_advanced",
+   "description": "Serial corr advanced",
+   "value": "0.13",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "autocorr_high",
+   "description": "Serial corr high-income EM",
+   "value": "0.17",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "autocorr_middle",
+   "description": "Serial corr middle-income",
+   "value": "0.24",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "autocorr_low",
+   "description": "Serial corr low-income",
+   "value": "0.24",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "IPS_y_stat",
+   "description": "IPS unit root y^g levels",
+   "value": "-0.39",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_y_p",
+   "description": "IPS p-value y levels",
+   "value": "0.35",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_c_stat",
+   "description": "IPS c levels",
+   "value": "3.49",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_c_p",
+   "description": "IPS p c levels",
+   "value": "1.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_i_stat",
+   "description": "IPS i levels",
+   "value": "-1.27",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_i_p",
+   "description": "IPS p i levels",
+   "value": "0.10",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_dy_stat",
+   "description": "IPS Delta y^g",
+   "value": "-29.63",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_dy_p",
+   "description": "IPS p Delta y",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_dc_stat",
+   "description": "IPS Delta c",
+   "value": "-26.25",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_dc_p",
+   "description": "IPS p Delta c",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_di_stat",
+   "description": "IPS Delta i",
+   "value": "-27.97",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_di_p",
+   "description": "IPS p Delta i",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_dy_stat",
+   "description": "LLC Delta y",
+   "value": "-27.58",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_dy_p",
+   "description": "LLC p Delta y",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_dc_stat",
+   "description": "LLC Delta c",
+   "value": "-24.83",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_dc_p",
+   "description": "LLC p Delta c",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_di_stat",
+   "description": "LLC Delta i",
+   "value": "-27.81",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_di_p",
+   "description": "LLC p Delta i",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_cy_stat",
+   "description": "IPS c-y ratio AIC",
+   "value": "-1.42",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_cy_p",
+   "description": "IPS p c-y",
+   "value": "0.07",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_iy_stat",
+   "description": "IPS i-y ratio",
+   "value": "-4.23",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "IPS_iy_p",
+   "description": "IPS p i-y",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_cy_stat",
+   "description": "LLC c-y ratio",
+   "value": "-1.70",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_cy_p",
+   "description": "LLC p c-y",
+   "value": "0.05",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_iy_stat",
+   "description": "LLC i-y ratio",
+   "value": "-4.51",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "LLC_iy_p",
+   "description": "LLC p i-y",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "Pedroni_PP_stat",
+   "description": "Pedroni PP cointegration",
+   "value": "-5.29",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "Pedroni_PP_p",
+   "description": "Pedroni PP p",
+   "value": "0.00",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "Pedroni_ADF_stat",
+   "description": "Pedroni ADF",
+   "value": "-2.26",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "Pedroni_ADF_p",
+   "description": "Pedroni ADF p",
+   "value": "0.01",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "PS_persistence_rho",
+   "description": "AR1 persistence productivity shock rho",
+   "value": "-0.06",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Sec 3.1 text"
+  },
+  {
+   "name": "PS_persistence_p",
+   "description": "p-value persistence productivity shock",
+   "value": "0.94",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Sec 3.1"
+  },
+  {
+   "name": "FS_firstF_stat_global",
+   "description": "First-stage F BAA spread global annual",
+   "value": "10.69",
+   "unit": "F-stat",
+   "kind": "estimate",
+   "where": "Sec 3.2 text and Table 4"
+  },
+  {
+   "name": "FS_firstF_p",
+   "description": "p-value first-stage F text",
+   "value": "0.0004",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Sec 3.2"
+  },
+  {
+   "name": "FS_firstF_p_table",
+   "description": "p-value first-stage F table",
+   "value": "0.000",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 4"
+  },
+  {
+   "name": "FS_effectiveF_range_min",
+   "description": "Montiel Olea effective F minimum across groups/horizons",
+   "value": "8.83",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 4 and Sec 3.2"
+  },
+  {
+   "name": "FS_effectiveF_range_max",
+   "description": "Montiel Olea effective F maximum",
+   "value": "14.85",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 4"
+  },
+  {
+   "name": "FS_effectiveF_low_min",
+   "description": "Effective F low-income min",
+   "value": "8.83",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Sec 3.2 text"
+  },
+  {
+   "name": "FS_effectiveF_low_max",
+   "description": "Effective F low-income max",
+   "value": "13.03",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Sec 3.2"
+  },
+  {
+   "name": "HansenJ_p",
+   "description": "Hansen J overidentification p-value",
+   "value": "0.58",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 4"
+  },
+  {
+   "name": "Durbin_stat",
+   "description": "Durbin-Wu-Hausman statistic BAA exogeneity",
+   "value": "8.98",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "Table 4"
+  },
+  {
+   "name": "Durbin_p",
+   "description": "Durbin-Wu-Hausman p-value",
+   "value": "0.0038",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Sec 3.2 and Table 4"
+  },
+  {
+   "name": "FS_persistence_rho_text",
+   "description": "AR1 rho financial shock text",
+   "value": "0.22",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Sec 3.2 text rho=0.22"
+  },
+  {
+   "name": "FS_persistence_rho_table",
+   "description": "AR1 rho financial shock table",
+   "value": "0.2188",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4"
+  },
+  {
+   "name": "FS_persistence_p",
+   "description": "p-value financial shock persistence",
+   "value": "0.737",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Table 4"
+  },
+  {
+   "name": "VS_PS_advanced_h0",
+   "description": "LP variance share productivity advanced h0",
+   "value": "9.77",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_advanced_h1",
+   "description": "VS advanced h1",
+   "value": "5.34",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_advanced_h2",
+   "description": "VS advanced h2",
+   "value": "2.36",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_advanced_h3",
+   "description": "VS advanced h3",
+   "value": "1.40",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_advanced_h4",
+   "description": "VS advanced h4",
+   "value": "0.01",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_advanced_h5",
+   "description": "VS advanced h5",
+   "value": "0.12",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_high_h0",
+   "description": "VS high-income EM h0",
+   "value": "0.87",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_high_h1",
+   "description": "VS high h1",
+   "value": "2.28",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_high_h2",
+   "description": "VS high h2",
+   "value": "0.84",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_high_h3",
+   "description": "VS high h3",
+   "value": "0.96",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_high_h4",
+   "description": "VS high h4",
+   "value": "0.00",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_high_h5",
+   "description": "VS high h5",
+   "value": "0.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_mid_h0",
+   "description": "VS middle-income h0",
+   "value": "5.11",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_mid_h1",
+   "description": "VS mid h1",
+   "value": "0.08",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_mid_h2",
+   "description": "VS mid h2",
+   "value": "0.01",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_mid_h3",
+   "description": "VS mid h3",
+   "value": "0.14",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_mid_h4",
+   "description": "VS mid h4",
+   "value": "0.22",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_mid_h5",
+   "description": "VS mid h5",
+   "value": "0.43",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_low_h0",
+   "description": "VS low-income h0",
+   "value": "15.78",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_low_h1",
+   "description": "VS low h1",
+   "value": "3.73",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_low_h2",
+   "description": "VS low h2",
+   "value": "0.65",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_low_h3",
+   "description": "VS low h3",
+   "value": "2.29",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_low_h4",
+   "description": "VS low h4",
+   "value": "3.92",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_PS_low_h5",
+   "description": "VS low h5",
+   "value": "14.53",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "VS_FS_advanced_h0",
+   "description": "LP-IV variance share financial advanced h0",
+   "value": "0.06",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_advanced_h1",
+   "description": "VS financial advanced h1",
+   "value": "7.64",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_advanced_h2",
+   "description": "VS financial advanced h2",
+   "value": "0.31",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_advanced_h3",
+   "description": "VS financial advanced h3",
+   "value": "0.60",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_advanced_h4",
+   "description": "VS financial advanced h4",
+   "value": "0.06",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_advanced_h5",
+   "description": "VS financial advanced h5",
+   "value": "0.00",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_high_h0",
+   "description": "VS financial high-income h0",
+   "value": "0.38",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_high_h1",
+   "description": "VS financial high h1",
+   "value": "1.99",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_high_h2",
+   "description": "VS financial high h2",
+   "value": "0.80",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_high_h3",
+   "description": "VS financial high h3",
+   "value": "2.12",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_high_h4",
+   "description": "VS financial high h4",
+   "value": "0.18",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_high_h5",
+   "description": "VS financial high h5",
+   "value": "0.77",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_mid_h0",
+   "description": "VS financial middle-income h0",
+   "value": "0.03",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_mid_h1",
+   "description": "VS financial mid h1",
+   "value": "0.77",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_mid_h2",
+   "description": "VS financial mid h2",
+   "value": "0.20",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_mid_h3",
+   "description": "VS financial mid h3",
+   "value": "0.56",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_mid_h4",
+   "description": "VS financial mid h4",
+   "value": "0.04",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_mid_h5",
+   "description": "VS financial mid h5",
+   "value": "0.09",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_low_h0",
+   "description": "VS financial low-income h0",
+   "value": "0.25",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_low_h1",
+   "description": "VS financial low h1",
+   "value": "0.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_low_h2",
+   "description": "VS financial low h2",
+   "value": "0.04",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_low_h3",
+   "description": "VS financial low h3",
+   "value": "0.54",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_low_h4",
+   "description": "VS financial low h4",
+   "value": "0.89",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "VS_FS_low_h5",
+   "description": "VS financial low h5",
+   "value": "1.20",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "disc_median_advanced",
+   "description": "Median statistical discrepancy / Delta INV advanced",
+   "value": "0.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_lt10_advanced",
+   "description": "Ratio <10% advanced",
+   "value": "79.2",
+   "unit": "% of obs",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_zero_advanced",
+   "description": "Zero discrepancy advanced",
+   "value": "41.2",
+   "unit": "% of obs",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_median_high",
+   "description": "Median discrepancy high-income EM",
+   "value": "0.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_lt10_high",
+   "description": "Ratio <10% high-income",
+   "value": "57.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_zero_high",
+   "description": "Zero disc high-income",
+   "value": "27.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_median_mid",
+   "description": "Median discrepancy middle-income",
+   "value": "0.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_lt10_mid",
+   "description": "Ratio <10% middle-income",
+   "value": "75.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_zero_mid",
+   "description": "Zero disc middle-income",
+   "value": "45.7",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_median_low",
+   "description": "Median discrepancy low-income",
+   "value": "0.0001",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_lt10_low",
+   "description": "Ratio <10% low-income",
+   "value": "59.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "disc_zero_low",
+   "description": "Zero disc low-income",
+   "value": "24.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A Table A1"
+  },
+  {
+   "name": "corr_excluding_large_y",
+   "description": "Corr with output advanced excluding large economies",
+   "value": "0.48",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "App B Table B1"
+  },
+  {
+   "name": "corr_including_large_y",
+   "description": "Corr with output advanced including large",
+   "value": "0.52",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "App B Table B1"
+  },
+  {
+   "name": "serial_excluding_large",
+   "description": "Serial corr excluding large",
+   "value": "0.13",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "App B Table B1"
+  },
+  {
+   "name": "serial_including_large",
+   "description": "Serial corr including large",
+   "value": "0.15",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "App B Table B1"
+  },
+  {
+   "name": "MOP_advanced_h0",
+   "description": "MOP effective F advanced h0",
+   "value": "10.01",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_advanced_h1",
+   "description": "MOP effective F advanced h1",
+   "value": "9.75",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_advanced_h2",
+   "description": "MOP effective F advanced h2",
+   "value": "11.31",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_advanced_h3",
+   "description": "MOP effective F advanced h3",
+   "value": "10.14",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_advanced_h4",
+   "description": "MOP effective F advanced h4",
+   "value": "12.25",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_advanced_h5",
+   "description": "MOP effective F advanced h5",
+   "value": "14.85",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_low_h0",
+   "description": "MOP effective F low-income h0",
+   "value": "8.83",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "MOP_low_h5",
+   "description": "MOP effective F low-income h5",
+   "value": "13.03",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F1"
+  },
+  {
+   "name": "Pesaran_PS_advanced_h1",
+   "description": "Pesaran CD productivity LP residuals advanced h1",
+   "value": "-2.13",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F5"
+  },
+  {
+   "name": "Pesaran_FS_advanced_h0",
+   "description": "Pesaran CD financial LP-IV residuals advanced h0",
+   "value": "20.21",
+   "unit": "statistic",
+   "kind": "estimate",
+   "where": "App F Table F6"
+  },
+  {
+   "name": "param_H",
+   "description": "Projection horizon H",
+   "value": "5",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Sec 3.3"
+  },
+  {
+   "name": "param_p_lag",
+   "description": "VECM lag order p baseline",
+   "value": "1",
+   "unit": "lag",
+   "kind": "parameter",
+   "where": "Sec 3.1 and App D"
+  },
+  {
+   "name": "param_controls_lags",
+   "description": "LP controls: two lags output growth and two lags inventory cycle",
+   "value": "2",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Sec 3.3"
+  },
+  {
+   "name": "param_worldGDP_thresh",
+   "description": "Large economy definition share world GDP threshold",
+   "value": "2%",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Sec 2"
+  },
+  {
+   "name": "param_inv_GDP_ratio_median",
+   "description": "Median absolute Delta INV / GDP benchmark for mechanical link discussion",
+   "value": "1%",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Sec 3.1 footnote"
+  },
+  {
+   "name": "param_yearFE_productivity",
+   "description": "Year fixed effects included in productivity LP",
+   "value": "1",
+   "unit": "indicator",
+   "kind": "parameter",
+   "where": "Sec 3.3 eq productivity"
+  },
+  {
+   "name": "param_yearFE_financial",
+   "description": "Year fixed effects excluded in financial LP due to collinearity with global shock",
+   "value": "0",
+   "unit": "indicator",
+   "kind": "parameter",
+   "where": "Sec 3.3 and App F"
+  }
+ ],
+ "headline": "corr_advanced_y",
+ "partitions": [
+  {
+   "split": "IMF World Bank income classification 1993-2022 mode",
+   "total": "N_total_balanced_panel",
+   "parts": [
+    "N_advanced",
+    "N_high_em",
+    "N_middle_em",
+    "N_low_em"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Two-sided weak-instrument relevance of SM_t and UNC_t for BAA spread on annual global series 1993-2022",
+   "statistic": "FS_firstF_stat_global",
+   "p_value": "FS_firstF_p",
+   "group_sizes": [
+    "T_panel_years"
+   ]
+  },
+  {
+   "test": "Hansen J overidentification of monetary surprises and uncertainty as instruments for BAA spread",
+   "statistic": "not stated",
+   "p_value": "HansenJ_p",
+   "group_sizes": [
+    "T_panel_years"
+   ]
+  },
+  {
+   "test": "Durbin-Wu-Hausman endogeneity of BAA spread (IV vs OLS)",
+   "statistic": "Durbin_stat",
+   "p_value": "Durbin_p",
+   "group_sizes": [
+    "T_panel_years"
+   ]
+  },
+  {
+   "test": "AR(1) persistence of recovered long-run productivity shock with country FE and country-clustered SE, null rho=0",
+   "statistic": "PS_persistence_rho",
+   "p_value": "PS_persistence_p",
+   "group_sizes": [
+    "N_total_balanced_panel"
+   ]
+  },
+  {
+   "test": "AR(1) persistence of instrumented financial shock with country FE, null rho=0",
+   "statistic": "FS_persistence_rho_table",
+   "p_value": "FS_persistence_p",
+   "group_sizes": [
+    "N_total_balanced_panel"
+   ]
+  },
+  {
+   "test": "Unit root IPS y^g in levels, null unit root",
+   "statistic": "IPS_y_stat",
+   "p_value": "IPS_y_p",
+   "group_sizes": [
+    "N_total_balanced_panel"
+   ]
+  },
+  {
+   "test": "Pedroni PP panel cointegration y^g,c,i null no cointegration",
+   "statistic": "Pedroni_PP_stat",
+   "p_value": "Pedroni_PP_p",
+   "group_sizes": [
+    "N_total_balanced_panel"
+   ]
+  },
+  {
+   "test": "Montiel Olea-Pflueger effective F weak-IV diagnostic example advanced h0 LP-IV with year clustering",
+   "statistic": "MOP_advanced_h0",
+   "p_value": "not stated",
+   "group_sizes": [
+    "T_panel_years"
+   ]
+  },
+  {
+   "test": "Pesaran CD weak cross-sectional dependence in productivity LP residuals example advanced h1 with country+year FE",
+   "statistic": "Pesaran_PS_advanced_h1",
+   "p_value": "not stated",
+   "group_sizes": [
+    "N_advanced"
+   ]
+  },
+  {
+   "test": "Pesaran CD weak cross-sectional dependence in financial LP-IV residuals example advanced h0 with country FE",
+   "statistic": "Pesaran_FS_advanced_h0",
+   "p_value": "not stated",
+   "group_sizes": [
+    "N_advanced"
+   ]
+  }
+ ]
+}

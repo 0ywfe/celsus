@@ -1,0 +1,602 @@
+{
+ "title": "Mining Financial Data using Mixtures of Mirrored Weibull Distributions - Replication Spec",
+ "hypothesis": "MMW provides more accurate VaR estimates/forecasts than GMM and tMM for non-normal stock returns",
+ "data_sources": [
+  "S&P500 adjusted closing prices for BRK, WMT, CVS"
+ ],
+ "sample": "3 stocks: BRK monthly log price ratio returns, WMT monthly log price ratio returns, CVS* daily log price ratio returns; calculated on adjusted closing prices as log price ratio. No filters stated. Sample sizes (n) not printed.",
+ "period_start": "June 1996",
+ "period_end": "Jun 2024",
+ "method": [
+  "Step 1 - Returns: x = log price ratio of adjusted closing prices as defined in Section 3.1 (Table 1 notes daily* for CVS).",
+  "Step 2 - Mirror transform: y_j = c - x_j where c = ceil(|x_(n)|), x_(n)=largest observation; f_MW(x;mu,sigma) = sigma/mu * ((c-x)/mu)^(sigma-1) * exp(-((c-x)/mu)^sigma) for x <= c.",
+  "Step 3 - Model: f(x;Psi)=sum_{i=1}^g pi_i f_MW(x;mu_i,sigma_i), sum pi_i=1, m=3g-1 free parameters.",
+  "Step 4 - Estimation: ML via EM. Init: k-means (or hierarchical/random) on y, z_{ij}^{(0)} membership, pi_i^{(0)}=sum_j z_{ij}^{(0)}, mu_i^{(0)}= ybar_i / Gamma(1+1/sigma_i^{(0)}), sigma_i^{(0)} solves s_i^2/ybar_i^2 = [Gamma(1+2/sigma)-Gamma(1+1/sigma)^2]/Gamma(1+1/sigma)^2. E-step: z_{ij}^{(k)}= pi_i^{(k)} f_W(y_j;mu_i^{(k)},sigma_i^{(k)}) / sum_h pi_h^{(k)} f_W(y_j;...). M-step: pi_i^{(k)}=1/n sum_j z_{ij}^{(k)}; sigma_i^{(k)}=[sum_j z_{ij}^{(k)} y_j^{mu_i^{(k)}} / sum_j z_{ij}^{(k)}]^{1/mu_i^{(k)}}; mu_i^{(k)} solves [sum z y^{mu} log y / sum z y^{mu} - sum z log y / sum z]^{-1} (numeric; Cohen-Whitten approx allowed). Log-likelihood l^{(k)} as Eq logL.",
+  "Step 5 - Stopping: k>=k_max=500 or |l^{(k)}-l^{(k-1)}|<epsilon=1e-6.",
+  "Step 6 - Choose g: run g=1,2,3,4, select min BIC = m log n -2 log hat l; most frequent g=2.",
+  "Step 7 - VaR: Definition VaR_alpha = F_X^{-1}(1-alpha). Estimation by simulation from fitted MMW/GMM/tMM (cdf closed form available). Levels alpha=5% and alpha=1% (1% for WMT,CVS). Empirical VaR is historical quantile.",
+  "Step 8 - Forecast: One-day ahead rolling window 250 days (~1yr) for CVS, advance 1 day until last date.",
+  "Step 9 - Assessment: Kupiec POF/unconditional coverage/backtest LR_POF and Christoffersen independence LR_IND with p-values; pass/fail as printed; MSE and failure rate for CVS forecasts."
+ ],
+ "claims": [
+  {
+   "name": "brk_min",
+   "description": "BRK minimum monthly return Table1",
+   "value": "-15.39",
+   "unit": "% log return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "wmt_min",
+   "description": "WMT minimum monthly return Table1",
+   "value": "-23.24",
+   "unit": "% log return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "cvs_min",
+   "description": "CVS minimum daily* return Table1",
+   "value": "-10.34",
+   "unit": "% log return",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "brk_max",
+   "description": "BRK maximum",
+   "value": "23.42",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "wmt_max",
+   "description": "WMT maximum",
+   "value": "23.58",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "cvs_max",
+   "description": "CVS maximum",
+   "value": "18.44",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "brk_mean",
+   "description": "BRK mean",
+   "value": "0.89",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "wmt_mean",
+   "description": "WMT mean",
+   "value": "0.93",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "cvs_mean",
+   "description": "CVS mean",
+   "value": "0.00",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "brk_sd",
+   "description": "BRK std dev",
+   "value": "5.44",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "wmt_sd",
+   "description": "WMT std dev",
+   "value": "6.01",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "cvs_sd",
+   "description": "CVS std dev",
+   "value": "1.85",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "brk_skew",
+   "description": "BRK skewness",
+   "value": "-0.01",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "wmt_skew",
+   "description": "WMT skewness",
+   "value": "-0.16",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "cvs_skew",
+   "description": "CVS skewness",
+   "value": "1.32",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "brk_kurt",
+   "description": "BRK kurtosis",
+   "value": "4.22",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "wmt_kurt",
+   "description": "WMT kurtosis",
+   "value": "4.45",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "cvs_kurt",
+   "description": "CVS kurtosis",
+   "value": "17.36",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "brk_empirical_var_5pct",
+   "description": "BRK empirical VaR 5% text p8",
+   "value": "-13.46",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "p8 text"
+  },
+  {
+   "name": "brk_empirical_var_1pct",
+   "description": "BRK empirical VaR 1% text p8",
+   "value": "-8.66",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "p8 text"
+  },
+  {
+   "name": "brk_gmm_var_5pct",
+   "description": "BRK GMM VaR 5% Table2",
+   "value": "-11.74",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_var_5pct",
+   "description": "BRK tMM VaR 5% Table2",
+   "value": "-12.99",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_var_5pct",
+   "description": "BRK MMW VaR 5% Table2",
+   "value": "-13.43",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_kupiec_LR_5pct",
+   "description": "BRK GMM Kupiec LR 5%",
+   "value": "3.06",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_kupiec_p_5pct",
+   "description": "BRK GMM Kupiec p 5%",
+   "value": "0.08",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_ind_LR_5pct",
+   "description": "BRK GMM Ind LR 5%",
+   "value": "0.30",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_ind_p_5pct",
+   "description": "BRK GMM Ind p 5%",
+   "value": "0.58",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_kupiec_LR_5pct",
+   "description": "BRK tMM Kupiec LR 5%",
+   "value": "0.71",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_kupiec_p_5pct",
+   "description": "BRK tMM Kupiec p 5%",
+   "value": "0.40",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_ind_LR_5pct",
+   "description": "BRK tMM Ind LR 5%",
+   "value": "0.15",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_ind_p_5pct",
+   "description": "BRK tMM Ind p 5%",
+   "value": "0.70",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_kupiec_LR_5pct",
+   "description": "BRK MMW Kupiec LR 5%",
+   "value": "0.12",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_kupiec_p_5pct",
+   "description": "BRK MMW Kupiec p 5%",
+   "value": "0.73",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_ind_LR_5pct",
+   "description": "BRK MMW Ind LR 5%",
+   "value": "0.10",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_ind_p_5pct",
+   "description": "BRK MMW Ind p 5%",
+   "value": "0.76",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_var_1pct",
+   "description": "BRK GMM VaR 1%",
+   "value": "-8.08",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_var_1pct",
+   "description": "BRK tMM VaR 1%",
+   "value": "-7.81",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_var_1pct",
+   "description": "BRK MMW VaR 1%",
+   "value": "-8.66",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_kupiec_LR_1pct",
+   "description": "BRK GMM Kupiec LR 1%",
+   "value": "0.63",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_kupiec_p_1pct",
+   "description": "BRK GMM Kupiec p 1%",
+   "value": "0.43",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_ind_LR_1pct",
+   "description": "BRK GMM Ind LR 1%",
+   "value": "8.41",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_gmm_ind_p_1pct",
+   "description": "BRK GMM Ind p 1%",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_kupiec_LR_1pct",
+   "description": "BRK tMM Kupiec LR 1%",
+   "value": "0.63",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_kupiec_p_1pct",
+   "description": "BRK tMM Kupiec p 1%",
+   "value": "0.43",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_ind_LR_1pct",
+   "description": "BRK tMM Ind LR 1%",
+   "value": "8.41",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_tmm_ind_p_1pct",
+   "description": "BRK tMM Ind p 1%",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_kupiec_LR_1pct",
+   "description": "BRK MMW Kupiec LR 1%",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_kupiec_p_1pct",
+   "description": "BRK MMW Kupiec p 1%",
+   "value": "0.95",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_ind_LR_1pct",
+   "description": "BRK MMW Ind LR 1%",
+   "value": "3.81",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "brk_mmw_ind_p_1pct",
+   "description": "BRK MMW Ind p 1%",
+   "value": "0.05",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "wmt_empirical_var_1pct",
+   "description": "WMT empirical VaR 0.01",
+   "value": "-16.31",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "p9 text Table3"
+  },
+  {
+   "name": "wmt_gmm_var_1pct",
+   "description": "WMT GMM VaR 0.01",
+   "value": "-13.08",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_tmm_var_1pct",
+   "description": "WMT tMM VaR 0.01",
+   "value": "-14.32",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_mmw_var_1pct",
+   "description": "WMT MMW VaR 0.01",
+   "value": "-16.26",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_gmm_kupiec_LR_1pct",
+   "description": "WMT GMM Kupiec LR",
+   "value": "3.06",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_gmm_kupiec_p_1pct",
+   "description": "WMT GMM Kupiec p",
+   "value": "0.08",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_gmm_ind_LR_1pct",
+   "description": "WMT GMM Ind LR",
+   "value": "0.30",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_gmm_ind_p_1pct",
+   "description": "WMT GMM Ind p",
+   "value": "0.58",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_tmm_kupiec_LR_1pct",
+   "description": "WMT tMM Kupiec LR",
+   "value": "1.71",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_tmm_kupiec_p_1pct",
+   "description": "WMT tMM Kupiec p",
+   "value": "0.19",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_tmm_ind_LR_1pct",
+   "description": "WMT tMM Ind LR",
+   "value": "0.22",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_tmm_ind_p_1pct",
+   "description": "WMT tMM Ind p",
+   "value": "0.64",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_mmw_kupiec_LR_1pct",
+   "description": "WMT MMW Kupiec LR",
+   "value": "0.12",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_mmw_kupiec_p_1pct",
+   "description": "WMT MMW Kupiec p",
+   "value": "0.73",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_mmw_ind_LR_1pct",
+   "description": "WMT MMW Ind LR",
+   "value": "0.10",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "wmt_mmw_ind_p_1pct",
+   "description": "WMT MMW Ind p",
+   "value": "0.76",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "cvs_mmw_mse",
+   "description": "CVS MMW average MSE 1% VaR forecast",
+   "value": "0.18",
+   "unit": "",
+   "kind": "estimate",
+   "where": "p9 text"
+  },
+  {
+   "name": "cvs_gmm_mse",
+   "description": "CVS GMM MSE",
+   "value": "1.21",
+   "unit": "",
+   "kind": "estimate",
+   "where": "p9 text"
+  },
+  {
+   "name": "cvs_tmm_mse",
+   "description": "CVS tMM MSE",
+   "value": "0.60",
+   "unit": "",
+   "kind": "estimate",
+   "where": "p9 text"
+  },
+  {
+   "name": "cvs_mmw_failure_rate",
+   "description": "CVS MMW Kupiec failure rate",
+   "value": "0.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "p9 text"
+  },
+  {
+   "name": "cvs_gmm_failure_rate",
+   "description": "CVS GMM failure rate",
+   "value": "0.25",
+   "unit": "",
+   "kind": "estimate",
+   "where": "p9 text"
+  },
+  {
+   "name": "cvs_tmm_failure_rate",
+   "description": "CVS tMM failure rate",
+   "value": "0.03",
+   "unit": "",
+   "kind": "estimate",
+   "where": "p9 text"
+  }
+ ],
+ "headline": "cvs_mmw_mse",
+ "partitions": [],
+ "tests": []
+}

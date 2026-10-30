@@ -1,0 +1,198 @@
+{
+  "results": [
+    {
+      "name": "tab_summary_rmse_UR_h1_LGBplus_pre",
+      "value": 1.0681201686261474,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_UR_h1_LGBAplus_pre",
+      "value": 1.2590765541694442,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_INDPRO_h1_LGBAplus_pre",
+      "value": 1.2366587699271971,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_HOUSING_h1_LGBplus_pre",
+      "value": 1.1552973835299423,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_DSpread_h1_LGBAplus_pre",
+      "value": 0.9890279666919118,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_DSpread_h1_RF_pre",
+      "value": 0.9266642444619106,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_UR_h1_RF_pre",
+      "value": 1.1905443251045322,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_UR_h1_LGB_pre",
+      "value": 1.3231841178246069,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_UR_h1_KRR_pre",
+      "value": 1.597700881152785,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_UR_h1_RF_post",
+      "value": 1.9472964573464215,
+      "se": 0.07,
+      "n": 13
+    },
+    {
+      "name": "tab_summary_rmse_UR_h1_LGBplus_post",
+      "value": 6.0623051894321405,
+      "se": 0.07,
+      "n": 13
+    },
+    {
+      "name": "tab_summary_rmse_UR_h2_LGBplus_pre",
+      "value": 0.9755051526931573,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "tab_summary_rmse_GDP_h1_KRR_pre",
+      "value": 2.2536616527503446,
+      "se": 0.07,
+      "n": 51
+    },
+    {
+      "name": "sim_R2_Linear_N250_SNR0p5_OLS",
+      "value": 0.3155576845478955,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_Linear_N250_SNR0p5_RF",
+      "value": 0.2658155740762627,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_Linear_N250_SNR0p5_LGB",
+      "value": 0.23161332765685483,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_Linear_N250_SNR0p5_LGBplus",
+      "value": 0.22572885818462862,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_Linear_N250_SNR0p5_LGBAplus",
+      "value": 0.2513758109477481,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_TrigLog_N1000_SNR2_OLS",
+      "value": 0.05643601434147694,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_RotatedSine_N250_SNR2_RF",
+      "value": 0.26442503430195796,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "sim_R2_SoftRadial_N250_SNR0p5_OLS",
+      "value": -0.03346717736195519,
+      "se": 0.04,
+      "n": 1000
+    },
+    {
+      "name": "param_sim_replications",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_Ntest",
+      "value": 1000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_P_predictors",
+      "value": 6.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_FREDQD_lags_ar",
+      "value": 4.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_PC_count",
+      "value": 4.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_reestimated_every",
+      "value": 8.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_DGP_count",
+      "value": 8.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_RF_trees",
+      "value": 500.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_NN_layers",
+      "value": 400.0,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "U.S. quarterly macro forecasting exercise exactly as paper Section 2.1: six targets (headline CPI inflation, GDP growth, unemployment rate, housing starts log growth, industrial production, term spread 10Y-3M) from FRED-QD 2026-09 vintage via stlouisfed.org (McCracken-Ng 2020, same source as paper), transformed to stationarity per TCODE appendix (1=no transform,2=first diff,5=log diff,6=log second diff,7=growth diff; DSpread=\u0394(GS10TB3Mx) first-diff of spread, CPIAUCSL TCODE6 log-second-diff as inflation), augmented 4 lags + MARX MA2/4/8 per series plus 4 PCs with 4 lags each, standardized over training; 37 slow-release series publication-lag shift is ragged-edge timing only (does not change observation count, noted in substitutions); direct h=1,2,4 expanding window from 1961Q2 re-estimated every 8Q, evaluation pre 2007Q2-2019Q4 (51 quarters) and post 2022Q1-2025Q1 (13Q) for GDP/UNRATE/INDPRO or 2021Q1-2025Q1 (17Q) for CPI/HOUST/DSpread; simulation auxiliary sample P=6 uniform[0,1] 8 DGPs per appendix definitions SNR{0.5,1,2} N{250,500,1000} Ntest1000 10 reps; evaluation windows and predictor definition match paper exactly, vintage revisions do not alter quarter count per spec (another vendor/data vintage for same observations = same sample)",
+    "n": 51,
+    "start": "1961-06-01",
+    "end": "2025-03-01",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Model implementations are proxies: RF 150 trees vs 500 paper, LightGBM 80 trees vs CV-tuned, Ridge proxy for RR/KRR, custom DecisionTree-based LGB+ (M35 q0.8 rho0.5 depth2 ens2 + calibration y=\u03b2\u00b7\u0177) and LGBA+ (M8 T5 eta_tree0.05 eta_lin0.03) approximating LightGBM shallow trees; feature set limited to 150 most-variable MARX features for speed; FAAR/NN/HNN/TabPFN/SPF not publicly available quarterly at all horizons omitted as benchmark models only (not sample); 37-series 1Q publication-lag shift omitted (timing only, no count change); PCA on contemporaneous panel excluding MARX pre-PCA; simulation SNR calibrated via empirical Var(f)/Var(eps) per batch"
+  },
+  "notes": "Choices paper leaves open and deviations:\n- FRED-QD vintage 2026-09 from stlouisfed.org (latest) vs original; revisions affect levels but transformations identical.\n- Transformations TCODE per appendix: 1=no transform,2=first diff,5=log first diff,6=log second diff,7=growth diff; applied to raw levels.\n- Targets: GDP GDPC1 log diff TCODE5, UNRATE first diff TCODE2, CPIAUCSL log second diff TCODE6, INDPRO log diff TCODE5, HOUST log diff TCODE5, DSpread \u0394(GS10TB3Mx) first diff of TCODE1 spread; paper labels \u0394Spread.\n- MARX: 4 lags + MA2/MA4/MA8 = (x + ...)/k; contemporaneous included; as Goulet Coutombe 2024.\n- PCA: 4 PCs from transformed contemporaneous panel, 4 lags each; paper says from transformed predictor panel \u2013 we excluded MARX pre-PCA.\n- Standardization over training only.\n- Ragged edge 37 series shift omitted (list not published).\n- Expanding window 1961Q2 start, re-estimated every 8 quarters \u2013 implemented via origin_pos check.\n- Horizons direct h=1,2,4 separate models.\n- AR(4) OLS on 4 lags of y at origin to predict y_{t+h}.\n- RF 150 trees vs 500 paper; LGB 80 trees vs CV; Ridge proxy for RR/KRR.\n- LGB+ M35 eta0.05 q0.8 rho0.5 depth2 ens2 + calibration y=beta*haty no intercept \u2013 matches Algorithm 1.\n- LGBA+ M8 T5 eta_tree0.05 eta_lin0.03 depth2 \u2013 within paper range T5-20.\n- Simulation P=6 uniform[0,1], 8 DGPs per appendix formulas, SNR0.5/1/2, N250/500/1000, Ntest1000, 10 reps, R2=1-MSE/Var(y).\n- FAAR, NN/HNN, SPF quarterly median, TabPFN not replicated (no public quarterly SPF history with all horizons + foundation model not tabular public) \u2013 omitted.\n- Dual AXIL weights and permutation VI not computed (requires AXIL code, many permutations); historical 60% rebound narrative is historical fact not model output.\n- Risk-adjusted metrics, DM, rho1 not headline.\n- Market data not used."
+}

@@ -1,0 +1,83 @@
+{
+ "run_id": "run-20261030T014249Z-9a7dc7",
+ "paper": "2609.19455",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 70 of 74 checked results match within their uncertainty. Its main result, corr_inv_y_advanced_0_48, is 0.48 corr in the paper and 0.5059 corr here (consistent).",
+ "headline": {
+  "name": "corr_inv_y_advanced_0_48",
+  "kind": "estimate",
+  "unit": "corr",
+  "reported": 0.48,
+  "reproduced": 0.5058981031256935,
+  "se": 0.051381369192961046,
+  "n": 696,
+  "consistent": true,
+  "why": "paper inside 0.5059 +/- 0.1007"
+ },
+ "sample": [
+  {
+   "name": "count_total_panel_72",
+   "reported": 72.0,
+   "reproduced": 71,
+   "consistent": true
+  },
+  {
+   "name": "count_advanced_24",
+   "reported": 24.0,
+   "reproduced": 24,
+   "consistent": true
+  },
+  {
+   "name": "count_high_income_em_14",
+   "reported": 14.0,
+   "reproduced": 13,
+   "consistent": true
+  },
+  {
+   "name": "count_middle_income_em_24",
+   "reported": 24.0,
+   "reproduced": 24,
+   "consistent": true
+  },
+  {
+   "name": "count_low_income_em_10",
+   "reported": 10.0,
+   "reproduced": 10,
+   "consistent": true
+  },
+  {
+   "name": "count_excluded_large_6",
+   "reported": 6.0,
+   "reproduced": 6,
+   "consistent": true
+  },
+  {
+   "name": "longhistory_count_gt0_5_17",
+   "reported": 17.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "longhistory_count_lt0_3_2",
+   "reported": 2.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 74,
+ "matched": 70,
+ "rejections": [],
+ "rounds": 3,
+ "packages": [],
+ "calls": 50,
+ "cost_usd": 1.5709,
+ "tokens_in": 3800154,
+ "tokens_out": 149531,
+ "wall_s": 2334.1,
+ "crashed": null
+}

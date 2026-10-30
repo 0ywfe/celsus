@@ -1,0 +1,5 @@
+exit 0 in 44.5s
+--- stdout
+Wrote 71 results
+
+--- stderr

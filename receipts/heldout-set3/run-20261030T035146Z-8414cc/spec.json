@@ -1,0 +1,913 @@
+{
+ "title": "Sequentially valid inference for probabilistic inflation forecasts - Replication Spec",
+ "hypothesis": "Probabilistic inflation forecasts are probabilistically/rank calibrated uniformly distributed PIT/ranks; sequential e-value tests detect time-varying miscalibration missed by static full-sample KS tests.",
+ "data_sources": [
+  "FRED-MD",
+  "ECB Statistical Data Warehouse (EA-MD-QD)",
+  "SNB data portal"
+ ],
+ "sample": "Monthly year-over-year inflation pi_t = P_t/P_{t-12}-1. Harmonized predictor sets ~20 series per region (monetary/credit aggregates, interest rates, consumer/producer prices). Retained only monthly series free of missing obs over sample period. Transformations per McCracken FRED-MD/ECB/SNB to stationarity. Inflation not winsorized; all stationary predictors winsorized at 0.5th and 99.5th percentiles. US: CPIAUCSL. EA: HICP. CH: Swiss CPI.",
+ "period_start": "January 1960 (US), January 1983 (Switzerland), January 2001 (Euro Area)",
+ "period_end": "April 2025",
+ "method": [
+  "1. Construct pi_t per (1). Apply per-variable transformations as in Table us_data/ea_data/ch_data: Delta, Delta log, 100*Delta log, Delta^2 log as listed. Winsorize predictors at 0.5% and 99.5%.",
+  "2. Forecast design: initial training window = first 40% of each region sample. Expanding window: at each t re-estimate model parameters using all data to t; issue h-step predictive CDF F_hat_{t,h} for h in {1,3,6,12}. Re-tune hyperparameters (lags) when cumulative sample reaches 50%,60%,70%,80%,90% of region sample; otherwise keep hyperparameters fixed. Parameter: training=40%, retune_grid=50-90 step 10%, L=20 for PNC/Rolling mean.",
+  "3. Estimate models per Appendix models: PNC with L=20 empirical CDF; Gaussian no-change N(pi_t, sigma_h^2) with sigma_h^2 from mean squared h-step residuals expanding window; Rolling mean N(bar_pi_t, sigma_h^2) with bar_pi_t mean last L=20 and variance scaled by sqrt(1+1/L); ARIMA selection: ADF for d, BIC search p<=5 q<=5, adopted ARIMA(1,1,0) Delta pi_t = alpha0 + phi1 Delta pi_{t-1}+eps; BVAR(1) with p=1 chosen by BIC over 1..12, specifications diffuse/Minnesota/Normal-Wishart, iterated forecasts cumulating predicted changes with cumulative variance sum_{1..h} var; DFM state-space y_t=Lambda f_t+eps_t, f_t=VAR(p) with k by Onatski eigenvalue ratio, q by Bai 2007, p=1, EM ML, Kalman filter, cumulated level forecast N(pi_hat, sigma_h^2); DRF: predictors = current, first lag, first difference per macro variable plus pi_t..pi_{t-11}, forest weights w_x(i)=1/N sum_b 1{i in L_b(x)}/|L_b(x)|, predictive CDF = sum w_t(i)1{pi_{i+h}<=y}, default MMD kernel Gaussian, standard hyperparameters.",
+  "4. Calibration assessment: For Gaussian models (Naive last, Rolling mean, ARIMA(1,1,0), BVAR diff/Minnesota/NW, DFM) compute PIT z_t = F_hat_{t,h}(pi_{t+h}); For PNC compute rank r_t =1+sum 1{X_i<Y}; For DRF compute randomized PIT. Use 20 bins for histogram. Null: z_t ~ UNIF(0,1) or r_t ~ UNIF{1..m} conditional on t-h information.",
+  "5. Sequential e-values: Alternative beta family for PIT, beta-binomial for ranks. Likelihood ratio E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta); E^{alpha,beta}(r)=m*p_{alpha,beta}(r). Adaptive MLE per (2): (alpha_hat_t,beta_hat_t)=argmax sum log p_{alpha,beta}(z_i) using past data. Sequential e-value E_{t+1}=E^{alpha_hat_t,beta_hat_t}(z_{t+1}) with E1=E2=1. For lag h>1 compute h separate MLEs on subsequences {k+hs} per (3) and E_{k+th}=E^{alpha_hat_t^k,beta_hat_t^k}(z_{k+th}) with E1..E2h=1. Ignore observations at {0,1} in estimation. Parameter: warm-up n0=10 e-values set to 1 before MLE (per subsequence for h>1).",
+  "6. Aggregation: For h=1 product e_t=prod_{i=1..t} E_i is test supermartingale. For h>1 aggregated e_t = 1/h sum_{k=1..h} prod_{l in I_k(t)} E_l where I_k(t)={k+hs: s=0..floor((t-k)/h)} per Prop 4.3. Modified stopping rule tau_{alpha,h}=inf{t: 1/(h e log h) sum_k sup_{s<=t} prod_{l in I_k(s)} E_l >=1/alpha}. Parameter: threshold 1/alpha=100 for alpha=0.01; penalty factor e log(h) for h>1.",
+  "7. Reporting: Plot cumulative e_t on log scale with horizontal lines at 1 and rejection threshold. Estimate alternative PIT density via beta and boundary-corrected kernel over highlighted subsamples. Complement with two-sided one-sample Kolmogorov-Smirnov test for UNIF(0,1) on full sample PITs (except PNC). Report KS p, edge frequency %, max e over evaluation period. Evaluation period starts when all models have non-missing forecasts; series one month shorter for models requiring differencing."
+ ],
+ "claims": [
+  {
+   "name": "us_total_obs",
+   "description": "US total monthly observations Jan 1960-Apr 2025",
+   "value": "784",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Sec 3.1 para 5"
+  },
+  {
+   "name": "us_eval_N_h1",
+   "description": "US evaluation forecasts after Feb 1986 (h=1)",
+   "value": "470",
+   "unit": "forecasts",
+   "kind": "count",
+   "where": "Sec 3.1 para 5"
+  },
+  {
+   "name": "ch_total_obs",
+   "description": "CH total obs Jan 1983-Apr 2025",
+   "value": "508",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Sec 3.1 para 5"
+  },
+  {
+   "name": "ch_eval_N_h1",
+   "description": "CH evaluation forecasts after Dec 1999",
+   "value": "305",
+   "unit": "forecasts",
+   "kind": "count",
+   "where": "Sec 3.1 para 5"
+  },
+  {
+   "name": "ea_total_obs",
+   "description": "EA total obs Jan 2001-Apr 2025",
+   "value": "292",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Sec 3.1 para 5"
+  },
+  {
+   "name": "ea_eval_N_h1",
+   "description": "EA evaluation forecasts after Sep 2010",
+   "value": "175",
+   "unit": "forecasts",
+   "kind": "count",
+   "where": "Sec 3.1 para 5"
+  },
+  {
+   "name": "arima_choice_ch_freq",
+   "description": "ARIMA(1,1,0) chosen share CH",
+   "value": "81%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 4.2 p selection"
+  },
+  {
+   "name": "arima_choice_ea_freq",
+   "description": "ARIMA(1,1,0) chosen share EA",
+   "value": "48%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 4.2"
+  },
+  {
+   "name": "arima_choice_us_freq",
+   "description": "ARIMA(1,1,0) chosen share US",
+   "value": "44%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 4.2"
+  },
+  {
+   "name": "arima_choice_us_post2000_freq",
+   "description": "ARIMA(1,1,0) share US post-2000",
+   "value": "67%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec 4.2"
+  },
+  {
+   "name": "us_h1_naive_rmse",
+   "description": "US h=1 Naive last RMSE",
+   "value": "0.398",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_naive_mae",
+   "description": "US h=1 Naive last MAE",
+   "value": "0.276",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_naive_crps",
+   "description": "US h=1 Naive last CRPS",
+   "value": "0.206",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_roll_rmse",
+   "description": "US h=1 Rolling mean RMSE",
+   "value": "1.412",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_roll_mae",
+   "description": "US h=1 Rolling mean MAE",
+   "value": "1.015",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_roll_crps",
+   "description": "US h=1 Rolling mean CRPS",
+   "value": "0.792",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_pnc_rmse",
+   "description": "US h=1 PNC RMSE",
+   "value": "1.412",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_pnc_mae",
+   "description": "US h=1 PNC MAE",
+   "value": "1.102",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_pnc_crps",
+   "description": "US h=1 PNC CRPS",
+   "value": "0.740",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_arima_rmse",
+   "description": "US h=1 ARIMA RMSE",
+   "value": "0.362",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_arima_mae",
+   "description": "US h=1 ARIMA MAE",
+   "value": "0.259",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_arima_crps",
+   "description": "US h=1 ARIMA CRPS",
+   "value": "0.191",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_diff_rmse",
+   "description": "US h=1 BVAR diffuse RMSE",
+   "value": "0.489",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_diff_mae",
+   "description": "US h=1 BVAR diffuse MAE",
+   "value": "0.337",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_diff_crps",
+   "description": "US h=1 BVAR diffuse CRPS",
+   "value": "0.252",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_min_rmse",
+   "description": "US h=1 BVAR Minnesota RMSE",
+   "value": "0.486",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_min_mae",
+   "description": "US h=1 BVAR Minnesota MAE",
+   "value": "0.335",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_min_crps",
+   "description": "US h=1 BVAR Minnesota CRPS",
+   "value": "0.250",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_nw_rmse",
+   "description": "US h=1 BVAR NW RMSE",
+   "value": "0.483",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_nw_mae",
+   "description": "US h=1 BVAR NW MAE",
+   "value": "0.332",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_bvar_nw_crps",
+   "description": "US h=1 BVAR NW CRPS",
+   "value": "0.249",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_dfm_rmse",
+   "description": "US h=1 DFM RMSE",
+   "value": "0.364",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_dfm_mae",
+   "description": "US h=1 DFM MAE",
+   "value": "0.262",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_dfm_crps",
+   "description": "US h=1 DFM CRPS",
+   "value": "0.193",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_drf_rmse",
+   "description": "US h=1 DRF RMSE",
+   "value": "0.590",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_drf_mae",
+   "description": "US h=1 DRF MAE",
+   "value": "0.395",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h1_drf_crps",
+   "description": "US h=1 DRF CRPS",
+   "value": "0.296",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h3_naive_rmse",
+   "description": "US h=3 Naive last RMSE",
+   "value": "0.865",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h3_naive_mae",
+   "description": "US h=3 Naive last MAE",
+   "value": "0.575",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h3_naive_crps",
+   "description": "US h=3 Naive last CRPS",
+   "value": "0.441",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h3_arima_rmse",
+   "description": "US h=3 ARIMA RMSE",
+   "value": "0.849",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h3_arima_mae",
+   "description": "US h=3 ARIMA MAE",
+   "value": "0.577",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h3_arima_crps",
+   "description": "US h=3 ARIMA CRPS",
+   "value": "0.436",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h6_drf_rmse",
+   "description": "US h=6 DRF RMSE",
+   "value": "1.173",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h6_drf_mae",
+   "description": "US h=6 DRF MAE",
+   "value": "0.785",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h6_drf_crps",
+   "description": "US h=6 DRF CRPS",
+   "value": "0.575",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h12_drf_rmse",
+   "description": "US h=12 DRF RMSE",
+   "value": "1.341",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h12_drf_mae",
+   "description": "US h=12 DRF MAE",
+   "value": "0.864",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "us_h12_drf_crps",
+   "description": "US h=12 DRF CRPS",
+   "value": "0.620",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table us_performance"
+  },
+  {
+   "name": "ea_h1_arima_rmse",
+   "description": "EA h=1 ARIMA RMSE",
+   "value": "0.334",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table eu_performance"
+  },
+  {
+   "name": "ea_h1_arima_mae",
+   "description": "EA h=1 ARIMA MAE",
+   "value": "0.222",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table eu_performance"
+  },
+  {
+   "name": "ea_h1_arima_crps",
+   "description": "EA h=1 ARIMA CRPS",
+   "value": "0.170",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table eu_performance"
+  },
+  {
+   "name": "ea_h12_drf_rmse",
+   "description": "EA h=12 DRF RMSE",
+   "value": "1.832",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table eu_performance"
+  },
+  {
+   "name": "ea_h12_drf_crps",
+   "description": "EA h=12 DRF CRPS",
+   "value": "0.804",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table eu_performance"
+  },
+  {
+   "name": "ch_h1_dfm_rmse",
+   "description": "CH h=1 DFM RMSE",
+   "value": "0.284",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table ch_performance"
+  },
+  {
+   "name": "ch_h1_dfm_mae",
+   "description": "CH h=1 DFM MAE",
+   "value": "0.215",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table ch_performance"
+  },
+  {
+   "name": "ch_h1_dfm_crps",
+   "description": "CH h=1 DFM CRPS",
+   "value": "0.158",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table ch_performance"
+  },
+  {
+   "name": "ch_h6_drf_rmse",
+   "description": "CH h=6 DRF RMSE",
+   "value": "0.802",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table ch_performance"
+  },
+  {
+   "name": "ch_h12_drf_rmse",
+   "description": "CH h=12 DRF RMSE",
+   "value": "0.869",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table ch_performance"
+  },
+  {
+   "name": "us_h1_arima_ks_p",
+   "description": "US h=1 ARIMA KS p",
+   "value": "0.260",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_arima_edge",
+   "description": "US h=1 ARIMA edge freq",
+   "value": "0.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_arima_maxe",
+   "description": "US h=1 ARIMA max e",
+   "value": "1.82×10^4",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_roll_ks_p",
+   "description": "US h=1 Rolling mean KS p",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_roll_maxe",
+   "description": "US h=1 Rolling mean max e",
+   "value": "2.28×10^34",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_bvar_min_ks_p",
+   "description": "US h=1 BVAR Minnesota KS p",
+   "value": "0.381",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_bvar_min_maxe",
+   "description": "US h=1 BVAR Minnesota max e",
+   "value": "1.91×10^22",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_bvar_nw_maxe",
+   "description": "US h=1 BVAR NW max e",
+   "value": "5.66×10^30",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_bvar_diff_maxe",
+   "description": "US h=1 BVAR diffuse max e",
+   "value": "1.61×10^27",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_dfm_ks_p",
+   "description": "US h=1 DFM KS p",
+   "value": "0.097",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_dfm_maxe",
+   "description": "US h=1 DFM max e",
+   "value": "9.70×10^4",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_drf_ks_p",
+   "description": "US h=1 DRF KS p",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_drf_maxe",
+   "description": "US h=1 DRF max e",
+   "value": "4.70×10^14",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_drf_edge",
+   "description": "US h=1 DRF edge freq",
+   "value": "1.7",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_pnc_edge",
+   "description": "US h=1 PNC edge freq",
+   "value": "28.5",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h1_pnc_maxe",
+   "description": "US h=1 PNC max e",
+   "value": "5.68×10^1",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h12_bvar_nw_maxe",
+   "description": "US h=12 BVAR NW max e",
+   "value": "5.17×10^36",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h12_bvar_min_maxe",
+   "description": "US h=12 BVAR Minnesota max e",
+   "value": "6.55×10^31",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h12_bvar_diff_maxe",
+   "description": "US h=12 BVAR diffuse max e",
+   "value": "3.42×10^34",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "us_h6_drmax",
+   "description": "US h=6 DRF max e",
+   "value": "1.82×10^0",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table us_calibration"
+  },
+  {
+   "name": "ea_h1_arima_ks_p",
+   "description": "EA h=1 ARIMA KS p",
+   "value": "0.517",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_arima_maxe",
+   "description": "EA h=1 ARIMA max e",
+   "value": "2.00×10^2",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_dfm_ks_p",
+   "description": "EA h=1 DFM KS p",
+   "value": "0.815",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_dfm_maxe",
+   "description": "EA h=1 DFM max e",
+   "value": "1.90×10^7",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_bvar_nw_maxe",
+   "description": "EA h=1 BVAR NW max e",
+   "value": "5.07×10^29",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_bvar_min_maxe",
+   "description": "EA h=1 BVAR Minnesota max e",
+   "value": "1.05×10^15",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h3_bvar_nw_maxe",
+   "description": "EA h=3 BVAR NW max e",
+   "value": "1.04×10^51",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h6_bvar_nw_maxe",
+   "description": "EA h=6 BVAR NW max e",
+   "value": "3.01×10^79",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h6_bvar_min_maxe",
+   "description": "EA h=6 BVAR Minnesota max e",
+   "value": "1.39×10^70",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h12_bvar_nw_maxe",
+   "description": "EA h=12 BVAR NW max e",
+   "value": "2.29×10^78",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h12_dfm_maxe",
+   "description": "EA h=12 DFM max e",
+   "value": "4.28×10^25",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_drf_ks_p",
+   "description": "EA h=1 DRF KS p",
+   "value": "0.004",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_drf_maxe",
+   "description": "EA h=1 DRF max e",
+   "value": "1.13×10^2",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h1_roll_maxe",
+   "description": "EA h=1 Rolling mean max e",
+   "value": "3.37×10^7",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ea_h6_arima_maxe",
+   "description": "EA h=6 ARIMA max e",
+   "value": "2.00×10^2",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table eu_calibration"
+  },
+  {
+   "name": "ch_h1_arima_ks_p",
+   "description": "CH h=1 ARIMA KS p",
+   "value": "0.109",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_arima_maxe",
+   "description": "CH h=1 ARIMA max e",
+   "value": "1.42×10^0",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_bvar_nw_maxe",
+   "description": "CH h=1 BVAR NW max e",
+   "value": "2.00×10^4",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_bvar_min_maxe",
+   "description": "CH h=1 BVAR Minnesota max e",
+   "value": "2.03×10^2",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_roll_maxe",
+   "description": "CH h=1 Rolling mean max e",
+   "value": "3.32×10^9",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_roll_ks_p",
+   "description": "CH h=1 Rolling mean KS p",
+   "value": "0.021",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_drf_maxe",
+   "description": "CH h=1 DRF max e",
+   "value": "1.21×10^7",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h1_drf_ks_p",
+   "description": "CH h=1 DRF KS p",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h12_bvar_nw_maxe",
+   "description": "CH h=12 BVAR NW max e",
+   "value": "3.93×10^4",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  },
+  {
+   "name": "ch_h3_bvar_min_maxe",
+   "description": "CH h=3 BVAR Minnesota max e",
+   "value": "1.00×10^0",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table ch_calibration"
+  }
+ ],
+ "headline": "us_h1_bvar_min_maxe",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "KS vs sequential US h=1 ARIMA",
+   "statistic": "us_h1_arima_maxe",
+   "p_value": "us_h1_arima_ks_p",
+   "group_sizes": [
+    "us_eval_N_h1",
+    "us_total_obs"
+   ]
+  },
+  {
+   "test": "KS vs sequential US h=1 BVAR Minnesota",
+   "statistic": "us_h1_bvar_min_maxe",
+   "p_value": "us_h1_bvar_min_ks_p",
+   "group_sizes": [
+    "us_eval_N_h1",
+    "us_total_obs"
+   ]
+  },
+  {
+   "test": "KS vs sequential EA h=1 DFM",
+   "statistic": "ea_h1_dfm_maxe",
+   "p_value": "ea_h1_dfm_ks_p",
+   "group_sizes": [
+    "ea_eval_N_h1",
+    "ea_total_obs"
+   ]
+  },
+  {
+   "test": "KS vs sequential EA h=3 BVAR NW",
+   "statistic": "ea_h3_bvar_nw_maxe",
+   "p_value": "ea_h1_arima_ks_p",
+   "group_sizes": [
+    "ea_eval_N_h1",
+    "ea_total_obs"
+   ]
+  },
+  {
+   "test": "KS vs sequential CH h=1 BVAR NW",
+   "statistic": "ch_h1_bvar_nw_maxe",
+   "p_value": "ch_h1_arima_ks_p",
+   "group_sizes": [
+    "ch_eval_N_h1",
+    "ch_total_obs"
+   ]
+  },
+  {
+   "test": "KS vs sequential US h=1 DRF",
+   "statistic": "us_h1_drf_maxe",
+   "p_value": "us_h1_drf_ks_p",
+   "group_sizes": [
+    "us_eval_N_h1",
+    "us_total_obs"
+   ]
+  }
+ ]
+}

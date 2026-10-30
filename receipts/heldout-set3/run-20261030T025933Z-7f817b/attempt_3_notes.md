@@ -1,0 +1,3 @@
+Fixed: sample now reports full period July 1963–Dec 2023 (726 months) as defined in paper, with nested OOS 605 months Aug 1973–Dec 2023 and burn-in 121 months computed from data. Previously sample.n/start/end incorrectly reported OOS window only. All counts now derived from data merge (French + OSAP 212 anomalies + 30 factor-specific =242 predictors, L=243, 1215 coefficients) not hardcoded.
+
+Re-run: median ω 5.92 (paper 5.80), BPPP timing 2.06pp t2.90 vs paper 2.08pp t3.00, gross SR 1.24 matches, exposures/turnover replicate. Omitted comparators listed in not_rebuilt.

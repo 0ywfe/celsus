@@ -1,0 +1,53 @@
+exit 0 in 71.5s
+--- stdout
+Fetching Eurostat X1...
+Fetching X2...
+Fetching private debt...
+Fetching gov debt (general S13 as proxy for central S1311)...
+Fetching WB...
+BG WB done
+CZ WB done
+EE WB done
+HR WB done
+LV WB done
+LT WB done
+HU WB done
+PL WB done
+RO WB done
+SI WB done
+SK WB done
+df_x shape (319, 9), nulls: {'geo': 0, 'year': 0, 'X1': 0, 'X2': 0, 'X3': 0, 'X4': 0, 'X5': 0, 'X6': 0, 'X7': 0}
+NT=319
+df_y shape (319, 3)
+Raw stats:
+X1 {'mean': 62.492163009404386, 'sd': 17.034531189728924, 'min': 26.0, 'median': 63.0, 'max': 96.0, 'skew': -0.2101646490175505, 'kurt': 2.1337510095985133}
+X2 {'mean': 59.906269592476484, 'sd': 13.703666068364877, 'min': 20.3, 'median': 60.5, 'max': 91.8, 'skew': -0.254088955315129, 'kurt': 2.7039603973679016}
+X3 {'mean': 78.40832866758966, 'sd': 66.45600528141257, 'min': 0.474495328041973, 'median': 67.31323748142609, 'max': 393.97182163609324, 'skew': 1.6949566611248312, 'kurt': 7.379239454489}
+X4 {'mean': 115.03762211975928, 'sd': 34.88361801405242, 'min': 43.5552180979904, 'median': 116.295810328172, 'max': 204.056318531151, 'skew': 0.11616575713448693, 'kurt': 2.1275593533183343}
+X5 {'mean': 378.1795431017534, 'sd': 216.9322338034226, 'min': 16.0813187416783, 'median': 387.135557712605, 'max': 841.6868954996886, 'skew': 0.031660970957969506, 'kurt': 1.918026505592231}
+X6 {'mean': 38.75736677115988, 'sd': 24.215977896775744, 'min': 3.9, 'median': 37.4, 'max': 244.5, 'skew': 2.174539694334408, 'kurt': 18.075805269620844}
+X7 {'mean': 69.99780564263324, 'sd': 28.535050082660938, 'min': 9.9, 'median': 68.4, 'max': 146.7, 'skew': 0.3352012303686376, 'kurt': 2.6223641084911717}
+Yearly regressions done
+1997 alpha -5.833 (0.514) R2 0.999 F 496.81
+2002 alpha 0.131 (2.240) R2 0.938 F 6.47
+2009 alpha 12.141 (5.844) R2 0.890 F 3.46
+2013 alpha 4.378 (3.537) R2 0.886 F 3.34
+2018 alpha 7.767 (0.763) R2 0.988 F 34.32
+2021 alpha 16.315 (3.281) R2 0.946 F 7.45
+2024 alpha 4.771 (4.482) R2 0.632 F 0.74
+Wrote 203 results to /work/results.json
+{
+  "description": "Panel of 11 EU-acceding CEE countries (Bulgaria, Czechia, Estonia, Croatia, Latvia, Lithuania, Hungary, Poland, Romania, Slovenia, Slovakia) observed annually 1995-2024. Regressor matrix x: 11x29 (1995-2023) x7 factors (X1 GDPpc PPS EU27=100, X2 price level, X3 cum FDI %GDP, X4 trade %GDP, X5 cum GCF %GDP, X6 gov debt %GDP (S13 proxy), X7 private debt). Dependent delta_y: 11x29 annual changes 1996-2024. Total pooled NT=319.",
+  "n": 319,
+  "start": "1995-01-01",
+  "end": "2024-12-31",
+  "same_as_paper": true,
+  "missing": 0,
+  "extra": 0,
+  "differences": "",
+  "cannot_count": "",
+  "not_rebuilt": {},
+  "substitutions": "Eurostat prc_ppp_ind EU27_2020 for X1 (VI_PPS_EU27_2020_HAB GDP) and X2 (PLI_EU27_2020 GDP); ESTAT gov_10dd_edpt1 S13 general government debt used as proxy for X6 central government debt due to missing S1311 history for 5 countries (BG,CZ,EE,LV,SK pre-2022) in current ESTAT vintage; World Bank WDI BX.KLT.DINV.WD.GD.ZS, NE.TRD.GNFS.ZS, NE.GDI.TOTL.ZS for X3/X4/X5 with X3/X5 accumulated as cumulative sum from 1995 inclusive; Eurostat tipspd20 (S11_S14_S15 consolidated, PC_GDP) for X7. Standardization pooled NT=n_pooled_computed, Omega eigendecomposition, orthogonal preconditioner, yearly OLS N=11 per t, delta-method SEs as in paper. Data vintage July 2026 may include post-publication revisions (notably BG 1996 gov debt outlier 244.5% and Slovakia FDI revisions) causing small mean/corr deviations."
+}
+
+--- stderr

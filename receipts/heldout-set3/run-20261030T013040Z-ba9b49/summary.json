@@ -1,0 +1,71 @@
+{
+ "run_id": "run-20261030T013040Z-ba9b49",
+ "paper": "2608.23064",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 4 of 6 checked results match within their uncertainty. Its main result, EA_calib_DFM_h1_max_e, is 1.9e+07 e in the paper and 3.951e+37 e here (not judged: no standard error).",
+ "headline": {
+  "name": "EA_calib_DFM_h1_max_e",
+  "kind": "estimate",
+  "unit": "e",
+  "reported": 19000000.0,
+  "reproduced": 3.9508424154138923e+37,
+  "se": null,
+  "n": 175,
+  "consistent": null,
+  "why": "no standard error"
+ },
+ "sample": [
+  {
+   "name": "US_N_obs",
+   "reported": 784.0,
+   "reproduced": 784.0,
+   "consistent": true
+  },
+  {
+   "name": "US_N_eval",
+   "reported": 470.0,
+   "reproduced": 470.0,
+   "consistent": true
+  },
+  {
+   "name": "CH_N_obs",
+   "reported": 508.0,
+   "reproduced": 508.0,
+   "consistent": true
+  },
+  {
+   "name": "CH_N_eval",
+   "reported": 305.0,
+   "reproduced": 304.0,
+   "consistent": true
+  },
+  {
+   "name": "EA_N_obs",
+   "reported": 292.0,
+   "reproduced": 292.0,
+   "consistent": true
+  },
+  {
+   "name": "EA_N_eval",
+   "reported": 175.0,
+   "reproduced": 175.0,
+   "consistent": true
+  }
+ ],
+ "judged": 6,
+ "matched": 4,
+ "rejections": [],
+ "rounds": 2,
+ "packages": [],
+ "calls": 44,
+ "cost_usd": 1.4297,
+ "tokens_in": 3380938,
+ "tokens_out": 137638,
+ "wall_s": 4723.8,
+ "crashed": null
+}

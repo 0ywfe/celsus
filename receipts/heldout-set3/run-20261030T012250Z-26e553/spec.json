@@ -1,0 +1,1413 @@
+{
+ "title": "Replication Spec - Analysis of Contagion in China's Stock Market: A Hawkes Process Perspective",
+ "hypothesis": "Market and sector indices exhibit self-excitation / cross-excitation and sector rotation detectable via multivariate (non)linear Hawkes processes. Trading-day returns are transformed into point processes of extreme up/down events defined by quantile thresholds.",
+ "data_sources": [
+  "not stated - daily return series of Shanghai Composite (SSE), Shenzhen Component (SZI), ChiNext (GEI) - source not stated",
+  "not stated - daily return series of CSI Consumer 000932, CSI Healthcare 000933, CSI Finance & Real Estate 000934 - source not stated"
+ ],
+ "sample": "Experiment 1: daily returns of Shanghai Composite, Shenzhen Component, ChiNext transformed into bivariate event sequences {t_i,d_i} where d_i=0 sharp rise (return >= 90th percentile) and d_i=1 sharp decline (return <=10th percentile). Thresholds computed per index history. Experiment 2: CSI Consumer, Healthcare, Fin&RE daily returns transformed into 6-type event sequences (0:cons-up,1:med-up,2:fin-up,3:cons-down,4:med-down,5:fin-down) using same quantile convention. Timeline segmented into 15 periods of 150 trading days. Goodness-of-fit sample: homogeneous Poisson vs Hawkes on 2013.02-2022.03 train and 2022.03-2023.03 test split. Sample sizes are count claims: shanghai_count, shenzhen_count, chinext_count, train_size, val_size, csi_consumer_count, csi_healthcare_count, csi_finre_count.",
+ "period_start": "February 26, 2013",
+ "period_end": "March 2023",
+ "method": [
+  "1. Obtain daily returns in percent for each index. Base normalized to 1.0 on February 26, 2013 for cumulative plots.",
+  "2. For each index compute its 10th and 90th percentiles of its return history. Experiment 1 thresholds: Shanghai [-1.285, 1.481] %, Shenzhen [-1.701, 1.891] %, ChiNext [-2.105, 2.502] % - parameter claims shanghai_quant10, shanghai_quant90 etc. Define event at time t_i = trading-day index of extreme return; type d_i=0 if return >= q90 (sharp rise), d_i=1 if return <= q10 (sharp decline). This yields bivariate sequence {(t_i,d_i)} on [0,T] with T=2452 trading days.",
+  "3. Split sequence 85% training (2084 samples, count claim train_size) and 15% validation (368 samples, count claim val_size) - as printed.",
+  "4. Specify exponential kernel Hawkes for m=2: lambda_k*(t)= mu_k + sum_{j=1..m} sum_{t_i<t} alpha_{k,j} * omega * exp(-omega*(t-t_i)), mu_k>0, alpha>0. Set decay omega as hyperparameter, grid-searched; omega=0.1 for Shanghai, Shenzhen, ChiNext (parameter claims omega_shanghai, omega_shenzhen, omega_chinext). Estimate mu=[mu0,mu1] and impact matrix A=[alpha_{k,j}] by MLE: L(theta;T)= prod_i lambda_{d_i}*(t_i) * exp(-sum_j Lambda_j(T)), log L = sum_i log lambda_{d_i}*(t_i) - sum_j int_0^T lambda_j*(s) ds, using Python tick module. Same specification applied to each index separately.",
+  "5. Experiment 2: Use CSI sector indices March 2013-March 2023, Count 2452 each. Segment timeline into 15 periods (parameter claim num_periods) each 150 trading days (parameter claim trading_days_per_period). Following previous convention define 2 event types per sector => m=6 types: 0 cons-up,1 med-up,2 fin-up,3 cons-down,4 med-down,5 fin-down.",
+  "6. Specify nonlinear Hawkes with inhibition: lambda*(t)=g(overline{lambda}*(t)), overline{lambda}*(t)= mu + alpha*omega*exp(-omega*t), mu in R, alpha in R, omega>0, link g(x)=max(x,0.01) (parameter claim link_threshold=0.01). Remove non-negativity constraints on mu and A to allow inhibition. Estimate via SGD Monte Carlo MLE (Algorithm 1): int_0^T lambda_j*(s) ds = T * E_s[lambda_j*(s)], s~U(0,T), sample N uniform times T_m=[t_1..t_N], compute I_m = (sum_i lambda_m*(t_i)/N)*T, NLL = -sum_{t_i in H(t)} log lambda_{d_i}*(t_i) + sum_j I_m, backprop update.",
+  "7. Focus estimation on Period 3: 2014.12 to 2015.08 (structural bull, high activity) and Period 5: 2016.03 to 2016.11 (pessimistic, low activity). Report 6x6 influence matrix A_{i,j} (estimate claims period3_A00..period3_A55, period5_A00..period5_A55), background intensity mu vector of length 6 (period3_mu0..period3_mu5, period5_mu0..period5_mu5) and decay omega (period3_omega, period5_omega). Interpret 6x6 block as [A B; C D] where A=up-trend, B=oversold rebound, C=pullback, D=down-trend.",
+  "8. Goodness-of-fit Random Time Change Theorem: if lambda*(t)>0 and Lambda(T)=int_0^T lambda*(s) ds <inf, then {Lambda(t_i)} is unit-rate Poisson. Test by Q-Q plot of Delta Lambda(t_i)=Lambda(t_i)-Lambda(t_{i-1}) vs Exp(1) and scatter plot (Lambda_{t+1}-Lambda_t, Lambda_t-Lambda_{t-1}) for independence. Baseline homogeneous Poisson with moment estimator lambda_hat = 1 / (sum_i Delta t_i / n). Estimated lambda_train=[0.100,0.101] for 2013.02-2022.03 and lambda_test=[0.067,0.082] for 2022.03-2023.03 (estimate claims lambda_train_type0 etc). No numeric test statistic or p-value printed - visual assessment only. Stability condition rho(A)<1 mentioned as theoretical benchmark, no numeric estimate printed."
+ ],
+ "claims": [
+  {
+   "name": "shanghai_count",
+   "description": "Shanghai Composite daily returns Count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table 1 Descriptive Statistics of Daily Index Returns"
+  },
+  {
+   "name": "shanghai_mean",
+   "description": "Shanghai Composite Mean daily return %",
+   "value": "0.021",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shanghai_std",
+   "description": "Shanghai Composite Std",
+   "value": "1.32",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shanghai_min",
+   "description": "Shanghai Composite Min",
+   "value": "-8.491",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shanghai_median",
+   "description": "Shanghai Composite Median",
+   "value": "0.051",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shanghai_max",
+   "description": "Shanghai Composite Max",
+   "value": "5.764",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shanghai_skew",
+   "description": "Shanghai Composite Skew",
+   "value": "-0.927",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shanghai_kurtosis",
+   "description": "Shanghai Composite Kurtosis",
+   "value": "6.71",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_count",
+   "description": "Shenzhen Component Count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_mean",
+   "description": "Shenzhen Component Mean",
+   "value": "0.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_std",
+   "description": "Shenzhen Component Std",
+   "value": "1.601",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_min",
+   "description": "Shenzhen Component Min",
+   "value": "-8.446",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_median",
+   "description": "Shenzhen Component Median",
+   "value": "0.036",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_max",
+   "description": "Shenzhen Component Max",
+   "value": "6.454",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_skew",
+   "description": "Shenzhen Component Skew",
+   "value": "-0.683",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "shenzhen_kurtosis",
+   "description": "Shenzhen Component Kurtosis",
+   "value": "3.727",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_count",
+   "description": "ChiNext Count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_mean",
+   "description": "ChiNext Mean",
+   "value": "0.06",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_std",
+   "description": "ChiNext Std",
+   "value": "1.944",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_min",
+   "description": "ChiNext Min",
+   "value": "-8.91",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_median",
+   "description": "ChiNext Median",
+   "value": "0.045",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_max",
+   "description": "ChiNext Max",
+   "value": "7.159",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_skew",
+   "description": "ChiNext Skew",
+   "value": "-0.378",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "chinext_kurtosis",
+   "description": "ChiNext Kurtosis",
+   "value": "2.034",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "train_size",
+   "description": "Training set 85% of 2452",
+   "value": "2084",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Sec 3.1 Experimental Design and Results text: 2,084 samples"
+  },
+  {
+   "name": "val_size",
+   "description": "Validation set 15% of 2452",
+   "value": "368",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Sec 3.1: 368 samples"
+  },
+  {
+   "name": "shanghai_quant10",
+   "description": "Shanghai 0.1 quantile threshold %",
+   "value": "-1.285",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table 2 Parameter Comparison"
+  },
+  {
+   "name": "shanghai_quant90",
+   "description": "Shanghai 0.9 quantile threshold %",
+   "value": "1.481",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_quant10",
+   "description": "Shenzhen 0.1 quantile %",
+   "value": "-1.701",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_quant90",
+   "description": "Shenzhen 0.9 quantile %",
+   "value": "1.891",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_quant10",
+   "description": "ChiNext 0.1 quantile %",
+   "value": "-2.105",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_quant90",
+   "description": "ChiNext 0.9 quantile %",
+   "value": "2.502",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "omega_shanghai",
+   "description": "Decay omega hyperparameter Shanghai bivariate Hawkes",
+   "value": "0.1",
+   "unit": ".",
+   "kind": "parameter",
+   "where": "Sec 3.1 and Table 2"
+  },
+  {
+   "name": "omega_shenzhen",
+   "description": "Decay omega hyperparameter Shenzhen",
+   "value": "0.1",
+   "unit": ".",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "omega_chinext",
+   "description": "Decay omega hyperparameter ChiNext",
+   "value": "0.1",
+   "unit": ".",
+   "kind": "parameter",
+   "where": "Table 2"
+  },
+  {
+   "name": "shanghai_mu0",
+   "description": "Shanghai baseline mu_0 (type0 sharp rise)",
+   "value": "0.024",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Eq and Table 2 mu=[0.024 0.044]"
+  },
+  {
+   "name": "shanghai_mu1",
+   "description": "Shanghai baseline mu_1 (type1 sharp decline)",
+   "value": "0.044",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Eq and Table 2"
+  },
+  {
+   "name": "shanghai_A00",
+   "description": "Shanghai impact alpha_00 (type0 on type0)",
+   "value": "0.382",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Impact matrix A"
+  },
+  {
+   "name": "shanghai_A01",
+   "description": "Shanghai impact alpha_01 (type1 on type0) row0 col1",
+   "value": "0.387",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Impact matrix"
+  },
+  {
+   "name": "shanghai_A10",
+   "description": "Shanghai impact alpha_10",
+   "value": "0.218",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Impact matrix"
+  },
+  {
+   "name": "shanghai_A11",
+   "description": "Shanghai impact alpha_11",
+   "value": "0.343",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Impact matrix"
+  },
+  {
+   "name": "shenzhen_mu0",
+   "description": "Shenzhen baseline mu0",
+   "value": "0.038",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_mu1",
+   "description": "Shenzhen baseline mu1",
+   "value": "0.047",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_A00",
+   "description": "Shenzhen A00",
+   "value": "0.175",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_A01",
+   "description": "Shenzhen A01",
+   "value": "0.451",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_A10",
+   "description": "Shenzhen A10",
+   "value": "0.155",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "shenzhen_A11",
+   "description": "Shenzhen A11",
+   "value": "0.381",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_mu0",
+   "description": "ChiNext baseline mu0",
+   "value": "0.034",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_mu1",
+   "description": "ChiNext baseline mu1",
+   "value": "0.05",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_A00",
+   "description": "ChiNext A00",
+   "value": "0.28",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_A01",
+   "description": "ChiNext A01",
+   "value": "0.385",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_A10",
+   "description": "ChiNext A10",
+   "value": "0.154",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "chinext_A11",
+   "description": "ChiNext A11",
+   "value": "0.348",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "csi_consumer_count",
+   "description": "CSI Consumer Count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table 3 Descriptive Statistics of Sector Index Daily Returns"
+  },
+  {
+   "name": "csi_consumer_mean",
+   "description": "CSI Consumer Mean %",
+   "value": "0.067",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_consumer_std",
+   "description": "CSI Consumer Std",
+   "value": "1.648",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_consumer_min",
+   "description": "CSI Consumer Min",
+   "value": "-8.325",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_consumer_median",
+   "description": "CSI Consumer Median",
+   "value": "0.061",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_consumer_max",
+   "description": "CSI Consumer Max",
+   "value": "7.214",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_consumer_skew",
+   "description": "CSI Consumer Skew",
+   "value": "-0.361",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_consumer_kurtosis",
+   "description": "CSI Consumer Kurtosis",
+   "value": "2.753",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_count",
+   "description": "CSI Healthcare Count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_mean",
+   "description": "CSI Healthcare Mean",
+   "value": "0.035",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_std",
+   "description": "CSI Healthcare Std",
+   "value": "1.659",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_min",
+   "description": "CSI Healthcare Min",
+   "value": "-8.484",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_median",
+   "description": "CSI Healthcare Median",
+   "value": "0.067",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_max",
+   "description": "CSI Healthcare Max",
+   "value": "7.909",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_skew",
+   "description": "CSI Healthcare Skew",
+   "value": "-0.395",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_healthcare_kurtosis",
+   "description": "CSI Healthcare Kurtosis",
+   "value": "2.67",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_count",
+   "description": "CSI Fin&RE Count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_mean",
+   "description": "CSI Fin&RE Mean",
+   "value": "0.023",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_std",
+   "description": "CSI Fin&RE Std",
+   "value": "1.557",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_min",
+   "description": "CSI Fin&RE Min",
+   "value": "-9.363",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_median",
+   "description": "CSI Fin&RE Median",
+   "value": "-0.034",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_max",
+   "description": "CSI Fin&RE Max",
+   "value": "8.918",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_skew",
+   "description": "CSI Fin&RE Skew",
+   "value": "-0.086",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "csi_finre_kurtosis",
+   "description": "CSI Fin&RE Kurtosis",
+   "value": "5.173",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table 3"
+  },
+  {
+   "name": "num_periods",
+   "description": "Number of periods segmented for sector analysis",
+   "value": "15",
+   "unit": "periods",
+   "kind": "parameter",
+   "where": "Sec 3.2 Experimental Design: 15 periods"
+  },
+  {
+   "name": "trading_days_per_period",
+   "description": "Trading days per period",
+   "value": "150",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec 3.2: each period comprising 150 trading days"
+  },
+  {
+   "name": "link_threshold",
+   "description": "Link function threshold g(x)=max(x,0.01)",
+   "value": "0.01",
+   "unit": ".",
+   "kind": "parameter",
+   "where": "Eq labeled eq:mult"
+  },
+  {
+   "name": "period3_mu0",
+   "description": "Period3 background mu type0 cons-up",
+   "value": "-0.226",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity mu and Decay Parameter Period3"
+  },
+  {
+   "name": "period3_mu1",
+   "description": "Period3 mu1 med-up",
+   "value": "-0.200",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period3_mu2",
+   "description": "Period3 mu2 fin-up",
+   "value": "-0.341",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period3_mu3",
+   "description": "Period3 mu3 cons-down",
+   "value": "-0.079",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period3_mu4",
+   "description": "Period3 mu4 med-down",
+   "value": "-0.024",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period3_mu5",
+   "description": "Period3 mu5 fin-down",
+   "value": "-0.095",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period3_omega",
+   "description": "Period3 decay omega",
+   "value": "0.702",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity Period3 omega 0.702"
+  },
+  {
+   "name": "period5_mu0",
+   "description": "Period5 background mu0",
+   "value": "0.089",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity Period5"
+  },
+  {
+   "name": "period5_mu1",
+   "description": "Period5 mu1",
+   "value": "0.093",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period5_mu2",
+   "description": "Period5 mu2",
+   "value": "0.058",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period5_mu3",
+   "description": "Period5 mu3",
+   "value": "0.091",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period5_mu4",
+   "description": "Period5 mu4",
+   "value": "0.091",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period5_mu5",
+   "description": "Period5 mu5",
+   "value": "0.061",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity"
+  },
+  {
+   "name": "period5_omega",
+   "description": "Period5 decay omega",
+   "value": "0.004",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Background Intensity Period5 omega 0.004"
+  },
+  {
+   "name": "period3_A00",
+   "description": "Period3 influence A00 (cons-up on cons-up)",
+   "value": "1.161",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Influence matrix Period3"
+  },
+  {
+   "name": "period3_A01",
+   "description": "Period3 A01",
+   "value": "0.240",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A02",
+   "description": "Period3 A02",
+   "value": "0.253",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A03",
+   "description": "Period3 A03",
+   "value": "-0.335",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A04",
+   "description": "Period3 A04",
+   "value": "-0.469",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A05",
+   "description": "Period3 A05",
+   "value": "-0.154",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A10",
+   "description": "Period3 A10",
+   "value": "0.157",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A11",
+   "description": "Period3 A11",
+   "value": "1.143",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A12",
+   "description": "Period3 A12",
+   "value": "-0.238",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A13",
+   "description": "Period3 A13",
+   "value": "-0.230",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A14",
+   "description": "Period3 A14",
+   "value": "-0.173",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A15",
+   "description": "Period3 A15",
+   "value": "-0.208",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A20",
+   "description": "Period3 A20",
+   "value": "-0.105",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A21",
+   "description": "Period3 A21",
+   "value": "-0.298",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A22",
+   "description": "Period3 A22",
+   "value": "1.313",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A23",
+   "description": "Period3 A23",
+   "value": "-0.371",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A24",
+   "description": "Period3 A24",
+   "value": "-0.474",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A25",
+   "description": "Period3 A25",
+   "value": "-0.425",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A30",
+   "description": "Period3 A30",
+   "value": "0.109",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A31",
+   "description": "Period3 A31",
+   "value": "0.093",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A32",
+   "description": "Period3 A32",
+   "value": "0.002",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A33",
+   "description": "Period3 A33",
+   "value": "0.671",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A34",
+   "description": "Period3 A34",
+   "value": "0.420",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A35",
+   "description": "Period3 A35",
+   "value": "-0.067",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A40",
+   "description": "Period3 A40",
+   "value": "0.037",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A41",
+   "description": "Period3 A41",
+   "value": "-0.191",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A42",
+   "description": "Period3 A42",
+   "value": "-0.005",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A43",
+   "description": "Period3 A43",
+   "value": "0.460",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A44",
+   "description": "Period3 A44",
+   "value": "0.831",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A45",
+   "description": "Period3 A45",
+   "value": "0.078",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A50",
+   "description": "Period3 A50",
+   "value": "-0.366",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A51",
+   "description": "Period3 A51",
+   "value": "-0.100",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A52",
+   "description": "Period3 A52",
+   "value": "-0.136",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A53",
+   "description": "Period3 A53",
+   "value": "0.071",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A54",
+   "description": "Period3 A54",
+   "value": "0.033",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period3_A55",
+   "description": "Period3 A55",
+   "value": "1.092",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "period5_A00",
+   "description": "Period5 influence A00",
+   "value": "-0.317",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Influence matrix Period5"
+  },
+  {
+   "name": "period5_A01",
+   "description": "Period5 A01",
+   "value": "-0.536",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A02",
+   "description": "Period5 A02",
+   "value": "-0.323",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A03",
+   "description": "Period5 A03",
+   "value": "-0.340",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A04",
+   "description": "Period5 A04",
+   "value": "-0.424",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A05",
+   "description": "Period5 A05",
+   "value": "-0.452",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A10",
+   "description": "Period5 A10",
+   "value": "-0.375",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A11",
+   "description": "Period5 A11",
+   "value": "-0.437",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A12",
+   "description": "Period5 A12",
+   "value": "-0.315",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A13",
+   "description": "Period5 A13",
+   "value": "-0.478",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A14",
+   "description": "Period5 A14",
+   "value": "-0.379",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A15",
+   "description": "Period5 A15",
+   "value": "-0.600",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A20",
+   "description": "Period5 A20",
+   "value": "-0.564",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A21",
+   "description": "Period5 A21",
+   "value": "-0.314",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A22",
+   "description": "Period5 A22",
+   "value": "-0.136",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A23",
+   "description": "Period5 A23",
+   "value": "-0.408",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A24",
+   "description": "Period5 A24",
+   "value": "-0.574",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A25",
+   "description": "Period5 A25",
+   "value": "-0.577",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A30",
+   "description": "Period5 A30",
+   "value": "-0.576",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A31",
+   "description": "Period5 A31",
+   "value": "-0.452",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A32",
+   "description": "Period5 A32",
+   "value": "-0.427",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A33",
+   "description": "Period5 A33",
+   "value": "-0.265",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A34",
+   "description": "Period5 A34",
+   "value": "-0.470",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A35",
+   "description": "Period5 A35",
+   "value": "-0.517",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A40",
+   "description": "Period5 A40",
+   "value": "-0.405",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A41",
+   "description": "Period5 A41",
+   "value": "-0.505",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A42",
+   "description": "Period5 A42",
+   "value": "-0.396",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A43",
+   "description": "Period5 A43",
+   "value": "-0.406",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A44",
+   "description": "Period5 A44",
+   "value": "-0.346",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A45",
+   "description": "Period5 A45",
+   "value": "-0.401",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A50",
+   "description": "Period5 A50",
+   "value": "-0.203",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A51",
+   "description": "Period5 A51",
+   "value": "-0.535",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A52",
+   "description": "Period5 A52",
+   "value": "-0.418",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A53",
+   "description": "Period5 A53",
+   "value": "-0.334",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A54",
+   "description": "Period5 A54",
+   "value": "-0.403",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "period5_A55",
+   "description": "Period5 A55",
+   "value": "-0.338",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "lambda_train_type0",
+   "description": "Homogeneous Poisson moment estimate 2013.02-2022.03 type0",
+   "value": "0.100",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Appendix Goodness-of-Fit (A) lambda_hat_train=[0.100,0.101]"
+  },
+  {
+   "name": "lambda_train_type1",
+   "description": "Homogeneous Poisson lambda train type1",
+   "value": "0.101",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Appendix Goodness-of-Fit"
+  },
+  {
+   "name": "lambda_test_type0",
+   "description": "Homogeneous Poisson lambda test 2022.03-2023.03 type0",
+   "value": "0.067",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Appendix lambda_hat_test=[0.067,0.082]"
+  },
+  {
+   "name": "lambda_test_type1",
+   "description": "Homogeneous Poisson lambda test type1",
+   "value": "0.082",
+   "unit": ".",
+   "kind": "estimate",
+   "where": "Appendix"
+  }
+ ],
+ "headline": "period3_A00",
+ "partitions": [
+  {
+   "split": "train_validation_split_experiment1",
+   "total": "shanghai_count",
+   "parts": [
+    "train_size",
+    "val_size"
+   ]
+  },
+  {
+   "split": "market_indices_by_type",
+   "total": "not stated",
+   "parts": [
+    "shanghai_count",
+    "shenzhen_count",
+    "chinext_count"
+   ]
+  },
+  {
+   "split": "sector_indices_by_type",
+   "total": "not stated",
+   "parts": [
+    "csi_consumer_count",
+    "csi_healthcare_count",
+    "csi_finre_count"
+   ]
+  }
+ ],
+ "tests": []
+}

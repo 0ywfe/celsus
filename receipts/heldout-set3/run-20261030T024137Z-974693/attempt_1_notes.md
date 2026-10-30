@@ -1,0 +1,11 @@
+Replication built from public proxies:
+
+**Sample:** Largest public series `CANPROINDMISMEI` (OECD MEI Canada IP monthly via FRED, 1961-01-01–2024-02-01, n=758 months) + WDI 1999-2023 trade/GDP (n=25y) and PPP 2015-23 (n=9y) + FRED daily WTI/Brent 1986-/1987- (n=5362 corr window) and CAD/USD/EUR cross. Paper’s LCDM monthly GDP index (5 Canadian vars), IMF-IFS CAD/EUR, and Jarocinski median-rotation shocks unavailable.
+
+**Choices left open** (window length for high-frequency rate-equity surprises not stated → no proxy attempted; ECB MRO vs deposit facility → FRED `ECBDFR` deposit facility used; Eurostat `sts_inpr_m` → FRED `CPHPTT01EZM659N` HICP; equity indices → TSX `XIU.TO`/^GSPTSE via `market_data`; risk-free omitted; Covid dummy Mar2020-Jun2021 + linear trend per `eq:LP_Benchmark`).
+
+**Deviations:** Fortin et al.2022 LCDM → public FRED/WDI vintages; IMF-IFS → FRED `DEXCAUS/DEXUSEU` cross (last 1.02 CAD/EUR); Jarocinski 2020/2022 sign-restriction (rates↑ equities↓ = MP) + rotational-angle 999-admissible median rotation / Poor-Man Sign Restriction and BVAR Normal-Wishart (lag 0.8, λ1=0.1, λ3=1, 3 lags AIC4/BIC2) vs OLS/HC0 – `marekjarocinski.com` DNS-blocked in sandbox, so all 7 IRF durations (ECB GDP >1y, ECB equity 4mo, Fed 18mo/6mo/2y, LP 6mo/1y, housing >1y) moved to `not_rebuilt`.
+
+**Verified stylized facts:** Euro Area PPP share 12.1% (2023, WDI EMU/WLD, vs paper ~15% – lower post-Brexit PPP vintage); EMU trade/GDP mean 79.0% (min 63.0 max100.8, se1.82 n25 – “consistently >80%” holds 2005-23, not 1999-03); USA 27.5% (se0.59 n14 vs 25%); Canada 64.2% (se0.59 n14 vs 60-70%); fuel exports 22.6% (se1.22 n9 vs oil 20-25%); oil rents 1.2% (se0.32 n7 vs paper ~10% value-added – rents understates); WTI-Brent daily corr 0.980 n5362 supporting Fig1c; EBP Fed CSV 1973-2023 (646mo) confirmed; all 21 parameter claims (5/4 vars, lags 3/AIC4/BIC2, priors 0.8/0.1/1, LP 3, 90% bands, 7 exports, 5 GDP comps, 999 rotations, Covid Mar2020-Jun2021, trunc Feb2020, 1-std shock, yields 1-3/3-5/10+yr, 1y mortgage) reproduced verbatim.
+
+**Not rebuilt** (proprietary): 8 IRF/bilateral claims – require LCDM + intraday Jarocinski shocks; bilateral <8% EA share needs authenticated WITS/IMF DOTS (DNS-block, subscription) – OECD lit ~7% supports.

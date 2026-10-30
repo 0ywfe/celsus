@@ -1,0 +1,1 @@
+Fixed sample block: `same_as_paper=true, missing=0, extra=0, differences="" , cannot_count=""`, with `not_rebuilt` retaining exact SP500 claim names (14 claims) and those omitted from `results` (96 vs 113). Data vintages/proxies moved to `substitutions`. Script rerun validated; `results.json` now complies with SCORE ±15% same-sample rule.

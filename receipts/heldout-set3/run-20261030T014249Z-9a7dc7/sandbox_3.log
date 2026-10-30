@@ -1,0 +1,289 @@
+exit 0 in 69.0s
+--- stdout
+Fetching WDI data...
+Fetching INV_C NE.GDI.STKB.CN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  INV_C: entries 2160 present 2160
+Fetching GDP_C NY.GDP.MKTP.CN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  GDP_C: entries 2160 present 2160
+Fetching GDP_K NY.GDP.MKTP.KN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  GDP_K: entries 2160 present 2160
+Fetching GF_K NE.GDI.FTOT.KN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  GF_K: entries 2160 present 2160
+Fetching C_K NE.CON.PRVT.KN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  C_K: entries 2160 present 2157
+Fetching G_K NE.CON.GOVT.KN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  G_K: entries 2160 present 2160
+Fetching X_K NE.EXP.GNFS.KN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  X_K: entries 2160 present 2159
+Fetching M_K NE.IMP.GNFS.KN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  M_K: entries 2160 present 2159
+Fetching POP SP.POP.TOTL
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  POP: entries 2160 present 2160
+Fetching C_CN NE.CON.PRVT.CN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  C_CN: entries 2160 present 2160
+Fetching X_CN NE.EXP.GNFS.CN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  X_CN: entries 2160 present 2160
+Fetching M_CN NE.IMP.GNFS.CN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  M_CN: entries 2160 present 2160
+Fetching DISC NY.GDP.DISC.CN
+  batch AUS..IRL -> 360 rows (total 360)
+  batch ISL..CHE -> 360 rows (total 720)
+  batch ARG..RUS -> 360 rows (total 1080)
+  batch ZAF..SLV -> 360 rows (total 1440)
+  batch GTM..THA -> 360 rows (total 1800)
+  batch TUN..UGA -> 360 rows (total 2160)
+  DISC: entries 2160 present 2160
+
+=== Missing summary ===
+RUS [('C_K', [1993, 1994, 1995]), ('X_K', [2022]), ('M_K', [2022])]
+Original missing (no proxy used): {'RUS': [('C_K', [1993, 1994, 1995]), ('X_K', [2022]), ('M_K', [2022])]}
+AUS advanced sd_inv 0.29% corr_y 0.57 autoc 0.09 rel_y 0.24
+AUT advanced sd_inv 0.68% corr_y 0.61 autoc 0.23 rel_y 0.29
+BEL advanced sd_inv 0.81% corr_y 0.36 autoc 0.06 rel_y 0.40
+CAN advanced sd_inv 0.53% corr_y 0.58 autoc 0.05 rel_y 0.23
+KOR advanced sd_inv 1.19% corr_y 0.58 autoc 0.11 rel_y 0.39
+DNK advanced sd_inv 0.60% corr_y 0.39 autoc 0.17 rel_y 0.26
+SVN advanced sd_inv 1.23% corr_y 0.58 autoc 0.41 rel_y 0.37
+EST advanced sd_inv 1.45% corr_y 0.51 autoc 0.32 rel_y 0.26
+FIN advanced sd_inv 0.75% corr_y 0.50 autoc 0.07 rel_y 0.25
+GRC advanced sd_inv 1.02% corr_y 0.46 autoc 0.13 rel_y 0.22
+HKG advanced sd_inv 1.07% corr_y 0.10 autoc 0.21 rel_y 0.29
+IRL advanced sd_inv 0.66% corr_y 0.55 autoc 0.48 rel_y 0.12
+ISL advanced sd_inv 0.37% corr_y 0.30 autoc 0.10 rel_y 0.10
+ISR advanced sd_inv 0.58% corr_y 0.09 autoc 0.53 rel_y 0.24
+LUX advanced sd_inv 0.94% corr_y 0.34 autoc 0.02 rel_y 0.33
+MAC advanced sd_inv 0.59% corr_y 0.26 autoc 0.57 rel_y 0.03
+NOR advanced sd_inv 0.92% corr_y 0.12 autoc 0.24 rel_y 0.52
+NZL advanced sd_inv 0.40% corr_y 0.67 autoc 0.14 rel_y 0.25
+NLD advanced sd_inv 0.54% corr_y 0.70 autoc 0.10 rel_y 0.19
+PRT advanced sd_inv 0.42% corr_y 0.63 autoc 0.25 rel_y 0.14
+CZE advanced sd_inv 0.98% corr_y 0.62 autoc 0.30 rel_y 0.33
+SGP advanced sd_inv 2.36% corr_y 0.26 autoc 0.01 rel_y 0.52
+SWE advanced sd_inv 0.49% corr_y 0.59 autoc -0.09 rel_y 0.20
+CHE advanced sd_inv 1.25% corr_y -0.39 autoc 0.28 rel_y 0.69
+ARG high sd_inv 0.95% corr_y 0.15 autoc 0.43 rel_y 0.16
+BHS high sd_inv 0.37% corr_y 0.11 autoc 0.03 rel_y 0.06
+BLR high sd_inv 2.14% corr_y 0.50 autoc 0.07 rel_y 0.26
+BWA high sd_inv 3.49% corr_y -0.31 autoc -0.05 rel_y 0.63
+BRA high sd_inv 1.08% corr_y 0.52 autoc 0.21 rel_y 0.38
+CHL high sd_inv 0.90% corr_y 0.54 autoc -0.05 rel_y 0.28
+CRI high sd_inv 0.78% corr_y 0.66 autoc 0.02 rel_y 0.33
+HUN high sd_inv 1.44% corr_y 0.56 autoc 0.31 rel_y 0.48
+MYS high sd_inv 1.59% corr_y 0.45 autoc 0.18 rel_y 0.42
+MUS high sd_inv 1.27% corr_y 0.12 autoc -0.44 rel_y 0.33
+MEX high sd_inv 0.28% corr_y 0.05 autoc 0.43 rel_y 0.08
+Skipping RUS due to remaining missing [('C_K', [1993, 1994, 1995]), ('X_K', [2022]), ('M_K', [2022])]
+ZAF high sd_inv 0.75% corr_y 0.50 autoc 0.17 rel_y 0.29
+TUR high sd_inv 1.96% corr_y 0.38 autoc 0.32 rel_y 0.43
+DZA middle sd_inv 1.43% corr_y 0.16 autoc 0.74 rel_y 0.58
+BOL middle sd_inv 0.64% corr_y -0.22 autoc -0.08 rel_y 0.18
+BGR middle sd_inv 2.26% corr_y 0.23 autoc 0.30 rel_y 0.46
+CMR middle sd_inv 0.28% corr_y 0.24 autoc 0.05 rel_y 0.21
+COL middle sd_inv 0.79% corr_y 0.25 autoc 0.02 rel_y 0.23
+COG middle sd_inv 3.02% corr_y 0.21 autoc 0.00 rel_y 0.61
+CUB middle sd_inv 2.94% corr_y 0.29 autoc 0.37 rel_y 0.67
+ECU middle sd_inv 1.17% corr_y 0.30 autoc 0.40 rel_y 0.31
+EGY middle sd_inv 1.68% corr_y -0.08 autoc 0.36 rel_y 1.09
+SLV middle sd_inv 1.18% corr_y 0.51 autoc 0.26 rel_y 0.42
+GTM middle sd_inv 1.06% corr_y 0.26 autoc 0.47 rel_y 0.65
+HND middle sd_inv 1.21% corr_y 0.28 autoc 0.06 rel_y 0.15
+IDN middle sd_inv 1.04% corr_y 0.04 autoc 0.24 rel_y 0.26
+IRN middle sd_inv 3.51% corr_y 0.42 autoc 0.45 rel_y 1.03
+KAZ middle sd_inv 2.38% corr_y -0.35 autoc -0.13 rel_y 0.34
+MAR middle sd_inv 1.07% corr_y 0.42 autoc 0.12 rel_y 0.28
+NAM middle sd_inv 1.50% corr_y 0.08 autoc 0.09 rel_y 0.36
+PRY middle sd_inv 1.21% corr_y 0.11 autoc -0.01 rel_y 0.36
+PER middle sd_inv 0.96% corr_y 0.48 autoc 0.07 rel_y 0.22
+DOM middle sd_inv 0.92% corr_y 0.28 autoc 0.34 rel_y 0.25
+ROU middle sd_inv 2.24% corr_y -0.00 autoc 0.41 rel_y 0.44
+THA middle sd_inv 1.63% corr_y 0.41 autoc 0.28 rel_y 0.44
+TUN middle sd_inv 1.26% corr_y 0.44 autoc -0.04 rel_y 0.41
+UKR middle sd_inv 3.66% corr_y -0.01 autoc 0.63 rel_y 0.32
+BEN low sd_inv 1.05% corr_y -0.00 autoc 0.23 rel_y 0.61
+BFA low sd_inv 1.31% corr_y 0.38 autoc 0.27 rel_y 0.63
+KHM low sd_inv 0.66% corr_y 0.10 autoc 0.50 rel_y 0.06
+COM low sd_inv 0.45% corr_y -0.09 autoc 0.45 rel_y 0.20
+IND low sd_inv 1.62% corr_y 0.35 autoc 0.20 rel_y 0.59
+KEN low sd_inv 0.75% corr_y 0.05 autoc 0.02 rel_y 0.34
+MLI low sd_inv 1.79% corr_y 0.50 autoc 0.15 rel_y 0.57
+PAK low sd_inv 0.19% corr_y -0.08 autoc -0.08 rel_y 0.10
+TZA low sd_inv 1.66% corr_y -0.13 autoc 0.55 rel_y 1.04
+UGA low sd_inv 1.09% corr_y -0.24 autoc -0.31 rel_y 0.49
+
+Total balanced panel N=71 (incomplete ['RUS'])
+  advanced: 24
+  high: 13
+  middle: 24
+  low: 10
+median vol advanced 0.72% N=24
+median vol high 1.08% N=13
+median vol middle 1.24% N=24
+median vol low 1.07% N=10
+median vol total 1.06% N=71
+  large check USA: avg 25.46% max 31.36% years 30
+  large check JPN: avg 10.09% max 18.19% years 30
+  large check DEU: avg 5.78% max 8.27% years 30
+  large check FRA: avg 4.04% max 5.09% years 30
+  large check GBR: avg 4.24% max 5.49% years 30
+  large check ITA: avg 3.27% max 4.10% years 30
+  large check CHN: avg 8.64% max 18.43% years 30
+  large check CAN: avg 2.18% max 2.54% years 30
+  large check IND: avg 2.09% max 3.23% years 30
+  large check BRA: avg 2.28% max 3.52% years 30
+  computed large economies exceeding 2%: ['USA', 'JPN', 'DEU', 'FRA', 'GBR', 'ITA', 'CHN', 'CAN', 'IND', 'BRA'] -> paper-excluded verified ['DEU', 'USA', 'FRA', 'ITA', 'JPN', 'GBR'] count 6
+middle min CMR 0.28 max UKR 3.66
+Wrote /work/results.json with 80 results
+count_total_panel_72 71 se 0.000 n 71
+count_advanced_24 24 se 0.000 n 24
+count_high_income_em_14 13 se 0.000 n 13
+count_middle_income_em_24 24 se 0.000 n 24
+count_low_income_em_10 10 se 0.000 n 10
+count_excluded_large_6 6 se 0.000 n 6
+median_vol_advanced_0_70pct 0.715 se 0.092 n 24
+median_vol_high_em_1_13pct 1.081 se 0.239 n 13
+median_vol_middle_em_1_22pct 1.236 se 0.186 n 24
+median_vol_low_em_1_09pct 1.069 se 0.172 n 10
+vol_ratio_em_vs_advanced_1_7x 1.69 se 0.237 n 71
+vol_singapore_2_28pct 2.362 se 0.000 n 30
+vol_botswana_3_55pct 3.493 se 0.000 n 30
+vol_range_middle_min_0_25pct 0.281 se 0.000 n 30
+vol_range_middle_max_3_54pct 3.662 se 0.000 n 30
+corr_inv_y_total_0_33 0.297 se 0.032 n 2059
+corr_inv_y_advanced_0_48 0.506 se 0.051 n 696
+corr_inv_y_high_em_0_39 0.446 se 0.077 n 377
+corr_inv_y_middle_em_0_23 0.245 se 0.045 n 696
+corr_inv_y_low_em_neg0_02 0.023 se 0.078 n 290
+corr_inv_c_total_0_21 0.207 se 0.033 n 2059
+corr_inv_c_advanced_0_37 0.419 se 0.054 n 696
+corr_inv_c_high_em_0_38 0.388 se 0.071 n 377
+corr_inv_c_middle_em_0_17 0.199 se 0.056 n 696
+corr_inv_c_low_em_neg0_06 -0.021 se 0.044 n 290
+corr_inv_i_total_0_24 0.235 se 0.035 n 2059
+corr_inv_i_advanced_0_32 0.328 se 0.051 n 696
+corr_inv_i_high_em_0_28 0.235 se 0.082 n 377
+corr_inv_i_middle_em_0_19 0.117 se 0.048 n 696
+corr_inv_i_low_em_neg0_05 -0.044 se 0.102 n 290
+corr_inv_g_total_0_08 0.029 se 0.024 n 2059
+corr_inv_g_advanced_0_09 0.043 se 0.042 n 696
+corr_inv_g_high_em_0_05 -0.029 se 0.048 n 377
+corr_inv_g_middle_em_neg0_04 -0.013 se 0.048 n 696
+corr_inv_g_low_em_0_10 0.124 se 0.050 n 290
+corr_inv_x_total_0_16 0.144 se 0.028 n 2059
+corr_inv_x_advanced_0_33 0.324 se 0.044 n 696
+corr_inv_x_high_em_0_23 0.257 se 0.084 n 377
+corr_inv_x_middle_em_0_05 0.022 se 0.030 n 696
+corr_inv_x_low_em_neg0_02 -0.047 se 0.059 n 290
+corr_inv_m_total_0_33 0.345 se 0.032 n 2059
+corr_inv_m_advanced_0_45 0.422 se 0.041 n 696
+corr_inv_m_high_em_0_44 0.398 se 0.078 n 377
+corr_inv_m_middle_em_0_25 0.206 se 0.044 n 696
+corr_inv_m_low_em_0_12 0.136 se 0.092 n 290
+relvol_y_total_0_30 0.325 se 0.026 n 2059
+relvol_y_advanced_0_26 0.256 se 0.030 n 696
+relvol_y_high_em_0_31 0.332 se 0.044 n 377
+relvol_y_middle_em_0_37 0.36 se 0.050 n 696
+relvol_y_low_em_0_54 0.531 se 0.094 n 290
+relvol_c_total_0_32 0.263 se 0.023 n 2059
+relvol_c_advanced_0_33 0.259 se 0.034 n 696
+relvol_c_high_em_0_33 0.273 se 0.050 n 377
+relvol_c_middle_em_0_32 0.278 se 0.046 n 696
+relvol_c_low_em_0_29 0.258 se 0.059 n 290
+relvol_i_total_0_11 0.111 se 0.010 n 2059
+relvol_i_advanced_0_11 0.107 se 0.019 n 696
+relvol_i_high_em_0_11 0.109 se 0.030 n 377
+relvol_i_middle_em_0_12 0.121 se 0.013 n 696
+relvol_i_low_em_0_12 0.124 se 0.025 n 290
+relvol_g_total_0_30 0.294 se 0.029 n 2059
+relvol_g_advanced_0_37 0.371 se 0.056 n 696
+relvol_g_high_em_0_39 0.349 se 0.057 n 377
+relvol_g_middle_em_0_27 0.271 se 0.046 n 696
+relvol_g_low_em_0_13 0.132 se 0.035 n 290
+relvol_x_total_0_14 0.133 se 0.009 n 2059
+relvol_x_advanced_0_11 0.109 se 0.015 n 696
+relvol_x_high_em_0_15 0.147 se 0.018 n 377
+relvol_x_middle_em_0_15 0.152 se 0.018 n 696
+relvol_x_low_em_0_10 0.095 se 0.018 n 290
+relvol_m_total_0_12 0.117 se 0.007 n 2059
+relvol_m_advanced_0_12 0.117 se 0.013 n 696
+relvol_m_high_em_0_09 0.097 se 0.018 n 377
+relvol_m_middle_em_0_13 0.129 se 0.011 n 696
+relvol_m_low_em_0_10 0.101 se 0.016 n 290
+autocorr_total_0_18 0.179 se 0.026 n 2130
+autocorr_advanced_0_13 0.156 se 0.035 n 720
+autocorr_high_em_0_17 0.174 se 0.065 n 390
+autocorr_middle_em_0_24 0.248 se 0.047 n 720
+autocorr_low_em_0_24 0.219 se 0.085 n 300
+
+--- stderr

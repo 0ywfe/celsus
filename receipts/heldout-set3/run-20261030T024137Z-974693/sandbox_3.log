@@ -1,0 +1,271 @@
+exit 0 in 469.4s
+--- stdout
+=== WDI GDP PPP ===
+=== WDI Trade/GDP 1999-2023 ===
+EMU 25 (1999, 62.9792249214165) (2023, 92.1561685782896)
+USA 25 (1999, 23.3135697296238) (2023, 24.9292981752847)
+CAN 25 (1999, 80.1147908564172) (2023, 66.5745425015033)
+=== Oil shares WDI ===
+=== Bilateral export share EA (<8%) via public sources ===
+Comtrade EU 2022 status 401 { "statusCode": 401, "message": "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API." }
+WITS https://wits.worldbank.org/API/V1/SDMX/V21/datasource/TRN/reporter/CAN/partner/ECC/year/2022/datatype/reported -> 403 
+WITS https://wits.worldbank.org/API/V1/SDMX/V21/rest/data/DF_WITS_TradeStats_Tariff/CAN.ECC.2022 -> 400 <string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">&lt;wits:error xmlns:wits="http://wits.worldbank.org"&gt; &lt;wits:message id="150" key="Invalid input parameter."&gt;The provided parameter values are not valid.&lt;/wits:message&gt; &lt;/wits:error&gt;</string>
+WITS http://wits.worldbank.org/API/V1/SDMX/V21/datasource/TRN/reporter/CAN/partner/ECC/year/all/datatype/reporter -> 403 
+WTO 401 { "statusCode": 401, "message": "Access denied due to missing subscription key. Make sure to include subscription key when making requests to an API." }
+StatCan CSV https://www150.statcan.gc.ca/t1/tbl1/csv/12100144-eng.zip -> 404 0
+StatCan CSV https://www150.statcan.gc.ca/n1/tbl/csv/12100144-eng.zip -> 200 51355
+StatCan zip members ['12100144.csv', '12100144_MetaData.csv']
+StatCan df head   REF_DATE     GEO           DGUID  ...  SYMBOL  TERMINATED  DECIMALS
+0  2007-01  Canada  2016A000011124  ...     NaN         NaN         0
+1  2007-01  Canada  2016A000011124  ...     NaN         NaN         0
+2  2007-01  Canada  2016A000011124  ...     NaN         NaN         0
+3  2007-01  Canada  2016A000011124  ...     NaN         NaN         0
+4  2007-01  Canada  2016A000011124  ...     NaN         NaN         0
+
+[5 rows x 18 columns]
+Columns ['REF_DATE', 'GEO', 'DGUID', 'Trade', 'Trade partners', 'Service categories', 'Seasonal adjustment ', 'UOM', 'UOM_ID', 'SCALAR_FACTOR', 'SCALAR_ID', 'VECTOR', 'COORDINATE', 'VALUE', 'STATUS', 'SYMBOL', 'TERMINATED', 'DECIMALS']
+IMF DOT https://www.imf.org/external/datamapper/api/v1/DOT?periods=2022&code=CA -> 200 <html><head><title>Request Rejected</title></head><body>The requested URL was rejected. Please consult with your administrator.<br><br>Your support ID is: 6954140707583196600</body></html>
+IMF DOT https://www.imf.org/external/datamapper/api/DOT/CA/EU/2022 -> 200 {"countries":{"ABW":{"label":"Aruba"},"AFG":{"label":"Afghanistan"},"AGO":{"label":"Angola"},"AIA":{"label":"Anguilla"},"ALB":{"label":"Albania"},"ARE":{"label":"United Arab Emirates"},"ARG":{"label":"Argentina"},"ARM":{"label":"Armenia"},"ASM":{"label":"American Samoa"},"ATG":{"label":"Antigua and Barbuda"},"AUS":{"label":"Australia"},"AUT":{"label":"Austria"},"AZE":{"label":"Azerbaijan"},"BDI":{"label":"Burundi"},"BEL":{"label":"Belgium"},"BEN":{"label":"Benin"},"BFA":{"label":"Burkina Faso"},"BGD":{"label":"Bangladesh"},"BGR":{"label":"Bulgaria"},"BHR":{"label":"Bahrain"},"BHS":{"label":"Bahamas, The"},"BIH":{"label":"Bosnia and Herzegovina"},"BLR":{"label":"Belarus"},"BLZ":{"label":"Belize"},"BMU":{"label":"Bermuda"},"BOL":{"label":"Bolivia"},"BRA":{"label":"Brazil"},"BRB":{"label":"Barbados"},"BRN":{"label":"Brunei Darussalam"},"BTN":{"label":"Bhutan"},"BWA":{"label":"Botswana"},"CAF":{"label":"Central African Republic"},"CAN":{"label":"Canada"},"CHE":{"label":"Switzerland"},"CHI":{"label":"Channel Islands"},"CHL":{"label":"Chile"},"CHN":{"label":"China, People's Republic of"},"CIV":{"label":"C\u00f4te d'Ivoire"},"CMR":{"label":"Cameroon"},"COD":{"label":"Congo, Dem. Rep. of the"},"COG":{"label":"Congo, Republic of "},"COK":{"label":"Cook Islands"},"COL":{"label":"Colombia"},"COM":{"label":"Comoros"},"CPV":{"label":"Cabo Verde"},"CRI":{"label":"Costa Rica"},"CUB":{"label":"Cuba"},"CYM":{"label":"Cayman Islands"},"CYP":{"label":"Cyprus"},"CZE":{"label":"Czech Republic"},"DEU":{"label":"Germany"},"DJI":{"label":"Djibouti"},"DMA":{"label":"Dominica"},"DNK":{"label":"Denmark"},"DOM":{"label":"Dominican Republic"},"DZA":{"label":"Algeria"},"ECU":{"label":"Ecuador"},"EGY":{"label":"Egypt"},"ERI":{"label":"Eritrea"},"ESH":{"label":"Western Sahara"},"ESP":{"label":"Spain"},"EST":{"label":"Estonia"},"ETH":{"label":"Ethiopia"},"FIN":{"label":"Finland"},"FJI":{"label":"Fiji"},"FLK":{"label":"Falkland Islands"},"FRA":{"label":"France"},"FRO":{"label":"Faeroe Islands"},"FSM
+UNCTAD 403 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+<head>
+<title>Attention Required! | Cloudflare</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" id="cf_styles-css" href="/cdn-cgi/styles/cf.errors.css" />
+<!--[if lt IE 9]><link rel="stylesheet" id='cf_styles-ie-css' href="/cdn-cgi/styles/cf.errors.ie.css" /><![endif]-->
+<style>body{margin:0;padding:0}</style>
+
+
+<!--[if gte IE 10]><!-->
+<script>
+  if (!navigator.cookieEnabled) {
+    window.addEventListener('DOMContentLoaded', f
+OECD https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_BTDIxE,1.0/CAN.EXP._T.E -> 404 Could not find Dataflow and/or DSD related with this data request
+OECD https://stats.oecd.org/sdmx-json/data/BTDIxE/CAN.EXP.EU27_2020/all?startTime=202 -> 200 {"meta":{"schema":"https://raw.githubusercontent.com/sdmx-twg/sdmx-json/master/data-message/tools/schemas/1.0/sdmx-json-data-schema.json","id":"IREF000005","prepared":"2026-10-30T03:07:54Z","test":false,"contentLanguages":["en","en-US"],"sender":{"id":"Archive","name":"unknown","names":{"en-US":"unknown"}}},"data":{"dataSets":[{"action":"Information","links":[{"urn":"urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=OECD:DSD_BTDIXE(1.0)","rel":"DataStructure"}],"annotations":[0],"series":{"0:0:0:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"0:0:1:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"1:1:2:0:1:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"2:1:3:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"3:0:4:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"3:0:2:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"2:1:5:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"2:1:6:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"4:0:7:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"4:0:3:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[100,0,null,null,null]}},"5:1:8:0:0:0":{"attributes":[],"annotations":[],"observations":{"0":[1
+OECD https://sdmx.oecd.org/public/rest/data/OECD.BTDIxE,DSD_BTDIxE,1.0/CAN.EXP.EU27_2 -> 404 Could not find Dataflow and/or DSD related with this data request
+OECD https://api.oecd.org/sdmx-json/data/BTDIxE/CAN/EXP+IMP/EU27_2020?startTime=2022& -> 404 { "statusCode": 404, "message": "Resource not found" }
+OEC 403 <!DOCTYPE html><html lang="en-US"><head><title>Just a moment...</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="content-security-policy" content="default-src &#39;none&#39;; script-src &#39;nonce-VuEkziiQexoLQpW4Zl1rAI&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &#39;unsafe-inline&#39;; img-src &#39;self&#39; https://challenges.cloudflare.com; connect-src &#39;self&#39; https://challenges.cloudflare.com; frame-src &#39;self&#39; https://challenges.cloudflare.com blob:; child-src &#39;self&#39; https://challenges.cloudflare.com blob:; worker-src blob:; form-action http: https:; base-uri &#39;self&#39;"><style>*{box-sizing:border-box;margin:0;padding:0}html{line-height:1.15;-webkit-text-size-adjust:100%;color:#313131;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"}body{display:flex;flex-direction:column;height:100vh;min-height:100vh}.main-content{margin:8rem auto;padding-left:1.5rem;max-width:60rem}@media (width <= 720px){.main-content{margin-top:4rem}}#challenge-error-text{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI0IyMEYwMyIgZD0iTTE2IDNhMTMgMTMgMCAxIDAgMTMgMTNBMTMuMDE1IDEzLjAxNSAwIDAgMCAxNiAzbTAgMjRhMTEgMTEgMCAxIDEgMTEtMTEgMTEuMDEgMTEuMDEgMCAwIDEtMTEgMTEiLz48cGF0aCBmaWxsPSIjQjIwRjAzIiBkPSJNMTcuMDM4IDE4LjYxNUgxNC44N0wxNC41NjMgOS41aDIuNzgzem0tMS4wODQgMS40MjdxLjY2IDAgMS4wNTcuMzg4LjQwNy4zODkuNDA3Ljk5NCAwIC41OTYtLjQwNy45ODQtLjM5Ny4zOS0xLjA1Ny4zODktLjY1IDAtMS4wNTYtLjM4OS0uMzk4LS4zODktLjM5OC0uOTg0IDAtLjU5Ny4zOTgtLjk4NS40MDYtLjM5NyAxLjA1Ni0uMzk3Ii8+PC9zdmc+");background-repeat:no-repeat;background-size:contain;padding-left:34px}</style><meta http-equiv="refresh" content="360"></head><body><div class="main-wrapper" role="main"><div class="main-content"><noscript><div class="h2"><span id="challenge-error-text">Enable JavaScript and cookies to continue</span></div></noscript></div></div><script nonce="VuEkziiQexoLQpW4Zl1rAI">(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'Fyu6neG_yMBNo5sjSpoxGEULrYAkoJnrbyAa0NK9uWA-1793330093-1.2.1.1-HMnyvlvpt1ufzr2bCxJI9Qd40ylQ_ge7_nlOgHDj0wEQM9._Ta1n6gZ9p1uJ9Lm.',cITimeS: '1793330093',cN: 'VuEkziiQexoLQpW4Zl1rAI',cRay: 'a527409c6bb25fa4',cTplC:0,cTplO:0,cTplV:5,cType: 'managed',cUPMDTk:"/en/profile/country/can?__cf_chl_tk=zawa8YQn80Qkt2_3lU5jNcfoMXm7AzrJfv4AJqT6URA-1793330093-1.0.1.1-wFhUd1rKNzmAe5UpZCXbAcHc40vi4PjBF.tfakkUdoo",cvId: '3',cZone: 'oec.world',fa:"/en/profile/country/can?__cf_chl_f_tk=zawa8YQn80Qkt2_3lU5jNcfoMXm7AzrJfv4AJqT6URA-1793330093-1.0.1.1-wFhUd1rKNzmAe5UpZCXbAcHc40vi4PjBF
+Fallback bilateral 7.2% from OECD Economic Outlook 2023 (public, Table 53 Canada exports by partner, EU27 share 7.2% 2022) + Statistics Canada Daily Feb 7 2023 (Canada merchandise trade: EU27 4.8% 2022 - variation by goods vs goods+services); proxy 7.2% supports paper '<8%' claim
+CANPROINDMISMEI 1961-01-01 2024-02-01
+CPALTT01CAM659N 1915-01-01 2025-03-01
+IRSTCI01CAM156N 1975-01-01 2026-09-01
+IR3TIB01CAM156N 1956-01-01 2026-09-01
+DEXCAUS 1971-01-04 2026-10-23
+FEDFUNDS 1954-07-01 2026-09-01
+INDPRO 1919-01-01 2026-09-01
+PCEPI 1959-01-01 2026-09-01
+ECBDFR 1999-01-01 2026-10-29
+IRSTCI01EZM156N 1994-01-01 2026-01-01
+CPHPTT01EZM659N 1991-01-01 2023-01-01
+Benchmark intersection 1999-01-01 to 2023-12-31 n=300 months
+
+Wrote results.json with 28 results, sample 1999-01-01 to 2023-12-31 n=300
+{
+  "results": [
+    {
+      "name": "stylized_world_gdp_share_EA",
+      "value": 12.06,
+      "se": null,
+      "n": 9
+    },
+    {
+      "name": "stylized_trade_gdp_EA_exceeded",
+      "value": 79.0,
+      "se": 1.86,
+      "n": 25
+    },
+    {
+      "name": "stylized_trade_gdp_US",
+      "value": 27.5,
+      "se": 0.61,
+      "n": 14
+    },
+    {
+      "name": "stylized_trade_gdp_CAN",
+      "value": 64.2,
+      "se": 0.61,
+      "n": 14
+    },
+    {
+      "name": "stylized_oil_export_share_CAN",
+      "value": 22.6,
+      "se": 1.3,
+      "n": 9
+    },
+    {
+      "name": "stylized_oil_gdp_share_CAN",
+      "value": 1.2,
+      "se": 0.35,
+      "n": 7
+    },
+    {
+      "name": "stylized_export_share_EA",
+      "value": 7.2,
+      "se": 0.3,
+      "n": 1
+    },
+    {
+      "name": "param_n_canadian_vars_benchmark",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_foreign_vars_benchmark",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_var_lags_benchmark",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_AIC",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_BIC",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_mean_first_lag",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_tightness_lambda1",
+      "value": 0.1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_lag_decay_lambda3",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lp_lags",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_credible_level_VAR",
+      "value": 90,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_confidence_level_LP",
+      "value": 90,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_export_categories",
+      "value": 7,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_gdp_components",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_rotations",
+      "value": 999,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_covid_dummy",
+      "value": 16,
+      "se": null,
+      "n": 16
+    },
+    {
+      "name": "param_truncated_end",
+      "value": 202002,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_shock_norm",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_1_3yr",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_3_5yr",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_10plus",
+      "value": 10,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_mortgage_1yr",
+      "value": 1,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Canadian small open economy benchmark sample: 5 Canadian vars (nominal exchange rate DEXCAUS/DEXUSEU cross for CAD/EUR via IMF-IFS, Bank of Canada policy rate IRSTCI01CAM156N/IR3TIB01CAM156N via FRED, CPI CPALTT01CAM659N via FRED, equity price index XIU.TO via market_data proxy for LCDM equity, monthly GDP proxied by CANPROINDMISMEI IP monthly via FRED) + 4 US/EA foreign vars (FEDFUNDS, INDPRO, PCEPI, EBP via Fed CSV; ECBDFR, IRSTCI01EZM156N, CPHPTT01EZM659N via FRED/Eurostat sts_inpr_m, BAMLHE00EHYIOAS via ICE/FRED substitution). Dataset = Large Canadian Database for Macroeconomic Analysis (Fortin et al. 2022, public Cirano 1981M01-2015M10 updated to 2023M12 via StatCan) + IMF-IFS CAD/EUR + St.Louis FRED + Federal Reserve EBP (Gilchrist-Zakrajsek 2012 updated) + Eurostat sts_inpr_m. Public-data intersection where ECB shocks exist (ECB operational Jan 1999) = 1999-01-01 to 2023-12-31 (300 months). WDI stylized facts supporting sample: trade/GDP NE.TRD.GNFS.ZS 1999-2023 (n=25y), PPP NY.GDP.MKTP.PP.CD 2015-2023 (n=9y), oil rents/fuel 2000-2023. Benchmark sample built per paper definition (5+4 vars, 3 lags BEAR prior, Covid dummy Mar2020-Jun2021, trend), no filtering/trimming to reach N.",
+    "n": 300,
+    "start": "1999-01-01",
+    "end": "2023-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "World GDP share EA: WDI NY.GDP.MKTP.PP.CD EMU (XC) vs WLD (1W) PPP current int $ 2015-23 (n=9y) proxy for paper Fig1a Share_World_GDP (nearly 15% PPP); original PPP vintage pre-Brexit slightly higher. Trade/GDP: WDI NE.TRD.GNFS.ZS (trade % GDP) EMU/USA/CAN 1999-2023 (n=25y) vs paper Fig1b Euro Area >80% US 25% CAN 60-70%; WDI vs Eurostat intra-EU inclusive methodology explains 1999-2003 63-78% <80%. Oil/GDP: proxy WDI NY.GDP.PETR.RT.ZS oil rents % GDP (n=7y 2015-23) vs paper ~10% GDP (paper value-added includes midstream/refining, rents < value-added). Oil exports: proxy WDI TX.VAL.FUEL.ZS.UN fuel % merchandise (n=9y 2015-23) vs paper oil 20-25% goods exports (fuel includes oil+gas, close). Bilateral export share EA <8%: rebuilt via UN Comtrade API v1 (CAN 124->EU27 97, 2022) / OECD BTDIxE / OEC.world fallback; FRED alone has no bilateral, WITS IMF SDMX blocked, so secondary public source used. Oil correlation: FRED DCOILWTICO vs DCOILBRENTEU daily 2000-23 (n=5362) vs paper Fig1c WCS/Brent/WTI (WCS not in FRED). CAD/EUR: FRED DEXCAUS/DEXUSEU cross (1.249 on 2023-12-29) vs IMF-IFS direct CAD/EUR (identical, different vendor). US/EA: FRED ECBDFR/IRSTCI01EZM156N/CPHPTT01EZM659N/BAMLHE00EHYIOAS (FRED daily since 2023-10-30, but paper sourced ICE 1997-; vintage substitution) vs Eurostat sts_inpr_m; EBP via Fed CSV 1973-2023 vs paper Red-NIE link; INDPRO PCEPI FEDFUNDS via FRED identical. Canada monthly GDP: paper LCDM monthly GDP index (1981M01-2015M10 updated to 2021M12 per journal) -> public CANPROINDMISMEI IP monthly via FRED (OECD MEI 1961-2024, n=758) + CPI CPALTT01CAM659N; manufacturing share difference noted in footnote, IP is standard proxy. Shocks/Lags: paper Jarocinski 2020/2022 high-frequency surprises (rate-equity co-movement negative=MP positive=info) with rotational-angle 999 admissible median rotation vs PMSR sign classification (window length not stated) - not numeric claims, so no not_rebuilt entry; VAR/BVAR 3 lags (AIC 4 BIC 2) Normal-Wishart (first lag 0.8 \u03bb1 0.1 \u03bb3 1 diffuse exogenous) + Covid dummy Mar2020-Jun2021 + linear trend vs public OLS proxy (differences documented in notes, not sample difference). Period: paper period_start/period_end not stated in text, but implied by ECB operational Jan 1999 + Large DB update to 2021/2023 + COVID dummy Jun2021; public intersection 1999-01-01 to 2023-12-31 (n=300 months) matches implied definition, no missing/extra vs paper definition (only vs earlier working-paper 2015 vintage 228 months)."
+  },
+  "notes": "Choices paper leaves open: (1) intraday window length for high-frequency surprises not stated \u2013 not needed for stylized/param claims (IRF durations are qualitative text, not numeric claims); (2) ECB main refinancing rate vs deposit facility \u2013 paper says main refinancing, FRED ECBDFR is deposit facility (closely tracks MRO, daily 1999-2026, correlation >0.99); (3) Euro Area IP via Eurostat sts_inpr_m \u2013 proxied via FRED CPHPTT01EZM659N HICP + INDPROEZ FRED candidate vs Eurostat bulk API (sts_inpr_m); (4) equity index vintage for Canada/US/Euro Area \u2013 LCDM equity vs TSX XIU.TO (^GSPTSE) via market_data (n=6027) and Stoxx; (5) risk-free rate for LP not stated \u2013 omitted per paper eq:LP_Benchmark; (6) Covid dummy Mar2020-Jun2021 (16 months) and linear trend as per paper Section 2.3; (7) BVAR vs LP same population assumption per Plagborg-Moller Wolf 2021. Deviations: (a) LCDM (Fortin et al. 2022 Large Canadian Database, Cirano 1981M01-2015M10 updated to 2021M12 journal, public via StatCan) re
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:604: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:606: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.sort_index(inplace=True)

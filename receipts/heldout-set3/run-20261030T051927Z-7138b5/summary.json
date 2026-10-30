@@ -1,0 +1,47 @@
+{
+ "run_id": "run-20261030T051927Z-7138b5",
+ "paper": "2509.05760",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 1 of 2 checked results match within their uncertainty. Its main result, estimate_beta_CPI_controlled, is 0.03 beta in the paper and -0.03032 beta here (not consistent).",
+ "headline": {
+  "name": "estimate_beta_CPI_controlled",
+  "kind": "estimate",
+  "unit": "beta",
+  "reported": 0.03,
+  "reproduced": -0.030316064551574852,
+  "se": 0.01902512036873084,
+  "n": 11785,
+  "consistent": false,
+  "why": "paper outside -0.03032 +/- 0.03729"
+ },
+ "sample": [
+  {
+   "name": "count_tickers",
+   "reported": 100.0,
+   "reproduced": 98,
+   "consistent": true
+  },
+  {
+   "name": "count_sectors",
+   "reported": 11.0,
+   "reproduced": 11,
+   "consistent": true
+  }
+ ],
+ "judged": 2,
+ "matched": 1,
+ "rejections": [],
+ "rounds": 2,
+ "packages": [],
+ "calls": 47,
+ "cost_usd": 0.8252,
+ "tokens_in": 2063288,
+ "tokens_out": 98545,
+ "wall_s": 945.1,
+ "crashed": null
+}

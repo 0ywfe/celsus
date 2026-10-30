@@ -1,0 +1,1845 @@
+{
+ "title": "Replication spec for The Behavior of Inventories over the Business Cycle: Evidence across Levels of Development",
+ "hypothesis": "Inventory dynamics vary systematically across levels of development: strongly procyclical and less volatile/persistent in advanced economies vs acyclical and more volatile/persistent at lower income levels; and responses to long-run productivity and financial shocks differ across groups.",
+ "data_sources": [
+  "World Bank WDI national accounts",
+  "IMF WEO classification",
+  "World Bank income classification",
+  "FRED BAA spread and Treasury",
+  "Fed funds futures FF4 Acosta 2024",
+  "Ludvigson et al. 2021 uncertainty index"
+ ],
+ "sample": "Balanced panel of 72 small open economies with complete records for changes in inventories at current prices, GDP at constant and current prices, investment as Gross Fixed Capital Formation, government consumption, imports, exports, population. Filters: period 1993-2022; exclude 6 countries with GDP >2% of world GDP: Germany, United States, France, Italy, Japan, United Kingdom; exclude countries with recurrent institutional instability or constituted after 1993: Mauritania, Slovakia, Togo, North Macedonia; countries classified to most frequent IMF/World Bank group 1993-2022 mode.",
+ "period_start": "1993",
+ "period_end": "2022",
+ "method": [
+  "1. Collect variables: delta INV_curr, Y constant and Y_curr, I as GFCF, G, M, X, population. Assess statistical discrepancy ratio = |Disc / delta INV_curr|.",
+  "2. Deflate delta INV_curr by country implicit GDP deflator to delta INV. Obtain Y_trend via log-quadratic filter, construct ratio = delta INV / Y_trend_{t-1}. Alternative robustness: log-quadratic, HP filter.",
+  "3. Build balanced panel 1993-2022, apply exclusion filters above to obtain 72 countries.",
+  "4. Classify into 4 groups per IMF and World Bank mode: 24 advanced high-income, 14 high and upper-middle EMDE, 24 lower-middle EMDE, 10 low-income EMDE.",
+  "5. Extract cycle: country-specific quadratic filter in levels: delta inv_t / Y_trend_{t-1} = beta0_i + beta1_i t + beta2_i t^2 + epsilon_i,t; epsilon = delta inv_t^c. For other aggregates take log first difference of per capita terms.",
+  "6. Compute median volatility, correlations Corr(delta inv^c, delta y/c/i/g/x/m), relative volatilities sigma(delta inv^c)/sigma(delta arg), serial correlation Corr(delta inv^c_t, delta inv^c_{t-1}).",
+  "7. Panel unit-root and cointegration tests: IPS in levels, IPS and LLC in first differences, IPS and LLC AIC on balanced-growth ratios c_t-y_t^g and i_t-y_t^g, Pedroni PP and ADF on (y^g,c,i).",
+  "8. Long-run productivity shock KPSW identification: X_i,t=[y^g,c,i]' per capita logs, beta'=[-1 1 0; -1 0 1], panel VECM delta X_i,t = mu_i + alpha beta'X_{i,t-1}+ sum Gamma_j delta X_{i,t-j}+u_i,t with pooled alpha Gamma p=1, C(1)=beta_perp[alpha_perp'(I-sum Gamma_j)beta_perp]^-1 alpha_perp', shock_PS_i,t = e_y' C(1) u_i,t e_y'=[1 0 0] sign-normalized to positive long-run output, persistence AR1 with FE clustered SE.",
+  "9. Financial shock: BAA spread = yield Baa corporate minus Treasury, instrument with SM_t=sum FF4_j in year t and global uncertainty UNC_t annual average Ludvigson index, estimate BAA_t = gamma0+gamma1 SM_t+gamma2 UNC_t+nu_t, shock = predicted component, diagnostics first-stage F on global annual series, Montiel-Olea-Pflueger effective F per group-horizon clustered by year, Hansen J, Durbin-Wu-Hausman, AR1 persistence.",
+  "10. Local projections h=0..5 separately per group and shock: delta inv^c_{i,t+h}=alpha_i+lambda_t+beta_PS_h shock_PS_i,t+Gamma_PS_h Z_{i,t-1}+eps and delta inv^c_{i,t+h}=alpha_i+beta_F_h BAA_hat_t+Gamma_F_h Z_{i,t-1}+eps, Z = 2 lags output growth and 2 lags delta inv^c, clustered SE by country, robust estimator for PS, alternative specs: crisis dummies 1998 2009 2020, 1 vs 2 lags, leave-one-out, year and two-way clustering.",
+  "11. LP variance share VS^j_{g,h}=100 * beta^j2_g,h Var_w(tilde s^j_i,t)/Var_w(tilde delta inv^c_{i,t+h}) residualized w.r.t controls and FE, weighted for PS."
+ ],
+ "claims": [
+  {
+   "name": "count_total_panel_72",
+   "description": "balanced panel total countries",
+   "value": "72",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec2: panel of 72 countries, Table1 N sum"
+  },
+  {
+   "name": "count_advanced_24",
+   "description": "advanced high-income economies",
+   "value": "24",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec2 and Table1"
+  },
+  {
+   "name": "count_high_income_em_14",
+   "description": "high and upper-middle EMDE",
+   "value": "14",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec2 and Table1"
+  },
+  {
+   "name": "count_middle_income_em_24",
+   "description": "lower-middle EMDE",
+   "value": "24",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec2 and Table1"
+  },
+  {
+   "name": "count_low_income_em_10",
+   "description": "low-income EMDE",
+   "value": "10",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec2 and Table1"
+  },
+  {
+   "name": "count_excluded_large_6",
+   "description": "excluded large economies >2% world GDP",
+   "value": "6",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec2 footnote Germany US France Italy Japan UK"
+  },
+  {
+   "name": "median_vol_advanced_0_70pct",
+   "description": "median absolute volatility delta inv advanced",
+   "value": "0.70%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2 after Table1"
+  },
+  {
+   "name": "median_vol_high_em_1_13pct",
+   "description": "median absolute volatility high-income EM",
+   "value": "1.13%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "median_vol_middle_em_1_22pct",
+   "description": "median absolute volatility middle-income EM",
+   "value": "1.22%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "median_vol_low_em_1_09pct",
+   "description": "median absolute volatility low-income EM",
+   "value": "1.09%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "vol_ratio_em_vs_advanced_1_7x",
+   "description": "EM average vol ~1.7 times advanced",
+   "value": "1.7",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "vol_singapore_2_28pct",
+   "description": "Singapore advanced max tail",
+   "value": "2.28%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2 Figure discussion"
+  },
+  {
+   "name": "vol_botswana_3_55pct",
+   "description": "Botswana high-income EM max tail",
+   "value": "3.55%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "vol_range_middle_min_0_25pct",
+   "description": "middle-income EM vol range min",
+   "value": "0.25%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "vol_range_middle_max_3_54pct",
+   "description": "middle-income EM vol range max",
+   "value": "3.54%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Sec2"
+  },
+  {
+   "name": "corr_inv_y_total_0_33",
+   "description": "Corr delta inv delta y total",
+   "value": "0.33",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_y_advanced_0_48",
+   "description": "Corr delta inv delta y advanced",
+   "value": "0.48",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_y_high_em_0_39",
+   "description": "Corr delta inv delta y high EM",
+   "value": "0.39",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_y_middle_em_0_23",
+   "description": "Corr delta inv delta y middle EM",
+   "value": "0.23",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_y_low_em_neg0_02",
+   "description": "Corr delta inv delta y low EM",
+   "value": "-0.02",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_c_total_0_21",
+   "description": "Corr delta inv delta c total",
+   "value": "0.21",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_c_advanced_0_37",
+   "description": "Corr delta inv delta c advanced",
+   "value": "0.37",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_c_high_em_0_38",
+   "description": "Corr delta inv delta c high EM",
+   "value": "0.38",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_c_middle_em_0_17",
+   "description": "Corr delta inv delta c middle EM",
+   "value": "0.17",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_c_low_em_neg0_06",
+   "description": "Corr delta inv delta c low EM",
+   "value": "-0.06",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_i_total_0_24",
+   "description": "Corr delta inv delta i total",
+   "value": "0.24",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_i_advanced_0_32",
+   "description": "Corr delta inv delta i advanced",
+   "value": "0.32",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_i_high_em_0_28",
+   "description": "Corr delta inv delta i high EM",
+   "value": "0.28",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_i_middle_em_0_19",
+   "description": "Corr delta inv delta i middle EM",
+   "value": "0.19",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_i_low_em_neg0_05",
+   "description": "Corr delta inv delta i low EM",
+   "value": "-0.05",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_g_total_0_08",
+   "description": "Corr delta inv delta g total",
+   "value": "0.08",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_g_advanced_0_09",
+   "description": "Corr delta inv delta g advanced",
+   "value": "0.09",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_g_high_em_0_05",
+   "description": "Corr delta inv delta g high EM",
+   "value": "0.05",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_g_middle_em_neg0_04",
+   "description": "Corr delta inv delta g middle EM",
+   "value": "-0.04",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_g_low_em_0_10",
+   "description": "Corr delta inv delta g low EM",
+   "value": "0.10",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_x_total_0_16",
+   "description": "Corr delta inv delta x total",
+   "value": "0.16",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_x_advanced_0_33",
+   "description": "Corr delta inv delta x advanced",
+   "value": "0.33",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_x_high_em_0_23",
+   "description": "Corr delta inv delta x high EM",
+   "value": "0.23",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_x_middle_em_0_05",
+   "description": "Corr delta inv delta x middle EM",
+   "value": "0.05",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_x_low_em_neg0_02",
+   "description": "Corr delta inv delta x low EM",
+   "value": "-0.02",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_m_total_0_33",
+   "description": "Corr delta inv delta m total",
+   "value": "0.33",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_m_advanced_0_45",
+   "description": "Corr delta inv delta m advanced",
+   "value": "0.45",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_m_high_em_0_44",
+   "description": "Corr delta inv delta m high EM",
+   "value": "0.44",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_m_middle_em_0_25",
+   "description": "Corr delta inv delta m middle EM",
+   "value": "0.25",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "corr_inv_m_low_em_0_12",
+   "description": "Corr delta inv delta m low EM",
+   "value": "0.12",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_y_total_0_30",
+   "description": "sigma inv / sigma y total",
+   "value": "0.30",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_y_advanced_0_26",
+   "description": "sigma inv / sigma y advanced",
+   "value": "0.26",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_y_high_em_0_31",
+   "description": "sigma inv / sigma y high EM",
+   "value": "0.31",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_y_middle_em_0_37",
+   "description": "sigma inv / sigma y middle EM",
+   "value": "0.37",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_y_low_em_0_54",
+   "description": "sigma inv / sigma y low EM",
+   "value": "0.54",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_c_total_0_32",
+   "description": "sigma inv / sigma c total",
+   "value": "0.32",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_c_advanced_0_33",
+   "description": "sigma inv / sigma c advanced",
+   "value": "0.33",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_c_high_em_0_33",
+   "description": "sigma inv / sigma c high EM",
+   "value": "0.33",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_c_middle_em_0_32",
+   "description": "sigma inv / sigma c middle EM",
+   "value": "0.32",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_c_low_em_0_29",
+   "description": "sigma inv / sigma c low EM",
+   "value": "0.29",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_i_total_0_11",
+   "description": "sigma inv / sigma i total",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_i_advanced_0_11",
+   "description": "sigma inv / sigma i advanced",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_i_high_em_0_11",
+   "description": "sigma inv / sigma i high EM",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_i_middle_em_0_12",
+   "description": "sigma inv / sigma i middle EM",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_i_low_em_0_12",
+   "description": "sigma inv / sigma i low EM",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_g_total_0_30",
+   "description": "sigma inv / sigma g total",
+   "value": "0.30",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_g_advanced_0_37",
+   "description": "sigma inv / sigma g advanced",
+   "value": "0.37",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_g_high_em_0_39",
+   "description": "sigma inv / sigma g high EM",
+   "value": "0.39",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_g_middle_em_0_27",
+   "description": "sigma inv / sigma g middle EM",
+   "value": "0.27",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_g_low_em_0_13",
+   "description": "sigma inv / sigma g low EM",
+   "value": "0.13",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_x_total_0_14",
+   "description": "sigma inv / sigma x total",
+   "value": "0.14",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_x_advanced_0_11",
+   "description": "sigma inv / sigma x advanced",
+   "value": "0.11",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_x_high_em_0_15",
+   "description": "sigma inv / sigma x high EM",
+   "value": "0.15",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_x_middle_em_0_15",
+   "description": "sigma inv / sigma x middle EM",
+   "value": "0.15",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_x_low_em_0_10",
+   "description": "sigma inv / sigma x low EM",
+   "value": "0.10",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_m_total_0_12",
+   "description": "sigma inv / sigma m total",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_m_advanced_0_12",
+   "description": "sigma inv / sigma m advanced",
+   "value": "0.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_m_high_em_0_09",
+   "description": "sigma inv / sigma m high EM",
+   "value": "0.09",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_m_middle_em_0_13",
+   "description": "sigma inv / sigma m middle EM",
+   "value": "0.13",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "relvol_m_low_em_0_10",
+   "description": "sigma inv / sigma m low EM",
+   "value": "0.10",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "autocorr_total_0_18",
+   "description": "autocorr delta inv total",
+   "value": "0.18",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "autocorr_advanced_0_13",
+   "description": "autocorr delta inv advanced",
+   "value": "0.13",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "autocorr_high_em_0_17",
+   "description": "autocorr delta inv high EM",
+   "value": "0.17",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "autocorr_middle_em_0_24",
+   "description": "autocorr delta inv middle EM",
+   "value": "0.24",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "autocorr_low_em_0_24",
+   "description": "autocorr delta inv low EM",
+   "value": "0.24",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "Table2"
+  },
+  {
+   "name": "ips_y_level_stat_neg0_39",
+   "description": "IPS y^g level statistic",
+   "value": "-0.39",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_y_level_p_0_35",
+   "description": "IPS y^g level p-value",
+   "value": "0.35",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_c_level_stat_3_49",
+   "description": "IPS c level statistic",
+   "value": "3.49",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_c_level_p_1_00",
+   "description": "IPS c level p-value",
+   "value": "1.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_i_level_stat_neg1_27",
+   "description": "IPS i level statistic",
+   "value": "-1.27",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_i_level_p_0_10",
+   "description": "IPS i level p-value",
+   "value": "0.10",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_dy_stat_neg29_63",
+   "description": "IPS Delta y^g statistic",
+   "value": "-29.63",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_dy_p_0_00",
+   "description": "IPS Delta y^g p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_dc_stat_neg26_25",
+   "description": "IPS Delta c statistic",
+   "value": "-26.25",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_dc_p_0_00",
+   "description": "IPS Delta c p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_di_stat_neg27_97",
+   "description": "IPS Delta i statistic",
+   "value": "-27.97",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_di_p_0_00",
+   "description": "IPS Delta i p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_dy_stat_neg27_58",
+   "description": "LLC Delta y^g statistic",
+   "value": "-27.58",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_dy_p_0_00",
+   "description": "LLC Delta y^g p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_dc_stat_neg24_83",
+   "description": "LLC Delta c statistic",
+   "value": "-24.83",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_dc_p_0_00",
+   "description": "LLC Delta c p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_di_stat_neg27_81",
+   "description": "LLC Delta i statistic",
+   "value": "-27.81",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_di_p_0_00",
+   "description": "LLC Delta i p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_cy_stat_neg1_42",
+   "description": "IPS c-y^g ratio AIC statistic",
+   "value": "-1.42",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_cy_p_0_07",
+   "description": "IPS c-y^g p-value",
+   "value": "0.07",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_iy_stat_neg4_23",
+   "description": "IPS i-y^g ratio AIC statistic",
+   "value": "-4.23",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "ips_iy_p_0_00",
+   "description": "IPS i-y^g p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_cy_stat_neg1_70",
+   "description": "LLC c-y^g statistic",
+   "value": "-1.70",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_cy_p_0_05",
+   "description": "LLC c-y^g p-value",
+   "value": "0.05",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_iy_stat_neg4_51",
+   "description": "LLC i-y^g statistic",
+   "value": "-4.51",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "llc_iy_p_0_00",
+   "description": "LLC i-y^g p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "pedroni_pp_stat_neg5_29",
+   "description": "Pedroni PP cointegration statistic",
+   "value": "-5.29",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "pedroni_pp_p_0_00",
+   "description": "Pedroni PP p-value",
+   "value": "0.00",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "pedroni_adf_stat_neg2_26",
+   "description": "Pedroni ADF statistic",
+   "value": "-2.26",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "pedroni_adf_p_0_01",
+   "description": "Pedroni ADF p-value",
+   "value": "0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table3"
+  },
+  {
+   "name": "rho_ps_neg0_06",
+   "description": "productivity shock AR1 coefficient",
+   "value": "-0.06",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Sec3.1"
+  },
+  {
+   "name": "rho_ps_p_0_94",
+   "description": "p-value persistence productivity shock",
+   "value": "0.94",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Sec3.1"
+  },
+  {
+   "name": "firststage_F_10_69",
+   "description": "first-stage F BAA on instruments global",
+   "value": "10.69",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Sec3.2 Table4"
+  },
+  {
+   "name": "firststage_F_p_0_0004",
+   "description": "first-stage F p-value",
+   "value": "0.0004",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Sec3.2"
+  },
+  {
+   "name": "effective_F_range_8_83_14_85",
+   "description": "MOP effective F range across groups-horizons",
+   "value": "8.83-14.85",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Sec3.2 Table4 and App F"
+  },
+  {
+   "name": "hansen_J_p_0_58",
+   "description": "Hansen J overidentification p-value",
+   "value": "0.58",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Sec3.2 Table4"
+  },
+  {
+   "name": "dwh_stat_8_98",
+   "description": "Durbin-Wu-Hausman statistic",
+   "value": "8.98",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "dwh_p_0_0038",
+   "description": "Durbin-Wu-Hausman p-value",
+   "value": "0.0038",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "rho_fin_0_2188",
+   "description": "financial shock AR1 coefficient",
+   "value": "0.2188",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "rho_fin_p_0_737",
+   "description": "financial shock persistence p-value",
+   "value": "0.737",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table4"
+  },
+  {
+   "name": "vs_ps_advanced_h0_9_77",
+   "description": "LP variance share PS advanced h0",
+   "value": "9.77",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_advanced_h1_5_34",
+   "description": "LP variance share PS advanced h1",
+   "value": "5.34",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_advanced_h2_2_36",
+   "description": "LP variance share PS advanced h2",
+   "value": "2.36",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_advanced_h3_1_40",
+   "description": "LP variance share PS advanced h3",
+   "value": "1.40",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_advanced_h4_0_01",
+   "description": "LP variance share PS advanced h4",
+   "value": "0.01",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_advanced_h5_0_12",
+   "description": "LP variance share PS advanced h5",
+   "value": "0.12",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_high_em_h0_0_87",
+   "description": "LP variance share PS high EM h0",
+   "value": "0.87",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_high_em_h1_2_28",
+   "description": "LP variance share PS high EM h1",
+   "value": "2.28",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_high_em_h2_0_84",
+   "description": "LP variance share PS high EM h2",
+   "value": "0.84",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_high_em_h3_0_96",
+   "description": "LP variance share PS high EM h3",
+   "value": "0.96",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_high_em_h4_0_00",
+   "description": "LP variance share PS high EM h4",
+   "value": "0.00",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_high_em_h5_0_02",
+   "description": "LP variance share PS high EM h5",
+   "value": "0.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_middle_em_h0_5_11",
+   "description": "LP variance share PS middle EM h0",
+   "value": "5.11",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_middle_em_h1_0_08",
+   "description": "LP variance share PS middle EM h1",
+   "value": "0.08",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_middle_em_h2_0_01",
+   "description": "LP variance share PS middle EM h2",
+   "value": "0.01",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_middle_em_h3_0_14",
+   "description": "LP variance share PS middle EM h3",
+   "value": "0.14",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_middle_em_h4_0_22",
+   "description": "LP variance share PS middle EM h4",
+   "value": "0.22",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_middle_em_h5_0_43",
+   "description": "LP variance share PS middle EM h5",
+   "value": "0.43",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_low_em_h0_15_78",
+   "description": "LP variance share PS low EM h0",
+   "value": "15.78",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_low_em_h1_3_73",
+   "description": "LP variance share PS low EM h1",
+   "value": "3.73",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_low_em_h2_0_65",
+   "description": "LP variance share PS low EM h2",
+   "value": "0.65",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_low_em_h3_2_29",
+   "description": "LP variance share PS low EM h3",
+   "value": "2.29",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_low_em_h4_3_92",
+   "description": "LP variance share PS low EM h4",
+   "value": "3.92",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_ps_low_em_h5_14_53",
+   "description": "LP variance share PS low EM h5",
+   "value": "14.53",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table5"
+  },
+  {
+   "name": "vs_fin_advanced_h0_0_06",
+   "description": "LP-IV variance share Fin advanced h0",
+   "value": "0.06",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_advanced_h1_7_64",
+   "description": "LP-IV variance share Fin advanced h1",
+   "value": "7.64",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_advanced_h2_0_31",
+   "description": "LP-IV variance share Fin advanced h2",
+   "value": "0.31",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_advanced_h3_0_60",
+   "description": "LP-IV variance share Fin advanced h3",
+   "value": "0.60",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_advanced_h4_0_06",
+   "description": "LP-IV variance share Fin advanced h4",
+   "value": "0.06",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_advanced_h5_0_00",
+   "description": "LP-IV variance share Fin advanced h5",
+   "value": "0.00",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_high_em_h0_0_38",
+   "description": "LP-IV variance share Fin high EM h0",
+   "value": "0.38",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_high_em_h1_1_99",
+   "description": "LP-IV variance share Fin high EM h1",
+   "value": "1.99",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_high_em_h2_0_80",
+   "description": "LP-IV variance share Fin high EM h2",
+   "value": "0.80",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_high_em_h3_2_12",
+   "description": "LP-IV variance share Fin high EM h3",
+   "value": "2.12",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_high_em_h4_0_18",
+   "description": "LP-IV variance share Fin high EM h4",
+   "value": "0.18",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_high_em_h5_0_77",
+   "description": "LP-IV variance share Fin high EM h5",
+   "value": "0.77",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_middle_em_h0_0_03",
+   "description": "LP-IV variance share Fin middle EM h0",
+   "value": "0.03",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_middle_em_h1_0_77",
+   "description": "LP-IV variance share Fin middle EM h1",
+   "value": "0.77",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_middle_em_h2_0_20",
+   "description": "LP-IV variance share Fin middle EM h2",
+   "value": "0.20",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_middle_em_h3_0_56",
+   "description": "LP-IV variance share Fin middle EM h3",
+   "value": "0.56",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_middle_em_h4_0_04",
+   "description": "LP-IV variance share Fin middle EM h4",
+   "value": "0.04",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_middle_em_h5_0_09",
+   "description": "LP-IV variance share Fin middle EM h5",
+   "value": "0.09",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_low_em_h0_0_25",
+   "description": "LP-IV variance share Fin low EM h0",
+   "value": "0.25",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_low_em_h1_0_02",
+   "description": "LP-IV variance share Fin low EM h1",
+   "value": "0.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_low_em_h2_0_04",
+   "description": "LP-IV variance share Fin low EM h2",
+   "value": "0.04",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_low_em_h3_0_54",
+   "description": "LP-IV variance share Fin low EM h3",
+   "value": "0.54",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_low_em_h4_0_89",
+   "description": "LP-IV variance share Fin low EM h4",
+   "value": "0.89",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "vs_fin_low_em_h5_1_20",
+   "description": "LP-IV variance share Fin low EM h5",
+   "value": "1.20",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table6"
+  },
+  {
+   "name": "disc_median_advanced_0_0000",
+   "description": "median Disc/|INV| advanced",
+   "value": "0.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_median_high_em_0_0000",
+   "description": "median Disc/|INV| high EM",
+   "value": "0.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_median_middle_em_0_0000",
+   "description": "median Disc/|INV| middle EM",
+   "value": "0.0000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_median_low_em_0_0001",
+   "description": "median Disc/|INV| low EM",
+   "value": "0.0001",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_ratio_lt10_advanced_79_2pct",
+   "description": "share Ratio<10% advanced",
+   "value": "79.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_ratio_lt10_high_em_57_1pct",
+   "description": "share Ratio<10% high EM",
+   "value": "57.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_ratio_lt10_middle_em_75_8pct",
+   "description": "share Ratio<10% middle EM",
+   "value": "75.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_ratio_lt10_low_em_59_0pct",
+   "description": "share Ratio<10% low EM",
+   "value": "59.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_zero_advanced_41_2pct",
+   "description": "share Zero Disc advanced",
+   "value": "41.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_zero_high_em_27_1pct",
+   "description": "share Zero Disc high EM",
+   "value": "27.1",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_zero_middle_em_45_7pct",
+   "description": "share Zero Disc middle EM",
+   "value": "45.7",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "disc_zero_low_em_24_0pct",
+   "description": "share Zero Disc low EM",
+   "value": "24.0",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App Table A1"
+  },
+  {
+   "name": "app_large_corr_y_excl_0_48",
+   "description": "App advanced Corr inv y excl large",
+   "value": "0.48",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table B1"
+  },
+  {
+   "name": "app_large_corr_y_incl_0_52",
+   "description": "App advanced Corr inv y incl large",
+   "value": "0.52",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table B1"
+  },
+  {
+   "name": "app_large_corr_c_excl_0_37",
+   "description": "App advanced Corr inv c excl large",
+   "value": "0.37",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table B1"
+  },
+  {
+   "name": "app_large_corr_c_incl_0_30",
+   "description": "App advanced Corr inv c incl large",
+   "value": "0.30",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table B1"
+  },
+  {
+   "name": "app_large_autocorr_excl_0_13",
+   "description": "App advanced autocorr excl large",
+   "value": "0.13",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table B1"
+  },
+  {
+   "name": "app_large_autocorr_incl_0_15",
+   "description": "App advanced autocorr incl large",
+   "value": "0.15",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table B1"
+  },
+  {
+   "name": "corr_groupshock_advanced_0_800",
+   "description": "corr panel vs group-specific shock advanced",
+   "value": "0.800",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D2"
+  },
+  {
+   "name": "corr_groupshock_high_em_0_897",
+   "description": "corr panel vs group-specific high EM",
+   "value": "0.897",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D2"
+  },
+  {
+   "name": "corr_groupshock_middle_em_0_918",
+   "description": "corr panel vs group-specific middle EM",
+   "value": "0.918",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D2"
+  },
+  {
+   "name": "corr_groupshock_low_em_0_789",
+   "description": "corr panel vs group-specific low EM",
+   "value": "0.789",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D2"
+  },
+  {
+   "name": "loo_corr_advanced_0_734",
+   "description": "leave-one-group-out corr advanced",
+   "value": "0.734",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D5"
+  },
+  {
+   "name": "loo_corr_high_em_0_856",
+   "description": "leave-one-group-out corr high EM",
+   "value": "0.856",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D5"
+  },
+  {
+   "name": "loo_corr_middle_em_0_597",
+   "description": "leave-one-group-out corr middle EM",
+   "value": "0.597",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D5"
+  },
+  {
+   "name": "loo_corr_low_em_0_765",
+   "description": "leave-one-group-out corr low EM",
+   "value": "0.765",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table D5"
+  },
+  {
+   "name": "homog_Δy_full_Δadj_4_1656_p0_0000",
+   "description": "Pesaran-Yamagata output eq full Delta_adj and p",
+   "value": "4.1656",
+   "unit": "stat/p 0.0000",
+   "kind": "estimate",
+   "where": "App Table D3 Panel A full"
+  },
+  {
+   "name": "homog_Δy_full_p_0_0002",
+   "description": "Delta p full output eq",
+   "value": "0.0002",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "App Table D3"
+  },
+  {
+   "name": "longhistory_median_corr_0_829",
+   "description": "median long-history country-specific vs panel corr",
+   "value": "0.829",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table E1"
+  },
+  {
+   "name": "longhistory_mean_corr_0_766",
+   "description": "mean long-history corr",
+   "value": "0.766",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table E1"
+  },
+  {
+   "name": "longhistory_count_gt0_5_17",
+   "description": "count long-history corr >0.5",
+   "value": "17",
+   "unit": "countries",
+   "kind": "count",
+   "where": "App E text"
+  },
+  {
+   "name": "longhistory_count_lt0_3_2",
+   "description": "count long-history corr <0.3",
+   "value": "2",
+   "unit": "countries",
+   "kind": "count",
+   "where": "App E text"
+  },
+  {
+   "name": "longhistory_hongkong_corr_0_949",
+   "description": "Hong Kong long-history corr",
+   "value": "0.949",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table E1"
+  },
+  {
+   "name": "longhistory_indonesia_corr_0_981",
+   "description": "Indonesia long-history corr",
+   "value": "0.981",
+   "unit": "corr",
+   "kind": "estimate",
+   "where": "App Table E1"
+  },
+  {
+   "name": "mop_advanced_h0_10_01",
+   "description": "MOP effective F advanced h0",
+   "value": "10.01",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "App Table F1"
+  },
+  {
+   "name": "mop_low_em_h0_8_83",
+   "description": "MOP effective F low EM h0",
+   "value": "8.83",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "App Table F1"
+  },
+  {
+   "name": "fin_robust_advanced_h1_baseline_neg0_305",
+   "description": "financial LP-IV beta advanced h1 baseline",
+   "value": "-0.305",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "App Table F2"
+  },
+  {
+   "name": "fin_robust_advanced_h1_twoway_neg0_308",
+   "description": "financial LP-IV beta advanced h1 two-way crisis",
+   "value": "-0.308",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "App Table F2"
+  },
+  {
+   "name": "fin_robust_low_em_h5_baseline_neg0_110",
+   "description": "financial LP-IV beta low EM h5 baseline",
+   "value": "-0.110",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "App Table F2"
+  },
+  {
+   "name": "pesaran_cd_fin_advanced_h0_20_21",
+   "description": "Pesaran CD Fin advanced h0",
+   "value": "20.21",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "App Table G financial"
+  },
+  {
+   "name": "pesaran_cd_prod_advanced_h0_neg1_08",
+   "description": "Pesaran CD Prod advanced h0",
+   "value": "-1.08",
+   "unit": "stat",
+   "kind": "estimate",
+   "where": "App Table G productivity"
+  }
+ ],
+ "headline": "corr_inv_y_advanced_0_48",
+ "partitions": [
+  {
+   "split": "Country groups by IMF and WB classification most frequent 1993-2022",
+   "total": "count_total_panel_72",
+   "parts": [
+    "count_advanced_24",
+    "count_high_income_em_14",
+    "count_middle_income_em_24",
+    "count_low_income_em_10"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "IPS y^g level unit root",
+   "statistic": "ips_y_level_stat_neg0_39",
+   "p_value": "ips_y_level_p_0_35",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "IPS c level unit root",
+   "statistic": "ips_c_level_stat_3_49",
+   "p_value": "ips_c_level_p_1_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "IPS i level unit root",
+   "statistic": "ips_i_level_stat_neg1_27",
+   "p_value": "ips_i_level_p_0_10",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "IPS Delta y^g",
+   "statistic": "ips_dy_stat_neg29_63",
+   "p_value": "ips_dy_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "IPS Delta c",
+   "statistic": "ips_dc_stat_neg26_25",
+   "p_value": "ips_dc_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "LLC Delta y^g",
+   "statistic": "llc_dy_stat_neg27_58",
+   "p_value": "llc_dy_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "LLC Delta c",
+   "statistic": "llc_dc_stat_neg24_83",
+   "p_value": "llc_dc_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "IPS c-y^g ratio AIC",
+   "statistic": "ips_cy_stat_neg1_42",
+   "p_value": "ips_cy_p_0_07",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "IPS i-y^g ratio AIC",
+   "statistic": "ips_iy_stat_neg4_23",
+   "p_value": "ips_iy_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "LLC c-y^g ratio AIC",
+   "statistic": "llc_cy_stat_neg1_70",
+   "p_value": "llc_cy_p_0_05",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "LLC i-y^g ratio AIC",
+   "statistic": "llc_iy_stat_neg4_51",
+   "p_value": "llc_iy_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "Pedroni PP y^g c i cointegration",
+   "statistic": "pedroni_pp_stat_neg5_29",
+   "p_value": "pedroni_pp_p_0_00",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "Pedroni ADF y^g c i cointegration",
+   "statistic": "pedroni_adf_stat_neg2_26",
+   "p_value": "pedroni_adf_p_0_01",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "Durbin-Wu-Hausman BAA exogeneity",
+   "statistic": "dwh_stat_8_98",
+   "p_value": "dwh_p_0_0038",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "Persistence AR1 productivity shock",
+   "statistic": "rho_ps_neg0_06",
+   "p_value": "rho_ps_p_0_94",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  },
+  {
+   "test": "Persistence AR1 financial shock",
+   "statistic": "rho_fin_0_2188",
+   "p_value": "rho_fin_p_0_737",
+   "group_sizes": [
+    "count_total_panel_72"
+   ]
+  }
+ ]
+}

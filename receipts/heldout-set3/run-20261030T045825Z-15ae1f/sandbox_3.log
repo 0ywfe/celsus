@@ -1,0 +1,284 @@
+exit 0 in 97.7s
+--- stdout
+Estimating critical values from S1 null...
+Crit T=100 tau=0.1 -> 0.1226 (mean null 0.0480)
+Crit T=100 tau=0.5 -> 0.0726 (mean null 0.0294)
+Crit T=100 tau=0.9 -> 0.1221 (mean null 0.0466)
+Crit T=200 tau=0.1 -> 0.0633 (mean null 0.0246)
+Crit T=200 tau=0.5 -> 0.0408 (mean null 0.0157)
+Crit T=200 tau=0.9 -> 0.0599 (mean null 0.0243)
+Crit T=500 tau=0.1 -> 0.0231 (mean null 0.0093)
+Crit T=500 tau=0.5 -> 0.0167 (mean null 0.0064)
+Crit T=500 tau=0.9 -> 0.0231 (mean null 0.0092)
+Running size/power simulations...
+S1 tau=0.1 T=100 p=0.030 se=0.010 n=300
+S1 tau=0.5 T=100 p=0.087 se=0.016 n=300
+S1 tau=0.9 T=100 p=0.040 se=0.011 n=300
+S1 tau=0.1 T=200 p=0.030 se=0.010 n=300
+S1 tau=0.5 T=200 p=0.053 se=0.013 n=300
+S1 tau=0.9 T=200 p=0.040 se=0.011 n=300
+S1 tau=0.1 T=500 p=0.052 se=0.011 n=400
+S1 tau=0.5 T=500 p=0.025 se=0.008 n=400
+S1 tau=0.9 T=500 p=0.055 se=0.011 n=400
+S2 tau=0.1 T=100 p=0.060 se=0.014 n=300
+S2 tau=0.5 T=100 p=0.113 se=0.018 n=300
+S2 tau=0.9 T=100 p=0.060 se=0.014 n=300
+S2 tau=0.1 T=200 p=0.050 se=0.013 n=300
+S2 tau=0.5 T=200 p=0.060 se=0.014 n=300
+S2 tau=0.9 T=200 p=0.053 se=0.013 n=300
+S2 tau=0.1 T=500 p=0.083 se=0.014 n=400
+S2 tau=0.5 T=500 p=0.052 se=0.011 n=400
+S2 tau=0.9 T=500 p=0.050 se=0.011 n=400
+P1 tau=0.1 T=100 p=0.563 se=0.029 n=300
+P1 tau=0.5 T=100 p=0.830 se=0.022 n=300
+P1 tau=0.9 T=100 p=0.537 se=0.029 n=300
+P1 tau=0.1 T=200 p=0.880 se=0.019 n=300
+P1 tau=0.5 T=200 p=0.967 se=0.010 n=300
+P1 tau=0.9 T=200 p=0.890 se=0.018 n=300
+P1 tau=0.1 T=500 p=1.000 se=0.000 n=400
+P1 tau=0.5 T=500 p=1.000 se=0.000 n=400
+P1 tau=0.9 T=500 p=1.000 se=0.000 n=400
+P2 tau=0.1 T=100 p=1.000 se=0.000 n=300
+P2 tau=0.5 T=100 p=1.000 se=0.000 n=300
+P2 tau=0.9 T=100 p=1.000 se=0.000 n=300
+P2 tau=0.1 T=200 p=1.000 se=0.000 n=300
+P2 tau=0.5 T=200 p=1.000 se=0.000 n=300
+P2 tau=0.9 T=200 p=1.000 se=0.000 n=300
+P2 tau=0.1 T=500 p=1.000 se=0.000 n=400
+P2 tau=0.5 T=500 p=1.000 se=0.000 n=400
+P2 tau=0.9 T=500 p=1.000 se=0.000 n=400
+P3 tau=0.1 T=100 p=1.000 se=0.000 n=300
+P3 tau=0.5 T=100 p=1.000 se=0.000 n=300
+P3 tau=0.9 T=100 p=1.000 se=0.000 n=300
+P3 tau=0.1 T=200 p=1.000 se=0.000 n=300
+P3 tau=0.5 T=200 p=1.000 se=0.000 n=300
+P3 tau=0.9 T=200 p=1.000 se=0.000 n=300
+P3 tau=0.1 T=500 p=1.000 se=0.000 n=400
+P3 tau=0.5 T=500 p=1.000 se=0.000 n=400
+P3 tau=0.9 T=500 p=1.000 se=0.000 n=400
+P4 tau=0.1 T=100 p=1.000 se=0.000 n=300
+P4 tau=0.5 T=100 p=1.000 se=0.000 n=300
+P4 tau=0.9 T=100 p=0.997 se=0.003 n=300
+P4 tau=0.1 T=200 p=1.000 se=0.000 n=300
+P4 tau=0.5 T=200 p=1.000 se=0.000 n=300
+P4 tau=0.9 T=200 p=1.000 se=0.000 n=300
+P4 tau=0.1 T=500 p=1.000 se=0.000 n=400
+P4 tau=0.5 T=500 p=1.000 se=0.000 n=400
+P4 tau=0.9 T=500 p=1.000 se=0.000 n=400
+Running pairwise power for P1...
+P1 pairwise T=100 tau=0.1 Y 0.377 Z 0.320 KNP Y 0.580 Z 0.603
+P1 pairwise T=100 tau=0.5 Y 0.487 Z 0.613 KNP Y 0.553 Z 0.543
+P1 pairwise T=100 tau=0.9 Y 0.397 Z 0.400 KNP Y 0.550 Z 0.553
+P1 pairwise T=200 tau=0.1 Y 0.760 Z 0.713 KNP Y 0.873 Z 0.873
+P1 pairwise T=200 tau=0.5 Y 0.910 Z 0.870 KNP Y 0.853 Z 0.880
+P1 pairwise T=200 tau=0.9 Y 0.667 Z 0.680 KNP Y 0.887 Z 0.880
+P1 pairwise T=500 tau=0.1 Y 0.980 Z 0.995 KNP Y 0.998 Z 1.000
+P1 pairwise T=500 tau=0.5 Y 0.998 Z 1.000 KNP Y 1.000 Z 1.000
+P1 pairwise T=500 tau=0.9 Y 0.973 Z 0.980 KNP Y 1.000 Z 1.000
+Running linear F simulations...
+Linear S1 T=100 p=0.080
+Linear S1 T=200 p=0.053
+Linear S1 T=500 p=0.052
+Linear S2 T=100 p=0.030
+Linear S2 T=200 p=0.030
+Linear S2 T=500 p=0.035
+Linear P1 T=100 p=0.810
+Linear P1 T=200 p=0.977
+Linear P1 T=500 p=1.000
+Linear P2 T=100 p=0.410
+Linear P2 T=200 p=0.410
+Linear P2 T=500 p=0.465
+Linear P3 T=100 p=0.307
+Linear P3 T=200 p=0.333
+Linear P3 T=500 p=0.370
+Linear P4 T=100 p=0.207
+Linear P4 T=200 p=0.223
+Linear P4 T=500 p=0.270
+Running P3 pairwise verification...
+P3 pairwise M-vine Y 0.307 Z 0.287 Linear Y 0.268 Z 0.258
+Fetched SP ^GSPC: 544 bars 2012-09-04->2014-10-31
+Fetched FTSE ^FTSE: 549 bars 2012-09-03->2014-10-31
+Fetched NK ^N225: 531 bars 2012-09-03->2014-10-31
+Common bars: 506 2012-09-04->2014-10-31
+Returns: 505
+Fetched NK ^N225: 531 bars 2012-09-03->2014-10-31
+Fetched HSI ^HSI: 531 bars 2012-09-03->2014-10-31
+Fetched SSE 000001.SS: 521 bars 2012-09-03->2014-10-31
+Common bars: 479 2012-09-03->2014-10-31
+Returns: 478
+Global_ret len 505 2012-09-05->2014-10-31
+Asian_ret len 478 2012-09-04->2014-10-31
+Fetched SP ^GSPC: 544 bars 2012-09-04->2014-10-31
+Fetched FTSE ^FTSE: 549 bars 2012-09-03->2014-10-31
+Fetched NK ^N225: 531 bars 2012-09-03->2014-10-31
+Fetched HSI ^HSI: 531 bars 2012-09-03->2014-10-31
+Fetched SSE 000001.SS: 521 bars 2012-09-03->2014-10-31
+Common bars: 462 2012-09-04->2014-10-31
+Returns: 461
+All 5 common returns 461
+Computing global empirical p-values...
+Global SP->FTSE tau=0.05 p=0.000 GC=0.1623
+Global SP->NK tau=0.05 p=0.000 GC=0.1785
+Global FTSE->SP tau=0.05 p=0.905 GC=0.0002
+Global FTSE->NK tau=0.05 p=0.000 GC=0.0898
+Global NK->SP tau=0.05 p=0.615 GC=0.0013
+Global NK->FTSE tau=0.05 p=0.735 GC=0.0006
+Global (FTSE,NK)->SP tau=0.05 p=0.765 GC=0.0063
+Global (SP,NK)->FTSE tau=0.05 p=0.000 GC=0.1644
+Global (SP,FTSE)->NK tau=0.05 p=0.000 GC=0.2100
+Global SP->FTSE tau=0.10 p=0.000 GC=0.1406
+Global SP->NK tau=0.10 p=0.000 GC=0.1752
+Global FTSE->SP tau=0.10 p=0.365 GC=0.0024
+Global FTSE->NK tau=0.10 p=0.000 GC=0.0949
+Global NK->SP tau=0.10 p=0.425 GC=0.0019
+Global NK->FTSE tau=0.10 p=0.525 GC=0.0014
+Global (FTSE,NK)->SP tau=0.10 p=0.690 GC=0.0082
+Global (SP,NK)->FTSE tau=0.10 p=0.000 GC=0.1417
+Global (SP,FTSE)->NK tau=0.10 p=0.000 GC=0.2032
+Global SP->FTSE tau=0.25 p=0.000 GC=0.1161
+Global SP->NK tau=0.25 p=0.000 GC=0.1834
+Global FTSE->SP tau=0.25 p=0.090 GC=0.0070
+Global FTSE->NK tau=0.25 p=0.000 GC=0.0964
+Global NK->SP tau=0.25 p=0.385 GC=0.0018
+Global NK->FTSE tau=0.25 p=0.460 GC=0.0013
+Global (FTSE,NK)->SP tau=0.25 p=0.150 GC=0.0124
+Global (SP,NK)->FTSE tau=0.25 p=0.000 GC=0.1164
+Global (SP,FTSE)->NK tau=0.25 p=0.000 GC=0.2013
+Global SP->FTSE tau=0.50 p=0.000 GC=0.1040
+Global SP->NK tau=0.50 p=0.000 GC=0.1872
+Global FTSE->SP tau=0.50 p=0.000 GC=0.0125
+Global FTSE->NK tau=0.50 p=0.000 GC=0.0911
+Global NK->SP tau=0.50 p=0.510 GC=0.0010
+Global NK->FTSE tau=0.50 p=0.555 GC=0.0008
+Global (FTSE,NK)->SP tau=0.50 p=0.060 GC=0.0165
+Global (SP,NK)->FTSE tau=0.50 p=0.000 GC=0.1043
+Global (SP,FTSE)->NK tau=0.50 p=0.000 GC=0.1938
+Global SP->FTSE tau=0.75 p=0.000 GC=0.1002
+Global SP->NK tau=0.75 p=0.000 GC=0.1707
+Global FTSE->SP tau=0.75 p=0.000 GC=0.0193
+Global FTSE->NK tau=0.75 p=0.000 GC=0.0771
+Global NK->SP tau=0.75 p=0.530 GC=0.0008
+Global NK->FTSE tau=0.75 p=0.740 GC=0.0002
+Global (FTSE,NK)->SP tau=0.75 p=0.015 GC=0.0242
+Global (SP,NK)->FTSE tau=0.75 p=0.000 GC=0.1003
+Global (SP,FTSE)->NK tau=0.75 p=0.000 GC=0.1746
+Global SP->FTSE tau=0.90 p=0.000 GC=0.0913
+Global SP->NK tau=0.90 p=0.000 GC=0.1307
+Global FTSE->SP tau=0.90 p=0.015 GC=0.0277
+Global FTSE->NK tau=0.90 p=0.000 GC=0.0599
+Global NK->SP tau=0.90 p=0.535 GC=0.0015
+Global NK->FTSE tau=0.90 p=0.790 GC=0.0002
+Global (FTSE,NK)->SP tau=0.90 p=0.015 GC=0.0391
+Global (SP,NK)->FTSE tau=0.90 p=0.000 GC=0.0916
+Global (SP,FTSE)->NK tau=0.90 p=0.000 GC=0.1405
+Global SP->FTSE tau=0.95 p=0.000 GC=0.0841
+Global SP->NK tau=0.95 p=0.000 GC=0.0998
+Global FTSE->SP tau=0.95 p=0.030 GC=0.0325
+Global FTSE->NK tau=0.95 p=0.000 GC=0.0503
+Global NK->SP tau=0.95 p=0.330 GC=0.0041
+Global NK->FTSE tau=0.95 p=0.505 GC=0.0020
+Global (FTSE,NK)->SP tau=0.95 p=0.050 GC=0.0545
+Global (SP,NK)->FTSE tau=0.95 p=0.000 GC=0.0862
+Global (SP,FTSE)->NK tau=0.95 p=0.000 GC=0.1151
+Computing Asian empirical p-values...
+Asian NK->HSI tau=0.05 p=0.010 GC=0.0408
+Asian NK->SSE tau=0.05 p=0.005 GC=0.0499
+Asian HSI->NK tau=0.05 p=0.010 GC=0.0635
+Asian HSI->SSE tau=0.05 p=0.140 GC=0.0124
+Asian SSE->NK tau=0.05 p=0.895 GC=0.0002
+Asian SSE->HSI tau=0.05 p=0.105 GC=0.0126
+Asian (NK,SSE)->HSI tau=0.05 p=0.005 GC=0.0622
+Asian (HSI,NK)->SSE tau=0.05 p=0.040 GC=0.0533
+Asian (HSI,SSE)->NK tau=0.05 p=0.005 GC=0.0800
+Asian NK->HSI tau=0.10 p=0.005 GC=0.0306
+Asian NK->SSE tau=0.10 p=0.000 GC=0.0322
+Asian HSI->NK tau=0.10 p=0.005 GC=0.0370
+Asian HSI->SSE tau=0.10 p=0.100 GC=0.0092
+Asian SSE->NK tau=0.10 p=0.985 GC=0.0000
+Asian SSE->HSI tau=0.10 p=0.105 GC=0.0105
+Asian (NK,SSE)->HSI tau=0.10 p=0.005 GC=0.0471
+Asian (HSI,NK)->SSE tau=0.10 p=0.040 GC=0.0357
+Asian (HSI,SSE)->NK tau=0.10 p=0.010 GC=0.0526
+Asian NK->HSI tau=0.25 p=0.005 GC=0.0180
+Asian NK->SSE tau=0.25 p=0.005 GC=0.0172
+Asian HSI->NK tau=0.25 p=0.020 GC=0.0153
+Asian HSI->SSE tau=0.25 p=0.050 GC=0.0080
+Asian SSE->NK tau=0.25 p=0.945 GC=0.0000
+Asian SSE->HSI tau=0.25 p=0.170 GC=0.0053
+Asian (NK,SSE)->HSI tau=0.25 p=0.040 GC=0.0241
+Asian (HSI,NK)->SSE tau=0.25 p=0.015 GC=0.0206
+Asian (HSI,SSE)->NK tau=0.25 p=0.025 GC=0.0239
+Asian NK->HSI tau=0.50 p=0.020 GC=0.0111
+Asian NK->SSE tau=0.50 p=0.055 GC=0.0088
+Asian HSI->NK tau=0.50 p=0.055 GC=0.0080
+Asian HSI->SSE tau=0.50 p=0.100 GC=0.0068
+Asian SSE->NK tau=0.50 p=0.765 GC=0.0002
+Asian SSE->HSI tau=0.50 p=0.585 GC=0.0008
+Asian (NK,SSE)->HSI tau=0.50 p=0.140 GC=0.0117
+Asian (HSI,NK)->SSE tau=0.50 p=0.090 GC=0.0121
+Asian (HSI,SSE)->NK tau=0.50 p=0.140 GC=0.0112
+Asian NK->HSI tau=0.75 p=0.095 GC=0.0085
+Asian NK->SSE tau=0.75 p=0.280 GC=0.0032
+Asian HSI->NK tau=0.75 p=0.195 GC=0.0045
+Asian HSI->SSE tau=0.75 p=0.120 GC=0.0058
+Asian SSE->NK tau=0.75 p=0.890 GC=0.0001
+Asian SSE->HSI tau=0.75 p=0.570 GC=0.0006
+Asian (NK,SSE)->HSI tau=0.75 p=0.255 GC=0.0094
+Asian (HSI,NK)->SSE tau=0.75 p=0.390 GC=0.0074
+Asian (HSI,SSE)->NK tau=0.75 p=0.455 GC=0.0061
+Asian NK->HSI tau=0.90 p=0.220 GC=0.0062
+Asian NK->SSE tau=0.90 p=0.690 GC=0.0005
+Asian HSI->NK tau=0.90 p=0.460 GC=0.0021
+Asian HSI->SSE tau=0.90 p=0.215 GC=0.0051
+Asian SSE->NK tau=0.90 p=0.965 GC=0.0000
+Asian SSE->HSI tau=0.90 p=0.280 GC=0.0053
+Asian (NK,SSE)->HSI tau=0.90 p=0.315 GC=0.0126
+Asian (HSI,NK)->SSE tau=0.90 p=0.770 GC=0.0054
+Asian (HSI,SSE)->NK tau=0.90 p=0.800 GC=0.0030
+Asian NK->HSI tau=0.95 p=0.370 GC=0.0036
+Asian NK->SSE tau=0.95 p=0.860 GC=0.0003
+Asian HSI->NK tau=0.95 p=0.680 GC=0.0005
+Asian HSI->SSE tau=0.95 p=0.255 GC=0.0072
+Asian SSE->NK tau=0.95 p=0.925 GC=0.0001
+Asian SSE->HSI tau=0.95 p=0.125 GC=0.0140
+Asian (NK,SSE)->HSI tau=0.95 p=0.290 GC=0.0216
+Asian (HSI,NK)->SSE tau=0.95 p=0.675 GC=0.0085
+Asian (HSI,SSE)->NK tau=0.95 p=0.905 GC=0.0022
+Missing empirical 0: []
+Headline p_NK_SSE_to_HSI_tau0.05: 0.005 p=0.005 se=0.004987484335815001 n=478
+Wrote 257 results to /work/results.json
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

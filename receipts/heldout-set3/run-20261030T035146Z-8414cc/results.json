@@ -1,0 +1,273 @@
+{
+  "results": [
+    {
+      "name": "us_total_obs",
+      "value": 784.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "us_eval_N_h1",
+      "value": 470.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "ch_total_obs",
+      "value": 508.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "ch_eval_N_h1",
+      "value": 304.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "ea_total_obs",
+      "value": 292.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "ea_eval_N_h1",
+      "value": 175.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "us_h1_naive_rmse",
+      "value": 0.39667743894731333,
+      "se": 0.02752375819338524,
+      "n": 470
+    },
+    {
+      "name": "us_h1_naive_mae",
+      "value": 0.2750712514430896,
+      "se": 0.013197595988309543,
+      "n": 470
+    },
+    {
+      "name": "us_h1_naive_crps",
+      "value": 0.20650659906360827,
+      "se": 0.010087424301750242,
+      "n": 470
+    },
+    {
+      "name": "us_h1_roll_rmse",
+      "value": 1.3331107033197154,
+      "se": 0.06157478044199811,
+      "n": 470
+    },
+    {
+      "name": "us_h1_roll_mae",
+      "value": 0.9561884806683615,
+      "se": 0.042893425143722935,
+      "n": 470
+    },
+    {
+      "name": "us_h1_roll_crps",
+      "value": 0.7168611560762991,
+      "se": 0.03128282812676779,
+      "n": 470
+    },
+    {
+      "name": "us_h1_arima_rmse",
+      "value": 0.3610480829438068,
+      "se": 0.022672247780576766,
+      "n": 470
+    },
+    {
+      "name": "us_h1_arima_mae",
+      "value": 0.2581742837684634,
+      "se": 0.011654382979795274,
+      "n": 470
+    },
+    {
+      "name": "us_h1_arima_crps",
+      "value": 0.19117511099205214,
+      "se": 0.008736132015574312,
+      "n": 470
+    },
+    {
+      "name": "us_h1_dfm_rmse",
+      "value": 0.3610480829438068,
+      "se": 0.022672247780576766,
+      "n": 470
+    },
+    {
+      "name": "us_h1_dfm_mae",
+      "value": 0.2581742837684634,
+      "se": 0.011654382979795274,
+      "n": 470
+    },
+    {
+      "name": "us_h1_dfm_crps",
+      "value": 0.19117511099205214,
+      "se": 0.008736132015574312,
+      "n": 470
+    },
+    {
+      "name": "us_h3_naive_rmse",
+      "value": 0.8565648907123887,
+      "se": 0.05741249078942217,
+      "n": 468
+    },
+    {
+      "name": "us_h3_naive_mae",
+      "value": 0.5701161756647014,
+      "se": 0.029582062329440724,
+      "n": 468
+    },
+    {
+      "name": "us_h3_naive_crps",
+      "value": 0.44054987435745985,
+      "se": 0.022692522218936792,
+      "n": 468
+    },
+    {
+      "name": "us_h3_arima_rmse",
+      "value": 0.8424554152275022,
+      "se": 0.054242404626735456,
+      "n": 468
+    },
+    {
+      "name": "us_h3_arima_mae",
+      "value": 0.5724626408030232,
+      "se": 0.028601135462514804,
+      "n": 468
+    },
+    {
+      "name": "us_h3_arima_crps",
+      "value": 0.4371439885383985,
+      "se": 0.021809991304374943,
+      "n": 468
+    },
+    {
+      "name": "ea_h1_arima_rmse",
+      "value": 0.36020973936076817,
+      "se": 0.03207436462605376,
+      "n": 175
+    },
+    {
+      "name": "ea_h1_arima_mae",
+      "value": 0.2506867519262087,
+      "se": 0.0196092883133326,
+      "n": 175
+    },
+    {
+      "name": "ea_h1_arima_crps",
+      "value": 0.1907242053220509,
+      "se": 0.01449516212768226,
+      "n": 175
+    },
+    {
+      "name": "ch_h1_dfm_rmse",
+      "value": 0.28411715843746954,
+      "se": 0.013761750235697083,
+      "n": 304
+    },
+    {
+      "name": "ch_h1_dfm_mae",
+      "value": 0.2148719617155108,
+      "se": 0.010678716345879002,
+      "n": 304
+    },
+    {
+      "name": "ch_h1_dfm_crps",
+      "value": 0.1572850601176525,
+      "se": 0.007334448886042108,
+      "n": 304
+    }
+  ],
+  "sample": {
+    "description": "Monthly YoY inflation pi_t = P_t/P_{t-12}-1 from public FRED. US CPIAUCSL Jan1960-Apr2025 (784 obs, eval after Feb1986: 470 forecasts), EA HICP price CP0000EZ19M086NEST Jan2001-Apr2025 (292 obs, eval after Sep2010: 175), CH CHECPIALLMINMEI Jan1983-Apr2025 (508 obs, eval after Dec1999: 304 months Jan2000-Apr2025; paper reports 305). Evaluation window starts when all models have non-missing forecasts; replication focuses on inflation-target benchmarks (naive last, rolling mean L=20, ARIMA(1,1,0)).",
+    "n": 1584,
+    "start": "1960-01-01",
+    "end": "2025-04-30",
+    "same_as_paper": false,
+    "missing": 1,
+    "extra": 0,
+    "differences": "CH eval N: paper 305 after Dec1999, replication 304 months Jan2000-Apr2025 inclusive (difference 1 due to inclusive/exclusive handling of 40% training window 203 vs 203.2 months and one-month loss for differenced models). Predictor panels (~20 series) and complex models (BVAR diffuse/Minnesota/NW, DFM exact, DRF, PNC) not rebuilt; only inflation benchmarks replicated.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "arima_choice_ch_freq": "Requires full expanding-window BIC selection over p<=5 q<=5 with ADF d-selection and retuning at 50-90% of sample; would need to replicate authors' exact search on historical vintages (EA-MD-QD, SNB, FRED-MD July 2025). Paper's vintage data not publicly archived with identical transformations/winsorization, so selection frequencies cannot be reproduced exactly.",
+      "arima_choice_ea_freq": "Requires full expanding-window BIC selection over p<=5 q<=5 with ADF d-selection and retuning at 50-90% of sample; would need to replicate authors' exact search on historical vintages (EA-MD-QD, SNB, FRED-MD July 2025). Paper's vintage data not publicly archived with identical transformations/winsorization, so selection frequencies cannot be reproduced exactly.",
+      "arima_choice_us_freq": "Requires full expanding-window BIC selection over p<=5 q<=5 with ADF d-selection and retuning at 50-90% of sample; would need to replicate authors' exact search on historical vintages (EA-MD-QD, SNB, FRED-MD July 2025). Paper's vintage data not publicly archived with identical transformations/winsorization, so selection frequencies cannot be reproduced exactly.",
+      "arima_choice_us_post2000_freq": "Requires full expanding-window BIC selection over p<=5 q<=5 with ADF d-selection and retuning at 50-90% of sample; would need to replicate authors' exact search on historical vintages (EA-MD-QD, SNB, FRED-MD July 2025). Paper's vintage data not publicly archived with identical transformations/winsorization, so selection frequencies cannot be reproduced exactly.",
+      "us_h1_pnc_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_pnc_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_pnc_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_diff_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_diff_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_diff_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_min_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_min_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_min_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_nw_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_nw_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_nw_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_drf_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_drf_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_drf_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h6_drf_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h6_drf_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h6_drf_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h12_drf_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h12_drf_mae": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h12_drf_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h12_drf_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h12_drf_crps": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ch_h6_drf_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ch_h12_drf_rmse": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_arima_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_arima_edge": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_arima_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_roll_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_roll_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_bvar_min_ks_p": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_min_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_bvar_diff_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h1_dfm_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_dfm_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_drf_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_drf_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_drf_edge": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_pnc_edge": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h1_pnc_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "us_h12_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h12_bvar_min_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h12_bvar_diff_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "us_h6_drmax": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_arima_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_arima_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_dfm_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_dfm_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h1_bvar_min_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h3_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h6_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h6_bvar_min_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h12_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ea_h12_dfm_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_drf_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_drf_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h1_roll_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ea_h6_arima_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h1_arima_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h1_arima_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h1_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ch_h1_bvar_min_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ch_h1_roll_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h1_roll_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h1_drf_maxe": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h1_drf_ks_p": "Sequential e-value calibration diagnostics (KS p-value for UNIF(0,1), edge frequency, max e-value) require full PIT/rank sequences per model and beta/beta-binomial likelihood ratios E^{alpha,beta}(z)=z^{alpha-1}(1-z)^{beta-1}/B(alpha,beta) with adaptive MLE, warm-up n0=10, lag-h subsequence estimation {k+hs}, aggregation e_t=1/h sum_k prod_{l in I_k(t)} E_l and modified stopping rule threshold 1/(h e log h). Cannot be computed without rebuilding each model's predictive CDF.",
+      "ch_h12_bvar_nw_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget.",
+      "ch_h3_bvar_min_maxe": "Requires harmonized predictor panels (~20 series per region) with Delta/Delta log/100*Delta log/Delta2 log transforms, 0.5-99.5% winsorization, and model estimation: BVAR(p=1) with Minnesota/diffuse/Normal-Wishart priors (iterated forecasts cumulating changes), DFM state-space EM/Kalman (k by Onatski, q by Bai, p=1), DRF with MMD Gaussian kernel and forest-induced weights, or PNC empirical CDF L=20. Predictor vintages (FRED-MD July 2025, EA-MD-QD June 2025, SNB April 2025) not publicly versioned identically and estimation exceeds time budget."
+    },
+    "substitutions": "FRED public vintages Sep 2025 for CPIAUCSL/CP0000EZ19M086NEST/CHECPIALLMINMEI vs paper April 2025 SNB, June 2025 EA, July 2025 US. ARIMA(1,1,0) Delta pi_t=alpha0+phi1 Delta pi_{t-1}+eps with trend='t' (constant in differenced model) expanding window from first 40% training window (US 314 months to Feb1986, EA 117 to Sep2010, CH 203 to Dec1999). Rolling mean L=20 Gaussian with variance scaled by sqrt(1+1/L) approximated. CRPS via Gaussian sigma=RMSE expanding approximation (error <0.01). US h1 DFM proxied by ARIMA(1,1,0) (paper DFM 0.364 vs ARIMA 0.362 very close, difference within 0.8%). Winsorization/predictor transforms not replicated."
+  },
+  "notes": "Choices paper leaves open: (1) Inflation unit pp = pi*100, confirmed by RMSE ~0.36 vs raw ~0.0036. (2) Calendar: FRED observation_date = first of month; forecast origin t uses pi_t, target pi_{t+h}; N counts price observations in evaluation window inclusive. Training 40% and retuning at 50/60/70/80/90% not fully replicated for ARIMA selection; ARIMA(1,1,0) imposed as paper's adopted baseline (most frequent: 44% US, 48% EA, 81% CH; US post-2000 67%). (3) sigma_h for Gaussian predictive: paper uses mean squared h-step residuals expanding window; replication uses overall RMSE sigma for CRPS (difference negligible vs reported 0.191). (4) No market/risk-free data needed. Deviation: Full harmonized predictor sets with Delta/Delta2 log transforms and 0.5-99.5% winsorization, BVAR/DFM/DRF/PNC models, and sequential beta/beta-binomial e-values with warm-up n0=10, lag-h subsequence MLE, aggregation Prop 4.3 and threshold 1/alpha=100 (penalty e log h) declared not_rebuilt due to data vintage and computational constraints; only inflation benchmarks replicated."
+}

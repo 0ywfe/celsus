@@ -1,0 +1,170 @@
+{
+ "verdict": "partly holds up",
+ "rows": [
+  {
+   "name": "gdp_irf_17c_approx_5pct",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 5.0,
+   "reproduced": 4.834969448768589,
+   "se": 0.8490307789934844,
+   "n": 100,
+   "consistent": true,
+   "why": "paper inside 4.835 +/- 1.664"
+  },
+  {
+   "name": "cpi_irf_17c_minus_4pct",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": -4.0,
+   "reproduced": -3.210820014294966,
+   "se": 0.5989150235264036,
+   "n": 100,
+   "consistent": true,
+   "why": "paper inside -3.211 +/- 1.174"
+  },
+  {
+   "name": "fev_inflation_16c_20pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 20.0,
+   "reproduced": 29.916753851988926,
+   "se": 4.5789335266614195,
+   "n": 100,
+   "consistent": false,
+   "why": "paper outside 29.92 +/- 8.975"
+  },
+  {
+   "name": "fev_inflation_17c_40pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 40.0,
+   "reproduced": 27.197656650563047,
+   "se": 4.449778800990437,
+   "n": 100,
+   "consistent": false,
+   "why": "paper outside 27.2 +/- 8.721"
+  },
+  {
+   "name": "fev_money_mid16c_20pct_low",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 20.0,
+   "reproduced": 27.71901934814639,
+   "se": 4.476112041930726,
+   "n": 100,
+   "consistent": true,
+   "why": "paper inside 27.72 +/- 8.773"
+  },
+  {
+   "name": "fev_money_1600_80pct_high",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 80.0,
+   "reproduced": 59.26118763781341,
+   "se": 7.673569467917547,
+   "n": 41,
+   "consistent": false,
+   "why": "paper outside 59.26 +/- 15.04"
+  },
+  {
+   "name": "m4_m0_ratio_1833_1_9",
+   "kind": "estimate",
+   "unit": "ratio",
+   "reported": 1.9,
+   "reproduced": 1.8922708589395612,
+   "se": 0,
+   "n": 1,
+   "consistent": true,
+   "why": "rounds to the printed 1.9"
+  },
+  {
+   "name": "m4_m0_ratio_1900_4_8",
+   "kind": "estimate",
+   "unit": "ratio",
+   "reported": 4.8,
+   "reproduced": 4.825323395803299,
+   "se": 0,
+   "n": 1,
+   "consistent": true,
+   "why": "rounds to the printed 4.8"
+  },
+  {
+   "name": "fev_output_pure_demand_low_20pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 20.0,
+   "reproduced": 23.441117104732403,
+   "se": 5.0,
+   "n": 323,
+   "consistent": true,
+   "why": "paper inside 23.44 +/- 9.8"
+  },
+  {
+   "name": "fev_output_pure_demand_high_30pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 30.0,
+   "reproduced": 23.441117104732403,
+   "se": 5.0,
+   "n": 323,
+   "consistent": true,
+   "why": "paper inside 23.44 +/- 9.8"
+  },
+  {
+   "name": "fev_output_money_supply_low_10pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 10.0,
+   "reproduced": 19.394104858516418,
+   "se": 5.0,
+   "n": 323,
+   "consistent": true,
+   "why": "paper inside 19.39 +/- 9.8"
+  },
+  {
+   "name": "fev_output_money_supply_high_20pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 20.0,
+   "reproduced": 19.394104858516418,
+   "se": 5.0,
+   "n": 323,
+   "consistent": true,
+   "why": "paper inside 19.39 +/- 9.8"
+  },
+  {
+   "name": "fev_money_money_supply_60pct",
+   "kind": "estimate",
+   "unit": "percent FEV",
+   "reported": 60.0,
+   "reproduced": 30.305776062987004,
+   "se": 5.0,
+   "n": 323,
+   "consistent": false,
+   "why": "paper outside 30.31 +/- 9.8"
+  },
+  {
+   "name": "natural_rate_1974_11_5pct",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 11.5,
+   "reproduced": 7.782550557043446,
+   "se": 1.5,
+   "n": 329,
+   "consistent": false,
+   "why": "paper outside 7.783 +/- 2.94"
+  },
+  {
+   "name": "gdp_corr_england_uk_99pct",
+   "kind": "estimate",
+   "unit": "percent correlation",
+   "reported": 99.0,
+   "reproduced": 99.97246125150258,
+   "se": 0.1311844040465291,
+   "n": 322,
+   "consistent": false,
+   "why": "paper outside 99.97 +/- 0.2571"
+  }
+ ]
+}

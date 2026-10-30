@@ -1,0 +1,171 @@
+{
+  "results": [
+    {
+      "name": "window_years",
+      "value": 4.884325804243669,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "alpha_idleness",
+      "value": 0.5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "kappa_complete_equal_theoretical",
+      "value": 0.5051546391752577,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "kappa_complete_equal_formula",
+      "value": 0.5051546391752577,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "LLY_curvature_limit",
+      "value": 1.0103092783505154,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "eigen_laplacian_complete_0",
+      "value": 0,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "eigen_laplacian_complete_n_over_n1",
+      "value": 1.0103092783505154,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "eigen_multiplicity_n1",
+      "value": 97,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "ORC_global_lower_bound",
+      "value": -2,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "ORC_global_upper_bound",
+      "value": 1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "kappa_lower_bound_formula",
+      "value": -1.958762886597938,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "kappa_lower_bound_equal_weight_formula",
+      "value": -1.958762886597938,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "kappa_min_NASDAQ100_theoretical",
+      "value": -1.958762886597938,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "d_ij_theoretical_at_lower_bound",
+      "value": 2.9587628865979383,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "N_NASDAQ100_nominal",
+      "value": 98,
+      "se": 0,
+      "n": 98
+    },
+    {
+      "name": "flow_iteration_5",
+      "value": 5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "flow_iteration_10",
+      "value": 10,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "flow_iteration_20",
+      "value": 20,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "surgery_curvature_threshold",
+      "value": 0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "corr_avg_empirical",
+      "value": 37.994265221291975,
+      "se": 0.2165304977172725,
+      "n": 4753
+    },
+    {
+      "name": "avg_edge_weight_empirical",
+      "value": 1.1048406124972856,
+      "se": 0.002022699286959831,
+      "n": 4753
+    },
+    {
+      "name": "median_edge_weight_empirical",
+      "value": 1.110577516655927,
+      "se": 0.0025344422065606683,
+      "n": 4753
+    },
+    {
+      "name": "surgery_edge_weight_around",
+      "value": 1.5160725779665342e-06,
+      "se": 2.2020993010317637e-09,
+      "n": 4753
+    }
+  ],
+  "sample": {
+    "description": "Empirical correlation graph of NASDAQ-100 constituents per paper definition: tickers_union 101 attempted (all appendix tables), 98 successfully fetched via Yahoo Finance yahoo_fin for 2020-01-01 to 2024-11-20, no filters applied (paper states 'No filters stated'). All 98 fetched tickers retained as fully connected weighted graph K_n (n=98) with w_ij=sqrt(2(1-Cij)). Pearson C from log returns log(adj_close) using pairwise complete observations (to keep IPO-limited tickers without trimming sample).",
+    "n": 98,
+    "start": "2020-01-02",
+    "end": "2024-11-20",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Paper nominal n=100, appendix union n=101 (66+35=101 discrepancy). Fetched n=98 via Yahoo Finance (missing ['ANSS', 'EA', 'WBD'] due to delisting/data gap); retained all 98 without trimming to nominal. No extra beyond fetched definition; missing vs nominal due to data availability and index rebalance, not trimming.",
+    "cannot_count": "Exact paper NASDAQ-100 vintage (wiki_nasdaq) not archived and quarterly rebalancing means nominal 100 list changes; fetched 98 vs union 101 vs nominal 100 differences cannot be precisely counted against unknown vintage.",
+    "not_rebuilt": {
+      "L1_cluster_A_66": "Hierarchical surgery clustering requires subjective zero-curvature threshold and neckpinch identification; flow under weighted measure (required for curvature spread) converges to uniform positive curvature 0.505 with no neckpinch, so partition cannot be deterministically rebuilt from public data alone.",
+      "L1_cluster_B_35": "Same as above",
+      "L2_semicon_basket_16": "Same as above",
+      "L2_semicond_parent_remainder_50": "Same as above",
+      "L3_outlier_10": "Same as above",
+      "L4_remaining_40": "Same as above",
+      "L4_biotech_4": "Same as above",
+      "L4_supermicro_1": "Same as above",
+      "L4_remainder_35_for_L5": "Same as above",
+      "L5_bigtech_17": "Same as above",
+      "L5_tesla_group_18": "Same as above",
+      "L2_health_staples_10_alt_branch": "Same as above",
+      "L3_staples_energy_8": "Same as above",
+      "L3_industrials_17_alt_branch": "Same as above"
+    },
+    "substitutions": "Yahoo Finance via market_data live (same source yahoo_fin). Log returns (paper says r_i unspecified; log vs simple <1% corr diff). Pairwise complete correlation to retain all fetched tickers without trimming (instead of common-window dropna). GraphRicciCurvature OllivierRicci alpha=0.5 base=e exp_power=2 (Ni et al. 2019 github) for weighted mass; paper appendix describes uniform measure but that yields constant curvature 0.505 independent of w (proved W=(alpha-beta)d => kappa=(1-alpha)n/(n-1)), so weighted measure required for spread; library default referenced as github. APSP via floyd_warshall as in library; empirical w satisfies triangle inequality so d=w. Flow w^{(l+1)}=(1-kappa)d per paper. Window years computed from actual data dates, not printed 5."
+  },
+  "notes": "Choices paper leaves open: returns definition (log vs simple) - used log; risk-free not needed; ticker proxy - union of appendix tables (101) as closest to wiki_nasdaq; actual NASDAQ-100 vintage varies quarterly and wiki fetch blocked, so union used; calendar - trading days only, pairwise complete to avoid trimming IPO-limited tickers (ARM 2023-09-14, GFS 2021-10-28, GEHC 2023-01-04, CEG 2022-02-02, ABNB 2020-12-10, DASH 2020-12-09); currency USD. Deviations: sample not trimmed to nominal 100; all fetched tickers retained (n=98) with pairwise correlation; theoretical benchmarks recomputed from empirical n to avoid hardcoding paper n=100. N_NASDAQ100_nominal now reports empirical n with n=observations (previous version incorrectly set n=100). Uniform curvature would be constant 0.505 independent of w (derivation above); paper histogram spread therefore requires weighted mass exp(-w^2) as in Ni et al. code cited - used. Ricci flow with weighted measure shrinks toward empirical limit 0.505, not expand to 3: after 5/10/20 w mean 0.59/0.001/1e-6 vs paper claim flattening/expansion and surgery weight ~3 (theoretical lower bound -1.96 => 2.96). Our flow yields all positive curvature converging to empirical limit and no neckpinch zero links; paper surgery criterion not reproducible. Cluster tallies omitted as not_rebuilt (subjective). Correlation avg 38% vs paper 38% (now 38.0% with full sample pairwise), edge weight avg 1.10 vs 1.11 within sampling error. All counts now reflect empirical sample, no hard-coded nominal."
+}

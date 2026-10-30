@@ -1,0 +1,616 @@
+{
+ "title": "LGB+: A Macroeconomic Forecasting Road Test",
+ "hypothesis": "LGB+ interleaving greedy univariate linear updates with tree boosting improves short-horizon macro forecasts where autoregressive/linear accounting relationships dominate, while retaining nonlinear gains; gains concentrated at h=1 for unemployment and industrial production via linear channel.",
+ "data_sources": [
+  "FRED-QD [mccracken2020fred]",
+  "Survey of Professional Forecasters (SPF) Philadelphia Fed",
+  "FRED variables CLAIMSx, PERMITS, PCE, etc."
+ ],
+ "sample": "Forecasting exercise for 6 quarterly U.S. macro aggregates: headline CPI inflation, GDP growth, unemployment rate, housing starts log growth, industrial production, term spread (10Y-3M). Predictors from FRED-QD transformed to stationarity, augmented with 4 lags plus MARX moving averages 2,4,8, plus 4 principal components with 4 lags each, standardized to zero mean unit variance over training sample; 37 slowly released variables shifted forward 1 quarter for ragged edge. Direct forecasts at horizons h=1,2,4 quarters with separate models per horizon. Training begins 1961Q2. Evaluation on expanding window re-estimated every 8 quarters (2 years) over pre-COVID 2007Q2--2019Q4 and post-COVID 2022Q1--2025Q1 for GDP/unemployment/industrial production and 2021Q1--2025Q1 for inflation/housing starts/term spread, excluding COVID quarters 2020Q1--2021Q2. Simulation evaluates 8 DGPs (Linear, Product-Log, Mixture, Friedman1, Trig-Log, Soft Radial, Step/U-curve, Rotated Sine) at N=250,500,1000, SNR=0.5,1,2, P=6, 10 replications, test set N=1000.",
+ "period_start": "1961Q2",
+ "period_end": "2025Q1",
+ "method": [
+  "Construct simulation data: draw P=6 predictors uniform [0,1]; define 8 signal functions f(x) as listed; add Gaussian noise calibrated to target SNR 0.5,1,2; generate training sizes N=250,500,1000 and fixed test set N=1000; repeat 10 Monte Carlo replications.",
+  "Build empirical predictor panel: take FRED-QD, apply stationarity transformations, add 4 lags and MARX moving averages order 2,4,8; extract 4 principal components from transformed panel and include 4 lags of each PC; standardize all series to zero mean unit variance over training sample; shift 37 slowly released variables forward 1 quarter.",
+  "Define targets: quarterly headline CPI inflation, GDP growth, unemployment rate, housing starts log growth, industrial production, change in term spread (10Y-3M); estimate direct forecasting models separately for h=1,2,4.",
+  "Train models on expanding window starting 1961Q2, re-estimating every 8 quarters; evaluate out-of-sample on pre-COVID 2007Q2--2019Q4 and post-COVID 2022Q1--2025Q1 (GDP/UR/INDPRO) or 2021Q1--2025Q1 (INFL/HOUST/DSpread). Benchmarks: AR(4), FAAR (4 lags target +2 lags of 4 PCs), Ridge, Kernel Ridge, RF (500 trees, 75% subsampling, min node 5), LightGBM, LGB+ competition (per step fit shallow tree on subsample residuals and greedy univariate OLS on most correlated feature in random subset fraction rho, evaluate L_tree vs L_lin on OOB/validation and advance winner with learning rate eta; ensembling and post-hoc scale calibration y=beta*yhat), LGBA+ alternating (T trees then 1 linear correction with eta_tree/eta_lin on fixed schedule), NN (3x400 ReLU dropout 0.2 Adam), HNN for inflation, TabPFN, SPF median where available.",
+  "Compute forecast accuracy: RMSE relative to AR, MAE, rho(1), DM t-stat vs AR; risk-adjusted metrics over squared and absolute errors (Return, Sharpe, Sortino, Omega, MaxDD, Edge) as reported in appendix panels A/B; permutation variable importance VI_g = (MSE_permuted - MSE_baseline)/MSE_baseline*100 with decomposition VI_g = VI_linear + VI_trees + C_g where C_g = 200/(n*MSE_base) sum Delta_lin*Delta_tree; dual observation weights via AXIL: yhat_j = sum w_ji y_i with w = w_lin + w_tree; decompose forecasts into linear vs tree contributions."
+ ],
+ "claims": [
+  {
+   "name": "sim_P",
+   "description": "P=6 predictors drawn uniformly from [0,1] in simulation",
+   "value": "6",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Appendix simulation design"
+  },
+  {
+   "name": "sim_N_250",
+   "description": "Training sample size N=250 in simulation",
+   "value": "250",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "sim_N_500",
+   "description": "Training sample size N=500 in simulation",
+   "value": "500",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "sim_N_1000",
+   "description": "Training sample size N=1000 in simulation",
+   "value": "1000",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "sim_SNR_0p5",
+   "description": "Signal-to-noise ratio 0.5 in simulation",
+   "value": "0.5",
+   "unit": "ratio",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "sim_SNR_1",
+   "description": "Signal-to-noise ratio 1 in simulation",
+   "value": "1",
+   "unit": "ratio",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "sim_SNR_2",
+   "description": "Signal-to-noise ratio 2 in simulation",
+   "value": "2",
+   "unit": "ratio",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "sim_Ntest",
+   "description": "Fixed test set size N_test=1000 for simulation evaluation",
+   "value": "1000",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Appendix simulation design"
+  },
+  {
+   "name": "sim_replications",
+   "description": "Results averaged over 10 Monte Carlo replications",
+   "value": "10",
+   "unit": "replications",
+   "kind": "parameter",
+   "where": "Section 2.3"
+  },
+  {
+   "name": "emp_ragged_shift_count",
+   "description": "37 slowly released FRED-QD variables shifted forward by one quarter for ragged edge",
+   "value": "37",
+   "unit": "variables",
+   "kind": "count",
+   "where": "Section 3"
+  },
+  {
+   "name": "emp_AR_lags",
+   "description": "AR(4) benchmark uses 4 lags of target",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_FAAR_target_lags",
+   "description": "FAAR includes 4 lags of target",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_FAAR_PC_lags",
+   "description": "FAAR includes 2 lags of four principal components",
+   "value": "2",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_MARX_lags",
+   "description": "Predictors augmented with 4 lags",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 3"
+  },
+  {
+   "name": "emp_MARX_MA_orders",
+   "description": "MARX moving averages of order 2,4,8",
+   "value": "2, 4, and 8",
+   "unit": "orders",
+   "kind": "parameter",
+   "where": "Section 3"
+  },
+  {
+   "name": "emp_PCs",
+   "description": "Four principal components extracted from predictor panel",
+   "value": "4",
+   "unit": "components",
+   "kind": "parameter",
+   "where": "Section 3"
+  },
+  {
+   "name": "emp_PC_lags",
+   "description": "Four lags of each principal component included",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 3"
+  },
+  {
+   "name": "emp_reestimate_freq",
+   "description": "Models re-estimated every 8 quarters (2 years) on expanding window",
+   "value": "8",
+   "unit": "quarters",
+   "kind": "parameter",
+   "where": "Section 3"
+  },
+  {
+   "name": "emp_RF_trees",
+   "description": "Random Forest 500 trees",
+   "value": "500",
+   "unit": "trees",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_RF_min_node",
+   "description": "Random Forest minimum node size 5",
+   "value": "5",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_NN_layers",
+   "description": "Feed-forward NN three hidden layers",
+   "value": "3",
+   "unit": "layers",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_NN_neurons",
+   "description": "NN 400 neurons per hidden layer",
+   "value": "400",
+   "unit": "neurons",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_NN_dropout",
+   "description": "NN dropout regularization rate 0.2",
+   "value": "0.2",
+   "unit": "rate",
+   "kind": "parameter",
+   "where": "Appendix models"
+  },
+  {
+   "name": "emp_LGBplus_T_low",
+   "description": "Alternating variant T between 5 and 20 works well, lower bound 5",
+   "value": "5",
+   "unit": "trees per cycle",
+   "kind": "parameter",
+   "where": "Section 2.2"
+  },
+  {
+   "name": "emp_LGBplus_T_high",
+   "description": "Alternating variant T between 5 and 20 works well, upper bound 20",
+   "value": "20",
+   "unit": "trees per cycle",
+   "kind": "parameter",
+   "where": "Section 2.2"
+  },
+  {
+   "name": "dual_ur_2009Q2_pred",
+   "description": "LGBA+ forecast of unemployment 2009Q2 predicted 0.98",
+   "value": "0.98",
+   "unit": "standardized units",
+   "kind": "estimate",
+   "where": "Section 3.2 dual interpretation"
+  },
+  {
+   "name": "dual_ur_2009Q2_actual",
+   "description": "Actual unemployment 2009Q2 1.03",
+   "value": "1.03",
+   "unit": "standardized units",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_ur_window_2008Q2_2009Q1_weight",
+   "description": "Top 4-quarter weight 2008Q2--2009Q1 0.350 for unemployment 2009Q2 forecast",
+   "value": "0.350",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_ur_window_1974Q4_1975Q3_weight",
+   "description": "Second 4-quarter weight 1974Q4--1975Q3 0.241 for unemployment 2009Q2",
+   "value": "0.241",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_dSpread_2024Q4_pred",
+   "description": "LGBA+ forecast change in term spread 2024Q4 predicted 0.72",
+   "value": "0.72",
+   "unit": "standardized units",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_dSpread_2024Q4_actual",
+   "description": "Actual change in term spread 2024Q4 0.93",
+   "value": "0.93",
+   "unit": "standardized units",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_dSpread_window_1981Q1_1981Q4_weight",
+   "description": "Top 4-quarter weight 1981Q1--1981Q4 0.154 for dSpread 2024Q4",
+   "value": "0.154",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_dSpread_window_1981Q2_1982Q1_weight",
+   "description": "Second 4-quarter weight 1981Q2--1982Q1 0.152 for dSpread 2024Q4",
+   "value": "0.152",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_houst_2022Q3_topQ_2022Q2_weight",
+   "description": "Top individual quarter 2022Q2 weight 0.043 for housing starts 2022Q3",
+   "value": "0.043",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_houst_2022Q3_secondQ_1981Q1_weight",
+   "description": "Second individual quarter 1981Q1 weight 0.032 for housing starts 2022Q3",
+   "value": "0.032",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_houst_2022Q3_top4Q_2021Q3_2022Q2_weight",
+   "description": "Top 4-quarter window 2021Q3--2022Q2 weight 0.094 for housing starts 2022Q3",
+   "value": "0.094",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "dual_houst_2022Q3_second4Q_1981Q1_1981Q4_weight",
+   "description": "Second 4-quarter window 1981Q1--1981Q4 weight 0.072 for housing starts 2022Q3",
+   "value": "0.072",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  },
+  {
+   "name": "sim_Linear_N250_SNR0p5_OLS_R2",
+   "description": "Simulation Linear DGP N=250 SNR=0.5 OLS R2 .32",
+   "value": ".32",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results Linear N=250 SNR 0.5 OLS"
+  },
+  {
+   "name": "sim_Linear_N250_SNR0p5_RF_R2",
+   "description": "Simulation Linear N=250 SNR=0.5 RF R2 .25",
+   "value": ".25",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_Linear_N250_SNR0p5_LGB_R2",
+   "description": "Simulation Linear N=250 SNR=0.5 LGB R2 .22",
+   "value": ".22",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_Linear_N250_SNR0p5_LGBplus_R2",
+   "description": "Simulation Linear N=250 SNR=0.5 LGB+ R2 .27",
+   "value": ".27",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_Linear_N250_SNR0p5_LGBAplus_R2",
+   "description": "Simulation Linear N=250 SNR=0.5 LGBA+ R2 .27",
+   "value": ".27",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_Linear_N250_SNR1_OLS_R2",
+   "description": "Simulation Linear N=250 SNR=1 OLS R2 .49",
+   "value": ".49",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_Linear_N250_SNR1_LGBAplus_R2",
+   "description": "Simulation Linear N=250 SNR=1 LGBA+ R2 .45",
+   "value": ".45",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_TrigLog_N250_SNR0p5_OLS_R2",
+   "description": "Simulation Trig-Log N=250 SNR=0.5 OLS R2 .00",
+   "value": ".00",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_TrigLog_N250_SNR0p5_RF_R2",
+   "description": "Simulation Trig-Log N=250 SNR=0.5 RF R2 .11",
+   "value": ".11",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_TrigLog_N250_SNR0p5_LGBAplus_R2",
+   "description": "Simulation Trig-Log N=250 SNR=0.5 LGBA+ R2 .13",
+   "value": ".13",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_SoftRadial_N250_SNR0p5_OLS_R2",
+   "description": "Simulation Soft Radial N=250 SNR=0.5 OLS R2 -.02",
+   "value": "-.02",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_SoftRadial_N250_SNR0p5_LGBAplus_R2",
+   "description": "Simulation Soft Radial N=250 SNR=0.5 LGBA+ R2 .20",
+   "value": ".20",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "sim_RotatedSine_N250_SNR0p5_RF_R2",
+   "description": "Simulation Rotated Sine N=250 SNR=0.5 RF R2 .10",
+   "value": ".10",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table simulation_results"
+  },
+  {
+   "name": "summary_preCOVID_UR_h1_RF_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 pre-COVID RF 0.86",
+   "value": "0.86",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse UR h=1 pre RF"
+  },
+  {
+   "name": "summary_preCOVID_UR_h1_LGB_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 pre-COVID LGB 0.86",
+   "value": "0.86",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse"
+  },
+  {
+   "name": "summary_preCOVID_UR_h1_LGBAplus_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 pre-COVID LGBA+ 0.68",
+   "value": "0.68",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse"
+  },
+  {
+   "name": "summary_preCOVID_UR_h1_LGBplus_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 pre-COVID LGB+ 0.67",
+   "value": "0.67",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse UR h=1 pre LGB+"
+  },
+  {
+   "name": "summary_preCOVID_UR_h1_KRR_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 pre-COVID KRR 1.29",
+   "value": "1.29",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse"
+  },
+  {
+   "name": "summary_preCOVID_UR_h2_LGBplus_RMSE",
+   "description": "RMSE relative to AR Unemployment h=2 pre-COVID LGB+ 0.71",
+   "value": "0.71",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse UR h=2 pre LGB+ 0.71"
+  },
+  {
+   "name": "summary_preCOVID_INDPRO_h1_LGBAplus_RMSE",
+   "description": "RMSE relative to AR Industrial Production h=1 pre-COVID LGBA+ 0.88",
+   "value": "0.88",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse INDPRO h=1 pre LGBA+ 0.88"
+  },
+  {
+   "name": "summary_preCOVID_INDPRO_h1_LGBplus_RMSE",
+   "description": "RMSE relative to AR Industrial Production h=1 pre-COVID LGB+ 1.01",
+   "value": "1.01",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse INDPRO h=1 pre LGB+ 1.01"
+  },
+  {
+   "name": "summary_preCOVID_HOUST_h1_LGBplus_RMSE",
+   "description": "RMSE relative to AR Housing Starts h=1 pre-COVID LGB+ 0.97",
+   "value": "0.97",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse HOUST h=1 pre LGB+ 0.97"
+  },
+  {
+   "name": "summary_preCOVID_GDP_h1_KRR_RMSE",
+   "description": "RMSE relative to AR GDP h=1 pre-COVID KRR 0.84",
+   "value": "0.84",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse GDP h=1 pre KRR 0.84"
+  },
+  {
+   "name": "summary_preCOVID_INFL_h2_SPF_RMSE",
+   "description": "RMSE relative to AR Inflation h=2 pre-COVID SPF 0.76",
+   "value": "0.76",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse INFL h=2 pre SPF 0.76"
+  },
+  {
+   "name": "summary_postCOVID_UR_h1_SPF_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 post-COVID SPF 1.15",
+   "value": "1.15",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse UR h=1 post SPF 1.15"
+  },
+  {
+   "name": "summary_postCOVID_UR_h1_TABPFN_RMSE",
+   "description": "RMSE relative to AR Unemployment h=1 post-COVID TabPFN 0.86",
+   "value": "0.86",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse UR h=1 post TabPFN 0.86"
+  },
+  {
+   "name": "summary_postCOVID_HOUST_h1_LGBAplus_RMSE",
+   "description": "RMSE relative to AR Housing Starts h=1 post-COVID LGBA+ 0.83",
+   "value": "0.83",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse HOUST h=1 post LGBA+ 0.83"
+  },
+  {
+   "name": "summary_postCOVID_DSpread_h1_LGBplus_RMSE",
+   "description": "RMSE relative to AR Delta Spread h=1 post-COVID LGB+ 0.80",
+   "value": "0.80",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table summary_rmse dSpread h=1 post LGB+ 0.80"
+  },
+  {
+   "name": "detailed_GDP_h1_preCOVID_KRR_Return_SE",
+   "description": "GDP h=1 pre-COVID Panel A Squared Error Return for KRR 0.29",
+   "value": "0.29",
+   "unit": "return",
+   "kind": "estimate",
+   "where": "Table GDP h=1 Panel A Return KRR pre"
+  },
+  {
+   "name": "detailed_GDP_h1_preCOVID_KRR_DM_tstat",
+   "description": "GDP h=1 pre-COVID Panel C DM t-stat for KRR 1.41",
+   "value": "1.41",
+   "unit": "t-stat",
+   "kind": "estimate",
+   "where": "Table GDP h=1 Panel C DM t-stat KRR pre"
+  },
+  {
+   "name": "detailed_UR_h1_preCOVID_LGBplus_Sharpe_SE",
+   "description": "Unemployment h=1 pre-COVID Panel A Sharpe for LGB+ 0.69",
+   "value": "0.69",
+   "unit": "Sharpe",
+   "kind": "estimate",
+   "where": "Table UR h=1 Panel A Sharpe LGB+ pre"
+  },
+  {
+   "name": "detailed_UR_h1_preCOVID_RF_rho1",
+   "description": "Unemployment h=1 pre-COVID Panel C rho(1) for RF 0.27",
+   "value": "0.27",
+   "unit": "autocorrelation",
+   "kind": "estimate",
+   "where": "Table UR h=1 Panel C rho1 RF pre"
+  },
+  {
+   "name": "detailed_UR_h1_postCOVID_TABPFN_DM",
+   "description": "Unemployment h=1 post-COVID Panel C DM t-stat for TabPFN 0.66",
+   "value": "0.66",
+   "unit": "t-stat",
+   "kind": "estimate",
+   "where": "Table UR h=1 Panel C DM t-stat TabPFN post"
+  },
+  {
+   "name": "detailed_DSpread_h1_preCOVID_RF_RMSE",
+   "description": "Delta Spread h=1 pre-COVID Panel C RMSE for RF 0.96",
+   "value": "0.96",
+   "unit": "relative RMSE",
+   "kind": "estimate",
+   "where": "Table dSpread h=1 Panel C RMSE RF pre"
+  },
+  {
+   "name": "interpret_IP_YLag_share",
+   "description": "Industrial Production lagged YLag accounts for roughly 60% of MSE reduction pre-COVID linear channel",
+   "value": "60%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Section 3.1 interpretation of INDPRO h=1"
+  },
+  {
+   "name": "housing_rebound_1983",
+   "description": "Housing starts rebounded roughly 60% as Volcker eased around 1983",
+   "value": "60%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Section 3.2 dual interpretation housing"
+  },
+  {
+   "name": "mortgage_rate_1981_approx",
+   "description": "30-year mortgage rates approached 18% in 1981",
+   "value": "18%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Section 3.2"
+  }
+ ],
+ "headline": "summary_preCOVID_UR_h1_LGBplus_RMSE",
+ "partitions": [],
+ "tests": []
+}

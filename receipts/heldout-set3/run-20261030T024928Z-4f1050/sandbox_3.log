@@ -1,0 +1,105 @@
+exit 0 in 50.4s
+--- stdout
+=== FETCH ===
+BTC BTC-USD: 1186 rows 2023-01-01 -> 2026-03-31
+ETH ETH-USD: 1186 rows 2023-01-01 -> 2026-03-31
+SOL SOL-USD: 1186 rows 2023-01-01 -> 2026-03-31
+ADA ADA-USD: 1186 rows 2023-01-01 -> 2026-03-31
+AVAX AVAX-USD: 1186 rows 2023-01-01 -> 2026-03-31
+LINK LINK-USD: 1186 rows 2023-01-01 -> 2026-03-31
+VIX ^VIX: 813 rows
+SPX ^GSPC: 813 rows
+DXY DX-Y.NYB: 815 rows
+IRX ^IRX: 813 rows
+TNX ^TNX: 813 rows
+ZQ ZQ=F: 816 rows
+ZN ZN=F: 816 rows
+Calendar days inclusive 1186
+BTC RVol5 N=1181 mean=0.348 std=0.193 min=0.048 max=1.566
+ETH RVol5 N=1181 mean=0.466 std=0.266 min=0.024 max=1.691
+SOL RVol5 N=1181 mean=0.647 std=0.330 min=0.049 max=2.577
+ADA RVol5 N=1181 mean=0.581 std=0.406 min=0.041 max=4.778
+AVAX RVol5 N=1181 mean=0.657 std=0.345 min=0.032 max=2.490
+LINK RVol5 N=1181 mean=0.626 std=0.326 min=0.061 max=2.163
+Controls trading days VIX=813 drop 31.5%
+BTC merged shape (817, 9)
+ETH merged shape (817, 9)
+SOL merged shape (817, 9)
+ADA merged shape (817, 9)
+AVAX merged shape (817, 9)
+LINK merged shape (817, 9)
+BTC M1 N=800 AdjR2=0.070 HAR5 t=2.56
+BTC M2 N=796 AdjR2=0.089
+ETH M1 N=800 AdjR2=0.050 HAR5 t=1.51
+ETH M2 N=796 AdjR2=0.086
+SOL M1 N=800 AdjR2=0.051 HAR5 t=1.44
+SOL M2 N=796 AdjR2=0.059
+ADA M1 N=800 AdjR2=0.048 HAR5 t=3.02
+ADA M2 N=796 AdjR2=0.055
+AVAX M1 N=800 AdjR2=0.042 HAR5 t=2.94
+AVAX M2 N=796 AdjR2=0.048
+LINK M1 N=800 AdjR2=0.039 HAR5 t=2.09
+LINK M2 N=796 AdjR2=0.047
+Results 58 written to /work/results.json
+{'name': 'BH_q', 'value': 0.05, 'se': None, 'n': None}
+{'name': 'BH_tests_total', 'value': 60.0, 'se': None, 'n': None}
+{'name': 'HAC_lags', 'value': 5.0, 'se': None, 'n': None}
+{'name': 'ada_mean_RVol', 'value': 0.5810085263419602, 'se': 0.011825073893372784, 'n': 1181}
+{'name': 'avax_mean_RVol', 'value': 0.6569049922408248, 'se': 0.0100343783437128, 'n': 1181}
+{'name': 'baseline_FF_t', 'value': -0.06334119972928268, 'se': 1.029172642765341, 'n': 796}
+{'name': 'baseline_UST_t', 'value': -0.3225305326241498, 'se': 0.5192850272659534, 'n': 796}
+{'name': 'baseline_eth_UST_t', 'value': -1.047540452196272, 'se': 0.7100912778626743, 'n': 796}
+{'name': 'btc_M1_AdjR2', 'value': 0.07027541940607984, 'se': 0.0, 'n': 800}
+{'name': 'btc_M1_HAR1_SE', 'value': 0.3897538802504594, 'se': 0.0, 'n': 800}
+{'name': 'btc_M1_HAR1_coef', 'value': -0.011919921275647533, 'se': 0.3897538802504594, 'n': 800}
+{'name': 'btc_M1_HAR20_SE', 'value': 2.457594992104919, 'se': 0.0, 'n': 800}
+{'name': 'btc_M1_HAR20_coef', 'value': 2.9340238044620457, 'se': 2.457594992104919, 'n': 800}
+{'name': 'btc_M1_HAR5_SE', 'value': 1.5893515806797653, 'se': 0.0, 'n': 800}
+{'name': 'btc_M1_HAR5_coef', 'value': 4.06994878130895, 'se': 1.5893515806797653, 'n': 800}
+{'name': 'btc_M2_AdjR2', 'value': 0.08906173759688107, 'se': 0.0, 'n': 796}
+{'name': 'btc_M2_DXY_SE', 'value': 1.666425884703696, 'se': 0.0, 'n': 796}
+{'name': 'btc_M2_DXY_coef', 'value': 1.7457609991450698, 'se': 1.666425884703696, 'n': 796}
+{'name': 'btc_M2_HAR1_SE', 'value': 0.37852593230847714, 'se': 0.0, 'n': 796}
+{'name': 'btc_M2_HAR1_coef', 'value': 0.04462873204314627, 'se': 0.37852593230847714, 'n': 796}
+Sample {'description': 'Six crypto assets BTC,ETH,SOL,ADA,AVAX,LINK via yfinance (BTC-USD etc.) Jan 2023-Mar 2026 inclusive 1186 calendar days. Crypto log returns from adj_close. Dependent RVol5 = sqrt(252)*sample sd(r_{t+1..t+5}). Controls VIX (^VIX level), DXY (DX-Y.NYB pct change), SPX (^GSPC pct change) aligned 4pm ET; trading-day merged N=813 dropping 31.5% weekends/holidays (paper ~30%). Effective after HAR1/5/20 lags (calendar 5/20d rolling mean |r|) + forward window: BTC M1 N=800, M2 N=796. Descriptive N per asset 1181 calendar. HAR M1-M2 estimated OLS HAC 5 lags.', 'n': 813, 'start': '2023-01-01', 'end': '2026-03-31', 'same_as_paper': False, 'missing': None, 'extra': None, 'differences': 'Trading effective ~790 per asset vs paper X (Kalshi-filtered). Kalshi 0/10 series available via market_data. RVol mean ~0.35-0.66 vs paper 0.63-0.93 (vendor/vintage).', 'cannot_count': 'Kalshi usable N per series (469,384,569 etc.) and volume/OI require Kalshi API history not in market_data cache; cannot count missing/extra for those series. Crypto extra cannot be determined precisely due to Kalshi filtering.', 'not_rebuilt': {'btc_fed_dovish_coef_M3': 'Kalshi KXFED volume-weighted probability change not available via market_data; Kalshi API history 2023-2026 not in public cache.', 'btc_fed_dovish_coef_SE': 'same', 'btc_fed_dovish_t': 'same', 'btc_fed_dovish_p': 'same', 'btc_fed_dovish_BH_adj_p': 'same', 'btc_recession_oos_msfe': 'requires Kalshi KXRECSSNBER signal and expanding-window OOS; unavailable.', 'btc_recession_oos_CW_p': 'same', 'btc_recession_oos_R2': 'same', 'btc_recession_in_t': 'same', 'btc_recession_in_p': 'same', 'btc_recession_BH_adj_not_survive': 'same', 'eth_cpi_in_coef': 'requires Kalshi KXCPI absolute prob change.', 'eth_cpi_in_t': 'same', 'eth_cpi_in_p': 'same', 'eth_cpi_in_AdjR2': 'same', 'eth_cpi_oos_msfe': 'same', 'eth_cpi_oos_CW_p': 'same', 'eth_cpi_oos_R2': 'same', 'sol_cpi_in_coef': 'same', 'sol_cpi_in_t': 'same', 'sol_cpi_in_p': 'same', 'sol_cpi_in_AdjR2': 'same', 'sol_cpi_oos_msfe': 'same', 'sol_cpi_oos_CW_p': 'same', 'sol_cpi_oos_R2': 'same', 'ada_cpi_in_coef': 'same', 'ada_cpi_in_t': 'same', 'ada_cpi_in_p': 'same', 'ada_cpi_in_AdjR2': 'same', 'avax_cpi_in_coef': 'same', 'avax_cpi_in_t': 'same', 'avax_cpi_in_p': 'same', 'avax_cpi_in_AdjR2': 'same', 'link_cpi_in_coef': 'same', 'link_cpi_in_t': 'same', 'link_cpi_in_p': 'same', 'link_cpi_in_AdjR2': 'same', 'link_cpi_BH_adj_p': 'same', 'btc_cpi_in_coef': 'same', 'btc_cpi_in_t': 'same', 'btc_cpi_in_p': 'same', 'btc_cpi_in_AdjR2': 'same', 'kalshi_cpi_range_t': 'same', 'orth_firstStage_R2_fed': 'first-stage projection requires Kalshi Fed-dovish signal.', 'orth_firstStage_R2_fed_orth_share': 'same', 'orth_firstStage_R2_cpi': 'requires Kalshi KXCPI.', 'orth_fed_resid_t': 'same', 'orth_fed_resid_p': 'same', 'orth_cpi_resid_t_eth': 'same', 'orth_cpi_resid_p_eth': 'same', 'orth_cpi_resid_t_sol': 'same', 'orth_cpi_resid_p_sol': 'same', 'orth_cpi_resid_t_ada': 'same', 'orth_cpi_resid_p_ada': 'same', 'orth_cpi_resid_t_link': 'same', 'orth_cpi_resid_p_link': 'same', 'btc_M3_HAR1_coef': 'M3 with Kalshi signal; unavailable.', 'btc_M3_HAR5_coef': 'same', 'btc_M3_HAR20_coef': 'same', 'btc_M3_VIX_coef': 'same', 'btc_M3_DXY_coef': 'same', 'btc_M3_SPX_coef': 'same', 'btc_M3_AdjR2': 'same', 'btc_IQR_fed': 'IQR of Kalshi Fed-dovish signal; unavailable.', 'btc_IQR_effect': 'same', 'btc_IQR_pct_mean': 'same', 'btc_OOS_fed_msfe': 'same', 'btc_OOS_fed_CWp': 'same', 'btc_OOS_cpi_msfe': 'same', 'kalshi_usable_N_KXFED': 'Kalshi API usable obs after lag/merge not reproducible via market_data.', 'kalshi_usable_N_KXCPI': 'same', 'kalshi_usable_N_KXCPICORE': 'same', 'kalshi_usable_N_KXGDP': 'same', 'kalshi_usable_N_KXU3': 'same', 'kalshi_usable_N_KXPCECORE': 'same', 'kalshi_usable_N_KXRECSSNBER_569': 'same', 'kalshi_usable_N_KXACPI': 'same', 'kalshi_usable_N_KXRATECUT': 'same', 'kalshi_usable_N_KXUSNFP': 'same', 'kalshi_median_vol_KXFED': 'Kalshi dollar volume not in public data.', 'kalshi_peak_vol_KXFED': 'same', 'kalshi_median_OI_KXFED': 'same', 'kalshi_median_OI_KXCPI': 'same', 'kalshi_median_OI_KXRECSSNBER': 'same', 'nonoverlap_btc_t': 'non-overlapping 5-day windows requires Kalshi signal.', 'nonoverlap_link_t': 'same', 'bootstrap_block_p': 'block bootstrap with Kalshi signal; unavailable.', 'leadlag_lag_t': 'same', 'baseline_joint_fed_t': 'joint M_FF+M_UST+Kalshi requires Kalshi.', 'dvol_btc_joint_fed_t': 'joint with Deribit DVOL requires Kalshi.', 'garch_btc_fed_t': 'GARCH with Kalshi signal; unavailable.', 'cpi_release_dummy_link_t': 'BLS release-window dummy plus Kalshi; unavailable.', 'ema_attenuated_btc_t': '5-day EMA of Kalshi signal; unavailable.', 'composite_btc_t': 'cross-sectional composite Kalshi; unavailable.'}, 'substitutions': 'Crypto yfinance BTC-USD/ETH-USD etc. for CoinGecko; controls ^VIX/^GSPC/DX-Y.NYB for CBOE VIX/S&P500/DXY; ^IRX+ZQ=F for Fed Funds futures; ^TNX+ZN=F for 10y Treasury; annualization sqrt252. HAR on calendar returns then trading-join.'}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

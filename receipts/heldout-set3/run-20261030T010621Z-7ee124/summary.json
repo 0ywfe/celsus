@@ -1,0 +1,92 @@
+{
+ "run_id": "run-20261030T010621Z-7ee124",
+ "paper": "2602.00080",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 7 of 15 checked results match within their uncertainty. Its main result, wf_gen_ratio_improvement_98pct, is 98% in the paper and 112.9% here (not judged: no standard error).",
+ "headline": {
+  "name": "wf_gen_ratio_improvement_98pct",
+  "kind": "estimate",
+  "unit": "%",
+  "reported": 98.0,
+  "reproduced": 112.85188596937931,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "no standard error"
+ },
+ "sample": [
+  {
+   "name": "n_assets",
+   "reported": 50.0,
+   "reproduced": 50,
+   "consistent": true
+  },
+  {
+   "name": "approx_trading_days_per_asset",
+   "reported": 3770.0,
+   "reproduced": 3774,
+   "consistent": true
+  },
+  {
+   "name": "n_strategies",
+   "reported": 3.0,
+   "reproduced": 3,
+   "consistent": true
+  },
+  {
+   "name": "n_walkforward_splits_per_asset",
+   "reported": 9.0,
+   "reproduced": 9,
+   "consistent": true
+  },
+  {
+   "name": "n_walkforward_trials_total",
+   "reported": 5340.0,
+   "reproduced": 5400,
+   "consistent": true
+  },
+  {
+   "name": "wf_gt_n",
+   "reported": 1335.0,
+   "reproduced": 1350,
+   "consistent": true
+  },
+  {
+   "name": "wf_sharpe_n",
+   "reported": 1335.0,
+   "reproduced": 1350,
+   "consistent": true
+  },
+  {
+   "name": "wf_sortino_n",
+   "reported": 1335.0,
+   "reproduced": 1350,
+   "consistent": true
+  },
+  {
+   "name": "wf_simple_n",
+   "reported": 1335.0,
+   "reproduced": 1350,
+   "consistent": true
+  }
+ ],
+ "judged": 15,
+ "matched": 7,
+ "rejections": [],
+ "rounds": 1,
+ "packages": [
+  "llvmlite==0.50.0",
+  "numba==0.68.1"
+ ],
+ "calls": 21,
+ "cost_usd": 0.6648,
+ "tokens_in": 615742,
+ "tokens_out": 101254,
+ "wall_s": 984.9,
+ "crashed": null
+}

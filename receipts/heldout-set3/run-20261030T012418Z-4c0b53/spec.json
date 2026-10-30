@@ -1,0 +1,51 @@
+{
+ "title": "Fast Times, Slow Times: Timescale Separation in Financial Timeseries Data",
+ "hypothesis": "Financial timeseries contain slow and fast components separable by variance and tail stationarity (generalized eigenvalue/tICA problems); in-sample slow-component timescales persist out-of-sample.",
+ "data_sources": [
+  "G10 currencies - instrument list, source, frequency, price vs return definition not stated",
+  "Five multifactor equity ETFs: IFSU, IUSZ, IUVL, IUMO, IUQA",
+  "US Treasuries - maturities/instruments, source, frequency not stated"
+ ],
+ "sample": "Three separate baskets analyzed independently. No explicit N observations, N periods count, or data source printed. Filters not stated. Only basket composition and time windows are printed.",
+ "period_start": "not stated as single calendar date - multiple fit/OOS windows: G10 2006-2010 fit, 2010-2025 OOS; ETFs 2021-2022 fit, 2022-2025 OOS; Treasuries 1994-1998 fit, 1998-2025 OOS",
+ "period_end": "not stated as single calendar date - see windows above",
+ "method": [
+  "1. Define X_t = n-dim column vector process (paper: e.g. prices or returns - which used for which basket not stated; demeaning, frequency, handling of missing/holidays not stated).",
+  "2. Linear tICA (k=1, sec 2.1): minimize d/dt Var(X_t w_i^T) s.t. Var(W X_t^T)=1. Leads to generalized eigenvalue problem C(t,T) w = lambda C(t,0) w where C(t,T)=1/2 E[X_{t+T}^T X_t + X_t^T X_{t+T}] is lag-T autocovariance, C(t,0)=E[X_t^T X_t] covariance, lambda=(1+beta)/2T. C(t,0) real symmetric positive definite. Solve with LAPACK gvd or scipy.linalg.eigh. Eigenvalues lambda_i in [-1,1] are autocorrelations. Timescales t_i = -2T / (lambda_i -1). Lag T value, discretization of dX_t, expectation estimator not stated.",
+  "3. Tail tICA (k=4, sec 2.2): minimize drift of 2k-th moment (1/2k)E(X_t w^T)^{2k} s.t. E[w_i X_t^T X_t w_j^T]=delta_ij. Solution satisfies (2k-1)E[(X_t w^T)^{2k-2}(dX_t w^T)X_t]+E[(X_t w^T)^{2k-1}dX_t]=beta w, w^T w=1, beta=2kE[(X_t w^T)^{2k-1}(dX_t w^T)]=2k d/dt M_{2k}, lambda=E[(X_t w^T)^{2k-1}(X_{t+T} w^T)] tail autocorrelation order k.",
+  "4. Numerics for k=4: Fixed Point Iteration (FastICA). Single: w <- E[X_t d(w^T X_t)^{2k-1})] - (2k-1)E[(w^T X_t)^{2k-2}] w ; w <- w/|w|. Parallel: W <- E[X_t d(W^T X_t)^{2k-1})] - (2k-1)E[(W^T X_t)^{2k-2}] W ; W <- (W X_t^T X_t W^T)^(-1/2) W. Initialization, convergence tolerance, restarts not stated.",
+  "5. Empirical windows - parameters (not results): G10: fit 2006-2010 extract slowest components, project 2010-2025 OOS. ETFs: fit 2021-2022 extract slowest components, project 2022-2025 OOS. Treasuries: fit 1994-1998, continuation 1998-2025. k=1 linear and k=4 nonlinear fitted per basket. Increasing k beyond 4 did not produce further meaningful changes - no threshold printed.",
+  "6. Extraction: 5 slowest components extracted for G10 and ETF baskets (explicit). Number for Treasuries not stated - figures show 5 but text does not state. Eigenvectors = directions of fastest/slowest decay. Weights rescaled to unit gross exposure (sum |w|=1).",
+  "7. OOS projection: apply in-sample weights w to OOS X_t to obtain Y_t = X_t w^T; plot in-sample green background vs OOS white background as Figures 1-3. Assessment is visual: no visible deterioration at in-sample to OOS transition; where higher frequencies enter due to 2008-2010 GFC or 2023 geopolitical events components revert to original slow timescale; orthogonality decays as expected out-of-sample. No numeric table, test statistic, p-value or standard error printed.",
+  "8. Theoretical benchmarks: eigenvalues in [-1,1]; unit gross exposure =1. Flash Crash 2010 S&P 500 -9% cited as background example, not estimate from this analysis. Data frequency, return definition, T, covariance estimation window, significance test not stated."
+ ],
+ "claims": [
+  {
+   "name": "n_baskets",
+   "description": "Three separate baskets analyzed",
+   "value": "3",
+   "unit": "baskets",
+   "kind": "count",
+   "where": "sec Empirical Examples para 1: G10 currencies, five multifactor equity ETFs, and US Treasuries"
+  },
+  {
+   "name": "n_etf_tickers",
+   "description": "Five multifactor equity ETFs analyzed: IFSU, IUSZ, IUVL, IUMO, IUQA",
+   "value": "5",
+   "unit": "tickers",
+   "kind": "count",
+   "where": "sec Empirical Examples para 2-3 brackets and fig caption"
+  },
+  {
+   "name": "no_quantified_headline_estimate",
+   "description": "No numeric headline estimate with SE/p-value printed. Main conclusion is qualitative/visual: relaxation timescales, at least for the slowest components, appear remarkably robust out-of-sample with no visible deterioration at in-sample/OOS transition; where higher frequencies enter (2008-2010 GFC, 2023 geopolitical events) components revert to original slow timescale; orthogonality decays as expected. Based solely on visual inspection of Figures 1-3.",
+   "value": "not stated",
+   "unit": "not applicable",
+   "kind": "estimate",
+   "where": "sec Empirical Examples last 3 paragraphs + Conclusion. No table of estimates, statistics or p-values printed anywhere."
+  }
+ ],
+ "headline": "no_quantified_headline_estimate",
+ "partitions": [],
+ "tests": []
+}

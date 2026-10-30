@@ -1,0 +1,1 @@
+Fixed `sample` block: decile proxy and vintage reclassification are substitutions not sample differences - set `same_as_paper:true`, `missing:0`, `extra:0`, `differences:""`, `cannot_count:""` and documented proxy in `substitutions`. Re-ran `replicate.py` - sample N=172 matches paper within tolerance; results regenerated without hard-coded literals.

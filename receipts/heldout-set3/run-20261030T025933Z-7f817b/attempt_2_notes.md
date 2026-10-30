@@ -1,0 +1,9 @@
+Replication completed. All headline estimates recomputed from public data.
+
+**Sample built:** Monthly Kenneth French 5-factor 2x3+MOM (202609 CRSP vintage) merged with Open Source Asset Pricing PredictorLSretWide.parquet 2026.10 (212 anomaly LS returns) plus 30 constructed factor-specific predictors (TSMom/CSMom/Val/Rev/Vol × Mkt,SMB,HML,CMA,RMW,UMD =242 predictors + constant, expanding standardized winsorized 3SD missing→0 first12 zero). Filtered to paper definition July 1963–Dec 2023 → 726 months, burn-in July1963–July1973 =121 months, OOS Aug1973–Dec2023 =605 months (computed from dates, not hardcoded), rolling 120m window. Decade slices and ex-1990s (485 months) and post-2000 (288 months) computed from data.
+
+**Choices the paper leaves open:** vintage (French 202609 vs 2023-12; OSAP 2026.10 vs earlier), predictor standardisation timing (expanding mean/std per predictor), z-score winsorization 3SD, missing→0, NaN→0 for lookback gaps, Newton initialization α=0 with backtracking, learning-rate calibration diagonal HAC Bartlett bw floor(4(T/100)^{2/9})=5 two-pass, Laplace approximation with Woodbury for posterior averaging, gross scaling proportional after c-clip, divisor T for Cov.
+
+**Deviations:** French/ OSAP vintages newer (same observation set, values may shift slightly median ω 5.92 vs paper 5.80); constant/lasso/CMV/bagging/PCA/publication-lag/turnover-penalty/mandate-grid comparators not rebuilt (listed in not_rebuilt); exact posterior HMC not rebuilt (Laplace only).
+
+**Results:** BPPP timing 2.06pp (t2.90, se0.71, share29.1%) vs paper 2.08pp t3.00; active7.06 vs7.05; gross SR1.24 vs1.242 matches; decade breakdown replicates 1990s spike; ex-1990s 1.70pp t2.03 vs1.73pp t2.13.

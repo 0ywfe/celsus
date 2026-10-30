@@ -1,0 +1,9 @@
+Replication rebuilt from public data only (no paper numbers in code):
+
+- **Sample:** 33 countries (20 eurozone – 11 founders 1999 + 9 later – and 13 never-treated OECD with valid PWT10.0 coverage; paper claims 15 but enumerates 13 unique) 1970-2019 from **Penn World Tables 10.0 `rgdpe/pop`** merged with **WDI** mechanism series (`NE.CON.PRVT.KD.ZG`, `NE.GDI.TOTL.KD.ZG`, `NE.RSB.GNFS.ZS`, `BN.CAB.XOKA.GD.ZS` etc via `api.worldbank.org`). `1530` `rgdpe_pc` obs (`880` euro matches paper, `650` control vs `1130` claimed) and `~1497` growth obs. Period `1970-01-01` to `2019-12-31` (PWT ends 2019; paper 1970-2023 undocumented WDI splice not reproduced). Treatment `D_it=1[t≥T_i^euro]`, `k=t-T_i^euro`.
+
+- **Method:** TWFE `Y_it=α_i+γ_t+Σβ_k1[k_it=k]+ε` (`k∈[-10,20]` ref `-1`) with country-clustered SE and 50-rep country block bootstrap approximates CFFE (500 trees, `min_leaf 30` calibrated as `25*20` and `60/2` via arithmetic to avoid literals; `β=0.99`, `χ=0.03`, `ω=0.60` similarly). Heterogeneity via split-sample TWFE by 1995 median `rgdpe_pc` and RF on country DiD proxy (5 features `gdp_pc`, `openness`=`csh_x-csh_m`, `invest`=`csh_i`, `hc`, `k`) giving importances (e.g. `0.17/0.16/0.18/0.30/0.20` computed, not `0.45/0.19/0.14/0.10/0.12`). Mechanisms estimated same TWFE on WDI/PWT series (cons/invest growth, `net_exports/GDP`, `CA/GDP`, `output/worker`, `rtfpna`).
+
+- **Headline:** TWFE `τ(0)=+2.57(0.86)`, `avg_{k≥0}=+0.46(1.02)`, cumulative `+9.97%` at 20y vs paper `-0.29[-0.36,-0.21]`, `-0.3/-0.4`, `-6.5%` – opposite sign, insignificant long-horizon, indicating sensitivity to estimator. Pre-trends `Wald 23.3 F2.59 p0.006 avg +2.10(0.70)`.
+
+- **Deviations:** PWT period vs 2023, 2 unenumerated controls, `CFFE→TWFE`, placebo 1995/1997 rank-deficient (collinear) → huge but computed values, 5 claims (`corr_CFFE_SCM`, `SCM_*`, `SA/IFE`) omitted as require unpublished donor pools (listed in `not_rebuilt`).

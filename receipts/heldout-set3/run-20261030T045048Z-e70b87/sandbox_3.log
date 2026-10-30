@@ -1,0 +1,21 @@
+exit 0 in 187.7s
+--- stdout
+Probing PIP data source...
+probe: fetched 2588 records from https://api.worldbank.org/pip/v1/pip?country=all&year=all&format=json
+probe: fields in record: ['comparable_spell', 'country_code', 'country_name', 'cpi', 'decile1', 'decile10', 'decile2', 'decile3', 'decile4', 'decile5', 'decile6', 'decile7', 'decile8', 'decile9', 'distribution_type', 'estimate_type', 'estimation_type', 'gini', 'headcount', 'is_interpolated', 'mean', 'median', 'mld', 'pg', 'polarization', 'poverty_gap', 'poverty_line', 'poverty_severity', 'ppp', 'region_code', 'region_name', 'reporting_gdp', 'reporting_level', 'reporting_pce', 'reporting_pop', 'reporting_year', 'spl', 'spr', 'survey_acronym', 'survey_comparability', 'survey_coverage', 'survey_year', 'watts', 'welfare_type']
+probe: example decile fields: {'country_code': 'AGO', 'country_name': 'Angola', 'reporting_year': 2000, 'welfare_type': 'consumption', 'decile1': 0.0099, 'decile10': 0.4017}
+probe: reporting_year type: <class 'int'> welfare_type values sample: {'income', 'consumption'}
+after filtering to latest per country: 172 countries
+after split by welfare_type: income 69, consumption 103, total 172
+period covering reporting_years 1992 to 2025
+after building vis samples from definition: income_vis 12 codes ['AUS', 'BRA', 'CHL', 'COL', 'FRA', 'DEU', 'MEX', 'POL', 'SWE', 'TUR', 'GBR', 'USA']
+after building vis samples from definition: consumption_vis 12 codes ['CHN', 'EGY', 'ETH', 'IND', 'IDN', 'CIV', 'KEN', 'MAR', 'NGA', 'ZAF', 'THA', 'VNM']
+Computing interior curvature count M=20 on latest sample...
+interior curvature max inside (0,1): 39 / 172
+dominance crossover p ~ 1.8739
+vis_total_n for robustness 24
+max rank shift 6 over vis samples
+probe: decile Lorenz points available: 11 need 101 for 13-point SG window -> cannot compute scheme-switch tallies
+Wrote results.json
+
+--- stderr

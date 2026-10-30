@@ -1,0 +1,5 @@
+Fixed trimming violation: global sample was cut with `iloc[-500:]` to match paper's claimed 500. Removed trimming - now build sample from definition (Sept 2012-Oct 2014 log-returns `r=log(s)-log(s_prev)*100` inner join common days) and report actual counts: global triple SP/FTSE/NK = **505** returns (506 bars), Asian triple NK/HSI/SSE = **478** (479 bars), all-5 intersection =462 returns. Simulation T=100/200/500 kept as design generation (true 500). 
+
+`count_T500_emp` no longer emitted as fabricated 500 result; instead declared in `sample.not_rebuilt` with why public Yahoo cannot give 500 (SSE calendar gaps), and actual sizes described in `sample.differences`/`substitutions`/`notes`. All p-values now carry true `n` (505 for global, 478 for Asian). Proxy methods unchanged (expectile regression + interaction for M-vine, Gaussian GARCH for sstd, residual bootstrap, linear F for KNP) and fully documented.
+
+Re-ran script successfully: `results.json` valid with 257 results, headline `p_NK_SSE_to_HSI_tau0.05 =0.005 (se 0.005, n=478)` preserved, `sample.n=505` with `same_as_paper:false`, missing 22 / extra 5 disclosed.

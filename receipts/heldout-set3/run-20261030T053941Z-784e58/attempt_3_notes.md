@@ -1,0 +1,1 @@
+Fixed `kind: p_value` misclassification: `TimingT`/`TimingMapT`/`TimingExNinetiesT` were emitting Newey-West t-stats (2.69, 1.44, 1.80). Now compute two-sided normal p = 2*(1-Φ(|t|)) from the data-estimated HAC t, yielding 0.0071, 0.150, 0.072 ∈[0,1] without clipping. Re-ran `/work/replicate.py` cleanly; exposures, timing components etc unchanged.

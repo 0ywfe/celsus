@@ -1,0 +1,298 @@
+{
+ "run_id": "run-20261030T050738Z-d36131",
+ "paper": "2604.01431",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "does not hold up",
+ "reason": "",
+ "first_line": "The paper's numbers do not hold up: 0 of 6 checked results match within their uncertainty. Its main result, btc_fed_dovish_t, was not computed.",
+ "headline": {
+  "name": "btc_fed_dovish_t",
+  "kind": "estimate",
+  "unit": "t-stat",
+  "reported": 3.63,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "merged_calendar_days",
+   "reported": 1183.0,
+   "reproduced": 1186,
+   "consistent": true
+  },
+  {
+   "name": "total_crypto_assets",
+   "reported": 6.0,
+   "reproduced": 6,
+   "consistent": true
+  },
+  {
+   "name": "btc_descriptive_N",
+   "reported": 1178.0,
+   "reproduced": 1181,
+   "consistent": true
+  },
+  {
+   "name": "eth_descriptive_N",
+   "reported": 1178.0,
+   "reproduced": 1181,
+   "consistent": true
+  },
+  {
+   "name": "sol_descriptive_N",
+   "reported": 1178.0,
+   "reproduced": 1181,
+   "consistent": true
+  },
+  {
+   "name": "ada_descriptive_N",
+   "reported": 1178.0,
+   "reproduced": 1181,
+   "consistent": true
+  },
+  {
+   "name": "avax_descriptive_N",
+   "reported": 1178.0,
+   "reproduced": 1181,
+   "consistent": true
+  },
+  {
+   "name": "link_descriptive_N",
+   "reported": 1178.0,
+   "reproduced": 1181,
+   "consistent": true
+  },
+  {
+   "name": "kalshi_total_series",
+   "reported": 10.0,
+   "reproduced": 10,
+   "consistent": true
+  },
+  {
+   "name": "kalshi_KXFED_N",
+   "reported": 469.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXCPI_N",
+   "reported": 384.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXCPICORE_N",
+   "reported": 331.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXGDP_N",
+   "reported": 424.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXU3_N",
+   "reported": 389.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXPCECORE_N",
+   "reported": 294.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXRECSSNBER_N",
+   "reported": 569.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXACPI_N",
+   "reported": 283.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXRATECUT_N",
+   "reported": 28.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "kalshi_KXUSNFP_N",
+   "reported": 0.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "btc_total_signals_tested",
+   "reported": 10.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "btc_insample_N",
+   "reported": 318.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "btc_recession_N_allsignals",
+   "reported": 389.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_CPILevel_N",
+   "reported": 195.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_Labor_N",
+   "reported": 265.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_CPI_Signal_N",
+   "reported": 264.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_MonPol_N",
+   "reported": 318.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_InflationPCE_N",
+   "reported": 193.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_GDP_N",
+   "reported": 289.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "allsignals_CoreInfl_N",
+   "reported": 225.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "insample_cpi_N",
+   "reported": 264.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_BTC_fed_Noos",
+   "reported": 198.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_BTC_rec_Noos",
+   "reported": 269.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_BTC_cpi_Noos",
+   "reported": 144.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_ETH_fed_Noos",
+   "reported": 198.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_ETH_cpi_Noos",
+   "reported": 144.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_ETH_rec_Noos",
+   "reported": 269.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_SOL_cpi_Noos",
+   "reported": 144.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_SOL_mon_Noos",
+   "reported": 198.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_ADA_mon_Noos",
+   "reported": 198.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_AVAX_cpi_Noos",
+   "reported": 144.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "oos_LINK_cpi_Noos",
+   "reported": 144.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "nonoverlap_BTC_N",
+   "reported": 64.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "nonoverlap_LINK_N",
+   "reported": 54.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 6,
+ "matched": 0,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (total_crypto_assets (6) at line 222, kalshi_total_series (10) at line 248, btc_total_signals_tested (10) at line 248). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 62,
+ "cost_usd": 1.3548,
+ "tokens_in": 4230727,
+ "tokens_out": 105076,
+ "wall_s": 706.6,
+ "crashed": null
+}

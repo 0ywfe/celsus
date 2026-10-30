@@ -1,0 +1,1454 @@
+{
+ "title": "Measuring inequality and social stratification with Lorenz curvature - Replication Spec",
+ "hypothesis": "Family of Lorenz-curvature indices Ip = ||kappa(L)||_p with p in [1,inf], alpha=p-1 stratification-aversion. Axioms hold iff p=1 (alpha=0, weakly Pigou-Dalton). For alpha>0 curvature detects class boundaries; rankings deviate from Gini, Atkinson, Amato-Kakwani, Theil, P90/P10, Wolfson, more for income- than consumption-based countries.",
+ "data_sources": [
+  "World Bank Poverty and Inequality Platform (PIP) percentile shares https://github.com/PIP-Technical-Team/pip-api - CC-BY 4.0",
+  "Processed per-country Lorenz data + code: https://github.com/ahippelainen/curvature_inequality"
+ ],
+ "sample": "World Bank PIP percentile-share data. Filter: latest yearly dataset available for each nation. Split by welfare concept as reported in PIP: income-based vs consumption-based. Lorenz curve assumed: L:[0,1]->[0,1], L(0)=0, L(1)=1, L in C^a(0,1) a>=2, monotone increasing, convex, no negative values, finite non-zero mean mu. Visualization/alpha-variation and ranking tables use subsamples of 12+12 nations from PIP. Full rank-correlation matrices use all PIP nations with available data.",
+ "period_start": "not stated",
+ "period_end": "not stated",
+ "method": [
+  "1. From PIP collect percentile shares per country, keep latest year per country. Split into income-reported and consumption-reported sets.",
+  "2. Continuous Lorenz approximation for each country via Bernstein polynomials of order M=20 (robustness M=15,25): L(x)=sum_{k=0}^M c_k B_{k,M}(x), B_{k,M}=binomial(M,k) x^k (1-x)^{M-k}, constraints c0=0, cM=1, c_k <= c_{k+1}, c_{k+2}-2c_{k+1}+c_k >=0, minimize squared residuals. Alternative approximations tested: finite-difference derivative (FDD) and Savitzky-Golay cubic fit to first and last 13 points - rejected due to negative L'(0) in sparse data; Bernstein used for all reported indices.",
+  "3. Numerical evaluation: sample fitted L on Gauss-Lobatto grid, derivatives via pseudospectral differentiation matrices to ensure convexity and stable evaluation.",
+  "4. Curvature: kappa(L(x)) = L''(x) / (1 + (L'(x))^2)^{3/2} (absolute value removed by convexity).",
+  "5. Index family: Ip = ( integral_0^1 kappa(L(x))^p dx )^{1/p} = ||kappa||_p, 1<=p<=inf, p=inf sup norm. Stratification-aversion alpha=p-1. For p=1 closed form: I1 = L'(1)/sqrt(1+L'(1)^2) - L'(0)/sqrt(1+L'(0)^2) where L'(1)=y_max/mu, L'(0)=y_min/mu. Operationalized I1_delta = L'(1-delta)/sqrt(1+L'(1-delta)^2) - L'(delta)/sqrt(1+L'(delta)^2) with delta=0.01 (1st to 99th percentile) for tail-robustness.",
+  "6. Axiomatic counterexamples: Lorenz dominance / Pigou-Dalton failure constructed as L1(x)=x^3 vs L2(x)= x +0.5*( sqrt((x-0.5)^2+epsilon) - sqrt(0.25+epsilon) ) with epsilon=1e-3. Compute Ip for varying p and locate crossover where Ip(L1)=Ip(L2).",
+  "7. Normalizability divergence sequence: F_epsilon(x)=x-x0+sqrt((x-x0)^2+epsilon), L_epsilon=(F_epsilon-F_epsilon(0))/(F_epsilon(1)-F_epsilon(0)) with x0=3/4 illustrative, show integral diverges as epsilon->0 for p>1.",
+  "8. Pigou-Dalton continuous variation: L_epsilon=L+epsilon phi, phi in C_inf_c(a,b), [a,b] subset [0,1], phi(a)=phi'(a)=phi''(a)=0, phi(b)=phi'(b)=phi''(b)=0, phi>=0, derive sufficient condition (kappa^{p-1}/A^3)'' + (3 L'' L' kappa^{p-1}/A^5)' <0 with A=sqrt(1+(L')^2).",
+  "9. Alpha-variation visualization: compute Ip for alpha in [0.01,10] (p in [1.01,11]) on 12 income +12 consumption visualization subsamples. Rankings stable outside window. Note qualitatively affected by sparsity for alpha !=0.",
+  "10. Comparison indices in Lorenz form (continuous) with fixed parameters: G=1-2 int_0^1 L dx; A_0.5=1-(int_0^1 sqrt(L')dx)^2 with Atkinson epsilon=0.5; K=(int_0^1 sqrt(1+(L')^2)dx - sqrt(2))/(2-sqrt(2)); T1=int_0^1 L' ln(L')dx; P90/P10=L'(0.9)/L'(0.1); W=2*(1-2L(0.5)-G)/L'(0.5). Compute country rankings 1=most equal.",
+  "11. Rank correlations: for full 72 income and 100 consumption sets compute orderings under 7 indices (I1,G,A0.5,K,T1,P90/P10,W) and Spearman and Kendall correlation matrices (figures only, no numeric values printed). Robustness of Kendall differences tested with order-15,20,25 Bernstein fits."
+ ],
+ "claims": [
+  {
+   "name": "total_countries_172",
+   "description": "World Bank PIP sample studied for interior curvature maxima with convex fits",
+   "value": "172",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 4, para 2 'for 172 countries'"
+  },
+  {
+   "name": "countries_with_interior_maxima_23",
+   "description": "Of 172, number with curvature maximum inside (0,1) not at endpoints (order-20 Bernstein)",
+   "value": "23",
+   "unit": "countries",
+   "kind": "tally",
+   "where": "Sec 4, para 2"
+  },
+  {
+   "name": "full_income_countries_72",
+   "description": "Full PIP dataset latest year: income-based countries used for Spearman/Kendall matrices",
+   "value": "72",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 4.2 '72 income-based countries'"
+  },
+  {
+   "name": "full_consumption_countries_100",
+   "description": "Full PIP dataset latest year: consumption-based countries used for matrices",
+   "value": "100",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 4.2 '100 consumption-based countries'"
+  },
+  {
+   "name": "vis_income_countries_12",
+   "description": "Visualization subsample income-based (AUS,BRA,CHL,COL,FRA,DEU,MEX,POL,SWE,TUR,GBR,USA)",
+   "value": "12",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 4.1 bullet list"
+  },
+  {
+   "name": "vis_consumption_countries_12",
+   "description": "Visualization subsample consumption-based (CHN,EGY,ETH,IND,IDN,CIV,KEN,MAR,NGA,ZAF,THA,VNM)",
+   "value": "12",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec 4.1 bullet list"
+  },
+  {
+   "name": "crossover_p_1.87",
+   "description": "p where Ip for Lorenz-dominance example L1=x^3 vs L2 smoothed kink epsilon=1e-3 equal; for p> crossover dominating L2 measured more unequal",
+   "value": "1.87",
+   "unit": "p (Ip)",
+   "kind": "estimate",
+   "where": "Sec 3.4 Fig 6 text 'equal at p approx 1.87', Fig 7"
+  },
+  {
+   "name": "pairs_switch_positions_schemes_2",
+   "description": "Income visualization sample: number of pairs switching rank between convex Bernstein vs Savitzky-Golay/Cubic polynomial derivative schemes",
+   "value": "2",
+   "unit": "pairs",
+   "kind": "tally",
+   "where": "App A.1 'two pairs of countries switch positions' consumption zero"
+  },
+  {
+   "name": "max_rank_shift_2",
+   "description": "Robustness to Bernstein order 15 vs 20 vs 25: at most two ranks shift",
+   "value": "2",
+   "unit": "ranks",
+   "kind": "estimate",
+   "where": "App A.1 'at most two ranks'"
+  },
+  {
+   "name": "income_Australia_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank 1=most equal",
+   "kind": "estimate",
+   "where": "Table 1 Australia I1"
+  },
+  {
+   "name": "income_Australia_G_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Australia_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Australia_K_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Australia_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Australia_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Australia_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_G_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_K_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Brazil_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_G_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_K_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Chile_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_G_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_K_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Colombia_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_G_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_K_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_France_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_G_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_K_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Germany_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_G_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_K_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Mexico_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_G_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_K_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Poland_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_G_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_K_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Sweden_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_G_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_K_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_Turkey_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_G_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_K_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedKingdom_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_I1_rank",
+   "description": "Table 1 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_G_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_A0.5_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_K_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_T1_rank",
+   "description": "Table 1 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_P90P10_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "income_UnitedStates_Wolfson_rank",
+   "description": "Table 1 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 1"
+  },
+  {
+   "name": "cons_China_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_China_G_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_China_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_China_K_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_China_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_China_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_China_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_G_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_K_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Egypt_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "2",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_G_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_K_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Ethiopia_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "3",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_G_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_K_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_India_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "1",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_G_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_K_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Indonesia_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_G_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_K_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_CoteDIvoire_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_G_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_K_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Kenya_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_G_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_K_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Morocco_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "10",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "8",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_G_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_K_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Nigeria_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_G_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_K_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_SouthAfrica_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "12",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_G_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_K_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "4",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "5",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Thailand_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "6",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_I1_rank",
+   "description": "Table 2 ranking",
+   "value": "11",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_G_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_A0.5_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_K_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_T1_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_P90P10_rank",
+   "description": "Table 2 ranking",
+   "value": "9",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  },
+  {
+   "name": "cons_Vietnam_Wolfson_rank",
+   "description": "Table 2 ranking",
+   "value": "7",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table 2"
+  }
+ ],
+ "headline": "crossover_p_1.87",
+ "partitions": [
+  {
+   "split": "Full PIP latest-year sample by welfare concept (income vs consumption)",
+   "total": "total_countries_172",
+   "parts": [
+    "full_income_countries_72",
+    "full_consumption_countries_100"
+   ]
+  }
+ ],
+ "tests": []
+}

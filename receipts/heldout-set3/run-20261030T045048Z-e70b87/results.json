@@ -1,0 +1,147 @@
+{
+  "results": [
+    {
+      "name": "curvature_diagnostic_total_n",
+      "value": 172,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "interior_curvature_max_n",
+      "value": 39,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "full_income_n",
+      "value": 69,
+      "se": null,
+      "n": 69
+    },
+    {
+      "name": "full_consumption_n",
+      "value": 103,
+      "se": null,
+      "n": 103
+    },
+    {
+      "name": "income_vis_sample_n",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "consumption_vis_sample_n",
+      "value": 12,
+      "se": null,
+      "n": 12
+    },
+    {
+      "name": "dominance_counterexample_crossover_p",
+      "value": 1.8738757046918317,
+      "se": 0.02000000057262839,
+      "n": 20000
+    },
+    {
+      "name": "bernstein_order_robustness_max_rank_shift",
+      "value": 6,
+      "se": null,
+      "n": 24
+    },
+    {
+      "name": "alpha_sensitivity_low",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "alpha_sensitivity_high",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bernstein_baseline_order",
+      "value": 20,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bernstein_alt_order_15",
+      "value": 15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bernstein_alt_order_25",
+      "value": 25,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "savitzky_golay_window",
+      "value": 13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dominance_eps_demo",
+      "value": 0.001,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dominance_x0_demo",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "kink_x0_normalizability",
+      "value": 0.75,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "atkinson_epsilon_comp",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "I1_operational_percentile_lower",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "I1_operational_percentile_upper",
+      "value": 99,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lorenz_example_exponent",
+      "value": 3,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Country Lorenz curves reconstructed from World Bank PIP API decile shares (proxy for paper's 101-point percentile shares), latest yearly dataset per nation (national coverage, welfare_type flag). Convex Bernstein order-20 fit (c0=0,cM=1, monotonic, convex) with analytic derivatives on uniform grid used for curvature. Decile proxy due to percentile endpoint unavailability. Visualization samples built by resolving paper's 12+12 country names against live PIP country_name and counting successful matches.",
+    "n": 172,
+    "start": "1992-01-01",
+    "end": "2025-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 3,
+    "differences": "Total N=172 matches paper. Income 69 vs paper 72 and consumption 103 vs paper 100: 3 countries reclassified welfare_type between paper vintage (pre-2026) and live 20260922_2021_01_02_PROD (latest reporting_year shifted). Interior curvature count 39 (decile+order20) vs paper 23 (percentile+order20) due to coarser 11-point Lorenz and overfitting. Max rank shift under order 15/25 is 6 (decile proxy) vs paper 2 (percentile). Vis samples 12/12 reproduced when resolving names (including aliases Cote d'Ivoire->C\u00f4te d'Ivoire, Turkey->T\u00fcrkiye, etc.).",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "income_ranking_scheme_switch_pairs": "Public PIP API v1/pip now returns only 10 decile shares (11 Lorenz points) not 100 percentile shares (101 points) needed to fit a cubic to first/last 13 points as defined by Savitzky-Golay endpoint derivative scheme; cannot compute scheme-switch tally without percentile resolution.",
+      "consumption_ranking_scheme_switch": "Same reason: requires 101-point percentile Lorenz curve to take 13-point windows at [0,0.12] and [0.88,1]; API provides only decile aggregates, insufficient to replicate comparison. Result omitted; no proxy substituted."
+    },
+    "substitutions": "PIP API v1/pip currently returns only decile1..decile10 shares, not 100 percentile shares referenced as WorldBankPIPData; Lorenz reconstructed from 11 cumulative points (0 plus 10 deciles). Gauss-Lobatto grid replaced by uniform 1001 grid with analytic Bernstein derivatives. Dominance crossover reproduced analytically independent of PIP data. Alpha sensitivity and Bernstein orders are publication parameters reproduced verbatim. Correlation matrices are qualitative heatmaps not numerically quoted, omitted from claims. Vis sample membership resolved via case-insensitive country_name matching with aliases for C\u00f4te d'Ivoire, T\u00fcrkiye, Viet Nam, Egypt Arab Rep."
+  },
+  "notes": "Choices paper leaves open: Welfare split uses PIP welfare_type for latest reporting_year per country (vintage dependent). Lorenz reconstruction uses Bernstein order M=20 with constraints c0=0,cM=1, ck<=ck+1, ck+2-2ck+1+ck>=0 minimizing squared residuals, analytic derivatives L'=M sum (c_{k+1}-ck)B_{k,M-1}, L''=M(M-1) sum (c_{k+2}-2c_{k+1}+ck)B_{k,M-2}, kappa=L''/(1+L'^2)^{3/2} on uniform grid (paper: Gauss-Lobatto + pseudospectral). I1 closed form I1=L'(1)/sqrt(1+L'(1)^2)-L'(0)/sqrt(1+L'(0)^2), operational I1^delta at 1st/99th percentiles. Alpha sweep [0.01,10] qualitative swaps stable outside. Comparison indices via Eq.7 with same L (Atkinson epsilon=0.5). Spearman/Kendall matrices qualitative, not claimed. Deviations: Data vintage shift reclassifies 3 countries (72/100 -> 69/103, total 172 unchanged). Percentile resolution unavailable inflates interior curvature (39 vs 23) and order-sensitivity (max shift 6 vs 2) due to fitting order-20 to 11 points. Dominance crossover confirmed ~1.87 (numerical integration 20000 points, ~0.02 grid error). Parameter claims reproduced verbatim. Sample counts for vis samples derived by resolving paper's name lists against live PIP country_name, not by trimming to reported 12. The two Savitzky-Golay scheme-switch tallies are omitted under integrity rule 1 because they cannot be computed from decile aggregates; not_rebuilt explains why public data lacks required percentile granularity."
+}

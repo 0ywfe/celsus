@@ -1,0 +1,227 @@
+{
+ "title": "Replication spec for Measuring inequality and social stratification with Lorenz curvature",
+ "hypothesis": "A continuous family of inequality/stratification indices I_p = ||kappa(L)||_p with stratification-aversion alpha=p-1 measures total Lorenz curvature kappa = L''/(1+L'^2)^{3/2}. Anonymity/scale/population invariance hold for all p. Normalizability, Pigou-Dalton and Lorenz dominance hold iff p=1 (alpha=0) and then only weakly for Pigou-Dalton. For any p>1 they can fail. Empirically I_1 deviates consistently from Gini/Atkinson/Amato-Kakwani/Theil/P90/P10/Wolfson rank orderings on PIP percentile data, less so for consumption-based than income-based countries.",
+ "data_sources": [
+  "World Bank Poverty and Inequality Platform PIP percentile shares https://github.com/ahippelainen/curvature_inequality CC-BY 4.0"
+ ],
+ "sample": "Country Lorenz curves reconstructed from PIP percentile shares, latest yearly dataset available per nation. Analysis dataset = countries with reportable percentile shares. Total N=172 for curvature maximum diagnostic. Split by PIP welfare concept: income-based N=72 and consumption-based N=100. Visualization/reordering demo subsample: income-measured 12 nations [Australia,Brazil,Chile,Colombia,France,Germany,Mexico,Poland,Sweden,Turkey,United Kingdom,United States] and consumption-measured 12 nations [China,Egypt,Ethiopia,India,Indonesia,Cote d'Ivoire,Kenya,Morocco,Nigeria,South Africa,Thailand,Vietnam]. Comparison indices computed on same 12+12 subsamples and on full 72+100 samples. No other filters stated.",
+ "period_start": "not stated",
+ "period_end": "not stated - latest yearly dataset per nation as available in PIP at time of collection",
+ "method": [
+  "1. Collect PIP percentile share vectors per country, latest year per country. Group by income vs consumption reporting.",
+  "2. Visualization sample: fix 12 income countries and 12 consumption countries listed in sample.",
+  "3. Full correlation sample: include all countries with data: 72 income-based, 100 consumption-based (total 172 for curvature diagnostic).",
+  "4. Reconstruct continuous Lorenz curve L(x) with L(0)=0, L(1)=1, monotone convex, L in C^a(0,1) a>=2. Baseline fit: Bernstein polynomial order M=20 L(x)=sum_{k=0}^M c_k B_{k,M}(x), B_{k,M}=binom(M,k) x^k (1-x)^{M-k} with constraints c0=0,cM=1, c_k<=c_{k+1}, c_{k+2}-2c_{k+1}+c_k>=0, minimize squared residuals. Sample on Gauss-Lobatto grid, derivatives via pseudospectral differentiation matrices. Robustness: refit with M=15 and M=25. Alternative endpoint-derivative schemes: finite-difference derivative and Savitzky-Golay 3rd-order polynomial to first/last 13 points for I_1.",
+  "5. Define curvature kappa(L(x))=L''(x)/(1+L'(x)^2)^{3/2} and I_p=(int_0^1 kappa(x)^p dx)^{1/p}=||kappa||_p, 1<=p<=infty, p=infty supremum norm, alpha=p-1 stratification-aversion. Closed form p=1: I_1=L'(1)/sqrt(1+L'(1)^2)-L'(0)/sqrt(1+L'(0)^2)=y_max/mu /sqrt(1+(y_max/mu)^2)-y_min/mu /sqrt(1+(y_min/mu)^2). Operational I_1^delta=L'(1-delta)/sqrt(1+L'(1-delta)^2)-L'(delta)/sqrt(1+L'(delta)^2) approximated from x=0 to 1st percentile and 99th percentile to x=1.",
+  "6. Axiomatic/normalizability pathology: kinked sequence F_epsilon(x)=x-x0+sqrt((x-x0)^2+epsilon), L_epsilon=(F_epsilon(x)-F_epsilon(0))/(F_epsilon(1)-F_epsilon(0)) with example x0=3/4. Dominance counterexample: L1(x)=x^3 vs L2(x)=x+0.5*(sqrt((x-0.5)^2+epsilon)-sqrt(0.25+epsilon)) with demo epsilon=10^{-3}, x0=0.5, find p where I_p equal, approx 1.87; monotonicity via Holder: for q>=p ||kappa||_p <= ||kappa||_q. Pigou-Dalton test via bump phi in C^infty_c(a,b), phi>=0, phi(a)=phi'(a)=phi''(a)=phi(b)=phi'(b)=phi''(b)=0, L_epsilon=L+epsilon phi, variation sign condition (kappa^{p-1}/A^3)''+(3 L''L' kappa^{p-1}/A^5)' <0 with A=sqrt(1+L'^2).",
+  "7. Alpha sensitivity: compute rankings for alpha in [0.01,10] on 12+12 visualization samples, note swaps. Stable outside window.",
+  "8. Comparison indices on same L (Eq. 7 in paper): G=1-2 int L, A_{0.5}=1-(int sqrt(L') )^2, K=(int sqrt(1+L'^2)-sqrt(2))/(2-sqrt(2)), T1=int L' ln L', P90/P10=L'(0.9)/L'(0.1), W=2*(1-2L(0.5)-G)/L'(0.5) with Atkinson epsilon=0.5 baseline. Report ordinal ranks 1-12 per Table 1/2.",
+  "9. Full-sample rank correlations: for 72 income and 100 consumption orderings compute Spearman and Kendall matrices among 7 indices [I1,G,A0.5,K,T1,P90/P10,W] displayed as heatmaps Figures 8/9 without numeric values quoted. Robustness of Kendall differences checked for Bernstein orders 15/20/25."
+ ],
+ "claims": [
+  {
+   "name": "curvature_diagnostic_total_n",
+   "description": "Total countries examined for interior vs endpoint curvature maximum using convex Bernstein fits",
+   "value": "172",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec.3 and App.A.1: studying World Bank inequality dataset for 172 countries"
+  },
+  {
+   "name": "interior_curvature_max_n",
+   "description": "Countries with curvature maximum inside (0,1) instead of exactly at endpoints",
+   "value": "23",
+   "unit": "countries",
+   "kind": "tally",
+   "where": "Sec.3: using convex fits, 23 of the 172 countries have curvature maximum inside the interval"
+  },
+  {
+   "name": "full_income_n",
+   "description": "Full PIP income-based sample for Spearman/Kendall matrices",
+   "value": "72",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec.4.2: full dataset includes 72 income-based countries among 172"
+  },
+  {
+   "name": "full_consumption_n",
+   "description": "Full PIP consumption-based sample for Spearman/Kendall matrices",
+   "value": "100",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec.4.2: and 100 consumption-based countries among 172"
+  },
+  {
+   "name": "income_vis_sample_n",
+   "description": "Income-measured visualization sample for alpha-sweep and Table 1",
+   "value": "12",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec.4.1: chosen 12 nations for each group - income list of 12"
+  },
+  {
+   "name": "consumption_vis_sample_n",
+   "description": "Consumption-measured visualization sample for alpha-sweep and Table 2",
+   "value": "12",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Sec.4.1: chosen 12 nations for each group - consumption list of 12"
+  },
+  {
+   "name": "dominance_counterexample_crossover_p",
+   "description": "p where I_p equal for L1=x^3 and L2 kinked Lorenz-dominating curve (epsilon=10^{-3}, x0=0.5)",
+   "value": "p ≈ 1.87",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Sec.3.4 and Fig.2/3: indices I_p for these curves are equal at p ≈ 1.87"
+  },
+  {
+   "name": "income_ranking_scheme_switch_pairs",
+   "description": "Number of country pairs switching rank in income 12-sample when switching from convex Bernstein derivative to low-order polynomial derivative (Savitzky-Golay 13-point cubic)",
+   "value": "2",
+   "unit": "pairs",
+   "kind": "tally",
+   "where": "App.A.1: For income-based country sample, two pairs switch positions with changing scheme"
+  },
+  {
+   "name": "consumption_ranking_scheme_switch",
+   "description": "Number of countries switching rank in consumption 12-sample under same scheme change",
+   "value": "0",
+   "unit": "countries",
+   "kind": "tally",
+   "where": "App.A.1: while all consumption-based countries have exactly the same ranking under both schemes"
+  },
+  {
+   "name": "bernstein_order_robustness_max_rank_shift",
+   "description": "Maximum rank shift in 12+12 samples when Bernstein order changed to 15 or 25 vs baseline 20",
+   "value": "2",
+   "unit": "ranks",
+   "kind": "estimate",
+   "where": "App.A.1: changing order to 15 or 25 sometimes results in ordering swaps, but only minor ones (at most two ranks, most often no swap)"
+  },
+  {
+   "name": "alpha_sensitivity_low",
+   "description": "Lower bound of stratification-aversion range varied for ranking stability",
+   "value": "0.01",
+   "unit": "alpha",
+   "kind": "parameter",
+   "where": "Sec.4.1 Figs.4/5: alpha varied between [0.01,10]"
+  },
+  {
+   "name": "alpha_sensitivity_high",
+   "description": "Upper bound of stratification-aversion range varied for ranking stability",
+   "value": "10",
+   "unit": "alpha",
+   "kind": "parameter",
+   "where": "Sec.4.1 Figs.4/5: alpha varied between [0.01,10]"
+  },
+  {
+   "name": "bernstein_baseline_order",
+   "description": "Baseline Bernstein polynomial order used across board",
+   "value": "20",
+   "unit": "order",
+   "kind": "parameter",
+   "where": "App.A.1: For fits we have used an order-20 Bernstein polynomial across the board"
+  },
+  {
+   "name": "bernstein_alt_order_15",
+   "description": "First alternative Bernstein order for robustness",
+   "value": "15",
+   "unit": "order",
+   "kind": "parameter",
+   "where": "App.A.1: tested also for robustness in varying fitting order to 15 or 25"
+  },
+  {
+   "name": "bernstein_alt_order_25",
+   "description": "Second alternative Bernstein order for robustness",
+   "value": "25",
+   "unit": "order",
+   "kind": "parameter",
+   "where": "App.A.1: changing order to 15 or 25"
+  },
+  {
+   "name": "savitzky_golay_window",
+   "description": "Number of points at each end fitted with cubic for Savitzky-Golay endpoint derivative",
+   "value": "13",
+   "unit": "points",
+   "kind": "parameter",
+   "where": "App.A.1: Fitting a cubic polynomial to the first and last 13 points of the interval"
+  },
+  {
+   "name": "dominance_eps_demo",
+   "description": "Smoothing parameter epsilon for L2 dominance counterexample demonstration",
+   "value": "10^{-3}",
+   "unit": "epsilon",
+   "kind": "parameter",
+   "where": "Sec.3.4: For demonstration, set epsilon = 10^{-3}"
+  },
+  {
+   "name": "dominance_x0_demo",
+   "description": "Kink location x0 for dominance example L2(x)=x+0.5*(sqrt((x-0.5)^2+epsilon)-sqrt(0.25+epsilon))",
+   "value": "0.5",
+   "unit": "x0",
+   "kind": "parameter",
+   "where": "Sec.3.4 Eq. for L2 with (x-0.5)"
+  },
+  {
+   "name": "kink_x0_normalizability",
+   "description": "Kink location for normalizability divergent sequence illustration",
+   "value": "3/4",
+   "unit": "x0",
+   "kind": "parameter",
+   "where": "App.A.2 Fig.7: example depicted with x0=3/4"
+  },
+  {
+   "name": "atkinson_epsilon_comp",
+   "description": "Atkinson inequality-aversion parameter used for comparison",
+   "value": "0.5",
+   "unit": "epsilon",
+   "kind": "parameter",
+   "where": "Sec.4.2: Atkinson (epsilon=0.5)"
+  },
+  {
+   "name": "I1_operational_percentile_lower",
+   "description": "Lower operational delta for I_1^delta derivative at bottom tail",
+   "value": "1st percentile",
+   "unit": "delta",
+   "kind": "parameter",
+   "where": "Sec.2.2: evaluating derivatives from x=0 to the 1st percentile"
+  },
+  {
+   "name": "I1_operational_percentile_upper",
+   "description": "Upper operational delta for I_1^delta derivative at top tail",
+   "value": "99th percentile",
+   "unit": "delta",
+   "kind": "parameter",
+   "where": "Sec.2.2: and from the 99th percentile to x=1, i.e., L'(1-delta) with delta at 99th percentile"
+  },
+  {
+   "name": "lorenz_example_exponent",
+   "description": "Exponent beta for polynomial Lorenz example family x^beta and L1 in dominance test",
+   "value": "3",
+   "unit": "beta",
+   "kind": "parameter",
+   "where": "Sec.2.2 Fig.1/2 and Sec.3.4: family x^beta and smoothly varying society L1(x)=x^3"
+  }
+ ],
+ "headline": "interior_curvature_max_n",
+ "partitions": [
+  {
+   "split": "Full PIP sample by welfare concept (N=172 diagnostic total)",
+   "total": "curvature_diagnostic_total_n",
+   "parts": [
+    "full_income_n",
+    "full_consumption_n"
+   ]
+  },
+  {
+   "split": "Visualization subsamples for alpha sweep and Tables 1/2",
+   "total": "income_vis_sample_n",
+   "parts": [
+    "income_vis_sample_n",
+    "consumption_vis_sample_n"
+   ]
+  }
+ ],
+ "tests": []
+}

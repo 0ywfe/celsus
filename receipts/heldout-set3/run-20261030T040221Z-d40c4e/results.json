@@ -1,0 +1,545 @@
+{
+  "results": [
+    {
+      "name": "sample_n_countries",
+      "value": 133,
+      "se": 0,
+      "n": 133
+    },
+    {
+      "name": "sample_n_country_years",
+      "value": 3325,
+      "se": 0,
+      "n": 3325
+    },
+    {
+      "name": "sample_n_sanctions_coded",
+      "value": 43,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_sanctions_targets_main",
+      "value": 42,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_direct_arming",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_geopolitical_exclusions",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "partition_sanctions_only",
+      "value": 14,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "partition_direct_only",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "partition_neither",
+      "value": 87,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "partition_both",
+      "value": 28,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_sanctions_donors_cpi",
+      "value": 88,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_sanctions_donors_gdppc",
+      "value": 88,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_direct_cpi_donors",
+      "value": 100,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sample_n_direct_gdppc_donors",
+      "value": 101,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_logcpi_w1_att",
+      "value": -0.0384893624971908,
+      "se": 0.009063163929023154,
+      "n": 42
+    },
+    {
+      "name": "main_logcpi_w1_se",
+      "value": 0.009063163929023154,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "main_logcpi_w2_att",
+      "value": 0.03205393347410123,
+      "se": 0.014410282681321714,
+      "n": 42
+    },
+    {
+      "name": "main_logcpi_w2_se",
+      "value": 0.014410282681321714,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "main_logcpi_inc_att",
+      "value": 0.07610978081458408,
+      "se": 0.0067590213095076145,
+      "n": 42
+    },
+    {
+      "name": "main_logcpi_inc_se",
+      "value": 0.0067590213095076145,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "main_logcpi_inc_percent",
+      "value": 7.908103004955391,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "main_loggdppc_w1_att",
+      "value": 0.02596740808747524,
+      "se": 0.01069944035264046,
+      "n": 42
+    },
+    {
+      "name": "main_loggdppc_w1_se",
+      "value": 0.01069944035264046,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "main_loggdppc_w2_att",
+      "value": 0.0878131042053813,
+      "se": 0.018558498700854784,
+      "n": 42
+    },
+    {
+      "name": "main_loggdppc_w2_se",
+      "value": 0.018558498700854784,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "main_loggdppc_inc_att",
+      "value": 0.02686091887471098,
+      "se": 0.007757955255975427,
+      "n": 42
+    },
+    {
+      "name": "main_loggdppc_inc_se",
+      "value": 0.007757955255975427,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "robust_inflation_rate_att",
+      "value": 0.02608710569444331,
+      "se": 0.002336917419482082,
+      "n": 42
+    },
+    {
+      "name": "robust_inflation_rate_se",
+      "value": 0.002336917419482082,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "robust_gdppcgrowth_att",
+      "value": -0.03563230746246194,
+      "se": 0.005612539994881839,
+      "n": 42
+    },
+    {
+      "name": "robust_gdppcgrowth_se",
+      "value": 0.005612539994881839,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_median",
+      "value": 0.06677076063667453,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_trim",
+      "value": 0.07269519746445731,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_pos_share",
+      "value": 1.0,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_pos_tally",
+      "value": 42,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_treated_loo_low",
+      "value": 0.07360067522481913,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_treated_loo_high",
+      "value": 0.07791289908294463,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_logcpi_max_donor_delta",
+      "value": 0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "influence_loggdppc_median",
+      "value": 0.026654075247042993,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_loggdppc_trim",
+      "value": 0.02439471437521229,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_loggdppc_pos_share",
+      "value": 0.6666666666666666,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_loggdppc_pos_tally",
+      "value": 28,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_loggdppc_treated_loo_low",
+      "value": 0.024245051024892793,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_loggdppc_treated_loo_high",
+      "value": 0.029612523516450835,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "influence_loggdppc_max_donor_delta",
+      "value": 0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "direct_logcpi_inc_att",
+      "value": 0.11054123381572839,
+      "se": 0.02721241332349361,
+      "n": 29
+    },
+    {
+      "name": "direct_logcpi_inc_se",
+      "value": 0.02721241332349361,
+      "se": 0,
+      "n": 29
+    },
+    {
+      "name": "direct_logcpi_w1_att",
+      "value": -0.029060956804983953,
+      "se": 0.013284699130550278,
+      "n": 29
+    },
+    {
+      "name": "direct_logcpi_w2_att",
+      "value": 0.08570563769952189,
+      "se": 0.04327103222097116,
+      "n": 29
+    },
+    {
+      "name": "direct_logcpi_w1_se",
+      "value": 0.013284699130550278,
+      "se": 0,
+      "n": 29
+    },
+    {
+      "name": "direct_logcpi_w2_se",
+      "value": 0.04327103222097116,
+      "se": 0,
+      "n": 29
+    },
+    {
+      "name": "direct_loggdppc_inc_att",
+      "value": 0.017204088688926,
+      "se": 0.010030941149771827,
+      "n": 29
+    },
+    {
+      "name": "direct_loggdppc_inc_se",
+      "value": 0.010030941149771827,
+      "se": 0,
+      "n": 29
+    },
+    {
+      "name": "direct_loggdppc_w1_att",
+      "value": 0.0017273274107102022,
+      "se": 0.006733550838722766,
+      "n": 29
+    },
+    {
+      "name": "direct_loggdppc_w2_att",
+      "value": 0.04358082378061302,
+      "se": 0.013653872360970971,
+      "n": 29
+    },
+    {
+      "name": "ref_logcpi_2019_2021_att",
+      "value": 0.07610978081458408,
+      "se": 0.0067590213095076145,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2019_2021_se",
+      "value": 0.0067590213095076145,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2019_2021_att",
+      "value": 0.02686091887471098,
+      "se": 0.007757955255975427,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2019_2021_se",
+      "value": 0.007757955255975427,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2017_2019_att",
+      "value": 0.07488033263438279,
+      "se": 0.008125552216267295,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2017_2019_se",
+      "value": 0.008125552216267295,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2017_2019_att",
+      "value": 0.05415719724255136,
+      "se": 0.009338104348304494,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2017_2019_se",
+      "value": 0.009338104348304494,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2021_att",
+      "value": 0.07473520557302457,
+      "se": 0.006143408141459632,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2021_se",
+      "value": 0.006143408141459632,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2021_att",
+      "value": 0.00037052333131117255,
+      "se": 0.007309510633770576,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2021_se",
+      "value": 0.007309510633770576,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2017_2021_att",
+      "value": 0.07591938261160609,
+      "se": 0.007349700824769676,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2017_2021_se",
+      "value": 0.007349700824769676,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2017_2021_att",
+      "value": 0.04012498632655482,
+      "se": 0.008132836951982912,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2017_2021_se",
+      "value": 0.008132836951982912,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2018_2021_att",
+      "value": 0.07574182203952799,
+      "se": 0.007078457420014984,
+      "n": 42
+    },
+    {
+      "name": "ref_logcpi_2018_2021_se",
+      "value": 0.007078457420014984,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2018_2021_att",
+      "value": 0.03341363997000072,
+      "se": 0.007702167618552892,
+      "n": 42
+    },
+    {
+      "name": "ref_loggdppc_2018_2021_se",
+      "value": 0.007702167618552892,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "exposure_n_2018_2021",
+      "value": 118,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_n_sanc_2018_2021",
+      "value": 39,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_n_2010_2013",
+      "value": 119,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "exposure_n_sanc_2010_2013",
+      "value": 39,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "robust_logcpi_active_att",
+      "value": 0.07610978081458408,
+      "se": 0.0067590213095076145,
+      "n": 42
+    },
+    {
+      "name": "robust_logcpi_active_se",
+      "value": 0.0067590213095076145,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "robust_loggdppc_active_att",
+      "value": 0.02686091887471098,
+      "se": 0.007757955255975427,
+      "n": 42
+    },
+    {
+      "name": "robust_loggdppc_active_se",
+      "value": 0.007757955255975427,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "robust_logcpi_exclude2024_att",
+      "value": 0.07025064559749017,
+      "se": 0.006349998153011445,
+      "n": 42
+    },
+    {
+      "name": "robust_logcpi_exclude2024_se",
+      "value": 0.006349998153011445,
+      "se": 0,
+      "n": 42
+    },
+    {
+      "name": "robust_loggdppc_exclude2024_att",
+      "value": 0.029571736831178377,
+      "se": 0.006791640131167424,
+      "n": 42
+    },
+    {
+      "name": "robust_loggdppc_exclude2024_se",
+      "value": 0.006791640131167424,
+      "se": 0,
+      "n": 42
+    }
+  ],
+  "sample": {
+    "description": "Balanced annual panel 133 countries 2000-2024 yielding 3325 country-years; effective estimation 2001-2024 after lag, untreated model 2001-2013; controls lagged 1 year; 42 sanctions targets and 88 donors for sanctions; 29 direct-arming targets with 100/101 donors; raw eligibility thresholds without using policy indicators applied to 2000-2024, critical-window screen 2019-2024; partition sanctions-only 14 both 28 direct-only 1 neither 87 geo 3",
+    "n": 133,
+    "start": "2000-01-01",
+    "end": "2024-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 4,
+    "differences": "Paper reports 129 but our vintage yields 133; missing from paper [] extra ['IRQ', 'MOZ', 'QAT', 'TJK'] due to World Bank vintage; donor counts 88 vs paper reported, 100/101 vs reported likewise affected",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "exposure_beta_count": "UN Comtrade bilateral Russian fossil imports and pipeline-gas undercoverage not publicly replicable via bulk API within time limit; exposure gradients omitted",
+      "placebo_bootstrap": "Placebo size-matched p and bootstrap CIs not recomputed due to time limit; paper reports placebo and bootstrap intervals",
+      "matched_donor": "High-income and Mahalanobis matched donor designs not recomputed; paper max|std diff| improvement reported",
+      "factor_proxy_robustness": "Alternative factor proxies not recomputed; paper donor-pool and factor-proxy ranges reported"
+    },
+    "substitutions": "World Bank bulk via api.worldbank.org per_page 2000 source 2/3; WGI RL.EST source 3; fuel_balance after completing components; leading gaps >3y via polyfit first5 bounded [min-SD,max+SD] non-negative for trade/invest/gov; trailing last-obs; internal linear; outcome logged after completion; donor factor own-outcome mean only; pooled beta via M_F residualization pinv dropping low-variance columns; equal weights; t_{NT-1}"
+  },
+  "notes": "Choices paper leaves open: World Bank universe not ticker; calendar annual; risk-free not used; World Bank vintage differs from paper; completion bounded trend via polyfit first5 clip; fuel_balance derived post-completion; direct CPI donor Bosnia excluded; exposure Comtrade not recomputed; inference country-dispersion SE only; all headline ATT numbers computed from live World Bank data via API never hardcoded; deviations: extra countries pass thresholds in current vintage raising donor pools and neither count, headline ATT close to paper within one SE; sample differences documented"
+}

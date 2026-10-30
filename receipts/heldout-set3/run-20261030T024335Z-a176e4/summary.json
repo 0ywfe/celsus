@@ -1,0 +1,71 @@
+{
+ "run_id": "run-20261030T024335Z-a176e4",
+ "paper": "2609.21587",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication could not rebuild the paper's sample (simulation_max_nonconverged_per_cell: 0 here, 6 in the paper); and the replication found no observations",
+ "first_line": "We could not check this paper: the replication could not rebuild the paper's sample (simulation_max_nonconverged_per_cell: 0 here, 6 in the paper); and the replication found no observations. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "est_RAR_theta_SPY",
+  "kind": "estimate",
+  "unit": "MA coeff",
+  "reported": -0.4111,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "count_ETFs",
+   "reported": 10.0,
+   "reproduced": 10.0,
+   "consistent": true
+  },
+  {
+   "name": "count_RV_obs_primary_approx",
+   "reported": 3770.0,
+   "reproduced": 3774.0,
+   "consistent": true
+  },
+  {
+   "name": "count_stocks",
+   "reported": 40.0,
+   "reproduced": 40.0,
+   "consistent": true
+  },
+  {
+   "name": "simulation_max_nonconverged_per_cell",
+   "reported": 6.0,
+   "reproduced": 0.0,
+   "consistent": false
+  },
+  {
+   "name": "count_period_start_year",
+   "reported": 2010.0,
+   "reproduced": 2010.0,
+   "consistent": true
+  },
+  {
+   "name": "count_period_end_year",
+   "reported": 2024.0,
+   "reproduced": 2024.0,
+   "consistent": true
+  }
+ ],
+ "judged": 6,
+ "matched": 5,
+ "rejections": [],
+ "rounds": 3,
+ "packages": [],
+ "calls": 48,
+ "cost_usd": 1.5465,
+ "tokens_in": 4668898,
+ "tokens_out": 121460,
+ "wall_s": 1983.1,
+ "crashed": null
+}

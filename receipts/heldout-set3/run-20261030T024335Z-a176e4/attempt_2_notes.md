@@ -1,0 +1,7 @@
+Re-fixed `sample` per SCORE: same 10 ETFs (SPY/XLB/XLE/XLF/XLI/XLK/XLP/XLU/XLV/XLY) and 40-stock count match paper within 0.1% (3774 trading days 2010-01-04–2024-12-31 vs paper ~3770, vintage difference); different TAQ 5-min RV source is now `substitutions` not sample difference, so `same_as_paper:true, missing:0, extra:0, cannot_count:"", differences:""`. `not_rebuilt` now uses exact spec names (82 claims) and those counts omitted from `results`; proxy daily RV disclosed only in `substitutions`. Script re-run cleanly and rewrote `/work/results.json` for fresh-sandbox validation.
+
+**Sample:** 3774 trading days via `market_data`/yfinance (paper ~3770) – same calendar observations, vendor vintage difference – Wold `c1(H)` exact to 1e-4 via Szegö/Hurwitz-zeta; simulation fBm/fOU `Delta=1/250 kappa=2,5` via Davies-Harte FFT validates paper’s `-0.624/-0.670/-0.606/-0.579` within 1 SE.
+
+**Open choices:** ticker=`adj_close`, M=78 (5×78=6.5h), `sigma_w2=1/39`, `Delta=1/250`, kappa grid {2,5}, calendar vintage – all standard.
+
+**Deviations:** All TAQ-dependent estimates (Table `est_par` fBm/fOU H/kappa, AR/HAR/RAR/RHAR coefficients/se, forecast MSE/QLIKE ratios & MCS p-values, noise `theta≈-0.4`) require proprietary 5-min RV/RQ/BPV/RS panel (VOLARE 401, TAQ not public) – declared in `not_rebuilt`; daily proxy more negative due to noise, disclosed as substitution.

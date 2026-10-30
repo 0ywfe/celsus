@@ -1,0 +1,166 @@
+{
+ "run_id": "run-20261030T003742Z-e279a3",
+ "paper": "2601.10279",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication could not rebuild the paper's sample (Exact 97-paper zoo vintage not archived publicly with same factor construction timing (HXZ 74); count of missing/extra requires vintage file unavailable)",
+ "first_line": "We could not check this paper: the replication could not rebuild the paper's sample (Exact 97-paper zoo vintage not archived publicly with same factor construction timing (HXZ 74); count of missing/extra requires vintage file unavailable). This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "claim_SR_M8_full",
+  "kind": "estimate",
+  "unit": "SR",
+  "reported": 2.73,
+  "reproduced": 2.267433139038089,
+  "se": 0.15741657179228885,
+  "n": 588,
+  "consistent": false,
+  "why": "paper outside 2.267 +/- 0.3085"
+ },
+ "sample": [
+  {
+   "name": "claim_T_total_months",
+   "reported": 588.0,
+   "reproduced": 588,
+   "consistent": true
+  },
+  {
+   "name": "claim_T_fold_test_months",
+   "reported": 196.0,
+   "reproduced": 196,
+   "consistent": true
+  },
+  {
+   "name": "claim_T_fold_train_months",
+   "reported": 392.0,
+   "reproduced": 392,
+   "consistent": true
+  },
+  {
+   "name": "claim_N_candidate_factors",
+   "reported": 97.0,
+   "reproduced": 97,
+   "consistent": true
+  },
+  {
+   "name": "claim_N_basis_portfolios",
+   "reported": 285.0,
+   "reproduced": 285,
+   "consistent": null
+  },
+  {
+   "name": "claim_nM_CAPM",
+   "reported": 1.0,
+   "reproduced": 1,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_FF3",
+   "reported": 3.0,
+   "reproduced": 3,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_FF5",
+   "reported": 5.0,
+   "reproduced": 5,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_FF6",
+   "reported": 6.0,
+   "reproduced": 6,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_Q5",
+   "reported": 5.0,
+   "reproduced": 5,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_DHS3",
+   "reported": 3.0,
+   "reproduced": 3,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_BS6",
+   "reported": 6.0,
+   "reproduced": 6,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_CAPMF",
+   "reported": 8.0,
+   "reproduced": 8,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_FF3F",
+   "reported": 11.0,
+   "reproduced": 11,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_FF5F",
+   "reported": 11.0,
+   "reproduced": 11,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_FF6F",
+   "reported": 12.0,
+   "reproduced": 12,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_Q5F",
+   "reported": 10.0,
+   "reproduced": 10,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_DHS3F",
+   "reported": 9.0,
+   "reproduced": 9,
+   "consistent": true
+  },
+  {
+   "name": "claim_nM_BS6F",
+   "reported": 12.0,
+   "reproduced": 12,
+   "consistent": true
+  },
+  {
+   "name": "claim_n_models_MKT_row",
+   "reported": 96.0,
+   "reproduced": 96,
+   "consistent": true
+  },
+  {
+   "name": "claim_n_models_FF3_row",
+   "reported": 94.0,
+   "reproduced": 94,
+   "consistent": true
+  }
+ ],
+ "judged": 48,
+ "matched": 34,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (claim_GRS_CAPM (5.40) at line 726, claim_HDA_CAPM (35.02) at line 728, claim_GRS_CAPM (5.40) at line 731, claim_HDA_CAPM (35.02) at line 733, claim_GRS_FF3 (5.35) at line 743, claim_HDA_FF3 (52.51) at line 745, claim_GRS_FF5 (4.80) at line 755, claim_HDA_FF5 (36.29) at line 757, claim_GRS_FF6 (4.59) at line 767, claim_HDA_FF6 (27.83) at line 769, claim_GRS_Q5 (2.95) at line 779, claim_HDA_Q5 (4.55) at line 781, claim_GRS_DHS3 (3.67) at line 791, claim_HDA_DHS3 (7.26) at line 793, claim_GRS_BS6 (4.04) at line 803, claim_HDA_BS6 (29.05) at line 805, claim_HDA_DHS3F (1.30) at line 817, claim_alpha_REG_given_CAPM (0.91) at line 836, claim_alpha_PEAD_given_CAPM (0.64) at line 847, claim_alpha_HMLM_given_CAPM (0.33) at line 858, claim_alpha_EPRD_given_CAPM (0.78) at line 901, claim_alpha_REG_given_FF3 (0.94) at line 918, claim_SR_CAPM_baseline (0.47) at line 921, claim_SR_CAPM_plus_REG (1.76) at line 922, claim_SR_FF3_baseline (0.64) at line 925, claim_SR_FF3_plus_REG (1.99) at line 930, claim_SR_FF3_plus_REG (1.99) at line 932, claim_SR_FF3_gain (1.35) at line 933, claim_SR_M8_full (2.73) at line 935, claim_SR_M8_OOS_recent (1.53) at line 936, claim_SR_Q5_baseline (2.04) at line 937, claim_SR_FF6F_expanded (2.82) at line 942, claim_SR_FF6F_expanded (2.82) at line 944, claim_Aalpha_unselected_CAPMF (0.15) at line 958, claim_TotalR2_unselected_CAPMF (32.9) at line 980, claim_CSR2_unselected_CAPMF (67.1) at line 981, claim_Aalpha_unselected_CAPM (0.51) at line 983, claim_Aalpha_unselected_CAPMF (0.15) at line 984, claim_TotalR2_unselected_CAPMF (32.9) at line 985, claim_CSR2_unselected_CAPMF (67.1) at line 986, claim_selected_pct_21_9 (21.9) at line 990, claim_same_pct_79_2 (79.2) at line 992, claim_rate_HMLM_CAPM_baseline (0.97) at line 995, claim_rate_STR_CAPM_baseline (0.98) at line 996, claim_rate_ILR_CAPM_baseline (0.98) at line 997, claim_rate_SMB_CAPM_baseline (0.84) at line 999, claim_rate_MKT_selected (0.93) at line 1000, claim_rate_HML_FF3_baseline (0.15) at line 1001, claim_SR_M8_bootstrap_INS_MSR2 (0.65) at line 1006, claim_SR_M8_bootstrap_OOS_MSR2 (0.56) at line 1007, claim_prob_M8_vs_Q5_OOS (99.8) at line 1010, claim_prob_M8_best_OOS (99.8) at line 1012, claim_SR2_diff_Q5_M8 (0.27) at line 1015, claim_OOS_CS_R2_FF5_Time1_INS (18.9) at line 1017, claim_OOS_CS_R2_FF5F_Time1_INS (54.4) at line 1018, claim_OOS_CS_R2_FF5_Time1_OOS (15.6) at line 1019, claim_OOS_CS_R2_FF5F_Time1_OOS (32.9) at line 1020, claim_OOS_Sharpe_FF5F_Time1 (2.88) at line 1021, claim_sim_CP_BSE_HDA_K100_T3000 (95.39) at line 1022, claim_sim_CF_BSE_HDA_K100_T3000 (90.28) at line 1023, claim_sim_TR_BSE_HDA_K100_T3000 (99.02) at line 1024, claim_sim_FR_BSE_HDA_K100_T3000 (0.13) at line 1025, claim_sim_FR_BSE_SR_K100_T3000 (18.65) at line 1026, claim_sim_CP_BSE_GRS_K100_T3000 (50.40) at line 1027, claim_sim_CF_BSE_HDA_case2_K100_T3000 (89.08) at line 1028, claim_avg_return_CAPM (0.62) at line 1031, claim_alpha_CAPM_M8 (1.12) at line 1032). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 49,
+ "cost_usd": 1.6704,
+ "tokens_in": 5618516,
+ "tokens_out": 120363,
+ "wall_s": 1672.3,
+ "crashed": null
+}

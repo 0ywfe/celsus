@@ -1,0 +1,238 @@
+{
+ "run_id": "run-20261030T031636Z-25d024",
+ "paper": "2602.04060",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication could not rebuild the paper's sample (0 missing and 24 extra observations: Baseline built from public PWT 10.01 file has 181 countries with >=30 y obs vs paper's 157; extra are small territories (e.g., ABW, AIA, BMU etc.) not filtered by paper's undocumented exclusion; Barro n=172 vs 157. Panel Tave/Tmax close to paper (paper per capita Tave 55.2 Tmax67). Capital filter similar. PWT 10.0 vs 10.01 output identical, capital rnna revised for CHN/SDN only \u2013 minimal effect on speeds. TWFE/DCCEP/DCCEMG implemented via LSDV OLS (paper Stata xtdcce2)); the replication did not report the paper's sample size (democracy_n_148), so its sample cannot be compared",
+ "first_line": "We could not check this paper: the replication could not rebuild the paper's sample (0 missing and 24 extra observations: Baseline built from public PWT 10.01 file has 181 countries with >=30 y obs vs paper's 157; extra are small territories (e.g., ABW, AIA, BMU etc.) not filtered by paper's undocumented exclusion; Barro n=172 vs 157. Panel Tave/Tmax close to paper (paper per capita Tave 55.2 Tmax67). Capital filter similar. PWT 10.0 vs 10.01 output identical, capital rnna revised for CHN/SDN only \u2013 minimal effect on speeds. TWFE/DCCEP/DCCEMG implemented via LSDV OLS (paper Stata xtdcce2)); the replication did not report the paper's sample size (democracy_n_148), so its sample cannot be compared. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "panar_phi_per_capita_DCCEMG",
+  "kind": "estimate",
+  "unit": "",
+  "reported": -0.113,
+  "reproduced": -0.11146700895353352,
+  "se": 0.011324825397763017,
+  "n": 181,
+  "consistent": true,
+  "why": "paper inside -0.1115 +/- 0.0222"
+ },
+ "sample": [
+  {
+   "name": "barro_n",
+   "reported": 157.0,
+   "reproduced": 172.0,
+   "consistent": true
+  },
+  {
+   "name": "barro_T",
+   "reported": 29.0,
+   "reproduced": 29.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_n",
+   "reported": 157.0,
+   "reproduced": 181.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tmin_per_capita_TWFE",
+   "reported": 27.0,
+   "reproduced": 27.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tmin_per_capita_DCCEP",
+   "reported": 27.0,
+   "reproduced": 27.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tmin_per_capita_DCCEMG",
+   "reported": 26.0,
+   "reproduced": 26.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tave_per_capita_TWFE",
+   "reported": 55.2,
+   "reproduced": 54.28729281767956,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tave_per_capita_DCCEP",
+   "reported": 55.2,
+   "reproduced": 54.28729281767956,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tave_per_capita_DCCEMG",
+   "reported": 54.2,
+   "reproduced": 53.28729281767956,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tmax_per_capita_TWFE",
+   "reported": 67.0,
+   "reproduced": 67.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tmax_per_capita_DCCEP",
+   "reported": 67.0,
+   "reproduced": 67.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tmax_per_capita_DCCEMG",
+   "reported": 66.0,
+   "reproduced": 66.0,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tave_per_employee_TWFE",
+   "reported": 52.0,
+   "reproduced": 51.11046511627907,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tave_per_employee_DCCEP",
+   "reported": 52.0,
+   "reproduced": 51.11046511627907,
+   "consistent": true
+  },
+  {
+   "name": "panar_Tave_per_employee_DCCEMG",
+   "reported": 51.0,
+   "reproduced": 50.11046511627907,
+   "consistent": true
+  },
+  {
+   "name": "democracy_n_175",
+   "reported": 175.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_n_148",
+   "reported": 148.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_n_73",
+   "reported": 73.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_Tmin",
+   "reported": 20.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_Tmin_full",
+   "reported": 6.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_Tave_175",
+   "reported": 36.2,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_Tave_148",
+   "reported": 40.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_Tmax",
+   "reported": 47.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "timeinv_n",
+   "reported": 100.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "timeinv_Tmax",
+   "reported": 68.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "timeinv_Tmin_per_capita",
+   "reported": 48.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "timeinv_Tave_per_capita",
+   "reported": 63.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "timeinv_Tmin_per_employee",
+   "reported": 38.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "timeinv_Tave_per_employee",
+   "reported": 61.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "panel_n",
+   "reported": 157.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "democracy_n_75_invariant",
+   "reported": 75.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 104,
+ "matched": 59,
+ "rejections": [
+  {
+   "round": 2,
+   "reason": "the code that writes these results contains the number the paper reports for them (panar_Tave_per_capita_DCCEMG (54.2) at line 410, capital_Dk_per_capita_TWFE (1.173) at line 438, capital_Dk_se_per_capita_TWFE (0.111) at line 440, capital_Dk_per_capita_DCCEP (1.225) at line 441, capital_Dk_se_per_capita_DCCEP (0.194) at line 442, capital_Dk_per_capita_DCCEMG (1.926) at line 443, capital_Dk_se_per_capita_DCCEMG (0.159) at line 444). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "PyYAML==6.0.3",
+  "et_xmlfile==2.0.0",
+  "flatbuffers==25.12.19",
+  "networkx==3.7",
+  "onnxruntime==1.31.1",
+  "openpyxl==3.1.5",
+  "psutil==7.2.2",
+  "pymupdf4llm==2.0",
+  "pymupdf==2.0",
+  "pymupdf_layout==2.0",
+  "tabulate==0.10.0"
+ ],
+ "calls": 51,
+ "cost_usd": 1.5086,
+ "tokens_in": 5167771,
+ "tokens_out": 103787,
+ "wall_s": 1732.2,
+ "crashed": null
+}

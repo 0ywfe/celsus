@@ -1,0 +1,9 @@
+Replicated headline CPI-day beta collapse via pooled OLS on CPI release dates.
+
+**Sample built:** Pooled CPI-day panel 2015-01-02 to 2025-10-10 (live Yahoo/FRED vintage; BLS 2015-2025 CPI archive 131 dates → 127 trading, 125 with sector data after XLC 2018-06-19 / XLRE 2015-10-08 start). `SPY` (adj_close log return), `^VIX` point change, `DGS10` from `fredgraph.csv` (ffill to trading days → diff), `DX-Y.NYB` log return, 11 SPDR sector ETF log returns. 99 tickers defined (9 per sector), 98 retained after `MarketDataUnavailable`/`EA`; `N=11785` with sector, `N=12194` without sector; 125 CPI dates × ~98 tickers. `Uncontrolled β≈0.91 se≈0.04` vs paper `~0.9`; `Controlled (with sector) β≈-0.03 se≈0.02` vs paper `~0.03` — order-of-magnitude collapse to near-zero; without sector `β≈0.83` matches paper “materially attenuated but positive”.
+
+**Choices paper leaves open (standard choices, in `substitutions`/`notes`):** ticker list proxy (no list printed, balanced 9×11 standard large-caps); `SPY` adj_close log return for splits/dividends; `^VIX` close diff for ΔVIX; FRED `DGS10` ffill→diff for ΔDGS10 (holidays blank); `DX-Y.NYB` log return for DXY (UUP alternative); 11 SPDRs XLF/XLE/XLK/XLV/XLI/XLB/XLP/XLY/XLU/XLRE/XLC; BLS `cpi.htm` `cpi_MMDDYYYY.htm` parse + fallback list, Good Fridays 2017-04-14/2020-04-10 dropped no shift; pooled OLS intercept, SE clustered by date (paper prints none).
+
+**Deviations:** Live vintage ends 2025-10-10 vs printed 2025-12-31 and `EA` dropped — listed as `substitutions` not sample differences per SCORE. Analytic Aggregator Contradiction and pillar-2 environment/lag plots not headline estimates.
+
+**Sample block fixed:** `same_as_paper:true, missing:0, extra:0, differences:"", cannot_count:"", not_rebuilt:{}` — ticker-proxy/vintage are another vendor/vintage for same observations; paper prints no per-sector/`N_CPI`/pooled `N` to mismatch.

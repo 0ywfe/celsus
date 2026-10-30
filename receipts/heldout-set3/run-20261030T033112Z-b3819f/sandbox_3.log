@@ -1,0 +1,162 @@
+exit 0 in 40.4s
+--- stdout
+OK SSE 000001.SS: 2454 prices, 2453 returns 2013-02-26 00:00:00 to 2023-03-31 00:00:00
+OK SZI 399001.SZ: 2453 prices, 2452 returns 2013-02-26 00:00:00 to 2023-03-31 00:00:00
+OK GEI_proxy 159915.SZ: 2455 prices, 2454 returns 2013-02-26 00:00:00 to 2023-03-31 00:00:00
+OK CSI_cons_proxy 000932.SZ: 2455 prices, 2454 returns 2013-02-26 00:00:00 to 2023-03-31 00:00:00
+OK CSI_health_proxy 000933.SZ: 2455 prices, 2454 returns 2013-02-26 00:00:00 to 2023-03-31 00:00:00
+OK CSI_fin_proxy 510230.SS: 2455 prices, 2454 returns 2013-02-26 00:00:00 to 2023-03-31 00:00:00
+CONFIRMED missing orig 399006.SZ
+CONFIRMED missing orig 000932.SS
+CONFIRMED missing orig 000933.SS
+CONFIRMED missing orig 000934.SS
+CONFIRMED missing orig 000934.SZ
+CONFIRMED missing orig 399934.SZ
+SSE q10 -1.2628 q90 1.4031 n_ret 2453
+SZI q10 -1.6631 q90 1.8185 n_ret 2452
+GEI_proxy q10 -2.1106 q90 2.4307 n_ret 2454
+SSE n_price 2454 train 2086 valid 368
+Estimating Hawkes for SSE omega=0.1 ...
+Result SSE: [0.01959144 0.04243169 0.39674686 0.40833765 0.15810694 0.41924606] fun 1546.3301984065515 success True se [0.00668504 0.00823799 0.0750675  0.07787083 0.07778691 0.08638105]
+Estimating Hawkes for SZI omega=0.1 ...
+Result SZI: [0.02906005 0.04577257 0.26755557 0.4431539  0.15446863 0.38959372] fun 1567.6504269666368 success True se [0.00805546 0.00898358 0.0780751  0.07967494 0.08551888 0.08660082]
+Estimating Hawkes for GEI_proxy omega=0.1 ...
+Result GEI_proxy: [0.01918007 0.04384336 0.34414953 0.46461922 0.2469107  0.31578958] fun 1552.8310717219142 success True se [0.00713471 0.00855411 0.07917509 0.08536105 0.08506731 0.08710498]
+Poisson train lambda up 0.10330765745355687 n 229 down 0.10209662716499544 n 225
+Poisson test lambda up 0.07692307692307693 n 17 down 0.08888888888888889 n 21
+Wrote results.json with 85 results
+{'name': 'exp1_SSE_count', 'value': 2454, 'se': None, 'n': None}
+{'name': 'SSE_mean', 'value': 0.02326052654769107, 'se': 0.026620570924470472, 'n': 2453}
+{'name': 'SSE_std', 'value': 1.3184575137006513, 'se': 0.018823586219750513, 'n': 2453}
+{'name': 'SSE_min', 'value': -8.490895458075142, 'se': None, 'n': 2453}
+{'name': 'SSE_median', 'value': 0.05051362086132549, 'se': None, 'n': 2453}
+{'name': 'SSE_max', 'value': 6.226040493972684, 'se': None, 'n': 2453}
+{'name': 'SSE_skew', 'value': -0.8829037970771618, 'se': None, 'n': 2453}
+{'name': 'SSE_kurt', 'value': 6.856513404553658, 'se': None, 'n': 2453}
+{'name': 'q_SSE_p10', 'value': -1.2627617854028637, 'se': None, 'n': None}
+{'name': 'q_SSE_p90', 'value': 1.4031121288062354, 'se': None, 'n': None}
+{'name': 'exp1_SZI_count', 'value': 2453, 'se': None, 'n': None}
+{'name': 'SZI_mean', 'value': 0.022766064932038175, 'se': 0.032321114462501424, 'n': 2452}
+{'name': 'SZI_std', 'value': 1.6004663967483312, 'se': 0.022854479211941347, 'n': 2452}
+{'name': 'SZI_min', 'value': -8.56063964471283, 'se': None, 'n': 2452}
+{'name': 'SZI_median', 'value': 0.037743566810621854, 'se': None, 'n': 2452}
+{'name': 'SZI_max', 'value': 6.453906009477395, 'se': None, 'n': 2452}
+{'name': 'SZI_skew', 'value': -0.7000827328671142, 'se': None, 'n': 2452}
+{'name': 'SZI_kurt', 'value': 3.857235033670163, 'se': None, 'n': 2452}
+{'name': 'q_SZI_p10', 'value': -1.663058159786982, 'se': None, 'n': None}
+{'name': 'q_SZI_p90', 'value': 1.8185355182274798, 'se': None, 'n': None}
+{'name': 'exp1_GEI_count', 'value': 2455, 'se': None, 'n': None}
+{'name': 'GEI_mean', 'value': 0.06359054171000242, 'se': 0.0427796483845684, 'n': 2454}
+{'name': 'GEI_std', 'value': 2.1192124167332844, 'se': 0.03024977946950445, 'n': 2454}
+{'name': 'GEI_min', 'value': -10.383886925073993, 'se': None, 'n': 2454}
+{'name': 'GEI_median', 'value': 0.0, 'se': None, 'n': 2454}
+{'name': 'GEI_max', 'value': 10.008703626524884, 'se': None, 'n': 2454}
+{'name': 'GEI_skew', 'value': -0.2445278104216362, 'se': None, 'n': 2454}
+{'name': 'GEI_kurt', 'value': 4.089378877547438, 'se': None, 'n': 2454}
+{'name': 'q_GEI_p10', 'value': -2.1105691918480063, 'se': None, 'n': None}
+{'name': 'q_GEI_p90', 'value': 2.4307300803822693, 'se': None, 'n': None}
+{'name': 'exp2_cons_count', 'value': 2455, 'se': None, 'n': None}
+{'name': 'CSI_cons_mean', 'value': 0.08700797540709869, 'se': 0.05339820958460733, 'n': 2454}
+{'name': 'CSI_cons_std', 'value': 2.645233260585805, 'se': 0.03775823610049634, 'n': 2454}
+{'name': 'CSI_cons_min', 'value': -10.103618967767336, 'se': None, 'n': 2454}
+{'name': 'CSI_cons_median', 'value': 0.0, 'se': None, 'n': 2454}
+{'name': 'CSI_cons_max', 'value': 10.126570833164683, 'se': None, 'n': 2454}
+{'name': 'CSI_cons_skew', 'value': 0.2262601823531867, 'se': None, 'n': 2454}
+{'name': 'CSI_cons_kurt', 'value': 3.0581737884323434, 'se': None, 'n': 2454}
+{'name': 'exp2_health_count', 'value': 2455, 'se': None, 'n': None}
+{'name': 'CSI_health_mean', 'value': 0.08910030945714684, 'se': 0.06602885279837141, 'n': 2454}
+{'name': 'CSI_health_std', 'value': 3.270928350206792, 'se': 0.04668944956769677, 'n': 2454}
+{'name': 'CSI_health_min', 'value': -12.3232258622613, 'se': None, 'n': 2454}
+{'name': 'CSI_health_median', 'value': 0.0, 'se': None, 'n': 2454}
+{'name': 'CSI_health_max', 'value': 10.062893521862293, 'se': None, 'n': 2454}
+{'name': 'CSI_health_skew', 'value': 0.03426575023958081, 'se': None, 'n': 2454}
+{'name': 'CSI_health_kurt', 'value': 1.8653170856206582, 'se': None, 'n': 2454}
+{'name': 'exp2_fin_count', 'value': 2455, 'se': None, 'n': None}
+{'name': 'CSI_fin_mean', 'value': 0.02538610983099066, 'se': 0.03287422125025033, 'n': 2454}
+{'name': 'CSI_fin_std', 'value': 1.6285187114604323, 'se': 0.02324558477227891, 'n': 2454}
+{'name': 'CSI_fin_min', 'value': -11.49253696488708, 'se': None, 'n': 2454}
+{'name': 'CSI_fin_median', 'value': -0.03124994718463059, 'se': None, 'n': 2454}
+{'name': 'CSI_fin_max', 'value': 10.005309312496191, 'se': None, 'n': 2454}
+{'name': 'CSI_fin_skew', 'value': 0.132259822345774, 'se': None, 'n': 2454}
+{'name': 'CSI_fin_kurt', 'value': 8.792756035145123, 'se': None, 'n': 2454}
+{'name': 'exp1_train_N', 'value': 2086, 'se': None, 'n': None}
+{'name': 'exp1_validation_N', 'value': 368, 'se': None, 'n': None}
+{'name': 'exp2_n_periods', 'value': 15, 'se': None, 'n': None}
+{'name': 'exp2_period_len', 'value': 150, 'se': None, 'n': None}
+{'name': 'exp2_n_event_types', 'value': 6, 'se': None, 'n': None}
+{'name': 'link_threshold', 'value': 0.01, 'se': None, 'n': None}
+{'name': 'omega_SSE', 'value': 0.1, 'se': None, 'n': None}
+{'name': 'omega_SZI', 'value': 0.1, 'se': None, 'n': None}
+{'name': 'omega_GEI', 'value': 0.1, 'se': None, 'n': None}
+{'name': 'A_SSE_00', 'value': 0.3967468644281575, 'se': 0.07506749500845793, 'n': 492}
+{'name': 'A_SSE_01', 'value': 0.40833764510401666, 'se': 0.07787082947348194, 'n': 492}
+{'name': 'A_SSE_10', 'value': 0.15810694187550056, 'se': 0.07778691280264513, 'n': 492}
+{'name': 'A_SSE_11', 'value': 0.4192460592613299, 'se': 0.08638105364651183, 'n': 492}
+{'name': 'mu_SSE_0', 'value': 0.0195914411185203, 'se': 0.006685040735535068, 'n': 492}
+{'name': 'mu_SSE_1', 'value': 0.04243169054473484, 'se': 0.008237986166445973, 'n': 492}
+{'name': 'A_SZI_00', 'value': 0.26755556832250654, 'se': 0.07807509558019449, 'n': 492}
+{'name': 'A_SZI_01', 'value': 0.44315389901983093, 'se': 0.07967493538084175, 'n': 492}
+{'name': 'A_SZI_10', 'value': 0.15446863330347485, 'se': 0.08551888243614653, 'n': 492}
+{'name': 'A_SZI_11', 'value': 0.3895937158360563, 'se': 0.08660081885952045, 'n': 492}
+{'name': 'mu_SZI_0', 'value': 0.029060045146346157, 'se': 0.008055457231044779, 'n': 492}
+{'name': 'mu_SZI_1', 'value': 0.045772567925886215, 'se': 0.008983577161804543, 'n': 492}
+{'name': 'A_GEI_00', 'value': 0.34414953144479654, 'se': 0.07917508600725792, 'n': 492}
+{'name': 'A_GEI_01', 'value': 0.4646192154646556, 'se': 0.08536104899727469, 'n': 492}
+{'name': 'A_GEI_10', 'value': 0.24691070451175254, 'se': 0.08506730786382574, 'n': 492}
+{'name': 'A_GEI_11', 'value': 0.31578957567622423, 'se': 0.08710497930928554, 'n': 492}
+{'name': 'mu_GEI_0', 'value': 0.019180067929212473, 'se': 0.007134706456677304, 'n': 492}
+{'name': 'mu_GEI_1', 'value': 0.04384336381032243, 'se': 0.008554111587239803, 'n': 492}
+{'name': 'lambda_poisson_train0', 'value': 0.10330765745355687, 'se': None, 'n': 229}
+{'name': 'lambda_poisson_train1', 'value': 0.10209662716499544, 'se': None, 'n': 225}
+{'name': 'lambda_poisson_test0', 'value': 0.07692307692307693, 'se': None, 'n': 17}
+{'name': 'lambda_poisson_test1', 'value': 0.08888888888888889, 'se': None, 'n': 21}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:604: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:606: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

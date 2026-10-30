@@ -1,0 +1,41 @@
+{
+ "run_id": "run-20261030T041025Z-718493",
+ "paper": "2510.15942",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 2 of 3 checked results match within their uncertainty. Its main result, surgery_curvature_0, is 0 curvature in the paper and 0 curvature here (not judged: a parameter the paper sets in its method, not a result). Sample size not rebuilt: the script writes it as a fixed number (101 at line 302), not counted from the data (n_total_100, 100 in the paper).",
+ "headline": {
+  "name": "surgery_curvature_0",
+  "kind": "parameter",
+  "unit": "curvature",
+  "reported": 0.0,
+  "reproduced": 0,
+  "se": 0,
+  "n": null,
+  "consistent": null,
+  "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+ },
+ "sample": [
+  {
+   "name": "n_total_100",
+   "reported": 100.0,
+   "reproduced": 101,
+   "consistent": null
+  }
+ ],
+ "judged": 3,
+ "matched": 2,
+ "rejections": [],
+ "rounds": 2,
+ "packages": [],
+ "calls": 42,
+ "cost_usd": 0.8158,
+ "tokens_in": 1500934,
+ "tokens_out": 103998,
+ "wall_s": 1526.4,
+ "crashed": null
+}

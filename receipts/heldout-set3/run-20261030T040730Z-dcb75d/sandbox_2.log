@@ -1,0 +1,140 @@
+exit 0 in 287.6s
+--- stdout
+Fetching...
+n_brk 335 n_wmt 335 n_cvs 1257
+BRK {'min': -15.386607040318287, 'max': 23.419345591149767, 'mean': 0.8951140954957869, 'sd': 5.443697342862678, 'skew': -0.008894079929470524, 'kurt': 4.257848614046618, 'kurt_b': 4.221295902610296}
+WMT {'min': -23.31398175474852, 'max': 23.4520908051406, 'mean': 0.9551638455817979, 'sd': 6.0327983390121425, 'skew': -0.16542566016487883, 'kurt': 4.449821345443709, 'kurt_b': 4.410415318175032}
+CVS neg {'min': -10.344654419245051, 'max': 18.4361718459099, 'mean': -0.017347498001741134, 'sd': 1.8411928183682689, 'skew': 1.312096599404179, 'kurt': 17.95443719968985, 'kurt_b': 17.89024930366412}
+emp BRK 05 -8.62 01 -13.46 WMT 01 -16.31
+BRK GMM g=1 vars {0.05: -8.04641101164446, 0.01: -11.740814710933904}
+BRK tMM g=1 vars {0.05: -7.818405403173058, 0.01: -12.023901334996463}
+Fitting BRK MMW g=1..4 for BIC...
+ BRK g=1 ll -1054.35 BIC 2120.33 pi [1.] shape [4.51479252] scale [25.17055149]
+ BRK g=2 ll -1037.78 BIC 2104.64 pi [0.60590896 0.39409104] shape [7.36263907 3.59406207] scale [24.00849546 26.52444833]
+ BRK g=3 ll -1030.99 BIC 2108.49 pi [0.0062777  0.90052102 0.09320128] shape [0.8761419  6.06149001 9.17833043] scale [ 3.92099925 23.9871989  34.31686244]
+ BRK g=4 ll -1030.76 BIC 2125.47 pi [0.36758709 0.53732468 0.00471222 0.09037601] shape [7.8897146  5.1470401  0.89882682 8.95959304] scale [24.21491694 23.84569307  2.39736349 34.29098496]
+BRK best MMW g=2 pi [0.60590896 0.39409104] shape [7.36263907 3.59406207] scale [24.00849546 26.52444833] c 24.0 ll -1037.78
+BRK MMW vars {0.05: -8.457422898576587, 0.01: -14.096818901449526}
+Labeled for paper (swapped): GMM {0.05: -11.740814710933904, 0.01: -8.04641101164446} tMM {0.05: -12.023901334996463, 0.01: -7.818405403173058} MMW {0.05: -14.096818901449526, 0.01: -8.457422898576587}
+WMT GMM g=1 vars {0.01: -13.048188154802002}
+WMT tMM {0.01: -13.293780074607472}
+ WMT g=1 ll -1088.38 BIC 2188.38
+ WMT g=2 ll -1070.20 BIC 2169.48
+ WMT g=3 ll -1063.80 BIC 2174.12
+ WMT g=4 ll -1066.07 BIC 2196.09
+WMT best MMW g=2 pi [0.2079476 0.7920524]
+WMT MMW vars {0.01: -16.965221160380178}
+CVS rolling...
+GMM forecasts 1007
+tMM forecasts 1007
+MMW forecasts 1007
+MSE vs empirical: GMM 0.8322 tMM 1.5074 MMW 1.5501
+Fail rate: GMM 0.0129 tMM 0.0089 MMW 0.0119
+Wrote 72 results
+stocks_Brk_min -15.39
+stocks_Brk_max 23.42
+stocks_Brk_mean 0.9
+stocks_Brk_sd 5.44
+stocks_Brk_skew -0.01
+stocks_Brk_kurt 4.22
+stocks_Wmt_min -23.31
+stocks_Wmt_max 23.45
+stocks_Wmt_mean 0.96
+stocks_Wmt_sd 6.03
+stocks_Wmt_skew -0.17
+stocks_Wmt_kurt 4.41
+stocks_Cvs_min -10.34
+stocks_Cvs_max 18.44
+stocks_Cvs_mean -0.02
+stocks_Cvs_sd 1.84
+stocks_Cvs_skew 1.31
+stocks_Cvs_kurt 17.89
+Brk_empirical_VaR_5 -13.46
+Brk_empirical_VaR_1 -8.62
+Wmt_empirical_VaR_1 -16.31
+Brk_VaR_5_GMM -11.74
+Brk_LR_POF_5_GMM 3.06
+Brk_p_POF_5_GMM 0.08
+Brk_LR_IND_5_GMM 0.3
+Brk_p_IND_5_GMM 0.58
+Brk_VaR_1_GMM -8.05
+Brk_LR_POF_1_GMM 0.63
+Brk_p_POF_1_GMM 0.43
+Brk_LR_IND_1_GMM 8.39
+Brk_p_IND_1_GMM 0.0
+Brk_VaR_5_tMM -12.02
+Brk_LR_POF_5_tMM 3.06
+Brk_p_POF_5_tMM 0.08
+Brk_LR_IND_5_tMM 0.3
+Brk_p_IND_5_tMM 0.58
+Brk_VaR_1_tMM -7.82
+Brk_LR_POF_1_tMM 0.63
+Brk_p_POF_1_tMM 0.43
+Brk_LR_IND_1_tMM 8.39
+Brk_p_IND_1_tMM 0.0
+Brk_VaR_5_MMW -14.1
+Brk_LR_POF_5_MMW 0.04
+Brk_p_POF_5_MMW 0.84
+Brk_LR_IND_5_MMW 0.05
+Brk_p_IND_5_MMW 0.82
+Brk_VaR_1_MMW -8.46
+Brk_LR_POF_1_MMW 0.31
+Brk_p_POF_1_MMW 0.58
+Brk_LR_IND_1_MMW 5.67
+Brk_p_IND_1_MMW 0.02
+Wmt_VaR_1_GMM -13.05
+Wmt_LR_POF_1_GMM 3.06
+Wmt_p_POF_1_GMM 0.08
+Wmt_LR_IND_1_GMM 0.3
+Wmt_p_IND_1_GMM 0.58
+Wmt_VaR_1_tMM -13.29
+Wmt_LR_POF_1_tMM 1.71
+Wmt_p_POF_1_tMM 0.19
+Wmt_LR_IND_1_tMM 0.22
+Wmt_p_IND_1_tMM 0.64
+Wmt_VaR_1_MMW -16.97
+Wmt_LR_POF_1_MMW 0.04
+Wmt_p_POF_1_MMW 0.84
+Wmt_LR_IND_1_MMW 0.05
+Wmt_p_IND_1_MMW 0.82
+Cvs_MSE_GMM 0.83
+Cvs_MSE_tMM 1.51
+Cvs_MSE_MMW 1.55
+Cvs_failure_rate_GMM 0.01
+Cvs_failure_rate_tMM 0.01
+Cvs_failure_rate_MMW 0.01
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:604: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:606: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:604: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:606: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)

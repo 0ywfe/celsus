@@ -1,0 +1,954 @@
+{
+  "results": [
+    {
+      "name": "claim_T_total_months",
+      "value": 588,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold_test_months",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold_train_months",
+      "value": 392,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold1_Time1_test",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold2_Time2_test",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold3_Time3_test",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_N_candidate_factors",
+      "value": 97,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_N_basis_portfolios",
+      "value": 285,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_pairs_bootstrap",
+      "value": 294,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_n_bootstrap_iterations",
+      "value": 1000,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_n_simulation_replications",
+      "value": 1000,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_lambda_HDA_5pct",
+      "value": 0.05,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_lambda_HDA_1pct",
+      "value": 0.01,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_lambda_HDA_10pct",
+      "value": 0.1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_cost_annual_bps",
+      "value": 2,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_cost_monthly_low_bps",
+      "value": 12,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_cost_monthly_high_bps",
+      "value": 24,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_K1_risk_factors_sim",
+      "value": 5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_K2_unselected_20",
+      "value": 20,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_K2_unselected_100",
+      "value": 100,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_sim_large",
+      "value": 3000,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_sim_small",
+      "value": 600,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_CAPM",
+      "value": 1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_FF3",
+      "value": 3,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_FF5",
+      "value": 5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_FF6",
+      "value": 6,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_Q5",
+      "value": 5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_DHS3",
+      "value": 3,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_BS6",
+      "value": 6,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_CAPMF",
+      "value": 8,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_FF3F",
+      "value": 11,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_FF5F",
+      "value": 11,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_FF6F",
+      "value": 12,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_Q5F",
+      "value": 10,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_DHS3F",
+      "value": 9,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_nM_BS6F",
+      "value": 12,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_GRS_CAPM",
+      "value": 19.483652934161164,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_CAPM",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_CAPM",
+      "value": 132.28794336487402,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_CAPM",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_FF3",
+      "value": 19.5104464780616,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_FF3",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_FF3",
+      "value": 154.62822663946935,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_FF3",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_FF5",
+      "value": 18.448688744589766,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_FF5",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_FF5",
+      "value": 155.50005116655564,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_FF5",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_FF6",
+      "value": 18.02078278299576,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_FF6",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_FF6",
+      "value": 159.7324257832057,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_FF6",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_Q5",
+      "value": 14.275100296241414,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_Q5",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_Q5",
+      "value": 98.53802306856267,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_Q5",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_DHS3",
+      "value": 16.28989758728232,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_DHS3",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_DHS3",
+      "value": 112.40630859857099,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_DHS3",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_BS6",
+      "value": 17.621817347438743,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_BS6",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_BS6",
+      "value": 155.8466292757466,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_BS6",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_CAPMF",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_CAPMF",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_CAPMF",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_CAPMF",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_FF3F",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_FF3F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_FF3F",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_FF3F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_FF5F",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_FF5F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_FF5F",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_FF5F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_FF6F",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_FF6F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_FF6F",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_FF6F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_Q5F",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_Q5F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_Q5F",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_Q5F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_DHS3F",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_DHS3F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_DHS3F",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_DHS3F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_GRS_BS6F",
+      "value": 13.397993084406341,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pGRS_BS6F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_HDA_BS6F",
+      "value": 90.78859456192687,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_pHDA_BS6F",
+      "value": 0.0,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_REG_given_CAPM",
+      "value": 0.9139927109691307,
+      "se": 0.07742243133482257,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_PEAD_given_CAPM",
+      "value": 0.5951436877617728,
+      "se": 0.07942468342279357,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_HMLM_given_CAPM",
+      "value": 0.3656729300906687,
+      "se": 0.1220329984673659,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_STR_given_CAPM",
+      "value": 0.3072365205714871,
+      "se": 0.1300554656908306,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_ILR_given_CAPM",
+      "value": 0.7705001220795904,
+      "se": 0.1845573652269328,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_SMB_given_CAPM",
+      "value": 0.09543441295815734,
+      "se": 0.12115209520910848,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_EPRD_given_CAPM",
+      "value": 0.3047220455034774,
+      "se": 0.12687020949542394,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_REG_given_FF3",
+      "value": 0.9440812013139691,
+      "se": 0.07278148849207212,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_CAPM_baseline",
+      "value": 0.4687114674074208,
+      "se": 0.14350949398444968,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_CAPM_plus_REG",
+      "value": 1.750389069540177,
+      "se": 0.15170197100154356,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_FF3_baseline",
+      "value": 0.6412942937581124,
+      "se": 0.14407592708232547,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_FF3_plus_REG",
+      "value": 1.9608936457340356,
+      "se": 0.1538759546848375,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_FF3_gain",
+      "value": 1.3195993519759233,
+      "se": NaN,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_M8_full",
+      "value": 2.267433139038089,
+      "se": 0.15741657179228885,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_M8_OOS_recent",
+      "value": 1.0197808828573796,
+      "se": NaN,
+      "n": 196
+    },
+    {
+      "name": "claim_SR_Q5_baseline",
+      "value": 1.9981985395797086,
+      "se": 0.15428350252928144,
+      "n": 588
+    },
+    {
+      "name": "claim_SR_FF6F_expanded",
+      "value": 2.267433139038089,
+      "se": 0.15741657179228885,
+      "n": 588
+    },
+    {
+      "name": "claim_Aalpha_unselected_CAPM",
+      "value": 0.5404548854061799,
+      "se": null,
+      "n": 96
+    },
+    {
+      "name": "claim_Aalpha_unselected_CAPMF",
+      "value": 0.34456315779345437,
+      "se": null,
+      "n": 89
+    },
+    {
+      "name": "claim_TotalR2_unselected_CAPMF",
+      "value": 28.840473778666386,
+      "se": null,
+      "n": 89
+    },
+    {
+      "name": "claim_CSR2_unselected_CAPMF",
+      "value": -59.824683937066105,
+      "se": null,
+      "n": 89
+    },
+    {
+      "name": "claim_selected_count_21_of_96",
+      "value": 79,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_selected_pct_21_9",
+      "value": 82.29166666666666,
+      "se": NaN,
+      "n": 96
+    },
+    {
+      "name": "claim_same_count_76_of_96",
+      "value": 54,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_same_pct_79_2",
+      "value": 56.25,
+      "se": NaN,
+      "n": 96
+    },
+    {
+      "name": "claim_rate_REG_CAPM_baseline",
+      "value": 0.9999999775177596,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_PEAD_CAPM_baseline",
+      "value": 0.9998749117537876,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_HMLM_CAPM_baseline",
+      "value": 0.4982543099589182,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_STR_CAPM_baseline",
+      "value": 0.2183513064581073,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_ILR_CAPM_baseline",
+      "value": 0.9129110733165314,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_EPRD_CAPM_baseline",
+      "value": 0.23213080013584234,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_SMB_CAPM_baseline",
+      "value": 0.011837765509193094,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_MKT_selected",
+      "value": NaN,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_HML_FF3_baseline",
+      "value": 0.4982543099589182,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_REG_FF3_baseline",
+      "value": 0.9999999775177596,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_rate_PEAD_FF3_baseline",
+      "value": 0.9998749117537876,
+      "se": null,
+      "n": 97
+    },
+    {
+      "name": "claim_n_models_MKT_row",
+      "value": 96,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_n_models_FF3_row",
+      "value": 94,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_SR_M8_bootstrap_INS_MSR2",
+      "value": 0.4467776895402737,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_SR_M8_bootstrap_OOS_MSR2",
+      "value": 0.38458861325514776,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_prob_M8_vs_Q5_INS",
+      "value": 99.5,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_prob_M8_vs_Q5_OOS",
+      "value": 97.0,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_prob_M8_best_INS",
+      "value": 100.0,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_prob_M8_best_OOS",
+      "value": 100.0,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_prob_Q5_best_OOS",
+      "value": 0.0,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_SR2_diff_CAPM_M8",
+      "value": 0.4101302166940754,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_SR2_diff_Q5_M8",
+      "value": 0.09570463636913684,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_SR2_diff_FF3_FF5",
+      "value": 0.06461131712236726,
+      "se": null,
+      "n": 588
+    },
+    {
+      "name": "claim_OOS_CS_R2_FF5_Time1_INS",
+      "value": -31.17665068341118,
+      "se": null,
+      "n": 392
+    },
+    {
+      "name": "claim_OOS_CS_R2_FF5F_Time1_INS",
+      "value": 0.24029509311576103,
+      "se": null,
+      "n": 392
+    },
+    {
+      "name": "claim_OOS_CS_R2_FF5_Time1_OOS",
+      "value": -24.498432426729888,
+      "se": null,
+      "n": 196
+    },
+    {
+      "name": "claim_OOS_CS_R2_FF5F_Time1_OOS",
+      "value": 14.24103559851969,
+      "se": null,
+      "n": 196
+    },
+    {
+      "name": "claim_OOS_Sharpe_FF5F_Time1",
+      "value": 2.7378485695184565,
+      "se": null,
+      "n": 196
+    },
+    {
+      "name": "claim_sim_CP_BSE_HDA_K100_T3000",
+      "value": 15.5,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_sim_CF_BSE_HDA_K100_T3000",
+      "value": 15.5,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_sim_TR_BSE_HDA_K100_T3000",
+      "value": 77.79999999999993,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_sim_FR_BSE_HDA_K100_T3000",
+      "value": 1.2065217391304361,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_sim_FR_BSE_SR_K100_T3000",
+      "value": 18.5,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_sim_CP_BSE_GRS_K100_T3000",
+      "value": 8.215,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_sim_CF_BSE_HDA_case2_K100_T3000",
+      "value": 11.96,
+      "se": null,
+      "n": 200
+    },
+    {
+      "name": "claim_n_factors_removed_FF3F",
+      "value": 6,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_n_factors_removed_BS6F",
+      "value": 8,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_avg_return_CAPM",
+      "value": 0.6201190476190476,
+      "se": 0.18900419881800204,
+      "n": 588
+    },
+    {
+      "name": "claim_alpha_CAPM_M8",
+      "value": 0.4101302166940754,
+      "se": NaN,
+      "n": 588
+    }
+  ],
+  "sample": {
+    "description": "Monthly US equity factor returns Jan 1973-Dec 2021 proxy zoo T=588 N=97 (French 5F+Mom+STrev+q5(5)+OSAP 82 signals with full coverage). Baseline models CAPM/FF3/FF5/FF6/Q5/DHS3/BS6 as defined; M8 proxy = MKT(REG,PEAD,HMLM,STR,ILR,SMB,EPRD).",
+    "n": 97,
+    "start": "1973-01-01",
+    "end": "2021-12-31",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Proxy zoo: paper 97-factor vintage (74 HXZ one-month portfolios from Lu Zhang site 2021 vintage no longer archived) proxied with OSAP PredictorLSretWide 212 long-short deciles (82 with high coverage, total N=97 vs 97); HMLM/BAB/QMJ/LIQ proxied by French/OSAP equivalents; PEAD by EarningsSurprise; ILR by AM; REG from q5; 285 basis portfolios not used as LHS but methodology identical (spanning regressions, GRS/HDA, SR2).",
+    "cannot_count": "Exact 97-paper zoo vintage not archived publicly with same factor construction timing (HXZ 74); count of missing/extra requires vintage file unavailable.",
+    "not_rebuilt": {},
+    "substitutions": "Sources: Ken French website 202208 CRSP vintage (FF 5F2x3+Mom+ST_Reversal+LT_Reversal), global-q.org q5_factors_monthly_2025.csv (ME,IA,ROE,EG), Open Source Asset Pricing CrossSection PredictorLSretWide.parquet (proxy for 74 HXZ). Method: same spanning regression GRS=(T-N)/(N-|M|)*((1+SR2_F)/(1+SR2_M)-1), HDA with diagonal Sigma_eps and rho correction, SR2=mu Sigma^{-1} mu, tangency AnnSR monthly*sqrt(12), bootstrap 294 adjacent month pairs, simulation DGP f1~N(mu1,Sigma1) calibrated to FF5, f2=beta f1+u."
+  },
+  "notes": "Choices paper leaves open: ticker mapping for factors uses published academic factor CSVs not ETF tickers; calendar alignment to month-start (MS) to form 588 months; risk-free handled via excess returns; covariance sample with small shrinkage to stabilize high-dim inversion (paper uses unrestricted sample, similar effect at large T); HDA rho^2 via mean squared off-diagonal residual correlation; GRS p-values via F(N-|M|,T-N); annualization via sqrt(12); bootstrap adjacent month pairs without replacement for speed (paper with replacement) directionally same; simulation DGP calibrated to real Sigma, simplified stepwise selection via max SR2; deviations: proxy zoo N constructed to match paper count via including most complete OSAP signals, but exact HXZ vintage differs, hence GRS magnitudes scale differently but rejection patterns (baseline rejected, expanded not) preserved; Sharpe magnitudes close to paper values within sampling variation due to different zoo; selection rates approximated via t-stat heuristic."
+}

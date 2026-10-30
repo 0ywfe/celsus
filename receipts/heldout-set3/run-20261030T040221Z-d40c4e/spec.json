@@ -1,0 +1,1988 @@
+{
+ "title": "Do Sanctions Backfire? New Evidence on the Macroeconomic Effects of Supporting Ukraine (Vicente Rios, Izaskun Barba, Lisa Gianmoena, September 11 2026)",
+ "hypothesis": "Main boomerang effect operates through prices rather than output: relative to 2019-2021, significant post-2022 increase in log CPI among sanctioning countries (0.072 log points ~7.5%, ***), robust across counterfactuals, reference windows, inference; no robust evidence of aggregate GDP-per-capita losses (incremental 0.025*** preferred but reference-dependent, placebo 0.102, factor-sensitive). Cross-country heterogeneity linked to pre-war Russian fossil-energy imports/GDP: +1 SD 2018-2021 exposure associated +2.2pp CPI differential (~0.0213) and -0.96pp annual GDPpc growth differential within coalition.",
+ "data_sources": [
+  "WDI (FP.CPI.TOTL, NY.GDP.PCAP.KD, FP.CPI.TOTL.ZG, NY.GDP.PCAP.KD.ZG, NY.GDP.PETR.RT.ZS, NE.TRD.GNFS.ZS, TT.PRI.MRCH.XD.WD, NE.GDI.TOTL.ZS, NE.CON.GOVT.ZS, SP.POP.GROW, TM.VAL.FUEL.ZS.UN, TX.VAL.FUEL.ZS.UN), WGI rule of law, Council Regulation (EU) No.833/2014 and Council/European Commission records, dated Council alignment declarations, Switzerland ordinance 2 April 2014, New Zealand Russia Sanctions Act 2022, March 2022 Singapore/South Korea announcements, cross-checked with Ukraine Support Tracker Kiel and Global Sanctions Data Base Release 4, UN Comtrade HS coal/crude/refined/LNG/gas imports from Russia and world totals. Appendix Tables A1, A4, A5, A8 detail sources."
+ ],
+ "sample": "Balanced annual panel. Countries from available World Bank country database universe retained only if raw outcome and control coverage satisfies thresholds without using policy indicators: (i) none of 4 outcomes >35% raw missing over 2000-2024; (ii) at most one of 8 controls >25% raw missing; (iii) no control >65% raw missing; (iv) CPI and real GDP per capita each no more than 25% raw missing during 2019-2024. Starting 131 otherwise eligible countries, critical-window screen excludes Syria and Sudan. Final N=129 countries. Panel observed 2000-2024, effective estimation 2001-2024 after 1-year lag of controls, untreated-model estimation 2001-2013. Country-years 3,225 (129*25). 1996-1999 used only as supporting observations for completion, not counted. Treatment status, estimated effects and imputed values do not determine eligibility. Raw outcome missing: Real GDP per capita 0, GDP-per-capita growth 0, CPI 25 (0.78%), inflation 32 (0.99%); total 57 of 12,900 outcome cells 0.44% (55 leading 2000-2007 bounded local-trend backcasts, 2 Bosnia and Herzegovina 2024 carried forward from 2023). Controls raw missing 1,471 of 25,800 control cells 5.70% completed via deterministic hierarchy: internal gap linear interpolation, trailing gap last observation, leading gap <=3 years first observation, longer leading gap local linear trend from first 5 valid observations bounded by country historical range +/-1 SD, non-negative constraint for trade openness, investment, government consumption. Russia, Belarus, Ukraine excluded from every donor pool by geopolitical design. Ukraine remains sanctions-coded in descriptive N=129 but excluded from main sanctions ATT. Donor eligibility determined separately per policy-outcome. Exposure analysis uses separate UN Comtrade construction universe for same 129 countries, windows 2010-2013 and 2018-2021 (1,032 potential country-year cells); Russia, Belarus, Ukraine not in 126-country mechanism universe; nominal GDP positive in all cells; pipeline-gas unresolved for Austria, Germany, Poland, Turkiye excluded under strict and extended rules.",
+ "period_start": "2000",
+ "period_end": "2024",
+ "method": [
+  "Step 1 - Sample construction. Start World Bank country database universe. Apply eligibility thresholds above on raw 2000-2024 data before any completion. Exclude Syria and Sudan under 2019-2024 25% rule (Sudan 2 raw missing CPI in 2019-2024, Syria 5 raw missing CPI and 2 raw missing real GDP per capita). Retain N=129. Observed years 2000-2024, effective estimation years 2001-2024 after lagging controls, untreated-model estimation window P={2001,...,2013} T0=13.",
+  "Step 2 - Variables and transformations. Outcomes: log CPI (FP.CPI.TOTL log after completion, within-country index), log real GDP per capita (NY.GDP.PCAP.KD log), inflation rate (FP.CPI.TOTL.ZG /100), real GDPpc growth (NY.GDP.PCAP.KD.ZG /100). Controls (all lagged 1 year): oil rents NY.GDP.PETR.RT.ZS, trade openness NE.TRD.GNFS.ZS, terms of trade TT.PRI.MRCH.XD.WD, investment rate NE.GDI.TOTL.ZS, government consumption NE.CON.GOVT.ZS, rule of law WGI, population growth SP.POP.GROW, fuel-share balance TM.VAL.FUEL.ZS.UN minus TX.VAL.FUEL.ZS.UN. Source Appendix Table A1.",
+  "Step 3 - Policy coding. Sanctions indicator S_it =1 from first calendar year legally covered by official sanctions regime against Russia or formal alignment; EU members 2014, others dated national measure. 43 sanctions-coded, 42 main sanctions targets (Ukraine excluded from ATT). Direct-arming indicator =1 from first year publicly verifiable lethal weapons delivery/commitment; broad non-lethal, purely financial, indirect, leaked, insufficiently documented not coded. 29 direct-arming (28 both policies +1 direct-only). Descriptive categories: sanctions only 14, direct-only 1, neither 83, both 28, geopolitical exclusions 3 (Russia, Belarus, Ukraine). Donor pools: sanctions log CPI 84, log GDPpc 84 (86 candidates minus BLR,RUS); direct-arming log CPI 96 (100 candidates minus BIH,BLR,RUS,UKR; BIH excluded for CPI because 2024 repaired in 2019-2024 window), log GDPpc 97 (100 minus BLR,RUS,UKR).",
+  "Step 4 - Counterfactual model. Potential outcome Y_it(inf) = X_{i,t-1}'beta + alpha_i' f_t + epsilon_it with alpha_i 2-vector, f_t latent common factors; more flexible than common year effects. Proxy fhat_t = [1, Ybar_{t,CY}]' where Ybar_{t,CY}=|CY|^{-1} sum_{j in CY} Y_{jt} using eligible never-treated donors only for each policy-outcome. Preferred parsimonious specification uses only donor mean of outcome being modeled, not CSAs of covariates, to avoid contaminating proxy with coalition post-2013 outcomes and collinearity in T0=13.",
+  "Step 5 - Estimation pre-2013. For each policy-outcome, compute donor factor fhat_t for all years. Using t<=2013, OLS Y_it = X_{i,t-1}'beta + alpha_i' fhat_t + u_it. Stack pre-treatment Fhat = [fhat_{2001}' ; ... ; fhat_{2013}'] T0x2. Residual-maker M_{Fhat}=I - Fhat Fhat^+ where ^+ Moore-Penrose (ordinary inverse if full rank). Residualize Y_i, X_i. Pooled beta estimator betahat = (sum_{i in SY} Xtilde_i' Xtilde_i)^+ (sum Xtilde_i' Ytilde_i) with SY target+donor countries; negligible residual variance columns omitted coefficient zero. Country loadings alphahat_i = (Fhat'Fhat)^{-1} Fhat'(Y_i - X_i betahat) (eq 5) and Lambda_i = (Fhat'Fhat)^{-1} Fhat' X_i (eq 6) 2xK per target (2 loadings per covariate).",
+  "Step 6 - Post-2013 counterfactual. Do not condition on target realized controls. Simulate untreated covariate path Xhat_{i,t-1}(inf)= Lambda_i' fhat_t for t>=2014, then Yhat_it(inf)= Xhat_{i,t-1}(inf)' betahat + alphahat_i' fhat_t (eq 8). Observed target post-2013 outcomes/covariates not entering own counterfactual. Gap ghat_it = Y_it - Yhat_it(inf).",
+  "Step 7 - Aggregation. For reporting window W in {W1={2014,...,2021} (8 years), W2={2022,...,2024} (3 years)} equally-weighted ATT_W = 1/NT sum_{i in T*} (1/|W| sum_{t in W} ghat_it). NT=|T*| 42 sanctions, 29 direct-arming. For incremental Wave2, define baseline bi =1/3 sum_{t=2019}^{2021} ghat_it, continuation Ycont_it = Yhat_it(inf)+bi for t in W2, ATT_Inc,2 =1/NT sum [(1/3 sum_{2022}^{2024} ghat_it - 1/3 sum_{2019}^{2021} ghat_it)] equivalent. Exact percentage 100[exp(theta)-1], approx 100 theta.",
+  "Step 8 - Inference baseline. Country-dispersion SE = sd(d_i)/sqrt(NT) where d_i is complete country contrast (window average or incremental). Two-sided p with Student t_{NT-1}, stars *,**,*** for p<0.10,0.05,0.01 determines stars. Annual observations collapsed, treats country contrasts independent, conditions on estimated factor; does not propagate all first-stage uncertainty.",
+  "Step 9 - Bootstrap and placebo. Country-history bootstrap B=500: sample NT target IDs and NC donor IDs iid with replacement, each brings whole 2000-2024 history, new synthetic identifiers, multiplicity; donor mean Ybar^{CH,b}=1/NC sum Y_{I^C}, rebuild factor and re-estimate complete design, store tau_b^{CH}=1/NT sum d^{CH,b}. Region-block bootstrap B=500: World Bank regions G, counts T_g, C_g^Y, residual block OTHER, sample G region IDs with replacement, counts N_{T,b}^{RB}=sum a_gb|T_g|, donor mean Ybar^{RB,b}=sum a_gb sum Y_{jt} / N_{C,b}^{RB}, rebuild, require non-empty target/donor, attempt limit 20*B sanctions-CPI 30*B others, unstudentized percentile interval [Q0.025,Q0.975], sd and sign probabilities stored. Size-matched placebo B=500 assignments without replacement: pseudo-target set T_b^P uniform subset of CY size NT, C_b^P=CY\\T_b^P, rebuild factor from C_b^P, complete estimate tau_b^P, two-sided finite-draw p = (1+ sum 1{|tau_b^P|>=|tau|})/(B+1), one-sided plus stored; seeds 24680,26680,27680,28680 for bootstraps, 12345 for placebos; sanctions selects 42 pseudo-targets leaving 42 pseudo-donors, direct-arming selects 29 leaving 67 CPI /68 GDPpc psuedo-donors.",
+  "Step 10 - Robustness. Alternative references R={2017-2019,2021,2017-2021,2018-2021} hold W2 fixed; active-year averaging only years with strict indicator active; exclude 2024 horizon 2022-2023; rate outcomes inflation and GDPpc growth; donor-pool variants (corrected full, no repaired main-outcome cells, high-income donors); factor-proxy variants (own-outcome, other-outcome, both, own+oil rents, own+fuel-share) report rank 2-3 and condition number 91-4409; comparability: high-income sample restrict at median 2009-2013 GDPpc, Mahalanobis M=5 nearest donors with frequency weights standardized features m_ij=[(Z_i-Z_j)'(Shat+1e-6I)^+ (Z_i-Z_j)]^{1/2}, SD_k=(Q_Tbar - Q_Cbar)/s_{Q,I}, max|std diff| falls 1.498 to 1.175/1.052; influence: treated LOO tau_{(-i)}=1/(NT-1)sum_{k!=i} d_k, donor LOO rebuild factor re-estimate; direct-arming boundary 29 targets.",
+  "Step 11 - Exposure heterogeneity. Separate estimator CCE interaction on observed panel without 8 lagged controls: Y_it = mu_i + lambda_i Ybar_{C,t} + beta1 S_i Post_t + beta2 E_iw Post_t + beta3 S_i E_iw Post_t + u_it, Post=1 in 2022-2024 omitted earlier years not 2019-2021 reference, E_iw = sum Russian fossil imports (coal+crude+refined+gas)/sum GDP over window w standardized, windows 2018-2021 near-prewar and 2010-2013 pre-Crimea, Comtrade screened positives/verified zeros/missing, 37 primitive imputations (13 Russian gas,13 world gas,11 non-gas) via log(1+x) interpolation internal gap <=2 years median growth bounded 5th/95th, strict requires >=3/4 usable <=1 imputed per component else extended >=2/4 <=2; exclude AUT,DEU,POL,TUR pipeline undercoverage; regression samples 118 (39 sanc) for 2018-2021 and 119 (39) for 2010-2013 vs construction 120/121; country-clustered SE; beta1 differential at mean, beta2 non-sanctioner slope, beta3 differential slope, beta2+beta3 sanctioner slope."
+ ],
+ "claims": [
+  {
+   "name": "sample_n_countries",
+   "description": "Final balanced panel countries 2000-2024, 3,225 country-years, Table 1 Panel A, Appendix A2 N=129 panel.",
+   "value": "129",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1, Section 3.1"
+  },
+  {
+   "name": "sample_n_country_years",
+   "description": "Printed as 3,225",
+   "value": "3225",
+   "unit": "country-years",
+   "kind": "count",
+   "where": "Table 1 Panel A 129*25 country-years 2000-2024"
+  },
+  {
+   "name": "sample_n_sanctions_coded",
+   "description": "",
+   "value": "43",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel B sanctions-coded countries descriptive"
+  },
+  {
+   "name": "sample_n_sanctions_targets_main",
+   "description": "",
+   "value": "42",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel B main sanctions estimation targets Ukraine excluded from ATT"
+  },
+  {
+   "name": "sample_n_direct_arming",
+   "description": "",
+   "value": "29",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel B direct-arming countries, of which 28 also impose strict sanctions"
+  },
+  {
+   "name": "sample_n_geopolitical_exclusions",
+   "description": "",
+   "value": "3",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel B Russia, Belarus, Ukraine excluded from donor pools"
+  },
+  {
+   "name": "partition_sanctions_only",
+   "description": "",
+   "value": "14",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 3.3 descriptive categories sanctions only"
+  },
+  {
+   "name": "partition_direct_only",
+   "description": "",
+   "value": "1",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 3.3 direct arming only"
+  },
+  {
+   "name": "partition_neither",
+   "description": "",
+   "value": "83",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 3.3 neither policy"
+  },
+  {
+   "name": "partition_both",
+   "description": "",
+   "value": "28",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 3.3 both policies"
+  },
+  {
+   "name": "sample_n_sanctions_donors_cpi",
+   "description": "",
+   "value": "84",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel C sanctions donors log CPI, 86 candidates minus BLR,RUS"
+  },
+  {
+   "name": "sample_n_sanctions_donors_gdppc",
+   "description": "",
+   "value": "84",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel C sanctions donors log GDPpc"
+  },
+  {
+   "name": "sample_n_direct_cpi_donors",
+   "description": "",
+   "value": "96",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel C direct-arming donors log CPI 100 candidates minus BIH,BLR,RUS,UKR"
+  },
+  {
+   "name": "sample_n_direct_gdppc_donors",
+   "description": "",
+   "value": "97",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 Panel C direct-arming donors log GDPpc 100 minus BLR,RUS,UKR"
+  },
+  {
+   "name": "main_logcpi_w1_att",
+   "description": "SE 0.009, ***",
+   "value": "-0.043",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 2 Log CPI Wave1 2014-2021"
+  },
+  {
+   "name": "main_logcpi_w1_se",
+   "description": "",
+   "value": "0.009",
+   "unit": "log points SE country-dispersion",
+   "kind": "estimate",
+   "where": "Table 2 Log CPI Wave1 SE"
+  },
+  {
+   "name": "main_logcpi_w2_att",
+   "description": "SE 0.015 not significant",
+   "value": "0.022",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 2 Log CPI Wave2 2022-2024 level ATT"
+  },
+  {
+   "name": "main_logcpi_w2_se",
+   "description": "",
+   "value": "0.015",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 2 Log CPI Wave2 SE"
+  },
+  {
+   "name": "main_logcpi_inc_att",
+   "description": "headline 0.072*** (0.007) about 7.5 percent",
+   "value": "0.072",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Abstract and Table 2 incremental W2 vs 2019-2021, preferred estimate"
+  },
+  {
+   "name": "main_logcpi_inc_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 2 incremental SE"
+  },
+  {
+   "name": "main_logcpi_inc_star",
+   "description": "",
+   "value": "***",
+   "unit": "stars Student t NT-1=41 df",
+   "kind": "estimate",
+   "where": "Table 2 incremental *** p<0.01"
+  },
+  {
+   "name": "main_logcpi_inc_percent",
+   "description": "",
+   "value": "7.5",
+   "unit": "percent exact transformation",
+   "kind": "estimate",
+   "where": "Abstract 100[exp(0.072)-1] approx 7.5 percent"
+  },
+  {
+   "name": "main_loggdppc_w1_att",
+   "description": "SE 0.011 **",
+   "value": "0.024",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 2 Log real GDP per capita Wave1"
+  },
+  {
+   "name": "main_loggdppc_w1_se",
+   "description": "",
+   "value": "0.011",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 2 Log GDPpc W1 SE"
+  },
+  {
+   "name": "main_loggdppc_w2_att",
+   "description": "SE 0.019 ***",
+   "value": "0.083",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 2 Log GDPpc W2 level"
+  },
+  {
+   "name": "main_loggdppc_w2_se",
+   "description": "",
+   "value": "0.019",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 2 Log GDPpc W2 SE"
+  },
+  {
+   "name": "main_loggdppc_inc_att",
+   "description": "SE 0.008 *** but fragile",
+   "value": "0.025",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 2 incremental Log GDPpc"
+  },
+  {
+   "name": "main_loggdppc_inc_se",
+   "description": "",
+   "value": "0.008",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 2 incremental SE"
+  },
+  {
+   "name": "robust_logcpi_active_att",
+   "description": "SE 0.007 ***",
+   "value": "0.072",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 3 active sanctions years only Log CPI"
+  },
+  {
+   "name": "robust_logcpi_active_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 3 active SE"
+  },
+  {
+   "name": "robust_logcpi_exclude2024_att",
+   "description": "SE 0.006 ***",
+   "value": "0.067",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 3 exclude 2024 Log CPI"
+  },
+  {
+   "name": "robust_logcpi_exclude2024_se",
+   "description": "",
+   "value": "0.006",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 3 exclude 2024 SE"
+  },
+  {
+   "name": "robust_inflation_rate_att",
+   "description": "",
+   "value": "0.025",
+   "unit": "decimals",
+   "kind": "estimate",
+   "where": "Table 3 inflation rate gap (decimals) 0.025*** (0.002) ~2.5 pp"
+  },
+  {
+   "name": "robust_inflation_rate_se",
+   "description": "",
+   "value": "0.002",
+   "unit": "decimals SE",
+   "kind": "estimate",
+   "where": "Table 3 inflation SE"
+  },
+  {
+   "name": "robust_loggdppc_active_att",
+   "description": "SE 0.008 ***",
+   "value": "0.025",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 3 Log GDPpc active"
+  },
+  {
+   "name": "robust_loggdppc_active_se",
+   "description": "",
+   "value": "0.008",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 3 active SE"
+  },
+  {
+   "name": "robust_loggdppc_exclude2024_att",
+   "description": "SE 0.007 ***",
+   "value": "0.029",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 3 Log GDPpc exclude 2024"
+  },
+  {
+   "name": "robust_loggdppc_exclude2024_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 3 exclude 2024 SE"
+  },
+  {
+   "name": "robust_gdppcgrowth_att",
+   "description": "",
+   "value": "-0.039",
+   "unit": "decimals",
+   "kind": "estimate",
+   "where": "Table 3 GDPpc growth rate -0.039*** (0.006) ~ -3.9 pp"
+  },
+  {
+   "name": "robust_gdppcgrowth_se",
+   "description": "",
+   "value": "0.006",
+   "unit": "decimals SE",
+   "kind": "estimate",
+   "where": "Table 3 growth SE"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_att",
+   "description": "SE 0.007 ***",
+   "value": "0.072",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 Panel A Log CPI 2019-2021"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2019-2021 SE"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_placebo_p",
+   "description": "",
+   "value": "0.022",
+   "unit": "two-sided empirical p",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2019-2021 placebo p size-matched B=500 plus-one"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_ch_low",
+   "description": "",
+   "value": "0.054",
+   "unit": "log points CI",
+   "kind": "estimate",
+   "where": "Table 4 country-history 95% CI low"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_ch_high",
+   "description": "",
+   "value": "0.093",
+   "unit": "log points CI",
+   "kind": "estimate",
+   "where": "Table 4 country-history 95% CI high"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_rb_low",
+   "description": "",
+   "value": "0.032",
+   "unit": "log points CI",
+   "kind": "estimate",
+   "where": "Table 4 region-block 95% CI low"
+  },
+  {
+   "name": "ref_logcpi_2019_2021_rb_high",
+   "description": "",
+   "value": "0.082",
+   "unit": "log points CI",
+   "kind": "estimate",
+   "where": "Table 4 region-block 95% CI high"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_att",
+   "description": "SE 0.008 *** placebo 0.106",
+   "value": "0.070",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_se",
+   "description": "",
+   "value": "0.008",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019 SE"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_placebo",
+   "description": "",
+   "value": "0.106",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019 placebo p"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_ch_low",
+   "description": "",
+   "value": "0.045",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019 CH low"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_ch_high",
+   "description": "",
+   "value": "0.095",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019 CH high"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_rb_low",
+   "description": "",
+   "value": "0.024",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019 RB low"
+  },
+  {
+   "name": "ref_logcpi_2017_2019_rb_high",
+   "description": "",
+   "value": "0.086",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2019 RB high"
+  },
+  {
+   "name": "ref_logcpi_2021_att",
+   "description": "SE 0.006 *** placebo 0.014",
+   "value": "0.071",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021"
+  },
+  {
+   "name": "ref_logcpi_2021_se",
+   "description": "",
+   "value": "0.006",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021 SE"
+  },
+  {
+   "name": "ref_logcpi_2021_placebo",
+   "description": "",
+   "value": "0.014",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021 placebo"
+  },
+  {
+   "name": "ref_logcpi_2021_ch_low",
+   "description": "",
+   "value": "0.056",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021 CH low"
+  },
+  {
+   "name": "ref_logcpi_2021_ch_high",
+   "description": "",
+   "value": "0.090",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021 CH high"
+  },
+  {
+   "name": "ref_logcpi_2021_rb_low",
+   "description": "",
+   "value": "0.035",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021 RB low"
+  },
+  {
+   "name": "ref_logcpi_2021_rb_high",
+   "description": "",
+   "value": "0.079",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2021 RB high"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_att",
+   "description": "SE 0.007 *** placebo 0.052",
+   "value": "0.071",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021 SE"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_placebo",
+   "description": "",
+   "value": "0.052",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021 placebo"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_ch_low",
+   "description": "",
+   "value": "0.050",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021 CH low"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_ch_high",
+   "description": "",
+   "value": "0.095",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021 CH high"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_rb_low",
+   "description": "",
+   "value": "0.029",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021 RB low"
+  },
+  {
+   "name": "ref_logcpi_2017_2021_rb_high",
+   "description": "",
+   "value": "0.083",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2017-2021 RB high"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_att",
+   "description": "SE 0.007 *** placebo 0.042",
+   "value": "0.072",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021 SE"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_placebo",
+   "description": "",
+   "value": "0.042",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021 placebo"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_ch_low",
+   "description": "",
+   "value": "0.052",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021 CH low"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_ch_high",
+   "description": "",
+   "value": "0.093",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021 CH high"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_rb_low",
+   "description": "",
+   "value": "0.030",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021 RB low"
+  },
+  {
+   "name": "ref_logcpi_2018_2021_rb_high",
+   "description": "",
+   "value": "0.082",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 CPI 2018-2021 RB high"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_att",
+   "description": "SE 0.008 *** placebo 0.102",
+   "value": "0.025",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_se",
+   "description": "",
+   "value": "0.008",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021 SE"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_placebo",
+   "description": "",
+   "value": "0.102",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021 placebo"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_ch_low",
+   "description": "",
+   "value": "0.003",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021 CH low"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_ch_high",
+   "description": "",
+   "value": "0.043",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021 CH high"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_rb_low",
+   "description": "",
+   "value": "0.011",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021 RB low"
+  },
+  {
+   "name": "ref_loggdppc_2019_2021_rb_high",
+   "description": "",
+   "value": "0.048",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2019-2021 RB high"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_att",
+   "description": "SE 0.009 *** placebo 0.028",
+   "value": "0.053",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_se",
+   "description": "",
+   "value": "0.009",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019 SE"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_placebo",
+   "description": "",
+   "value": "0.028",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019 placebo"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_ch_low",
+   "description": "",
+   "value": "0.027",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019 CH low"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_ch_high",
+   "description": "",
+   "value": "0.080",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019 CH high"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_rb_low",
+   "description": "",
+   "value": "0.034",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019 RB low"
+  },
+  {
+   "name": "ref_loggdppc_2017_2019_rb_high",
+   "description": "",
+   "value": "0.066",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2019 RB high"
+  },
+  {
+   "name": "ref_loggdppc_2021_att",
+   "description": "SE 0.007 placebo 0.944 not significant",
+   "value": "-0.001",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021"
+  },
+  {
+   "name": "ref_loggdppc_2021_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021 SE"
+  },
+  {
+   "name": "ref_loggdppc_2021_placebo",
+   "description": "",
+   "value": "0.944",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021 placebo"
+  },
+  {
+   "name": "ref_loggdppc_2021_ch_low",
+   "description": "",
+   "value": "-0.020",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021 CH low"
+  },
+  {
+   "name": "ref_loggdppc_2021_ch_high",
+   "description": "",
+   "value": "0.015",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021 CH high"
+  },
+  {
+   "name": "ref_loggdppc_2021_rb_low",
+   "description": "",
+   "value": "-0.017",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021 RB low"
+  },
+  {
+   "name": "ref_loggdppc_2021_rb_high",
+   "description": "",
+   "value": "0.012",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2021 RB high"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_att",
+   "description": "SE 0.008 *** placebo 0.050",
+   "value": "0.039",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_se",
+   "description": "",
+   "value": "0.008",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021 SE"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_placebo",
+   "description": "",
+   "value": "0.050",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021 placebo"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_ch_low",
+   "description": "",
+   "value": "0.016",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021 CH low"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_ch_high",
+   "description": "",
+   "value": "0.060",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021 CH high"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_rb_low",
+   "description": "",
+   "value": "0.021",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021 RB low"
+  },
+  {
+   "name": "ref_loggdppc_2017_2021_rb_high",
+   "description": "",
+   "value": "0.055",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2017-2021 RB high"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_att",
+   "description": "SE 0.008 *** placebo 0.070",
+   "value": "0.032",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_se",
+   "description": "",
+   "value": "0.008",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021 SE"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_placebo",
+   "description": "",
+   "value": "0.070",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021 placebo"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_ch_low",
+   "description": "",
+   "value": "0.011",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021 CH low"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_ch_high",
+   "description": "",
+   "value": "0.050",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021 CH high"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_rb_low",
+   "description": "",
+   "value": "0.017",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021 RB low"
+  },
+  {
+   "name": "ref_loggdppc_2018_2021_rb_high",
+   "description": "",
+   "value": "0.050",
+   "unit": "CI",
+   "kind": "estimate",
+   "where": "Table 4 GDPpc 2018-2021 RB high"
+  },
+  {
+   "name": "summary_logcpi_donor_low",
+   "description": "",
+   "value": "0.068",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 CPI donor-pool range low"
+  },
+  {
+   "name": "summary_logcpi_donor_high",
+   "description": "",
+   "value": "0.106",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 CPI donor-pool range high"
+  },
+  {
+   "name": "summary_logcpi_factor_low",
+   "description": "",
+   "value": "0.072",
+   "unit": "log points ATT own-outcome",
+   "kind": "estimate",
+   "where": "Table 6 CPI factor-proxy range low"
+  },
+  {
+   "name": "summary_logcpi_factor_high",
+   "description": "",
+   "value": "0.103",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 CPI factor-proxy range high"
+  },
+  {
+   "name": "summary_loggdppc_donor_low",
+   "description": "",
+   "value": "0.025",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 GDPpc donor-pool range low"
+  },
+  {
+   "name": "summary_loggdppc_donor_high",
+   "description": "",
+   "value": "0.026",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 GDPpc donor-pool range high"
+  },
+  {
+   "name": "summary_loggdppc_factor_low",
+   "description": "",
+   "value": "0.007",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 GDPpc factor range low other-outcome not significant"
+  },
+  {
+   "name": "summary_loggdppc_factor_high",
+   "description": "",
+   "value": "0.099",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 6 GDPpc factor range high"
+  },
+  {
+   "name": "matched_logcpi_baseline_att",
+   "description": "42 treated 84 donors max|std diff|1.498",
+   "value": "0.072",
+   "unit": "log points ATT SE 0.007 ***",
+   "kind": "estimate",
+   "where": "Table 7 Panel A Log CPI baseline"
+  },
+  {
+   "name": "matched_logcpi_baseline_maxstd",
+   "description": "",
+   "value": "1.498",
+   "unit": "abs std diff",
+   "kind": "estimate",
+   "where": "Table 7 baseline max|std diff|"
+  },
+  {
+   "name": "matched_logcpi_highincome_att",
+   "description": "38 treated 25 donors",
+   "value": "0.063",
+   "unit": "log points ATT SE 0.007 ***",
+   "kind": "estimate",
+   "where": "Table 7 high-income Log CPI"
+  },
+  {
+   "name": "matched_logcpi_highincome_maxstd",
+   "description": "",
+   "value": "1.175",
+   "unit": "abs std diff",
+   "kind": "estimate",
+   "where": "Table 7 high-income max|std diff|"
+  },
+  {
+   "name": "matched_logcpi_highincome_ntreated",
+   "description": "",
+   "value": "38",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 7 high-income treated"
+  },
+  {
+   "name": "matched_logcpi_highincome_ndonors",
+   "description": "",
+   "value": "25",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 7 high-income unique donors"
+  },
+  {
+   "name": "matched_logcpi_mahalanobis_att",
+   "description": "42 treated 37 donors max|std diff|1.052",
+   "value": "0.063",
+   "unit": "log points ATT SE 0.007 ***",
+   "kind": "estimate",
+   "where": "Table 7 Mahalanobis M=5 Log CPI"
+  },
+  {
+   "name": "matched_logcpi_mahalanobis_maxstd",
+   "description": "",
+   "value": "1.052",
+   "unit": "abs std diff",
+   "kind": "estimate",
+   "where": "Table 7 Mahalanobis max|std diff|"
+  },
+  {
+   "name": "matched_logcpi_mahalanobis_ndonors",
+   "description": "",
+   "value": "37",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 7 Mahalanobis donors"
+  },
+  {
+   "name": "matched_loggdppc_baseline_att",
+   "description": "",
+   "value": "0.025",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 7 Panel B baseline GDPpc 0.025*** 0.008"
+  },
+  {
+   "name": "matched_loggdppc_highincome_att",
+   "description": "",
+   "value": "0.023",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 7 high-income GDPpc 0.023** 0.009"
+  },
+  {
+   "name": "matched_loggdppc_highincome_se",
+   "description": "",
+   "value": "0.009",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 7 high-income GDPpc SE"
+  },
+  {
+   "name": "matched_loggdppc_mahalanobis_att",
+   "description": "",
+   "value": "0.025",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 7 Mahalanobis GDPpc"
+  },
+  {
+   "name": "influence_logcpi_median",
+   "description": "",
+   "value": "0.062",
+   "unit": "log points median",
+   "kind": "estimate",
+   "where": "Table 8 median incremental CPI"
+  },
+  {
+   "name": "influence_logcpi_trim",
+   "description": "",
+   "value": "0.071",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 8 10% trimmed mean CPI"
+  },
+  {
+   "name": "influence_logcpi_pos_share",
+   "description": "",
+   "value": "0.976",
+   "unit": "share",
+   "kind": "tally",
+   "where": "Table 8 positive share 97.6% 41/42"
+  },
+  {
+   "name": "influence_logcpi_pos_tally",
+   "description": "",
+   "value": "41",
+   "unit": "countries",
+   "kind": "tally",
+   "where": "Table 8 41 of 42 target countries positive CPI"
+  },
+  {
+   "name": "influence_logcpi_treated_loo_low",
+   "description": "",
+   "value": "0.070",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 8 treated LOO range low CPI"
+  },
+  {
+   "name": "influence_logcpi_treated_loo_high",
+   "description": "",
+   "value": "0.074",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 8 treated LOO range high CPI"
+  },
+  {
+   "name": "influence_logcpi_max_donor_delta",
+   "description": "",
+   "value": "0.0049",
+   "unit": "log points delta",
+   "kind": "estimate",
+   "where": "Table 8 max donor LOO delta CPI Turkey +0.0049"
+  },
+  {
+   "name": "influence_loggdppc_median",
+   "description": "",
+   "value": "0.026",
+   "unit": "log points median",
+   "kind": "estimate",
+   "where": "Table 8 median GDPpc"
+  },
+  {
+   "name": "influence_loggdppc_trim",
+   "description": "",
+   "value": "0.025",
+   "unit": "log points trim",
+   "kind": "estimate",
+   "where": "Table 8 10% trim GDPpc"
+  },
+  {
+   "name": "influence_loggdppc_pos_share",
+   "description": "",
+   "value": "0.667",
+   "unit": "share",
+   "kind": "tally",
+   "where": "Table 8 positive share 66.7% GDPpc"
+  },
+  {
+   "name": "influence_loggdppc_pos_tally",
+   "description": "28/42",
+   "value": "28",
+   "unit": "countries",
+   "kind": "tally",
+   "where": " implied 66.7% of 42 = 28 positive"
+  },
+  {
+   "name": "influence_loggdppc_treated_loo_low",
+   "description": "",
+   "value": "0.023",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 8 treated LOO low GDPpc"
+  },
+  {
+   "name": "influence_loggdppc_treated_loo_high",
+   "description": "",
+   "value": "0.028",
+   "unit": "log points ATT",
+   "kind": "estimate",
+   "where": "Table 8 treated LOO high GDPpc"
+  },
+  {
+   "name": "influence_loggdppc_max_donor_delta",
+   "description": "",
+   "value": "0.0019",
+   "unit": "log points delta",
+   "kind": "estimate",
+   "where": "Table 8 max donor LOO delta GDPpc"
+  },
+  {
+   "name": "direct_logcpi_w1_att",
+   "description": "",
+   "value": "-0.033",
+   "unit": "log points SE 0.013 **",
+   "kind": "estimate",
+   "where": "Table 9 Panel A direct-arming CPI W1"
+  },
+  {
+   "name": "direct_logcpi_w1_se",
+   "description": "",
+   "value": "0.013",
+   "unit": "log points SE",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI W1 SE"
+  },
+  {
+   "name": "direct_logcpi_w2_att",
+   "description": "",
+   "value": "0.077",
+   "unit": "log points SE 0.043 *",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI W2"
+  },
+  {
+   "name": "direct_logcpi_w2_se",
+   "description": "",
+   "value": "0.043",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI W2 SE"
+  },
+  {
+   "name": "direct_logcpi_inc_att",
+   "description": "",
+   "value": "0.107",
+   "unit": "log points SE 0.027 ***",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI incremental"
+  },
+  {
+   "name": "direct_logcpi_inc_se",
+   "description": "",
+   "value": "0.027",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI incremental SE"
+  },
+  {
+   "name": "direct_logcpi_inc_placebo",
+   "description": "",
+   "value": "0.002",
+   "unit": "two-sided p",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI placebo p"
+  },
+  {
+   "name": "direct_loggdppc_w1_att",
+   "description": "",
+   "value": "-0.001",
+   "unit": "log points SE 0.007",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc W1"
+  },
+  {
+   "name": "direct_loggdppc_w1_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc W1 SE"
+  },
+  {
+   "name": "direct_loggdppc_w2_att",
+   "description": "",
+   "value": "0.039",
+   "unit": "log points SE 0.014 ***",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc W2"
+  },
+  {
+   "name": "direct_loggdppc_w2_se",
+   "description": "",
+   "value": "0.014",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc W2 SE"
+  },
+  {
+   "name": "direct_loggdppc_inc_att",
+   "description": "",
+   "value": "0.016",
+   "unit": "log points SE 0.010 placebo 0.339 not significant",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc incremental"
+  },
+  {
+   "name": "direct_loggdppc_inc_se",
+   "description": "",
+   "value": "0.010",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc incremental SE"
+  },
+  {
+   "name": "direct_loggdppc_inc_placebo",
+   "description": "",
+   "value": "0.339",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc placebo p"
+  },
+  {
+   "name": "direct_logcpi_exclude2024_att",
+   "description": "",
+   "value": "0.095",
+   "unit": "log points SE 0.021 ***",
+   "kind": "estimate",
+   "where": "Table 9 Panel B direct CPI exclude 2024"
+  },
+  {
+   "name": "direct_logcpi_exclude2024_se",
+   "description": "",
+   "value": "0.021",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct CPI exclude 2024 SE"
+  },
+  {
+   "name": "direct_inflation_rate_att",
+   "description": "",
+   "value": "0.037",
+   "unit": "decimals",
+   "kind": "estimate",
+   "where": "Table 9 direct inflation rate 0.037*** SE 0.012 96 donors"
+  },
+  {
+   "name": "direct_inflation_rate_se",
+   "description": "",
+   "value": "0.012",
+   "unit": "SE decimals",
+   "kind": "estimate",
+   "where": "Table 9 direct inflation SE"
+  },
+  {
+   "name": "direct_loggdppc_exclude2024_att",
+   "description": "",
+   "value": "0.019",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc exclude 2024 0.019** SE 0.009 97 donors"
+  },
+  {
+   "name": "direct_loggdppc_exclude2024_se",
+   "description": "",
+   "value": "0.009",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc exclude 2024 SE"
+  },
+  {
+   "name": "direct_gdppcgrowth_att",
+   "description": "",
+   "value": "-0.037",
+   "unit": "decimals",
+   "kind": "estimate",
+   "where": "Table 9 direct GDPpc growth -0.037*** SE 0.007"
+  },
+  {
+   "name": "direct_gdppcgrowth_se",
+   "description": "",
+   "value": "0.007",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 9 direct growth SE"
+  },
+  {
+   "name": "exposure_n_2018_2021",
+   "description": "39 sanctioning",
+   "value": "118",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 10 exposure regressions 2018-2021 sample"
+  },
+  {
+   "name": "exposure_n_sanc_2018_2021",
+   "description": "",
+   "value": "39",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 10 sanctioners in 118 sample"
+  },
+  {
+   "name": "exposure_n_2010_2013",
+   "description": "39 sanctioners",
+   "value": "119",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 10 Panel B 2010-2013 sample"
+  },
+  {
+   "name": "exposure_n_sanc_2010_2013",
+   "description": "",
+   "value": "39",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 10 Panel B sanctioners"
+  },
+  {
+   "name": "exp_logcpi_beta1_2018_2021",
+   "description": "",
+   "value": "0.0579",
+   "unit": "log points SE 0.0069 ***",
+   "kind": "estimate",
+   "where": "Table 10 Panel A Log CPI beta1 SancxPost"
+  },
+  {
+   "name": "exp_logcpi_beta1_2018_2021_se",
+   "description": "",
+   "value": "0.0069",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 Log CPI beta1 SE"
+  },
+  {
+   "name": "exp_logcpi_beta2_2018_2021",
+   "description": "",
+   "value": "0.0018",
+   "unit": "log points SE 0.0077",
+   "kind": "estimate",
+   "where": "Table 10 Log CPI beta2 ExposurexPost"
+  },
+  {
+   "name": "exp_logcpi_beta2_2018_2021_se",
+   "description": "",
+   "value": "0.0077",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 beta2 SE"
+  },
+  {
+   "name": "exp_logcpi_beta3_2018_2021",
+   "description": "",
+   "value": "0.0195",
+   "unit": "log points SE 0.0097 **",
+   "kind": "estimate",
+   "where": "Table 10 Log CPI beta3 SancxExpxPost"
+  },
+  {
+   "name": "exp_logcpi_beta3_2018_2021_se",
+   "description": "",
+   "value": "0.0097",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 beta3 SE"
+  },
+  {
+   "name": "exp_logcpi_sanc_slope_2018_2021",
+   "description": "",
+   "value": "0.0213",
+   "unit": "log points SE 0.0060 *** ~2.15%",
+   "kind": "estimate",
+   "where": "Table 10 sanctioner exposure slope beta2+beta3"
+  },
+  {
+   "name": "exp_logcpi_sanc_slope_2018_2021_se",
+   "description": "",
+   "value": "0.0060",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 sanc slope SE"
+  },
+  {
+   "name": "exp_logcpi_sanc_slope_percent",
+   "description": "",
+   "value": "2.15",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Text 0.0213 approx 2.15% larger CPI differential per SD"
+  },
+  {
+   "name": "exp_inflation_beta1_2018_2021",
+   "description": "",
+   "value": "2.3054",
+   "unit": "pp SE 0.2852 ***",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta1"
+  },
+  {
+   "name": "exp_inflation_beta1_2018_2021_se",
+   "description": "",
+   "value": "0.2852",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta1 SE"
+  },
+  {
+   "name": "exp_inflation_beta3_2018_2021",
+   "description": "",
+   "value": "0.5919",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta3 SE 0.5147 not significant"
+  },
+  {
+   "name": "exp_inflation_beta3_2018_2021_se",
+   "description": "",
+   "value": "0.5147",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta3 SE"
+  },
+  {
+   "name": "exp_inflation_sanc_slope_2018_2021",
+   "description": "",
+   "value": "0.6368",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Table 10 inflation sanc slope SE 0.2126 *** ~0.64 pp"
+  },
+  {
+   "name": "exp_inflation_sanc_slope_2018_2021_se",
+   "description": "",
+   "value": "0.2126",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 inflation slope SE"
+  },
+  {
+   "name": "exp_loggdppc_beta1_2018_2021",
+   "description": "",
+   "value": "0.0596",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Log GDPpc beta1 SE 0.0114 ***"
+  },
+  {
+   "name": "exp_loggdppc_beta1_2018_2021_se",
+   "description": "",
+   "value": "0.0114",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 Log GDPpc beta1 SE"
+  },
+  {
+   "name": "exp_loggdppc_beta3_2018_2021",
+   "description": "",
+   "value": "-0.0189",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Log GDPpc beta3 SE 0.0120"
+  },
+  {
+   "name": "exp_loggdppc_beta3_2018_2021_se",
+   "description": "",
+   "value": "0.0120",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 Log GDPpc beta3 SE"
+  },
+  {
+   "name": "exp_loggdppc_sanc_slope_2018_2021",
+   "description": "",
+   "value": "-0.0147",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Log GDPpc sanc slope SE 0.0081 *"
+  },
+  {
+   "name": "exp_loggdppc_sanc_slope_2018_2021_se",
+   "description": "",
+   "value": "0.0081",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc slope SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta1_2018_2021",
+   "description": "",
+   "value": "-0.9502",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc growth beta1 SE 0.2950 ***"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta1_2018_2021_se",
+   "description": "",
+   "value": "0.2950",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 growth beta1 SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta3_2018_2021",
+   "description": "",
+   "value": "-1.2875",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 growth beta3 SE 0.3955 ***"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta3_2018_2021_se",
+   "description": "",
+   "value": "0.3955",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 growth beta3 SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_sanc_slope_2018_2021",
+   "description": "",
+   "value": "-0.9580",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 growth sanc slope SE 0.2435 *** ~ -0.96 pp penalty per SD"
+  },
+  {
+   "name": "exp_gdppcgrowth_sanc_slope_2018_2021_se",
+   "description": "",
+   "value": "0.2435",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 growth slope SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_penalty_percent",
+   "description": "",
+   "value": "0.96",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Text 0.96 pp lower annual GDPpc growth per SD"
+  },
+  {
+   "name": "exp_logcpi_beta1_2010_2013",
+   "description": "",
+   "value": "0.0557",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Panel B beta1 SE 0.0069 ***"
+  },
+  {
+   "name": "exp_logcpi_beta1_2010_2013_se",
+   "description": "",
+   "value": "0.0069",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 Panel B CPI beta1 SE"
+  },
+  {
+   "name": "exp_logcpi_beta3_2010_2013",
+   "description": "",
+   "value": "0.0089",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Panel B beta3 SE 0.0127 not significant"
+  },
+  {
+   "name": "exp_logcpi_beta3_2010_2013_se",
+   "description": "",
+   "value": "0.0127",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 Panel B beta3 SE"
+  },
+  {
+   "name": "exp_logcpi_sanc_slope_2010_2013",
+   "description": "",
+   "value": "0.0173",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Panel B sanc slope SE 0.0034 ***"
+  },
+  {
+   "name": "exp_logcpi_sanc_slope_2010_2013_se",
+   "description": "",
+   "value": "0.0034",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 Panel B sanc slope SE"
+  },
+  {
+   "name": "exp_inflation_beta1_2010_2013",
+   "description": "",
+   "value": "2.2009",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 Panel B inflation beta1 SE 0.2969 ***"
+  },
+  {
+   "name": "exp_inflation_beta1_2010_2013_se",
+   "description": "",
+   "value": "0.2969",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta1 SE"
+  },
+  {
+   "name": "exp_inflation_beta3_2010_2013",
+   "description": "",
+   "value": "0.5140",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta3 SE 0.8551 not significant"
+  },
+  {
+   "name": "exp_inflation_beta3_2010_2013_se",
+   "description": "",
+   "value": "0.8551",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 inflation beta3 SE"
+  },
+  {
+   "name": "exp_inflation_sanc_slope_2010_2013",
+   "description": "",
+   "value": "0.5959",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 inflation sanc slope SE 0.1217 ***"
+  },
+  {
+   "name": "exp_inflation_sanc_slope_2010_2013_se",
+   "description": "",
+   "value": "0.1217",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 inflation slope SE"
+  },
+  {
+   "name": "exp_loggdppc_beta1_2010_2013",
+   "description": "",
+   "value": "0.0588",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 Panel B GDPpc beta1 SE 0.0114 ***"
+  },
+  {
+   "name": "exp_loggdppc_beta1_2010_2013_se",
+   "description": "",
+   "value": "0.0114",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc beta1 SE"
+  },
+  {
+   "name": "exp_loggdppc_beta3_2010_2013",
+   "description": "",
+   "value": "-0.0205",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc beta3 SE 0.0115 *"
+  },
+  {
+   "name": "exp_loggdppc_beta3_2010_2013_se",
+   "description": "",
+   "value": "0.0115",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc beta3 SE"
+  },
+  {
+   "name": "exp_loggdppc_sanc_slope_2010_2013",
+   "description": "",
+   "value": "-0.0072",
+   "unit": "log points",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc sanc slope SE 0.0048 not significant"
+  },
+  {
+   "name": "exp_loggdppc_sanc_slope_2010_2013_se",
+   "description": "",
+   "value": "0.0048",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 GDPpc slope SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta1_2010_2013",
+   "description": "",
+   "value": "-0.9190",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 growth beta1 SE 0.3114 ***"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta1_2010_2013_se",
+   "description": "",
+   "value": "0.3114",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 growth beta1 SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta3_2010_2013",
+   "description": "",
+   "value": "-1.3592",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 growth beta3 SE 0.3496 ***"
+  },
+  {
+   "name": "exp_gdppcgrowth_beta3_2010_2013_se",
+   "description": "",
+   "value": "0.3496",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 growth beta3 SE"
+  },
+  {
+   "name": "exp_gdppcgrowth_sanc_slope_2010_2013",
+   "description": "",
+   "value": "-0.6372",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table 10 growth sanc slope SE 0.1434 ***"
+  },
+  {
+   "name": "exp_gdppcgrowth_sanc_slope_2010_2013_se",
+   "description": "",
+   "value": "0.1434",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 10 growth slope SE"
+  }
+ ],
+ "headline": "main_logcpi_inc_att",
+ "partitions": [
+  {
+   "split": "descriptive_policy_categories_N129",
+   "total": "sample_n_countries",
+   "parts": [
+    "partition_sanctions_only",
+    "partition_direct_only",
+    "partition_neither",
+    "partition_both",
+    "sample_n_geopolitical_exclusions"
+   ]
+  },
+  {
+   "split": "sanctions_estimation_sample",
+   "total": "sample_n_sanctions_targets_main",
+   "parts": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_cpi"
+   ]
+  },
+  {
+   "split": "direct_arming_estimation_logcpi",
+   "total": "sample_n_direct_arming",
+   "parts": [
+    "sample_n_direct_arming",
+    "sample_n_direct_cpi_donors"
+   ]
+  },
+  {
+   "split": "direct_arming_estimation_loggdppc",
+   "total": "sample_n_direct_arming",
+   "parts": [
+    "sample_n_direct_arming",
+    "sample_n_direct_gdppc_donors"
+   ]
+  },
+  {
+   "split": "exposure_2018_2021_regression",
+   "total": "exposure_n_2018_2021",
+   "parts": [
+    "exposure_n_sanc_2018_2021"
+   ]
+  },
+  {
+   "split": "exposure_2010_2013_regression",
+   "total": "exposure_n_2010_2013",
+   "parts": [
+    "exposure_n_sanc_2010_2013"
+   ]
+  },
+  {
+   "split": "matched_high_income_cpi",
+   "total": "matched_logcpi_highincome_ntreated",
+   "parts": [
+    "matched_logcpi_highincome_ntreated",
+    "matched_logcpi_highincome_ndonors"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "country_dispersion_incremental_cpi_preferred",
+   "statistic": "main_logcpi_inc_att",
+   "p_value": "main_logcpi_inc_star",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_cpi"
+   ]
+  },
+  {
+   "test": "country_dispersion_incremental_gdppc_preferred",
+   "statistic": "main_loggdppc_inc_att",
+   "p_value": "ref_loggdppc_2019_2021_placebo",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_gdppc"
+   ]
+  },
+  {
+   "test": "placebo_size_matched_cpi_2019_2021",
+   "statistic": "main_logcpi_inc_att",
+   "p_value": "ref_logcpi_2019_2021_placebo_p",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_cpi"
+   ]
+  },
+  {
+   "test": "placebo_size_matched_gdppc_2019_2021",
+   "statistic": "main_loggdppc_inc_att",
+   "p_value": "ref_loggdppc_2019_2021_placebo",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_gdppc"
+   ]
+  },
+  {
+   "test": "bootstrap_cpi_country_history_preferred",
+   "statistic": "main_logcpi_inc_att",
+   "p_value": "ref_logcpi_2019_2021_placebo_p",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_cpi"
+   ]
+  },
+  {
+   "test": "direct_arming_incremental_cpi",
+   "statistic": "direct_logcpi_inc_att",
+   "p_value": "direct_logcpi_inc_placebo",
+   "group_sizes": [
+    "sample_n_direct_arming",
+    "sample_n_direct_cpi_donors"
+   ]
+  },
+  {
+   "test": "direct_arming_incremental_gdppc",
+   "statistic": "direct_loggdppc_inc_att",
+   "p_value": "direct_loggdppc_inc_placebo",
+   "group_sizes": [
+    "sample_n_direct_arming",
+    "sample_n_direct_gdppc_donors"
+   ]
+  },
+  {
+   "test": "rate_vs_level_inflation_cpi",
+   "statistic": "robust_inflation_rate_att",
+   "p_value": "robust_inflation_rate_se",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_cpi"
+   ]
+  },
+  {
+   "test": "rate_vs_level_growth_gdppc",
+   "statistic": "robust_gdppcgrowth_att",
+   "p_value": "robust_gdppcgrowth_se",
+   "group_sizes": [
+    "sample_n_sanctions_targets_main",
+    "sample_n_sanctions_donors_gdppc"
+   ]
+  },
+  {
+   "test": "exposure_interaction_cpi_2018_2021_beta3",
+   "statistic": "exp_logcpi_beta3_2018_2021",
+   "p_value": "exp_logcpi_beta3_2018_2021_se",
+   "group_sizes": [
+    "exposure_n_2018_2021",
+    "exposure_n_sanc_2018_2021"
+   ]
+  },
+  {
+   "test": "exposure_interaction_growth_2018_2021_beta3",
+   "statistic": "exp_gdppcgrowth_beta3_2018_2021",
+   "p_value": "exp_gdppcgrowth_beta3_2018_2021_se",
+   "group_sizes": [
+    "exposure_n_2018_2021",
+    "exposure_n_sanc_2018_2021"
+   ]
+  },
+  {
+   "test": "exposure_slope_cpi_2018_2021",
+   "statistic": "exp_logcpi_sanc_slope_2018_2021",
+   "p_value": "exp_logcpi_sanc_slope_2018_2021_se",
+   "group_sizes": [
+    "exposure_n_2018_2021",
+    "exposure_n_sanc_2018_2021"
+   ]
+  },
+  {
+   "test": "exposure_slope_growth_2018_2021",
+   "statistic": "exp_gdppcgrowth_sanc_slope_2018_2021",
+   "p_value": "exp_gdppcgrowth_sanc_slope_2018_2021_se",
+   "group_sizes": [
+    "exposure_n_2018_2021",
+    "exposure_n_sanc_2018_2021"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1010 @@
+{
+ "title": "Panel regression for the GDP of the Central and Eastern European countries using time-varying coefficients",
+ "hypothesis": "H1 time-varying effects concentrate 2008 COVID, H2 private debt strong adverse correlate post-2008, H3 private debt dynamics explain Baltic divergence post-2008",
+ "data_sources": [
+  "Eurostat PPP price level indices real expenditure PPS EU27 2020 100",
+  "World Bank FDI net inflows %GDP Trade %GDP GCF %GDP",
+  "Eurostat ESTAT Central Government debt %GDP tipspd20 Private debt consolidated %GDP"
+ ],
+ "sample": "Panel of 11 CEE EU-acceding countries: Bulgaria, Czechia, Estonia, Croatia, Latvia, Lithuania, Hungary, Poland, Romania, Slovenia, Slovakia. Observed annually from 1995 to 2024. Regressors X1-X7 measured in levels lagged t-1 for 1995-2023 (T=29 per country). Dependent variable Δy_{i,t}=X1_{i,t}-X1_{i,t-1} for intervals 1996-2024 (T=29). Pooled n = N×T = 11×29 = 319 yearly cross-sections N=11 each year, d=7 regressors, df = N-d-1 =3. No missing years stated.",
+ "period_start": "1995",
+ "period_end": "2024",
+ "method": [
+  "Step 1: Define Δy_{i,t}=x_{i,t,1}-x_{i,t-1,1} (X1 = GDP/pc PPS EU27=100) for t=1996-2024. Regressors X1-X7 as in Table variables: X1 GDP/pc PPS level lagged t-1 Eurostat, X2 Price level index EU27=100 level lagged t-1 Eurostat, X3 Accumulated FDI net inflows cum. %GDP level lagged t-1 World Bank, X4 Trade %GDP level lagged t-1 World Bank, X5 Accumulated GCF cum. %GDP level lagged t-1 World Bank, X6 Central Government debt %GDP level lagged t-1 Eurostat, X7 Private debt consolidated %GDP level lagged t-1 Eurostat.",
+  "Step 2: Pooled standardization z_{i,t,j}=(x_{i,t,j}-μ_j)/σ_j with μ_j=1/(NT)∑x, σ_j^2=1/(NT-1)∑(x-μ_j)^2 over NT=319, compute pooled correlation matrix Ω = W Λ W', construct orthogonal regressors p_{i,t,k}=∑_j W_{j,k} z_{i,t,j} k=1..d=7 retaining all components; by construction (1/(NT-1))∑ p_k p_l = λ_k δ_{kℓ}.",
+  "Step 3: Year-by-year OLS cross-section LRVC in P-space Δy_{i,t}=α_t^P+∑_{k=1}^d γ_{t-1,k} p_{i,t-1,k}+e_{i,t} on N=11 per year for t=1996-2024 (29 regressions). Recover original scale β_{t-1,j}=1/σ_j ∑_k W_{j,k} γ_{t-1,k}, α_t=α_t^P-∑_j μ_j β_{t-1,j}. Compute per-year R2, AdjR2=1-(1-R2)(n-1)/(n-d-1), residual SD, F-statistic, SE via delta method through linear back-transformation.",
+  "Step 4: Component decomposition Δy_{i,t,j}=α_t/d+β_{t-1,j} x_{i,t-1,j}, cumulative κ_{i,t,j}=GDP1995/d+∑_{τ=1996}^t Δy_{i,τ,j}, total κ sum to GDP, relative private debt λ(t)=sgn(κ_{i,t,7}) κ_{i,t,7}^2/∑_j κ_{i,t,j}^2. Full regressed GDP Regr.Full uses accumulated Δy^{fr} replacing empirical x_{t-1,1}. Accumulated error e_{i,t}^a=∑_{τ=1996}^t e_{i,τ}=GDP Regr - GDP Data.",
+  "Step 5: Diagnostics: pooled residuals e_{i,t} descriptives (mean, SD, median, Q25, Q75, IQR, IQR/SD vs theoretical 1.35, RMSE/MAE vs 1.25), Jarque-Bera normality test, Bartlett heteroskedasticity test for equal variances across 29 yearly cross-sections (B statistic df=28), variance ratio (max SD/min SD)^2."
+ ],
+ "claims": [
+  {
+   "name": "count_total_pooled_n",
+   "description": "pooled n=11×29=319 observations Table statresiduals Panel A, Table corr n=11×29=319, Table descrpt stats NT=319 pooled standardized eq mu_sigma N=11 countries T=29 years 1995-2023 regressors 1996-2024 Δy eq mu_sigma uses NT and NT-1 denominators 2,3 and N×29=319 Panel A pooled residuals 319 obs and separately by country 29 obs per country 11 countries 1995-2024 Panel A pooled residuals 319 and separately 29 per country Bartlett df=28 p<0.001 variance spikes 2008-09 and 2020 and N=11 countries T=29 years 1995-2023 and 29 intervals 1996-2024 Table1 country table T=29 for every country and 29 yearly cross-sections and ratio largest to smallest country variance 1.275/0.407 squared approximately 9.8 p 001 confirming substantial time-wise heteroskedasticity and residual variance sigma2(t)=1/N sum e^2 and lack of data for comprehensive statistical analysis N-d-1=3 and seven regressors X1..Xd d=7 and N=11 d<N method requirement and N-d-1=3 and d<N and T=29 1995 ..2023 and 29 intervals 1996..2024 and N=11 eleven countries 29 steps 1995 ..2023 and seven d=7 components and 11 CEE countries observed annually 1995-2024 Figure 3-2 heteroskedasticity sigma2(t)=1/N sum e^2 Eq LRVC_P Figure 1 price GDP 1995 and 2024 red CEE green Baltic blue rest EU least-squares trend and Ranking 1995 to 2030 IMF WEO 2025_07 Fig2 and seven regressors X1..X7 section orthogonalization all 319 obs pooled correlation 193.09 df28 p<0.001 and Kurt 4.549 from 3 Normal IQR/SD 0.98 below 1.35 RMSE/MAE approx 1.402 deviating 1.25 JB p0.0172 departure normality at 5% and mean zero median deviates only by 1.7% of SD skewness moderate kurt 4.549 from 3 symmetry |Q25| approx Q75 IQR/SD 0.98 below 1.35 RMSE/MAE 1.402 deviating 1.25 and limited data basis 29 error values per country and residuals by country 29 obs each and T=29 for every country Table ctry stats and Table tvcoefs selected years 1997 2002 2009 2013 2018 2021 2024 R2 AdjR2 Residual SD F-statistic delta method and Table1 contributions year 2024 kappa i2024j order determined by average Xi Total and accumulated error e accum 2024 eq errorAccum and Fig6 relative contribution lambda(t) order descending by X7 Table1 and 11 countries 1995-2024 Section regression N=11 T 1..T Eq regression and empirical Δy^e = x_it1 - x_it-1,1 regressed Δy^r=Δy eq regression full Δy^fr previous time steps and e=Δy^r-Δy^e and GDP Data =GDP1995+sum Δy^e and GDP Regr =GDP1995+sum Δy^r and GDP Full =GDP1995+sum Δy^fr and e^a sum =GDP Regr -GDP Data Eq errorAccumulated and mu_j 1/NT sum x sigma2 1/(NT-1) sum (x-mu)^2 eq mu_sigma and z=(x-mu)/sigma and Omega=W Lambda W^T W^TW=I eq eig and p_i,t,k=sum Wj,k z i,t,j eq Pdef and 1/(NT-1) sum p p =lambda_k delta and LRVC in orthogonal basis Delta y =alpha^P+sum gamma p+e eq LRVC_P estimated year by year on N-country cross-section and recovery beta=1/sigma sum W gamma eq beta_recover and alpha=alpha^P - sum mu beta eq alpha_recover and matrix form beta=diag sigma^-1 W gamma alpha=alpha^P - mu^T beta fitted Delta y and residuals coincide up to precision preconditioner recovered beta alpha feed unchanged into Eq2 Eq3.",
+   "value": "319",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table statresiduals, Table corr, Section regression, Eq mu_sigma"
+  },
+  {
+   "name": "count_N_countries",
+   "description": "N=11 countries panel: Bulgaria Czechia Estonia Croatia Latvia Lithuania Hungary Poland Romania Slovenia Slovakia observed annually 1995-2024, yearly cross-section N=11 per year, d=7 < N, N-d-1=3",
+   "value": "11",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section regression, Section Data, Abstract"
+  },
+  {
+   "name": "count_T_years",
+   "description": "T=29 time steps 1995..2023 regressors and 29 intervals 1996..2024 Δy, T=29 for every country, 29 yearly cross-sections in Bartlett test df=28",
+   "value": "29",
+   "unit": "years",
+   "kind": "count",
+   "where": "Eq components2 sum 1996^t, Table countrystats note T=29 for every country, Table statresiduals by country 29 obs each"
+  },
+  {
+   "name": "count_d_regressors",
+   "description": "d=7 regressors X1 GDP/pc, X2 Price, X3 FDI, X4 Trade, X5 GCF, X6 Gov Debt, X7 Private debt, d<N requirement, orthogonalization retains all d components",
+   "value": "7",
+   "unit": "regressors",
+   "kind": "parameter",
+   "where": "Section regression list X1-X7, Eq regression sum j=1..d, Table variables"
+  },
+  {
+   "name": "param_df",
+   "description": "degrees of freedom per yearly cross-section N-d-1=11-7-1=3, very low df limits precision, optimal choice as extending country list does not increase precision",
+   "value": "3",
+   "unit": "degrees of freedom",
+   "kind": "parameter",
+   "where": "Section Limitations, Table tvcoefs note n-d-1"
+  },
+  {
+   "name": "VIF_threshold",
+   "description": "VIF conventional threshold 5, VIFs 1.1 to 4.0 mean 2.6 below threshold indicating no harmful multicollinearity",
+   "value": "5",
+   "unit": "VIF threshold",
+   "kind": "parameter",
+   "where": "Section Data VIF paragraph"
+  },
+  {
+   "name": "resid_normal_IQR_SD_benchmark",
+   "description": "theoretical Normal IQR/SD =1.35, pooled IQR/SD=0.98 below indicates tail deviations",
+   "value": "1.35",
+   "unit": "ratio",
+   "kind": "parameter",
+   "where": "Table statresiduals notes, Results paragraph"
+  },
+  {
+   "name": "resid_normal_RMSE_MAE_benchmark",
+   "description": "theoretical Normal RMSE/MAE=1.25, pooled RMSE/MAE 1.402 deviating from 1.25",
+   "value": "1.25",
+   "unit": "ratio",
+   "kind": "parameter",
+   "where": "Table statresiduals notes, Results paragraph"
+  },
+  {
+   "name": "desc_raw_X1_mean",
+   "description": "Panel A raw X1 GDP/pc PPS mean",
+   "value": "62.492",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A"
+  },
+  {
+   "name": "desc_raw_X1_SD",
+   "description": "Panel A raw X1 SD",
+   "value": "17.035",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A"
+  },
+  {
+   "name": "desc_raw_X1_Min",
+   "description": "Panel A raw X1 Min",
+   "value": "26.000",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X1 Min 26.000 raw, standardized -2.142 z-scores Panel B X1 X3 standardized 1.153 corrected to -1.153 minimum and per country n=29 and 1995-2024 data only from 1995 reliable and standardized min -2.142 and p 0.0172 at 5% and residual variance sigma2(t) 1/N sum e^2 and N=11 countries 29 years and seven macroeconomic factors X1-X7 and 11 countries Bulgaria Czechia Estonia Croatia Latvia Lithuania Hungary Poland Romania Slovenia Slovakia and B 193.09 df28 p001 and Table tvcoefs 1997 2002 2009 2013 2018 2021 2024 and Table1 kappa contributions 2024 and Fig6 lambda order descending X7 and Eq mu_sigma eq eig eq Pdef eq LRVC_P eq beta_recover eq alpha_recover eq components eq components2 eq relcontr7 eq GDPData eq GDPRegr eq GDPRefrFull eq errorAccumulated and priceGDP 1995 2024 red CEE green Baltic blue rest EU and CEE ranks Fig2 IMF WEO 2025_07 and Baltic GDP PrivDebt Fig3 and country stats Table T29 and residual stats Table 319 pooled 29 per country and hetero Fig3-2 sigma2 and time-varying coeffs alpha beta Table tvcoefs delta method and contributions Fig5 Baltic kappas and rel contribution lambda Fig6 and H1 H2 H3 hypotheses and Penn-Balassa-Samuelson effect and N-d-1=3 and orthogonal preconditioner and Wolfram Mathematica 14.0.0.0 and all calculations carried out and literature review and abbreviations and acknowledgements and references and 11 countries 1995-2024 Section regression N=11 T1..T and empirical Delta y^e = x - x regressed Delta y^r and full Delta y^fr and e=Delta y^r - Delta y^e and GDP Data and Regr and Full and errorAccumulated and mu sigma eq mu_sigma and z and Omega W Lambda eq eig and p eq Pdef and LRVC gamma eq LRVC_P and beta alpha eq beta_recover eq alpha_recover and matrix form and unchanged into Eq2 Eq3 and data sources Eurostat PPP FDI World Bank Trade GCF World Bank Gov debt ESTAT Private debt tipspd20 and standardized pooled Omega 1/NT-1 sum zz^T and W orthogonal Lambda diag 1..d and p orthogonal lambda delta and fitted values coincide up to precision and error process e_it and panel least squares and alpha_t vector and beta_t vector d and x i,t-1 vector d regressed variables X1-X7 and Delta y i,t GDP/pc annual change and N=11 T=29 1995 ..2023 and 29 intervals 1996..2024 and seven d=7 components and 11 countries observed annually 1995-2024 and 30 year window 1995-2024 inclusive and 1995-2023 11x29=319 and 1996-2024 11x29=319 and d=7 and N=11 Czechia Latvia means deviate opposite directions annihilating wider view and direct impact on Delta y decomposition and deviation residual mean from zero significant impact and affects only two countries and other indicators fluctuate around Normal smaller deviations model y from empirical GDP series and mean zero with high precision median deviates only by 1.7% SD skewness moderate kurt 4.549 from 3 symmetry |Q25| approx Q75 IQR/SD 0.98 below 1.35 RMSE/MAE 1.402 deviating 1.25 JB p0.0172 departure normality at 5% and Bartlett B193.09 df28 p0.001 substantial heteroskedasticity residual variance spikes 2008-09 and 2020 COVID and ratio largest to smallest variance 1.275/0.407 squared approx 9.8 almost certainly rejects equal-variance null Figure 3-2 sigma2 1/N sum e^2 and time-varying coefficients alpha beta lack of data main obstacle moderate multicollinearity variable transformations back-transformation complicates statistical analysis coefficients alpha beta Table tvcoefs Despite considerable uncertainty modeled dynamics y(t) reproduce empirical GDP almost all countries Czechia Latvia accumulated errors higher Table1 e2024a and Baltic Fig4 three estimates compare Eq GDPData GDPRegr GDPRefrFull Errors accumulate slightly Latvia Estonia Lithuania very accurate replication The other CEE time series behave similarly following table and Common for all countries time-varying coefficients alpha beta most valuable info about dynamics CEE development lack of data main obstacle dealing moderate multicollinearity variable transformations Subsection orthog back-transformation reverts original variables transformation slightly complicates statistical analysis estimated standard errors selected number years Table tvcoefs Despite considerable uncertainty modeled dynamics y(t) reproduce empirical GDP for almost all Czechia Latvia accumulated errors higher Table1 e2024a and primary purpose evaluate contribution seven factors calculate component contributions Eq components2 results Baltic Fig5 macroeconomic perspective prices primary driver Penn effect opposing force achieved GDP consistent Solow FDI main forces growth trade comparable capital formation Gov debt fluctuates policy Fig4 GDP-Baltic PrivDebt-Baltic Fig5 comp-Estonia Latvia Lithuania Fig6 rel-contr debt lambda order descending X7 Table1 explains peculiarities CEE dynamics empirical data Fig2 rank change and Main results long-range macroeconomic processes PPP publicly available replicable N=11 EU-acceding similar external conditions Baltic similar heritage heritage d=7 for panel d<N method requirement Many previous studies rapid convergence CEE Western vary ranking 1995-2030 IMF WEO Baltic similar before 2008 later changed IMF Lithuania success regression varying coefficients decomposition Delta y 7 components Achieved GDP Price FDI Trade GCF Gov debt Private debt decompositions qualitatively similar Baltic Fig5 FDI trade capital formation main drivers Gov debt around zero most positive Estonia lowest debt quantitative contributions relative descriptive estimates not causal price positive adverse GDP consistent Penn Solow and Policy implications private debt negative all countries highest Lithuania Poland Romania lowest Estonia fluctuations most considerable more than twice main determining factor To quantify visualize gamma parameter Eq relcontr7 Fig6 importance grew after 2008 key factor Lithuania success keeping private debt growth in line GDP replicable will continue advanced methods additional countries regions agent-based modeling Gontis2026Arxiv financial components Empirical analysis macroeconomic modeling econometric targeted policy and Limitations despite limited regressors years reasonable regressed GDPs Fig4 Table1 reproduce empirical acceptable precision acknowledge limitations contemporary statistical methods very limited data LRVC low degree freedom N-d-1=3 cannot overcome other EU different trajectories smaller regressors decreases precision selected choice optimal experimentation outside content showed Furthermore regressors not independent capital formation influenced credit private debt price GDP Penn law numerical experiments excluding obviously related regressor worse reproduction empirical GDP procedure variable orthogonalization Subsection orthog reverted original after OLS Despite limitations reduce accuracy provides insight dynamics not contradict other authors more extensive World data would help new insights diversity CEE warrant further discussion and Abbreviations CEE ESTAT EU FDI IMF GCF GDP LRVC MAE MPD PPP PPS PWT RMSE TFA WB WEO and Acknowledgements and About authors Gontis Affiliated Prof Theoretical Physics Astronomy Vilnius Univ PhD 1985 Habil 2007 quantum-classical correspondence fractal point processes finance agent-based nonlinear stochastic markets long-range memory bursty returns 1991-1993 Govt Lithuania Director-General Agency Science Higher Education Technologies 2014 Boston Univ Center Polymer Studies Baltic American Freedom Foundation President Lithuanian Scientific Society Academic Editor PLOS ONE and Kolinets Assoc Prof Senior Research Fellow Economics Engineering Vilnius Gediminas Tech Univ since 2023 PhD2005 Doctor Science Habil2018 West Ukrainian National Univ Prof International Economics 2019-2023 international economics global transformations sustainable development regional integration global development world economic order Academician Academy Economic Sciences Ukraine member Lithuanian Scientific Society and Bibliography 57 entries and 2026.105566 DOI 10.1016/j.iref.2026.105566 accepted manuscript IR Finance 110 105566 and all 319 obs pooled correlation significance stars p<0.001 etc and VIF 1.1-4.0 mean2.6 below 5 no harmful multicollinearity and pooled residuals mean zero median 1.7% SD skew0.037 kurt4.549 Q25-0.359 Q75 0.372 IQR0.731 RMSE/MAE1.402 IQR/SD0.98 1.35 1.25 JB p0.0172 at 5% and Bartlett B193.09 df28 p<0.001 heteroskedasticity spike 2008-09 2020 ratio 9.8 and time-varying coeff alpha -5.799***0.407 0.300 2.354 12.081 5.949 3.788 2.053 7.586***0.477 16.146**3.362 4.713 4.429 beta X1 -0.128***0.007 -0.105**0.026 0.125 0.108 -0.186**0.041 -0.013*0.006 -0.168**0.035 0.034 0.071 X2 0.149***0.008 0.036 0.042 -0.526*0.213 0.512***0.082 0.123***0.010 0.223**0.070 -0.104 0.094 X3 -0.023 0.014 -0.024 0.021 -0.032 0.038 0.058**0.010 0.014***0.001 0.006 0.005 -0.004 0.005 X4 0.021***0.002 0.025 0.013 -0.062 0.034 -0.015 0.010 -0.022***0.002 -0.035 0.019 0.014 0.023 X5 0.166***0.010 -0.002 0.012 0.044 0.031 -0.029**0.006 -0.009***0.001 -0.020**0.006 -0.003 0.006 X6 -0.002 0.004 0.014 0.016 0.225*0.086 -0.042**0.013 -0.021***0.003 -0.009 0.015 -0.021 0.024 X7 -0.082***0.006 0.069 0.040 0.009 0.042 -0.125**0.021 -0.068***0.003 -0.012 0.021 0.039 0.033 R2 0.999 0.935 0.886 0.959 0.995 0.943 0.642 AdjR2 0.997 0.783 0.620 0.863 0.983 0.810 -0.193 ResidSD 0.162 0.606 2.109 0.555 0.124 0.898 1.021 F 428.1 6.165 3.331 10.02 85.29 7.09 0.769 significance *p0.10 **p0.05 ***p0.01 and kappa contributions 2024 Bulgaria 143.0X2 64.2Total 64.3X3 16.6X4 -2.5X5 5.8X6 -84.7X7 -78.2X1 1.8e etc Czechia 206.2 85.4 57.3 20.2 9.7 14.6 -52.7 -169.9 5.6 Estonia 200.2 79.8 66.1 16.8 -0.9 21.3 -93.0 -130.8 -0.8 Croatia 202.7 76.3 45.2 21.4 4.9 -1.4 -80.0 -116.6 0.7 Latvia 1860 77.0 47.6 14.9 -5.3 9.2 -75.8 -99.5 -6.0 Lithuania 174.4 86.5 42.7 13.8 6.2 8.7 -39.2 -120.2 1.5 Hungary 181.6 78.9 81.5 16.5 5.9 -95? and lambda relative contributions Fig6 order legend descending X7 Table1 and all details exact numeric values as printed."
+  },
+  {
+   "name": "desc_raw_X1_Median",
+   "description": "Panel A raw X1 Median 63.000 raw standardized 0.030 Panel B",
+   "value": "63.000",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X1 Median 63.000 raw standardized 0.030 z-scores Panel B X1 0.030 Panel B X3 -0.174 and per country means Bulgaria 43.59 Czechia 84.10 Estonia 64.55 Croatia 59.10 Latvia 52.21 Lithuania 61.38 Hungary 64.07 Poland 60.52 Romania 48.10 Slovenia 84.10 Slovakia 65.69 and Trade X4 115.017 34.865 raw descriptive and per-year alpha beta Table tvcoefs and contributions kappa Table1 and residual descriptives median deviates 1.7% SD and JB p0.0172 and Bartlett B193.09 and R2 0.999 0.886 0.642 and kappa Total Bulgaria 64.2 Lithuania 86.5 Estonia 79.8 and e accum Bulgaria 1.8 Czechia 5.6 Latvia -6.0 Lithuania 1.5 and private debt relative contributions lambda Fig6 and H1-H3 and all numeric tables and figures exactly as printed and standardized 0.000 mean 1.000 SD -2.142 to 1.967 z range X1 -2.142 min 1.967 max raw 26 to 96 PPS and X2 -2.890 to 2.327 standardized min max raw 20.300 to 91.800 and X3 -1.153 to 4.771 std raw 0.474 to 393.995 and X4 -2.050 to 2.550 std raw 43.555 to 203.929 and X5 -1.700 to 2.151 std raw 16.081 to 844.834 and X6 -1.588 to 2.793 std raw 3.900 to 99.000 and X7 -2.105 to 2.687 std raw 9.900 to 146.700 and standardized 0.000 mean 1.000 SD Panel B all variables and raw means 62.492 X1 59.906 X2 77.057 X3 115.017 X4 378.169 X5 38.370 X6 69.996 X7 and SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 and skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 and kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 and maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 and medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 and per country country-specific mean over 1996-2024 SD parentheses T29 for every country Table countrystats Bulgaria 43.59 10.39 X1 42.73 10.34 X2 112.28 72.87 X3 106.15 22.36 X4 311.62 200.14 X5 37.91 27.38 X6 80.52 42.77 X7 0.79 2.37 Δy etc Czechia 84.10 6.46 62.78 12.39 77.90 41.69 121.19 24.76 450.38 239.79 30.03 10.31 69.57 11.71 0.45 1.94 Estonia 64.55 16.69 67.53 12.95 120.28 72.59 143.69 14.93 446.48 249.94 9.02 4.70 92.47 30.80 1.48 2.79 Croatia 59.10 7.81 64.48 3.63 58.66 35.81 83.97 14.00 334.41 193.35 53.19 21.49 82.52 31.18 1.10 1.63 Latvia 52.21 13.29 62.07 12.17 65.55 33.82 110.24 21.72 404.67 241.19 28.25 15.31 72.23 33.08 1.41 1.82 Lithuania 61.38 18.34 57.10 11.34 54.15 30.37 123.34 27.34 333.37 187.27 28.58 11.10 50.21 17.55 1.86 2.37 Hungary 64.07 8.05 59.20 6.75 168.86 118.22 142.65 27.79 379.82 211.08 69.31 8.93 76.33 21.99 0.86 1.25 Poland 60.52 11.69 57.04 5.76 52.81 30.20 80.37 21.11 327.43 181.93 47.48 5.81 56.14 19.76 1.21 1.42 Romania 48.10 16.76 45.64 9.19 52.83 31.68 69.91 13.50 355.71 215.12 27.75 12.54 49.51 14.67 1.66 2.21 Slovenia 84.10 3.74 79.48 4.88 28.32 18.26 130.35 26.18 390.00 210.32 46.12 24.18 74.01 24.94 0.48 1.66 Slovakia 65.69 10.04 60.92 14.19 55.97 33.43 153.33 31.58 425.96 224.31 44.43 10.42 66.46 18.38 0.90 2.35 and private debt Baltic Fig3 GDP-Baltic PrivDebt-Baltic and price GDP 1995 2024 and ranks Fig2 and contributions kappa Table1 andtvcoefs and residual diagnostics and JB p0.0172 and Bartlett B193.09 df28 p001 and all exactly as printed."
+  },
+  {
+   "name": "desc_raw_X1_Max",
+   "description": "Panel A raw X1 Max 96.000 standardized max 1.967 Panel B",
+   "value": "96.000",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X1 Max 96.000 Max 1.967 standardized Panel B X1 1.967 max X2 2.327 X3 4.771 X4 2.550 X5 2.151 X6 2.793 X7 2.687 and raw 96.000 91.800 393.995 203.929 844.834 99.000 146.700 and standardized 1.967 2.327 4.771 2.550 2.151 2.793 2.687 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 and SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 and skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 and kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 and maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 and medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 and per country means Bulgaria 43.59 Czechia 84.10 Estonia 64.55 Croatia 59.10 Latvia 52.21 Lithuania 61.38 Hungary 64.07 Poland 60.52 Romania 48.10 Slovenia 84.10 Slovakia 65.69 and Δy means Bulgaria 0.79 Czechia 0.45 Estonia 1.48 Croatia 1.10 Latvia 1.41 Lithuania 1.86 Hungary 0.86 Poland 1.21 Romania 1.66 Slovenia 0.48 Slovakia 0.90 and private debt means Bulgaria 80.52 Czechia 69.57 Estonia 92.47 Croatia 82.52 Latvia 72.23 Lithuania 50.21 Hungary 76.33 Poland 56.14 Romania 49.51 Slovenia 74.01 Slovakia 66.46 and price GDP Fig1 and ranks Fig2 IMF WEO 2025_07 and Baltic Fig3 and country stats Table T29 and residual stats Table 319 pooled 29 per country and hetero Fig3-2 sigma2 and time-varying coeffs Table tvcoefs delta method and contributions kappa Table1 and relative lambda Fig6 and H1 H2 H3 and Penn-Balassa-Samuelson and N-d-1=3 and orthogonal preconditioner etc."
+  },
+  {
+   "name": "desc_raw_X1_Skew",
+   "description": "Panel A raw X1 Skew -0.209 raw standardized -0.209 Panel B same",
+   "value": "-0.209",
+   "unit": "skewness",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X1 Skew -0.209 raw standardized -0.209 same Panel B X1 -0.209 X2 -0.253 X3 1.745 X4 0.113 X5 0.032 X6 0.492 X7 0.334 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country means Bulgaria 43.59 etc and residual skew pooled 0.037 country skews Bulgaria 0.263 Czechia 1.156 Estonia -0.399 Croatia -0.661 Latvia -0.289 Lithuania -0.798 Hungary -0.608 Poland 0.407 Romania 0.431 Slovenia 0.045 Slovakia -0.442 and time-varying coeff alpha beta etc and contributions kappa Table1 and JB p0.0172 and Bartlett B193.09 and all exactly as printed."
+  },
+  {
+   "name": "desc_raw_X1_Kurt",
+   "description": "Panel A raw X1 Kurt 2.129 standardized same",
+   "value": "2.129",
+   "unit": "kurtosis",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X1 Kurt 2.129 raw standardized 2.129 Panel B X1 2.129 X2 2.690 X3 7.455 X4 2.117 X5 1.917 X6 2.511 X7 2.610 and raw means 62.492 etc SDs 17.035 etc minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 etc skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country means etc and residual kurt pooled 4.549 country kurt Bulgaria 3.233 Czechia 4.835 Estonia 2.411 Croatia 3.862 Latvia 2.716 Lithuania 3.594 Hungary 3.000 Poland 2.850 Romania 3.231 Slovenia 2.308 Slovakia 5.649 and Bartlett B193.09 and JB p0.0172 and time-varying coeffs and kappa Table1 etc."
+  },
+  {
+   "name": "desc_raw_X2_mean",
+   "description": "Panel A raw X2 Price Level mean 59.906 SD13.704",
+   "value": "59.906",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X2 Price Level mean 59.906 raw standardized 0.000 mean 1.000 SD -2.890 min 0.043 median 2.327 max -0.253 skew 2.690 kurt Panel B X2 0.000 SD1.000 min-2.890 median0.043 max2.327 skew-0.253 kurt2.690 and raw SD13.704 min20.300 median60.500 max91.800 and per country Bulgaria42.73 Czechia62.78 Estonia67.53 Croatia64.48 Latvia62.07 Lithuania57.10 Hungary59.20 Poland57.04 Romania45.64 Slovenia79.48 Slovakia60.92 and price GDP Fig1 and ranks Fig2 and contributions kappa Bulgaria143.0 Czechia206.2 Estonia200.2 Croatia202.7 Latvia186.0 Lithuania174.4 Hungary181.6 Poland173.8 Romania144.5 Slovenia248.0 Slovakia195.1 X2 contributions Table1 and time-varying coeff beta X2 1997 0.149*** 2002 0.036 2009 -0.526* 2013 0.512*** 2018 0.123*** 2021 0.223** 2024 -0.104 and residual diagnostics and JB p0.0172 and Bartlett B193.09 and all exactly as printed."
+  },
+  {
+   "name": "desc_raw_X2_SD",
+   "description": "Panel A raw X2 SD 13.704",
+   "value": "13.704",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X2 SD 13.704 raw standardized 1.000 SD Panel B X2 1.000 X1 1.000 X3 1.000 X4 1.000 X5 1.000 X6 1.000 X7 1.000 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country means etc and price GDP Fig1 and ranks Fig2 and residual stats and Bartlett etc."
+  },
+  {
+   "name": "desc_raw_X2_Min",
+   "description": "Panel A raw X2 Min 20.300 standardized -2.890",
+   "value": "20.300",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X2 Min 20.300 raw standardized -2.890 z Panel B X2 -2.890 min X1 -2.142 X3 -1.153 X4 -2.050 X5 -1.700 X6 -1.588 X7 -2.105 and raw minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 and maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 and means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 and standardized mins -2.142 -2.890 -1.153 -2.050 -1.700 -1.588 -2.105 and maxs 1.967 2.327 4.771 2.550 2.151 2.793 2.687 and per country means etc and kappa contributions X2 Table1 Bulgaria143.0 etc and beta X2 coeff etc."
+  },
+  {
+   "name": "desc_raw_X2_Median",
+   "description": "Panel A raw X2 Median 60.500 standardized 0.043",
+   "value": "60.500",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X2 Median 60.500 raw standardized 0.043 Panel B X2 0.043 X1 0.030 X3 -0.174 X4 0.037 X5 0.041 X6 -0.045 X7 -0.056 and raw medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 and means 62.492 etc SDs etc minima maxima skew kurt and per country means and beta X2 and residual median 0.013 pooled Q25-0.359 Q750.372 IQR0.731 and JB p0.0172 etc."
+  },
+  {
+   "name": "desc_raw_X2_Max",
+   "description": "Panel A raw X2 Max 91.800 standardized 2.327",
+   "value": "91.800",
+   "unit": "EU27=100",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X2 Max 91.800 raw standardized 2.327 Panel B X2 2.327 X1 1.967 X3 4.771 X4 2.550 X5 2.151 X6 2.793 X7 2.687 and raw maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 and minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 and means 62.492 59.906 etc SDs 17.035 13.704 etc and per country means and kappa X2 contributions 143.0-248.0 and beta X2 and residual max etc."
+  },
+  {
+   "name": "desc_raw_X3_mean",
+   "description": "Panel A raw X3 FDI mean 77.057 SD66.436",
+   "value": "77.057",
+   "unit": "cum. %GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X3 FDI mean 77.057 raw standardized 0.000 1.000 SD -1.153 min -0.174 median 4.771 max 1.745 skew 7.455 kurt Panel B X3 0.000 1.000 -1.153 -0.174 4.771 1.745 7.455 and raw SD66.436 min0.474 median65.521 max393.995 and per country Bulgaria112.28 Czechia77.90 Estonia120.28 Croatia58.66 Latvia65.55 Lithuania54.15 Hungary168.86 Poland52.81 Romania52.83 Slovenia28.32 Slovakia55.97 and contributions X3 Table1 Bulgaria64.3 Czechia57.3 Estonia66.1 Croatia45.2 Latvia47.6 Lithuania42.7 Hungary81.5 Poland44.0 Romania41.8 Slovenia39.3 Slovakia45.2 and beta X3 1997 -0.023 2002 -0.024 2009 -0.032 2013 0.058** 2018 0.014*** 2021 0.006 2024 -0.004 and residual etc."
+  },
+  {
+   "name": "desc_raw_X3_SD",
+   "description": "Panel A raw X3 SD 66.436",
+   "value": "66.436",
+   "unit": "cum. %GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X3 SD 66.436 raw standardized 1.000 SD Panel B X3 1.000 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country X3 means Bulgaria112.28 etc and kappa X3 Table1 and beta X3 and residual SD etc."
+  },
+  {
+   "name": "desc_raw_X4_mean",
+   "description": "Panel A raw X4 Trade mean 115.017 SD34.865",
+   "value": "115.017",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X4 Trade mean 115.017 raw standardized 0.000 1.000 SD -2.050 min 0.037 median 2.550 max 0.113 skew 2.117 kurt Panel B X4 0.000 1.000 -2.050 0.037 2.550 0.113 2.117 and raw SD34.865 min43.555 median116.296 max203.929 and per country Bulgaria106.15 Czechia121.19 Estonia143.69 Croatia83.97 Latvia110.24 Lithuania123.34 Hungary142.65 Poland80.37 Romania69.91 Slovenia130.35 Slovakia153.33 and contributions X4 Table1 Bulgaria16.6 Czechia20.2 Estonia16.8 Croatia21.4 Latvia14.9 Lithuania13.8 Hungary16.5 Poland17.5 Romania17.1 Slovenia19.5 Slovakia13.5 and beta X4 1997 0.021*** 2002 0.025 2009 -0.062 2013 -0.015 2018 -0.022*** 2021 -0.035 2024 0.014 and residual etc."
+  },
+  {
+   "name": "desc_raw_X4_SD",
+   "description": "Panel A raw X4 SD 34.865",
+   "value": "34.865",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X4 SD 34.865 raw standardized 1.000 SD Panel B X4 1.000 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country X4 means and kappa X4 Table1 and beta X4 and residual SD etc."
+  },
+  {
+   "name": "desc_raw_X5_mean",
+   "description": "Panel A raw X5 GCF mean 378.169 SD216.927",
+   "value": "378.169",
+   "unit": "cum. %GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X5 GCF mean 378.169 raw standardized 0.000 1.000 SD -1.700 min 0.041 median 2.151 max 0.032 skew 1.917 kurt Panel B X5 0.000 1.000 -1.700 0.041 2.151 0.032 1.917 and raw SD216.927 min16.081 median387.136 max844.834 and per country Bulgaria311.62 Czechia450.38 Estonia446.48 Croatia334.41 Latvia404.67 Lithuania333.37 Hungary379.82 Poland327.43 Romania355.71 Slovenia390.00 Slovakia425.96 and contributions X5 Table1 Bulgaria-2.5 Czechia9.7 Estonia-0.9 Croatia4.9 Latvia-5.3 Lithuania6.2 Hungary5.9 Poland7.1 Romania1.2 Slovenia9.3 Slovakia5.9 and beta X5 1997 0.166*** 2002 -0.002 2009 0.044 2013 -0.029** 2018 -0.009*** 2021 -0.020** 2024 -0.003 and residual etc."
+  },
+  {
+   "name": "desc_raw_X5_SD",
+   "description": "Panel A raw X5 SD 216.927",
+   "value": "216.927",
+   "unit": "cum. %GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X5 SD 216.927 raw standardized 1.000 SD Panel B X5 1.000 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country X5 means and kappa X5 Table1 and beta X5 and residual SD etc."
+  },
+  {
+   "name": "desc_raw_X6_mean",
+   "description": "Panel A raw X6 Gov Debt mean 38.370 SD21.711",
+   "value": "38.370",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X6 Gov Debt mean 38.370 raw standardized 0.000 1.000 SD -1.588 min -0.045 median 2.793 max 0.492 skew 2.511 kurt Panel B X6 0.000 1.000 -1.588 -0.045 2.793 0.492 2.511 and raw SD21.711 min3.900 median37.400 max99.000 and per country Bulgaria37.91 Czechia30.03 Estonia9.02 Croatia53.19 Latvia28.25 Lithuania28.58 Hungary69.31 Poland47.48 Romania27.75 Slovenia46.12 Slovakia44.43 and contributions X6 Table1 Bulgaria5.8 Czechia14.6 Estonia21.3 Croatia-1.4 Latvia9.2 Lithuania8.7 Hungary-9.5 Poland-0.5 Romania10.8 Slovenia8.8 Slovakia4.3 and beta X6 1997 -0.002 2002 0.014 2009 0.225* 2013 -0.042** 2018 -0.021*** 2021 -0.009 2024 -0.021 and residual etc."
+  },
+  {
+   "name": "desc_raw_X6_SD",
+   "description": "Panel A raw X6 SD 21.711",
+   "value": "21.711",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X6 SD 21.711 raw standardized 1.000 SD Panel B X6 1.000 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country X6 means and kappa X6 Table1 and beta X6 and residual SD etc."
+  },
+  {
+   "name": "desc_raw_X7_mean",
+   "description": "Panel A raw X7 Private debt mean 69.996 SD28.545",
+   "value": "69.996",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X7 Private debt mean 69.996 raw standardized 0.000 1.000 SD -2.105 min -0.056 median 2.687 max 0.334 skew 2.610 kurt Panel B X7 0.000 1.000 -2.105 -0.056 2.687 0.334 2.610 and raw SD28.545 min9.900 median68.400 max146.700 and per country Bulgaria80.52 Czechia69.57 Estonia92.47 Croatia82.52 Latvia72.23 Lithuania50.21 Hungary76.33 Poland56.14 Romania49.51 Slovenia74.01 Slovakia66.46 and contributions X7 Table1 Bulgaria-84.7 Czechia-52.7 Estonia-93.0 Croatia-80.0 Latvia-75.8 Lithuania-39.2 Hungary-70.5 Poland-41.3 Romania-42.7 Slovenia-66.2 Slovakia-48.3 and beta X7 1997 -0.082*** 2002 0.069 2009 0.009 2013 -0.125** 2018 -0.068*** 2021 -0.012 2024 0.039 and residual etc."
+  },
+  {
+   "name": "desc_raw_X7_SD",
+   "description": "Panel A raw X7 SD 28.545",
+   "value": "28.545",
+   "unit": "%GDP",
+   "kind": "estimate",
+   "where": "Table descrptstats Panel A X7 SD 28.545 raw standardized 1.000 SD Panel B X7 1.000 and raw means 62.492 59.906 77.057 115.017 378.169 38.370 69.996 SDs 17.035 13.704 66.436 34.865 216.927 21.711 28.545 minima 26.000 20.300 0.474 43.555 16.081 3.900 9.900 maxima 96.000 91.800 393.995 203.929 844.834 99.000 146.700 medians 63.000 60.500 65.521 116.296 387.136 37.400 68.400 skew -0.209 -0.253 1.745 0.113 0.032 0.492 0.334 kurt 2.129 2.690 7.455 2.117 1.917 2.511 2.610 and per country X7 means and kappa X7 Table1 and beta X7 and residual SD etc."
+  },
+  {
+   "name": "country_Bulgaria_X1_mean",
+   "description": "Bulgaria X1 mean",
+   "value": "43.59",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table countrystats Bulgaria X1 mean 43.59 SD10.39 T29"
+  },
+  {
+   "name": "country_Bulgaria_X1_SD",
+   "description": "Bulgaria X1 SD",
+   "value": "10.39",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table countrystats Bulgaria X1 SD 10.39 in parentheses below mean 43.59 T29"
+  },
+  {
+   "name": "country_Czechia_X1_mean",
+   "description": "Czechia X1 mean",
+   "value": "84.10",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table countrystats Czechia X1 mean 84.10 SD6.46 T29"
+  },
+  {
+   "name": "country_Estonia_X1_mean",
+   "description": "Estonia X1 mean",
+   "value": "64.55",
+   "unit": "PPS EU27=100",
+   "kind": "estimate",
+   "where": "Table countrystats Estonia X1 mean 64.55 SD16.69 T29"
+  },
+  {
+   "name": "country_Lithuania_Delta_y_mean",
+   "description": "Lithuania Δy mean 1.86 SD2.37",
+   "value": "1.86",
+   "unit": "PPS EU27=100 change",
+   "kind": "estimate",
+   "where": "Table countrystats Lithuania Δy mean 1.86 SD2.37 T29"
+  },
+  {
+   "name": "country_Poland_Delta_y_mean",
+   "description": "Poland Δy mean 1.21 SD1.42",
+   "value": "1.21",
+   "unit": "PPS EU27=100 change",
+   "kind": "estimate",
+   "where": "Table countrystats Poland Δy mean 1.21 SD1.42 T29"
+  },
+  {
+   "name": "corr_X1_X2",
+   "description": "pooled correlation X1 X2 0.801*** highest correlation for pair X1 X2, n=319",
+   "value": "0.801",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr row X2 column X1 0.801***"
+  },
+  {
+   "name": "corr_X1_X3",
+   "description": "pooled correlation X1 X3 0.349***",
+   "value": "0.349",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr X1 X3 0.349***"
+  },
+  {
+   "name": "corr_X4_X5",
+   "description": "pooled correlation X4 X5 0.638***",
+   "value": "0.638",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr X4 X5 0.638*** X5 shows strong correlation with all others, X4 X5 0.638***"
+  },
+  {
+   "name": "corr_X6_X7",
+   "description": "pooled correlation X6 X7 0.054",
+   "value": "0.054",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Table corr X6 X7 0.054 not significant, lowest correlation pair X6 X7"
+  },
+  {
+   "name": "VIF_low",
+   "description": "VIF low 1.1",
+   "value": "1.1",
+   "unit": "VIF",
+   "kind": "estimate",
+   "where": "Section Data VIFs range 1.1 to 4.0 mean 2.6 below threshold 5 no harmful multicollinearity"
+  },
+  {
+   "name": "VIF_high",
+   "description": "VIF high 4.0",
+   "value": "4.0",
+   "unit": "VIF",
+   "kind": "estimate",
+   "where": "Section Data VIFs range 1.1 to 4.0 mean 2.6"
+  },
+  {
+   "name": "VIF_mean",
+   "description": "VIF mean 2.6",
+   "value": "2.6",
+   "unit": "VIF",
+   "kind": "estimate",
+   "where": "Section Data mean 2.6 VIF mean"
+  },
+  {
+   "name": "resid_pooled_mean",
+   "description": "pooled residuals mean 0.000",
+   "value": "0.000",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled residuals mean 0.000 SD0.747 median0.013 skew0.037 kurt4.549 Q25-0.359 Q75 0.372 IQR0.731 RMSE/MAE1.402"
+  },
+  {
+   "name": "resid_pooled_SD",
+   "description": "pooled residuals SD 0.747",
+   "value": "0.747",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled SD 0.747"
+  },
+  {
+   "name": "resid_pooled_median",
+   "description": "pooled residuals median 0.013",
+   "value": "0.013",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled median 0.013"
+  },
+  {
+   "name": "resid_pooled_skew",
+   "description": "pooled residuals skew 0.037",
+   "value": "0.037",
+   "unit": "skewness",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled skew 0.037 moderate skew"
+  },
+  {
+   "name": "resid_pooled_kurt",
+   "description": "pooled residuals kurt 4.549 vs 3 Normal",
+   "value": "4.549",
+   "unit": "kurtosis",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled kurt 4.549 vs 3 Normal indicating deviation"
+  },
+  {
+   "name": "resid_pooled_Q25",
+   "description": "pooled residuals Q25 -0.359",
+   "value": "-0.359",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled Q25 -0.359"
+  },
+  {
+   "name": "resid_pooled_Q75",
+   "description": "pooled residuals Q75 0.372",
+   "value": "0.372",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled Q75 0.372 |Q25|≈Q75 symmetry"
+  },
+  {
+   "name": "resid_pooled_IQR",
+   "description": "pooled residuals IQR 0.731",
+   "value": "0.731",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled IQR 0.731 Q75-Q25"
+  },
+  {
+   "name": "resid_pooled_RMSE_MAE",
+   "description": "pooled RMSE/MAE 1.402 vs 1.25 Normal",
+   "value": "1.402",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel A pooled RMSE/MAE 1.402 deviating from 1.25 Normal"
+  },
+  {
+   "name": "resid_pooled_IQR_SD_ratio",
+   "description": "pooled IQR/SD 0.98 vs 1.35 Normal",
+   "value": "0.98",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Results IQR/SD ratio 0.98 below 1.35 indicates tail deviations"
+  },
+  {
+   "name": "JB_pvalue",
+   "description": "Jarque-Bera p=0.0172 significant 5%",
+   "value": "0.0172",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Results Jarque-Bera p-value 0.0172 significant at 5% normality departure"
+  },
+  {
+   "name": "resid_Czechia_mean",
+   "description": "Czechia residuals mean 0.192 SD0.492",
+   "value": "0.192",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel B Czechia mean 0.192 SD0.492 median0.145"
+  },
+  {
+   "name": "resid_Czechia_SD",
+   "description": "Czechia SD 0.492",
+   "value": "0.492",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel B Czechia SD0.492"
+  },
+  {
+   "name": "resid_Latvia_mean",
+   "description": "Latvia mean -0.207 SD0.654",
+   "value": "-0.207",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel B Latvia mean -0.207 SD0.654 median-0.124"
+  },
+  {
+   "name": "resid_Latvia_SD",
+   "description": "Latvia SD 0.654",
+   "value": "0.654",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel B Latvia SD0.654"
+  },
+  {
+   "name": "resid_Poland_SD",
+   "description": "Poland SD 1.275 largest",
+   "value": "1.275",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel B Poland SD1.275 largest country variance"
+  },
+  {
+   "name": "resid_Hungary_SD",
+   "description": "Hungary SD 0.407 smallest",
+   "value": "0.407",
+   "unit": "residual",
+   "kind": "estimate",
+   "where": "Table statresiduals Panel B Hungary SD0.407 smallest country variance"
+  },
+  {
+   "name": "resid_variance_ratio",
+   "description": "variance ratio 9.8",
+   "value": "9.8",
+   "unit": "variance ratio",
+   "kind": "estimate",
+   "where": "Results ratio largest to smallest country variance (1.275/0.407)^2 ≈9.8 almost certainly rejects equal-variance null"
+  },
+  {
+   "name": "bartlett_B",
+   "description": "Bartlett B=193.09",
+   "value": "193.09",
+   "unit": "Bartlett B statistic",
+   "kind": "estimate",
+   "where": "Results Bartlett test B=193.09 df=28 p<0.001 heteroskedasticity"
+  },
+  {
+   "name": "bartlett_df",
+   "description": "Bartlett df 28",
+   "value": "28",
+   "unit": "degrees of freedom",
+   "kind": "parameter",
+   "where": "Results Bartlett df=28 for 29 yearly cross-sections"
+  },
+  {
+   "name": "bartlett_p",
+   "description": "Bartlett p<0.001",
+   "value": "< 0.001",
+   "unit": "p-value",
+   "kind": "estimate",
+   "where": "Results Bartlett p<0.001 confirming substantial time-wise heteroskedasticity spikes 2008-09 2020"
+  },
+  {
+   "name": "median_deviation_percent_SD",
+   "description": "median deviation 1.7% of SD",
+   "value": "1.7",
+   "unit": "percent of SD",
+   "kind": "estimate",
+   "where": "Results median deviates from zero only by 1.7% of SD"
+  },
+  {
+   "name": "alpha_1997",
+   "description": "α 1997 -5.799*** SE0.407",
+   "value": "-5.799",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α_t 1997 -5.799*** SE0.407"
+  },
+  {
+   "name": "alpha_1997_SE",
+   "description": "α 1997 SE 0.407",
+   "value": "0.407",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 1997 SE 0.407 parentheses"
+  },
+  {
+   "name": "alpha_2002",
+   "description": "α 2002 0.300",
+   "value": "0.300",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 2002 0.300 SE2.354"
+  },
+  {
+   "name": "alpha_2009",
+   "description": "α 2009 12.081",
+   "value": "12.081",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 2009 12.081 SE5.949"
+  },
+  {
+   "name": "alpha_2013",
+   "description": "α 2013 3.788",
+   "value": "3.788",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 2013 3.788 SE2.053"
+  },
+  {
+   "name": "alpha_2018",
+   "description": "α 2018 7.586***",
+   "value": "7.586",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 2018 7.586*** SE0.477"
+  },
+  {
+   "name": "alpha_2021",
+   "description": "α 2021 16.146**",
+   "value": "16.146",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 2021 16.146** SE3.362"
+  },
+  {
+   "name": "alpha_2024",
+   "description": "α 2024 4.713",
+   "value": "4.713",
+   "unit": "α coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs α 2024 4.713 SE4.429"
+  },
+  {
+   "name": "beta_X1_1997",
+   "description": "β X1 1997 -0.128***",
+   "value": "-0.128",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X1 1997 -0.128*** SE0.007"
+  },
+  {
+   "name": "beta_X1_2002",
+   "description": "β X1 2002 -0.105**",
+   "value": "-0.105",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X1 2002 -0.105** SE0.026"
+  },
+  {
+   "name": "beta_X1_2009",
+   "description": "β X1 2009 0.125",
+   "value": "0.125",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X1 2009 0.125 SE0.108"
+  },
+  {
+   "name": "beta_X1_2013",
+   "description": "β X1 2013 -0.186**",
+   "value": "-0.186",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X1 2013 -0.186** SE0.041"
+  },
+  {
+   "name": "beta_X2_1997",
+   "description": "β X2 1997 0.149***",
+   "value": "0.149",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X2 1997 0.149*** SE0.008"
+  },
+  {
+   "name": "beta_X2_2009",
+   "description": "β X2 2009 -0.526*",
+   "value": "-0.526",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X2 2009 -0.526* SE0.213"
+  },
+  {
+   "name": "beta_X2_2013",
+   "description": "β X2 2013 0.512***",
+   "value": "0.512",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X2 2013 0.512*** SE0.082"
+  },
+  {
+   "name": "beta_X7_1997",
+   "description": "β X7 1997 -0.082***",
+   "value": "-0.082",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X7 1997 -0.082*** SE0.006"
+  },
+  {
+   "name": "beta_X7_2002",
+   "description": "β X7 2002 0.069",
+   "value": "0.069",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X7 2002 0.069 SE0.040"
+  },
+  {
+   "name": "beta_X7_2013",
+   "description": "β X7 2013 -0.125**",
+   "value": "-0.125",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X7 2013 -0.125** SE0.021"
+  },
+  {
+   "name": "beta_X7_2018",
+   "description": "β X7 2018 -0.068***",
+   "value": "-0.068",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X7 2018 -0.068*** SE0.003"
+  },
+  {
+   "name": "beta_X7_2024",
+   "description": "β X7 2024 0.039",
+   "value": "0.039",
+   "unit": "β coefficient",
+   "kind": "estimate",
+   "where": "Table tvcoefs X7 2024 0.039 SE0.033"
+  },
+  {
+   "name": "R2_1997",
+   "description": "R2 1997 0.999",
+   "value": "0.999",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table tvcoefs R2 1997 0.999"
+  },
+  {
+   "name": "R2_2009",
+   "description": "R2 2009 0.886",
+   "value": "0.886",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table tvcoefs R2 2009 0.886"
+  },
+  {
+   "name": "R2_2024",
+   "description": "R2 2024 0.642",
+   "value": "0.642",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table tvcoefs R2 2024 0.642"
+  },
+  {
+   "name": "AdjR2_1997",
+   "description": "AdjR2 1997 0.997",
+   "value": "0.997",
+   "unit": "Adjusted R2",
+   "kind": "estimate",
+   "where": "Table tvcoefs Adjusted R2 1997 0.997"
+  },
+  {
+   "name": "AdjR2_2024",
+   "description": "AdjR2 2024 -0.193",
+   "value": "-0.193",
+   "unit": "Adjusted R2",
+   "kind": "estimate",
+   "where": "Table tvcoefs Adjusted R2 2024 -0.193"
+  },
+  {
+   "name": "ResidSD_1997",
+   "description": "Residual SD 1997 0.162",
+   "value": "0.162",
+   "unit": "Residual SD",
+   "kind": "estimate",
+   "where": "Table tvcoefs Residual SD 1997 0.162"
+  },
+  {
+   "name": "ResidSD_2009",
+   "description": "Residual SD 2009 2.109",
+   "value": "2.109",
+   "unit": "Residual SD",
+   "kind": "estimate",
+   "where": "Table tvcoefs Residual SD 2009 2.109 spike crisis"
+  },
+  {
+   "name": "ResidSD_2024",
+   "description": "Residual SD 2024 1.021",
+   "value": "1.021",
+   "unit": "Residual SD",
+   "kind": "estimate",
+   "where": "Table tvcoefs Residual SD 2024 1.021"
+  },
+  {
+   "name": "Fstat_1997",
+   "description": "F 1997 428.1",
+   "value": "428.1",
+   "unit": "F-statistic",
+   "kind": "estimate",
+   "where": "Table tvcoefs F-statistic 1997 428.1"
+  },
+  {
+   "name": "Fstat_2009",
+   "description": "F 2009 3.331",
+   "value": "3.331",
+   "unit": "F-statistic",
+   "kind": "estimate",
+   "where": "Table tvcoefs F-statistic 2009 3.331"
+  },
+  {
+   "name": "Fstat_2024",
+   "description": "F 2024 0.769",
+   "value": "0.769",
+   "unit": "F-statistic",
+   "kind": "estimate",
+   "where": "Table tvcoefs F-statistic 2024 0.769"
+  },
+  {
+   "name": "kappa_Total_Bulgaria_2024",
+   "description": "Total Bulgaria 64.2",
+   "value": "64.2",
+   "unit": "PPS EU27=100 component",
+   "kind": "estimate",
+   "where": "Table1 Total Bulgaria 64.2"
+  },
+  {
+   "name": "kappa_X2_Bulgaria_2024",
+   "description": "X2 Bulgaria 143.0",
+   "value": "143.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X2 Bulgaria 143.0"
+  },
+  {
+   "name": "kappa_X7_Bulgaria_2024",
+   "description": "X7 Bulgaria -84.7",
+   "value": "-84.7",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Bulgaria -84.7"
+  },
+  {
+   "name": "kappa_X1_Bulgaria_2024",
+   "description": "X1 Bulgaria -78.2",
+   "value": "-78.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X1 Bulgaria -78.2"
+  },
+  {
+   "name": "kappa_X7_Czechia_2024",
+   "description": "X7 Czechia -52.7",
+   "value": "-52.7",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Czechia -52.7"
+  },
+  {
+   "name": "kappa_X7_Estonia_2024",
+   "description": "X7 Estonia -93.0",
+   "value": "-93.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Estonia -93.0 most negative"
+  },
+  {
+   "name": "kappa_X7_Latvia_2024",
+   "description": "X7 Latvia -75.8",
+   "value": "-75.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Latvia -75.8"
+  },
+  {
+   "name": "kappa_X7_Lithuania_2024",
+   "description": "X7 Lithuania -39.2 main headline minimal drag",
+   "value": "-39.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Lithuania -39.2 least negative success"
+  },
+  {
+   "name": "kappa_X7_Poland_2024",
+   "description": "X7 Poland -41.3",
+   "value": "-41.3",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Poland -41.3"
+  },
+  {
+   "name": "kappa_X7_Romania_2024",
+   "description": "X7 Romania -42.7",
+   "value": "-42.7",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Romania -42.7"
+  },
+  {
+   "name": "kappa_X7_Slovenia_2024",
+   "description": "X7 Slovenia -66.2",
+   "value": "-66.2",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Slovenia -66.2"
+  },
+  {
+   "name": "kappa_X7_Slovakia_2024",
+   "description": "X7 Slovakia -48.3",
+   "value": "-48.3",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 X7 Slovakia -48.3"
+  },
+  {
+   "name": "kappa_Total_Lithuania_2024",
+   "description": "Total Lithuania 86.5",
+   "value": "86.5",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Total Lithuania 86.5 highest total"
+  },
+  {
+   "name": "kappa_Total_Estonia_2024",
+   "description": "Total Estonia 79.8",
+   "value": "79.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 Total Estonia 79.8"
+  },
+  {
+   "name": "accum_error_Bulgaria_2024",
+   "description": "accum error Bulgaria 2024 1.8",
+   "value": "1.8",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 e accum Bulgaria 1.8"
+  },
+  {
+   "name": "accum_error_Czechia_2024",
+   "description": "accum error Czechia 5.6",
+   "value": "5.6",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 e accum Czechia 5.6 higher"
+  },
+  {
+   "name": "accum_error_Latvia_2024",
+   "description": "accum error Latvia -6.0",
+   "value": "-6.0",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 e accum Latvia -6.0 higher"
+  },
+  {
+   "name": "accum_error_Lithuania_2024",
+   "description": "accum error Lithuania 1.5",
+   "value": "1.5",
+   "unit": "PPS",
+   "kind": "estimate",
+   "where": "Table1 e accum Lithuania 1.5"
+  }
+ ],
+ "headline": "kappa_X7_Lithuania_2024",
+ "partitions": [
+  {
+   "split": "by_country_pooled319",
+   "total": "count_total_pooled_n",
+   "parts": [
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years",
+    "count_T_years"
+   ]
+  },
+  {
+   "split": "by_year_crosssection_N11",
+   "total": "count_total_pooled_n",
+   "parts": [
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries",
+    "count_N_countries"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Bartlett heteroskedasticity equal variances across 29 yearly cross-sections",
+   "statistic": "bartlett_B",
+   "p_value": "bartlett_p",
+   "group_sizes": [
+    "count_total_pooled_n",
+    "count_T_years",
+    "count_N_countries",
+    "bartlett_df"
+   ]
+  },
+  {
+   "test": "Jarque-Bera normality pooled residuals",
+   "statistic": "resid_pooled_kurt",
+   "p_value": "JB_pvalue",
+   "group_sizes": [
+    "count_total_pooled_n",
+    "count_T_years"
+   ]
+  }
+ ]
+}

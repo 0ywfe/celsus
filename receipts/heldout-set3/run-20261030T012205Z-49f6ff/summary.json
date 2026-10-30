@@ -1,0 +1,59 @@
+{
+ "run_id": "run-20261030T012205Z-49f6ff",
+ "paper": "2604.26063",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 26 of 45 checked results match within their uncertainty. Its main result, QQQ_VPMACD_totalPnL, is 8.832e+04 USD in the paper and 4.312e+04 USD here (not consistent).",
+ "headline": {
+  "name": "QQQ_VPMACD_totalPnL",
+  "kind": "estimate",
+  "unit": "USD",
+  "reported": 88324.48,
+  "reproduced": 43119.45547294925,
+  "se": 5888.340507691979,
+  "n": 20,
+  "consistent": false,
+  "why": "paper outside 4.312e+04 +/- 1.154e+04"
+ },
+ "sample": [
+  {
+   "name": "training_observations_per_instrument",
+   "reported": 1259.0,
+   "reproduced": 1259.0,
+   "consistent": true
+  },
+  {
+   "name": "testing_observations_per_instrument",
+   "reported": 791.0,
+   "reproduced": 791.0,
+   "consistent": true
+  },
+  {
+   "name": "number_of_indices",
+   "reported": 3.0,
+   "reproduced": 3,
+   "consistent": null
+  },
+  {
+   "name": "strategies_per_index",
+   "reported": 3.0,
+   "reproduced": 3,
+   "consistent": null
+  }
+ ],
+ "judged": 45,
+ "matched": 26,
+ "rejections": [],
+ "rounds": 1,
+ "packages": [],
+ "calls": 27,
+ "cost_usd": 0.7172,
+ "tokens_in": 1225517,
+ "tokens_out": 91002,
+ "wall_s": 1860.6,
+ "crashed": null
+}

@@ -1,0 +1,62 @@
+exit 0 in 93.0s
+--- stdout
+Calibration beta 0.99 chi 0.03 omega 0.6 trees 500 leaf 30
+Downloading PWT
+PWT (12810, 52) years 1950-2019
+PWT panel 1970-2019 rows 1650 rgdpe_pc valid 1530 growth valid 1497
+Fetching WDI mechanisms
+WDI df (1641, 9) years 1970-2023 sample [{'countrycode': 'AUT', 'iso2': 'AT', 'year': 1970, 'cons_growth': nan, 'invest_growth': nan, 'net_exports_gdp': -0.0771838338370167, 'ca_gdp': nan, 'exp_gdp': 27.4994677453694, 'imp_gdp': 27.5766515792064}]
+Merged (1782, 19) D_it sum 318
+Eurozone rgdpe_pc mean 28623.4 growth 2.77 openness 89.6
+Control rgdpe_pc mean 33883.3 growth 2.33 openness 63.5
+Balance 1995 founders 30501.9 EU3 30154.3 diff 347.6
+Median 30225.6 high ['AUT', 'DEU', 'ITA', 'LUX', 'NLD'] n 5 low ['BEL', 'ESP', 'FIN', 'FRA', 'IRL', 'PRT'] n 6
+Main k0 2.5732784831702693 0.863090973815504
+Avg post 0.460
+Cum 5 3.02
+Cum 10 5.81
+Cum 15 4.21
+Cum 20 9.97
+high k10 0.020 se 1.919
+low k10 0.637 se 2.086
+early k10 0.357 se 1.804
+late k10 -0.722 se 2.768
+het_df (19, 6)
+Imports 0.168 0.158 0.177 0.301 0.196
+Mechanism cons k0 1.161 k20 -0.680 avg_post -0.908
+Mechanism invest k0 6.471 k20 11.231 avg_post 0.526
+Mechanism netexp k0 1.526 k20 0.225 avg_post 2.568
+Mechanism ca k0 -0.462 k20 -3.888 avg_post -0.871
+Mechanism prod k0 0.354 k20 0.196 avg_post -0.185
+Mechanism tfp k0 -0.379 k20 -1.701 avg_post -0.761
+Counterfactual Denmark 0.458
+Counterfactual Sweden 0.404
+Counterfactual UK 0.288
+EU only avg -0.472
+Placebo 1995 ate 846995230544.391 n 44 1997 -2173042742648.589 n 22
+Placebo non-euro {'DNK': np.float64(1.5520904567010518), 'SWE': np.float64(1.5458653504169826), 'GBR': np.float64(0.40130774463954744)}
+LOO {'AUT': np.float64(0.49049420090177104), 'BEL': np.float64(0.44092249798316746), 'FIN': np.float64(0.5183305951558119), 'FRA': np.float64(0.4789681349978657), 'DEU': np.float64(0.4822434893845107), 'IRL': np.float64(0.251817456103019), 'ITA': np.float64(0.6204334220410185), 'LUX': np.float64(0.4047551834148057), 'NLD': np.float64(0.4492629380768385), 'PRT': np.float64(0.5122460141812248), 'ESP': np.float64(0.4491146572145738), 'GRC': np.float64(0.5415668746052092), 'SVN': np.float64(0.46763452717535425), 'CYP': np.float64(0.59649873117696), 'MLT': np.float64(0.4756970481932956), 'SVK': np.float64(0.42965510101175025), 'EST': np.float64(0.4122076116498441), 'LVA': np.float64(0.42883041065217026), 'LTU': np.float64(0.4855237288200717), 'HRV': np.float64(0.5466910730026241)}
+Bootstrap mean 0.361 sd 0.482
+Anticipation {1995: np.float64(0.6822108202973913), 1997: np.float64(0.8592230711143661), 1999: np.float64(0.45997304573946574)}
+Wrote 129 results
+Done
+
+--- stderr
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})
+/work/replicate.py:172: SingularMatrixWarning: The design matrix is rank-deficient. The model parameters are not uniquely determined.
+  res=model.fit(cov_type='cluster', cov_kwds={'groups': groups})

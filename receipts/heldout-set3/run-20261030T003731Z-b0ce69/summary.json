@@ -1,0 +1,33 @@
+{
+ "run_id": "run-20261030T003731Z-b0ce69",
+ "paper": "2602.04060",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the run stopped (BudgetExceeded)",
+ "first_line": "We could not check this paper: the run stopped (BudgetExceeded). This says nothing about whether its numbers hold.",
+ "headline": null,
+ "sample": [],
+ "judged": 0,
+ "matched": 0,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (bias_illustration_bias (_0.803) at line 861, bias_illustration_phat (_0.9907) at line 862, nber_us_cycle_years (_6.25) at line 866). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "et_xmlfile==2.0.0",
+  "openpyxl==3.1.5",
+  "xlrd==2.0.2"
+ ],
+ "calls": 61,
+ "cost_usd": 2.0012,
+ "tokens_in": 7512001,
+ "tokens_out": 141806,
+ "wall_s": 2108.9,
+ "crashed": "BudgetExceeded: spent $2.0012 of a $2.0000 budget"
+}

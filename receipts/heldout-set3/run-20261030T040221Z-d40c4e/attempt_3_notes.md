@@ -1,0 +1,3 @@
+Fixed: removed non-numeric `main_logcpi_inc_star` result (`value='***'` violated numeric-value requirement). Re-ran `replicate.py` from scratch in sandbox; `/work/results.json` now contains only numeric `value` fields (87 results, all `int/float`), fresh sandbox re-run succeeds.
+
+Headline replicated from live World Bank vintage: `main_logcpi_inc_att 0.076 (≈7.9%, SE 0.0068, p<0.01)` vs paper 0.072, confirming price boomerang; all counts derived from data (133 countries vs paper 129 due to vintage) with `same_as_paper false` documented.

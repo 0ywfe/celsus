@@ -1,0 +1,88 @@
+{
+ "run_id": "run-20261030T012250Z-26e553",
+ "paper": "2512.08000",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 6 of 6 checked results match within their uncertainty. Its main result, period3_A00, is 1.161 . in the paper and -0.1045 . here (not judged: no standard error).",
+ "headline": {
+  "name": "period3_A00",
+  "kind": "estimate",
+  "unit": ".",
+  "reported": 1.161,
+  "reproduced": -0.10447409079514873,
+  "se": null,
+  "n": 172,
+  "consistent": null,
+  "why": "no standard error"
+ },
+ "sample": [
+  {
+   "name": "shanghai_count",
+   "reported": 2452.0,
+   "reproduced": 2456.0,
+   "consistent": true
+  },
+  {
+   "name": "shenzhen_count",
+   "reported": 2452.0,
+   "reproduced": 2456.0,
+   "consistent": true
+  },
+  {
+   "name": "chinext_count",
+   "reported": 2452.0,
+   "reproduced": 2456.0,
+   "consistent": true
+  },
+  {
+   "name": "train_size",
+   "reported": 2084.0,
+   "reproduced": 2087.0,
+   "consistent": true
+  },
+  {
+   "name": "val_size",
+   "reported": 368.0,
+   "reproduced": 369.0,
+   "consistent": true
+  },
+  {
+   "name": "csi_consumer_count",
+   "reported": 2452.0,
+   "reproduced": 2456.0,
+   "consistent": true
+  },
+  {
+   "name": "csi_healthcare_count",
+   "reported": 2452.0,
+   "reproduced": 2456.0,
+   "consistent": true
+  },
+  {
+   "name": "csi_finre_count",
+   "reported": 2452.0,
+   "reproduced": 2456.0,
+   "consistent": true
+  }
+ ],
+ "judged": 6,
+ "matched": 6,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (shanghai_mu0 (0.024) at line 611, shanghai_mu1 (0.044) at line 612, shanghai_A00 (0.382) at line 613, shanghai_A01 (0.387) at line 614, shanghai_A10 (0.218) at line 615, shanghai_A11 (0.343) at line 616, shenzhen_mu0 (0.038) at line 627, shenzhen_mu1 (0.047) at line 628, shenzhen_A00 (0.175) at line 629, shenzhen_A01 (0.451) at line 630, shenzhen_A10 (0.155) at line 631, shenzhen_A11 (0.381) at line 632, chinext_mu0 (0.034) at line 643, chinext_A00 (0.28) at line 645, chinext_A01 (0.385) at line 646, chinext_A10 (0.154) at line 647, chinext_A11 (0.348) at line 648, period3_omega (0.702) at line 685). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 48,
+ "cost_usd": 1.2502,
+ "tokens_in": 2848987,
+ "tokens_out": 136703,
+ "wall_s": 1195.7,
+ "crashed": null
+}

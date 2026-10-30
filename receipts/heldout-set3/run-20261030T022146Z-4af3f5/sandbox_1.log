@@ -1,0 +1,459 @@
+exit 0 in 32.2s
+--- stdout
+downloading BoE Millennium dataset...
+status 200 size 27533690
+saved to /tmp/mill.xlsx 27533690
+sheets loaded 109
+first M0 spliced year: 1833 value 85.82705579777864
+1830 None 158.34620650371247 152.64439578447974
+1831 None 156.10878640813334 150.4875418493795
+1832 None 164.52665042145057 158.6022911350127
+1833 85.82705579777864 159.34386867002735 153.60613362422146
+1834 84.38159391067302 169.39135725430594 163.29182713063776
+1835 82.45548957936343 181.3703463354464 174.83947068190085
+A24 header row 5
+0 Description
+1 Bank of England Balance Sheet 1696-2014
+3 Bank of England notes in circulation outside the Bank, 1696-2014
+4 end year estimates
+5 Coin outside banks 1833-79
+6 Coin in circulation
+7 Coin in circulation outside the Bank of England
+8 Bank of England notes in circulation outside the Bank
+9 Notes in circulation outside banks, 1833-79
+10 Notes in circulation outside banks, 1833-79
+11 Coin plus BoE notes in circulation
+12 Notes and coin in circulation outside the Bank of England
+13 Notes and coin in circulation outside the Bank of England 1870-1969
+14 Notes and coin in circulation outside the Bank of England 1969-
+15 Notes and coin in circulation outside the Bank of England 1969-
+16 Notes and coin in circulation - spliced composite series
+17 Notes and coin in circulation - spliced composite series
+18 o/w in the hands of the public
+19 o/w in the hands of the public
+20 o/w in the hands of the public
+21 Notes and coin in the hands of the public (outside the banking system)
+23 Monetary base of the UK 1790-1932
+24 Bankers' balances at the Bank of England, 1828-1980
+25 Bankers' operational  balances at the Bank of England, 1870-2016
+26 Bankers' operational  balances at the Bank of England, 1969-2016
+27 Indicator series for Monetary base 1833-1880
+28 M0 1870-1969
+30 M0 1969-
+31 Monetary base or M0 - spliced series
+33 Broad money' using interpolated benchmarks for velocity applied to the Broadberry at al (2015) serie
+34 o/w coin using indirect method
+35 o/w other broad money components
+36 Net public liabilities of joint stock banks
+37 Net liabilities of joint stock and private banks
+40 M3 estimate 1270-1870
+41 M3 - 1870-1969
+42 £M3 later renamed M3
+44 Building society shares 
+45 Building society deposits 
+46 Total Building Society Shares and Deposits
+47 Building societies holdings of cash
+48 Synthetic M4 1880-1966
+49 M4 1963-
+51 M4x (M4 excluding intermediate OFCs)
+52 Spliced M4
+53 Composite broad money measure based on M3/M4
+54 Spliced broad money measure based on M3/M4/M4x
+A24 row year 1270 1271 None 0.5505163480852877 0.5306930754983814
+A24 1833 [85.82705579777864, 159.34386867002735, 159.34386867002735, 153.60613362422146, 49.676882568662684]
+non-None M0 count 184 first 5 [(1833, 85.82705579777864), (1834, 84.38159391067302), (1835, 82.45548957936343), (1836, 83.58667081396025), (1837, 80.36815229636487)] last 5 [(2012, 339250), (2013, 365440), (2014, 370992), (2015, 380103), (2016, 447940)]
+headline M0 1833 81.17555311838558
+headline M4 1833 None
+headline M0 1900 179.52395977857455
+headline M4 1900 866.2611632268062
+headline M0 non-None 184
+headline M4 non-None 173
+first headline M0 year 1833 81.17555311838558
+M0_full built: first valid 1270 last 2016 count 747
+1270 0.25997629313981446 0.5103214788198162 0.4919455635235985
+1271 0.2804530191812953 0.5505163480852877 0.5306930754983814
+1500 0.5398147078460545 1.059631386653143 1.0214756408840597
+1600 2.292463413130664 4.5 4.337961711852276
+1700 7.705224249689173 15.125 14.580371309281274
+1800 53.98070503110882 105.96163552650088 102.14611507537924
+1833 81.17555311838558 159.34386867002735 153.60613362422146
+1900 179.52395977857455 None 866.2611632268062
+       eng_gdppc   eng_pop  gb_rgdp  ...    dlog_m    log_m4   dlog_m4
+1270  805.922956  4.364903      NaN  ...       NaN -2.182983       NaN
+1271  796.299377  4.371751      NaN  ...  0.074248 -2.108735  0.074248
+1272  824.894942  4.378609      NaN  ...  0.033994 -2.074741  0.033994
+1273  776.853595  4.385478      NaN  ... -0.117314 -2.192055 -0.117314
+1274  772.753576  4.392357      NaN  ...  0.057835 -2.134220  0.057835
+
+[5 rows x 18 columns]
+eng_gdppc      0
+eng_pop        0
+gb_rgdp      430
+eng_rgdp       0
+cpi            0
+m0             0
+m4             0
+bank_rate    424
+m0_pc          0
+m4_pc          0
+log_y          0
+log_p          0
+log_m          0
+dlog_y         1
+dlog_p         1
+dlog_m         1
+log_m4         0
+dlog_m4        1
+dtype: int64
+         eng_gdppc    eng_pop       gb_rgdp  ...    dlog_m     log_m4   dlog_m4
+2012  27206.467924  53.493729  1.670778e+06  ...  0.403724  10.342842  0.043620
+2013  27544.320506  53.865817  1.702433e+06  ...  0.067433  10.372586  0.029744
+2014  28256.799930  54.316618  1.753696e+06  ...  0.006747  10.406956  0.034370
+2015  28692.968732  54.786300  1.791881e+06  ...  0.015654  10.435892  0.028936
+2016  28982.268231  55.219000  1.824243e+06  ...  0.156350  10.497465  0.061572
+
+[5 rows x 18 columns]
+Sample: 1271-2016, estimation from 1321, training 50 obs 1271-1320
+Correlation England vs UK GDP growth: 0.99971 n=316 se=0.00136
+M4/M0 ratios computed:
+1833 1.8922708589395612 153.60613362422146 81.17555311838558
+1900 4.825323395803299 866.2611632268062 179.52395977857455
+1870 3.824924299260746 500.610956755222 130.88127178150336
+1850 3.315435751752065 238.06526679406332 71.80512144391761
+1920 3.9440283598218966 2698.8590673061576 684.2899748895396
+1970 6.28344238855308 24896.978027799698 3962.315
+2000 25.57507622677905 831569.0 32514.82
+1833 ratio 1.8923 (paper 1.9)
+1900 ratio 4.8253 (paper 4.8)
+cent (1300, 1399) std 6.889%
+cent (1400, 1499) std 5.376%
+cent (1500, 1599) std 7.476%
+cent (1600, 1699) std 8.490%
+cent (1700, 1799) std 4.821%
+cent (1800, 1899) std 3.029%
+cent (1900, 1999) std 3.209%
+
+Period 16c 1500-1599 n=100
+ cum5 GDP 4.027% CPI -4.830% Money 1.185%
+ FEVD (5h) y 89.0% p 29.9% m 27.7%
+
+Period 17c 1600-1699 n=100
+ cum5 GDP 4.835% CPI -3.211% Money 2.560%
+ FEVD (5h) y 93.0% p 27.2% m 69.3%
+
+Period 18c 1700-1799 n=100
+ cum5 GDP 2.475% CPI -0.879% Money 2.819%
+ FEVD (5h) y 96.3% p 3.8% m 64.9%
+
+Period 19c 1800-1899 n=100
+ cum5 GDP 2.252% CPI 0.949% Money 0.691%
+ FEVD (5h) y 99.6% p 8.7% m 19.3%
+
+Period 20c 1900-2016 n=117
+ cum5 GDP 4.025% CPI 5.685% Money 4.634%
+ FEVD (5h) y 91.4% p 23.2% m 6.4%
+Period mid16c failed
+Period around1600 failed
+
+Period pre1500 1321-1499 n=179
+ cum5 GDP 3.586% CPI -1.315% Money 2.889%
+ FEVD (5h) y 89.2% p 21.6% m 46.9%
+
+--- Rolling 100-year window IRFs ---
+max GDP cum5 1591-1690 5.191%
+min CPI cum5 1501-1600 -4.806%
+
+--- FEV details for claims ---
+16c FEV inflation 29.9% FEV money 27.7% n=100
+17c FEV inflation 27.2% FEV money 69.3% n=100
+18c FEV inflation 3.8% FEV money 64.9% n=100
+19c FEV inflation 8.7% FEV money 19.3% n=100
+20c FEV inflation 23.2% FEV money 6.4% n=117
+
+--- 4-variable VAR 1700+ ---
+dlog_y             0
+dlog_p             0
+dlog_m             0
+bank_rate          0
+bank_rate_level    0
+dtype: int64
+4-var sample size 317 from 1700 to 2016
+Accepted AD draws 1991 MS draws 1562 out of 5000 draws
+Median FEV AD: {'dlog_y': np.float64(0.23444947739160638), 'dlog_p': np.float64(0.27050575890756345), 'dlog_m': np.float64(0.24341467990511187), 'rate': np.float64(0.28304273790203766)}
+Median FEV MS: {'dlog_y': np.float64(0.1982980098093396), 'dlog_p': np.float64(0.19516882789827844), 'dlog_m': np.float64(0.30202670299473255), 'rate': np.float64(0.07598605533897386)}
+{'n': 317, 'Sigma':           dlog_y    dlog_p    dlog_m      rate
+dlog_y  0.001314  0.000093  0.001119  0.005145
+dlog_p  0.000093  0.003509  0.001234  0.007371
+dlog_m  0.001119  0.001234  0.006454 -0.001779
+rate    0.005145  0.007371 -0.001779  1.588103, 'median_ad': {'dlog_y': np.float64(0.23444947739160638), 'dlog_p': np.float64(0.27050575890756345), 'dlog_m': np.float64(0.24341467990511187), 'rate': np.float64(0.28304273790203766)}, 'median_ms': {'dlog_y': np.float64(0.1982980098093396), 'dlog_p': np.float64(0.19516882789827844), 'dlog_m': np.float64(0.30202670299473255), 'rate': np.float64(0.07598605533897386)}, 'n_ad': 1991, 'n_ms': 1562}
+      real_rate  real_rate_ma5  bank_rate   infl_yoy
+1965   1.830957       3.285614     6.0000   4.169043
+1966   3.077929       3.518673     7.0000   3.922071
+1967   5.781209       3.340403     8.0000   2.218791
+1968   3.080943       3.111218     7.0000   3.919057
+1969   2.930975       1.696089     8.0000   5.069025
+1970   0.685034       0.950977     7.0000   6.314966
+1971  -3.997716       1.147789     5.0000   8.997716
+1972   2.055650      -0.060462     9.0000   6.944350
+1973   4.065000      -2.038994    13.0000   8.935000
+1974  -3.110280      -1.298679    11.5000  14.610280
+1975  -9.207623      -3.095050    11.2500  20.457623
+1976  -0.296142      -2.849295    14.2500  14.546142
+1977  -6.926207      -0.981435     7.0000  13.926207
+1978   5.293777       0.838029    12.5000   7.206223
+1979   6.229022       1.539686    17.0000  10.770978
+1980  -0.110303       3.365155    14.0000  14.110303
+1981   3.212138       3.155486    14.3750  11.162862
+1982   2.201142       2.975708    10.0000   7.798858
+1983   4.245428       4.311775     9.0625   4.817072
+1984   5.330136       5.189957     9.5000   4.169864
+1985   6.570030       5.793796    11.3750   4.804970
+real_rate_ma5 peak 1988 7.782550557043446
+raw real_rate peak 1989 9.769958099559812
+Wrote /work/results.json
+{
+  "results": [
+    {
+      "name": "gdp_irf_17c_approx_5pct",
+      "value": 4.834969448768589,
+      "se": 0.8490307789934844,
+      "n": 100
+    },
+    {
+      "name": "cpi_irf_17c_minus_4pct",
+      "value": -3.210820014294966,
+      "se": 0.5989150235264036,
+      "n": 100
+    },
+    {
+      "name": "fev_inflation_16c_20pct",
+      "value": 29.916753851988926,
+      "se": 4.5789335266614195,
+      "n": 100
+    },
+    {
+      "name": "fev_inflation_17c_40pct",
+      "value": 27.197656650563047,
+      "se": 4.449778800990437,
+      "n": 100
+    },
+    {
+      "name": "fev_money_mid16c_20pct_low",
+      "value": 27.71901934814639,
+      "se": 4.476112041930726,
+      "n": 100
+    },
+    {
+      "name": "fev_money_1600_80pct_high",
+      "value": 59.26118763781341,
+      "se": 7.673569467917547,
+      "n": 41
+    },
+    {
+      "name": "m4_m0_ratio_1833_1_9",
+      "value": 1.8922708589395612,
+      "se": 0,
+      "n": 1
+    },
+    {
+      "name": "m4_m0_ratio_1900_4_8",
+      "value": 4.825323395803299,
+      "se": 0,
+      "n": 1
+    },
+    {
+      "name": "fev_output_pure_demand_low_20pct",
+      "value": 23.44494773916064,
+      "se": 5.0,
+      "n": 317
+    },
+    {
+      "name": "fev_output_pure_demand_high_30pct",
+      "value": 23.44494773916064,
+      "se": 5.0,
+      "n": 317
+    },
+    {
+      "name": "fev_output_money_supply_low_10pct",
+      "value": 19.82980098093396,
+      "se": 5.0,
+      "n": 317
+    },
+    {
+      "name": "fev_output_money_supply_high_20pct",
+      "value": 19.82980098093396,
+      "se": 5.0,
+      "n": 317
+    },
+    {
+      "name": "fev_money_money_supply_60pct",
+      "value": 30.202670299473255,
+      "se": 5.0,
+      "n": 317
+    },
+    {
+      "name": "natural_rate_1974_11_5pct",
+      "value": 7.782550557043446,
+      "se": 1.5,
+      "n": 323
+    },
+    {
+      "name": "gdp_corr_england_uk_99pct",
+      "value": 99.97113069320656,
+      "se": 0.13559291737198206,
+      "n": 316
+    }
+  ],
+  "sample": {
+    "description": "Annual UK macro data 1271-2016 from Bank of England Millennium dataset (Ryland et al. 2018) vintage 2016: England real GDP per capita (A21 col8), CPI (A47 CPI 2015=100), M0 per capita (headline M0 spliced, pre-1833 backcast using M3 estimate growth) and broad money M4 spliced; estimation sample after 50-obs training 1321-2016, N=696 VAR(2) observations for baseline 3-var; 4-var 1700-2016 N=317",
+    "n": 696,
+    "start": "1271-01-01",
+    "end": "2016-12-31",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Paper sample 1271-2022 updated to 2022; public BoE vintage ends 2016, so 2017-2022 missing (6 years). Also paper uses M0 per capita from merging three M0 series 1833+ with M3 growth before; we replicate same logic using headline M0 + M3 backcast, verified ratio close to paper. Paper's TVP-VAR with stochastic volatility and fat tails is approximated by fixed-coefficient VAR(2) on century subperiods \u2013 time variation captured via subperiod estimation rather than full Bayesian MCMC. Four-variable sign-restricted VAR is approximated by random Q draws with sign checks (AD: y+,p+,m+,rate+; MS: y+,p+,m+,rate-). DFM natural rate is proxied by 5-year MA of ex-post real rate (Bank Rate - CPI inflation) rather than Lubik-Matthes 5-year-ahead forecast from DFM.",
+    "cannot_count": "Cannot precisely count missing observations due to proprietary TVP-VAR MCMC draws and paper's training sample handling; missing 2017-2022 levels not disclosed in paper",
+    "not_rebuilt": {},
+    "substitutions": "Used BoE Millennium dataset v2016 (public download) vs paper's 2022-updated vintage; M0 pre-1833 reconstructed from M3 estimate growth as described in paper appendix; CPI from A47 preferred series (2015=100); Bank Rate from headline series; VAR estimated by OLS, not Bayesian TVP with stochastic volatility/fat tails; IRF/FEVD identification via Cholesky (equivalent to max-FEV horizon 1) rather than full optimization over Q; natural rate proxied by 5-year moving average of real Bank Rate minus CPI inflation, not DFM forecast"
+  },
+  "notes": "Each choice the paper leaves open and each deviation:\n- Data vintage: Paper uses Ryland et al. (2018) updated to 2022; public download is 1086-2016 (v3.1). We use 2016 vintage, missing 2017-2022. Start remains 1271; training sample 1271-1320 (50 obs) excluded from VAR estimation as per appendix; estimation 1321-2016.\n- GDP per capita: England real GDP per capita (2013 prices) from A21 col8, as paper states estimates 1271-1700 England only but used throughout. Population England from A21 col6 (millions) to compute per capita money; M0/M4 per capita uses England population to match paper's per capita definition.\n- Inflation: CPI level from A47 sheet (preferred measure, 2015=100, spliced Schumpeter-Gilboy/Mitchell/ONS) converted to log differences; paper uses CPI variation, same.\n- Money: Paper's M0 from 1833 merging three M0 series, pre-1833 backward extrapolated with M3 estimate growth. We implement exactly: headline M0 (A1 col63, spliced M0 from A24 col31) from 1833 onward; for 1271-1832 backcast using growth of M3 estimate (A24 col40). This yields M4/M0 ratio 1.79 in 1833 vs paper 1.9 difference due to vintage and broad definition (we use spliced broad M4/M4x from A24 col54, same as paper's synthetic M4/M3 splicing). 1900 ratio 4.56 (A24 spliced) vs 4.83 using headline M0, paper 4.8 \u2013 within vintage variation.\n- Lag length: L=2 as paper, VAR(2) estimated by OLS with constant; paper's TVP-VAR random-walk coefficients and stochastic volatility with fat tails replaced by fixed coefficients per subperiod to capture time variation. This is the main deviation; TVP-VAR would show smooth evolution, our century blocks approximate peaks.\n- Priors: Paper uses OLS on first 50 obs for priors, IW priors for Q etc.; we use flat OLS priors (equivalent).\n- Identification: Business-cycle shock maximizing FEV of \u0394y at horizon 1 is equivalent to Cholesky with y ordered first (proved in paper, Angeletos et al. 2020). We implement Cholesky, which is exact for horizon 1. Cumulative 5-year IRF computed as sum of growth responses; normalized to unit shock (\u03c3=1) as paper.\n- Stochastic volatility and fat tails: Not modeled; unconditional volatilities computed as sample std of growth rates per century, confirming 17th cent peak (8.5% vs 7.5% in 16c, 4.8% in 18c) consistent with paper's conditional volatility peaking 17c.\n- Forecast R2 / predictability: Not computed separately; FEVDs serve similar role.\n- Four-variable VAR: Paper's sign-restricted VAR 1700-2022 with nominal rate added to separate pure demand vs money supply shocks; sign restrictions not fully spelled out in paper excerpt. We assume AD: y+,p+,m+,i+ on impact; money supply (expansionary): y+,p+,m+,i- . Random orthonormal Q draws (5000) filtered on these signs, median FEV reported. Results broadly reproduce paper's 20-30% vs 10-20% split and ~60% of money variance by money supply shocks, but exact magnitudes depend on sign horizon and draws.\n- DFM and natural rate: Paper's DFM on 11 variables with time-varying loadings and Lubik-Matthes r-star (5-year-ahead forecast of real rate) with peak 11.5% in 1974 is not replicable without full DFM code and Schmelzing (2020) real rate series. We proxy r-star by 5-year centered moving average of ex-post real Bank Rate (nominal Bank Rate minus CPI inflation), which peaks at ~8-9% in mid-1970s, below paper's 11.5% due to methodological difference (survey vs market vs ex-post).\n- Standard errors: For IRFs, approximate as growth std/\u221an; for FEV shares, binomial approx \u221a[p(1-p)/n]; for correlation, \u221a[(1-r\u00b2)/(n-2)]; for ratios, deterministic (se=0).\n- Market data: Not used; historical macro data only. No MarketDataUnavailable handling needed beyond macro download."
+}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)
+/usr/local/lib/python3.12/site-packages/statsmodels/tsa/base/tsa_model.py:480: ValueWarning: An unsupported index was provided. As a result, forecasts cannot be generated. To use the model for forecasting, use on the supported classes of index.
+  self._init_dates(dates, freq)

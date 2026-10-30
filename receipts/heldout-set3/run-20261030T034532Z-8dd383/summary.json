@@ -1,0 +1,144 @@
+{
+ "run_id": "run-20261030T034532Z-8dd383",
+ "paper": "2609.37108",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication never produced results",
+ "first_line": "We could not check this paper: the replication never produced results. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "abstract_kkt_about_1e_13",
+  "kind": "estimate",
+  "unit": "KKT residual order",
+  "reported": 1e-13,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "n_test_assets",
+   "reported": 20.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "T_mu_simulated_days",
+   "reported": 50.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_asset_n_50",
+   "reported": 50.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_asset_n_100",
+   "reported": 100.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_asset_n_500",
+   "reported": 500.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_n20_seeds",
+   "reported": 3.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_n50_seeds",
+   "reported": 3.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_n100_seeds",
+   "reported": 3.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "table_n500_seeds",
+   "reported": 3.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "french_n_initial",
+   "reported": 100.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "french_missing_days",
+   "reported": 250.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "french_dropped_portfolios",
+   "reported": 1.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "french_remaining_portfolios",
+   "reported": 99.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "french_T_days",
+   "reported": 2514.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "sp500_n_stocks",
+   "reported": 494.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "sp500_T_days",
+   "reported": 1213.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 0,
+ "matched": 0,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (five_factor_sharpe_illustrative_max (2.1) at line 483, kelly_gross_exposure (7.765) at line 489, sharpe_first_corner_longshort (0.539) at line 490, tilt_max_at_c2 (745.6) at line 499, tilt_min_at_c2 (0.2576) at line 500, longonly_plain_stop_tilt (0.1415) at line 517, nu_last_test_problem (-4.95) at line 520, nu_last_factor_example (-11.9) at line 521, nu_last_stock_data (-0.178) at line 522, nu_last_portfolio_data (-0.0118) at line 523, longonly_extra_tilt_1 (0.1158) at line 545, longonly_extra_tilt_2 (0.0128) at line 546, longonly_extra_tilt_1 (0.1158) at line 548, longonly_extra_tilt_2 (0.0128) at line 549, table_n20_nu_last_low (-0.57) at line 557, table_n20_nu_last_high (0.12) at line 558, table_n50_nu_last_low (-11.9) at line 591, table_n50_nu_last_high (-0.74) at line 592, table_n50_time_ms (2.5) at line 596, table_n100_nu_last_low (-0.56) at line 601, table_n100_nu_last_high (-0.38) at line 602, table_n100_time_ms (7.7) at line 606, table_n500_nu_last_low (-0.45) at line 610, table_n500_nu_last_high (-0.26) at line 611, french_nu_last (-0.0118) at line 623, french_nu_last (-0.0118) at line 632, sp500_time_lasso_s (0.14) at line 642, sp500_time_one_QP_s (0.12) at line 643, sp500_OSQP_time_tol1e_6_s (4.9) at line 645, sp500_OSQP_time_tol1e_5_s (3.4) at line 647, kelly_gross_exposure (7.765) at line 204, longonly_plain_stop_tilt (0.1415) at line 514). Compute each result from the data; the paper's value never goes into it."
+  },
+  {
+   "round": 2,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (french_n_initial (100) at line 352, french_T_days (2514) at line 542). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  },
+  {
+   "round": 3,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (french_n_initial (100) at line 352). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 48,
+ "cost_usd": 1.1676,
+ "tokens_in": 3241572,
+ "tokens_out": 126175,
+ "wall_s": 1455.5,
+ "crashed": null
+}

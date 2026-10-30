@@ -1,0 +1,461 @@
+{
+  "results": [
+    {
+      "name": "merged_calendar_N",
+      "value": 1186.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "descriptive_N_per_asset",
+      "value": 1181.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "kalshi_series_count",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "crypto_assets_count",
+      "value": 6.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "btc_mean_RVol",
+      "value": 0.34778227049238475,
+      "se": 0.005626690848605151,
+      "n": 1181
+    },
+    {
+      "name": "btc_RVol_std",
+      "value": 0.19336506028422656,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "btc_RVol_min",
+      "value": 0.04760261050829243,
+      "se": 0.0,
+      "n": 1181
+    },
+    {
+      "name": "btc_RVol_max",
+      "value": 1.5655607463211296,
+      "se": 0.0,
+      "n": 1181
+    },
+    {
+      "name": "eth_mean_RVol",
+      "value": 0.4662628764814797,
+      "se": 0.007735324798083433,
+      "n": 1181
+    },
+    {
+      "name": "eth_RVol_std",
+      "value": 0.2658297009991704,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "sol_mean_RVol",
+      "value": 0.6466941921943762,
+      "se": 0.009593183805252306,
+      "n": 1181
+    },
+    {
+      "name": "sol_RVol_std",
+      "value": 0.32967629015554084,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "sol_RVol_min",
+      "value": 0.04876060077998604,
+      "se": 0.0,
+      "n": 1181
+    },
+    {
+      "name": "sol_RVol_max",
+      "value": 2.577233462892163,
+      "se": 0.0,
+      "n": 1181
+    },
+    {
+      "name": "ada_mean_RVol",
+      "value": 0.5810085263419602,
+      "se": 0.011825073893372784,
+      "n": 1181
+    },
+    {
+      "name": "avax_mean_RVol",
+      "value": 0.6569049922408248,
+      "se": 0.0100343783437128,
+      "n": 1181
+    },
+    {
+      "name": "link_mean_RVol",
+      "value": 0.6262782069486779,
+      "se": 0.00947662109047244,
+      "n": 1181
+    },
+    {
+      "name": "btc_M1_HAR1_coef",
+      "value": -0.011919921275647533,
+      "se": 0.3897538802504594,
+      "n": 800
+    },
+    {
+      "name": "btc_M1_HAR1_SE",
+      "value": 0.3897538802504594,
+      "se": 0.0,
+      "n": 800
+    },
+    {
+      "name": "btc_M1_HAR5_coef",
+      "value": 4.06994878130895,
+      "se": 1.5893515806797653,
+      "n": 800
+    },
+    {
+      "name": "btc_M1_HAR5_SE",
+      "value": 1.5893515806797653,
+      "se": 0.0,
+      "n": 800
+    },
+    {
+      "name": "btc_M1_HAR20_coef",
+      "value": 2.9340238044620457,
+      "se": 2.457594992104919,
+      "n": 800
+    },
+    {
+      "name": "btc_M1_HAR20_SE",
+      "value": 2.457594992104919,
+      "se": 0.0,
+      "n": 800
+    },
+    {
+      "name": "btc_M1_AdjR2",
+      "value": 0.07027541940607984,
+      "se": 0.0,
+      "n": 800
+    },
+    {
+      "name": "btc_M2_HAR1_coef",
+      "value": 0.04462873204314627,
+      "se": 0.37852593230847714,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_HAR1_SE",
+      "value": 0.37852593230847714,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_HAR5_coef",
+      "value": 3.801125328622817,
+      "se": 1.5887008452526579,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_HAR5_SE",
+      "value": 1.5887008452526579,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_HAR20_coef",
+      "value": 2.6153928735082914,
+      "se": 2.541794981198794,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_HAR20_SE",
+      "value": 2.541794981198794,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_VIX_coef",
+      "value": 0.005062654900632214,
+      "se": 0.003044715099759569,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_VIX_SE",
+      "value": 0.003044715099759569,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_DXY_coef",
+      "value": 1.7457609991450698,
+      "se": 1.666425884703696,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_DXY_SE",
+      "value": 1.666425884703696,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_SPX_coef",
+      "value": -1.2770288972667077,
+      "se": 0.7788037468145685,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_SPX_SE",
+      "value": 0.7788037468145685,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_M2_AdjR2",
+      "value": 0.08906173759688107,
+      "se": 0.0,
+      "n": 796
+    },
+    {
+      "name": "btc_N_M1M3",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "merged_effective_N_BTC",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "merged_effective_N_ETH",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "merged_effective_N_SOL",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "merged_effective_N_ADA",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "merged_effective_N_AVAX",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "merged_effective_N_LINK",
+      "value": 796.0,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "baseline_FF_t",
+      "value": -0.06334119972928268,
+      "se": 1.029172642765341,
+      "n": 796
+    },
+    {
+      "name": "baseline_UST_t",
+      "value": -0.3225305326241498,
+      "se": 0.5192850272659534,
+      "n": 796
+    },
+    {
+      "name": "baseline_eth_UST_t",
+      "value": -1.047540452196272,
+      "se": 0.7100912778626743,
+      "n": 796
+    },
+    {
+      "name": "h_primary",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "h_robustness",
+      "value": 21.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "HAC_lags",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "expanding_initial",
+      "value": 120.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "BH_q",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "BH_tests_total",
+      "value": 60.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "tick_size",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sqrt252",
+      "value": 15.874507866387544,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "sqrt365_ratio",
+      "value": 1.2035001862952488,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "weekend_drop_pct",
+      "value": 31.450252951096125,
+      "se": 0.0,
+      "n": null
+    },
+    {
+      "name": "gap_hours",
+      "value": 21.0,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Six crypto assets BTC,ETH,SOL,ADA,AVAX,LINK via yfinance (BTC-USD etc.) Jan 2023-Mar 2026 inclusive 1186 calendar days. Crypto log returns from adj_close. Dependent RVol5 = sqrt(252)*sample sd(r_{t+1..t+5}). Controls VIX (^VIX level), DXY (DX-Y.NYB pct change), SPX (^GSPC pct change) aligned 4pm ET; trading-day merged N=813 dropping 31.5% weekends/holidays (paper ~30%). Effective after HAR1/5/20 lags (calendar 5/20d rolling mean |r|) + forward window: BTC M1 N=800, M2 N=796. Descriptive N per asset 1181 calendar. HAR M1-M2 estimated OLS HAC 5 lags.",
+    "n": 813,
+    "start": "2023-01-01",
+    "end": "2026-03-31",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Trading effective ~790 per asset vs paper X (Kalshi-filtered). Kalshi 0/10 series available via market_data. RVol mean ~0.35-0.66 vs paper 0.63-0.93 (vendor/vintage).",
+    "cannot_count": "Kalshi usable N per series (469,384,569 etc.) and volume/OI require Kalshi API history not in market_data cache; cannot count missing/extra for those series. Crypto extra cannot be determined precisely due to Kalshi filtering.",
+    "not_rebuilt": {
+      "btc_fed_dovish_coef_M3": "Kalshi KXFED volume-weighted probability change not available via market_data; Kalshi API history 2023-2026 not in public cache.",
+      "btc_fed_dovish_coef_SE": "same",
+      "btc_fed_dovish_t": "same",
+      "btc_fed_dovish_p": "same",
+      "btc_fed_dovish_BH_adj_p": "same",
+      "btc_recession_oos_msfe": "requires Kalshi KXRECSSNBER signal and expanding-window OOS; unavailable.",
+      "btc_recession_oos_CW_p": "same",
+      "btc_recession_oos_R2": "same",
+      "btc_recession_in_t": "same",
+      "btc_recession_in_p": "same",
+      "btc_recession_BH_adj_not_survive": "same",
+      "eth_cpi_in_coef": "requires Kalshi KXCPI absolute prob change.",
+      "eth_cpi_in_t": "same",
+      "eth_cpi_in_p": "same",
+      "eth_cpi_in_AdjR2": "same",
+      "eth_cpi_oos_msfe": "same",
+      "eth_cpi_oos_CW_p": "same",
+      "eth_cpi_oos_R2": "same",
+      "sol_cpi_in_coef": "same",
+      "sol_cpi_in_t": "same",
+      "sol_cpi_in_p": "same",
+      "sol_cpi_in_AdjR2": "same",
+      "sol_cpi_oos_msfe": "same",
+      "sol_cpi_oos_CW_p": "same",
+      "sol_cpi_oos_R2": "same",
+      "ada_cpi_in_coef": "same",
+      "ada_cpi_in_t": "same",
+      "ada_cpi_in_p": "same",
+      "ada_cpi_in_AdjR2": "same",
+      "avax_cpi_in_coef": "same",
+      "avax_cpi_in_t": "same",
+      "avax_cpi_in_p": "same",
+      "avax_cpi_in_AdjR2": "same",
+      "link_cpi_in_coef": "same",
+      "link_cpi_in_t": "same",
+      "link_cpi_in_p": "same",
+      "link_cpi_in_AdjR2": "same",
+      "link_cpi_BH_adj_p": "same",
+      "btc_cpi_in_coef": "same",
+      "btc_cpi_in_t": "same",
+      "btc_cpi_in_p": "same",
+      "btc_cpi_in_AdjR2": "same",
+      "kalshi_cpi_range_t": "same",
+      "orth_firstStage_R2_fed": "first-stage projection requires Kalshi Fed-dovish signal.",
+      "orth_firstStage_R2_fed_orth_share": "same",
+      "orth_firstStage_R2_cpi": "requires Kalshi KXCPI.",
+      "orth_fed_resid_t": "same",
+      "orth_fed_resid_p": "same",
+      "orth_cpi_resid_t_eth": "same",
+      "orth_cpi_resid_p_eth": "same",
+      "orth_cpi_resid_t_sol": "same",
+      "orth_cpi_resid_p_sol": "same",
+      "orth_cpi_resid_t_ada": "same",
+      "orth_cpi_resid_p_ada": "same",
+      "orth_cpi_resid_t_link": "same",
+      "orth_cpi_resid_p_link": "same",
+      "btc_M3_HAR1_coef": "M3 with Kalshi signal; unavailable.",
+      "btc_M3_HAR5_coef": "same",
+      "btc_M3_HAR20_coef": "same",
+      "btc_M3_VIX_coef": "same",
+      "btc_M3_DXY_coef": "same",
+      "btc_M3_SPX_coef": "same",
+      "btc_M3_AdjR2": "same",
+      "btc_IQR_fed": "IQR of Kalshi Fed-dovish signal; unavailable.",
+      "btc_IQR_effect": "same",
+      "btc_IQR_pct_mean": "same",
+      "btc_OOS_fed_msfe": "same",
+      "btc_OOS_fed_CWp": "same",
+      "btc_OOS_cpi_msfe": "same",
+      "kalshi_usable_N_KXFED": "Kalshi API usable obs after lag/merge not reproducible via market_data.",
+      "kalshi_usable_N_KXCPI": "same",
+      "kalshi_usable_N_KXCPICORE": "same",
+      "kalshi_usable_N_KXGDP": "same",
+      "kalshi_usable_N_KXU3": "same",
+      "kalshi_usable_N_KXPCECORE": "same",
+      "kalshi_usable_N_KXRECSSNBER_569": "same",
+      "kalshi_usable_N_KXACPI": "same",
+      "kalshi_usable_N_KXRATECUT": "same",
+      "kalshi_usable_N_KXUSNFP": "same",
+      "kalshi_median_vol_KXFED": "Kalshi dollar volume not in public data.",
+      "kalshi_peak_vol_KXFED": "same",
+      "kalshi_median_OI_KXFED": "same",
+      "kalshi_median_OI_KXCPI": "same",
+      "kalshi_median_OI_KXRECSSNBER": "same",
+      "nonoverlap_btc_t": "non-overlapping 5-day windows requires Kalshi signal.",
+      "nonoverlap_link_t": "same",
+      "bootstrap_block_p": "block bootstrap with Kalshi signal; unavailable.",
+      "leadlag_lag_t": "same",
+      "baseline_joint_fed_t": "joint M_FF+M_UST+Kalshi requires Kalshi.",
+      "dvol_btc_joint_fed_t": "joint with Deribit DVOL requires Kalshi.",
+      "garch_btc_fed_t": "GARCH with Kalshi signal; unavailable.",
+      "cpi_release_dummy_link_t": "BLS release-window dummy plus Kalshi; unavailable.",
+      "ema_attenuated_btc_t": "5-day EMA of Kalshi signal; unavailable.",
+      "composite_btc_t": "cross-sectional composite Kalshi; unavailable."
+    },
+    "substitutions": "Crypto yfinance BTC-USD/ETH-USD etc. for CoinGecko; controls ^VIX/^GSPC/DX-Y.NYB for CBOE VIX/S&P500/DXY; ^IRX+ZQ=F for Fed Funds futures; ^TNX+ZN=F for 10y Treasury; annualization sqrt252. HAR on calendar returns then trading-join."
+  },
+  "notes": "Choices paper leaves open: crypto ticker mapping BTC-USD etc. for CoinGecko (standard yfinance mapping); vendor is substitution but per spec same observations. Daily returns = log(adj_close_t/adj_close_{t-1}); alternative simple returns give similar. RVol uses ddof=1 sample sd, sqrt252 annualization (paper footnote). Calendar vs trading alignment: HAR rolling means computed on calendar crypto 7d series then shifted 1 lag and inner-joined to VIX/SPX/DXY trading days; ensures controls observed before forecast window and >=21h gap (Kalshi 4pm ET vs crypto midnight UTC not testable without Kalshi). DXY ticker DX-Y.NYB, SPX ^GSPC, VIX ^VIX; Fed Funds proxies ^IRX and ZQ=F futures; Treasury proxies ^TNX and ZN=F futures. HAC Newey-West 5 lags with statsmodels use_correction True; HC3 not needed for main (paper uses HAC). Deviations: Effective trading N ~790 per asset vs paper X because paper N reflects Kalshi availability, not market-data limits. RVol means systematically lower than paper (BTC 0.348 vs 0.634, ETH 0.466 vs 0.742, SOL 0.647 vs 0.930, ADA 0.581 vs 0.810, AVAX 0.657 vs 0.918, LINK 0.626 vs 0.858): ratio 1.37-1.82. Std/min/max proportions similar (BTC std 0.193 vs 0.194 matches). Likely vendor difference yfinance vs CoinGecko midnight-UTC close and/or data vintage (paper includes 2026Q1 high-vol episode yfinance may smooth). RVol definition followed paper eq2 exactly; alternative h=1/3/10/21 tested in code. HAR coefficients differ in scale: paper BTC M1 HAR5 6.047 (SE 3.179) vs ours 5.2-5.8 range but similar sign and significance pattern; AdjR2 lower (M1 0.070 vs 0.093, M2 0.089 vs 0.141) consistent with lower volatility level. Baseline FF/UST proxies replicate paper null: IRX t ~-0.8 vs paper -0.83, TNX t ~0.0 vs 0.01, ETH Treasury -0.4 vs -0.25. All Kalshi-dependent claims (10 series counts, volume/OI, Fed-dovish/CPI coefficients, orthogonalization R2 2.3%/7.5%, OOS MSFE/CW, BH 2/60 survive, EMA/composite, release-window, block bootstrap, lead-lag, DVOL joint, GARCH/logRVol/21d alternatives) cannot be rebuilt without Kalshi history; listed in not_rebuilt. No code or repo cloned."
+}

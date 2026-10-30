@@ -1,0 +1,768 @@
+{
+  "results": [
+    {
+      "name": "training_observations",
+      "value": 1259,
+      "se": null,
+      "n": 1259
+    },
+    {
+      "name": "testing_observations_per_instrument",
+      "value": 791,
+      "se": null,
+      "n": 791
+    },
+    {
+      "name": "initial_capital",
+      "value": 100000,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "transaction_cost_one_way",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "trading_cost",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "slippage",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "round_trip_cost",
+      "value": 8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ema_fast_window",
+      "value": 12,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ema_slow_window",
+      "value": 26,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "signal_window",
+      "value": 9,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_range_low",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_range_high",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_step",
+      "value": 0.02,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_candidates",
+      "value": 11,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bootstrap_resamples",
+      "value": 1000,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bootstrap_block_length",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sharpe_annualization_factor",
+      "value": 252,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_opt_spy_macdpluslambda",
+      "value": 0.9,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_opt_spy_vpmacd",
+      "value": 0.88,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_opt_qqq_macdpluslambda",
+      "value": 0.84,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_opt_qqq_vpmacd",
+      "value": 0.98,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_opt_dia_macdpluslambda",
+      "value": 0.92,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lambda_opt_dia_vpmacd",
+      "value": 0.86,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "spy_baseline_trades",
+      "value": 38,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "spy_baseline_win_rate",
+      "value": 52.63157894736842,
+      "se": 0.08099829095409111,
+      "n": 38
+    },
+    {
+      "name": "spy_baseline_total_pnl",
+      "value": 9697.73977192388,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "spy_baseline_pnl_ratio",
+      "value": 1.1996812975093933,
+      "se": 0,
+      "n": 38
+    },
+    {
+      "name": "spy_baseline_sharpe",
+      "value": 0.38485209748309485,
+      "se": 0.03684895140031624,
+      "n": 791
+    },
+    {
+      "name": "spy_baseline_max_dd",
+      "value": 13.006796621720795,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "spy_baseline_expectancy",
+      "value": 286.86706822959616,
+      "se": 498.5517120979966,
+      "n": 38
+    },
+    {
+      "name": "spy_macdpluslambda_trades",
+      "value": 29,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "spy_macdpluslambda_win_rate",
+      "value": 51.724137931034484,
+      "se": 0.09279245191499011,
+      "n": 29
+    },
+    {
+      "name": "spy_macdpluslambda_total_pnl",
+      "value": 15299.781351977552,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "spy_macdpluslambda_pnl_ratio",
+      "value": 1.5098006444619247,
+      "se": 0,
+      "n": 29
+    },
+    {
+      "name": "spy_macdpluslambda_sharpe",
+      "value": 0.5770841526821768,
+      "se": 0.038402240302169925,
+      "n": 791
+    },
+    {
+      "name": "spy_macdpluslambda_max_dd",
+      "value": 11.207307537687122,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "spy_macdpluslambda_expectancy",
+      "value": 571.4171149119417,
+      "se": 678.7319566204735,
+      "n": 29
+    },
+    {
+      "name": "spy_vpmacd_trades",
+      "value": 21,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "spy_vpmacd_win_rate",
+      "value": 71.42857142857143,
+      "se": 0.0985807941917649,
+      "n": 21
+    },
+    {
+      "name": "spy_vpmacd_total_pnl",
+      "value": 32129.48857193603,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "spy_vpmacd_pnl_ratio",
+      "value": 1.7667406089383024,
+      "se": 0,
+      "n": 21
+    },
+    {
+      "name": "spy_vpmacd_sharpe",
+      "value": 0.790744616524963,
+      "se": 0.040736558039582454,
+      "n": 791
+    },
+    {
+      "name": "spy_vpmacd_max_dd",
+      "value": 9.142427670928779,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "spy_vpmacd_expectancy",
+      "value": 1486.2946241844536,
+      "se": 599.987496437741,
+      "n": 21
+    },
+    {
+      "name": "qqq_baseline_trades",
+      "value": 33,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "qqq_baseline_win_rate",
+      "value": 48.484848484848484,
+      "se": 0.08699885606851798,
+      "n": 33
+    },
+    {
+      "name": "qqq_baseline_total_pnl",
+      "value": 20056.659826550327,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "qqq_baseline_pnl_ratio",
+      "value": 1.5236092817065796,
+      "se": 0,
+      "n": 33
+    },
+    {
+      "name": "qqq_baseline_sharpe",
+      "value": 0.53169986299318,
+      "se": 0.037985830949343664,
+      "n": 791
+    },
+    {
+      "name": "qqq_baseline_max_dd",
+      "value": 22.298288881574827,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "qqq_baseline_expectancy",
+      "value": 658.7963012062776,
+      "se": 944.3142962337536,
+      "n": 33
+    },
+    {
+      "name": "qqq_macdpluslambda_trades",
+      "value": 24,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "qqq_macdpluslambda_win_rate",
+      "value": 50.0,
+      "se": 0.10206207261596575,
+      "n": 24
+    },
+    {
+      "name": "qqq_macdpluslambda_total_pnl",
+      "value": 5704.98750419922,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "qqq_macdpluslambda_pnl_ratio",
+      "value": 1.1976891544336974,
+      "se": 0,
+      "n": 24
+    },
+    {
+      "name": "qqq_macdpluslambda_sharpe",
+      "value": 0.20581637306883163,
+      "se": 0.03593047419134871,
+      "n": 791
+    },
+    {
+      "name": "qqq_macdpluslambda_max_dd",
+      "value": 17.26600632724877,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "qqq_macdpluslambda_expectancy",
+      "value": 299.6683777567548,
+      "se": 959.7486607658149,
+      "n": 24
+    },
+    {
+      "name": "qqq_vpmacd_trades",
+      "value": 20,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "qqq_vpmacd_win_rate",
+      "value": 75.0,
+      "se": 0.09682458365518543,
+      "n": 20
+    },
+    {
+      "name": "qqq_vpmacd_total_pnl",
+      "value": 43119.45547294922,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "qqq_vpmacd_pnl_ratio",
+      "value": 1.2349484404657436,
+      "se": 0,
+      "n": 20
+    },
+    {
+      "name": "qqq_vpmacd_sharpe",
+      "value": 0.8066876596588982,
+      "se": 0.0409336747322227,
+      "n": 791
+    },
+    {
+      "name": "qqq_vpmacd_max_dd",
+      "value": 15.861787199295547,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "qqq_vpmacd_expectancy",
+      "value": 2375.349127108154,
+      "se": 1316.6729649864894,
+      "n": 20
+    },
+    {
+      "name": "dia_baseline_trades",
+      "value": 38,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dia_baseline_win_rate",
+      "value": 31.57894736842105,
+      "se": 0.07540530520119779,
+      "n": 38
+    },
+    {
+      "name": "dia_baseline_total_pnl",
+      "value": -2368.576695593307,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "dia_baseline_pnl_ratio",
+      "value": 2.0241198015539106,
+      "se": 0,
+      "n": 38
+    },
+    {
+      "name": "dia_baseline_sharpe",
+      "value": -0.05420494133737232,
+      "se": 0.03558201451657519,
+      "n": 791
+    },
+    {
+      "name": "dia_baseline_max_dd",
+      "value": 14.595123729340246,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "dia_baseline_expectancy",
+      "value": -62.33096567350822,
+      "se": 465.4785383151714,
+      "n": 38
+    },
+    {
+      "name": "dia_macdpluslambda_trades",
+      "value": 33,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dia_macdpluslambda_win_rate",
+      "value": 42.42424242424242,
+      "se": 0.08603395906609154,
+      "n": 33
+    },
+    {
+      "name": "dia_macdpluslambda_total_pnl",
+      "value": 1792.8158854247886,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "dia_macdpluslambda_pnl_ratio",
+      "value": 1.4318519069703064,
+      "se": 0,
+      "n": 33
+    },
+    {
+      "name": "dia_macdpluslambda_sharpe",
+      "value": 0.10863995733367242,
+      "se": 0.03566066579455808,
+      "n": 791
+    },
+    {
+      "name": "dia_macdpluslambda_max_dd",
+      "value": 13.034990962196021,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "dia_macdpluslambda_expectancy",
+      "value": 54.32775410378133,
+      "se": 574.8829420165288,
+      "n": 33
+    },
+    {
+      "name": "dia_vpmacd_trades",
+      "value": 22,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dia_vpmacd_win_rate",
+      "value": 59.09090909090909,
+      "se": 0.10482356110715556,
+      "n": 22
+    },
+    {
+      "name": "dia_vpmacd_total_pnl",
+      "value": 11451.841161791963,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "dia_vpmacd_pnl_ratio",
+      "value": 1.1616987215365042,
+      "se": 0,
+      "n": 22
+    },
+    {
+      "name": "dia_vpmacd_sharpe",
+      "value": 0.38923962292445835,
+      "se": 0.036878070564089246,
+      "n": 791
+    },
+    {
+      "name": "dia_vpmacd_max_dd",
+      "value": 9.962133103048762,
+      "se": 0,
+      "n": 791
+    },
+    {
+      "name": "dia_vpmacd_expectancy",
+      "value": 552.2874955893766,
+      "se": 651.665176714802,
+      "n": 22
+    },
+    {
+      "name": "ttest_pair1_spy_t",
+      "value": 0.6657770081952732,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair1_spy_p",
+      "value": 0.25287411698387263,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair2_spy_t",
+      "value": 0.8587159878054603,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair2_spy_p",
+      "value": 0.19537901307416106,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair3_spy_t",
+      "value": 0.6294701343192749,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair3_spy_p",
+      "value": 0.2646117680455309,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair1_spy_t",
+      "value": 0.7167327200440118,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair1_spy_p",
+      "value": 0.23676951625304732,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair2_spy_t",
+      "value": 0.9981839723920303,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair2_spy_p",
+      "value": 0.15909507845171933,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair3_spy_t",
+      "value": 0.743260795397725,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair3_spy_p",
+      "value": 0.2286619011483333,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "bootstrap_pair1_spy_p",
+      "value": 0.241,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair1_qqq_t",
+      "value": -0.8116775908029198,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair1_qqq_p",
+      "value": 0.7913892729672369,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair2_qqq_t",
+      "value": 0.6797180882359918,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair2_qqq_p",
+      "value": 0.2484411744887005,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair3_qqq_t",
+      "value": 1.1165485675545874,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair3_qqq_p",
+      "value": 0.13226365107943172,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair1_qqq_t",
+      "value": -0.825797093691725,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair1_qqq_p",
+      "value": 0.7955403984869539,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair2_qqq_t",
+      "value": 0.6895210072480448,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair2_qqq_p",
+      "value": 0.24524772904475156,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair3_qqq_t",
+      "value": 1.1245909867721269,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair3_qqq_p",
+      "value": 0.1303811974261916,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "bootstrap_pair2_qqq_p",
+      "value": 0.219,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair1_dia_t",
+      "value": 0.49138723437198634,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair1_dia_p",
+      "value": 0.31164462590516717,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair2_dia_t",
+      "value": 0.7332481854016686,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair2_dia_p",
+      "value": 0.23181243472041635,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair3_dia_t",
+      "value": 0.5107009698993745,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "ttest_pair3_dia_p",
+      "value": 0.3048516589621537,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair1_dia_t",
+      "value": 0.5056210196778901,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair1_dia_p",
+      "value": 0.30656136134396206,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair2_dia_t",
+      "value": 0.708993350322033,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair2_dia_p",
+      "value": 0.23916430168984704,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair3_dia_t",
+      "value": 0.4923106971637709,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "nw_pair3_dia_p",
+      "value": 0.3112498595625546,
+      "se": null,
+      "n": 790
+    },
+    {
+      "name": "bootstrap_pair3_dia_p",
+      "value": 0.31,
+      "se": null,
+      "n": 790
+    }
+  ],
+  "sample": {
+    "description": "Daily OHLCV for SPY, QQQ, DIA from Yahoo Finance via market_data.get_prices; full history from first available trading day through last test trading day; training and testing intervals follow paper definition (training up to end of 2022, testing from start of 2023 through end of Feb 2026 window); ETFs as index proxies",
+    "n": 2050,
+    "start": "2018-01-02",
+    "end": "2026-02-27",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "ETFs SPY/QQQ/DIA as proxies for S&P 500/NASDAQ-100/DJIA indices; Yahoo Finance vendor; next-day open execution; integer shares with floor(cash/(open*(1+cost))); sigma_i interpreted as (High-Low)/Close because STD of single High-Low undefined without extra window; P* window N chosen as standard trading month (paper leaves N unstated); EMA via pandas ewm adjust=False span; Sharpe sqrt(252); MDD as max peak-to-trough; HAC Newey-West lags=5 Bartlett; block bootstrap length 5 with 1000 resamples"
+  },
+  "notes": "Choices the paper leaves open: (1) Paper defines P*_t with sum over i=t-N to t-1 but never states N; we chose N as standard trading month consistent with MA reference in text; other N values produce very different VP-MACD trade counts. (2) sigma_i = STD(High-Low)/Close: STD of single daily High-Low is undefined; we implemented sigma_i=(High-Low)/Close (range-based normalized volatility) which is the only literal implementable reading without an extra undocumented rolling window; alternative rolling STD over N or other window shifts trade counts and PnL. (3) r_i uses absolute body ratio |Close-Open|/(High-Low) as stated. (4) Data source: paper uses Yahoo Finance Close; we use close field from yfinance (unadjusted close) for signal generation; open for execution is unadjusted. (5) EMA initialization: alpha=2/(n+1) with recursive EMA_t = alpha*P_t+(1-alpha)*EMA_{t-1} initialized via pandas ewm adjust=False min_periods=n. (6) Execution: paper states next trading day open to avoid look-ahead bias; we implement signal at close of t executed at open of t+1; if signal on last test day no execution possible. (7) Position handling: long-only, fully invested, floor to integer shares, cost one-way applied as price*(1+cost) at entry and price*(1-cost) at exit equivalent to cost per share; paper states one-way cost and round-trip, we apply at both entry and exit. (8) Metrics: total PnL = V_T - V_0 where V_0 is initial capital at test start and V_T mark-to-market including unrealized position at last close; win ratio = N_win/N completed buy-sell pairs (incomplete open position not counted); PnL ratio = avgGain/avgLoss in USD; expectancy = winRatio*avgGain - (1-winRatio)*avgLoss; Sharpe = mean(R)/sd(R)*sqrt(252) where R_t = (V_t - V_{t-1})/V_{t-1} (daily portfolio returns, zero when flat); MDD as max(Peak - Value)/Peak. (9) Statistical tests: one-sided t-test on daily return differences with t_{T-1} p-values; Newey-West HAC t with Bartlett weights lags=5 (paper does not state bandwidth) and normal p-values; circular block bootstrap with block length 5, B as stated, p = proportion of bootstrap mean differences <=0 (one-sided). (10) Deviations: Our baseline and MACD+lambda trade counts and PnLs differ from paper likely due to Yahoo Finance data vintage differences, dividend/split adjustments, exact EMA warmup handling, and transaction cost application details; VP-MACD differences larger due to ambiguous N and sigma window as above; we report honest replication values without tuning N to match paper. Sample counts are derived purely from date range definition without trimming to paper counts."
+}

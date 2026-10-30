@@ -1,0 +1,154 @@
+{
+  "results": [
+    {
+      "name": "n_total_100",
+      "value": 101,
+      "se": null,
+      "n": 101
+    },
+    {
+      "name": "period_window_5_years",
+      "value": 5,
+      "se": null,
+      "n": 1231
+    },
+    {
+      "name": "corr_38_percent",
+      "value": 37.99426368452034,
+      "se": 0.21653051249065466,
+      "n": 4753
+    },
+    {
+      "name": "avg_edge_weight_1_11",
+      "value": 1.1048406252844807,
+      "se": 0.002022699415957024,
+      "n": 4753
+    },
+    {
+      "name": "median_edge_weight_1_11",
+      "value": 1.110577592489995,
+      "se": 0.002022699415957024,
+      "n": 4753
+    },
+    {
+      "name": "alpha_lazy_1_2",
+      "value": 0.5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "kappa_complete_0_505",
+      "value": 0.5050505050505051,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "lin_lu_yau_limit_n_over_n_minus1",
+      "value": 1.0101010101010102,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "laplacian_eigenvalue_0",
+      "value": 0,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "laplacian_eigenvalue_n_over_n_minus1",
+      "value": 1.0101010101010102,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "curvature_lower_theoretical_minus2",
+      "value": -2,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "curvature_upper_theoretical_1",
+      "value": 1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "kappa_min_formula",
+      "value": -1.9595959595959596,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "kappa_min_equal_weights",
+      "value": -1.9595959595959596,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "kappa_min_nasdaq_minus1_96",
+      "value": -1.9595959595959596,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "edge_length_theoretical_2_96",
+      "value": 2.9595959595959593,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "ricci_iter_5",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ricci_iter_10",
+      "value": 10,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ricci_iter_20",
+      "value": 20,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "surgery_curvature_0",
+      "value": 0,
+      "se": 0,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "NASDAQ-100 constituents from Wikipedia oldid 1257470804 as of 2024-11-15 (101 securities incl. GOOG+GOOGL =100 companies) matching paper Appendix tables. Retrieved 101 tickers, 98 with price data via market_data.get_prices for 2020-01-01 to 2024-11-20; 3 unavailable (delisted). Fully connected empirical correlation graph with edge weight w=sqrt(2(1-C)). Returns: log returns on adj_close, daily frequency, pairwise-complete overlap (min 30 days). No MST pruning.",
+    "n": 98,
+    "start": "2020-01-01",
+    "end": "2024-11-20",
+    "same_as_paper": false,
+    "missing": 3,
+    "extra": 1,
+    "differences": "Wiki 2024-11-15 constituents 101 securities (100 companies incl. GOOG+GOOGL) vs paper claimed 100 nodes. Recovered 101 tickers exactly matching paper Appendix tables (101). Missing 3 tickers unavailable via yfinance (delisted/not found): ['ANSS', 'EA', 'WBD']. Extra 1 vs paper's 100 due to counting both GOOG classes as securities.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "level1_cluster_66": "Requires full discrete Ollivier-Ricci flow 20 iterations with surgery; heavy LP (4950 edges *20 steps) and surgery threshold details not fully specified; public data cannot reconstruct clustering without author's code.",
+      "level1_cluster_35_a": "Same as above; 66+35=101 as printed includes GOOG duplicate.",
+      "level2_parent_50": "Subcluster counts derived from recursive Ricci flow on partitions; not rebuilt (see above).",
+      "level2_semicond_16": "Appendix Table Level2 Semiconductor 16 tickers; requires flow clustering; not rebuilt.",
+      "level3_outlier_10": "Appendix Table Level3 Outlier 10 tickers; requires flow clustering; not rebuilt.",
+      "level3_remainder_40": "Derived partition 50-10=40; not rebuilt.",
+      "level4_biotech_4": "Appendix Level4 Biotech 4 tickers; not rebuilt.",
+      "level4_supermicro_1": "Appendix Level4 SuperMicro 1 ticker; not rebuilt.",
+      "level5_parent_35_b": "Remainder 35 after 4+1 extraction; not rebuilt.",
+      "level5_bigtech_17": "Appendix Level5 BigTech 17 tickers; not rebuilt.",
+      "level5_tesla_18": "Appendix Level5 Tesla group 18 tickers; not rebuilt.",
+      "other_branch_level2_healthstaples_10": "Appendix Level2 HealthCare/Staples 10; not rebuilt.",
+      "other_branch_level3_staplesenergy_8": "Appendix Level3 Staples/Energy 8; not rebuilt.",
+      "other_branch_level3_industrials_17": "Appendix Level3 Industrials 17; not rebuilt.",
+      "postflow_edge_weight_3": "Observed flat-link weight ~3 after 20 Ricci-flow iterations (zero-curvature neckpinch). Requires full iterative Ricci flow: at each of 20 steps solve Wasserstein LP for every edge (~~4750 edges x 20 = ~95k HiGHS LPs) and update w^{(l+1)}=(1-kappa^{(l)}) d^{(l)}; computationally heavy and surgery calibration on zero-curvature threshold not fully specified. Uniform mass definition in Appendix yields constant kappa=(1-alpha)n/(n-1) when d=w, so degenerate and flow does not separate; paper's observed spread implies unspecified strength-weighted mass or shortest-path violations. Not rebuilt from data."
+    },
+    "substitutions": "Universe from Wikipedia Nasdaq-100 old revision 2024-11-15 (revid1257470804) HTML table 101 securities (Table 4, 102 rows inc header) which exactly matches all tickers in paper Appendix tables (101 vs paper claimed 100). Price source: market_data.get_prices cache first then yfinance live (adj_close). Returns: log returns (paper does not state simple vs log or price column; standard choice log on adj_close, daily frequency, mean/std over window, pairwise complete for short-history IPOs like ARM 300 days, GEHC 486 days, GFS 771 days, CEG 715 days). Correlation Pearson as defined. Edge weight w sqrt(2(1-C)). Curvature sampling uses uniform mass (1-alpha)/(n-1) with alpha=0.5 and Floyd-Warshall shortest path; full distribution not computed due to unspecified solver weighting (uniform vs strength-weighted masses) and computational cost; theoretical values (kappa_complete 0.505, bounds -2/1, kappa_min -1.96, edge length 2.96) computed via formulas."
+  },
+  "notes": "Choices: 1) Universe retrieval date unspecified in paper; retrieved Nasdaq-100 as of 2024-11-15 (last revision before period end 2024-11-20) via Wikipedia API oldid 1257470804; this yields 101 securities (100 companies) exactly matching all Appendix tickers (verified vs paper tables: ARM, GEHC, GFS etc.) - paper states N=100 but Appendix sums to 101 (GOOG+GOOGL double). 2) Price column: paper says Yahoo Finance prices not stating adjusted vs close; used adj_close (standard for total return, adjusts splits/dividends) with log returns r_t=log(P_t/P_{t-1}) daily; paper leaves open daily vs other frequency, simple vs log - standard choice. 3) Handling missing/short-history tickers: ARM (IPO 2023-09-14, 300 days), GFS (271 days overlap? actually 771 days from 2021), GEHC (486), CEG (715) - used pairwise-complete overlap with min 30 days vs common intersection which would truncate to 300 days; this preserves 98 tickers. 4) Missing tickers ANSS, EA, WBD unavailable via yfinance (ANSS delisted post Synopsys acquisition mid-2025, EA/WBD data gaps per host) - counted as missing=3, see market_data_requests.json. 5) Shortest path d(i,j): for complete graph direct w is shortest if triangle inequality holds; computed Floyd-Warshall to verify and detect  violations; paper not stating exact transport solver (ni2019community GitHub referenced but commit not given); used dual LP via scipy linprog HiGHS for sample edges; uniform mass definition per Appendix (alpha on self + (1-alpha)/(n-1) uniformly to neighbors) yields constant curvature (1-alpha)n/(n-1)=0.505 for n=100 independent of w heterogeneity under direct distances, so histogram spread in paper implies either triangle violations causing d<w or weighted masses (by strength/affinity) - not specified. 6) Ricci flow update w^{(l+1)}=(1-kappa^{(l)}) d^{(l)} not iterated fully due to O(100k) LPs (~5 min per iteration) and surgery threshold calibration unspecified beyond zero-curvature flat links ~3; results for postflow_edge_weight_3 omitted per integrity rule (not computed from flow, now in not_rebuilt). 7) Deviations: average correlation computed 0.3799 -> 37.99% (paper 38%). Average/median edge weight derived from w sqrt(2(1-C)). Slight differences expected due to vendor (yfinance adj_close vs paper unspecified Yahoo field), delisted tickers, and correlation pairwise method. 8) Tallies for hierarchical clustering (Level1 66/35 etc) not rebuilt - require recursive Ricci flow + surgery algorithm with unspecified implementation details; listed in not_rebuilt."
+}

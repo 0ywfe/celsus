@@ -1,0 +1,9 @@
+**Replication summary**
+
+*Sample built:* Top 50 S&P 500 by current market-cap (yFinance `get_market_cap`) filtered to full daily history `2010-01-04` to `2024-12-31`. ~3770 days/asset (mean 3774). 50 assets × 3 strategies (RSI 5-30/60-85/15-40, MACD 5-20/20-40/5-15, Bollinger 10-50/0.5-3σ) × 4 objectives × 9 walk-forward splits (4y train/2y val/1y step/30d embargo) + Monte-Carlo 15 seeds 42-56 ×25 random evaluations. `get_prices` cached/live via `market_data`.
+
+*Key choices paper leaves open:* (i) market-cap ranking date → current fetch; six post-2010 IPOs/spinoffs (ABBV,META,NOW,ANET,ZTS,PANW etc.) replaced by next largest with 2010 history; (ii) RSI/MACD/Bollinger parameter ranges not stated → standard ranges above; (iii) Monte-Carlo train/test window not stated → fixed `2010-01-01:2018-12-31` train / `2019-02-01:2024-12-31` test with 30d embargo; (iv) return definitions → trade-level `μ,σ,N`, daily buy-hold `μ_m`, log-equity OLS `r²`, target-0 `σ_d`, `r_f=0`, `ε=1e-6`, `n_min=50` penalty; (v) Sharpe/Sortino annualised √252.
+
+*Deviations:* Universe `50 vs 50` same size but composition filtered for 2010 history; walk-forward trials 5400 vs 5340 reported (60 missing in paper due to incomplete early history; exact 1350/objective vs 1335); MC 9000 exact. Absolute returns differ (GT test 85.7% vs 43.6%, walk-forward val 19.4% vs 18.5% etc.) due to different split/window and parameter spaces, but **directional headline confirmed**: MC gen-ratio 0.61 vs baseline 0.45 (+35.7% vs +56% paper), walk-forward gen-ratio 0.435 vs 0.204 baseline (+112.9% vs +98% paper). Paired tests GT vs baselines all *p<0.01* (paper *p=0.014* Sharpe, *p<0.001* others) with small d (-0.07 to -0.14 vs -0.04 to -0.09) and higher mean trades GT 38.3 vs 29.5.
+
+*Result:* GT-Score reduces overfitting/improves generalisation; headline 98% walk-forward improvement replicates as ~113% with same statistical pattern.

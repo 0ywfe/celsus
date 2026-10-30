@@ -1,0 +1,269 @@
+{
+ "verdict": "could not check",
+ "rows": [
+  {
+   "name": "irf_gdp_peak_17th_century",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 5.0,
+   "reproduced": 5.067656570473314,
+   "se": 1.0,
+   "n": 101,
+   "consistent": true,
+   "why": "paper inside 5.068 +/- 1.96"
+  },
+  {
+   "name": "irf_cpi_peak_17th_century",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": -4.0,
+   "reproduced": -3.4635658809012453,
+   "se": 1.0,
+   "n": 101,
+   "consistent": true,
+   "why": "paper inside -3.464 +/- 1.96"
+  },
+  {
+   "name": "fevd_inflation_max_16th_century",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 20.0,
+   "reproduced": 23.445696276486597,
+   "se": 2.0,
+   "n": 100,
+   "consistent": true,
+   "why": "paper inside 23.45 +/- 3.92"
+  },
+  {
+   "name": "fevd_inflation_max_17th_century",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 40.0,
+   "reproduced": 25.564189449199908,
+   "se": 2.0,
+   "n": 101,
+   "consistent": false,
+   "why": "paper outside 25.56 +/- 3.92"
+  },
+  {
+   "name": "fevd_money_start_mid16th",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 20.0,
+   "reproduced": 22.11076460375392,
+   "se": 2.0,
+   "n": 100,
+   "consistent": true,
+   "why": "paper inside 22.11 +/- 3.92"
+  },
+  {
+   "name": "fevd_money_peak_1600",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 80.0,
+   "reproduced": 68.56138101670246,
+   "se": 2.0,
+   "n": 101,
+   "consistent": false,
+   "why": "paper outside 68.56 +/- 3.92"
+  },
+  {
+   "name": "m4_m0_ratio_1833",
+   "kind": "estimate",
+   "unit": "ratio",
+   "reported": 1.9,
+   "reproduced": 1.892270858939561,
+   "se": 0,
+   "n": 1,
+   "consistent": true,
+   "why": "rounds to the printed 1.9"
+  },
+  {
+   "name": "m4_m0_ratio_1900",
+   "kind": "estimate",
+   "unit": "ratio",
+   "reported": 4.8,
+   "reproduced": 4.825323395803299,
+   "se": 0,
+   "n": 1,
+   "consistent": true,
+   "why": "rounds to the printed 4.8"
+  },
+  {
+   "name": "fevd_output_pure_ad_lower",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 20.0,
+   "reproduced": 54.864257395164,
+   "se": 2.0,
+   "n": 117,
+   "consistent": false,
+   "why": "paper outside 54.86 +/- 3.92"
+  },
+  {
+   "name": "fevd_output_pure_ad_upper",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 30.0,
+   "reproduced": 73.15234319355201,
+   "se": 2.0,
+   "n": 117,
+   "consistent": false,
+   "why": "paper outside 73.15 +/- 3.92"
+  },
+  {
+   "name": "fevd_output_money_supply_lower",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 10.0,
+   "reproduced": 18.288085798388003,
+   "se": 2.0,
+   "n": 117,
+   "consistent": false,
+   "why": "paper outside 18.29 +/- 3.92"
+  },
+  {
+   "name": "fevd_output_money_supply_upper",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 20.0,
+   "reproduced": 36.57617159677601,
+   "se": 2.0,
+   "n": 117,
+   "consistent": false,
+   "why": "paper outside 36.58 +/- 3.92"
+  },
+  {
+   "name": "fevd_money_money_supply_shock",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 60.0,
+   "reproduced": 6.878689239693117,
+   "se": 2.0,
+   "n": 117,
+   "consistent": false,
+   "why": "paper outside 6.879 +/- 3.92"
+  },
+  {
+   "name": "rstar_peak_1974",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 11.5,
+   "reproduced": 33.515426159716995,
+   "se": 1.5,
+   "n": 746,
+   "consistent": false,
+   "why": "paper outside 33.52 +/- 2.94"
+  },
+  {
+   "name": "correlation_gdp_growth_england_uk_post1700",
+   "kind": "estimate",
+   "unit": "percent",
+   "reported": 99.0,
+   "reproduced": 0.9992445303899612,
+   "se": 8.496486546263515e-05,
+   "n": 316,
+   "consistent": false,
+   "why": "paper outside 0.9992 +/- 0.0001665"
+  },
+  {
+   "name": "var_lag_length",
+   "kind": "parameter",
+   "unit": "lags",
+   "reported": 2.0,
+   "reproduced": 2,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "pre_sample_training_observations",
+   "kind": "parameter",
+   "unit": "observations",
+   "reported": 50.0,
+   "reproduced": 50,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "fevd_identification_horizon",
+   "kind": "parameter",
+   "unit": "periods",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "irf_cumulation_horizon",
+   "kind": "parameter",
+   "unit": "years",
+   "reported": 5.0,
+   "reproduced": 5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "credible_set_level",
+   "kind": "parameter",
+   "unit": "percent",
+   "reported": 68.0,
+   "reproduced": 68,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "bc_frequency_band_lower",
+   "kind": "parameter",
+   "unit": "years",
+   "reported": 1.5,
+   "reproduced": 1.5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "bc_frequency_band_upper",
+   "kind": "parameter",
+   "unit": "years",
+   "reported": 8.0,
+   "reproduced": 8,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "prior_v0_degrees_freedom",
+   "kind": "parameter",
+   "unit": "not stated",
+   "reported": 20.0,
+   "reproduced": 20,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "dfm_n_variables",
+   "kind": "parameter",
+   "unit": "variables",
+   "reported": 11.0,
+   "reproduced": 11,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  }
+ ]
+}

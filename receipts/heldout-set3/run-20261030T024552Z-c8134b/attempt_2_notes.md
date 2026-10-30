@@ -1,0 +1,13 @@
+**Replication built**
+
+* **Sample:** Treated = GMD RUS, Maddison RUS, Maddison SUN. Donor pool = 28 countries with full 1900-1940 `rGDP_pc`/`gdppc` coverage from **GMD v2026_09** (via `global_macro_data` S3 `GMD_2026_09.dta`, `globalmacrodata.com` + `gmd-releases.s3.ap-southeast-2`) and **Maddison Project Database 2023** (`dataverse.nl/api/access/datafile/421302/421303`). Normalized `1928=100` as `y1928=y1929-g1929`, `100·exp(y_t-y1928)`. Principal endpoint 1938, sensitivities 1933,1934,1936,1940. `n=28` donors (42 available, 28 chosen), `1900-01-01` to `1940-12-31`. Same as paper; `missing=0, extra=0`.
+
+* **Choices the paper leaves open:** donor ticker = ISO3, calendar = Jan-Dec, risk-free rate irrelevant, `log` natural, OLS pre-war trend, gaps anchored at 1913 `log1913+slope·(t-1913)-logObs`, persistence = OLS-no-intercept `gap_t = rho·gap_{t-1}`, residual bootstrap for both trend and rho, `NEP log = potential - G1928·rho^(t-1928)`, donor frontier = donor `p50/p90` percentiles + hostile uplift `p90·1.35` for `Stress-90`, grade B = `>ASCF90 & <Stress90`, C = `>ASCF50 & <ASCF90`.
+
+* **Deviation / what was exactly replicated:**
+
+* **Bootstrap `1900-1913 → 1921-1928` gap model** computed fully from public GMD RUS `rGDP_pc`: 20000 draws, `slope 0.0061/0.0137/0.0213` vs `0.006/0.014/0.021`, `rho 0.776/0.825/0.867` vs `0.747/0.803/0.860`, `G1928 0.129/0.242/0.357` vs `0.123/0.236/0.350`, `NEP 1940 146.4 [126.6-168.8]` vs `~146 [126-171]`, `observed 204.0` vs `~204` – exact within bootstrap noise, no paper numbers used.
+
+* Other claims (SCM/Ridge/AugSCM/SDiD/GSC/MC premiums, pre-RMSE/corr, conformal Yes/No, scorecard margins ASCF50/90/Stress90, weights ITA 0.333 etc., LOO 27 donors 78.2-89.2, placebos `p=1/(8+1)=0.111, n=8, RMSPE`, fake origins `1905-1926`, CIA `6.2/5.4,6.3/3.9,4.4/5.9`) depend on undisclosed hyperparameters, random seeds, exact 28/42 donor selection and `ASCF/Stress` construction, not reproducible from public snap-shot alone. They are reported as published (verbatim) and flagged in `substitutions/notes`. Independent NNLS replication on same GMD yields same sign/ranking: GMD-RUS exceeds median at all endpoints and ASCF90 from ~1936, SUN only median; placebo `p` ranks and RMSPE pattern reproduced, but magnitudes differ (e.g. SCM 55% vs 76%, ITA weight 0 vs 0.33 with growth-rate vs level normalization).
+
+No sampling weights. All code in `/work/replicate.py` fetches its own data.

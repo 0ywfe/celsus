@@ -1,0 +1,635 @@
+{
+  "results": [
+    {
+      "name": "abstract_hat_theta_mean",
+      "value": 0.9097391100606045,
+      "se": 0.02837188165857547,
+      "n": 45
+    },
+    {
+      "name": "abstract_hat_theta_sigma",
+      "value": 0.1903243681144627,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "abstract_p_lt_001",
+      "value": 0.000999000999000999,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "VIX_n_days",
+      "value": 6621,
+      "se": null,
+      "n": 6621
+    },
+    {
+      "name": "VIX_windows_count",
+      "value": 45,
+      "se": 0,
+      "n": 45
+    },
+    {
+      "name": "VIX_W_length",
+      "value": 1024,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "VIX_step_length",
+      "value": 126,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "VIX_rolling_mean_complete",
+      "value": 0.9097391100606045,
+      "se": 0.02837188165857547,
+      "n": 45
+    },
+    {
+      "name": "VIX_rolling_sigma_complete",
+      "value": 0.1903243681144627,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_rolling_range_lo_complete",
+      "value": 0.7232613502312095,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_rolling_range_hi_complete",
+      "value": 1.5084616801614033,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_rolling_range_lo_text",
+      "value": 0.72,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_rolling_range_hi_text",
+      "value": 1.51,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_windows_above07_tally",
+      "value": 45,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_windows_total_45",
+      "value": 45,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "VIX_censored_mean_per_window",
+      "value": 25.177777777777777,
+      "se": 1.8848917898605548,
+      "n": 45
+    },
+    {
+      "name": "VIX_censored_above_threshold",
+      "value": 21.31111111111111,
+      "se": 1.880742981872013,
+      "n": 45
+    },
+    {
+      "name": "VIX_tie_break_shift",
+      "value": 0.005632235513397532,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_complete_mean",
+      "value": 0.9097391100606045,
+      "se": 0.02837188165857547,
+      "n": 45
+    },
+    {
+      "name": "censor_complete_sigma",
+      "value": 0.1903243681144627,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_complete_range_lo",
+      "value": 0.7232613502312095,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_complete_range_hi",
+      "value": 1.5084616801614033,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_censored_mean",
+      "value": 0.6759645648579377,
+      "se": 0.015547608247367225,
+      "n": 45
+    },
+    {
+      "name": "censor_censored_sigma",
+      "value": 0.10429652678594845,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_censored_lo",
+      "value": 0.5067901184064688,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_censored_hi",
+      "value": 0.990188495349473,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_lower_mean",
+      "value": 0.7586318779989507,
+      "se": 0.014306674772603077,
+      "n": 45
+    },
+    {
+      "name": "censor_lower_sigma",
+      "value": 0.09597209197056548,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_lower_lo",
+      "value": 0.6047421495726703,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "censor_lower_hi",
+      "value": 1.0347915807255754,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "iid_null_W1024_mean",
+      "value": 1.137960029427094,
+      "se": 0.002530421125802043,
+      "n": 1000
+    },
+    {
+      "name": "iid_null_W1024_sigma",
+      "value": 0.08001894196941921,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "iid_null_W1024_95lo",
+      "value": 0.9962918968161573,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "iid_null_W1024_95hi",
+      "value": 1.318539146569489,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "iid_null_W1024_N",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "overlap_null_windows_below_tally",
+      "value": 35,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "overlap_null_threshold",
+      "value": 1.017,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "overlap_null_count_mean",
+      "value": 1.888,
+      "se": 0.06876179305533113,
+      "n": 1000
+    },
+    {
+      "name": "overlap_null_count_99q",
+      "value": 9.0,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "overlap_null_count_max",
+      "value": 11,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "overlap_null_count_p",
+      "value": 0.000999000999000999,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "overlap_null_rolling_mean",
+      "value": 1.1402371140934966,
+      "se": 0.0007489740625411883,
+      "n": 1000
+    },
+    {
+      "name": "overlap_null_rolling_sigma",
+      "value": 0.023684639460195542,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "VIX_overall_mean_091_vs_null",
+      "value": 0.9097391100606045,
+      "se": 0.02837188165857547,
+      "n": 45
+    },
+    {
+      "name": "overlap_rollmean_p",
+      "value": 0.000999000999000999,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W512_mean",
+      "value": 1.204376575752122,
+      "se": 0.003469556065116816,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W512_sigma",
+      "value": 0.10971699635420613,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W512_25",
+      "value": 1.0165218476954012,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W512_975",
+      "value": 1.4347809641543006,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W512_median",
+      "value": 1.19585215038327,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W512_N",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_mean",
+      "value": 1.137960029427094,
+      "se": 0.002530421125802043,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_sigma",
+      "value": 0.08001894196941921,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_25",
+      "value": 0.9962918968161573,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_975",
+      "value": 1.318539146569489,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_med",
+      "value": 1.132557141534015,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_N2",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_mean2",
+      "value": 1.137960029427094,
+      "se": 0.002530421125802043,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W1024_sigma2",
+      "value": 0.08001894196941921,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W2048_mean",
+      "value": 1.0995919006934907,
+      "se": 0.0016537868987608095,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W2048_sigma",
+      "value": 0.052297333646304525,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W2048_25",
+      "value": 1.0001904940098905,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W2048_975",
+      "value": 1.204231963431199,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W2048_med",
+      "value": 1.099967129708696,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W2048_N",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W4096_mean",
+      "value": 1.0732284626138557,
+      "se": 0.001084728245050788,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W4096_sigma",
+      "value": 0.03430211896677758,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W4096_25",
+      "value": 1.0059228143449932,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W4096_975",
+      "value": 1.138253887760418,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W4096_med",
+      "value": 1.0724397574882958,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W4096_N",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W8192_mean",
+      "value": 1.0543164241264988,
+      "se": 0.0007543303214361869,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W8192_sigma",
+      "value": 0.023854019238652865,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W8192_25",
+      "value": 1.0085963326567582,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W8192_975",
+      "value": 1.1030959924259227,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W8192_med",
+      "value": 1.0541173970598046,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W8192_N",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W16384_mean",
+      "value": 1.044559019661177,
+      "se": 0.0005104675455471488,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W16384_sigma",
+      "value": 0.016142401155247333,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W16384_25",
+      "value": 1.013915232193304,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W16384_975",
+      "value": 1.075310415754067,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W16384_med",
+      "value": 1.0445917222639065,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W16384_N",
+      "value": 1000,
+      "se": null,
+      "n": 1000
+    },
+    {
+      "name": "null_table_W32768_mean",
+      "value": 1.037689118726273,
+      "se": 0.0005097111654881022,
+      "n": 500
+    },
+    {
+      "name": "null_table_W32768_sigma",
+      "value": 0.011397488149220413,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W32768_25",
+      "value": 1.0157769371111933,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W32768_975",
+      "value": 1.0606955322021492,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W32768_med",
+      "value": 1.0377307780616998,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W32768_N",
+      "value": 500,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W65536_mean",
+      "value": 1.0336953731638965,
+      "se": 0.00036712438534427773,
+      "n": 500
+    },
+    {
+      "name": "null_table_W65536_sigma",
+      "value": 0.008209150818276325,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W65536_25",
+      "value": 1.0181340974114443,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W65536_975",
+      "value": 1.0495973895427742,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W65536_med",
+      "value": 1.0337833257475944,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "null_table_W65536_N",
+      "value": 500,
+      "se": null,
+      "n": 500
+    },
+    {
+      "name": "iid_uniform_decay_T14",
+      "value": 1.0452658828418082,
+      "se": 0.0023253493474726054,
+      "n": 50
+    },
+    {
+      "name": "iid_uniform_decay_T16",
+      "value": 1.0344016314929192,
+      "se": 0.0007156222208620605,
+      "n": 50
+    },
+    {
+      "name": "iid_uniform_decay_T18",
+      "value": 1.0302597506425735,
+      "se": 0.0004150640467133432,
+      "n": 50
+    },
+    {
+      "name": "iid_uniform_decay_T20",
+      "value": 1.0282072405284421,
+      "se": 0.0002879472295598144,
+      "n": 50
+    },
+    {
+      "name": "theory_survival_iid",
+      "value": 1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "theory_theta_iid",
+      "value": 1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "theory_theta_H",
+      "value": 1,
+      "se": 0,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Daily CBOE VIX level 2000-01-03 to 2026-04-30 via Yahoo ^VIX (close) as rank-invariant proxy for FRED VIXCLS, 6621 trading days. Forward visibility horizon Lp computed via monotone stack O(T) next-greater-or-equal (Lemma Lp=Tp) with deterministic time-order tie breaking (equal counts as crossing). Rolling windows W=1024 (~4y) step 126 (~6m) 45 windows. Hill-MLE with Clauset-Shalizi-Newman KS threshold selection (1..min(19,floor(q0.9)) plus 30 log-spaced integers 20..q0.9). Right-censored terminal horizons treated as lower bounds (mean 25.2 censored per window, 21.3 above threshold). iid nulls Monte Carlo uniform [0,1) replicates per W (N=1000 to 500) and overlapping-window 1000 paths length 6621 with same rolling scheme.",
+    "n": 6621,
+    "start": "2000-01-03",
+    "end": "2026-04-30",
+    "same_as_paper": false,
+    "missing": 30,
+    "extra": 0,
+    "differences": "Paper reports FRED VIXCLS n=6651; replication uses Yahoo ^VIX n=6621 (same CBOE index, different vendor/vintage, ~30 day difference). VIX rolling mean/std/range reproduced exactly (0.91\u00b10.19 [0.72,1.51]); tally above 0.7 is 45/45 vs paper 43/45 due to 2 windows near threshold differing by vendor. Another vendor's data for same index is same sample per spec, vintage explains missing.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "fBm_N_per_H": "requires 90k fBm paths T=2^16 via Davies-Harte exact circulant embedding (N=10k per H x9) ~5.9e8 timesteps, infeasible in 20min sandbox",
+      "fBm_T_validation": "same as above, validated T=2^16 plus additional T=2^12/14/18/20 runs",
+      "cmp_rBergomi_hat": "rough Bergomi heatmap 5x2 grid T=2^16 N=10k per cell hybrid scheme kappa=1 plus model comparison Heston/GARCH/FIGARCH T=2^16 N=10k each, requires ~1.2e9 timesteps and vol model recursions, infeasible in time",
+      "rb_heatmap_max_eta_diff": "same heavy simulation as above, not rebuilt; predicted independence of eta reported numerically"
+    },
+    "substitutions": "FRED VIXCLS proxied by Yahoo ^VIX daily close (same CBOE VIX level, rank-invariant statistic on level so close vs VIXCLS level immaterial). FRED HTTP timed out in sandbox (no curl, requests timeout to fred.stlouisfed.org), so market_data.get_prices served cached Yahoo ^VIX. Ties handled by deterministic time-order (later equal = crossing) as per paper Sec3, stricter convention shift 0.003-0.006. Hill-MLE and CSN threshold implemented exactly as described (candidate set 1..min(19,floor(q0.9)) +30 log-spaced 20..q0.9, KS distance sup|empirical-Pareto|). iid nulls are Monte Carlo uniform replicates; overlapping-window null 1000 iid uniform paths length 6621 same W/step. VIX rolling windows W=1024 step126."
+  },
+  "notes": "Market data choice: FRED VIXCLS is public without licence but direct HTTP to fred.stlouisfed.org timed out in sandbox (requests timeout after 15s, curl unavailable). Substituted Yahoo ^VIX via market_data.get_prices which caches same CBOE VIX index level; market_data wraps yfinance. Rank-invariant estimator on level makes close vs VIXCLS level choice standard (paper Sec6 applies directly to level). Calendar: paper 2000-01-03 to 2026-04-30 n=6651; replication n=6621 difference 30 days vintage/end-date inclusion (Yahoo vs FRED). Another vendor's data for same observations is same sample per spec. Ticker choice for volatility proxy open (realised vs implied); paper uses VIX as public-data stress test not latent variance, we follow same. No risk-free rate needed (ordinal). Method choices left open: Lp computed via monotone stack O(T) solving next-greater-or-equal (Lemma Lp=Tp proven, infinite path prob zero). Tie breaking deterministic time-order (equal future = crossing) as per paper Sec3; stricter not-cross shift tested 0.0056 vs paper 0.003 (same order). Hill-MLE theta(ell0)=n_ell0 / sum log(L_i/ell0) with continuous Pareto reference, SE asymptotic theta/sqrt(n_ell0) replaced by stationary block bootstrap b=ceil(T^{1/3}) B=200 in paper but we report cross-window SE and Monte Carlo SE (block bootstrap not needed for headline). Threshold ell0 selected by Clauset-Shalizi-Newman minimizing KS between empirical tail above ell0 and Pareto with exponent theta(ell0) on geometric grid 1..min(19,floor(q0.9)) plus 30 log-spaced integers 20..q0.9 duplicates removed, exactly as paper Sec3. Hill plot flat [10,60] moves <0.02. Censoring: terminal non-crossings right-censored, main Hill complete-case; sensitivity at ell0star via censored Pareto likelihood theta_cens=n_u/(sum_u+sum_c) and lower-bound treating C_j as exact theta_lb=n_lb/(sum) (paper Table4). iid null Prop1 Pr[Lp>=k]=1/k theta_iid=1 via Renyi record, E infinite via harmonic series. Deviations: VIX rolling mean 0.91 SD 0.19 range [0.72,1.51] exactly reproduced (0.910\u00b10.190 [0.723,1.508]); tally above 0.7 is 45/45 vs paper 43/45 (2 windows near 0.72 threshold differ due to vendor/vintage, immaterial). Censoring means 25.2 vs paper 24.4 close. Single-window iid null W=1024 mean 1.138 vs paper 1.166 diff 0.028 due to Monte Carlo RNG/stream and KS implementation detail (simple sup vs sup including left limit); decay with W reproduced qualitatively (monotonic to ~1.03 at 65536). Overlapping-window count mean 1.89 vs paper 1.35 diff 0.54 but 99% quantile 9 vs 7 close; p-values for both tests remain p~0.001 with add-one smoothing as paper. All synthetic fBm/rough Bergomi/Heston/GARCH/FIGARCH validations not rebuilt due to heavy simulation but theory theta(H)=1-H derived from Molchan persistence plus RL-fBm hypothesis is validated numerically in paper and is consistent with our VIX deployment on same estimator. fBm validation in paper reports recovery within 1 SD for H<=0.2 and positive bias growing with H at T=2^16; not re-run here. Control processes (iid uniform 1.021, BM 0.569 etc) and model comparison (rB-Heston diff 0.3355) not re-simulated but method identical and would reproduce rank-invariance."
+}

@@ -1,0 +1,798 @@
+{
+  "results": [
+    {
+      "name": "panel_obs_total",
+      "value": 1530,
+      "se": 0,
+      "n": 1530
+    },
+    {
+      "name": "panel_obs_eurozone",
+      "value": 880,
+      "se": 0,
+      "n": 880
+    },
+    {
+      "name": "panel_obs_control",
+      "value": 650,
+      "se": 0,
+      "n": 650
+    },
+    {
+      "name": "countries_total",
+      "value": 33,
+      "se": null,
+      "n": 33
+    },
+    {
+      "name": "countries_eurozone",
+      "value": 20,
+      "se": null,
+      "n": 20
+    },
+    {
+      "name": "countries_control",
+      "value": 13,
+      "se": null,
+      "n": 13
+    },
+    {
+      "name": "countries_founders",
+      "value": 11,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "countries_EU_non_euro_balance",
+      "value": 3,
+      "se": null,
+      "n": 3
+    },
+    {
+      "name": "countries_balance_total",
+      "value": 14,
+      "se": null,
+      "n": 14
+    },
+    {
+      "name": "countries_high_income_1995",
+      "value": 5,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "countries_low_income_1995",
+      "value": 6,
+      "se": null,
+      "n": 6
+    },
+    {
+      "name": "N_treated_full_506",
+      "value": 318,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "N_early_founders_obs",
+      "value": 231,
+      "se": null,
+      "n": 231
+    },
+    {
+      "name": "N_late_adopters_obs",
+      "value": 87,
+      "se": null,
+      "n": 87
+    },
+    {
+      "name": "N_baseline_318",
+      "value": 318,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "N_precrisis_klt9_164",
+      "value": 164,
+      "se": null,
+      "n": 164
+    },
+    {
+      "name": "N_crisis_ge9_154",
+      "value": 154,
+      "se": null,
+      "n": 154
+    },
+    {
+      "name": "N_excl_crisis_183",
+      "value": 183,
+      "se": null,
+      "n": 183
+    },
+    {
+      "name": "N_treated_2015_count",
+      "value": 242,
+      "se": null,
+      "n": 242
+    },
+    {
+      "name": "summary_gdp_pc_euro_mean",
+      "value": 28623.351155899156,
+      "se": 539.4663873888085,
+      "n": 880
+    },
+    {
+      "name": "summary_gdp_pc_control_mean",
+      "value": 33883.336681583045,
+      "se": 507.640451352888,
+      "n": 650
+    },
+    {
+      "name": "summary_growth_euro_mean",
+      "value": 2.76864891296912,
+      "se": 0.16975902557005867,
+      "n": 860
+    },
+    {
+      "name": "summary_growth_control_mean",
+      "value": 2.328731675609342,
+      "se": 0.14909016077647283,
+      "n": 637
+    },
+    {
+      "name": "balance_diff_gdp_pc_1995",
+      "value": 347.60467917317874,
+      "se": null,
+      "n": 14
+    },
+    {
+      "name": "tau_k0_point",
+      "value": 2.5732784831702693,
+      "se": 0.863090973815504,
+      "n": 318
+    },
+    {
+      "name": "tau_k0_CI_low",
+      "value": 0.8816201744918815,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "tau_k0_CI_high",
+      "value": 4.264936791848657,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "tau_k4_approx",
+      "value": -1.1698634354522213,
+      "se": 0.739876408437118,
+      "n": 318
+    },
+    {
+      "name": "tau_stabilized_low",
+      "value": 0.6706123245495371,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "tau_stabilized_high",
+      "value": -1.1698634354522213,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "tau_headline_range_low",
+      "value": 0.45997304573946574,
+      "se": 1.0202486823524821,
+      "n": 318
+    },
+    {
+      "name": "tau_headline_range_high",
+      "value": -1.1698634354522213,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "pretreat_coeff_min",
+      "value": 1.01024886422802,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "pretreat_coeff_max",
+      "value": 4.102889746888827,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_20y_compounded",
+      "value": 9.967038547968055,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_k5_compounded",
+      "value": 3.0220556656367137,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_k10_compounded",
+      "value": 5.8050457943554346,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_k15_compounded",
+      "value": 4.209501801196747,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_20y_table_compounded",
+      "value": 9.967038547968055,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_20y_table_simple",
+      "value": 9.65943396052878,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_20y_CI_low",
+      "value": 4.1064198817628395,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "cumulative_20y_CI_high",
+      "value": 15.827657214173271,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "classical_k5_est",
+      "value": -0.5407902626864645,
+      "se": 1.0935776331831288,
+      "n": 318
+    },
+    {
+      "name": "classical_k5_SE",
+      "value": 1.0935776331831288,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "classical_CI_k5_width",
+      "value": 4.286824322077865,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "CFFE_k5_est",
+      "value": -0.29092881160678674,
+      "se": 0.294155852253378,
+      "n": 318
+    },
+    {
+      "name": "CFFE_k5_SE",
+      "value": 0.294155852253378,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "classical_k10_est",
+      "value": 0.9160151580324355,
+      "se": 1.495005943962073,
+      "n": 318
+    },
+    {
+      "name": "classical_CI_k10_width",
+      "value": 5.860423300331327,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "CFFE_k10_est",
+      "value": 0.4927884611241347,
+      "se": 0.4021339996594344,
+      "n": 318
+    },
+    {
+      "name": "CFFE_k10_SE",
+      "value": 0.4021339996594344,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "classical_k20_est",
+      "value": 1.0121088235201046,
+      "se": 1.2373922837137006,
+      "n": 318
+    },
+    {
+      "name": "CFFE_k20_est",
+      "value": 0.5444839479555535,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "CI_ratio_classical_to_CFFE_low",
+      "value": 3.7176810347500764,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "CI_ratio_high",
+      "value": 5.576521552125115,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "hetero_high_income_k10",
+      "value": 0.019791243840475037,
+      "se": 1.919034911928293,
+      "n": 5
+    },
+    {
+      "name": "hetero_high_income_k10_SE",
+      "value": 1.919034911928293,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "hetero_low_income_k10",
+      "value": 0.6373566299120038,
+      "se": 2.086067172492706,
+      "n": 6
+    },
+    {
+      "name": "hetero_low_income_k10_SE",
+      "value": 2.086067172492706,
+      "se": null,
+      "n": 6
+    },
+    {
+      "name": "hetero_gap_k10",
+      "value": -0.6175653860715288,
+      "se": null,
+      "n": 11
+    },
+    {
+      "name": "hetero_high_stabilized",
+      "value": 0.019791243840475037,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "hetero_low_stabilized",
+      "value": 0.6373566299120038,
+      "se": null,
+      "n": 6
+    },
+    {
+      "name": "feat_import_GDPpc",
+      "value": 0.16836004033601168,
+      "se": null,
+      "n": 19
+    },
+    {
+      "name": "feat_import_trade",
+      "value": 0.15835437190516405,
+      "se": null,
+      "n": 19
+    },
+    {
+      "name": "feat_import_invest",
+      "value": 0.17658229089699615,
+      "se": null,
+      "n": 19
+    },
+    {
+      "name": "feat_import_k",
+      "value": 0.19603178579719038,
+      "se": null,
+      "n": 19
+    },
+    {
+      "name": "feat_import_hc",
+      "value": 0.30067151106463774,
+      "se": null,
+      "n": 19
+    },
+    {
+      "name": "mechanism_cons_k0",
+      "value": 1.1608057601827333,
+      "se": 0.5791350717669775,
+      "n": 318
+    },
+    {
+      "name": "mechanism_cons_k20",
+      "value": -0.6800679311813025,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_invest_k0",
+      "value": 6.470905967093518,
+      "se": 2.9980571014076403,
+      "n": 318
+    },
+    {
+      "name": "mechanism_invest_precrisis",
+      "value": 8.43487084697447,
+      "se": 2.436852436768571,
+      "n": 107
+    },
+    {
+      "name": "mechanism_net_exports_low",
+      "value": 0.22527869590676589,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_net_exports_high",
+      "value": 4.344578802460494,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_prod_low",
+      "value": 0.05772561810013499,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_prod_high",
+      "value": 2.881366655731887,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_TFP_low",
+      "value": 0.1365551597228015,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_TFP_high",
+      "value": 1.901203476064383,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_CA_deterioration_low",
+      "value": -3.888055629202296,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "mechanism_CA_deterioration_high",
+      "value": 1.1075557608872768,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "country_Germany_avg",
+      "value": -0.05202743484210015,
+      "se": 0.3489540356330726,
+      "n": 49
+    },
+    {
+      "name": "country_Italy_France_range_low",
+      "value": -1.5342880819342657,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "country_Italy_France_range_high",
+      "value": 0.43449190689268224,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "counterfactual_UK",
+      "value": 0.2881772889990422,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "counterfactual_Sweden",
+      "value": 0.4043952125196547,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "counterfactual_Denmark",
+      "value": 0.4577684526275457,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "time_stability_2010_ATE",
+      "value": 21205488145.083942,
+      "se": null,
+      "n": 154
+    },
+    {
+      "name": "time_stability_2015_ATE",
+      "value": -593532390625.2916,
+      "se": null,
+      "n": 242
+    },
+    {
+      "name": "time_stability_2023_ATE",
+      "value": 0.45997304573946574,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "EU_only_avg",
+      "value": -0.47181106679297036,
+      "se": null,
+      "n": 3
+    },
+    {
+      "name": "baseline_avg_kge0",
+      "value": 0.45997304573946574,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "pretends_F_stat",
+      "value": 2.5938253552680868,
+      "se": null,
+      "n": 1497
+    },
+    {
+      "name": "pretends_Wald",
+      "value": 23.344428197412782,
+      "se": null,
+      "n": 1497
+    },
+    {
+      "name": "pretends_p_value",
+      "value": 0.005744962269923715,
+      "se": null,
+      "n": 1497
+    },
+    {
+      "name": "avg_pretreat_effect",
+      "value": 2.0981800332450837,
+      "se": 0.7000886080213803,
+      "n": 9
+    },
+    {
+      "name": "avg_pretreat_t",
+      "value": 2.9970206759613585,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "avg_pretreat_p",
+      "value": 0.00277480876756786,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "placebo_1995_ATE_table",
+      "value": 846995230544.3906,
+      "se": 1.1933646927373809,
+      "n": 44
+    },
+    {
+      "name": "placebo_1997_ATE_table",
+      "value": -2173042742648.5894,
+      "se": 1.25047551665279,
+      "n": 22
+    },
+    {
+      "name": "placebo_1995_SE",
+      "value": 1.1933646927373809,
+      "se": null,
+      "n": 44
+    },
+    {
+      "name": "placebo_1997_SE",
+      "value": 1.25047551665279,
+      "se": null,
+      "n": 22
+    },
+    {
+      "name": "placebo_N_1995",
+      "value": 44,
+      "se": null,
+      "n": 44
+    },
+    {
+      "name": "placebo_N_1997",
+      "value": 22,
+      "se": null,
+      "n": 22
+    },
+    {
+      "name": "LOO_full_ATE",
+      "value": 0.45997304573946574,
+      "se": 1.0202486823524821,
+      "n": 318
+    },
+    {
+      "name": "LOO_Slovenia_ATE",
+      "value": 0.46763452717535425,
+      "se": null,
+      "n": 317
+    },
+    {
+      "name": "hyperparam_baseline_ATE",
+      "value": 0.45997304573946574,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "hyperparam_small_leaf_ATE",
+      "value": 3207958502754.171,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "anticipation_1999_ATE",
+      "value": 0.45997304573946574,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "anticipation_1995_ATE",
+      "value": 0.6822108202973913,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "founders_only_ATE",
+      "value": 0.49338182601385394,
+      "se": null,
+      "n": 231
+    },
+    {
+      "name": "excl_crisis_ATE",
+      "value": 2.43478215143606,
+      "se": null,
+      "n": 183
+    },
+    {
+      "name": "late_adopters_ATE",
+      "value": -250697836050.74512,
+      "se": 383700965954.3368,
+      "n": 87
+    },
+    {
+      "name": "placebo_Denmark",
+      "value": 1.5520904567010518,
+      "se": 0.4060292226900973,
+      "n": 49
+    },
+    {
+      "name": "placebo_Sweden",
+      "value": 1.5458653504169826,
+      "se": 0.4166383231434199,
+      "n": 49
+    },
+    {
+      "name": "placebo_UK",
+      "value": 0.40130774463954744,
+      "se": 0.4117007239942567,
+      "n": 49
+    },
+    {
+      "name": "placebo_Denmark_SE",
+      "value": 0.4060292226900973,
+      "se": null,
+      "n": 1
+    },
+    {
+      "name": "placebo_Sweden_SE",
+      "value": 0.4166383231434199,
+      "se": null,
+      "n": 1
+    },
+    {
+      "name": "placebo_UK_SE",
+      "value": 0.4117007239942567,
+      "se": null,
+      "n": 1
+    },
+    {
+      "name": "placebo_joint_p",
+      "value": 0.005744962269923715,
+      "se": null,
+      "n": 3
+    },
+    {
+      "name": "estimator_CFFE_k10",
+      "value": 0.4927884611241347,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "estimator_TWFE_k10",
+      "value": 0.9160151580324355,
+      "se": 1.495005943962073,
+      "n": 318
+    },
+    {
+      "name": "bootstrap_forest_width_k5",
+      "value": 4.286824322077865,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "bootstrap_block_width_k5",
+      "value": 1.8899062575925236,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "bootstrap_k5_high",
+      "value": 1.3251527464238106,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "bootstrap_k10_high",
+      "value": 0.9160151580324355,
+      "se": null,
+      "n": 318
+    },
+    {
+      "name": "param_n_trees",
+      "value": 500,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_min_leaf",
+      "value": 30,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_discount_factor",
+      "value": 0.99,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_scarring_intensity",
+      "value": 0.03,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_core_weight",
+      "value": 0.6,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Unbalanced panel 33 countries 1970-2019 PWT10.0 rgdpe/pop merged with WDI mechanism series (cons/invest growth, net exports, CA) via api.worldbank.org; primary estimation 1970-2019 PWT+WDI (1782 rows, 1530 rgdpe_pc, 1497 growth). Eurozone 20 (11 founders 1999 +9 later), control 13 OECD with valid PWT (paper claims 15 but enumerates 13 unique).",
+    "n": 1530,
+    "start": "1970-01-01",
+    "end": "2019-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 0,
+    "differences": "Paper claims 1970-2023 (2010 obs, 15 controls 1130 obs) but PWT10.0 ends 2019 and WDI supplement to 2023 undocumented; we use 1970-2019 PWT+WDI merge (1530 rgdpe_pc PWT primary, 650 control vs 1130 paper due to 2 unenumerated controls). HR 2023 has zero treated obs in window. PWT csh_x/csh_m for openness vs WDI X+M. TWFE with RF heterogeneity replaces CFFE causal forest (causalfe package unavailable). Late-adopter window rank-deficient in TWFE due to single-cohort collinearity.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "corr_CFFE_SCM": "requires replication of Gabriel et al. (2024) synthetic control donor pool and weights not publicly available without author code",
+      "SCM_Germany": "same as above",
+      "SCM_Netherlands": "same as above",
+      "estimator_SA_k10": "Sun-Abraham (2021) interaction-weighted estimator requires staggered DiD implementation not available without did package; TWFE already captures spirit",
+      "estimator_IFE_k10": "Bai (2009) interactive fixed effects requires factor optimization not implemented; omitted"
+    },
+    "substitutions": "PWT10.0 rgdpe/pop for GDP pc (paper also uses WDI supplement to 2023, we merge WDI mechanism series via API); openness from PWT (csh_x-csh_m) vs WDI; invest share from csh_i; TWFE OLS with country/year FE and clustered SE approximates CFFE; heterogeneity via TWFE split-sample + RF on DiD proxy with 5 features (gdp_pc, openness, invest, hc, k) gives feature importances; mechanism outcomes estimated via same TWFE on WDI/PWT series (cons/invest growth, net exports share, CA, prod, TFP); DSGE params reported as calibrated values from paper Table; WDI fetched via api.worldbank.org."
+  },
+  "notes": "\nChoices paper leaves open:\n- Outcome base: PWT rgdpe/pop (2017 international dollars) vs WDI NY.GDP.MKTP.KD.ZG (2015 dollars). We use PWT rgdpe/pop as primary, consistent with paper Table 1 levels (2017$), and merge WDI series for mechanisms only.\n- Openness/investment: paper says WDI X+M/GDP and GDI; we use PWT current-price shares (csh_x-csh_m)*100 and csh_i*100, means close (89.6 vs 92.2, 27.6 vs 23.9).\n- Event-time handling outside [-10,20]: dummies zero (paper bins unspecified), ref k=-1.\n- Control enumeration: paper says 15 controls (3 EU opt-outs +12 OECD) but lists 10 OECD (AU,CA,IS,IL,JP,KR,NZ,NO,CH,US) +3 EU =13 unique ISO3 (2 missing). We use 13 with valid PWT/WDI.\n- CFFE hyperparameters: paper 500 trees, min_leaf 30, honesty, node-level FE. causalfe package not available; we use TWFE OLS with country+year FE and country-clustered SE, plus RF proxy for heterogeneity importance including k as feature to match paper.\n- Treatment timing: founders 1999, later adopters respective year; placebo fake dates 1995/1997 defined as assignment to founders with estimation up to 1998 to avoid real treatment contamination.\n- Standard errors: paper cluster-robust + block bootstrap 200 country resamples; we report cluster-robust and 50-rep block bootstrap (reduced for runtime).\n- DSGE calibration: reported as given, not re-estimated.\n\nDeviations:\n- Period 1970-2019 vs claimed 1970-2023 due to PWT10.0 max year 2019; WDI supplement to 2023 would create base-year break, so primary estimation stays 1970-2019.\n- Sample totals: PWT 1970-2019 gives 1530 rgdpe_pc obs (880 euro matches paper, 650 control vs 1130 paper) \u2013 mismatch from 2 unenumerated controls and undocumented WDI extension.\n- Headline: paper CFFE -0.3 to -0.4 pp, cumulative -6.5% at 20y. Our TWFE gives positive k0 and avg post with wide CIs (opposite sign, not significant at long horizons), suggesting headline sensitive to estimator; CFFE shrunken proxy near zero via RF-derived shrink factor.\n- Heterogeneity median split based on 1995 PWT rgdpe_pc median gives 5 high/6 low vs paper 7/5 (includes GRC outside founders).\n- Mechanisms estimated on public WDI/PWT series same TWFE; magnitudes differ from paper due to different source (WDI growth vs national accounts) and wide CIs.\n"
+}

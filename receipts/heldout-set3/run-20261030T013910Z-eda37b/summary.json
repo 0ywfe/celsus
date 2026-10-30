@@ -1,0 +1,52 @@
+{
+ "run_id": "run-20261030T013910Z-eda37b",
+ "paper": "2609.06907",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 5 of 7 checked results match within their uncertainty. Its main result, US_supply_contrib_set_upper_2022Q2, is 7.3 percentage points in the paper and 5.351 percentage points here (not consistent). Sample size not rebuilt: BEA Underlying Detail Table 2.4.5U defines 136 PCE categories over 1988M1-2023M9; this panel cannot be reconstructed without BEA API key; FRED SBEA series provide only a subset of aggregate PCE components (tested valid IDs DNDGRG3M086SBEA etc.) and do not separately publish all 136 detailed categories; no other public source provides the full monthly panel (n_PCE_categories_total, 136 in the paper).",
+ "headline": {
+  "name": "US_supply_contrib_set_upper_2022Q2",
+  "kind": "estimate",
+  "unit": "percentage points",
+  "reported": 7.3,
+  "reproduced": 5.35130150546269,
+  "se": 0.55,
+  "n": 92,
+  "consistent": false,
+  "why": "paper outside 5.351 +/- 1.078"
+ },
+ "sample": [
+  {
+   "name": "n_PCE_categories_total",
+   "reported": 136.0,
+   "reproduced": 136.0,
+   "consistent": null
+  },
+  {
+   "name": "dimension_d_3var_post2019_periods",
+   "reported": 17.0,
+   "reproduced": 17.0,
+   "consistent": null
+  }
+ ],
+ "judged": 7,
+ "matched": 5,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (joint_hypothesis_upper_prob_robust (0.99) at line 344). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 73,
+ "cost_usd": 1.7351,
+ "tokens_in": 6455622,
+ "tokens_out": 128737,
+ "wall_s": 2344.6,
+ "crashed": null
+}

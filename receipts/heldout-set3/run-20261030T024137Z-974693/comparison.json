@@ -1,0 +1,280 @@
+{
+ "verdict": "could not check",
+ "rows": [
+  {
+   "name": "stylized_export_share_EA",
+   "kind": "estimate",
+   "unit": "share of exports",
+   "reported": 8.0,
+   "reproduced": 7.2,
+   "se": 0.3,
+   "n": 1,
+   "consistent": false,
+   "why": "paper outside 7.2 +/- 0.588"
+  },
+  {
+   "name": "stylized_world_gdp_share_EA",
+   "kind": "estimate",
+   "unit": "share of world GDP",
+   "reported": 15.0,
+   "reproduced": 12.06,
+   "se": null,
+   "n": 9,
+   "consistent": null,
+   "why": "no standard error"
+  },
+  {
+   "name": "stylized_trade_gdp_EA_exceeded",
+   "kind": "estimate",
+   "unit": "trade/GDP",
+   "reported": 80.0,
+   "reproduced": 79.0,
+   "se": 1.86,
+   "n": 25,
+   "consistent": true,
+   "why": "paper inside 79 +/- 3.646"
+  },
+  {
+   "name": "stylized_trade_gdp_US",
+   "kind": "estimate",
+   "unit": "trade/GDP",
+   "reported": 25.0,
+   "reproduced": 27.5,
+   "se": 0.61,
+   "n": 14,
+   "consistent": false,
+   "why": "paper outside 27.5 +/- 1.196"
+  },
+  {
+   "name": "stylized_trade_gdp_CAN",
+   "kind": "estimate",
+   "unit": "trade/GDP",
+   "reported": null,
+   "reproduced": 64.2,
+   "se": 0.61,
+   "n": 14,
+   "consistent": null,
+   "why": "the paper's value \"60--70%\" holds several numbers, so it is not judged"
+  },
+  {
+   "name": "stylized_oil_gdp_share_CAN",
+   "kind": "estimate",
+   "unit": "share of GDP",
+   "reported": 10.0,
+   "reproduced": 1.2,
+   "se": 0.35,
+   "n": 7,
+   "consistent": false,
+   "why": "paper outside 1.2 +/- 0.686"
+  },
+  {
+   "name": "stylized_oil_export_share_CAN",
+   "kind": "estimate",
+   "unit": "share of exports",
+   "reported": null,
+   "reproduced": 22.6,
+   "se": 1.3,
+   "n": 9,
+   "consistent": null,
+   "why": "the paper's value \"20\u201325%\" holds several numbers, so it is not judged"
+  },
+  {
+   "name": "param_n_canadian_vars_benchmark",
+   "kind": "parameter",
+   "unit": "variables",
+   "reported": 5.0,
+   "reproduced": 5,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_n_foreign_vars_benchmark",
+   "kind": "parameter",
+   "unit": "variables",
+   "reported": 4.0,
+   "reproduced": 4,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_var_lags_benchmark",
+   "kind": "parameter",
+   "unit": "lags",
+   "reported": 3.0,
+   "reproduced": 3,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_lag_BIC",
+   "kind": "parameter",
+   "unit": "lags",
+   "reported": 2.0,
+   "reproduced": 2,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_prior_mean_first_lag",
+   "kind": "parameter",
+   "unit": "coefficient",
+   "reported": 0.8,
+   "reproduced": 0.8,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_prior_tightness_lambda1",
+   "kind": "parameter",
+   "unit": "hyperparameter",
+   "reported": 0.1,
+   "reproduced": 0.1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_prior_lag_decay_lambda3",
+   "kind": "parameter",
+   "unit": "hyperparameter",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_lp_lags",
+   "kind": "parameter",
+   "unit": "lags",
+   "reported": 3.0,
+   "reproduced": 3,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_credible_level_VAR",
+   "kind": "parameter",
+   "unit": "credible level",
+   "reported": 90.0,
+   "reproduced": 90,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_confidence_level_LP",
+   "kind": "parameter",
+   "unit": "confidence level",
+   "reported": 90.0,
+   "reproduced": 90,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_n_rotations",
+   "kind": "parameter",
+   "unit": "angles",
+   "reported": 999.0,
+   "reproduced": 999,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_covid_dummy",
+   "kind": "parameter",
+   "unit": "date range",
+   "reported": 2020.0,
+   "reproduced": 16,
+   "se": null,
+   "n": 16,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_truncated_end",
+   "kind": "parameter",
+   "unit": "date",
+   "reported": 2020.0,
+   "reproduced": 202002,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_bond_yield_1_3yr",
+   "kind": "parameter",
+   "unit": "years",
+   "reported": 1.0,
+   "reproduced": 2,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_bond_yield_3_5yr",
+   "kind": "parameter",
+   "unit": "years",
+   "reported": 3.0,
+   "reproduced": 4,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_bond_yield_10plus",
+   "kind": "parameter",
+   "unit": "years",
+   "reported": 10.0,
+   "reproduced": 10,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "param_mortgage_1yr",
+   "kind": "parameter",
+   "unit": "rate tenor",
+   "reported": 1.0,
+   "reproduced": 1,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "a parameter the paper sets in its method, not a result, so it is not judged"
+  },
+  {
+   "name": "estimate_fed_rate_hike_persistence",
+   "kind": "estimate",
+   "unit": "duration",
+   "reported": 18.0,
+   "reproduced": null,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "not computed"
+  }
+ ]
+}

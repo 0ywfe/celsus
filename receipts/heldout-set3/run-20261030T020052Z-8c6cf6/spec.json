@@ -1,0 +1,1234 @@
+{
+ "title": "United in Currency, Divided in Growth: Dynamic Effects of Euro Adoption - Replication Spec",
+ "hypothesis": "Euro adoption reduced annual real GDP per capita growth under conditional parallel trends",
+ "data_sources": [
+  "Penn World Tables 10.0 (rgdpe/pop, log diff growth, productivity, human capital)",
+  "World Bank World Development Indicators (consumption, investment, net exports, additional macro indicators)"
+ ],
+ "sample": "Unbalanced country-year panel 35 countries 1970-2023. Treatment: 20 current eurozone members (11 founding 1999: Austria, Belgium, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Portugal, Spain; 9 late: Greece 2001, Slovenia 2007, Cyprus 2008, Malta 2008, Slovakia 2009, Estonia 2011, Latvia 2014, Lithuania 2015, Croatia 2023). Control: 15 (3 EU opt-out Denmark, Sweden, UK until 2020 + 12 other OECD: Australia, Canada, Iceland, Israel, Japan, Korea, New Zealand, Norway, Switzerland, US). Heterogeneity features measured 1998 or year before adoption: initial GDP per capita 2017$, trade openness, investment share, human capital index, standardized. Event time k_it = t - T_i^euro. Main estimation window k in [-10,20] (figure k in [-5,20]), placebo/anticipation checks with fake dates 1995,1997 and alternative treatment 1995 Madrid summit. Exclude <10 years pre-treatment for late adopters in main, included in robustness.",
+ "period_start": "1970",
+ "period_end": "2023",
+ "method": [
+  "Step 1 - Variable construction: primary outcome annual real GDP per capita growth = log diff rgdpe/pop (expenditure-side, 2017 prices). Treatment D_it=1 if adopted euro by year t. Event time k_it defined for treated; never-treated controls k undefined/placeholder. Mechanism outcomes: consumption growth (household final consumption), investment growth (gross fixed capital formation), net exports %GDP, labor productivity growth (output per worker), TFP rtpfna.",
+  "Step 2 - Features: X_i vector pre-treatment: initial GDP per capita, trade openness (%GDP), investment share (%GDP), human capital index. All continuous features standardized. Node-level residualization: within each tree node l compute Y~ - alpha_i^l - gamma_t^l and D~ - pi_i^l - rho_t^l (country+year FE estimated on observations in node l).",
+  "Step 3 - Causal Forests with Fixed Effects (CFFE) using causalfe Python (Kattenberg R reference). Hyperparameters: param_n_trees_main = 500 trees, Minimum leaf size param_min_leaf_main = 30 observations, Honesty enabled (separate split/estimation subsamples), node-level FE residualization. Robustness varies trees 100/200/500, depth 3/5/7, leaf 20/30/50. Model: Y_it = alpha_i + gamma_t + tau(k_it,X_i)*D_it + epsilon_it.",
+  "Step 4 - Dynamic ATT: tau_hat(k,X) learned forest nonparametrically. Average dynamic effect tau_hat(k)=1/N_k sum_{i:k_it=k} tau_hat(k,X_i). Cluster-robust variance: Var =1/N_k^2 sum_i (sum_{t:k_it=k} (tau_hat_it - tau_hat(k)))^2. Forest-based CI (Wager). Block bootstrap param_bootstrap_B=200 resamples entire country time series with replacement. Pre-treatment k<0 examined for placebo/parallel trends.",
+  "Step 5 - Benchmark/comparisons: Classical TWFE event study Y_it=alpha_i+gamma_t+ sum_{k=-10}^{20} beta_k*1[k_it=k]+epsilon_it k=-1 reference clustered SE; Sun-Abraham (2021) interaction-weighted cohort aggregation; Callaway-Sant'Anna (2021) doubly-robust group-time ATT; Bai (2009) interactive FE Y_it=alpha_i+ lambda_i'f_t + tau D_it+epsilon_it. Alternative control EU-only (Denmark,Sweden,UK) vs OECD baseline; crisis separation excluding 2008-2015, pre-crisis k<9 vs k>=9; anticipation 1995/1997 treatment dates; sample restrictions founders-only/EU15/excl crisis countries/core-only.",
+  "Step 6 - Mechanisms/heterogeneity: re-estimate CFFE with same structure for consumption, investment, net exports, productivity/TFP, current account. Feature importance = proportion of splits using variable. Country-level CATE tau_hat(k) trajectories and counterfactual predictions for non-euro EU members (UK, Sweden, Denmark) had they adopted 1999. Correlation with Gabriel et al SCM estimates. DSGE two-country NK with hysteresis (sequence-space Jacobian): IS, NKPC, scarring a_H=rho_a a_H-1+chi x_H-1+eps, Taylor union i=rho_i i_-1+(1-rho_i)(phi_pi pi^EA+phi_x x^EA) vs float country Taylor, UIP and q dynamics; calibration table DSGE."
+ ],
+ "claims": [
+  {
+   "name": "n_total_countries",
+   "description": "Total countries panel",
+   "value": "35",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Data Sources/Sample 35 countries 1970-2023"
+  },
+  {
+   "name": "n_eurozone",
+   "description": "Eurozone treatment group",
+   "value": "20",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table summary Countries 20"
+  },
+  {
+   "name": "n_control",
+   "description": "Control OECD non-euro",
+   "value": "15",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table summary Countries 15"
+  },
+  {
+   "name": "n_founders_1999",
+   "description": "Founding members 1999",
+   "value": "11",
+   "unit": "countries",
+   "kind": "count",
+   "where": "11 founding members 1999"
+  },
+  {
+   "name": "n_late_9",
+   "description": "Late adopters total current members",
+   "value": "9",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Nine countries joined subsequently"
+  },
+  {
+   "name": "n_late_sufficient",
+   "description": "Late adopters with sufficient post-treatment data",
+   "value": "8",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Figure heterogeneity 8 countries with sufficient data; Table adopter_timing"
+  },
+  {
+   "name": "n_EU_optout",
+   "description": "EU opt-out controls",
+   "value": "3",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Denmark, Sweden, UK"
+  },
+  {
+   "name": "n_nonEU_OECD",
+   "description": "Non-EU OECD controls",
+   "value": "12",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Remaining twelve other OECD"
+  },
+  {
+   "name": "n_high_low_total",
+   "description": "Heterogeneity sample founders+Greece split by 1995 median GDPpc",
+   "value": "12",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Figure heterogeneity_core_periphery lists 7+5=12"
+  },
+  {
+   "name": "n_high_income",
+   "description": "High-income founders above median 1995",
+   "value": "7",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Austria, Belgium, Finland, France, Germany, Luxembourg, Netherlands"
+  },
+  {
+   "name": "n_low_income",
+   "description": "Low-income founders below median 1995 incl Greece",
+   "value": "5",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Greece, Ireland, Italy, Portugal, Spain"
+  },
+  {
+   "name": "n_treated_19",
+   "description": "Eurozone members with sufficient data in event study figure",
+   "value": "19",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Figure 1 caption Sample includes 19 eurozone countries and 15 controls"
+  },
+  {
+   "name": "N_total_obs",
+   "description": "Total country-year observations",
+   "value": "2,010",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table summary Full Sample 2,010"
+  },
+  {
+   "name": "N_eurozone_obs",
+   "description": "Eurozone obs",
+   "value": "880",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table summary Eurozone 880"
+  },
+  {
+   "name": "N_control_obs",
+   "description": "Control obs",
+   "value": "1,130",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table summary Control 1,130"
+  },
+  {
+   "name": "N_full_506",
+   "description": "Treated obs full sample CFFE",
+   "value": "506",
+   "unit": "country-years treated",
+   "kind": "count",
+   "where": "Table time_stability 2023 N 506; Table adopter_timing Full N 506"
+  },
+  {
+   "name": "N_early_275",
+   "description": "Early adopters country-years",
+   "value": "275",
+   "unit": "country-years",
+   "kind": "count",
+   "where": "Table adopter_timing Early N 275"
+  },
+  {
+   "name": "N_late_231",
+   "description": "Late adopters country-years",
+   "value": "231",
+   "unit": "country-years",
+   "kind": "count",
+   "where": "Table adopter_timing Late N 231"
+  },
+  {
+   "name": "N_time_stab_2010",
+   "description": "Treated obs end 2010",
+   "value": "220",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table time_stability 2010 N 220"
+  },
+  {
+   "name": "N_time_stab_2023",
+   "description": "Treated obs end 2023",
+   "value": "506",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table time_stability 2023 N 506"
+  },
+  {
+   "name": "n_preperiods_classic",
+   "description": "Number pre-periods classic TWFE test",
+   "value": "9",
+   "unit": "periods",
+   "kind": "count",
+   "where": "Table pretrends Number pre-periods 9, range [-10,-2]"
+  },
+  {
+   "name": "N_placebo_1995_92",
+   "description": "Placebo 1995 N treated obs",
+   "value": "92",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table placebo N treated 92"
+  },
+  {
+   "name": "N_placebo_1997_68",
+   "description": "Placebo 1997 N treated obs",
+   "value": "68",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table placebo N treated 68"
+  },
+  {
+   "name": "param_n_trees_main",
+   "description": "Number trees CFFE baseline implementation",
+   "value": "500",
+   "unit": "trees",
+   "kind": "parameter",
+   "where": "Methodology Implementation Details"
+  },
+  {
+   "name": "param_min_leaf_main",
+   "description": "Minimum leaf size baseline",
+   "value": "30",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Implementation Details"
+  },
+  {
+   "name": "param_bootstrap_B",
+   "description": "Block bootstrap replications",
+   "value": "200",
+   "unit": "replications",
+   "kind": "parameter",
+   "where": "Block Bootstrap 200 bootstrap samples"
+  },
+  {
+   "name": "param_event_window_main",
+   "description": "Main event window focus",
+   "value": "[-10, 20]",
+   "unit": "k years",
+   "kind": "parameter",
+   "where": "Text k in [-10,20] main, [-5,20] figure"
+  },
+  {
+   "name": "att_range_low",
+   "description": "Average annual growth reduction lower bound",
+   "value": "0.3",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Abstract 0.3-0.4 pp average"
+  },
+  {
+   "name": "att_range_high",
+   "description": "Average annual growth reduction upper bound",
+   "value": "0.4",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Abstract 0.3-0.4 pp average"
+  },
+  {
+   "name": "att_k0_point",
+   "description": "ATT at k=0 CFFE",
+   "value": "-0.29",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Results k=0 -0.29"
+  },
+  {
+   "name": "att_k0_CI_low",
+   "description": "k0 CI low",
+   "value": "-0.36",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Results 95% CI [-0.36,-0.21]"
+  },
+  {
+   "name": "att_k0_CI_high",
+   "description": "k0 CI high",
+   "value": "-0.21",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Results 95% CI [-0.36,-0.21]"
+  },
+  {
+   "name": "att_k4_approx",
+   "description": "Effect by k=4",
+   "value": "-0.40",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Results reaching approx -0.40 pp by k=4"
+  },
+  {
+   "name": "att_stabilized_band_low",
+   "description": "Stabilized band low",
+   "value": "-0.30",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "fluctuating between -0.30 and -0.40 through k=20"
+  },
+  {
+   "name": "att_stabilized_band_high",
+   "description": "Stabilized band high",
+   "value": "-0.40",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "fluctuating between -0.30 and -0.40"
+  },
+  {
+   "name": "pretreat_range_low",
+   "description": "Pre-treatment coefficients low",
+   "value": "-0.05",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Pre-treatment -0.05 to +0.08"
+  },
+  {
+   "name": "pretreat_range_high",
+   "description": "Pre-treatment coefficients high",
+   "value": "0.08",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Pre-treatment -0.05 to +0.08"
+  },
+  {
+   "name": "CI_width_CFFE_low",
+   "description": "CFFE CI width low",
+   "value": "0.08",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Confidence bands 0.08 to 0.10 width"
+  },
+  {
+   "name": "CI_width_CFFE_high",
+   "description": "CFFE CI width high",
+   "value": "0.10",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Confidence bands 0.08 to 0.10 width"
+  },
+  {
+   "name": "bootstrap_wider_factor",
+   "description": "Block bootstrap wider factor",
+   "value": "8",
+   "unit": "times",
+   "kind": "estimate",
+   "where": "Appendix approx 8 times wider"
+  },
+  {
+   "name": "cumulative_20y_simple",
+   "description": "Cumulative simple sum k=20",
+   "value": "-7.04",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative Simple Sum -7.04 at k=20"
+  },
+  {
+   "name": "cumulative_20y_compounded",
+   "description": "Cumulative compounded k=20",
+   "value": "-6.81",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative Compounded -6.81 at k=20"
+  },
+  {
+   "name": "cumulative_20y_CI_low",
+   "description": "Cumulative 20y CI low",
+   "value": "-12.60",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative 95% CI [-12.60,-1.02]"
+  },
+  {
+   "name": "cumulative_20y_CI_high",
+   "description": "Cumulative 20y CI high",
+   "value": "-1.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative 95% CI [-12.60,-1.02]"
+  },
+  {
+   "name": "cumulative_10y_compounded",
+   "description": "Cumulative compounded k=10",
+   "value": "-3.97",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative Compounded -3.97 at 10y"
+  },
+  {
+   "name": "cumulative_5y_compounded",
+   "description": "Cumulative compounded k=5",
+   "value": "-2.25",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative Compounded -2.25 at k=5"
+  },
+  {
+   "name": "cumulative_15y_compounded",
+   "description": "Cumulative compounded k=15",
+   "value": "-5.40",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table cumulative Compounded -5.40 at 15y"
+  },
+  {
+   "name": "classical_k5_est",
+   "description": "Classical TWFE k=5 estimate",
+   "value": "-2.56",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table comparison Estimate -2.56 at k=5 classic"
+  },
+  {
+   "name": "classical_k5_SE",
+   "description": "Classical k5 SE",
+   "value": "0.82",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table comparison SE 0.82 classic k5"
+  },
+  {
+   "name": "classical_k5_CI_width",
+   "description": "Classical k5 CI width",
+   "value": "3.22",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table comparison CI Width 3.22 classic k5"
+  },
+  {
+   "name": "cffe_k5_est",
+   "description": "CFFE k=5 estimate",
+   "value": "-0.40",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table comparison CFFE -0.40 at k5"
+  },
+  {
+   "name": "cffe_k5_SE",
+   "description": "CFFE k5 SE",
+   "value": "0.03",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table comparison SE 0.03 CFFE k5"
+  },
+  {
+   "name": "cffe_k5_CI_width",
+   "description": "CFFE k5 CI width",
+   "value": "0.12",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table comparison CI Width 0.12 CFFE k5"
+  },
+  {
+   "name": "CI_width_ratio_low",
+   "description": "CI width ratio classic/CFFE low",
+   "value": "16",
+   "unit": "times",
+   "kind": "estimate",
+   "where": "Text CI width ratio 16 to 46"
+  },
+  {
+   "name": "CI_width_ratio_high",
+   "description": "CI width ratio high",
+   "value": "46",
+   "unit": "times",
+   "kind": "estimate",
+   "where": "Text CI width ratio 16 to 46"
+  },
+  {
+   "name": "high_income_k10",
+   "description": "High-income founders k10",
+   "value": "-0.31",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Heterogeneity high-income -0.31 SE0.02 at k10"
+  },
+  {
+   "name": "low_income_k10",
+   "description": "Low-income founders k10",
+   "value": "-0.54",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Heterogeneity low-income -0.54 SE0.03 at k10"
+  },
+  {
+   "name": "high_low_diff_k10",
+   "description": "High-low difference k10",
+   "value": "0.23",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Difference 0.23 pp at k10"
+  },
+  {
+   "name": "heterogeneity_GDP_importance",
+   "description": "Initial GDPpc importance",
+   "value": "0.45",
+   "unit": "proportion",
+   "kind": "estimate",
+   "where": "Table importance Initial GDP per capita 0.45"
+  },
+  {
+   "name": "heterogeneity_trade_importance",
+   "description": "Trade openness importance",
+   "value": "0.19",
+   "unit": "proportion",
+   "kind": "estimate",
+   "where": "Trade openness 0.19"
+  },
+  {
+   "name": "heterogeneity_invest_importance",
+   "description": "Investment share importance",
+   "value": "0.14",
+   "unit": "proportion",
+   "kind": "estimate",
+   "where": "Investment share 0.14"
+  },
+  {
+   "name": "heterogeneity_event_importance",
+   "description": "Event time importance",
+   "value": "0.12",
+   "unit": "proportion",
+   "kind": "estimate",
+   "where": "Event time 0.12"
+  },
+  {
+   "name": "heterogeneity_hc_importance",
+   "description": "Human capital importance",
+   "value": "0.10",
+   "unit": "proportion",
+   "kind": "estimate",
+   "where": "Human capital 0.10"
+  },
+  {
+   "name": "consumption_k0",
+   "description": "Consumption growth effect k0",
+   "value": "-0.24",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Mechanisms consumption k0 -0.24 SE0.04"
+  },
+  {
+   "name": "consumption_k20",
+   "description": "Consumption growth effect k20",
+   "value": "-0.07",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Mechanisms consumption k20 -0.07 SE0.02"
+  },
+  {
+   "name": "investment_k0",
+   "description": "Investment growth effect k0",
+   "value": "0.17",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Mechanisms investment +0.17 SE0.03 at k0"
+  },
+  {
+   "name": "investment_precrisis",
+   "description": "Investment pre-crisis effect",
+   "value": "0.25",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Pre-crisis initial positive +0.25 pp"
+  },
+  {
+   "name": "net_exports_range_low",
+   "description": "Net exports improvement low",
+   "value": "1.3",
+   "unit": "pp GDP",
+   "kind": "estimate",
+   "where": "Mechanisms net exports 1.3-1.6 pp"
+  },
+  {
+   "name": "net_exports_range_high",
+   "description": "Net exports improvement high",
+   "value": "1.6",
+   "unit": "pp GDP",
+   "kind": "estimate",
+   "where": "Mechanisms net exports 1.3-1.6 pp"
+  },
+  {
+   "name": "prod_decline_low",
+   "description": "Productivity decline low",
+   "value": "0.23",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Labor productivity declined 0.23-0.31 pp"
+  },
+  {
+   "name": "prod_decline_high",
+   "description": "Productivity decline high",
+   "value": "0.31",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Labor productivity 0.23-0.31 pp"
+  },
+  {
+   "name": "TFP_decline_low",
+   "description": "TFP decline low",
+   "value": "-0.15",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "TFP -0.15 to -0.22 pp"
+  },
+  {
+   "name": "TFP_decline_high",
+   "description": "TFP decline high",
+   "value": "-0.22",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "TFP -0.15 to -0.22 pp"
+  },
+  {
+   "name": "CA_deterioration_low",
+   "description": "Current account deterioration low periphery",
+   "value": "1.5",
+   "unit": "pp GDP",
+   "kind": "estimate",
+   "where": "Current account deterioration 1.5-2.5 pp low-income"
+  },
+  {
+   "name": "CA_deterioration_high",
+   "description": "Current account deterioration high",
+   "value": "2.5",
+   "unit": "pp GDP",
+   "kind": "estimate",
+   "where": "Current account deterioration 1.5-2.5 pp"
+  },
+  {
+   "name": "Germany_CATE",
+   "description": "Germany average CATE",
+   "value": "-0.20",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Country trajectories Germany smallest -0.20 pp"
+  },
+  {
+   "name": "corr_CFFE_SCM",
+   "description": "Correlation CFFE vs SCM country cumulative",
+   "value": "0.68",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Comparison correlation 0.68"
+  },
+  {
+   "name": "SCM_Germany",
+   "description": "SCM Germany cumulative",
+   "value": "1.2",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "SCM Germany +1.2%"
+  },
+  {
+   "name": "SCM_Netherlands",
+   "description": "SCM Netherlands cumulative",
+   "value": "0.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "SCM Netherlands +0.8%"
+  },
+  {
+   "name": "DSGE_beta",
+   "description": "DSGE discount factor",
+   "value": "0.99",
+   "unit": "quarterly",
+   "kind": "parameter",
+   "where": "Table DSGE beta 0.99"
+  },
+  {
+   "name": "DSGE_kappa",
+   "description": "DSGE NKPC slope",
+   "value": "0.10",
+   "unit": " ",
+   "kind": "parameter",
+   "where": "Table DSGE kappa 0.10"
+  },
+  {
+   "name": "DSGE_chi_baseline",
+   "description": "DSGE scarring intensity baseline",
+   "value": "0.03",
+   "unit": " ",
+   "kind": "parameter",
+   "where": "Table DSGE chi 0.03 baseline"
+  },
+  {
+   "name": "DSGE_omega",
+   "description": "DSGE core weight",
+   "value": "0.60",
+   "unit": " ",
+   "kind": "parameter",
+   "where": "Table DSGE omega 0.60"
+  },
+  {
+   "name": "DSGE_cumul_loss_union_vs_float",
+   "description": "Union cumulative loss 40% larger",
+   "value": "40",
+   "unit": "% larger",
+   "kind": "estimate",
+   "where": "DSGE cumulative losses approx 40% larger under union"
+  },
+  {
+   "name": "time_stab_2023_ATE",
+   "description": "ATE end 2023",
+   "value": "-0.28",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table time_stability 2023 -0.28 [-0.30,-0.27]"
+  },
+  {
+   "name": "time_stab_2010_ATE",
+   "description": "ATE end 2010",
+   "value": "-0.29",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table time_stability 2010 -0.29 [-0.31,-0.27]"
+  },
+  {
+   "name": "time_stab_2015_ATE",
+   "description": "ATE end 2015",
+   "value": "-0.56",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table time_stability 2015 -0.56"
+  },
+  {
+   "name": "EUonly_k0",
+   "description": "EU-only k0 estimate",
+   "value": "-0.703",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table EU-only k0 -0.703 SE0.064"
+  },
+  {
+   "name": "baseline_k0_EUcomp",
+   "description": "Baseline OECD k0 for EU comparison",
+   "value": "-0.228",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table baseline k0 -0.228 SE0.036"
+  },
+  {
+   "name": "EUonly_avg",
+   "description": "EU-only avg k>=0",
+   "value": "-0.472",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table EU-only Avg -0.472"
+  },
+  {
+   "name": "baseline_avg",
+   "description": "Baseline avg k>=0",
+   "value": "-0.261",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table baseline Avg -0.261"
+  },
+  {
+   "name": "loo_full_ATE",
+   "description": "Leave-one-out full sample ATE",
+   "value": "-0.188",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table loo None Full -0.188 SE0.028 CI[-0.244,-0.133]"
+  },
+  {
+   "name": "loo_full_CI_low",
+   "description": "LOO full CI low",
+   "value": "-0.244",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "LOO full CI [-0.244,-0.133]"
+  },
+  {
+   "name": "loo_full_CI_high",
+   "description": "LOO full CI high",
+   "value": "-0.133",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "LOO full CI [-0.244,-0.133]"
+  },
+  {
+   "name": "loo_Slovenia_ATE",
+   "description": "LOO dropping Slovenia",
+   "value": "-0.422",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table loo Slovenia -0.422 SE0.033"
+  },
+  {
+   "name": "loo_Austria_ATE",
+   "description": "LOO dropping Austria",
+   "value": "-0.132",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table loo Austria -0.132"
+  },
+  {
+   "name": "placebo_1995_text_ATE",
+   "description": "Placebo 1995 text ATE",
+   "value": "-0.02",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Text placebo 1995 ATE -0.02 p0.78"
+  },
+  {
+   "name": "placebo_1995_text_p",
+   "description": "Placebo 1995 text p",
+   "value": "0.78",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Text placebo 1995 p=0.78"
+  },
+  {
+   "name": "placebo_1997_text_ATE",
+   "description": "Placebo 1997 text ATE",
+   "value": "0.01",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Text placebo 1997 +0.01 p0.89"
+  },
+  {
+   "name": "placebo_1997_text_p",
+   "description": "Placebo 1997 text p",
+   "value": "0.89",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Text placebo 1997 p=0.89"
+  },
+  {
+   "name": "placebo_table_1995_ATE",
+   "description": "Placebo table 1995 ATE",
+   "value": "1.751",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table placebo Placebo 1995 ATE 1.751 SE0.042"
+  },
+  {
+   "name": "placebo_table_1995_p",
+   "description": "Placebo table 1995 p",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table placebo p=0.000"
+  },
+  {
+   "name": "placebo_table_1997_ATE",
+   "description": "Placebo table 1997 ATE",
+   "value": "1.555",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table placebo Placebo 1997 ATE 1.555 SE0.025"
+  },
+  {
+   "name": "pre_trends_F",
+   "description": "Joint pre-trends F-statistic classic TWFE",
+   "value": "3.13",
+   "unit": "F",
+   "kind": "estimate",
+   "where": "Table pretrends F-statistic 3.13 classic"
+  },
+  {
+   "name": "pre_trends_Wald",
+   "description": "Wald statistic",
+   "value": "28.16",
+   "unit": "Wald",
+   "kind": "estimate",
+   "where": "Table pretrends Wald 28.16"
+  },
+  {
+   "name": "pre_trends_p",
+   "description": "Pre-trends joint p",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table pretrends p=0.001 Reject Yes"
+  },
+  {
+   "name": "pre_trends_avg_effect",
+   "description": "Average pre-treatment effect",
+   "value": "-0.312",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table pretrends Average effect -0.312 SE0.295"
+  },
+  {
+   "name": "pre_trends_avg_SE",
+   "description": "Avg pre SE",
+   "value": "0.295",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table pretrends SE 0.295"
+  },
+  {
+   "name": "pre_trends_avg_t",
+   "description": "Avg pre t-stat",
+   "value": "-1.06",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table pretrends t -1.06"
+  },
+  {
+   "name": "pre_trends_avg_p",
+   "description": "Avg pre p",
+   "value": "0.321",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table pretrends p=0.321"
+  },
+  {
+   "name": "placebo_Denmark",
+   "description": "Placebo Denmark effect 1999",
+   "value": "-0.10",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU Denmark -0.10 SE0.02 p<0.01"
+  },
+  {
+   "name": "placebo_Denmark_p",
+   "description": "Placebo Denmark p",
+   "value": "<0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU Denmark p<0.01"
+  },
+  {
+   "name": "placebo_Denmark_SE",
+   "description": "Placebo Denmark SE",
+   "value": "0.02",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU Denmark SE0.02"
+  },
+  {
+   "name": "placebo_Sweden",
+   "description": "Placebo Sweden effect",
+   "value": "0.14",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU Sweden +0.14 SE0.05 p0.01"
+  },
+  {
+   "name": "placebo_Sweden_p",
+   "description": "Placebo Sweden p",
+   "value": "0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU Sweden p0.01"
+  },
+  {
+   "name": "placebo_UK",
+   "description": "Placebo UK effect",
+   "value": "-0.14",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU UK -0.14 SE0.07 p0.07"
+  },
+  {
+   "name": "placebo_UK_p",
+   "description": "Placebo UK p",
+   "value": "0.07",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU UK p0.07"
+  },
+  {
+   "name": "placebo_joint_p",
+   "description": "Placebo joint test p",
+   "value": "<0.01",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table placebo_nonEU Joint p<0.01"
+  },
+  {
+   "name": "alt_CFFE_k10",
+   "description": "Alternative estimators CFFE k10",
+   "value": "-0.20",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator_comparison CFFE -0.20 [-0.25,-0.16] width0.10"
+  },
+  {
+   "name": "alt_CFFE_k10_CI_low",
+   "description": "CFFE k10 CI low alt table",
+   "value": "-0.25",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator -0.25 low"
+  },
+  {
+   "name": "alt_CFFE_k10_CI_high",
+   "description": "CFFE k10 CI high alt table",
+   "value": "-0.16",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator -0.16 high"
+  },
+  {
+   "name": "alt_TWFE_k10",
+   "description": "Classical TWFE k10 alt table",
+   "value": "-0.83",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator TWFE -0.83 [-3.09,+1.44]"
+  },
+  {
+   "name": "alt_TWFE_k10_CI_low",
+   "description": "TWFE k10 CI low",
+   "value": "-3.09",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator TWFE -3.09"
+  },
+  {
+   "name": "alt_IFE_k10",
+   "description": "Interactive FE k10",
+   "value": "-5.98",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator IFE -5.98 [-8.25,-3.71]"
+  },
+  {
+   "name": "alt_SA_k10",
+   "description": "Sun-Abraham k10",
+   "value": "-3.52",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table estimator SA -3.52 [-8.81,+1.77]"
+  },
+  {
+   "name": "bootstrap_k5_forest_low",
+   "description": "Bootstrap forest-based k5 low",
+   "value": "-0.29",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table bootstrap Forest k5 [-0.29,-0.21]"
+  },
+  {
+   "name": "bootstrap_k5_boot_low",
+   "description": "Bootstrap block k5 low",
+   "value": "-0.72",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table bootstrap Block k5 [-0.72,+0.13]"
+  },
+  {
+   "name": "bootstrap_k5_boot_high",
+   "description": "Bootstrap block k5 high",
+   "value": "0.13",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table bootstrap Block k5 [-0.72,+0.13]"
+  },
+  {
+   "name": "summary_GDPpc_euro_mean",
+   "description": "Summary GDP pc euro mean",
+   "value": "30,751",
+   "unit": "$",
+   "kind": "estimate",
+   "where": "Table summary Eurozone GDPpc 30,751"
+  },
+  {
+   "name": "summary_GDPgrowth_euro_mean",
+   "description": "Summary GDP growth euro mean",
+   "value": "2.72",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table summary GDP growth 2.72% euro"
+  },
+  {
+   "name": "balance_GDPdiff_1995",
+   "description": "Balance 1995 GDP diff founders vs EU non-euro",
+   "value": "1,560",
+   "unit": "$",
+   "kind": "estimate",
+   "where": "Table balance_1995 Diff 1,560"
+  },
+  {
+   "name": "early_adopter_ATE",
+   "description": "Early adopters ATE",
+   "value": "-0.37",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table adopter_timing Early -0.37 [-0.38,-0.35]"
+  },
+  {
+   "name": "late_adopter_ATE",
+   "description": "Late adopters ATE",
+   "value": "0.11",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table adopter_timing Late +0.11 [+0.04,+0.19]"
+  },
+  {
+   "name": "founders_only_ATE",
+   "description": "Founders only sample ATE",
+   "value": "-0.37",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table sample_restrictions Founders only -0.37 N275"
+  },
+  {
+   "name": "excl_crisis_ATE",
+   "description": "Excluding crisis countries ATE",
+   "value": "-0.18",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table sample_restrictions Excl crisis -0.18 N341"
+  },
+  {
+   "name": "anticipation_1995_ATE",
+   "description": "Anticipation 1995 treatment date ATE",
+   "value": "-0.19",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table anticipation 1995 -0.19 [-0.21,-0.17]"
+  },
+  {
+   "name": "anticipation_1999_ATE",
+   "description": "Anticipation baseline 1999 ATE",
+   "value": "-0.25",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table anticipation baseline -0.25 [-0.27,-0.24]"
+  }
+ ],
+ "headline": "att_k0_point",
+ "partitions": [
+  {
+   "split": "Heterogeneity by initial GDP per capita (pre-1995 median split, founders + Greece as classified in figure)",
+   "total": "n_high_low_total",
+   "parts": [
+    "High-income founders above-median 1995: Austria, Belgium, Finland, France, Germany, Luxembourg, Netherlands",
+    "total count claim = n_high_income = 7",
+    "representative estimate high_income_k10 = -0.31 pp SE 0.02, stabilized ~ -0.30 pp",
+    "Low-income founders below-median 1995: Greece, Ireland, Italy, Portugal, Spain",
+    "total count claim = n_low_income = 5",
+    "representative estimate low_income_k10 = -0.54 pp SE 0.03, diff high_low_diff_k10 = 0.23 pp"
+   ]
+  },
+  {
+   "split": "Early (1999 founders) vs late adopters",
+   "total": "n_treated_19",
+   "parts": [
+    "Early adopters 1999",
+    "count claim = n_founders_1999 = 11, country-year count claim N_early_275 = 275, ATE claim early_adopter_ATE = -0.37 pp",
+    "Late adopters",
+    "count claim = n_late_sufficient = 8, country-year count claim N_late_231 = 231, ATE claim late_adopter_ATE = 0.11 pp"
+   ]
+  },
+  {
+   "split": "Control group composition",
+   "total": "n_control",
+   "parts": [
+    "EU opt-out controls (Denmark, Sweden, UK)",
+    "count claim = n_EU_optout = 3",
+    "Non-EU OECD controls",
+    "count claim = n_nonEU_OECD = 12",
+    "EU-only robustness at k0 EUonly_k0 = -0.703 vs baseline baseline_k0_EUcomp = -0.228, avg EUonly_avg = -0.472 vs baseline_avg = -0.261"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Joint pre-trends F (classical TWFE) H0: all tau(k)=0 for k<0",
+   "statistic": "pre_trends_F",
+   "p_value": "pre_trends_p",
+   "group_sizes": [
+    "n_preperiods_classic",
+    "n_founders_1999",
+    "n_control",
+    "N_total_obs"
+   ]
+  },
+  {
+   "test": "Average pre-treatment effect t-test (classical TWFE)",
+   "statistic": "pre_trends_avg_t",
+   "p_value": "pre_trends_avg_p",
+   "group_sizes": [
+    "n_preperiods_classic",
+    "N_total_obs"
+   ]
+  },
+  {
+   "test": "Placebo fake adoption 1995 on actual adopters (text interpretation)",
+   "statistic": "placebo_1995_text_ATE",
+   "p_value": "placebo_1995_text_p",
+   "group_sizes": [
+    "N_placebo_1995_92",
+    "n_founders_1999"
+   ]
+  },
+  {
+   "test": "Placebo fake adoption 1997 on actual adopters (text interpretation)",
+   "statistic": "placebo_1997_text_ATE",
+   "p_value": "placebo_1997_text_p",
+   "group_sizes": [
+    "N_placebo_1997_68",
+    "n_founders_1999"
+   ]
+  },
+  {
+   "test": "Placebo table contradictory estimate 1995 (audit note: table vs text inconsistency)",
+   "statistic": "placebo_table_1995_ATE",
+   "p_value": "placebo_table_1995_p",
+   "group_sizes": [
+    "N_placebo_1995_92"
+   ]
+  },
+  {
+   "test": "Placebo non-euro EU members 1999 (Denmark)",
+   "statistic": "placebo_Denmark",
+   "p_value": "placebo_Denmark_p",
+   "group_sizes": [
+    "n_EU_optout",
+    "n_founders_1999"
+   ]
+  },
+  {
+   "test": "Placebo non-euro EU members 1999 (Sweden)",
+   "statistic": "placebo_Sweden",
+   "p_value": "placebo_Sweden_p",
+   "group_sizes": [
+    "n_EU_optout"
+   ]
+  },
+  {
+   "test": "Placebo non-euro EU members 1999 (UK)",
+   "statistic": "placebo_UK",
+   "p_value": "placebo_UK_p",
+   "group_sizes": [
+    "n_EU_optout"
+   ]
+  },
+  {
+   "test": "Placebo non-euro EU members joint test all placebo =0",
+   "statistic": "placebo_joint_p",
+   "p_value": "placebo_joint_p",
+   "group_sizes": [
+    "n_EU_optout"
+   ]
+  }
+ ]
+}

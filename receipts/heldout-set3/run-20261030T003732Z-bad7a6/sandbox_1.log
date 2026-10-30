@@ -1,0 +1,33 @@
+exit 0 in 143.0s
+--- stdout
+=== Fetch VIX ===
+Yahoo ^VIX rows 6621 from 2000-01-03 to 2026-04-30
+VIX mean 0.9097 sd 0.1903 range [0.7233,1.5085] windows 45
+cnt above 0.7 45/45 below 1.017 35 cens 25.18 above 21.31 tie_shift 0.0056
+Full Lp 6602 cens 19 q90 29.0
+W   512 mean 1.204 sigma 0.110 2.5 1.017 97.5 1.435 med 1.196
+W  1024 mean 1.138 sigma 0.080 2.5 0.996 97.5 1.319 med 1.133
+W  2048 mean 1.100 sigma 0.052 2.5 1.000 97.5 1.204 med 1.100
+W  4096 mean 1.073 sigma 0.034 2.5 1.006 97.5 1.138 med 1.072
+W  8192 mean 1.054 sigma 0.024 2.5 1.009 97.5 1.103 med 1.054
+W 16384 mean 1.045 sigma 0.016 2.5 1.014 97.5 1.075 med 1.045
+W 32768 mean 1.038 sigma 0.011 2.5 1.016 97.5 1.061 med 1.038
+W 65536 mean 1.034 sigma 0.008 2.5 1.018 97.5 1.050 med 1.034
+Overlap count mean 1.89 99% 9 max 11 p_cnt 0.0010
+Overlap rolling mean 1.140 sigma 0.024 p_mean 0.0010
+Cens mean 0.676 range [0.507,0.990] lower mean 0.759 range [0.605,1.035]
+Decay T 2^14 mean 1.045
+Decay T 2^16 mean 1.034
+Decay T 2^18 mean 1.030
+Decay T 2^20 mean 1.028
+Wrote /work/results.json 102 results
+{'name': 'abstract_hat_theta_mean', 'value': 0.9097391100606045, 'se': 0.02837188165857547, 'n': 45}
+{'name': 'abstract_hat_theta_sigma', 'value': 0.1903243681144627, 'se': None, 'n': 45}
+{'name': 'abstract_p_lt_001', 'value': 0.000999000999000999, 'se': None, 'n': 1000}
+{'name': 'VIX_n_days', 'value': 6621, 'se': None, 'n': 6621}
+{'name': 'VIX_windows_count', 'value': 45, 'se': 0, 'n': 45}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

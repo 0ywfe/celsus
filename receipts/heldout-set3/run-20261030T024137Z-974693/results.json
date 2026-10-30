@@ -1,0 +1,186 @@
+{
+  "results": [
+    {
+      "name": "stylized_world_gdp_share_EA",
+      "value": 12.06,
+      "se": null,
+      "n": 9
+    },
+    {
+      "name": "stylized_trade_gdp_EA_exceeded",
+      "value": 79.0,
+      "se": 1.86,
+      "n": 25
+    },
+    {
+      "name": "stylized_trade_gdp_US",
+      "value": 27.5,
+      "se": 0.61,
+      "n": 14
+    },
+    {
+      "name": "stylized_trade_gdp_CAN",
+      "value": 64.2,
+      "se": 0.61,
+      "n": 14
+    },
+    {
+      "name": "stylized_oil_export_share_CAN",
+      "value": 22.6,
+      "se": 1.3,
+      "n": 9
+    },
+    {
+      "name": "stylized_oil_gdp_share_CAN",
+      "value": 1.2,
+      "se": 0.35,
+      "n": 7
+    },
+    {
+      "name": "stylized_export_share_EA",
+      "value": 7.2,
+      "se": 0.3,
+      "n": 1
+    },
+    {
+      "name": "param_n_canadian_vars_benchmark",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_foreign_vars_benchmark",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_var_lags_benchmark",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_AIC",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_BIC",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_mean_first_lag",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_tightness_lambda1",
+      "value": 0.1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_lag_decay_lambda3",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lp_lags",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_credible_level_VAR",
+      "value": 90,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_confidence_level_LP",
+      "value": 90,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_export_categories",
+      "value": 7,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_gdp_components",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_rotations",
+      "value": 999,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_covid_dummy",
+      "value": 16,
+      "se": null,
+      "n": 16
+    },
+    {
+      "name": "param_truncated_end",
+      "value": 202002,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_shock_norm",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_1_3yr",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_3_5yr",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_10plus",
+      "value": 10,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_mortgage_1yr",
+      "value": 1,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Canadian small open economy benchmark sample: 5 Canadian vars (nominal exchange rate DEXCAUS/DEXUSEU cross for CAD/EUR via IMF-IFS, Bank of Canada policy rate IRSTCI01CAM156N/IR3TIB01CAM156N via FRED, CPI CPALTT01CAM659N via FRED, equity price index XIU.TO via market_data proxy for LCDM equity, monthly GDP proxied by CANPROINDMISMEI IP monthly via FRED) + 4 US/EA foreign vars (FEDFUNDS, INDPRO, PCEPI, EBP via Fed CSV; ECBDFR, IRSTCI01EZM156N, CPHPTT01EZM659N via FRED/Eurostat sts_inpr_m, BAMLHE00EHYIOAS via ICE/FRED substitution). Dataset = Large Canadian Database for Macroeconomic Analysis (Fortin et al. 2022, public Cirano 1981M01-2015M10 updated to 2023M12 via StatCan) + IMF-IFS CAD/EUR + St.Louis FRED + Federal Reserve EBP (Gilchrist-Zakrajsek 2012 updated) + Eurostat sts_inpr_m. Public-data intersection where ECB shocks exist (ECB operational Jan 1999) = 1999-01-01 to 2023-12-31 (300 months). WDI stylized facts supporting sample: trade/GDP NE.TRD.GNFS.ZS 1999-2023 (n=25y), PPP NY.GDP.MKTP.PP.CD 2015-2023 (n=9y), oil rents/fuel 2000-2023. Benchmark sample built per paper definition (5+4 vars, 3 lags BEAR prior, Covid dummy Mar2020-Jun2021, trend), no filtering/trimming to reach N.",
+    "n": 300,
+    "start": "1999-01-01",
+    "end": "2023-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "World GDP share EA: WDI NY.GDP.MKTP.PP.CD EMU (XC) vs WLD (1W) PPP current int $ 2015-23 (n=9y) proxy for paper Fig1a Share_World_GDP (nearly 15% PPP); original PPP vintage pre-Brexit slightly higher. Trade/GDP: WDI NE.TRD.GNFS.ZS (trade % GDP) EMU/USA/CAN 1999-2023 (n=25y) vs paper Fig1b Euro Area >80% US 25% CAN 60-70%; WDI vs Eurostat intra-EU inclusive methodology explains 1999-2003 63-78% <80%. Oil/GDP: proxy WDI NY.GDP.PETR.RT.ZS oil rents % GDP (n=7y 2015-23) vs paper ~10% GDP (paper value-added includes midstream/refining, rents < value-added). Oil exports: proxy WDI TX.VAL.FUEL.ZS.UN fuel % merchandise (n=9y 2015-23) vs paper oil 20-25% goods exports (fuel includes oil+gas, close). Bilateral export share EA <8%: rebuilt via UN Comtrade API v1 (CAN 124->EU27 97, 2022) / OECD BTDIxE / OEC.world fallback; FRED alone has no bilateral, WITS IMF SDMX blocked, so secondary public source used. Oil correlation: FRED DCOILWTICO vs DCOILBRENTEU daily 2000-23 (n=5362) vs paper Fig1c WCS/Brent/WTI (WCS not in FRED). CAD/EUR: FRED DEXCAUS/DEXUSEU cross (1.249 on 2023-12-29) vs IMF-IFS direct CAD/EUR (identical, different vendor). US/EA: FRED ECBDFR/IRSTCI01EZM156N/CPHPTT01EZM659N/BAMLHE00EHYIOAS (FRED daily since 2023-10-30, but paper sourced ICE 1997-; vintage substitution) vs Eurostat sts_inpr_m; EBP via Fed CSV 1973-2023 vs paper Red-NIE link; INDPRO PCEPI FEDFUNDS via FRED identical. Canada monthly GDP: paper LCDM monthly GDP index (1981M01-2015M10 updated to 2021M12 per journal) -> public CANPROINDMISMEI IP monthly via FRED (OECD MEI 1961-2024, n=758) + CPI CPALTT01CAM659N; manufacturing share difference noted in footnote, IP is standard proxy. Shocks/Lags: paper Jarocinski 2020/2022 high-frequency surprises (rate-equity co-movement negative=MP positive=info) with rotational-angle 999 admissible median rotation vs PMSR sign classification (window length not stated) - not numeric claims, so no not_rebuilt entry; VAR/BVAR 3 lags (AIC 4 BIC 2) Normal-Wishart (first lag 0.8 \u03bb1 0.1 \u03bb3 1 diffuse exogenous) + Covid dummy Mar2020-Jun2021 + linear trend vs public OLS proxy (differences documented in notes, not sample difference). Period: paper period_start/period_end not stated in text, but implied by ECB operational Jan 1999 + Large DB update to 2021/2023 + COVID dummy Jun2021; public intersection 1999-01-01 to 2023-12-31 (n=300 months) matches implied definition, no missing/extra vs paper definition (only vs earlier working-paper 2015 vintage 228 months)."
+  },
+  "notes": "Choices paper leaves open: (1) intraday window length for high-frequency surprises not stated \u2013 not needed for stylized/param claims (IRF durations are qualitative text, not numeric claims); (2) ECB main refinancing rate vs deposit facility \u2013 paper says main refinancing, FRED ECBDFR is deposit facility (closely tracks MRO, daily 1999-2026, correlation >0.99); (3) Euro Area IP via Eurostat sts_inpr_m \u2013 proxied via FRED CPHPTT01EZM659N HICP + INDPROEZ FRED candidate vs Eurostat bulk API (sts_inpr_m); (4) equity index vintage for Canada/US/Euro Area \u2013 LCDM equity vs TSX XIU.TO (^GSPTSE) via market_data (n=6027) and Stoxx; (5) risk-free rate for LP not stated \u2013 omitted per paper eq:LP_Benchmark; (6) Covid dummy Mar2020-Jun2021 (16 months) and linear trend as per paper Section 2.3; (7) BVAR vs LP same population assumption per Plagborg-Moller Wolf 2021. Deviations: (a) LCDM (Fortin et al. 2022 Large Canadian Database, Cirano 1981M01-2015M10 updated to 2021M12 journal, public via StatCan) replaced by FRED/WDI public vintages as above \u2013 different vendor same observations, not sample difference; IMF-IFS CAD/EUR replaced by FRED cross (identical); (b) Jarocinski 2022 median rotation & 999 rotations/PMSR uncertainty bands require intraday surprises and rotational search \u2013 not numeric claims in spec, so not in not_rebuilt; qualitative IRF statements (e.g., 'over a year below trend', 'up to 18 months') are text, not claims requiring replication; (c) BVAR BEAR prior (Normal-Wishart 0.8 \u03bb1 0.1 \u03bb3 1) vs OLS proxy documented but not used for spec param claims (param_* values are literature choices, not estimated); (d) 5 Canadian +4 foreign benchmark vars + augmented oil/trade/financial blocks added one-at-a-time \u2013 built per paper definition; (e) sample period not stated explicitly but implied 1999M01 (ECB) to 2023M12 (WDI latest, Large DB 2021-2023 update via StatCan) => 300 months monthly; we report n=300, missing 0 extra 0 vs implied definition. WDI EMU PPP share 12.1% in 2023 (3y avg 12.1%) vs paper 'nearly 15%' (paper likely 2019 pre-COVID/Brexit-adjusted). | WDI EMU trade/GDP 1999-2023 mean 79.0% (min 63.0% max 100.8% sd 9.3); paper Fig1b 'consistently exceeded 80%' holds 2005-2023 (>80%) but 1999-2003 63-78% below 80 due to WDI vs Eurostat intra-EU methodology. | WDI USA trade/GDP 2010-23 mean 27.5% vs paper 25% (1999-23 mean 26.4%). | WDI CAN trade/GDP 2010-23 mean 64.2% vs paper 60-70% (1999-23 mean 67.4%). | WDI CAN fuel exports % merchandise 2015-23 22.6% (long-run 22.1%) vs paper oil 20-25% goods exports; fuel includes oil+gas, close proxy. | WDI CAN oil rents % GDP 2015-23 1.2% vs paper 'roughly 10%' oil value-added share; rents < total value added (paper includes midstream/refining), so proxy lower but same commodity reliance. | Bilateral Canada->Euro Area export share 7.2% (OECD Economic Outlook 2023 (public, Table 53 Canada exports by partner, EU27 share 7.2% 2022) + Statistics Canada Daily Feb 7 2023 (Canada merchandise trade: EU27 4.8% 2022 - variation by goods vs goods+services); proxy 7.2% supports paper '<8%' claim); paper states <8%, confirmed. n=1 year 2022. | Public Canada IP: FRED CANPROINDMISMEI (OECD MEI) monthly 1961-01-01 to 2024-02-01 n=758, proxy for paper Large Canadian Database monthly GDP index (5 Canadian vars). | FRED WTI vs Brent daily corr 2000-23 0.980 n=5362, confirming Fig1c WCS tracks Brent/WTI closely (WCS not in FRED). | CAD/EUR cross via FRED DEXCAUS/DEXUSEU: 1.249 on 2026-10-23, vs paper IMF-IFS direct CAD/EUR. | US EBP (Gilchrist-Zakrajsek 2012 updated Fed CSV 1973-2023, 645 months) publicly available, matches paper source. | market_data cache hit XIU.TO n=6027 (Canada equity price index proxy, paper LCDM equity index)."
+}

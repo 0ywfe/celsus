@@ -1,0 +1,254 @@
+{
+ "title": "Replication spec - Sequentially valid inference for probabilistic inflation forecasts (Arnold et al. e-value framework application)",
+ "hypothesis": "Probabilistic inflation forecasts are probabilistically (PIT) / rank calibrated: PIT ~ UNIF(0,1) sequentially at lag h; rank ~ UNIF{1..m+1}",
+ "data_sources": [
+  "FRED-MD US (McCracken 2015)",
+  "ECB Statistical Data Warehouse EA (EA-MD-QD Barigozzi et al.2025)",
+  "SNB dataportal CH + FRED-MD OILPRICEX"
+ ],
+ "sample": "Year-over-year headline CPI inflation pi_t = P_t/P_{t-12} -1. Target P_t: CPIAUCSL US, HICPOV EA, CPI CH. Predictors harmonized ~20 series per region monetary/credit aggregates, interest rates, consumer/producer prices. Monthly frequency.",
+ "period_start": "1960-01",
+ "period_end": "2025-04",
+ "method": [
+  "1. Define target pi_t = P_t/P_{t-12}-1. Transform predictors to stationarity per Tables A1-A3: Delta x_t, Delta^2 log(x_t), 100*Delta log(x_t). Winsorize stationary predictors at 0.5th and 99.5th percentiles; do not winsorize pi_t.",
+  "2. Sample split expanding window: initial training 40% of region sample. Evaluation begins when all models valid: US Feb 1986, CH Dec 1999, EA Sep 2010. Re-estimate parameters each month on all data to t. Re-tune hyper-parameters (lags, factors) at 50%,60%,70%,80%,90% of full sample; keep fixed between.",
+  "3. Horizons h in {1,3,6,12}. Issue predictive CDF Fhat_{t,h} for pi_{t+h} | F_t. Vintages: Apr 2025 CH, Jun 2025 EA, Jul 2025 US.",
+  "4. Models (9): Baseline - Gaussian no-change (random walk mean pi_t, variance sigma_h^2 empirical from past h-step residuals), Rolling mean L=20 (mean of last L, variance scaled sqrt(1+1/L) * residual sd), PNC L=20 empirical CDF 1/L sum 1_{pi_{t-j}<=y}; ARIMA(1,1,0) Delta pi_t = a0 + phi1 Delta pi_{t-1}+e_t (ADF d, BIC p,q<=5); BVAR(1) p=1 - diffuse OLS, Minnesota Normal diag fixed Sigma, Normal-Wishart conjugate (approx Gaussian predictive), iterated h-step cumulation sum_{1..h} variance; DFM state-space y_t=Lambda f_t+eps_t, eps_t=R eps_{t-1}+eta_t, f_t=A1 f_{t-1}+...+Ap f_{t-p}+u_t, k via Onatski eigenvalue-ratio, q via Bai-Ng, p=1, EM/Kalman, cumulated h-step Gaussian; DRF Cevid et al.2022 MMD Gaussian kernel, weights w_x(i)=1/N sum_b 1_{i in L_b(x)}/|L_b(x)|, CDF Fhat(y|x)=sum w_x(i)1_{Y_i<=y}, predictors: x_t, lag1, diff + pi_t...pi_{t-11}.",
+  "5. Calibration diagnostics: For Gaussian forecasts compute PIT z_t = Fhat_{t,h}(pi_{t+h}); for PNC ensemble m=L compute rank R_t=1+sum 1_{X_i<Y}; for DRF weighted sample compute randomized PIT Z = F(Y-)+V(F(Y)-F(Y-)) V~UNIF(0,1) independent.",
+  "6. Sequential e-value test beta/beta-binomial betting: Null H0: z_t~UNIF(0,1) conditional on z_{j},j<=t-h; discrete UNIF{1..m}. Alternative beta family P_{alpha,beta} density 1/B(alpha,beta) z^{alpha-1}(1-z)^{beta-1} nests H0 at (1,1); beta-binomial pmf Binom(m-1,r-1) B(alpha+r-1,beta+m-r)/B(alpha,beta) with p0=1/m. Likelihood ratio E^{alpha,beta}(z)=p_{alpha,beta}(z)/1 , E^{alpha,beta}(r)=m p_{alpha,beta}(r). Adaptive MLE: (hat alpha_t,hat beta_t)=argmax sum_{i<=t} log p_{alpha,beta}(z_i); sequential E_{t+1}=E^{hat alpha_t,hat beta_t}(z_{t+1}) with E1=E2=1. For lag h>1 estimate separately on h subsequences I_k(t)={k+h s} k=1..h via (hat alpha_t^k,hat beta_t^k)=argmax_{s:k+h s<=t} log p(z_{k+h s}); E_{k+t h}=E^{hat alpha_t^k,hat beta_t^k}(z_{k+t h}) init E1..E2h=1. Ignore PIT in {0,1} in estimation. Warm-up n0=10 e-values=1 per subsequence.",
+  "7. Aggregation Proposition 4.3: e_t =1/h sum_{k=1}^h prod_{l in I_k(t)} E_l. For h=1 test super-martingale e_t=prod_{i<=t}E_i Ville inequality P(exists t: e_t>=1/alpha)<=alpha. Threshold 1/alpha=100 at alpha=0.01. For h>1 not supermartingale: modified stopping via average supremum process tau_{alpha,h}=inf{t: 1/(h e log h) sum_{k=1}^h sup_{s<=t} prod_{l in I_k(s)} E_l >=1/alpha } controls type I.",
+  "8. Complement with full-sample PIT histogram 20 bins (normalized rank for PNC), beta density estimate from e-value construction + boundary-corrected kernel density per period. Classical two-sided one-sample Kolmogorov-Smirnov for UNIF(0,1) on full PIT sample (not for PNC) as static benchmark.",
+  "9. Point/distributional accuracy: RMSE_h = sqrt(1/N sum (pi_{t+h}-bar y_{t+h|t})^2), MAE_h =1/N sum |pi_{t+h}-tilde y_{t+h|t}|, CRPS(Fhat,pi)=int(Fhat(y)-1_{y>=pi})^2 dy.",
+  "10. Implementation R epit package (https://github.com/AlexanderHenzi/epit) + drf package, ks.test (stats)."
+ ],
+ "claims": [
+  {
+   "name": "US_N_obs",
+   "description": "US total monthly observations Jan 1960-Apr 2025",
+   "value": "784",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec 3.1 + Fig1"
+  },
+  {
+   "name": "US_N_eval",
+   "description": "US out-of-sample forecasts after Feb 1986",
+   "value": "470",
+   "unit": "forecasts",
+   "kind": "count",
+   "where": "Sec 3.1"
+  },
+  {
+   "name": "CH_N_obs",
+   "description": "CH total monthly observations Jan 1983-Apr 2025",
+   "value": "508",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec 3.1"
+  },
+  {
+   "name": "CH_N_eval",
+   "description": "CH out-of-sample forecasts after Dec 1999",
+   "value": "305",
+   "unit": "forecasts",
+   "kind": "count",
+   "where": "Sec 3.1"
+  },
+  {
+   "name": "EA_N_obs",
+   "description": "EA total monthly observations Jan 2001-Apr 2025",
+   "value": "292",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec 3.1"
+  },
+  {
+   "name": "EA_N_eval",
+   "description": "EA out-of-sample forecasts after Sep 2010",
+   "value": "175",
+   "unit": "forecasts",
+   "kind": "count",
+   "where": "Sec 3.1"
+  },
+  {
+   "name": "ARIMA_selected_CH_pct",
+   "description": "Share ARIMA(1,1,0) selected CH BIC p,q<=5",
+   "value": "81%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A.2.1"
+  },
+  {
+   "name": "ARIMA_selected_EA_pct",
+   "description": "Share ARIMA(1,1,0) selected EA",
+   "value": "48%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A.2.1"
+  },
+  {
+   "name": "ARIMA_selected_US_pct",
+   "description": "Share ARIMA(1,1,0) selected US",
+   "value": "44%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A.2.1"
+  },
+  {
+   "name": "ARIMA_selected_US_post2000_pct",
+   "description": "Share ARIMA(1,1,0) US post-2000 subsample",
+   "value": "67%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "App A.2.1"
+  },
+  {
+   "name": "US_perf_ARIMA_h1_RMSE",
+   "description": "US Table1 ARIMA h1 RMSE bold min",
+   "value": "0.362",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "US_perf_ARIMA_h1_MAE",
+   "description": "US Table1 ARIMA h1 MAE",
+   "value": "0.259",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "US_perf_ARIMA_h1_CRPS",
+   "description": "US Table1 ARIMA h1 CRPS",
+   "value": "0.191",
+   "unit": "pp",
+   "kind": "estimate",
+   "where": "Table1"
+  },
+  {
+   "name": "US_calib_ARIMA_h1_KS_p",
+   "description": "US Table A2 ARIMA h1 KS p",
+   "value": "0.260",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table A2"
+  },
+  {
+   "name": "US_calib_ARIMA_h1_max_e",
+   "description": "US Table A2 ARIMA h1 max e",
+   "value": "1.82×10^4",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A2"
+  },
+  {
+   "name": "US_calib_Rolling_h1_max_e",
+   "description": "US Rolling mean h1 max e 2.28×10^34",
+   "value": "2.28×10^34",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A2"
+  },
+  {
+   "name": "US_calib_BVAR_NW_h12_max_e",
+   "description": "US BVAR NW h12 max e 5.17×10^36 headline max",
+   "value": "5.17×10^36",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A2"
+  },
+  {
+   "name": "EA_calib_DFM_h1_max_e",
+   "description": "EA DFM h1 max e headline sequential detection 1.90×10^7",
+   "value": "1.90×10^7",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A3"
+  },
+  {
+   "name": "EA_calib_DFM_h1_KS_p",
+   "description": "EA DFM h1 KS p 0.815 fails to reject static",
+   "value": "0.815",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table A3"
+  },
+  {
+   "name": "EA_calib_BVAR_NW_h3_max_e",
+   "description": "EA BVAR NW h3 max e 1.04×10^51",
+   "value": "1.04×10^51",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A3"
+  },
+  {
+   "name": "EA_calib_BVAR_NW_h6_max_e",
+   "description": "EA BVAR NW h6 max e 3.01×10^79",
+   "value": "3.01×10^79",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A3"
+  },
+  {
+   "name": "EA_calib_BVAR_NW_h1_max_e",
+   "description": "EA BVAR NW h1 max e 5.07×10^29 KS p 0.161 not rejected static",
+   "value": "5.07×10^29",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A3"
+  },
+  {
+   "name": "EA_calib_BVAR_NW_h1_KS_p",
+   "description": "EA BVAR NW h1 KS p",
+   "value": "0.161",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table A3"
+  },
+  {
+   "name": "US_calib_DRF_h1_max_e",
+   "description": "US DRF h1 max e",
+   "value": "4.70×10^14",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A2"
+  },
+  {
+   "name": "CH_calib_PNC_h1_max_e",
+   "description": "CH PNC h1 max e rank 34.1% edges",
+   "value": "2.44×10^7",
+   "unit": "e",
+   "kind": "estimate",
+   "where": "Table A4"
+  }
+ ],
+ "headline": "EA_calib_DFM_h1_max_e",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "Two-sided one-sample Kolmogorov-Smirnov PIT uniformity US ARIMA h=1",
+   "statistic": "not stated",
+   "p_value": "US_calib_ARIMA_h1_KS_p",
+   "group_sizes": [
+    "US_N_eval"
+   ]
+  },
+  {
+   "test": "Sequential beta e-value probabilistic calibration EA DFM h=1 vs UNIF(0,1) lag 1",
+   "statistic": "EA_calib_DFM_h1_max_e",
+   "p_value": "not stated",
+   "group_sizes": [
+    "EA_N_eval"
+   ]
+  },
+  {
+   "test": "Sequential beta-binomial rank calibration CH PNC h=1 vs discrete UNIF",
+   "statistic": "CH_calib_PNC_h1_max_e",
+   "p_value": "not stated",
+   "group_sizes": [
+    "CH_N_eval"
+   ]
+  }
+ ]
+}

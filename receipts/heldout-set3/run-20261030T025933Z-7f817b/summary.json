@@ -1,0 +1,66 @@
+{
+ "run_id": "run-20261030T025933Z-7f817b",
+ "paper": "2602.21173",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 3 of 3 checked results match within their uncertainty. Its main result is none of the numbers checked, so it was not judged. Sample size not rebuilt: exact posterior HMC in rank(K)<=T via 32 chains 300 burn 700 retained not rebuilt - Laplace approximation used, so exact timing/MCSE/Rhat not computed (RevExactDates, 605 in the paper).",
+ "headline": null,
+ "sample": [
+  {
+   "name": "NOOS_months",
+   "reported": 605.0,
+   "reproduced": 605.0,
+   "consistent": true
+  },
+  {
+   "name": "NAnomaly_portfolios",
+   "reported": 212.0,
+   "reproduced": 212.0,
+   "consistent": true
+  },
+  {
+   "name": "NTiming_predictors",
+   "reported": 30.0,
+   "reproduced": 30.0,
+   "consistent": true
+  },
+  {
+   "name": "NSignals_predictors",
+   "reported": 242.0,
+   "reproduced": 242.0,
+   "consistent": true
+  },
+  {
+   "name": "Timing_ex1990s_months",
+   "reported": 485.0,
+   "reproduced": 485.0,
+   "consistent": true
+  },
+  {
+   "name": "RevExactDates",
+   "reported": 605.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 3,
+ "matched": 3,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script writes the paper's sample count as a result's count, or cuts its sample to it (RevExactDates (605) at line 297). Build the sample from the paper's definition and report the count you get; never trim, cut or pad it to a reported count."
+  }
+ ],
+ "rounds": 3,
+ "packages": [],
+ "calls": 45,
+ "cost_usd": 1.5486,
+ "tokens_in": 3236649,
+ "tokens_out": 166634,
+ "wall_s": 810.4,
+ "crashed": null
+}

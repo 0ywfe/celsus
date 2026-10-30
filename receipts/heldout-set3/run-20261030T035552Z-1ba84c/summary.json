@@ -1,0 +1,29 @@
+{
+ "run_id": "run-20261030T035552Z-1ba84c",
+ "paper": "2601.10279",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the run stopped (BudgetExceeded)",
+ "first_line": "We could not check this paper: the run stopped (BudgetExceeded). This says nothing about whether its numbers hold.",
+ "headline": null,
+ "sample": [],
+ "judged": 0,
+ "matched": 0,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the script does not compile: line 979: unmatched ')': w_train = w_train / np.sum(np.abs(w_train)) if np.sum(np.abs(w_train))!=0 else 1)."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 64,
+ "cost_usd": 2.0194,
+ "tokens_in": 7465317,
+ "tokens_out": 149943,
+ "wall_s": 2516.5,
+ "crashed": "BudgetExceeded: spent $2.0194 of a $2.0000 budget"
+}

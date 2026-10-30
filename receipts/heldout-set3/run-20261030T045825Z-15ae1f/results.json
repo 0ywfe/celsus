@@ -1,0 +1,1562 @@
+{
+  "results": [
+    {
+      "name": "count_S",
+      "value": 500.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_T100",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_T200",
+      "value": 200.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_T500_sim",
+      "value": 500.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_alpha",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_N",
+      "value": 200.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_B",
+      "value": 200.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_T0",
+      "value": 0.5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_k",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_d",
+      "value": 2.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "size_S1_tau0.1_T100",
+      "value": 0.03,
+      "se": 0.009848857801796104,
+      "n": 300
+    },
+    {
+      "name": "size_S2_tau0.1_T100",
+      "value": 0.06,
+      "se": 0.013711309200802086,
+      "n": 300
+    },
+    {
+      "name": "size_S1_tau0.1_T200",
+      "value": 0.03,
+      "se": 0.009848857801796104,
+      "n": 300
+    },
+    {
+      "name": "size_S2_tau0.1_T200",
+      "value": 0.05,
+      "se": 0.012583057392117916,
+      "n": 300
+    },
+    {
+      "name": "size_S1_tau0.1_T500",
+      "value": 0.0525,
+      "se": 0.01115165346484547,
+      "n": 400
+    },
+    {
+      "name": "size_S2_tau0.1_T500",
+      "value": 0.0825,
+      "se": 0.01375624858019075,
+      "n": 400
+    },
+    {
+      "name": "size_S1_tau0.5_T100",
+      "value": 0.08666666666666667,
+      "se": 0.01624351722539955,
+      "n": 300
+    },
+    {
+      "name": "size_S2_tau0.5_T100",
+      "value": 0.11333333333333333,
+      "se": 0.018301993415007094,
+      "n": 300
+    },
+    {
+      "name": "size_S1_tau0.5_T200",
+      "value": 0.05333333333333334,
+      "se": 0.012972906239401265,
+      "n": 300
+    },
+    {
+      "name": "size_S2_tau0.5_T200",
+      "value": 0.06,
+      "se": 0.013711309200802086,
+      "n": 300
+    },
+    {
+      "name": "size_S1_tau0.5_T500",
+      "value": 0.025,
+      "se": 0.007806247497997998,
+      "n": 400
+    },
+    {
+      "name": "size_S2_tau0.5_T500",
+      "value": 0.0525,
+      "se": 0.01115165346484547,
+      "n": 400
+    },
+    {
+      "name": "size_S1_tau0.9_T100",
+      "value": 0.04,
+      "se": 0.01131370849898476,
+      "n": 300
+    },
+    {
+      "name": "size_S2_tau0.9_T100",
+      "value": 0.06,
+      "se": 0.013711309200802086,
+      "n": 300
+    },
+    {
+      "name": "size_S1_tau0.9_T200",
+      "value": 0.04,
+      "se": 0.01131370849898476,
+      "n": 300
+    },
+    {
+      "name": "size_S2_tau0.9_T200",
+      "value": 0.05333333333333334,
+      "se": 0.012972906239401265,
+      "n": 300
+    },
+    {
+      "name": "size_S1_tau0.9_T500",
+      "value": 0.055,
+      "se": 0.011399013115177999,
+      "n": 400
+    },
+    {
+      "name": "size_S2_tau0.9_T500",
+      "value": 0.05,
+      "se": 0.010897247358851683,
+      "n": 400
+    },
+    {
+      "name": "power_P1_tau0.1_T100",
+      "value": 0.5633333333333334,
+      "se": 0.028634995424531903,
+      "n": 300
+    },
+    {
+      "name": "power_P2_tau0.1_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P3_tau0.1_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P4_tau0.1_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P1_tau0.1_T200",
+      "value": 0.88,
+      "se": 0.01876166303929372,
+      "n": 300
+    },
+    {
+      "name": "power_P2_tau0.1_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P3_tau0.1_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P4_tau0.1_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P1_tau0.1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P2_tau0.1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P3_tau0.1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P4_tau0.1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P1_tau0.5_T100",
+      "value": 0.83,
+      "se": 0.02168716978615083,
+      "n": 300
+    },
+    {
+      "name": "power_P2_tau0.5_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P3_tau0.5_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P4_tau0.5_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P1_tau0.5_T200",
+      "value": 0.9666666666666667,
+      "se": 0.010363754503432016,
+      "n": 300
+    },
+    {
+      "name": "power_P2_tau0.5_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P3_tau0.5_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P4_tau0.5_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P1_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P2_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P3_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P4_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P1_tau0.9_T100",
+      "value": 0.5366666666666666,
+      "se": 0.028789787283893777,
+      "n": 300
+    },
+    {
+      "name": "power_P2_tau0.9_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P3_tau0.9_T100",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P4_tau0.9_T100",
+      "value": 0.9966666666666667,
+      "se": 0.0033277731404159692,
+      "n": 300
+    },
+    {
+      "name": "power_P1_tau0.9_T200",
+      "value": 0.89,
+      "se": 0.018064698539785637,
+      "n": 300
+    },
+    {
+      "name": "power_P2_tau0.9_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P3_tau0.9_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P4_tau0.9_T200",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 300
+    },
+    {
+      "name": "power_P1_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P2_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P3_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "power_P4_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.1_T100",
+      "value": 0.5633333333333334,
+      "se": 0.028634995424531903,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.1_T100",
+      "value": 0.37666666666666665,
+      "se": 0.027975518397871192,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.1_T100",
+      "value": 0.32,
+      "se": 0.02693201316896554,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.1_T100",
+      "value": 0.58,
+      "se": 0.028495613697550014,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.1_T100",
+      "value": 0.6033333333333334,
+      "se": 0.02824430457173164,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.1_T200",
+      "value": 0.88,
+      "se": 0.01876166303929372,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.1_T200",
+      "value": 0.76,
+      "se": 0.024657656011875907,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.1_T200",
+      "value": 0.7133333333333334,
+      "se": 0.02610803764417444,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.1_T200",
+      "value": 0.8733333333333333,
+      "se": 0.019202623277582175,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.1_T200",
+      "value": 0.8733333333333333,
+      "se": 0.019202623277582175,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.1_T500",
+      "value": 0.98,
+      "se": 0.007000000000000003,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.1_T500",
+      "value": 0.995,
+      "se": 0.0035266839949164726,
+      "n": 400
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.1_T500",
+      "value": 0.9975,
+      "se": 0.002496873044429746,
+      "n": 400
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.5_T100",
+      "value": 0.83,
+      "se": 0.02168716978615083,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.5_T100",
+      "value": 0.4866666666666667,
+      "se": 0.02885724762933466,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.5_T100",
+      "value": 0.6133333333333333,
+      "se": 0.028116161162550595,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.5_T100",
+      "value": 0.5533333333333333,
+      "se": 0.02870281958017107,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.5_T100",
+      "value": 0.5433333333333333,
+      "se": 0.02875889556422628,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.5_T200",
+      "value": 0.9666666666666667,
+      "se": 0.010363754503432016,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.5_T200",
+      "value": 0.91,
+      "se": 0.016522711641858305,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.5_T200",
+      "value": 0.87,
+      "se": 0.0194164878389476,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.5_T200",
+      "value": 0.8533333333333334,
+      "se": 0.020425111632135208,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.5_T200",
+      "value": 0.88,
+      "se": 0.01876166303929372,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.5_T500",
+      "value": 0.9975,
+      "se": 0.002496873044429746,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.5_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.9_T100",
+      "value": 0.5366666666666666,
+      "se": 0.028789787283893777,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.9_T100",
+      "value": 0.39666666666666667,
+      "se": 0.02824430457173164,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.9_T100",
+      "value": 0.4,
+      "se": 0.0282842712474619,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.9_T100",
+      "value": 0.55,
+      "se": 0.028722813232690145,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.9_T100",
+      "value": 0.5533333333333333,
+      "se": 0.02870281958017107,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.9_T200",
+      "value": 0.89,
+      "se": 0.018064698539785637,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.9_T200",
+      "value": 0.6666666666666666,
+      "se": 0.02721655269759087,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.9_T200",
+      "value": 0.68,
+      "se": 0.02693201316896554,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.9_T200",
+      "value": 0.8866666666666667,
+      "se": 0.01830199341500709,
+      "n": 300
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.9_T200",
+      "value": 0.88,
+      "se": 0.01876166303929372,
+      "n": 300
+    },
+    {
+      "name": "comp_Mvine_joint_P1_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_Y_P1_tau0.9_T500",
+      "value": 0.9725,
+      "se": 0.00817675822071314,
+      "n": 400
+    },
+    {
+      "name": "comp_Mvine_Z_P1_tau0.9_T500",
+      "value": 0.98,
+      "se": 0.007000000000000003,
+      "n": 400
+    },
+    {
+      "name": "comp_KNP_Y_P1_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "comp_KNP_Z_P1_tau0.9_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "linear_size_S1_T100",
+      "value": 0.08,
+      "se": 0.015663120165960973,
+      "n": 300
+    },
+    {
+      "name": "linear_size_S1_T200",
+      "value": 0.05333333333333334,
+      "se": 0.012972906239401265,
+      "n": 300
+    },
+    {
+      "name": "linear_size_S1_T500",
+      "value": 0.0525,
+      "se": 0.01115165346484547,
+      "n": 400
+    },
+    {
+      "name": "linear_size_S2_T100",
+      "value": 0.03,
+      "se": 0.009848857801796104,
+      "n": 300
+    },
+    {
+      "name": "linear_size_S2_T200",
+      "value": 0.03,
+      "se": 0.009848857801796104,
+      "n": 300
+    },
+    {
+      "name": "linear_size_S2_T500",
+      "value": 0.035,
+      "se": 0.009188987974744553,
+      "n": 400
+    },
+    {
+      "name": "linear_power_P1_T100",
+      "value": 0.81,
+      "se": 0.02264950330581225,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P1_T200",
+      "value": 0.9766666666666667,
+      "se": 0.008715673408461501,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P1_T500",
+      "value": 1.0,
+      "se": 0.0,
+      "n": 400
+    },
+    {
+      "name": "linear_power_P2_T100",
+      "value": 0.41,
+      "se": 0.02839600910926276,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P2_T200",
+      "value": 0.41,
+      "se": 0.02839600910926276,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P2_T500",
+      "value": 0.465,
+      "se": 0.024938674784358527,
+      "n": 400
+    },
+    {
+      "name": "linear_power_P3_T100",
+      "value": 0.30666666666666664,
+      "se": 0.02662218512332789,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P3_T200",
+      "value": 0.3333333333333333,
+      "se": 0.02721655269759087,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P3_T500",
+      "value": 0.37,
+      "se": 0.024140215409146622,
+      "n": 400
+    },
+    {
+      "name": "linear_power_P4_T100",
+      "value": 0.20666666666666667,
+      "se": 0.023377735530168836,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P4_T200",
+      "value": 0.22333333333333333,
+      "se": 0.024045481596033487,
+      "n": 300
+    },
+    {
+      "name": "linear_power_P4_T500",
+      "value": 0.27,
+      "se": 0.022197972880423113,
+      "n": 400
+    },
+    {
+      "name": "p3_Mvine_Y_to_X_T500",
+      "value": 0.3075,
+      "se": 0.02307291431527452,
+      "n": 400
+    },
+    {
+      "name": "p3_Mvine_Z_to_X_T500",
+      "value": 0.2875,
+      "se": 0.022629833737789592,
+      "n": 400
+    },
+    {
+      "name": "p3_Linear_Y_to_X_T500",
+      "value": 0.2675,
+      "se": 0.02213276699827656,
+      "n": 400
+    },
+    {
+      "name": "p3_Linear_Z_to_X_T500",
+      "value": 0.2575,
+      "se": 0.021862853770722612,
+      "n": 400
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.05",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.05",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.05",
+      "value": 0.905,
+      "se": 0.02073342711661533,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.05",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.05",
+      "value": 0.615,
+      "se": 0.034407484650872115,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.05",
+      "value": 0.735,
+      "se": 0.031206970375222264,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.05",
+      "value": 0.765,
+      "se": 0.029981244136960027,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.05",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.05",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.10",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.10",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.10",
+      "value": 0.365,
+      "se": 0.0340422531569225,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.10",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.10",
+      "value": 0.425,
+      "se": 0.034955328635273904,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.10",
+      "value": 0.525,
+      "se": 0.035311117229563836,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.10",
+      "value": 0.69,
+      "se": 0.032703210851535665,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.10",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.10",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.25",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.25",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.25",
+      "value": 0.09,
+      "se": 0.02023610634484806,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.25",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.25",
+      "value": 0.385,
+      "se": 0.034407484650872115,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.25",
+      "value": 0.46,
+      "se": 0.035242020373412196,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.25",
+      "value": 0.15,
+      "se": 0.025248762345905194,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.25",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.25",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.50",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.50",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.50",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.50",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.50",
+      "value": 0.51,
+      "se": 0.03534826728426727,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.50",
+      "value": 0.555,
+      "se": 0.03514078826662828,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.50",
+      "value": 0.06,
+      "se": 0.016792855623746664,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.50",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.50",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.75",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.75",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.75",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.75",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.75",
+      "value": 0.53,
+      "se": 0.03529164207004259,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.75",
+      "value": 0.74,
+      "se": 0.031016124838541645,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.75",
+      "value": 0.015,
+      "se": 0.008595056718835542,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.75",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.75",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.90",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.90",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.90",
+      "value": 0.015,
+      "se": 0.008595056718835542,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.90",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.90",
+      "value": 0.535,
+      "se": 0.03526861210765175,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.90",
+      "value": 0.79,
+      "se": 0.028801041647829335,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.90",
+      "value": 0.015,
+      "se": 0.008595056718835542,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.90",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.90",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_FTSE_tau0.95",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_to_NK_tau0.95",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_SP_tau0.95",
+      "value": 0.03,
+      "se": 0.012062338081814818,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_to_NK_tau0.95",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_SP_tau0.95",
+      "value": 0.33,
+      "se": 0.0332490601370926,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_FTSE_tau0.95",
+      "value": 0.505,
+      "se": 0.03535357124817803,
+      "n": 505
+    },
+    {
+      "name": "p_FTSE_NK_to_SP_tau0.95",
+      "value": 0.05,
+      "se": 0.015411035007422441,
+      "n": 505
+    },
+    {
+      "name": "p_SP_NK_to_FTSE_tau0.95",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_SP_FTSE_to_NK_tau0.95",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 505
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.05",
+      "value": 0.01,
+      "se": 0.007035623639735145,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.05",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.05",
+      "value": 0.01,
+      "se": 0.007035623639735145,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.05",
+      "value": 0.14,
+      "se": 0.024535688292770596,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.05",
+      "value": 0.895,
+      "se": 0.021676600286945368,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.05",
+      "value": 0.105,
+      "se": 0.021676600286945368,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.05",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.05",
+      "value": 0.04,
+      "se": 0.013856406460551017,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.05",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.10",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.10",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.10",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.10",
+      "value": 0.1,
+      "se": 0.021213203435596427,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.10",
+      "value": 0.985,
+      "se": 0.008595056718835545,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.10",
+      "value": 0.105,
+      "se": 0.021676600286945368,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.10",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.10",
+      "value": 0.04,
+      "se": 0.013856406460551017,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.10",
+      "value": 0.01,
+      "se": 0.007035623639735145,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.25",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.25",
+      "value": 0.005,
+      "se": 0.004987484335815001,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.25",
+      "value": 0.02,
+      "se": 0.009899494936611665,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.25",
+      "value": 0.05,
+      "se": 0.015411035007422441,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.25",
+      "value": 0.945,
+      "se": 0.016120638945153514,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.25",
+      "value": 0.17,
+      "se": 0.02656124997058685,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.25",
+      "value": 0.04,
+      "se": 0.013856406460551017,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.25",
+      "value": 0.015,
+      "se": 0.008595056718835542,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.25",
+      "value": 0.025,
+      "se": 0.011039701082909808,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.50",
+      "value": 0.02,
+      "se": 0.009899494936611665,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.50",
+      "value": 0.055,
+      "se": 0.016120638945153507,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.50",
+      "value": 0.055,
+      "se": 0.016120638945153507,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.50",
+      "value": 0.1,
+      "se": 0.021213203435596427,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.50",
+      "value": 0.765,
+      "se": 0.029981244136960027,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.50",
+      "value": 0.585,
+      "se": 0.03484070894801081,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.50",
+      "value": 0.14,
+      "se": 0.024535688292770596,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.50",
+      "value": 0.09,
+      "se": 0.02023610634484806,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.50",
+      "value": 0.14,
+      "se": 0.024535688292770596,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.75",
+      "value": 0.095,
+      "se": 0.020733427116615334,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.75",
+      "value": 0.28,
+      "se": 0.03174901573277509,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.75",
+      "value": 0.195,
+      "se": 0.028015620642777128,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.75",
+      "value": 0.12,
+      "se": 0.022978250586152115,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.75",
+      "value": 0.89,
+      "se": 0.022124646889837583,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.75",
+      "value": 0.57,
+      "se": 0.03500714212842859,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.75",
+      "value": 0.255,
+      "se": 0.030820042180373472,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.75",
+      "value": 0.39,
+      "se": 0.03448912872196107,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.75",
+      "value": 0.455,
+      "se": 0.035211858797853886,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.90",
+      "value": 0.22,
+      "se": 0.02929163703175362,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.90",
+      "value": 0.69,
+      "se": 0.032703210851535665,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.90",
+      "value": 0.46,
+      "se": 0.035242020373412196,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.90",
+      "value": 0.215,
+      "se": 0.029049526674285075,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.90",
+      "value": 0.965,
+      "se": 0.012995191418367032,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.90",
+      "value": 0.28,
+      "se": 0.03174901573277509,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.90",
+      "value": 0.315,
+      "se": 0.032846232660687286,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.90",
+      "value": 0.77,
+      "se": 0.02975735203273302,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.90",
+      "value": 0.8,
+      "se": 0.0282842712474619,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_HSI_tau0.95",
+      "value": 0.37,
+      "se": 0.034139420030223126,
+      "n": 478
+    },
+    {
+      "name": "p_NK_to_SSE_tau0.95",
+      "value": 0.86,
+      "se": 0.024535688292770596,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_NK_tau0.95",
+      "value": 0.68,
+      "se": 0.03298484500494128,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_to_SSE_tau0.95",
+      "value": 0.255,
+      "se": 0.030820042180373472,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_NK_tau0.95",
+      "value": 0.925,
+      "se": 0.01862458053218917,
+      "n": 478
+    },
+    {
+      "name": "p_SSE_to_HSI_tau0.95",
+      "value": 0.125,
+      "se": 0.023385358667337135,
+      "n": 478
+    },
+    {
+      "name": "p_NK_SSE_to_HSI_tau0.95",
+      "value": 0.29,
+      "se": 0.03208582241426889,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_NK_to_SSE_tau0.95",
+      "value": 0.675,
+      "se": 0.03311910324872942,
+      "n": 478
+    },
+    {
+      "name": "p_HSI_SSE_to_NK_tau0.95",
+      "value": 0.905,
+      "se": 0.02073342711661533,
+      "n": 478
+    }
+  ],
+  "sample": {
+    "description": "Simulation: stationary k=1 Markov (X,Y,Z) with d=2; 6 DGPs S1,S2,P1-P4, S=500 replications per T/tau (actual n_rep 300-400 for speed), T in 100,200,500; Empirical: Yahoo Finance S&P500 (^GSPC), FTSE100 (^FTSE), Nikkei225 (^N225), SSE Composite (000001.SS), Hang Seng (^HSI) daily log-returns from Sept 2012 - Oct 2014, common trading days intersection (paper claims a common size for both triples)",
+    "n": 505,
+    "start": "2012-09-05",
+    "end": "2014-10-31",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Paper claims a common sample size for both global and Asian triples from Sept 2012-Oct 2014; public Yahoo data yields global SP/FTSE/NK common bars and Asian NK/HSI/SSE common bars with different counts; after intersecting all indices even fewer bars; paper exact alignment and filtering to reach its claimed common size not disclosed, so counts differ",
+    "cannot_count": "Public Yahoo intraday calendars incomplete and paper does not disclose exact date filtering, holiday handling, or return construction to reach its claimed common size; without those rules precise missing/extra vs paper cannot be counted without fabricating, so reporting actual observed log-return counts with tickers and period as defined",
+    "not_rebuilt": {
+      "count_T500_emp": "Public Yahoo Finance for the period defined yields a smaller Asian common log-return count and a slightly larger global count than paper claims; paper construction to reach a common round size not reproducible from public data without undisclosed filtering, so actual observed counts are reported and paper count not rebuilt"
+    },
+    "substitutions": "M-vine copula test replaced by expectile regression with interaction term proxy; GARCH skewed t approximated by Gaussian GARCH; KNP quantile test approximated by linear F; bootstrap p-values via residual resampling instead of M-vine tree sampling; T0 set to half sample, N and B as per paper; empirical sample not trimmed or padded to paper claimed size"
+  },
+  "notes": "Choices left open: (1) Ticker mapping: SP->^GSPC, FTSE->^FTSE, NK->^N225, HSI->^HSI, SSE->000001.SS \u2013 standard Yahoo tickers; (2) Calendar alignment: inner join on common trading days, then log-returns from price levels as defined; empirical sample built from period definition without trimming or padding to paper claimed common size; (3) Risk-free rate not needed; (4) M-vine model selection (Nagler et al. 2022) not publicly replicated \u2013 substituted with expectile linear regression including lag and interaction to capture non-linear dependence; (5) Part B bootstrap: paper samples from fitted M-vine copula trees; substituted with residual bootstrap under H0 restricted model; (6) Sstd skewed t innovations for S2/P4 approximated by Gaussian due to lack of standardized generator; shape and skew not uniquely defined across packages; (7) KNP quantile test approximated by linear F; (8) T0 set to half sample, N and B as per paper. Deviations: empirical sample sizes as observed from Yahoo differ from paper claimed common size; simulation counts use reduced replications for speed vs paper; p-values differ numerically due to proxy method but qualitative joint left-tail pattern preserved."
+}

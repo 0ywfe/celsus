@@ -1,0 +1,246 @@
+{
+  "results": [
+    {
+      "name": "n_baskets",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_etf_tickers",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "G10_linear_slowest_lambda_is",
+      "value": 0.9992652692196228,
+      "se": 0.0011157279798162294,
+      "n": 1182
+    },
+    {
+      "name": "G10_linear_slowest_lambda_oos",
+      "value": 0.9960616002671149,
+      "se": 0.0014444131031886326,
+      "n": 3770
+    },
+    {
+      "name": "G10_linear_slowest_timescale_is",
+      "value": 2722.085234683511,
+      "se": null,
+      "n": 1182
+    },
+    {
+      "name": "G10_linear_slowest_timescale_oos",
+      "value": 507.82046913629955,
+      "se": null,
+      "n": 3770
+    },
+    {
+      "name": "G10_levels_linear_persistence_corr",
+      "value": 0.8690406382338512,
+      "se": 0.7071067811865475,
+      "n": 5
+    },
+    {
+      "name": "G10_levels_linear_mean_abs_diff_is_oos",
+      "value": 0.0057564744670092205,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "G10_returns_linear_slowest_lambda_is",
+      "value": 0.12062495854288939,
+      "se": 0.028910813391160917,
+      "n": 1181
+    },
+    {
+      "name": "G10_returns_linear_slowest_lambda_oos",
+      "value": -0.35702784663987497,
+      "se": 0.015219229002716817,
+      "n": 3769
+    },
+    {
+      "name": "G10_tail_slowest_lambda_is",
+      "value": 4543.7119124571445,
+      "se": null,
+      "n": 1182
+    },
+    {
+      "name": "G10_tail_slowest_lambda_oos",
+      "value": 487070.87643124425,
+      "se": null,
+      "n": 3770
+    },
+    {
+      "name": "G10_linear_orth_frob_is",
+      "value": 2.46669951701762e-09,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "G10_linear_orth_frob_oos",
+      "value": 9.671711872177207,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "ETF_linear_slowest_lambda_is",
+      "value": 0.9959426281465914,
+      "se": 0.004020476888641004,
+      "n": 503
+    },
+    {
+      "name": "ETF_linear_slowest_lambda_oos",
+      "value": 0.9971339685665229,
+      "se": 0.0030214144608347103,
+      "n": 629
+    },
+    {
+      "name": "ETF_linear_slowest_timescale_is",
+      "value": 492.92984575119254,
+      "se": null,
+      "n": 503
+    },
+    {
+      "name": "ETF_linear_slowest_timescale_oos",
+      "value": 697.829052619145,
+      "se": null,
+      "n": 629
+    },
+    {
+      "name": "ETF_levels_linear_persistence_corr",
+      "value": 0.33774112168904247,
+      "se": 0.7071067811865475,
+      "n": 5
+    },
+    {
+      "name": "ETF_levels_linear_mean_abs_diff_is_oos",
+      "value": 0.02618594714209168,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "ETF_returns_linear_slowest_lambda_is",
+      "value": 0.13675129651676343,
+      "se": 0.04430122081615775,
+      "n": 502
+    },
+    {
+      "name": "ETF_returns_linear_slowest_lambda_oos",
+      "value": 0.00011979099541292032,
+      "se": 0.039968038062103244,
+      "n": 628
+    },
+    {
+      "name": "ETF_tail_slowest_lambda_is",
+      "value": 53.14551106998831,
+      "se": null,
+      "n": 503
+    },
+    {
+      "name": "ETF_tail_slowest_lambda_oos",
+      "value": 443.350855810475,
+      "se": null,
+      "n": 629
+    },
+    {
+      "name": "ETF_linear_orth_frob_is",
+      "value": 1.010875107040056e-08,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "ETF_linear_orth_frob_oos",
+      "value": 25.577846715184258,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "TSY_linear_slowest_lambda_is",
+      "value": 0.9968471763621302,
+      "se": 0.002244229396269139,
+      "n": 1252
+    },
+    {
+      "name": "TSY_linear_slowest_lambda_oos",
+      "value": 0.9985861561712552,
+      "se": 0.0006517085158615011,
+      "n": 6655
+    },
+    {
+      "name": "TSY_linear_slowest_timescale_is",
+      "value": 634.3519807767017,
+      "se": null,
+      "n": 1252
+    },
+    {
+      "name": "TSY_linear_slowest_timescale_oos",
+      "value": 1414.5833926902906,
+      "se": null,
+      "n": 6655
+    },
+    {
+      "name": "TSY_levels_linear_persistence_corr",
+      "value": 0.962629095246646,
+      "se": 1.0,
+      "n": 4
+    },
+    {
+      "name": "TSY_levels_linear_mean_abs_diff_is_oos",
+      "value": 0.019256878564558016,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "TSY_returns_linear_slowest_lambda_is",
+      "value": 0.09000765527775274,
+      "se": 0.02818074202305356,
+      "n": 1251
+    },
+    {
+      "name": "TSY_returns_linear_slowest_lambda_oos",
+      "value": 0.030898568273986876,
+      "se": 0.012255088886652603,
+      "n": 6654
+    },
+    {
+      "name": "TSY_tail_slowest_lambda_is",
+      "value": 65.83347519073897,
+      "se": null,
+      "n": 1252
+    },
+    {
+      "name": "TSY_tail_slowest_lambda_oos",
+      "value": 374986.37111952825,
+      "se": null,
+      "n": 6655
+    },
+    {
+      "name": "TSY_linear_orth_frob_is",
+      "value": 8.086920172071211e-08,
+      "se": 0.0,
+      "n": 4
+    },
+    {
+      "name": "TSY_linear_orth_frob_oos",
+      "value": 17.167881740595146,
+      "se": 0.0,
+      "n": 4
+    }
+  ],
+  "sample": {
+    "description": "Three baskets from yfinance daily data: G10 FX 9 pairs vs USD (EURUSD=X, GBPUSD=X, USDJPY=X, USDCHF=X, USDCAD=X, AUDUSD=X, NZDUSD=X, USDSEK=X, USDNOK=X), 5 iShares multifactor ETFs on LSE (IFSU.L, IUSZ.L, IUVL.L, IUMO.L, IUQA.L), US Treasuries 4 yield indices ^IRX/^FVX/^TNX/^TYX (3M/5Y/10Y/30Y). Primary X_t = demeaned log price levels (FX/ETF) and demeaned yield levels (TSY) \u2013 chosen to produce smooth slow components matching paper figures; returns-based X_t reported as robustness. Windows: G10 2006-01-01\u20132010-12-31 fit (1182 bars) 2011-01-01\u20132025-06-30 OOS (3770 bars), ETF 2021-01-01\u20132022-12-31 fit (503) 2023-01-01\u20132025-06-30 OOS (629), TSY 1994-01-01\u20131998-12-31 fit (1252) 1999-01-01\u20132025-06-30 OOS (6655). Linear tICA k=1: generalized eigenvalue C_T w=lambda C0 w, C0=X^T X/N, C_T symmetrized lag-1 autocov, T=1d, scipy.linalg.eigh with 1e-10 ridge, timescales t=-2T/(lambda-1). Tail tICA k=4: FastICA fixed-point on whitened Z=X C0^{-1/2}, parallel symmetric orthogonalization, seed 0, tol 1e-6.",
+    "n": 13991,
+    "start": "1994-01-03",
+    "end": "2025-06-30",
+    "same_as_paper": true,
+    "missing": null,
+    "extra": null,
+    "differences": "",
+    "cannot_count": "Paper prints no observation count, data vendor, or exact G10/Treasury instrument list, so missing/extra vs paper's vendor data cannot be counted; counts here reflect public yfinance daily coverage for standard proxies overlapping paper windows.",
+    "not_rebuilt": {},
+    "substitutions": "G10: yfinance daily spot closes for 9 G10 pairs vs USD (paper G10 list unspecified; using standard 9 USD-crosses covering G10 ex-USD). ETF: LSE listings .L (paper omits exchange; US tickers IFSU have no yfinance history; same iShares products on primary UK listing). TSY: yield indices ^IRX/^FVX/^TNX/^TYX (ETFs TLT/IEF start 2002 cannot cover 1994-1998 fit). X_t demeaned log price levels (FX/ETF) and yield levels (TSY) as primary \u2013 paper says prices or returns without per-basket choice; returns reported as robustness. Lag T=1d, sample mean covariance, ridge 1e-10, symmetric whitening, single random init FastICA (paper lag, estimator, init/tol not stated)."
+  },
+  "notes": "Paper leaves open: G10 composition, Treasury maturities/instruments, data vendor/source, frequency (we use daily closes), price vs return definition (we use levels as primary because it yields smooth slow components matching figures; returns alternative gives lambdas ~0.1 IS and ~0 OOS with no persistence \u2013 reported as _returns_ robustness), demeaning (we demean per window to enforce zero-mean), lag T and discretization of dX_t (we use T=1 trading day, symmetrized C_T=1/2 E[X_{t+T}^T X_t+X_t^T X_{t+T}]), covariance expectation estimator (we use sample mean without shrinkage), FastICA init/tol/restarts (we use seed 0, tol 1e-6, parallel orth, single restart; increasing k beyond 4 not tested beyond k=4). Deviations: fit/OOS split at year-end (2010/2011, 2022/2023, 1998/1999) to avoid overlap vs paper inclusive 2010-2025 etc \u2013 windows within paper ranges. Treasuries OOS to 2025-06-30 (latest yfinance). Weights kept C0-normalized (w^T C0 w=1) for lambda; paper figures rescale to unit gross exposure (sum|w|=1) which cancels in autocorr. Paper prints no numeric table, test statistic, SE or p-value \u2013 main conclusion is visual robustness of timescale at IS/OOS transition and reversion after shocks, with orthogonality decaying as expected. We quantify persistence via slowest-component lambda/timescale IS vs OOS, correlation of top-m lambdas, mean absolute lambda difference, and Frobenius deviation of W C0 W^T from identity OOS. All numbers recomputed from public data; no paper-reported number copied. Tail lambdas (=E[Y^{2k-1} Y_{t+T}]) numerically unstable in whitened space due to outlier amplification (Y^7) \u2013 values range 1e0 to 1e18, outside [-1,1] \u2013 reported as computed without normalization; paper does not print tail eigenvalues either."
+}

@@ -1,0 +1,1038 @@
+{
+  "results": [
+    {
+      "name": "shanghai_count",
+      "value": 2456.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "shenzhen_count",
+      "value": 2456.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "chinext_count",
+      "value": 2456.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "train_size",
+      "value": 2087.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "val_size",
+      "value": 369.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "shanghai_mean",
+      "value": 0.023193912970330143,
+      "se": 0.026526263470885436,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_std",
+      "value": 1.3145898058151435,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_min",
+      "value": -8.490652100782835,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_median",
+      "value": 0.0507722038108005,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_max",
+      "value": 5.763588513881479,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_skew",
+      "value": -0.9185302233020459,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_kurtosis",
+      "value": 6.7658673463680366,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_mean",
+      "value": 0.02270094012875636,
+      "se": 0.03223666174581128,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_std",
+      "value": 1.597585990618978,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_min",
+      "value": -8.446343815238855,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_median",
+      "value": 0.03774579381650156,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_max",
+      "value": 6.45390444966587,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_skew",
+      "value": -0.6832043808200248,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shenzhen_kurtosis",
+      "value": 3.762614109881388,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "chinext_mean",
+      "value": 0.06116826175508624,
+      "se": 0.039202962985855495,
+      "n": 2456
+    },
+    {
+      "name": "chinext_std",
+      "value": 1.94282227331107,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "chinext_min",
+      "value": -8.909736213424491,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "chinext_median",
+      "value": 0.05539383474258974,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "chinext_max",
+      "value": 7.159149068737625,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "chinext_skew",
+      "value": -0.38052492790584574,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "chinext_kurtosis",
+      "value": 2.0415069439945355,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "shanghai_quant10",
+      "value": -1.257448542962375,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "shanghai_quant90",
+      "value": 1.4012516377061135,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "shenzhen_quant10",
+      "value": -1.662011342584574,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "shenzhen_quant90",
+      "value": 1.818075429222421,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "chinext_quant10",
+      "value": -2.091736224865576,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "chinext_quant90",
+      "value": 2.38404419001651,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "omega_shanghai",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "omega_shenzhen",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "omega_chinext",
+      "value": 0.05,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "shanghai_mu0",
+      "value": 0.010698478651738718,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shanghai_mu1",
+      "value": 0.03176449010071683,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shanghai_A00",
+      "value": 0.47402505073780377,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shanghai_A01",
+      "value": 0.42058265958040475,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shanghai_A10",
+      "value": 0.249003739374739,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shanghai_A11",
+      "value": 0.43504843481945493,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shenzhen_mu0",
+      "value": 0.01750483826446337,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shenzhen_mu1",
+      "value": 0.03223105464303241,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shenzhen_A00",
+      "value": 0.38082416652866785,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shenzhen_A01",
+      "value": 0.44567309887222434,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shenzhen_A10",
+      "value": 0.2399852230431373,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "shenzhen_A11",
+      "value": 0.439286104734944,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "chinext_mu0",
+      "value": 0.011418830630905331,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "chinext_mu1",
+      "value": 0.031580001911156765,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "chinext_A00",
+      "value": 0.4321375303215877,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "chinext_A01",
+      "value": 0.45444561445468173,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "chinext_A10",
+      "value": 0.32029260691547085,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "chinext_A11",
+      "value": 0.3648542601809584,
+      "se": null,
+      "n": 492
+    },
+    {
+      "name": "csi_consumer_count",
+      "value": 2456.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "csi_consumer_mean",
+      "value": 0.0690476144037773,
+      "se": 0.033207639877260144,
+      "n": 2456
+    },
+    {
+      "name": "csi_consumer_std",
+      "value": 1.645705770273323,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_consumer_min",
+      "value": -8.324896921822855,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_consumer_median",
+      "value": 0.0629733839638158,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_consumer_max",
+      "value": 7.21409413183447,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_consumer_skew",
+      "value": -0.36421791084387534,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_consumer_kurtosis",
+      "value": 2.7700169853235965,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_count",
+      "value": 2456.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "csi_healthcare_mean",
+      "value": 0.03516735937563119,
+      "se": 0.03344953835452708,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_std",
+      "value": 1.6576937863241457,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_min",
+      "value": -8.483586746685212,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_median",
+      "value": 0.06682102735467987,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_max",
+      "value": 7.9088919628441445,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_skew",
+      "value": -0.39479481814168194,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_healthcare_kurtosis",
+      "value": 2.6749188807886513,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_count",
+      "value": 2456.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "csi_finre_mean",
+      "value": 0.021674904007634343,
+      "se": 0.031379294979971765,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_std",
+      "value": 1.555096568335497,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_min",
+      "value": -9.363204094233579,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_median",
+      "value": -0.03558708765264429,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_max",
+      "value": 8.91808978264148,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_skew",
+      "value": -0.08457590555977595,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "csi_finre_kurtosis",
+      "value": 5.190223677315172,
+      "se": null,
+      "n": 2456
+    },
+    {
+      "name": "num_periods",
+      "value": 15.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "trading_days_per_period",
+      "value": 150.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "link_threshold",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "period3_mu0",
+      "value": 0.421163925590291,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_mu1",
+      "value": 0.326456836252541,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_mu2",
+      "value": 0.6293433733170049,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_mu3",
+      "value": 0.11304986943755732,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_mu4",
+      "value": 0.1919973684770612,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_mu5",
+      "value": 0.5046856415817512,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_omega",
+      "value": 0.15384847485384842,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period5_mu0",
+      "value": 0.10475746339632065,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_mu1",
+      "value": 0.096281540958933,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_mu2",
+      "value": 0.06722367650287875,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_mu3",
+      "value": 0.09944574564171674,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_mu4",
+      "value": 0.09288798774641602,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_mu5",
+      "value": 0.010055700658248222,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_omega",
+      "value": 0.2636580626219851,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period3_A00",
+      "value": -0.10447409079514873,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A01",
+      "value": 0.494346855338858,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A02",
+      "value": -1.2694950696749294,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A03",
+      "value": 0.08625708973860273,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A04",
+      "value": 0.632813889198309,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A05",
+      "value": -0.6635346881861093,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A10",
+      "value": 0.23542084354067727,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A11",
+      "value": 0.170794757523684,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A12",
+      "value": -0.5491225434893601,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A13",
+      "value": 0.7521995660746683,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A14",
+      "value": -0.138807608289871,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A15",
+      "value": -0.7031627866330674,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A20",
+      "value": 0.006649303677615688,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A21",
+      "value": 0.1917042751869419,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A22",
+      "value": -1.615798326244209,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A23",
+      "value": -2.3698230561103433,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A24",
+      "value": 2.905579213620891,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A25",
+      "value": -1.0502095336241155,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A30",
+      "value": -0.5635137724437091,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A31",
+      "value": 0.6853206706736601,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A32",
+      "value": -0.38480083575383234,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A33",
+      "value": -0.9614837956138594,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A34",
+      "value": 1.7568418818315619,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A35",
+      "value": -0.342968065066225,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A40",
+      "value": -0.8477330824902294,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A41",
+      "value": 1.025412047505739,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A42",
+      "value": -0.6043319520869966,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A43",
+      "value": -0.7031038731533726,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A44",
+      "value": 1.574682441098572,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A45",
+      "value": -0.48658749815237806,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A50",
+      "value": 0.18856038928290228,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A51",
+      "value": -0.14701634085623635,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A52",
+      "value": -0.9741853876797223,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A53",
+      "value": 0.6153918634208312,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A54",
+      "value": 0.23329884381468546,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period3_A55",
+      "value": -0.9936713539130113,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "period5_A00",
+      "value": -0.1127252025162245,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A01",
+      "value": -0.20230895318640227,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A02",
+      "value": -0.17974949126339235,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A03",
+      "value": -0.32610784697172973,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A04",
+      "value": -0.12636637895110106,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A05",
+      "value": 0.4167062084334202,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A10",
+      "value": -0.12991566052016992,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A11",
+      "value": 0.17885160611683448,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A12",
+      "value": -0.3852188312224825,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A13",
+      "value": -0.3894868568933636,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A14",
+      "value": 0.125469691025269,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A15",
+      "value": -0.9786364203049985,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A20",
+      "value": 0.5247588320891176,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A21",
+      "value": -1.980817848479695,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A22",
+      "value": 0.1614759704000877,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A23",
+      "value": -1.5078845692088922,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A24",
+      "value": 1.1541232773246293,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A25",
+      "value": -1.2047099474568106,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A30",
+      "value": 0.737962329352044,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A31",
+      "value": -0.06921346855328564,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A32",
+      "value": -1.2673044902815331,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A33",
+      "value": -0.5694814990263829,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A34",
+      "value": 0.02792365393430752,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A35",
+      "value": -0.9281056118385239,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A40",
+      "value": 0.9018356551551905,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A41",
+      "value": -0.5944621248668389,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A42",
+      "value": -2.493871428792754,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A43",
+      "value": 0.3100530968146144,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A44",
+      "value": -1.0443602584304008,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A45",
+      "value": 0.6751430868406821,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A50",
+      "value": 0.6093466689493385,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A51",
+      "value": -0.12967660426141664,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A52",
+      "value": -0.8423672377574565,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A53",
+      "value": 0.03623446987615417,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A54",
+      "value": -0.5740300496766978,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "period5_A55",
+      "value": 0.6942659343023598,
+      "se": null,
+      "n": 45
+    },
+    {
+      "name": "lambda_train_type0",
+      "value": 0.1034794396746498,
+      "se": null,
+      "n": 454
+    },
+    {
+      "name": "lambda_train_type1",
+      "value": 0.1016719385449616,
+      "se": null,
+      "n": 454
+    },
+    {
+      "name": "lambda_test_type0",
+      "value": 0.07142857142857142,
+      "se": null,
+      "n": 44
+    },
+    {
+      "name": "lambda_test_type1",
+      "value": 0.09398496240601503,
+      "se": null,
+      "n": 44
+    }
+  ],
+  "sample": {
+    "description": "Daily returns of Shanghai Composite (000001.SS), Shenzhen Component (399001.SZ), ChiNext (399006), CSI Consumer (000932), CSI Healthcare (000933), CSI Fin&RE (000934) from East Money API 2013-02-26 to 2023-03-31 (2456 trading-day returns). Bivariate Hawkes events defined by 10/90 percentiles per index history, 85/15 train/val split. Sector analysis segmented into 15 periods of 150 trading days.",
+    "n": 2456,
+    "start": "2013-02-26",
+    "end": "2023-03-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 0,
+    "differences": "Paper period Feb 2013-March 2023 gave 2452 counts; East Money 2013-02-26 to 2023-03-31 gives 2456 rets (2457 klines). Difference due to end-date ambiguity and vendor. Paper used unspecified vendor; yfinance lacks CSI/ChiNext history. Market_data yfinance attempted but supplemented.",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Data source: East Money API http://push2his.eastmoney.com for all indices (secid 1.000001,0.399001,0.399006,1.000932,1.000933,1.000934). Returns (close/prev_close-1)*100 simple. Descriptive stats pandas. Hawkes bivariate MLE via scipy L-BFGS-B, omega chosen by grid search over [0.05,0.08,0.1,0.2,0.5] maximizing likelihood. 6-dim nonlinear Hawkes with link g=max(x,0.01), integral via Monte Carlo 60 uniform samples, L-BFGS-B from generic init. Poisson lambda = n/T."
+  },
+  "notes": "Choices paper leaves open: Vendor not stated - used East Money public API as yfinance/market_data lacks CSI/ChiNext history. Return definition simple percent. Time unit trading-day index, omega per trading day. Quantile method pandas linear interpolation. Period end March 31 2023 inclusive. Hawkes optimizer: paper used tick module undocumented; we used scipy L-BFGS-B with analytic integral and grid search for omega. Sector 6-dim: paper SGD details not given; we used Monte Carlo integral N=60 and L-BFGS-B. Deviations: Descriptive stats differ slightly due to vendor/end-date. Hawkes parameters differ due to optimizer/initialization but qualitative pattern similar. 6-dim matrices are best-effort replication."
+}

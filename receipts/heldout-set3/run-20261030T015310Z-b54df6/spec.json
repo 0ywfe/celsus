@@ -1,0 +1,3066 @@
+{
+ "title": "Granger Causality in Expectiles: an M-vine copula test",
+ "hypothesis": "H0: GC_tau(Z->X)=0 (no Granger causality in tau-expectile); H1: GC_tau>0; reject if p=(1/B) sum I(hat GC^{0}_{tau,j} >= hat GC_tau) < alpha",
+ "data_sources": [
+  "Yahoo Finance daily prices SP500, FTSE100, Nikkei225, SSE Composite, Hang Seng Index Sept 2012-Oct 2014 transformed to log-returns *100; simulation DGPs as defined (Gaussian white noise, sstd nu=5 xi=-1.5 GARCH)"
+ ],
+ "sample": "Simulation: (X_t,Y_t,Z_t) k=1 Markov stationary. Size DGPs S1 (3 independent AR(1) 0.5 with N(0,1)) and S2 (3 independent GARCH(1,1) 0.01+0.08 e_{t-1}^2+0.87 sigma_{t-1}^2 with sstd(0,1,nu=5,xi=-1.5)). Power DGPs P1 (X_t=0.5 X_{t-1}+0.2 Y_{t-1}+0.2 Z_{t-1}+eta), P2 (X_t=0.5 X_{t-1}+5 Y_{t-1}Z_{t-1}+eta; Y,Z AR(1) 0.25), P3 (X_t=0.5 X_{t-1}+5 Y_{t-1}Z_{t-1}+eta; Y,Z N(0,1)), P4 (X_t=0.5 X_{t-1}+2.5 Y_{t-1}Z_{t-1}+epsilon; epsilon GARCH sstd as S2). Each cell aggregates S=500 Monte Carlo replications at T=100,200,500 and tau=0.1,0.5,0.9. Comparison P1: additional pairwise M-vine Y->X, Z->X and KNP quantile tests. Linear F-test: joint (Y,Z)->X mean. P3 appendix pairwise check at T=500, tau=1/2. Empirical Global: log-returns r_t=(log(s_t)-log(s_{t-1}))*100 of SP500, FTSE100, Nikkei225 daily Sept 2012-Oct 2014, T=500. Empirical Asian: log-returns of NK, HSI, SSE daily Sept 2012-Oct 2014, T=500. 9 directions x7 taus per application.",
+ "period_start": "September 2012",
+ "period_end": "October 2014",
+ "method": [
+  "1. Assume (X_t,Z_{1,t}..Z_{d,t}) strictly stationary k-Markov square-integrable with k=1, d=2 (d+1=3 series). Define tau-expectile mu_tau(X)=argmin_m E[R_tau(X-m)] with R_tau(X-m)=|tau-I{(X-m)<0}|(X-m)^2 = tau (X-m)_+^2+(1-tau)(X-m)_-^2. Define GC_tau(Z->X)=log( E[R_tau(X_t-mu_tau(X_t|I_X(t-k))) ] / E[R_tau(X_t-mu_tau(X_t|I_{X,Z}(t-k))) ] ). For tau=1/2 equals GC_mean.",
+  "2. Estimate hat GC_tau(Z->X)=log( sum_{t=T0}^{T} R_tau(x_t-hat mu_tau(X_t|X_{t-1}=x_{t-1})) / sum_{t=T0}^{T} R_tau(x_t-hat mu_tau(X_t|X_{t-1}=x_{t-1},Z_{t-1}=z_{t-1})) ) with T0=T/2. hat mu_tau computed via M-vine.",
+  "3. Step A1: fit M-vine copula to M_x=(x_t)_{t=1..T} via selection/estimation of nagler2022 for stationary vines. Step A2: for each t=T0..T generate N=200 iid predictions tilde x^{M_x}_{i,t} of X_t|X_{t-1}=x_{t-1} from fitted vine, compute hat mu_{tau,N}=argmin_m sum_{i=1}^N R_tau(tilde x^{M_x}_{i,t}-m). Step A3: repeat A1-A2 on M_{x,vz}=(x_t,vz_t) to obtain hat mu_{tau,N}(X_t|X_{t-1}=x_{t-1},Z_{t-1}=vz_{t-1}).",
+  "4. Test H0: GC_tau=0 vs H1:hat GC_tau>0. Part B p-value via vine bootstrap under H0 preserving dependence: B1 extract c_{X_t,X_{t+1}} and c_{X_t,Z_{1,t}} from Tree1 of M_{x,vz} vine; B2 generate x_t^0~hat F_X then x_{t+1}^0|c_{X_t,X_{t+1}}; B3 generate z_{1,t}^0|c_{X_t,Z_{1,t}} using hat F_{Z1}; B4 for i=2..d extract c_{X_t,Z_{i,t};Z_{1..i-1}} from Tree i and draw z_{i,t}^0| x_t^0,z_{1..i-1,t}^0 using hat F_{Zi}; B5 compute hat GC^{0}_{tau,j} on simulated {(x_t^0,vz_t^0)}_{t=1..T}; B6 repeat B=200 times; B7 p=(1/B) sum_j I(hat GC^{0}_{tau,j} >= hat GC_tau). Reject if p<alpha with alpha=0.05.",
+  "5. Simulation evaluates empirical size (S1,S2) and power (P1-P4) as rejection rates over S=500 replications at each tau in {0.1,0.5,0.9} and T in {100,200,500} with N=200,B=200,T0=T/2. Linear F-test comparison uses restricted/unrestricted AR for (Y,Z)->X mean. Pairwise P3 check uses pairwise M-vine tau=1/2 and linear F at alpha=0.05,S=500,T=500.",
+  "6. Empirical applies same specification N=200,B=200,T0=T/2 to log-returns r_t*100 at tau in {0.05,0.1,0.25,0.5,0.75,0.9,0.95} for 6 pairwise +3 joint directions per application, each on T=500."
+ ],
+ "claims": [
+  {
+   "name": "count_T100",
+   "description": "simulated series length T=100 per replication (S1,S2,P1-P4)",
+   "value": "100",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table sizeres/powerres/linear_granger column T=100; Section 4 S=500 replications per cell T in {100,200,500}"
+  },
+  {
+   "name": "count_T200",
+   "description": "simulated series length T=200 per replication",
+   "value": "200",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table sizeres/powerres/linear_granger column T=200"
+  },
+  {
+   "name": "count_T500",
+   "description": "simulated series length T=500 per replication",
+   "value": "500",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table sizeres/powerres/linear_granger column T=500"
+  },
+  {
+   "name": "count_App_global_T500",
+   "description": "Global application daily log-returns SP,FTSE,NK Sept 2012-Oct 2014",
+   "value": "500",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Section 5.1 T=500 Yahoo Finance"
+  },
+  {
+   "name": "count_App_asian_T500",
+   "description": "Asian application daily log-returns NK,HSI,SSE Sept 2012-Oct 2014",
+   "value": "500",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Section 5.2 T=500"
+  },
+  {
+   "name": "param_S",
+   "description": "Monte Carlo replications per DGP*tau*T cell",
+   "value": "500",
+   "unit": "replications",
+   "kind": "parameter",
+   "where": "Section 4 S=500 replications; Appendix Table p3sims S=500; Table powercomp S=500 note"
+  },
+  {
+   "name": "param_N",
+   "description": "M-vine predictions per t for hat mu_tau",
+   "value": "200",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Section 4 PartA N=200, Section 5 same"
+  },
+  {
+   "name": "param_B",
+   "description": "bootstrap samples under H0 for p-value",
+   "value": "200",
+   "unit": "samples",
+   "kind": "parameter",
+   "where": "Section 4 PartB B=200, Section 5 same"
+  },
+  {
+   "name": "param_alpha",
+   "description": "nominal significance level",
+   "value": "0.05",
+   "unit": "level",
+   "kind": "parameter",
+   "where": "Section 4 alpha=0.05, Table captions alpha=0.05"
+  },
+  {
+   "name": "param_T0",
+   "description": "evaluation start T0=T/2",
+   "value": "T/2",
+   "unit": "index",
+   "kind": "parameter",
+   "where": "Section 4 T0=T/2, Section 5 same"
+  },
+  {
+   "name": "param_k",
+   "description": "Markov order assumed k=1",
+   "value": "1",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 3 For simplicity we assume k=1"
+  },
+  {
+   "name": "param_d",
+   "description": "causing dimension d=2 (d+1=3 series) (Y,Z)->X notation",
+   "value": "2",
+   "unit": "series",
+   "kind": "parameter",
+   "where": "Section 4 d=2 i.e. d+1=3 series (X,Y,Z)"
+  },
+  {
+   "name": "param_tau_sim",
+   "description": "expectile levels simulation",
+   "value": "0.1, 0.5, 0.9",
+   "unit": "quantile",
+   "kind": "parameter",
+   "where": "Section 4 tau in {0.1,0.5,0.9}"
+  },
+  {
+   "name": "param_tau_app",
+   "description": "expectile levels empirical",
+   "value": "0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95",
+   "unit": "quantile",
+   "kind": "parameter",
+   "where": "Section 5 tau in {0.05,0.1,0.25,0.5,0.75,0.9,0.95}"
+  },
+  {
+   "name": "size_S1_tau0.1_T100",
+   "description": "empirical size (Y,Z)->X S1 tau0.1 T100 rejection rate",
+   "value": "0.056",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.1 S1 T100"
+  },
+  {
+   "name": "size_S1_tau0.1_T200",
+   "description": "size S1 tau0.1 T200",
+   "value": "0.062",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.1 S1 T200"
+  },
+  {
+   "name": "size_S1_tau0.1_T500",
+   "description": "size S1 tau0.1 T500",
+   "value": "0.056",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.1 S1 T500"
+  },
+  {
+   "name": "size_S2_tau0.1_T100",
+   "description": "size S2 tau0.1 T100",
+   "value": "0.056",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.1 S2 T100"
+  },
+  {
+   "name": "size_S2_tau0.1_T200",
+   "description": "size S2 tau0.1 T200",
+   "value": "0.040",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.1 S2 T200"
+  },
+  {
+   "name": "size_S2_tau0.1_T500",
+   "description": "size S2 tau0.1 T500",
+   "value": "0.046",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.1 S2 T500"
+  },
+  {
+   "name": "size_S1_tau0.5_T100",
+   "description": "size S1 tau0.5 T100",
+   "value": "0.042",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.5 S1 T100"
+  },
+  {
+   "name": "size_S1_tau0.5_T200",
+   "description": "size S1 tau0.5 T200",
+   "value": "0.040",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.5 S1 T200"
+  },
+  {
+   "name": "size_S1_tau0.5_T500",
+   "description": "size S1 tau0.5 T500",
+   "value": "0.046",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.5 S1 T500"
+  },
+  {
+   "name": "size_S2_tau0.5_T100",
+   "description": "size S2 tau0.5 T100",
+   "value": "0.056",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.5 S2 T100"
+  },
+  {
+   "name": "size_S2_tau0.5_T200",
+   "description": "size S2 tau0.5 T200",
+   "value": "0.042",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.5 S2 T200"
+  },
+  {
+   "name": "size_S2_tau0.5_T500",
+   "description": "size S2 tau0.5 T500",
+   "value": "0.052",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.5 S2 T500"
+  },
+  {
+   "name": "size_S1_tau0.9_T100",
+   "description": "size S1 tau0.9 T100",
+   "value": "0.064",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.9 S1 T100"
+  },
+  {
+   "name": "size_S1_tau0.9_T200",
+   "description": "size S1 tau0.9 T200",
+   "value": "0.050",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.9 S1 T200"
+  },
+  {
+   "name": "size_S1_tau0.9_T500",
+   "description": "size S1 tau0.9 T500",
+   "value": "0.042",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.9 S1 T500"
+  },
+  {
+   "name": "size_S2_tau0.9_T100",
+   "description": "size S2 tau0.9 T100",
+   "value": "0.060",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.9 S2 T100"
+  },
+  {
+   "name": "size_S2_tau0.9_T200",
+   "description": "size S2 tau0.9 T200",
+   "value": "0.042",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.9 S2 T200"
+  },
+  {
+   "name": "size_S2_tau0.9_T500",
+   "description": "size S2 tau0.9 T500",
+   "value": "0.044",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table sizeres tau0.9 S2 T500"
+  },
+  {
+   "name": "power_P1_tau0.1_T100",
+   "description": "power P1 tau0.1 T100",
+   "value": "0.420",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P1 T100"
+  },
+  {
+   "name": "power_P1_tau0.1_T200",
+   "description": "power P1 tau0.1 T200",
+   "value": "0.586",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P1 T200"
+  },
+  {
+   "name": "power_P1_tau0.1_T500",
+   "description": "power P1 tau0.1 T500",
+   "value": "0.882",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P1 T500"
+  },
+  {
+   "name": "power_P2_tau0.1_T100",
+   "description": "power P2 tau0.1 T100",
+   "value": "0.640",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P2 T100"
+  },
+  {
+   "name": "power_P2_tau0.1_T200",
+   "description": "power P2 tau0.1 T200",
+   "value": "0.924",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P2 T200"
+  },
+  {
+   "name": "power_P2_tau0.1_T500",
+   "description": "power P2 tau0.1 T500",
+   "value": "0.998",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P2 T500"
+  },
+  {
+   "name": "power_P3_tau0.1_T100",
+   "description": "power P3 tau0.1 T100",
+   "value": "0.676",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P3 T100"
+  },
+  {
+   "name": "power_P3_tau0.1_T200",
+   "description": "power P3 tau0.1 T200",
+   "value": "0.934",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P3 T200"
+  },
+  {
+   "name": "power_P3_tau0.1_T500",
+   "description": "power P3 tau0.1 T500",
+   "value": "1.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P3 T500"
+  },
+  {
+   "name": "power_P4_tau0.1_T100",
+   "description": "power P4 tau0.1 T100",
+   "value": "0.796",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P4 T100"
+  },
+  {
+   "name": "power_P4_tau0.1_T200",
+   "description": "power P4 tau0.1 T200",
+   "value": "0.908",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P4 T200"
+  },
+  {
+   "name": "power_P4_tau0.1_T500",
+   "description": "power P4 tau0.1 T500",
+   "value": "0.982",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.1 P4 T500"
+  },
+  {
+   "name": "power_P1_tau0.5_T100",
+   "description": "power P1 tau0.5 T100",
+   "value": "0.516",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P1 T100"
+  },
+  {
+   "name": "power_P1_tau0.5_T200",
+   "description": "power P1 tau0.5 T200",
+   "value": "0.724",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P1 T200"
+  },
+  {
+   "name": "power_P1_tau0.5_T500",
+   "description": "power P1 tau0.5 T500",
+   "value": "0.978",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P1 T500"
+  },
+  {
+   "name": "power_P2_tau0.5_T100",
+   "description": "power P2 tau0.5 T100",
+   "value": "0.288",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P2 T100"
+  },
+  {
+   "name": "power_P2_tau0.5_T200",
+   "description": "power P2 tau0.5 T200",
+   "value": "0.594",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P2 T200"
+  },
+  {
+   "name": "power_P2_tau0.5_T500",
+   "description": "power P2 tau0.5 T500",
+   "value": "0.942",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P2 T500"
+  },
+  {
+   "name": "power_P3_tau0.5_T100",
+   "description": "power P3 tau0.5 T100",
+   "value": "0.296",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P3 T100"
+  },
+  {
+   "name": "power_P3_tau0.5_T200",
+   "description": "power P3 tau0.5 T200",
+   "value": "0.610",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P3 T200"
+  },
+  {
+   "name": "power_P3_tau0.5_T500",
+   "description": "power P3 tau0.5 T500",
+   "value": "0.972",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P3 T500"
+  },
+  {
+   "name": "power_P4_tau0.5_T100",
+   "description": "power P4 tau0.5 T100",
+   "value": "0.944",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P4 T100"
+  },
+  {
+   "name": "power_P4_tau0.5_T200",
+   "description": "power P4 tau0.5 T200",
+   "value": "0.988",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P4 T200"
+  },
+  {
+   "name": "power_P4_tau0.5_T500",
+   "description": "power P4 tau0.5 T500",
+   "value": "1.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.5 P4 T500"
+  },
+  {
+   "name": "power_P1_tau0.9_T100",
+   "description": "power P1 tau0.9 T100",
+   "value": "0.412",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P1 T100"
+  },
+  {
+   "name": "power_P1_tau0.9_T200",
+   "description": "power P1 tau0.9 T200",
+   "value": "0.624",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P1 T200"
+  },
+  {
+   "name": "power_P1_tau0.9_T500",
+   "description": "power P1 tau0.9 T500",
+   "value": "0.886",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P1 T500"
+  },
+  {
+   "name": "power_P2_tau0.9_T100",
+   "description": "power P2 tau0.9 T100",
+   "value": "0.652",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P2 T100"
+  },
+  {
+   "name": "power_P2_tau0.9_T200",
+   "description": "power P2 tau0.9 T200",
+   "value": "0.934",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P2 T200"
+  },
+  {
+   "name": "power_P2_tau0.9_T500",
+   "description": "power P2 tau0.9 T500",
+   "value": "1.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P2 T500"
+  },
+  {
+   "name": "power_P3_tau0.9_T100",
+   "description": "power P3 tau0.9 T100",
+   "value": "0.672",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P3 T100"
+  },
+  {
+   "name": "power_P3_tau0.9_T200",
+   "description": "power P3 tau0.9 T200",
+   "value": "0.958",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P3 T200"
+  },
+  {
+   "name": "power_P3_tau0.9_T500",
+   "description": "power P3 tau0.9 T500",
+   "value": "1.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P3 T500"
+  },
+  {
+   "name": "power_P4_tau0.9_T100",
+   "description": "power P4 tau0.9 T100",
+   "value": "0.900",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 T100"
+  },
+  {
+   "name": "power_P4_tau0.9_T200",
+   "description": "power P4 tau0.9 T200",
+   "value": "0.986",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P4 T200"
+  },
+  {
+   "name": "power_P4_tau0.9_T500",
+   "description": "power P4 tau0.9 T500",
+   "value": "1.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powerres tau0.9 P4 T500"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.1_T100",
+   "description": "pairwise power M-vine Y->X P1 tau0.1 T100",
+   "value": "0.196",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 M-vine Y->X T100"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.1_T200",
+   "description": "pairwise M-vine Y->X P1 tau0.1 T200",
+   "value": "0.356",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 M-vine Y->X T200"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.1_T500",
+   "description": "pairwise M-vine Y->X P1 tau0.1 T500",
+   "value": "0.650",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 M-vine Y->X T500"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.1_T100",
+   "description": "pairwise M-vine Z->X P1 tau0.1 T100",
+   "value": "0.280",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 M-vine Z->X T100"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.1_T200",
+   "description": "pairwise M-vine Z->X P1 tau0.1 T200",
+   "value": "0.388",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 M-vine Z->X T200"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.1_T500",
+   "description": "pairwise M-vine Z->X P1 tau0.1 T500",
+   "value": "0.530",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 M-vine Z->X T500"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.1_T100",
+   "description": "KNP Y->X P1 tau0.1 T100",
+   "value": "0.041",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 KNP Y->X T100"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.1_T200",
+   "description": "KNP Y->X P1 tau0.1 T200",
+   "value": "0.048",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 KNP Y->X T200"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.1_T500",
+   "description": "KNP Y->X P1 tau0.1 T500",
+   "value": "0.084",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 KNP Y->X T500"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.1_T100",
+   "description": "KNP Z->X P1 tau0.1 T100",
+   "value": "0.033",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 KNP Z->X T100"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.1_T200",
+   "description": "KNP Z->X P1 tau0.1 T200",
+   "value": "0.040",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 KNP Z->X T200"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.1_T500",
+   "description": "KNP Z->X P1 tau0.1 T500",
+   "value": "0.094",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.1 KNP Z->X T500"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.5_T100",
+   "description": "pairwise M-vine Y->X P1 tau0.5 T100",
+   "value": "0.300",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 M-vine Y->X T100"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.5_T200",
+   "description": "pairwise M-vine Y->X P1 tau0.5 T200",
+   "value": "0.468",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 M-vine Y->X T200"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.5_T500",
+   "description": "pairwise M-vine Y->X P1 tau0.5 T500",
+   "value": "0.740",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 M-vine Y->X T500"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.5_T100",
+   "description": "pairwise M-vine Z->X P1 tau0.5 T100",
+   "value": "0.344",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 M-vine Z->X T100"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.5_T200",
+   "description": "pairwise M-vine Z->X P1 tau0.5 T200",
+   "value": "0.464",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 M-vine Z->X T200"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.5_T500",
+   "description": "pairwise M-vine Z->X P1 tau0.5 T500",
+   "value": "0.720",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 M-vine Z->X T500"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.5_T100",
+   "description": "KNP Y->X P1 tau0.5 T100",
+   "value": "0.154",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 KNP Y->X T100"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.5_T200",
+   "description": "KNP Y->X P1 tau0.5 T200",
+   "value": "0.340",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 KNP Y->X T200"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.5_T500",
+   "description": "KNP Y->X P1 tau0.5 T500",
+   "value": "0.709",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 KNP Y->X T500"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.5_T100",
+   "description": "KNP Z->X P1 tau0.5 T100",
+   "value": "0.180",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 KNP Z->X T100"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.5_T200",
+   "description": "KNP Z->X P1 tau0.5 T200",
+   "value": "0.344",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 KNP Z->X T200"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.5_T500",
+   "description": "KNP Z->X P1 tau0.5 T500",
+   "value": "0.705",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.5 KNP Z->X T500"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.9_T100",
+   "description": "pairwise M-vine Y->X P1 tau0.9 T100",
+   "value": "0.264",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 M-vine Y->X T100"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.9_T200",
+   "description": "pairwise M-vine Y->X P1 tau0.9 T200",
+   "value": "0.388",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 M-vine Y->X T200"
+  },
+  {
+   "name": "comp_Mvine_YtoX_P1_tau0.9_T500",
+   "description": "pairwise M-vine Y->X P1 tau0.9 T500",
+   "value": "0.620",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 M-vine Y->X T500"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.9_T100",
+   "description": "pairwise M-vine Z->X P1 tau0.9 T100",
+   "value": "0.268",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 M-vine Z->X T100"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.9_T200",
+   "description": "pairwise M-vine Z->X P1 tau0.9 T200",
+   "value": "0.352",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 M-vine Z->X T200"
+  },
+  {
+   "name": "comp_Mvine_ZtoX_P1_tau0.9_T500",
+   "description": "pairwise M-vine Z->X P1 tau0.9 T500",
+   "value": "0.560",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 M-vine Z->X T500"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.9_T100",
+   "description": "KNP Y->X P1 tau0.9 T100",
+   "value": "0.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 KNP Y->X T100"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.9_T200",
+   "description": "KNP Y->X P1 tau0.9 T200",
+   "value": "0.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 KNP Y->X T200"
+  },
+  {
+   "name": "comp_KNP_YtoX_P1_tau0.9_T500",
+   "description": "KNP Y->X P1 tau0.9 T500",
+   "value": "0.082",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 KNP Y->X T500"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.9_T100",
+   "description": "KNP Z->X P1 tau0.9 T100",
+   "value": "0.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 KNP Z->X T100"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.9_T200",
+   "description": "KNP Z->X P1 tau0.9 T200",
+   "value": "0.014",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 KNP Z->X T200"
+  },
+  {
+   "name": "comp_KNP_ZtoX_P1_tau0.9_T500",
+   "description": "KNP Z->X P1 tau0.9 T500",
+   "value": "0.052",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table powercomp tau0.9 KNP Z->X T500"
+  },
+  {
+   "name": "fg_size_S1_T100",
+   "description": "F-test size S1 T100 (Y,Z)->X mean",
+   "value": "0.028",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Size S1 T100"
+  },
+  {
+   "name": "fg_size_S1_T200",
+   "description": "F-test size S1 T200",
+   "value": "0.052",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Size S1 T200"
+  },
+  {
+   "name": "fg_size_S1_T500",
+   "description": "F-test size S1 T500",
+   "value": "0.060",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Size S1 T500"
+  },
+  {
+   "name": "fg_size_S2_T100",
+   "description": "F-test size S2 T100",
+   "value": "0.042",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Size S2 T100"
+  },
+  {
+   "name": "fg_size_S2_T200",
+   "description": "F-test size S2 T200",
+   "value": "0.062",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Size S2 T200"
+  },
+  {
+   "name": "fg_size_S2_T500",
+   "description": "F-test size S2 T500",
+   "value": "0.060",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Size S2 T500"
+  },
+  {
+   "name": "fg_power_P1_T100",
+   "description": "F-test power P1 T100",
+   "value": "0.810",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P1 T100"
+  },
+  {
+   "name": "fg_power_P1_T200",
+   "description": "F-test power P1 T200",
+   "value": "0.988",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P1 T200"
+  },
+  {
+   "name": "fg_power_P1_T500",
+   "description": "F-test power P1 T500",
+   "value": "1.000",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P1 T500"
+  },
+  {
+   "name": "fg_power_P2_T100",
+   "description": "F-test power P2 T100",
+   "value": "0.454",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P2 T100"
+  },
+  {
+   "name": "fg_power_P2_T200",
+   "description": "F-test power P2 T200",
+   "value": "0.438",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P2 T200"
+  },
+  {
+   "name": "fg_power_P2_T500",
+   "description": "F-test power P2 T500",
+   "value": "0.448",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P2 T500"
+  },
+  {
+   "name": "fg_power_P3_T100",
+   "description": "F-test power P3 T100",
+   "value": "0.350",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P3 T100"
+  },
+  {
+   "name": "fg_power_P3_T200",
+   "description": "F-test power P3 T200",
+   "value": "0.338",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P3 T200"
+  },
+  {
+   "name": "fg_power_P3_T500",
+   "description": "F-test power P3 T500",
+   "value": "0.340",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P3 T500"
+  },
+  {
+   "name": "fg_power_P4_T100",
+   "description": "F-test power P4 T100",
+   "value": "0.388",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P4 T100"
+  },
+  {
+   "name": "fg_power_P4_T200",
+   "description": "F-test power P4 T200",
+   "value": "0.410",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P4 T200"
+  },
+  {
+   "name": "fg_power_P4_T500",
+   "description": "F-test power P4 T500",
+   "value": "0.500",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table linear_granger Power P4 T500"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.05",
+   "description": "M-vine GC expectile SP->FTSE tau0.05",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.05"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.10",
+   "description": "SP->FTSE tau0.10",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.10"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.25",
+   "description": "SP->FTSE tau0.25",
+   "value": "0.003",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.25"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.50",
+   "description": "SP->FTSE tau0.50",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.50"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.75",
+   "description": "SP->FTSE tau0.75",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.75"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.90",
+   "description": "SP->FTSE tau0.90",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.90"
+  },
+  {
+   "name": "pval_SP_to_FTSE_tau0.95",
+   "description": "SP->FTSE tau0.95",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->FTSE tau0.95"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.05",
+   "description": "SP->NK tau0.05",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.05"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.10",
+   "description": "SP->NK tau0.10",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.10"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.25",
+   "description": "SP->NK tau0.25",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.25"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.50",
+   "description": "SP->NK tau0.50",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.50"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.75",
+   "description": "SP->NK tau0.75",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.75"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.90",
+   "description": "SP->NK tau0.90",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.90"
+  },
+  {
+   "name": "pval_SP_to_NK_tau0.95",
+   "description": "SP->NK tau0.95",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres SP->NK tau0.95"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.05",
+   "description": "FTSE->SP tau0.05",
+   "value": "0.030",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.05"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.10",
+   "description": "FTSE->SP tau0.10",
+   "value": "0.003",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.10"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.25",
+   "description": "FTSE->SP tau0.25",
+   "value": "0.150",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.25"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.50",
+   "description": "FTSE->SP tau0.50",
+   "value": "0.290",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.50"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.75",
+   "description": "FTSE->SP tau0.75",
+   "value": "0.500",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.75"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.90",
+   "description": "FTSE->SP tau0.90",
+   "value": "0.035",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.90"
+  },
+  {
+   "name": "pval_FTSE_to_SP_tau0.95",
+   "description": "FTSE->SP tau0.95",
+   "value": "0.025",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->SP tau0.95"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.05",
+   "description": "FTSE->NK tau0.05",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.05"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.10",
+   "description": "FTSE->NK tau0.10",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.10"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.25",
+   "description": "FTSE->NK tau0.25",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.25"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.50",
+   "description": "FTSE->NK tau0.50",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.50"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.75",
+   "description": "FTSE->NK tau0.75",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.75"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.90",
+   "description": "FTSE->NK tau0.90",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.90"
+  },
+  {
+   "name": "pval_FTSE_to_NK_tau0.95",
+   "description": "FTSE->NK tau0.95",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres FTSE->NK tau0.95"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.05",
+   "description": "NK->SP tau0.05",
+   "value": "0.340",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.05"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.10",
+   "description": "NK->SP tau0.10",
+   "value": "0.453",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.10"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.25",
+   "description": "NK->SP tau0.25",
+   "value": "0.470",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.25"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.50",
+   "description": "NK->SP tau0.50",
+   "value": "0.525",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.50"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.75",
+   "description": "NK->SP tau0.75",
+   "value": "0.248",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.75"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.90",
+   "description": "NK->SP tau0.90",
+   "value": "0.575",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.90"
+  },
+  {
+   "name": "pval_NK_to_SP_tau0.95",
+   "description": "NK->SP tau0.95",
+   "value": "0.233",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->SP tau0.95"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.05",
+   "description": "NK->FTSE tau0.05",
+   "value": "0.260",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.05"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.10",
+   "description": "NK->FTSE tau0.10",
+   "value": "0.472",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.10"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.25",
+   "description": "NK->FTSE tau0.25",
+   "value": "0.165",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.25"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.50",
+   "description": "NK->FTSE tau0.50",
+   "value": "0.145",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.50"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.75",
+   "description": "NK->FTSE tau0.75",
+   "value": "0.295",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.75"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.90",
+   "description": "NK->FTSE tau0.90",
+   "value": "0.470",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.90"
+  },
+  {
+   "name": "pval_NK_to_FTSE_tau0.95",
+   "description": "NK->FTSE tau0.95",
+   "value": "0.123",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres NK->FTSE tau0.95"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.05",
+   "description": "(FTSE,NK)->SP tau0.05",
+   "value": "0.008",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.05"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.10",
+   "description": "(FTSE,NK)->SP tau0.10",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.10"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.25",
+   "description": "(FTSE,NK)->SP tau0.25",
+   "value": "0.135",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.25"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.50",
+   "description": "(FTSE,NK)->SP tau0.50",
+   "value": "0.340",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.50"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.75",
+   "description": "(FTSE,NK)->SP tau0.75",
+   "value": "0.128",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.75"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.90",
+   "description": "(FTSE,NK)->SP tau0.90",
+   "value": "0.030",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.90"
+  },
+  {
+   "name": "pval_FTSE_NK_to_SP_tau0.95",
+   "description": "(FTSE,NK)->SP tau0.95",
+   "value": "0.022",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (FTSE,NK)->SP tau0.95"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.05",
+   "description": "(SP,NK)->FTSE tau0.05",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.05"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.10",
+   "description": "(SP,NK)->FTSE tau0.10",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.10"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.25",
+   "description": "(SP,NK)->FTSE tau0.25",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.25"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.50",
+   "description": "(SP,NK)->FTSE tau0.50",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.50"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.75",
+   "description": "(SP,NK)->FTSE tau0.75",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.75"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.90",
+   "description": "(SP,NK)->FTSE tau0.90",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.90"
+  },
+  {
+   "name": "pval_SPNK_to_FTSE_tau0.95",
+   "description": "(SP,NK)->FTSE tau0.95",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,NK)->FTSE tau0.95"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.05",
+   "description": "(SP,FTSE)->NK tau0.05",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.05"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.10",
+   "description": "(SP,FTSE)->NK tau0.10",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.10"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.25",
+   "description": "(SP,FTSE)->NK tau0.25",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.25"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.50",
+   "description": "(SP,FTSE)->NK tau0.50",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.50"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.75",
+   "description": "(SP,FTSE)->NK tau0.75",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.75"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.90",
+   "description": "(SP,FTSE)->NK tau0.90",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.90"
+  },
+  {
+   "name": "pval_SPFTSE_to_NK_tau0.95",
+   "description": "(SP,FTSE)->NK tau0.95",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres (SP,FTSE)->NK tau0.95"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.05",
+   "description": "NK->HSI tau0.05",
+   "value": "0.080",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.05"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.10",
+   "description": "NK->HSI tau0.10",
+   "value": "0.080",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.10"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.25",
+   "description": "NK->HSI tau0.25",
+   "value": "0.145",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.25"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.50",
+   "description": "NK->HSI tau0.50",
+   "value": "0.470",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.50"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.75",
+   "description": "NK->HSI tau0.75",
+   "value": "0.365",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.75"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.90",
+   "description": "NK->HSI tau0.90",
+   "value": "0.305",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.90"
+  },
+  {
+   "name": "pval_NK_to_HSI_tau0.95",
+   "description": "NK->HSI tau0.95",
+   "value": "0.370",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->HSI tau0.95"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.05",
+   "description": "NK->SSE tau0.05",
+   "value": "0.410",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.05"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.10",
+   "description": "NK->SSE tau0.10",
+   "value": "0.520",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.10"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.25",
+   "description": "NK->SSE tau0.25",
+   "value": "0.325",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.25"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.50",
+   "description": "NK->SSE tau0.50",
+   "value": "0.345",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.50"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.75",
+   "description": "NK->SSE tau0.75",
+   "value": "0.285",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.75"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.90",
+   "description": "NK->SSE tau0.90",
+   "value": "0.340",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.90"
+  },
+  {
+   "name": "pval_NK_to_SSE_tau0.95",
+   "description": "NK->SSE tau0.95",
+   "value": "0.425",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 NK->SSE tau0.95"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.05",
+   "description": "HSI->NK tau0.05",
+   "value": "0.440",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.05"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.10",
+   "description": "HSI->NK tau0.10",
+   "value": "0.275",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.10"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.25",
+   "description": "HSI->NK tau0.25",
+   "value": "0.330",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.25"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.50",
+   "description": "HSI->NK tau0.50",
+   "value": "0.365",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.50"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.75",
+   "description": "HSI->NK tau0.75",
+   "value": "0.310",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.75"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.90",
+   "description": "HSI->NK tau0.90",
+   "value": "0.305",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.90"
+  },
+  {
+   "name": "pval_HSI_to_NK_tau0.95",
+   "description": "HSI->NK tau0.95",
+   "value": "0.360",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->NK tau0.95"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.05",
+   "description": "HSI->SSE tau0.05",
+   "value": "0.150",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.05"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.10",
+   "description": "HSI->SSE tau0.10",
+   "value": "0.370",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.10"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.25",
+   "description": "HSI->SSE tau0.25",
+   "value": "0.255",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.25"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.50",
+   "description": "HSI->SSE tau0.50",
+   "value": "0.240",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.50"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.75",
+   "description": "HSI->SSE tau0.75",
+   "value": "0.235",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.75"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.90",
+   "description": "HSI->SSE tau0.90",
+   "value": "0.515",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.90"
+  },
+  {
+   "name": "pval_HSI_to_SSE_tau0.95",
+   "description": "HSI->SSE tau0.95",
+   "value": "0.195",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 HSI->SSE tau0.95"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.05",
+   "description": "SSE->NK tau0.05",
+   "value": "0.445",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.05"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.10",
+   "description": "SSE->NK tau0.10",
+   "value": "0.370",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.10"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.25",
+   "description": "SSE->NK tau0.25",
+   "value": "0.325",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.25"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.50",
+   "description": "SSE->NK tau0.50",
+   "value": "0.410",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.50"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.75",
+   "description": "SSE->NK tau0.75",
+   "value": "0.365",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.75"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.90",
+   "description": "SSE->NK tau0.90",
+   "value": "0.305",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.90"
+  },
+  {
+   "name": "pval_SSE_to_NK_tau0.95",
+   "description": "SSE->NK tau0.95",
+   "value": "0.360",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->NK tau0.95"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.05",
+   "description": "SSE->HSI tau0.05",
+   "value": "0.340",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.05"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.10",
+   "description": "SSE->HSI tau0.10",
+   "value": "0.155",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.10"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.25",
+   "description": "SSE->HSI tau0.25",
+   "value": "0.260",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.25"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.50",
+   "description": "SSE->HSI tau0.50",
+   "value": "0.535",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.50"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.75",
+   "description": "SSE->HSI tau0.75",
+   "value": "0.450",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.75"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.90",
+   "description": "SSE->HSI tau0.90",
+   "value": "0.325",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.90"
+  },
+  {
+   "name": "pval_SSE_to_HSI_tau0.95",
+   "description": "SSE->HSI tau0.95",
+   "value": "0.275",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 SSE->HSI tau0.95"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.05",
+   "description": "(NK,SSE)->HSI tau0.05 - joint left tail headline",
+   "value": "0.005",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.05"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.10",
+   "description": "(NK,SSE)->HSI tau0.10",
+   "value": "0.025",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.10"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.25",
+   "description": "(NK,SSE)->HSI tau0.25",
+   "value": "0.080",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.25"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.50",
+   "description": "(NK,SSE)->HSI tau0.50",
+   "value": "0.545",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.50"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.75",
+   "description": "(NK,SSE)->HSI tau0.75",
+   "value": "0.340",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.75"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.90",
+   "description": "(NK,SSE)->HSI tau0.90",
+   "value": "0.235",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.90"
+  },
+  {
+   "name": "pval_NK_SSE_to_HSI_tau0.95",
+   "description": "(NK,SSE)->HSI tau0.95",
+   "value": "0.195",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (NK,SSE)->HSI tau0.95"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.05",
+   "description": "(HSI,NK)->SSE tau0.05",
+   "value": "0.225",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.05"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.10",
+   "description": "(HSI,NK)->SSE tau0.10",
+   "value": "0.395",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.10"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.25",
+   "description": "(HSI,NK)->SSE tau0.25",
+   "value": "0.305",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.25"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.50",
+   "description": "(HSI,NK)->SSE tau0.50",
+   "value": "0.220",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.50"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.75",
+   "description": "(HSI,NK)->SSE tau0.75",
+   "value": "0.305",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.75"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.90",
+   "description": "(HSI,NK)->SSE tau0.90",
+   "value": "0.385",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.90"
+  },
+  {
+   "name": "pval_HSI_NK_to_SSE_tau0.95",
+   "description": "(HSI,NK)->SSE tau0.95",
+   "value": "0.575",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,NK)->SSE tau0.95"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.05",
+   "description": "(HSI,SSE)->NK tau0.05",
+   "value": "0.325",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.05"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.10",
+   "description": "(HSI,SSE)->NK tau0.10",
+   "value": "0.200",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.10"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.25",
+   "description": "(HSI,SSE)->NK tau0.25",
+   "value": "0.210",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.25"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.50",
+   "description": "(HSI,SSE)->NK tau0.50",
+   "value": "0.230",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.50"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.75",
+   "description": "(HSI,SSE)->NK tau0.75",
+   "value": "0.335",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.75"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.90",
+   "description": "(HSI,SSE)->NK tau0.90",
+   "value": "0.270",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.90"
+  },
+  {
+   "name": "pval_HSI_SSE_to_NK_tau0.95",
+   "description": "(HSI,SSE)->NK tau0.95",
+   "value": "0.185",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Table appres2 (HSI,SSE)->NK tau0.95"
+  },
+  {
+   "name": "rej_Mvine_P3_YtoX_T500",
+   "description": "P3 pairwise M-vine Y->X rejection rate tau=1/2 T500 alpha0.05 S500",
+   "value": "0.072",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table p3sims M-vine Y->X T500"
+  },
+  {
+   "name": "rej_Mvine_P3_ZtoX_T500",
+   "description": "P3 pairwise M-vine Z->X rejection rate tau=1/2",
+   "value": "0.048",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table p3sims M-vine Z->X T500"
+  },
+  {
+   "name": "rej_Ftest_P3_YtoX_T500",
+   "description": "P3 pairwise linear F Y->X rejection rate (size-distorted)",
+   "value": "0.244",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table p3sims Linear F Y->X T500"
+  },
+  {
+   "name": "rej_Ftest_P3_ZtoX_T500",
+   "description": "P3 pairwise linear F Z->X rejection rate",
+   "value": "0.246",
+   "unit": "rate",
+   "kind": "tally",
+   "where": "Table p3sims Linear F Z->X T500"
+  }
+ ],
+ "headline": "pval_NK_SSE_to_HSI_tau0.05",
+ "partitions": [
+  {
+   "split": "simulated series lengths T=100 vs 200 vs 500 per DGP*tau cell (each cell S=500 replications)",
+   "total": "count_T500",
+   "parts": [
+    "count_T100",
+    "count_T200",
+    "count_T500"
+   ]
+  },
+  {
+   "split": "empirical daily log-return samples: Global (SP,FTSE,NK) vs Asian (NK,HSI,SSE) Sept 2012-Oct 2014 each T=500, 9 directions x7 taus=63 tests each",
+   "total": "count_App_global_T500",
+   "parts": [
+    "count_App_global_T500",
+    "count_App_asian_T500"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Global_SP_to_FTSE_tau0.05",
+   "statistic": "not stated (hat GC_tau)",
+   "p_value": "pval_SP_to_FTSE_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_FTSE_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_FTSE_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_FTSE_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_FTSE_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_FTSE_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_FTSE_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_FTSE_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_FTSE_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_FTSE_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_FTSE_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_FTSE_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_FTSE_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SP_to_NK_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_SP_to_NK_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_SP_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_SP_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_to_NK_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_to_NK_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_SP_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SP_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_NK_to_FTSE_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_FTSE_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_FTSE_NK_to_SP_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_FTSE_NK_to_SP_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPNK_to_FTSE_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_SPNK_to_FTSE_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.05",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.10",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.25",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.50",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.75",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.90",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Global_SPFTSE_to_NK_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_SPFTSE_to_NK_tau0.95",
+   "group_sizes": [
+    "count_App_global_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_HSI_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_HSI_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_to_SSE_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_NK_to_SSE_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_NK_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_NK_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_to_SSE_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_to_SSE_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_NK_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_NK_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_SSE_to_HSI_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_SSE_to_HSI_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.05_HEADLINE",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_NK_SSE_to_HSI_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_NK_SSE_to_HSI_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_NK_to_SSE_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_NK_to_SSE_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.05",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.05",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.10",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.10",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.25",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.25",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.50",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.50",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.75",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.75",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.90",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.90",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  },
+  {
+   "test": "Asian_HSI_SSE_to_NK_tau0.95",
+   "statistic": "not stated",
+   "p_value": "pval_HSI_SSE_to_NK_tau0.95",
+   "group_sizes": [
+    "count_App_asian_T500"
+   ]
+  }
+ ]
+}

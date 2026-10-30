@@ -1,0 +1,1158 @@
+{
+ "title": "A Volume-Price-Adjusted MACD Trading Strategy with Sensitivity Calibration for U.S. Equity Indices",
+ "hypothesis": "H0 mu_new <= mu_old HA mu_new > mu_old for each pair Pair1 B vs A Pair2 C vs A Pair3 C vs B one-sided 5%",
+ "data_sources": [
+  "Yahoo Finance daily OHLCV SPY (S&P 500) QQQ (Nasdaq-100) DIA (Dow Jones Industrial Average)"
+ ],
+ "sample": "Daily market data (Open, High, Low, Close, Volume) for 3 U.S. equity index ETFs as proxies: S&P 500 SPY (market-cap-weighted, diversified large-cap, 11 sectors, high liquidity), Nasdaq-100 QQQ (market-cap-weighted, growth/tech-concentrated, high liquidity/high volatility), Dow Jones DIA (price-weighted, blue-chip, lower liquidity/lower volatility). Source Yahoo Finance. Daily trading frequency weekends/non-trading days excluded. Training calibration period: 2018 to 2022. Testing evaluation period: 2023-01-01 to 2026-02-28 out-of-sample. Strategy-specific index-specific lambda fixed from training applied to testing. No leverage, long-only fully invested min 1 share, execution next trading day open to avoid look-ahead. Costs applied.",
+ "period_start": "2018",
+ "period_end": "2026-02-28",
+ "method": [
+  "1 Data: Yahoo Finance daily OHLCV for SPY QQQ DIA. Sample 2018 to 2026-02-28 split training 2018-2022 (1,259 obs per instrument) testing 2023-01-01 to 2026-02-28 (791 obs per instrument). Exclude weekends/non-trading.",
+  "2 Define SMA_t = 1/n sum_{i=0}^{n-1} P_{t-i} and EMA_t = alpha P_t + (1-alpha) EMA_{t-1} with alpha = 2/(n+1) n in trading days. Use n=12,26 for MACD.",
+  "3 Traditional MACD: MACD_t = EMA12(P_t) - EMA26(P_t) ; Signal_t = EMA9(MACD_t) ; Hist_t = MACD_t - Signal_t ; P_t is closing price. Standard parameters (12,26,9).",
+  "4 Trading rules: Baseline signal-line crossover Rule A: Buy if MACD_{t-1}<=Signal_{t-1} and MACD_t>Signal_t ; Sell if MACD_{t-1}>=Signal_{t-1} and MACD_t<Signal_t. In this study only Rule A used as benchmark. Zero-line and divergence excluded. Execution at next trading day opening price.",
+  "5 Volume-price-adjusted price: Define N rolling window (N number past trading days, value not stated). For i in [t-N, t-1]: P*_t = sum P_i Volume_i sigma_i r_i / sum Volume_i. sigma_i = STD(P_i^{High}-P_i^{Low}) / P_i^{Close} normalized volatility. r_i = |P_i^{Close}-P_i^{Open}| / (P_i^{High}-P_i^{Low}) candlestick body ratio.",
+  "6 VP-MACD indicator: VP-MACD_t = EMA12(P*_t) - EMA26(P*_t) ; Signal_t = EMA9(VP-MACD_t).",
+  "7 Lambda-adjusted entry: lambda in (0.8,1) calibration range (practical not theoretical). Buy triggered when VP-MACD_{t-1} <= lambda Signal_{t-1} and VP-MACD_t > lambda Signal_t ; Sell if VP-MACD_{t-1} >= Signal_{t-1} and VP-MACD_t < Signal_t (no lambda on sell). Separate lambda optimized for Strategy B MACD+lambda (applied to traditional MACD) and Strategy C VP-MACD.",
+  "8 Grid search calibration: lambda in [0.8,1.0] step 0.02 11 candidates per strategy per index using training data. Multi-criteria selection balancing win ratio, total PnL, PnL ratio, Sharpe, max drawdown, expectancy. Preference Sharpe + PnL ratio + expectancy without worsening DD. Result lambdas SPY 0.90/0.88 QQQ 0.84/0.98 DIA 0.92/0.86.",
+  "9 Backtest simulation: Initialize V0=100,000 no leverage long-only fully invested min 1 share. Open on Buy close on Sell wait next Buy. Execute at next day open. Costs 4 bps one-way (3 bps trading + 1 bp slippage) both entry and exit => 8 bps round-trip per completed trade.",
+  "10 Evaluation metrics definitions: Total Trades N buy-sell pairs ; Win Ratio Nwin/N ; PnL Ratio (Gains/Nwin)/(Losses/Nloss) ; Expectancy = WinRatio*Gbar - (1-WinRatio)*Lbar ; Total PnL = VT-V0 ; Sharpe = E[Rt]/sigma(Rt) * sqrt252 ; MDD = max_t (Peak_t - Value_t)/Peak_t with Peak_t = max_{s<=t} Value_s.",
+  "11 Statistical tests on daily return differences testing period 791 obs per index. Hypotheses H0: mu_new <= mu_old HA: mu_new > mu_old per pair. Pair1 Strategy B vs A, Pair2 C vs A, Pair3 C vs B. Three complementary tests: (a) one-sided t-test mean difference >0, (b) HAC Newey-West adjusted t, (c) circular block bootstrap 1,000 resamples block length 5 non-parametric. Significance 5% p<0.05.",
+  "12 Reporting: Tables 2-4 performance across 3 indices x 3 strategies testing period. Tables 5-6 t and Newey-West results. Figs 8-10 bootstrap distributions. Conclusions interpret economic and statistical improvements and trade-off selectivity vs frequency."
+ ],
+ "claims": [
+  {
+   "name": "training_observations_per_instrument",
+   "description": "Training trading days per instrument 2018-2022 from daily Yahoo Finance data excluding weekends/non-trading days.",
+   "value": "1,259",
+   "unit": "trading days",
+   "kind": "count",
+   "where": "Sec 3.5.1 Data Description, Sec 4.1 Table 1 note."
+  },
+  {
+   "name": "testing_observations_per_instrument",
+   "description": "Testing trading days per instrument 2023 to 2026-02-28 per instrument.",
+   "value": "791",
+   "unit": "trading days",
+   "kind": "count",
+   "where": "Sec 3.5.1, Sec 4.2"
+  },
+  {
+   "name": "number_of_indices",
+   "description": "Number of U.S. equity indices evaluated SPY QQ DIA",
+   "value": "3",
+   "unit": "indices",
+   "kind": "count",
+   "where": "Sec 3.5.1: SPY QQQ DIA."
+  },
+  {
+   "name": "strategies_per_index",
+   "description": "Number of strategies evaluated per index Strategy A Baseline MACD Strategy B MACD+lambda Strategy C VP-MACD",
+   "value": "3",
+   "unit": "strategies",
+   "kind": "count",
+   "where": "Sec 3.5, Sec 4.2"
+  },
+  {
+   "name": "initial_capital",
+   "description": "Backtest starting capital long-only fully invested min 1 share",
+   "value": "$100,000",
+   "unit": "USD",
+   "kind": "parameter",
+   "where": "Sec 3.5.2 Backtesting Setup"
+  },
+  {
+   "name": "one_way_transaction_cost",
+   "description": "One-way cost 3 bps trading + 1 bp slippage applied at entry and exit",
+   "value": "4 bps",
+   "unit": "bps",
+   "kind": "parameter",
+   "where": "Sec 3.5.2"
+  },
+  {
+   "name": "round_trip_cost",
+   "description": "Total round-trip cost per completed trade",
+   "value": "8 bps",
+   "unit": "bps",
+   "kind": "parameter",
+   "where": "Sec 3.5.2"
+  },
+  {
+   "name": "grid_lambda_min",
+   "description": "Lower bound of lambda grid search",
+   "value": "0.8",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 3.5.2, Sec 4.1"
+  },
+  {
+   "name": "grid_lambda_max",
+   "description": "Upper bound of lambda grid search inclusive",
+   "value": "1.0",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 3.5.2, Sec 4.1"
+  },
+  {
+   "name": "grid_lambda_increment",
+   "description": "Lambda grid step yielding 11 candidate values [0.8,1.0]",
+   "value": "0.02",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 3.5.2, Sec 4.1"
+  },
+  {
+   "name": "bootstrap_resamples",
+   "description": "Circular block bootstrap resamples",
+   "value": "1,000",
+   "unit": "resamples",
+   "kind": "parameter",
+   "where": "Sec 3.5.3, Sec 4.3"
+  },
+  {
+   "name": "bootstrap_block_length",
+   "description": "Bootstrap block length consecutive daily returns",
+   "value": "5",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "Sec 3.5.3, Sec 4.3"
+  },
+  {
+   "name": "lambda_SPY_MACDplus",
+   "description": "Optimal lambda for SPY MACD+lambda selected on training by Sharpe etc",
+   "value": "0.90",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 Sec 4.1, Table 2 note"
+  },
+  {
+   "name": "lambda_SPY_VPMACD",
+   "description": "Optimal lambda for SPY VP-MACD",
+   "value": "0.88",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 Sec 4.1, Table 2 note"
+  },
+  {
+   "name": "lambda_QQQ_MACDplus",
+   "description": "Optimal lambda for QQQ MACD+lambda",
+   "value": "0.84",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 Sec 4.1, Table 3 note"
+  },
+  {
+   "name": "lambda_QQQ_VPMACD",
+   "description": "Optimal lambda for QQQ VP-MACD",
+   "value": "0.98",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 Sec 4.1, Table 3 note"
+  },
+  {
+   "name": "lambda_DIA_MACDplus",
+   "description": "Optimal lambda for DIA MACD+lambda",
+   "value": "0.92",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 Sec 4.1, Table 4 note"
+  },
+  {
+   "name": "lambda_DIA_VPMACD",
+   "description": "Optimal lambda for DIA VP-MACD",
+   "value": "0.86",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table 1 Sec 4.1, Table 4 note"
+  },
+  {
+   "name": "SPY_baseline_trades",
+   "description": "SPY Baseline MACD (12,26,9) total trades testing period",
+   "value": "40",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_baseline_winrate",
+   "description": "SPY Baseline MACD win rate",
+   "value": "50.00%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_baseline_totalPnL",
+   "description": "SPY Baseline MACD total PnL testing",
+   "value": "$13,612.34",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_baseline_PnLratio",
+   "description": "SPY Baseline MACD PnL ratio",
+   "value": "1.39",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_baseline_sharpe",
+   "description": "SPY Baseline MACD Sharpe annualized sqrt252",
+   "value": "0.47",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_baseline_MDD",
+   "description": "SPY Baseline MACD max drawdown",
+   "value": "-13.78%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_baseline_expectancy",
+   "description": "SPY Baseline MACD expectancy per trade",
+   "value": "$19.39",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_trades",
+   "description": "SPY MACD+lambda (0.90) trades",
+   "value": "36",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_winrate",
+   "description": "SPY MACD+lambda win rate",
+   "value": "55.56%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_totalPnL",
+   "description": "SPY MACD+lambda total PnL",
+   "value": "$52,688.94",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_PnLratio",
+   "description": "SPY MACD+lambda PnL ratio",
+   "value": "2.98",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_sharpe",
+   "description": "SPY MACD+lambda Sharpe",
+   "value": "1.35",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_MDD",
+   "description": "SPY MACD+lambda max DD",
+   "value": "-8.17%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_MACDlambda_expectancy",
+   "description": "SPY MACD+lambda expectancy",
+   "value": "$121.04",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_VPMACD_trades",
+   "description": "SPY VP-MACD (0.88) trades",
+   "value": "6",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 2 SPY bold row"
+  },
+  {
+   "name": "SPY_VPMACD_winrate",
+   "description": "SPY VP-MACD win rate",
+   "value": "50.00%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_VPMACD_totalPnL",
+   "description": "SPY VP-MACD total PnL",
+   "value": "$27,543.78",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_VPMACD_PnLratio",
+   "description": "SPY VP-MACD PnL ratio",
+   "value": "8.61",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_VPMACD_sharpe",
+   "description": "SPY VP-MACD Sharpe",
+   "value": "0.96",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_VPMACD_MDD",
+   "description": "SPY VP-MACD max DD",
+   "value": "-6.33%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "SPY_VPMACD_expectancy",
+   "description": "SPY VP-MACD expectancy",
+   "value": "$365.72",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 2 SPY"
+  },
+  {
+   "name": "QQQ_baseline_trades",
+   "description": "QQQ Baseline MACD trades",
+   "value": "35",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_baseline_winrate",
+   "description": "QQQ Baseline MACD win rate",
+   "value": "45.71%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_baseline_totalPnL",
+   "description": "QQQ Baseline MACD total PnL",
+   "value": "$16,823.12",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_baseline_PnLratio",
+   "description": "QQQ Baseline MACD PnL ratio",
+   "value": "1.56",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_baseline_sharpe",
+   "description": "QQQ Baseline MACD Sharpe",
+   "value": "0.45",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_baseline_MDD",
+   "description": "QQQ Baseline MACD max DD",
+   "value": "-22.84%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_baseline_expectancy",
+   "description": "QQQ Baseline MACD expectancy",
+   "value": "$17.14",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_trades",
+   "description": "QQQ MACD+lambda (0.84) trades",
+   "value": "31",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_winrate",
+   "description": "QQQ MACD+lambda win rate",
+   "value": "61.29%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_totalPnL",
+   "description": "QQQ MACD+lambda total PnL",
+   "value": "$63,321.06",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_PnLratio",
+   "description": "QQQ MACD+lambda PnL ratio",
+   "value": "1.89",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_sharpe",
+   "description": "QQQ MACD+lambda Sharpe",
+   "value": "1.13",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_MDD",
+   "description": "QQQ MACD+lambda max DD",
+   "value": "-11.94%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_MACDlambda_expectancy",
+   "description": "QQQ MACD+lambda expectancy",
+   "value": "$76.83",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_VPMACD_trades",
+   "description": "QQQ VP-MACD (0.98) trades",
+   "value": "21",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 3 QQQ bold row"
+  },
+  {
+   "name": "QQQ_VPMACD_winrate",
+   "description": "QQQ VP-MACD win rate",
+   "value": "80.95%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_VPMACD_totalPnL",
+   "description": "QQQ VP-MACD total PnL",
+   "value": "$88,324.48",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_VPMACD_PnLratio",
+   "description": "QQQ VP-MACD PnL ratio",
+   "value": "1.72",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_VPMACD_sharpe",
+   "description": "QQQ VP-MACD Sharpe",
+   "value": "1.51",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_VPMACD_MDD",
+   "description": "QQQ VP-MACD max DD",
+   "value": "-7.41%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "QQQ_VPMACD_expectancy",
+   "description": "QQQ VP-MACD expectancy",
+   "value": "$120.26",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 3 QQQ"
+  },
+  {
+   "name": "DIA_baseline_trades",
+   "description": "DIA Baseline MACD trades",
+   "value": "40",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_baseline_winrate",
+   "description": "DIA Baseline MACD win rate",
+   "value": "40.00%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_baseline_totalPnL",
+   "description": "DIA Baseline MACD total PnL",
+   "value": "$1,236.96",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_baseline_PnLratio",
+   "description": "DIA Baseline MACD PnL ratio",
+   "value": "1.55",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_baseline_sharpe",
+   "description": "DIA Baseline MACD Sharpe",
+   "value": "0.09",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_baseline_MDD",
+   "description": "DIA Baseline MACD max DD",
+   "value": "-13.95%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_baseline_expectancy",
+   "description": "DIA Baseline MACD expectancy",
+   "value": "$2.09",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_trades",
+   "description": "DIA MACD+lambda (0.92) trades",
+   "value": "34",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_winrate",
+   "description": "DIA MACD+lambda win rate",
+   "value": "50.00%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_totalPnL",
+   "description": "DIA MACD+lambda total PnL negative",
+   "value": "-$6,862.00",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_PnLratio",
+   "description": "DIA MACD+lambda PnL ratio",
+   "value": "0.75",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_sharpe",
+   "description": "DIA MACD+lambda Sharpe",
+   "value": "-0.20",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_MDD",
+   "description": "DIA MACD+lambda max DD",
+   "value": "-14.19%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_MACDlambda_expectancy",
+   "description": "DIA MACD+lambda expectancy",
+   "value": "-$12.55",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_VPMACD_trades",
+   "description": "DIA VP-MACD (0.86) trades",
+   "value": "13",
+   "unit": "trades",
+   "kind": "estimate",
+   "where": "Table 4 DIA bold row"
+  },
+  {
+   "name": "DIA_VPMACD_winrate",
+   "description": "DIA VP-MACD win rate",
+   "value": "69.23%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_VPMACD_totalPnL",
+   "description": "DIA VP-MACD total PnL",
+   "value": "$29,592.17",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_VPMACD_PnLratio",
+   "description": "DIA VP-MACD PnL ratio",
+   "value": "3.72",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_VPMACD_sharpe",
+   "description": "DIA VP-MACD Sharpe",
+   "value": "1.08",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_VPMACD_MDD",
+   "description": "DIA VP-MACD max DD",
+   "value": "-6.20%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "DIA_VPMACD_expectancy",
+   "description": "DIA VP-MACD expectancy",
+   "value": "$226.87",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "Table 4 DIA"
+  },
+  {
+   "name": "ttest_pair1_SPY_t",
+   "description": "One-sided t Pair1 MACD+lambda vs MACD SPY t-stat",
+   "value": "1.7171",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair1_SPY_p",
+   "description": "One-sided t Pair1 SPY p-value significant at 5%*",
+   "value": "0.0432",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair1_QQQ_t",
+   "description": "One-sided t Pair1 QQQ t",
+   "value": "1.6653",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair1_QQQ_p",
+   "description": "One-sided t Pair1 QQQ p significant",
+   "value": "0.0481",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair1_DIA_t",
+   "description": "One-sided t Pair1 DIA t",
+   "value": "-0.6313",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair1_DIA_p",
+   "description": "One-sided t Pair1 DIA p not significant",
+   "value": "0.0736",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair2_SPY_t",
+   "description": "One-sided t Pair2 VP-MACD vs MACD SPY t",
+   "value": "0.4971",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair2_SPY_p",
+   "description": "One-sided t Pair2 SPY p",
+   "value": "0.3096",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair2_QQQ_t",
+   "description": "One-sided t Pair2 QQQ t",
+   "value": "1.6586",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair2_QQQ_p",
+   "description": "One-sided t Pair2 QQQ p significant",
+   "value": "0.0488",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair2_DIA_t",
+   "description": "One-sided t Pair2 DIA t",
+   "value": "1.2804",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair2_DIA_p",
+   "description": "One-sided t Pair2 DIA p",
+   "value": "0.1004",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair3_SPY_t",
+   "description": "One-sided t Pair3 VP-MACD vs MACD+lambda SPY t",
+   "value": "-0.8857",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair3_SPY_p",
+   "description": "One-sided t Pair3 SPY p",
+   "value": "0.8120",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair3_QQQ_t",
+   "description": "One-sided t Pair3 QQQ t",
+   "value": "0.3107",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair3_QQQ_p",
+   "description": "One-sided t Pair3 QQQ p",
+   "value": "0.3781",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair3_DIA_t",
+   "description": "One-sided t Pair3 DIA t",
+   "value": "1.7065",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "ttest_pair3_DIA_p",
+   "description": "One-sided t Pair3 DIA p significant",
+   "value": "0.0442",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 5"
+  },
+  {
+   "name": "nwttest_pair1_SPY_t",
+   "description": "Newey-West HAC adj t Pair1 SPY t",
+   "value": "1.8983",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair1_SPY_p",
+   "description": "Newey-West Pair1 SPY p significant",
+   "value": "0.0288",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair1_QQQ_t",
+   "description": "Newey-West Pair1 QQQ t",
+   "value": "1.6931",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair1_QQQ_p",
+   "description": "Newey-West Pair1 QQQ p significant",
+   "value": "0.0452",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair1_DIA_t",
+   "description": "Newey-West Pair1 DIA t",
+   "value": "-0.6593",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair1_DIA_p",
+   "description": "Newey-West Pair1 DIA p",
+   "value": "0.7452",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair2_SPY_t",
+   "description": "Newey-West Pair2 SPY t",
+   "value": "0.5307",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair2_SPY_p",
+   "description": "Newey-West Pair2 SPY p",
+   "value": "0.2978",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair2_QQQ_t",
+   "description": "Newey-West Pair2 QQQ t",
+   "value": "1.7229",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair2_QQQ_p",
+   "description": "Newey-West Pair2 QQQ p significant",
+   "value": "0.0425",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair2_DIA_t",
+   "description": "Newey-West Pair2 DIA t",
+   "value": "1.2964",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair2_DIA_p",
+   "description": "Newey-West Pair2 DIA p",
+   "value": "0.0974",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair3_SPY_t",
+   "description": "Newey-West Pair3 SPY t",
+   "value": "-0.9922",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair3_SPY_p",
+   "description": "Newey-West Pair3 SPY p",
+   "value": "0.8394",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair3_QQQ_t",
+   "description": "Newey-West Pair3 QQQ t",
+   "value": "0.3487",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair3_QQQ_p",
+   "description": "Newey-West Pair3 QQQ p",
+   "value": "0.3637",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair3_DIA_t",
+   "description": "Newey-West Pair3 DIA t",
+   "value": "1.7894",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "nwttest_pair3_DIA_p",
+   "description": "Newey-West Pair3 DIA p significant",
+   "value": "0.0368",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table 6"
+  },
+  {
+   "name": "bootstrap_pair1_SPY_p",
+   "description": "Circular block bootstrap Pair1 SPY MACD+lambda vs MACD p 1000 resamples block 5 significant",
+   "value": "0.024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.3 text + Fig 8"
+  },
+  {
+   "name": "bootstrap_pair2_QQQ_p",
+   "description": "Block bootstrap Pair2 VP-MACD vs MACD QQQ p 1000 block5 significant",
+   "value": "0.039",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.3 text + Fig 10"
+  },
+  {
+   "name": "bootstrap_pair3_DIA_p",
+   "description": "Block bootstrap Pair3 VP-MACD vs MACD+lambda DIA p 1000 block5 significant",
+   "value": "0.028",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 4.3 text + Fig 9"
+  }
+ ],
+ "headline": "QQQ_VPMACD_totalPnL",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "Pair1 MACD+lambda vs Baseline MACD SPY one-sided t mean return >0",
+   "statistic": "ttest_pair1_SPY_t",
+   "p_value": "ttest_pair1_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair1 QQQ one-sided t",
+   "statistic": "ttest_pair1_QQQ_t",
+   "p_value": "ttest_pair1_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair1 DIA one-sided t",
+   "statistic": "ttest_pair1_DIA_t",
+   "p_value": "ttest_pair1_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair2 VP-MACD vs Baseline MACD SPY one-sided t",
+   "statistic": "ttest_pair2_SPY_t",
+   "p_value": "ttest_pair2_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair2 QQQ one-sided t",
+   "statistic": "ttest_pair2_QQQ_t",
+   "p_value": "ttest_pair2_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair2 DIA one-sided t",
+   "statistic": "ttest_pair2_DIA_t",
+   "p_value": "ttest_pair2_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair3 VP-MACD vs MACD+lambda SPY one-sided t",
+   "statistic": "ttest_pair3_SPY_t",
+   "p_value": "ttest_pair3_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair3 QQQ one-sided t",
+   "statistic": "ttest_pair3_QQQ_t",
+   "p_value": "ttest_pair3_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Pair3 DIA one-sided t",
+   "statistic": "ttest_pair3_DIA_t",
+   "p_value": "ttest_pair3_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West HAC Pair1 SPY",
+   "statistic": "nwttest_pair1_SPY_t",
+   "p_value": "nwttest_pair1_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair1 QQQ",
+   "statistic": "nwttest_pair1_QQQ_t",
+   "p_value": "nwttest_pair1_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair1 DIA",
+   "statistic": "nwttest_pair1_DIA_t",
+   "p_value": "nwttest_pair1_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair2 SPY",
+   "statistic": "nwttest_pair2_SPY_t",
+   "p_value": "nwttest_pair2_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair2 QQQ",
+   "statistic": "nwttest_pair2_QQQ_t",
+   "p_value": "nwttest_pair2_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair2 DIA",
+   "statistic": "nwttest_pair2_DIA_t",
+   "p_value": "nwttest_pair2_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair3 SPY",
+   "statistic": "nwttest_pair3_SPY_t",
+   "p_value": "nwttest_pair3_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair3 QQQ",
+   "statistic": "nwttest_pair3_QQQ_t",
+   "p_value": "nwttest_pair3_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Newey-West Pair3 DIA",
+   "statistic": "nwttest_pair3_DIA_t",
+   "p_value": "nwttest_pair3_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Circular block bootstrap Pair1 SPY 1000 resamples block5",
+   "statistic": "not stated",
+   "p_value": "bootstrap_pair1_SPY_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Circular block bootstrap Pair2 QQQ",
+   "statistic": "not stated",
+   "p_value": "bootstrap_pair2_QQQ_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  },
+  {
+   "test": "Circular block bootstrap Pair3 DIA",
+   "statistic": "not stated",
+   "p_value": "bootstrap_pair3_DIA_p",
+   "group_sizes": [
+    "testing_observations_per_instrument"
+   ]
+  }
+ ]
+}

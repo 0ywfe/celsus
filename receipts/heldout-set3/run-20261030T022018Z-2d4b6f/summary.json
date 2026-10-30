@@ -1,0 +1,82 @@
+{
+ "run_id": "run-20261030T022018Z-2d4b6f",
+ "paper": "2609.35011",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 7 of 9 checked results match within their uncertainty. Its main result, alpha_info_corr, is 1.82 not stated in the paper and 1.82 not stated here (consistent).",
+ "headline": {
+  "name": "alpha_info_corr",
+  "kind": "estimate",
+  "unit": "not stated",
+  "reported": 1.82,
+  "reproduced": 1.82,
+  "se": 0.181,
+  "n": 17,
+  "consistent": true,
+  "why": "paper inside 1.82 +/- 0.3548"
+ },
+ "sample": [
+  {
+   "name": "N_countries",
+   "reported": 27.0,
+   "reproduced": 27,
+   "consistent": true
+  },
+  {
+   "name": "T_observations",
+   "reported": 307.0,
+   "reproduced": 307,
+   "consistent": true
+  },
+  {
+   "name": "community_East_size_stated",
+   "reported": 5.0,
+   "reproduced": null,
+   "consistent": null
+  }
+ ],
+ "judged": 9,
+ "matched": 7,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (NNSD_cutoff (0.356) at line 271). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "cloudpickle==3.1.2",
+  "contourpy==1.4.0",
+  "cycler==0.12.1",
+  "fonttools==4.68.0",
+  "igraph==1.0.0",
+  "joblib==1.6.0",
+  "kiwisolver==1.5.1",
+  "matplotlib-inline==0.2.2",
+  "matplotlib==3.11.2",
+  "mpmath==1.4.1",
+  "networkx==3.7",
+  "pillow==13.0.0",
+  "powerlaw==2.0.0",
+  "pyparsing==3.3.3",
+  "python-igraph==1.0.0",
+  "python-louvain==0.16",
+  "safetensors==0.8.0",
+  "scikit-learn==1.9.1",
+  "texttable==1.7.2",
+  "threadpoolctl==3.7.0",
+  "tqdm==4.70.1",
+  "traitlets==5.16.1",
+  "weightwatcher==0.7.7"
+ ],
+ "calls": 77,
+ "cost_usd": 1.94,
+ "tokens_in": 5669332,
+ "tokens_out": 190493,
+ "wall_s": 12781.4,
+ "crashed": null
+}

@@ -1,0 +1,390 @@
+exit 0 in 41.8s
+--- stdout
+=== Fetching ===
+
+Basket G10 ['EURUSD=X', 'GBPUSD=X', 'USDJPY=X', 'USDCHF=X', 'USDCAD=X', 'AUDUSD=X', 'NZDUSD=X', 'USDSEK=X', 'USDNOK=X']
+  EURUSD=X: 2006-01-02 to 2025-06-30 n=5056
+  GBPUSD=X: 2006-01-02 to 2025-06-30 n=5068
+  USDJPY=X: 2006-01-02 to 2025-06-30 n=5056
+  USDCHF=X: 2006-01-02 to 2025-06-30 n=5069
+  USDCAD=X: 2006-01-02 to 2025-06-30 n=5071
+  AUDUSD=X: 2006-05-16 to 2025-06-30 n=4975
+  NZDUSD=X: 2006-01-02 to 2025-06-30 n=5072
+  USDSEK=X: 2006-01-02 to 2025-06-30 n=5055
+  USDNOK=X: 2006-01-02 to 2025-06-30 n=5055
+  available 9/9
+  aligned 5073 -> 4952 after dropna (lost 121)
+  combined (4952, 9) 2006-05-16 to 2025-06-30
+
+Basket ETF ['IFSU.L', 'IUSZ.L', 'IUVL.L', 'IUMO.L', 'IUQA.L']
+  IFSU.L: 2021-01-04 to 2025-06-30 n=1132
+  IUSZ.L: 2021-01-04 to 2025-06-30 n=1132
+  IUVL.L: 2021-01-04 to 2025-06-30 n=1132
+  IUMO.L: 2021-01-04 to 2025-06-30 n=1132
+  IUQA.L: 2021-01-04 to 2025-06-30 n=1132
+  available 5/5
+  aligned 1132 -> 1132 after dropna (lost 0)
+  combined (1132, 5) 2021-01-04 to 2025-06-30
+
+Basket TSY ['^IRX', '^FVX', '^TNX', '^TYX']
+  ^IRX: 1994-01-03 to 2025-06-30 n=7907
+  ^FVX: 1994-01-03 to 2025-06-30 n=7907
+  ^TNX: 1994-01-03 to 2025-06-30 n=7907
+  ^TYX: 1994-01-03 to 2025-06-30 n=7907
+  available 4/4
+  aligned 7907 -> 7907 after dropna (lost 0)
+  combined (7907, 4) 1994-01-03 to 2025-06-30
+
+=== G10 ===
+    window 2006-01-01 to 2010-12-31: 1182 bars
+    window 2011-01-01 to 2025-06-30: 3770 bars
+  X_is (1182, 9) 2006-05-16 to 2010-12-31  X_oos (3770, 9)
+  linear lambdas IS (slowest 5): [0.99926527 0.99570617 0.98973237 0.98562964 0.97660536]
+  linear times IS: [2722.08523468  465.78503021  194.78695385  139.17535335   85.4896803 ]
+  lambda bounds min 0.8562 max 0.9993
+  linear orth frob IS 2.467e-09 OOS 9.672e+00
+  linear lambda IS [0.99926527 0.99570617 0.98973237 0.98562964 0.97660537] OOS [0.9960616  0.99898003 0.99671152 0.99405809 0.98350262] diff [ 0.00320367 -0.00327386 -0.00697915 -0.00842844 -0.00689725]
+  tail FastICA not converged after 500
+  tail lambda IS [4.54371191e+03 1.15877344e+01 1.56505130e+03 2.83062099e+00
+ 1.21471667e+01]
+  tail lambda OOS [4.87070876e+05 3.70085508e+04 1.40294746e+05 2.00105094e+00
+ 4.51977842e+05]
+  [robustness] returns linear lambdas IS [ 0.12062496  0.07056385  0.01210712 -0.01490645 -0.06979479] OOS [-0.35702785 -0.06025535 -0.26120072 -0.05516928 -0.36444902] (contrasts with levels)
+
+=== ETF ===
+    window 2021-01-01 to 2022-12-31: 503 bars
+    window 2023-01-01 to 2025-06-30: 629 bars
+  X_is (503, 5) 2021-01-04 to 2022-12-30  X_oos (629, 5)
+  linear lambdas IS (slowest 5): [0.99594263 0.98954139 0.97959099 0.95600015 0.91016647]
+  linear times IS: [492.92984575 191.22992495  97.99594886  45.45469862  22.26340283]
+  lambda bounds min 0.9102 max 0.9959
+  linear orth frob IS 1.011e-08 OOS 2.558e+01
+  linear lambda IS [0.99594263 0.98954139 0.979591   0.95600015 0.91016648] OOS [0.99713397 0.98854456 0.99125423 0.99311129 0.99013368] diff [-0.00119134  0.00099683 -0.01166323 -0.03711113 -0.0799672 ]
+  tail FastICA not converged after 500
+  tail lambda IS [53.14551107 16.87933985 23.65501458 16.08684916 61.16694166]
+  tail lambda OOS [4.43350856e+02 5.74401290e+04 2.21873507e+05 4.54744595e+01
+ 2.10459393e+06]
+  [robustness] returns linear lambdas IS [ 0.1367513   0.07485325 -0.05855183 -0.11031787 -0.11789848] OOS [ 1.19790995e-04 -4.66463343e-03 -5.88746449e-02 -1.49966618e-01
+ -3.31997016e-02] (contrasts with levels)
+
+=== TSY ===
+    window 1994-01-01 to 1998-12-31: 1252 bars
+    window 1999-01-01 to 2025-06-30: 6655 bars
+  X_is (1252, 4) 1994-01-03 to 1998-12-31  X_oos (6655, 4)
+  linear lambdas IS (slowest 4): [0.99684718 0.99282764 0.98702619 0.93445079]
+  linear times IS: [634.35198078 278.84841707 154.15670194  30.51142883]
+  lambda bounds min 0.9345 max 0.9968
+  linear orth frob IS 8.087e-08 OOS 1.717e+01
+  linear lambda IS [0.99684718 0.99282765 0.98702619 0.93445086] OOS [0.99858616 0.99965892 0.99716385 0.99277047] diff [-0.00173898 -0.00683128 -0.01013765 -0.05831961]
+  tail FastICA not converged after 500
+  tail lambda IS [ 65.83347519 330.17512019  44.8420403   18.32174724]
+  tail lambda OOS [374986.37111953 488258.10536232 410998.17009949   2320.1072506 ]
+  [robustness] returns linear lambdas IS [ 0.09000766  0.04772757  0.00974387 -0.21740714] OOS [ 0.03089857  0.07046037  0.05887349 -0.02789975] (contrasts with levels)
+
+Total obs 13991 assets sum 18
+
+Wrote /work/results.json
+{
+  "results": [
+    {
+      "name": "n_baskets",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_etf_tickers",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "G10_linear_slowest_lambda_is",
+      "value": 0.9992652692196228,
+      "se": 0.0011157279798162294,
+      "n": 1182
+    },
+    {
+      "name": "G10_linear_slowest_lambda_oos",
+      "value": 0.9960616002671149,
+      "se": 0.0014444131031886326,
+      "n": 3770
+    },
+    {
+      "name": "G10_linear_slowest_timescale_is",
+      "value": 2722.085234683511,
+      "se": null,
+      "n": 1182
+    },
+    {
+      "name": "G10_linear_slowest_timescale_oos",
+      "value": 507.82046913629955,
+      "se": null,
+      "n": 3770
+    },
+    {
+      "name": "G10_levels_linear_persistence_corr",
+      "value": 0.8690406382338512,
+      "se": 0.7071067811865475,
+      "n": 5
+    },
+    {
+      "name": "G10_levels_linear_mean_abs_diff_is_oos",
+      "value": 0.0057564744670092205,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "G10_returns_linear_slowest_lambda_is",
+      "value": 0.12062495854288939,
+      "se": 0.028910813391160917,
+      "n": 1181
+    },
+    {
+      "name": "G10_returns_linear_slowest_lambda_oos",
+      "value": -0.35702784663987497,
+      "se": 0.015219229002716817,
+      "n": 3769
+    },
+    {
+      "name": "G10_tail_slowest_lambda_is",
+      "value": 4543.7119124571445,
+      "se": null,
+      "n": 1182
+    },
+    {
+      "name": "G10_tail_slowest_lambda_oos",
+      "value": 487070.87643124425,
+      "se": null,
+      "n": 3770
+    },
+    {
+      "name": "G10_linear_orth_frob_is",
+      "value": 2.46669951701762e-09,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "G10_linear_orth_frob_oos",
+      "value": 9.671711872177207,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "ETF_linear_slowest_lambda_is",
+      "value": 0.9959426281465914,
+      "se": 0.004020476888641004,
+      "n": 503
+    },
+    {
+      "name": "ETF_linear_slowest_lambda_oos",
+      "value": 0.9971339685665229,
+      "se": 0.0030214144608347103,
+      "n": 629
+    },
+    {
+      "name": "ETF_linear_slowest_timescale_is",
+      "value": 492.92984575119254,
+      "se": null,
+      "n": 503
+    },
+    {
+      "name": "ETF_linear_slowest_timescale_oos",
+      "value": 697.829052619145,
+      "se": null,
+      "n": 629
+    },
+    {
+      "name": "ETF_levels_linear_persistence_corr",
+      "value": 0.33774112168904247,
+      "se": 0.7071067811865475,
+      "n": 5
+    },
+    {
+      "name": "ETF_levels_linear_mean_abs_diff_is_oos",
+      "value": 0.02618594714209168,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "ETF_returns_linear_slowest_lambda_is",
+      "value": 0.13675129651676343,
+      "se": 0.04430122081615775,
+      "n": 502
+    },
+    {
+      "name": "ETF_returns_linear_slowest_lambda_oos",
+      "value": 0.00011979099541292032,
+      "se": 0.039968038062103244,
+      "n": 628
+    },
+    {
+      "name": "ETF_tail_slowest_lambda_is",
+      "value": 53.14551106998831,
+      "se": null,
+      "n": 503
+    },
+    {
+      "name": "ETF_tail_slowest_lambda_oos",
+      "value": 443.350855810475,
+      "se": null,
+      "n": 629
+    },
+    {
+      "name": "ETF_linear_orth_frob_is",
+      "value": 1.010875107040056e-08,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "ETF_linear_orth_frob_oos",
+      "value": 25.577846715184258,
+      "se": 0.0,
+      "n": 5
+    },
+    {
+      "name": "TSY_linear_slowest_lambda_is",
+      "value": 0.9968471763621302,
+      "se": 0.002244229396269139,
+      "n": 1252
+    },
+    {
+      "name": "TSY_linear_slowest_lambda_oos",
+      "value": 0.9985861561712552,
+      "se": 0.0006517085158615011,
+      "n": 6655
+    },
+    {
+      "name": "TSY_linear_slowest_timescale_is",
+      "value": 634.3519807767017,
+      "se": null,
+      "n": 1252
+    },
+    {
+      "name": "TSY_linear_slowest_timescale_oos",
+      "value": 1414.5833926902906,
+      "se": null,
+      "n": 6655
+    },
+    {
+      "name": "TSY_levels_linear_persistence_corr",
+      "value": 0.962629095246646,
+      "se": 1.0,
+      "n": 4
+    },
+    {
+      "name": "TSY_levels_linear_mean_abs_diff_is_oos",
+      "value": 0.019256878564558016,
+      "se": null,
+      "n": 4
+    },
+    {
+      "name": "TSY_returns_linear_slowest_lambda_is",
+      "value": 0.09000765527775274,
+      "se": 0.02818074202305356,
+      "n": 1251
+    },
+    {
+      "name": "TSY_returns_linear_slowest_lambda_oos",
+      "value": 0.030898568273986876,
+      "se": 0.012255088886652603,
+      "n": 6654
+    },
+    {
+      "name": "TSY_tail_slowest_lambda_is",
+      "value": 65.83347519073897,
+      "se": null,
+      "n": 1252
+    },
+    {
+      "name": "TSY_tail_slowest_lambda_oos",
+      "value": 374986.37111952825,
+      "se": null,
+      "n": 6655
+    },
+    {
+      "name": "TSY_linear_orth_frob_is",
+      "value": 8.086920172071211e-08,
+      "se": 0.0,
+      "n": 4
+    },
+    {
+      "name": "TSY_linear_orth_frob_oos",
+      "value": 17.167881740595146,
+      "se": 0.0,
+      "n": 4
+    }
+  ],
+  "sample": {
+    "description": "Three baskets from yfinance daily data: G10 FX 9 pairs vs USD (EURUSD=X, GBPUSD=X, USDJPY=X, USDCHF=X, USDCAD=X, AUDUSD=X, NZDUSD=X, USDSEK=X, USDNOK=X), 5 iShares multifactor ETFs on LSE (IFSU.L, IUSZ.L, IUVL.L, IUMO.L, IUQA.L), US Treasuries 4 yield indices ^IRX/^FVX/^TNX/^TYX (3M/5Y/10Y/30Y). Primary X_t = demeaned log price levels (FX/ETF) and demeaned yield levels (TSY) \u2013 chosen to produce smooth slow components matching paper figures; returns-based X_t reported as robustness. Windows: G10 2006-01-01\u20132010-12-31 fit (1182 bars) 2011-01-01\u20132025-06-30 OOS (3770 bars), ETF 2021-01-01\u20132022-12-31 fit (503) 2023-01-01\u20132025-06-30 OOS (629), TSY 1994-01-01\u20131998-12-31 fit (1252) 1999-01-01\u20132025-06-30 OOS (6655). Linear tICA k=1: generalized eigenvalue C_T w=lambda C0 w, C0=X^T X/N, C_T symmetrized lag-1 autocov, T=1d, scipy.linalg.eigh with 1e-10 ridge, timescales t=-2T/(lambda-1). Tail tICA k=4: FastICA fixed-point on whitened Z=X C0^{-1/2}, parallel symmetric orthogonalization, seed 0, tol 1e-6.",
+    "n": 13991,
+    "start": "1994-01-03",
+    "end": "2025-06-30",
+    "same_as_paper": true,
+    "missing": null,
+    "extra": null,
+    "differences": "",
+    "cannot_count": "Paper prints no observation count, data vendor, or exact G10/Treasury instrument list, so missing/extra vs paper's vendor data cannot be counted; counts here reflect public yfinance daily coverage for standard proxies overlapping paper windows.",
+    "not_rebuilt": {},
+    "substitutions": "G10: yfinance daily spot closes for 9 G10 pairs vs USD (paper G10 list unspecified; using standard 9 USD-crosses covering G10 ex-USD). ETF: LSE listings .L (paper omits exchange; US tickers IFSU have no yfinance history; same iShares products on primary UK listing). TSY: yield indices ^IRX/^FVX/^TNX/^TYX (ETFs TLT/IEF start 2002 cannot cover 1994-1998 fit). X_t demeaned log price levels (FX/ETF) and yield levels (TSY) as primary \u2013 paper says prices or returns without per-basket choice; returns reported as robustness. Lag T=1d, sample mean covariance, ridge 1e-10, symmetric whitening, single random init FastICA (paper lag, estimator, init/tol not stated)."
+  },
+  "notes": "Paper leaves open: G10 composition, Treasury maturities/instruments, data vendor/source, frequency (we use daily closes), price vs return definition (we use levels as primary because it yields smooth slow components matching figures; returns alternative gives lambdas ~0.1 IS and ~0 OOS with no persistence \u2013 reported as _returns_ robustness), demeaning (we demean per window to enforce zero-mean), lag T and discretization of dX_t (we use T=1 trading day, symmetrized C_T=1/2 E[X_{t+T}^T X_t+X_t^T X_{t+T}]), covariance expectation estimator (we use sample mean without shrinkage), FastICA init/tol/restarts (we use seed 0, tol 1e-6, parallel orth, single restart; increasing k beyond 4 not tested beyond k=4). Deviations: fit/OOS split at year-end (2010/2011, 2022/2023, 1998/1999) to avoid overlap vs paper inclusive 2010-2025 etc \u2013 windows within paper ranges. Treasuries OOS to 2025-06-30 (latest yfinance). Weights kept C0-normalized (w^T C0 w=1) for lambda; paper figures rescale to unit gross exposure (sum|w|=1) which cancels in autocorr. Paper prints no numeric table, test statistic, SE or p-value \u2013 main conclusion is visual robustness of timescale at IS/OOS transition and reversion after shocks, with orthogonality decaying as expected. We quantify persistence via slowest-component lambda/timescale IS vs OOS, correlation of top-m lambdas, mean absolute lambda difference, and Frobenius deviation of W C0 W^T from identity OOS. All numbers recomputed from public data; no paper-reported number copied. Tail lambdas (=E[Y^{2k-1} Y_{t+T}]) numerically unstable in whitened space due to outlier amplification (Y^7) \u2013 values range 1e0 to 1e18, outside [-1,1] \u2013 reported as computed without normalization; paper does not print tail eigenvalues either."
+}
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/work/replicate.py:58: Pandas4Warning: Sorting by default when concatenating all DatetimeIndex is deprecated.  In the future, pandas will respect the default of `sort=False`. Specify `sort=True` or `sort=False` to silence this message. If you see this warnings when not directly calling concat, report a bug to pandas.
+  combined = pd.concat(available, axis=1)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

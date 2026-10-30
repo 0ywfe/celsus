@@ -1,0 +1,32 @@
+exit 0 in 59.8s
+--- stdout
+Downloading PWT 10.01 from dataverse... https://dataverse.nl/api/access/datafile/354095?format=original&gbrecs=true
+download status 200 6551843
+Loading PWT from /tmp/pwt1001.xlsx
+Baseline n >=30 y: 181 (paper 157)
+Barro per_capita n=172 b=-0.0945 se 0.0351 c=0.0080 se 0.1393 phi=0.0034 se 0.0013 meanlag 291.6 se 114.2 t_rest -0.61
+  spec2 b2=-0.0938 se 0.0366 phi2=0.0034 se 0.0014 meanlag2 293.9
+Barro per_employee n=172 b=-0.1499 se 0.0388 c=-0.0049 se 0.1612 phi=0.0056 se 0.0016 meanlag 178.1 se 50.1 t_rest -0.97
+  spec2 b2=-0.1505 se 0.0403 phi2=0.0056 se 0.0016 meanlag2 177.3
+Panel y None keep countries 181 after >=30, rows 10369
+TWFE phi 0.0270 se 0.0035 psi1 0.230 psi2 0.052 mean 25.61 se 3.16 n 181 Tmin 27 Tave 54.3 Tmax 67
+DCCEP phi 0.0261 se 0.0033 mean 26.29 se 3.25 n 181
+MG phi 0.1115 se 0.0113 mean 6.00 se 5.60 n 181
+Panel y_emp None keep countries 172 after >=30, rows 9307
+TWFE phi 0.0296 se 0.0047 psi1 0.206 psi2 0.052 mean 24.08 se 3.87 n 172 Tmin 27 Tave 51.1 Tmax 67
+DCCEP phi 0.0298 se 0.0046 mean 23.75 se 3.69 n 172
+MG phi 0.1501 se 0.0145 mean 4.64 se 44.01 n 172
+Panel y k keep countries 180 after >=30, rows 10314
+TWFE phi 0.0494 se 0.0063 psi1 0.184 psi2 0.035 mean 14.82 se 1.92 n 180 Tmin 27 Tave 54.3 Tmax 67
+DCCEP phi 0.0490 se 0.0062 mean 14.97 se 1.91 n 180
+MG phi 0.3203 se 0.0232 mean 1.74 se 3.58 n 180
+  long TWFE 0.502 se 0.043 DCCEP 0.521 se 0.042 MG 0.436 se 0.195
+Panel y_emp k_emp keep countries 171 after >=30, rows 9267
+TWFE phi 0.0542 se 0.0079 psi1 0.193 psi2 0.040 mean 13.15 se 2.05 n 171 Tmin 27 Tave 51.2 Tmax 67
+DCCEP phi 0.0538 se 0.0077 mean 13.29 se 2.04 n 171
+MG phi 0.3499 se 0.0265 mean 1.50 se 4.43 n 171
+  long TWFE 0.477 se 0.046 DCCEP 0.488 se 0.045 MG 0.268 se 0.450
+Wrote /work/results.json with 131 results
+Done
+
+--- stderr

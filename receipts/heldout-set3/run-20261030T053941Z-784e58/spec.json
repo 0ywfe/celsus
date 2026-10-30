@@ -1,0 +1,1294 @@
+{
+ "title": "Bayesian Parametric Portfolio Policies",
+ "hypothesis": "Factor timing as portfolio rule. BPPP (posterior-averaged conditional PPP with 242 predictors -> 5 factors) earns timing component vs static and survives leverage limit and turnover penalty.",
+ "data_sources": [
+  "Kenneth French data library: monthly market total return Mkt, SMB, HML, CMA, RMW, UMD zero-investment factor returns, 1-month T-bill",
+  "Open Source Asset Pricing: 212 monthly anomaly portfolio returns (aggregate, same for every factor)",
+  "30 factor-specific predictors: time-series momentum, cross-sectional momentum, valuation on past prices, reversal, volatility computed from own factor returns (6 series x 5 families, Appendix A)"
+ ],
+ "sample": "Monthly factor returns. Full sample July 1963 to December 2023. Burn-in 121 months used only for estimation. Rolling estimation window 120 months. OOS evaluation August 1973 to December 2023 = 605 months. All predictors standardised using only data available at date, winsorized at 3 SD, missing=0, first 12 expanding-standardisation rows =0. z_t = [constant + 242 standardised predictors], L=243, K=5 factors, K*L=1,215 coefficients. Market weight fixed 1, benchmark factor weights 0. Position limit c=0.6 per factor, gross limit g=1.5, applied after capping via proportional scaling if sum|w|>g. Factors zero-investment, no budget constraint linking to market. Net returns deduct factor-specific trading costs and holding costs at factor level, market not costed, no netting across factors. Historical data vintages not reconstructed.",
+ "period_start": "July 1963",
+ "period_end": "December 2023",
+ "method": [
+  "1. Predictors: compute 212 aggregate anomaly returns + 30 factor-specific signals as defined in Appendix A. Standardise each predictor with expanding mean/SD to current date, winsorise at 3 SD, set missing to 0. First complete look-back missing retained. At startup first 12 rows after expanding standardisation left at 0. Append constant => L=NSignalsPolicy=243. Policy size NCoefficientsPolicy=1,215.",
+  "2. Policy: w_{m,t}=1, w_{k,t}(theta)=Pi_c(theta_k' z_t) for k=1..5, Pi_c(u)=min(c,max(-c,u)), c=TimingCap=0.6. Feasible set W={(1,w): |w_k|<=c, sum|w_k|<=g}, g=TimingLeverage=1.5. Portfolio return r_{p,t+1}=r_{m,t+1}+ w_t' F_{t+1}. Estimation criterion on window T_t of 120 months: f(theta)= -omega sum_{s in T_t} U(q_s(theta)) + 0.5 theta' Lambda theta, U(q)=(q^{1-gamma}-1)/(1-gamma), gamma=RiskAversion=5, q_s(theta)=1+r_{m,s+1}+ sum_k theta_k' z_s F_{k,s+1} linear in theta (affine surrogate, limits not inside q). Prior Gaussian theta_{k,l}~N(0,lambda_l^{-1}), lambda_0=delta_s^{-2} delta_s=0.8, lambda_{l>=1}=(L-1) delta_tau^{-2} delta_tau=1 (prior of BrandtSantaClara 2006 III.B). Lambda diagonal precision.",
+  "3. Learning rate omega: diagonal covariance-trace matching heuristic using empirical diagonals of H and V with Bartlett weights, median TimingOmega=5.80. Compute provisional mode at provisional omega, evaluate omega-hat_t = sum_{j in I} H_{jj}^{-1} / sum_{j in I} V_{jj} H_{jj}^{-2}, I={j: H_{jj}>xi} xi very small, recompute mode at omega-hat_t. One-pass, not fixed point. Full inverse does not exist (rank<=T). Motivation distinct from Lyddon et al 2019.",
+  "4. Optimisation: exploit kernel K_{ss'}=(F_{s+1}'F_{s'+1})(z_s' Lambda_L^{-1} z_{s'}), Lambda_L=diag(lambda_l), wealth q=1+r_m+K alpha, theta=Lambda^{-1} sum_s alpha_s G_s. Solve rho(alpha)=alpha - omega q(alpha)^{-gamma}=0 by Newton from 0 with backtracking. Strongly convex => unique mode. Bound f(theta)-min f <=0.5 rho' K rho <=0.5 grad' Lambda^{-1} grad (Lemma 1). Accept only when bound sufficiently small including provisional and bootstrap fits.",
+  "5. Posterior averaging (BPPP) vs mode (RPPP): Laplace approximation posterior N(hat_theta_t, C_t). Unconstrained weight X=theta_k' z_t ~ N(mu_k, sigma_k^2), mu_k=hat_theta_k' z_t, sigma_k^2=z_t' C_{kk} z_t via Woodbury sigma_k^2= z'Lambda_L^{-1}z - h_k'(D^{-1}+K)^{-1}h_k, D=omega gamma diag(q^{-gamma-1}), h_{k,s}=F_{k,s+1}(z_s' Lambda_L^{-1}z_t). Averaged constrained weight E[Pi_c(X)] closed form -c Phi(a)+mu[Phi(b)-Phi(a)]+sigma[phi(a)-phi(b)]+c[1-Phi(b)], a=(-c-mu)/sigma, b=(c-mu)/sigma. Then gross scaling. RPPP weight Pi_c(mu_k) then same gross scaling. Prior scales and omega same for BPPP/RPPP, only averaging differs.",
+  "6. Exact posterior check: likelihood depends only through u=G theta in R^T, u~N(0,K) prior, posterior of u proportional to N(u;0,K) exp{omega sum U(1+r_m+u)} on positive wealth, rank(K)<=T (first 7 windows rank 113-119, min retained RevExactMinRank=113). Conditional X_k|u normal. Estimate E_u[closed form] by HMC preconditioned at mode (32 chains, 300 burn-in, 700 retained, 12 steps size 0.3 whitened, 12 date shards seeds 1-12, median acceptance RevExactAccept=95%, max Rhat RevExactRhatMax=1.005, median/max MCSE RevExactMcseMedian=0.0037 RevExactMcseMax=0.0014 with Bartlett 100 lags).",
+  "7. Comparators, same limits c=0.6 g=1.5 unless noted: constant allocation maximises CRRA net of holding costs over all past returns subject to both limits; minimum variance minimises variance of whole portfolio using past 120m covariance; scaled min-var rescales to gross bound minimising variance; inverse variance and reward-to-risk proportional to inverse variance or positive mean/variance past 60m; lasso regresses vector of ones on past 120m factor returns (BrittenJones 1999 tangency) penalty by hold-out Sharpe, scaled to vol target; conditional mean-variance ridge forecasts each factor via ridge on same 242 predictors averaged over past 12 or 48m, then mean-variance with gamma=5, penalty and window chosen every 24m by past CE.",
+  "8. Timing decomposition: E[w_{k,t}F_{k,t+1}]=E[w]E[F]+Cov(w,F) (Lo 2008) summed over 5 factors, divisor T. Active return vs market = static + timing. Exposure = average sum|w|. Turnover =12 * average monthly sum_k|w_{k,t}-w_{k,t-1}|. Gross CE =12[ {T^{-1} sum(1+r_p)^{1-gamma}}^{1/(1-gamma)}-1], Sharpe= sqrt(12) mean(r_p)/sd(r_p), excess subtracts bill. HAC Newey-West Bartlett bandwidth floor(4(T/100)^{2/9})=5 at full sample. Paired Sharpe difference delta-method HAC LedoitWolf 2008 Sec 3.1 with Holm correction. Net returns: r^n_{t+1}=r_{m}+w'F - sum phi_k|delta w_k| - sum h_k|w_k|, phi =60,25,30,30,70 bps trading (SMB,HML,CMA,RMW,UMD), h=90,40,45,45,80 bps annual holding charged monthly, market not costed, initial purchase not charged.",
+  "9. Turnover penalty: f_kappa(theta)=f(theta)+ omega*kappa/2 sum_{s>min T_t} sum_k phi_k[theta_k'(z_s - z_{s-1})]^2, kappa>=0 quadratic proxy = linear cost at monthly raw change 2/kappa, depends only on within-window consecutive pairs T-1, adds omega kappa phi_k dZ'dZ to prior precision block A_k=Lambda_L+omega kappa phi_k dZ'dZ, K=sum_k(F_kF_k') circ (Z A_k^{-1} Z'), learning rate calibrated without penalty and held fixed. Penalty falls only on timing coefficients (constant unchanged).",
+  "10. Bagged ridge: 100 circular block-bootstrap samples of window block 12m, re-estimate mode same prior/omega, constrain to [-c,c], average constrained weights then gross scale. Tighter prior variants multiply both delta_s,delta_tau by 0.4-0.9 or timing-only scales 0.5,0.2. Constant scaling of RPPP by a in [0.05,1] before limits for frontier. Recursive prior/ kappa selection: grid {0.4,0.8,1.6}x{0.5,1.0,1.5} and 3x3x3 for kappa, chosen each month by highest past OOS CE (first 36m centre of grid, turnover includes spec change), net CE for cost section.",
+  "11. Costs: null hypotheses timing=0, Sharpe difference=0. Where paper does not state, write not stated. Theoretical Sharpe benchmark not stated. Return prediction not modelled in PPP (generalised posterior Bissiri 2016). Predictor set assembled ex post; publication-lagged check uses each anomaly from publication year (+2y lag) and restricts post-2000 analysis when all public."
+ ],
+ "claims": [
+  {
+   "name": "SampleStart",
+   "description": "Full sample start",
+   "value": "July 1963",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "OOSStart",
+   "description": "OOS start",
+   "value": "August 1973",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "OOSEnd",
+   "description": "Full/OOS end",
+   "value": "December 2023",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "NOOS",
+   "description": "OOS months Aug1973-Dec2023",
+   "value": "605",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec Data"
+  },
+  {
+   "name": "NBurnIn",
+   "description": "Burn-in months",
+   "value": "121",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec Data"
+  },
+  {
+   "name": "TimingWindow",
+   "description": "Rolling window months",
+   "value": "120",
+   "unit": "months",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "NAnomaly",
+   "description": "Anomaly return predictors",
+   "value": "212",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "NTiming",
+   "description": "Factor-specific predictors",
+   "value": "30",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "NSignals",
+   "description": "Aggregate predictors total",
+   "value": "242",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Sec Data"
+  },
+  {
+   "name": "NSignalsPolicy",
+   "description": "Predictors inc constant L",
+   "value": "243",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Sec Setup"
+  },
+  {
+   "name": "NCoefficientsPolicy",
+   "description": "Coefficients K*L",
+   "value": "1,215",
+   "unit": "coefficients",
+   "kind": "parameter",
+   "where": "Sec Setup"
+  },
+  {
+   "name": "RiskAversion",
+   "description": "CRRA gamma",
+   "value": "5",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec BPPP"
+  },
+  {
+   "name": "TimingCap",
+   "description": "Position limit c",
+   "value": "0.6",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec Results"
+  },
+  {
+   "name": "TimingLeverage",
+   "description": "Gross exposure limit g",
+   "value": "1.5",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec Results"
+  },
+  {
+   "name": "TimingPcaRank",
+   "description": "PCA rank illustrated",
+   "value": "10",
+   "unit": "components",
+   "kind": "parameter",
+   "where": "Abstract Table"
+  },
+  {
+   "name": "TimingOmega",
+   "description": "Median learning rate omega_hat",
+   "value": "5.80",
+   "unit": "",
+   "kind": "parameter",
+   "where": "App Estimation"
+  },
+  {
+   "name": "TimingActive",
+   "description": "BPPP active return vs market",
+   "value": "7.05",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingStatic",
+   "description": "BPPP static component",
+   "value": "4.97",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingComponent",
+   "description": "BPPP timing component (headline)",
+   "value": "2.08",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1 Fig Cum"
+  },
+  {
+   "name": "TimingT",
+   "description": "BPPP timing Newey-West t",
+   "value": "3.00",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingShare",
+   "description": "Timing share of active",
+   "value": "29.5",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingGrossSR",
+   "description": "BPPP gross Sharpe total",
+   "value": "1.242",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab1 Perf"
+  },
+  {
+   "name": "TimingMapTiming",
+   "description": "RPPP timing",
+   "value": "1.50",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1 Mech"
+  },
+  {
+   "name": "TimingMapT",
+   "description": "RPPP timing t",
+   "value": "1.53",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingMarketSR",
+   "description": "Market gross Sharpe",
+   "value": "0.739",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab1 Perf"
+  },
+  {
+   "name": "TimingConstSR",
+   "description": "Constant allocation gross Sharpe",
+   "value": "1.193",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab1 Perf"
+  },
+  {
+   "name": "TimingCmvTiming",
+   "description": "Conditional mean-variance timing",
+   "value": "0.98",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingCmvT",
+   "description": "CMV timing t",
+   "value": "1.15",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingLassoTiming",
+   "description": "Lasso timing",
+   "value": "0.82",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingLassoT",
+   "description": "Lasso timing t",
+   "value": "1.00",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingMinvarTiming",
+   "description": "Minimum variance timing",
+   "value": "0.11",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingInvvarTiming",
+   "description": "Inverse variance timing",
+   "value": "-0.12",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab1"
+  },
+  {
+   "name": "TimingPConst",
+   "description": "Holm p BPPP vs constant gross SR",
+   "value": "0.953",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Sec Performance"
+  },
+  {
+   "name": "TimingPMap",
+   "description": "Holm p BPPP vs RPPP gross SR",
+   "value": "0.953",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Sec Performance"
+  },
+  {
+   "name": "TimingSeventies",
+   "description": "Timing 1970s (to 1980)",
+   "value": "-0.14",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingEighties",
+   "description": "Timing 1980s",
+   "value": "0.79",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingNineties",
+   "description": "Timing 1990s",
+   "value": "2.93",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust Fig"
+  },
+  {
+   "name": "TimingThousands",
+   "description": "Timing 2000s",
+   "value": "-0.06",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingTens",
+   "description": "Timing 2010s",
+   "value": "0.72",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingTwenties",
+   "description": "Timing since 2020",
+   "value": "1.89",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingExNineties",
+   "description": "Timing excl 1990s",
+   "value": "1.73",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingExNinetiesT",
+   "description": "Ex-90s timing t",
+   "value": "2.13",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingExNinetiesMonths",
+   "description": "Months excl 1990s",
+   "value": "485",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingRobustLow",
+   "description": "Robust timing low (gamma/window/omega/prior)",
+   "value": "1.47",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingRobustHigh",
+   "description": "Robust timing high",
+   "value": "3.02",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingRobustTLow",
+   "description": "Robust t low",
+   "value": "2.18",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "TimingRobustTHigh",
+   "description": "Robust t high",
+   "value": "4.04",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevScaleMatched",
+   "description": "Scale matching BPPP avg exposure (hindsight)",
+   "value": "0.375",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Tab Mech Fig Frontier"
+  },
+  {
+   "name": "RevScaledTiming",
+   "description": "RPPP x0.375 timing matched exposure",
+   "value": "2.04",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevScaledT",
+   "description": "Matched exposure t",
+   "value": "2.65",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevScaledDiffT",
+   "description": "Matched vs BPPP timing diff t",
+   "value": "0.25",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevMonthlyTiming",
+   "description": "RPPP scaled to BPPP exposure each month timing (infeasible)",
+   "value": "1.55",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevMonthlyT",
+   "description": "Infeasible monthly scaled t",
+   "value": "2.19",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevBagTiming",
+   "description": "Bagged ridge timing",
+   "value": "1.69",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevBagT",
+   "description": "Bagged ridge t",
+   "value": "1.95",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevBagAtLimit",
+   "description": "Bagged ridge at gross limit",
+   "value": "86.6",
+   "unit": "% months",
+   "kind": "tally",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevRidgeHalfAtLimit",
+   "description": "RPPP both scales x0.5 at limit",
+   "value": "62.5",
+   "unit": "% months",
+   "kind": "tally",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevRidgeTimingLow",
+   "description": "Tighter prior timing low",
+   "value": "1.47",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevRidgeTimingHigh",
+   "description": "Tighter prior timing high",
+   "value": "1.69",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevPostSD",
+   "description": "Posterior SD of unconstrained weight",
+   "value": "1.00",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevBootSD",
+   "description": "Bootstrap SD of weight",
+   "value": "0.42",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevAtLimitBPPP",
+   "description": "BPPP at gross limit",
+   "value": "52.6",
+   "unit": "% months",
+   "kind": "tally",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevAtLimitMap",
+   "description": "RPPP at gross limit",
+   "value": "96.4",
+   "unit": "% months",
+   "kind": "tally",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "RevContraction",
+   "description": "BPPP median local slope approx psi mu",
+   "value": "0.45",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Mandate Prop"
+  },
+  {
+   "name": "RevContractionLow",
+   "description": "Local slope 10th pct",
+   "value": "0.32",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevContractionHigh",
+   "description": "Local slope 90th pct",
+   "value": "0.54",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevContractionCorr",
+   "description": "BPPP weight vs psi*mu correlation",
+   "value": "0.983",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevPeakScaleTiming",
+   "description": "Scale maximising RPPP timing",
+   "value": "0.400",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Fig Frontier"
+  },
+  {
+   "name": "RevPeakTiming",
+   "description": "Max timing on frontier",
+   "value": "2.05",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Fig Frontier"
+  },
+  {
+   "name": "RevPeakScaleSR",
+   "description": "Scale maximising Sharpe",
+   "value": "0.425",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Fig Frontier"
+  },
+  {
+   "name": "RevPeakSR",
+   "description": "Max Sharpe on frontier",
+   "value": "1.245",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Fig Frontier"
+  },
+  {
+   "name": "RevMandateBTLow",
+   "description": "BPPP timing t low over 16 mandate combos",
+   "value": "2.19",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateBTHigh",
+   "description": "BPPP timing t high over combos",
+   "value": "3.06",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateMTLow",
+   "description": "RPPP timing t low over combos",
+   "value": "1.39",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateMTHigh",
+   "description": "RPPP timing t high",
+   "value": "2.18",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateTimLow",
+   "description": "Timing pp low over combos",
+   "value": "1.38",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateTimHigh",
+   "description": "Timing pp high",
+   "value": "3.70",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateNetLow",
+   "description": "Net Sharpe low over combos",
+   "value": "0.963",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevMandateNetHigh",
+   "description": "Net Sharpe high",
+   "value": "1.107",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Mandate"
+  },
+  {
+   "name": "RevRecTiming",
+   "description": "Recursive prior scales timing",
+   "value": "1.90",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevRecT",
+   "description": "Recursive timing t",
+   "value": "2.64",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevRecModal",
+   "description": "Recursive uses reported scales",
+   "value": "72",
+   "unit": "% months",
+   "kind": "tally",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevRecCostT",
+   "description": "Recursive net rule gross timing t",
+   "value": "1.93",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "RevRecCostNetSR",
+   "description": "Recursive turnover-penalised net Sharpe",
+   "value": "1.121",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Cost Perf"
+  },
+  {
+   "name": "RevRecScaledTiming",
+   "description": "RPPP recursively scaled timing",
+   "value": "2.00",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevRecScaledT",
+   "description": "Recursive scaled t",
+   "value": "2.46",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Mandate"
+  },
+  {
+   "name": "RevCostEightyNet",
+   "description": "BPPP kappa80 net Sharpe",
+   "value": "1.118",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Cost Fig"
+  },
+  {
+   "name": "RevCostEightyTurn",
+   "description": "kappa80 turnover",
+   "value": "1.51",
+   "unit": "annual",
+   "kind": "estimate",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "RevCostEightyTiming",
+   "description": "kappa80 gross timing",
+   "value": "1.42",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "RevCostEightyT",
+   "description": "kappa80 timing t",
+   "value": "2.25",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "RevCostEightyP",
+   "description": "kappa80 net Sharpe vs constant p",
+   "value": "0.79",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "RevCostTLow",
+   "description": "Turnover penalty timing t low across kappa",
+   "value": "2.03",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevRecCostP",
+   "description": "Recursive net Sharpe vs constant p",
+   "value": "0.83",
+   "unit": "p",
+   "kind": "p_value",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "RevRecCostCEDiff",
+   "description": "Recursive vs constant net CE diff",
+   "value": "-0.34",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevConstNetSR",
+   "description": "Constant net Sharpe",
+   "value": "1.136",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Cost Perf"
+  },
+  {
+   "name": "RevScaleTwoNet",
+   "description": "Tightest prior (timing scale 0.2) net Sharpe",
+   "value": "1.122",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevScaleTwoT",
+   "description": "Tightest prior t",
+   "value": "1.78",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevScaleTwoTiming",
+   "description": "Tightest prior timing",
+   "value": "1.22",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevScaleTwoTurn",
+   "description": "Tightest prior turnover",
+   "value": "1.09",
+   "unit": "annual",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevExcessGrossSR",
+   "description": "BPPP excess (bill) Sharpe gross",
+   "value": "0.960",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Performance"
+  },
+  {
+   "name": "RevExcessConstGross",
+   "description": "Constant excess gross Sharpe",
+   "value": "0.925",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Performance"
+  },
+  {
+   "name": "RevDropAnomaly",
+   "description": "Drop anomaly returns timing",
+   "value": "0.87",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec WhichSignals"
+  },
+  {
+   "name": "RevDropAnomalyT",
+   "description": "Drop anomaly t",
+   "value": "1.13",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec WhichSignals"
+  },
+  {
+   "name": "RevFamilyMax",
+   "description": "Drop any factor-specific family max change",
+   "value": "0.05",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec WhichSignals"
+  },
+  {
+   "name": "RevPub",
+   "description": "Publication-lagged timing",
+   "value": "1.22",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevPubT",
+   "description": "Pub-lagged t",
+   "value": "1.79",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevPubPost",
+   "description": "Pub-lagged timing after 2000",
+   "value": "1.75",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevPubTwo",
+   "description": "Pub +2y lag timing",
+   "value": "1.17",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevPubTwoT",
+   "description": "Pub+2y t",
+   "value": "1.75",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevPost",
+   "description": "Post-2000 unrestricted timing",
+   "value": "1.82",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Robust"
+  },
+  {
+   "name": "RevPreBPPP",
+   "description": "BPPP avg gross exposure pre-gross limit",
+   "value": "1.48",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Inference"
+  },
+  {
+   "name": "RevPreMap",
+   "description": "RPPP avg gross exposure pre-limit",
+   "value": "2.44",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Inference"
+  },
+  {
+   "name": "RevExactDates",
+   "description": "Exact posterior dates evaluated",
+   "value": "605",
+   "unit": "dates",
+   "kind": "count",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactRhatMax",
+   "description": "Max split Rhat exact",
+   "value": "1.005",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactMcseMax",
+   "description": "Max pre-gross weight MCSE",
+   "value": "0.0037",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactMcseMedian",
+   "description": "Median MCSE",
+   "value": "0.0014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactMinRank",
+   "description": "Smallest retained rank(K)",
+   "value": "113",
+   "unit": "",
+   "kind": "count",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactAccept",
+   "description": "Median HMC acceptance",
+   "value": "95",
+   "unit": "%",
+   "kind": "tally",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactSdRatio",
+   "description": "Exact vs Laplace SD median ratio",
+   "value": "0.996",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactMeanShift",
+   "description": "Exact mean vs mode median shift",
+   "value": "0.026",
+   "unit": "SD",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactMaxDiff",
+   "description": "Max abs weight diff exact vs Laplace",
+   "value": "0.070",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactMeanDiff",
+   "description": "Mean abs weight diff",
+   "value": "0.0086",
+   "unit": "",
+   "kind": "estimate",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevExactTiming",
+   "description": "Exact posterior timing",
+   "value": "2.12",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "App Exact Tab"
+  },
+  {
+   "name": "RevExactT",
+   "description": "Exact timing t",
+   "value": "2.95",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "App Exact"
+  },
+  {
+   "name": "RevPcaTen",
+   "description": "PCA10 timing",
+   "value": "4.42",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevPcaTenT",
+   "description": "PCA10 t",
+   "value": "4.51",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevPcaTenExpl",
+   "description": "PCA10 median var explained",
+   "value": "53",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevPcaTurnLow",
+   "description": "PCA turnover low",
+   "value": "10.6",
+   "unit": "annual",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevPcaTurnHigh",
+   "description": "PCA turnover high",
+   "value": "15.4",
+   "unit": "annual",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevPcaNetLow",
+   "description": "PCA net Sharpe low",
+   "value": "0.56",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevPcaNetHigh",
+   "description": "PCA net Sharpe high",
+   "value": "0.85",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "RevTurnover",
+   "description": "BPPP annual turnover no penalty",
+   "value": "5.01",
+   "unit": "annual",
+   "kind": "estimate",
+   "where": "Tab Cost Diag"
+  },
+  {
+   "name": "RevBreakEighty",
+   "description": "Crossover costs kappa80 > constant",
+   "value": "51",
+   "unit": "% schedule",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevBreakRec",
+   "description": "Crossover recursive > constant",
+   "value": "51",
+   "unit": "% schedule",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevRecAlpha",
+   "description": "Recursive net alpha vs constant",
+   "value": "0.83",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevRecAlphaT",
+   "description": "Recursive alpha t",
+   "value": "0.76",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevBlendW",
+   "description": "Hindsight blend weight in timing",
+   "value": "40",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "RevBlendSR",
+   "description": "Blend net Sharpe",
+   "value": "1.147",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec Costs"
+  },
+  {
+   "name": "BPPP_exposure_Table1",
+   "description": "Table1 BPPP exposure",
+   "value": "1.31",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Timing"
+  },
+  {
+   "name": "RPPP_exposure_Table1",
+   "description": "Table1 RPPP exposure",
+   "value": "1.49",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Tab Timing"
+  },
+  {
+   "name": "Constant_active",
+   "description": "Constant active return",
+   "value": "7.18",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Timing"
+  },
+  {
+   "name": "Constant_static",
+   "description": "Constant static",
+   "value": "7.10",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Timing"
+  },
+  {
+   "name": "Constant_timing",
+   "description": "Constant timing",
+   "value": "0.08",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Timing"
+  },
+  {
+   "name": "Constant_timing_t",
+   "description": "Constant timing t",
+   "value": "0.33",
+   "unit": "t-stat",
+   "kind": "p_value",
+   "where": "Tab Timing"
+  },
+  {
+   "name": "Performance_BPPP_CE",
+   "description": "BPPP gross CE",
+   "value": "12.68",
+   "unit": "% annual",
+   "kind": "estimate",
+   "where": "Tab Perf"
+  },
+  {
+   "name": "Performance_Constant_CE",
+   "description": "Constant gross CE",
+   "value": "12.09",
+   "unit": "% annual",
+   "kind": "estimate",
+   "where": "Tab Perf"
+  },
+  {
+   "name": "Diagnostics_BPPP_at_position",
+   "description": "BPPP at position limit % factor-months",
+   "value": "0.0",
+   "unit": "%",
+   "kind": "tally",
+   "where": "Tab Diag"
+  },
+  {
+   "name": "Table2_RPPP_prior0.8_timing",
+   "description": "Example Tab Mech prior x0.8 timing",
+   "value": "1.52",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Mech"
+  },
+  {
+   "name": "Table3_PC3_timing",
+   "description": "PCA3 timing",
+   "value": "2.57",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "Table3_PC5_timing",
+   "description": "PCA5 timing",
+   "value": "3.98",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab PCA"
+  },
+  {
+   "name": "Table4_kappa5_timing",
+   "description": "kappa5 timing",
+   "value": "1.66",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Cost"
+  },
+  {
+   "name": "Table_signals_SMB_Leverage_contrib",
+   "description": "Top SMB timing contrib Leverage",
+   "value": "-0.303",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  },
+  {
+   "name": "Table_signals_HML_Leverage_contrib",
+   "description": "Top HML Leverage",
+   "value": "0.664",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  },
+  {
+   "name": "SMB_total_timing_signals",
+   "description": "SMB total timing",
+   "value": "0.625",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  },
+  {
+   "name": "HML_total_timing_signals",
+   "description": "HML total timing",
+   "value": "0.758",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  },
+  {
+   "name": "CMA_total_timing",
+   "description": "CMA total timing",
+   "value": "0.078",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  },
+  {
+   "name": "RMW_total_timing",
+   "description": "RMW total timing",
+   "value": "0.046",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  },
+  {
+   "name": "UMD_total_timing",
+   "description": "UMD total timing",
+   "value": "0.573",
+   "unit": "pp/year",
+   "kind": "estimate",
+   "where": "Tab Signals"
+  }
+ ],
+ "headline": "TimingComponent",
+ "partitions": [],
+ "tests": []
+}

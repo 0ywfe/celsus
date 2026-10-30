@@ -1,0 +1,64 @@
+{
+ "run_id": "run-20261030T031739Z-23fa5c",
+ "paper": "2512.02352",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 18 of 41 checked results match within their uncertainty. Its main result, p_abstract, is 0.001 p in the paper and 0.002494 p here (consistent).",
+ "headline": {
+  "name": "p_abstract",
+  "kind": "p_value",
+  "unit": "p",
+  "reported": 0.001,
+  "reproduced": 0.0024937655860349127,
+  "se": null,
+  "n": 400,
+  "consistent": true,
+  "why": "both < 0.05"
+ },
+ "sample": [
+  {
+   "name": "vix_n_days",
+   "reported": 6651.0,
+   "reproduced": 6651.0,
+   "consistent": true
+  },
+  {
+   "name": "vix_n_windows",
+   "reported": 45.0,
+   "reproduced": 45,
+   "consistent": null
+  },
+  {
+   "name": "vix_above07_total",
+   "reported": 45.0,
+   "reproduced": 45,
+   "consistent": null
+  },
+  {
+   "name": "vix_below_null_total",
+   "reported": 45.0,
+   "reproduced": 45,
+   "consistent": null
+  }
+ ],
+ "judged": 41,
+ "matched": 18,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (drift_noise_ratio_max (0.28) at line 529). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 2,
+ "packages": [],
+ "calls": 48,
+ "cost_usd": 1.4706,
+ "tokens_in": 3860013,
+ "tokens_out": 159047,
+ "wall_s": 2650.9,
+ "crashed": null
+}

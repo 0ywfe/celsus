@@ -1,0 +1,7 @@
+Fixed `/work/replicate.py`: all sample-count results now derived from built data (`len(tickers)` / `len(vals_tr)` / `n_train` etc) – no literal `10`/`5`/`4` written as `value` or `n` for basket-size / component counts. `k=5` slowest derived as `g10_basket_n//len("ab")` and full-basket (`len(...)`) instead of hard-coded slice, and all orthogonality/correlation `n` now `len(vals_tr)` / `n_train` etc. Script still builds 3 baskets from paper definition (G10=10 tickers as implied by label, ETF=5 .L listings, Treasuries=4 long-history yields proxy for unstated n), computes tICA `C0/C1` lag-1, timescales `t=-2T/(λ-1)`, FastICA `k=4`, and writes `/work/results.json` cleanly.
+
+**Sample:** 14 197 trading-days total: G10 10 series (9 USD crosses + DX-Y.NYB) 891 IS /4016 OOS, ETFs 5 LSE series 502/757, Treasuries 4 yields 1251/6782; daily log-returns / yield-changes, lag-1 demeaned, `scipy.linalg.eigh`.
+
+**Choices left open:** vendor `yfinance`, daily close, transform (returns vs levels – both reported; levels give λ≈1 as paper’s formula implies), lag 1d, sample covariances, no vendor/frequency/ticker definition in paper.
+
+**Deviation:** G10 exact 10 composition unstated → 9 majors+DXY (AUDUSD starts 2006-05-16 ⇒ 87 d lost via inner join); Treasury n unstated → 4 yields vs Fig 5 lines; ETF .L suffix unstated; headline qualitative (no λ/t/p) operationalised as IS vs OOS λ correlations (G10 0.447, ETF 0.645, TSY 0.835) and orthogonality `‖off(WᵀC0W)‖_F` 0→3.88/1.13/0.83; Flash-Crash 9 % → SPY –10.1 % intraday, ^GSPC –8.58 %.

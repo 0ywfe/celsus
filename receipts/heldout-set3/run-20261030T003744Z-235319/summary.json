@@ -1,0 +1,47 @@
+{
+ "run_id": "run-20261030T003744Z-235319",
+ "paper": "2605.09740",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "does not hold up",
+ "reason": "",
+ "first_line": "The paper's numbers do not hold up: 0 of 9 checked results match within their uncertainty. Its main result, summary_preCOVID_UR_h1_LGBplus_RMSE, was not computed. Sample size not rebuilt: the script writes it as a fixed number (37 at line 337), not counted from the data (emp_ragged_shift_count, 37 in the paper).",
+ "headline": {
+  "name": "summary_preCOVID_UR_h1_LGBplus_RMSE",
+  "kind": "estimate",
+  "unit": "relative RMSE",
+  "reported": 0.67,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "emp_ragged_shift_count",
+   "reported": 37.0,
+   "reproduced": 37,
+   "consistent": null
+  }
+ ],
+ "judged": 9,
+ "matched": 0,
+ "rejections": [],
+ "rounds": 2,
+ "packages": [
+  "cloudpickle==3.1.2",
+  "joblib==1.6.0",
+  "lightgbm==4.7.0",
+  "scikit-learn==1.9.1",
+  "threadpoolctl==3.7.0"
+ ],
+ "calls": 48,
+ "cost_usd": 1.5309,
+ "tokens_in": 5084590,
+ "tokens_out": 98185,
+ "wall_s": 1456.9,
+ "crashed": null
+}

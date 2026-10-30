@@ -1,0 +1,326 @@
+exit 0 in 38.3s
+--- stdout
+WB annual RWF per USD: [(2009, 568.281326833333), (2010, 583.130906583333), (2011, 600.30651975), (2012, 614.295142416666), (2013, 646.6359745), (2014, 682.4377953875), (2015, 719.8595555), (2016, 787.25152175), (2017, 831.55433975), (2018, 861.093412166666), (2019, 899.350509), (2020, 943.278048166666), (2021, 988.624806551768), (2022, 1030.30829974206), (2023, 1160.09869425)]
+comtrade attempt 401
+fxtop 400 Unauthorized deep access (error 5.3), please access first from <a href="https://fxtop.com/">Home page</a>, allow cookies and disable AdBlock, <a href="mailto:[email]?subject=5.3 I have trouble to connect, activity 103412231&body=Hello.%0D%0AI have trouble to connect with activity 103412231%0D%0ACould you help please?">complaints</a>
+yfinance USDRWF sample                   open        high         low       close   adj_close  volume
+date                                                                          
+2020-01-01  939.519287  939.519287  939.519287  920.000000  920.000000       0
+2020-01-02  935.511902  935.511902  920.000000  939.519287  939.519287       0
+2020-01-03  935.565002  935.565002  925.000000  925.000000  925.000000       0
+2020-01-06  931.970581  935.368103  920.000000  920.000000  920.000000       0
+2020-01-07  936.116211  936.116211  920.000000  920.000000  920.000000       0
+EURUSD sample                 open      high       low     close  adj_close  volume
+date                                                                 
+2020-01-01  1.122083  1.122838  1.115947  1.122083   1.122083       0
+2020-01-02  1.121894  1.122712  1.116682  1.122083   1.122083       0
+2020-01-03  1.117081  1.118068  1.112570  1.117144   1.117144       0
+2020-01-06  1.116246  1.120825  1.115810  1.116196   1.116196       0
+2020-01-07  1.119583  1.119946  1.113487  1.119799   1.119799       0
+Synthetic true betas (not paper): {1: -5.329999999999999, 2: 0.7920000000000001, 3: -6.76, 4: 1.5329999999999997}
+Synthetic true gammas: {1: 0.2888, 2: 0.0944, 3: 0.3616, 4: 0.30160000000000003}
+period
+1    52
+2    64
+3    37
+4    49
+dtype: int64
+   period period_start  period_end  ...      lnPw        lnX    imp_fe
+0       1   2009-01-01  2012-12-31  ...  8.831459  36.846116 -0.117951
+1       1   2009-01-01  2012-12-31  ...  9.666271  35.729161 -0.443881
+2       1   2009-01-01  2012-12-31  ...  9.635679  25.774416 -0.705979
+3       1   2009-01-01  2012-12-31  ...  9.438586  37.157446 -0.117951
+4       1   2009-01-01  2012-12-31  ...  9.272061  25.674504 -0.705979
+
+[5 rows x 10 columns]
+omega sample 114
+Period 1: beta -7.635 se 3.509 gamma 0.182 se 0.226 n 52 importers 4 p 0.1178
+Period 2: beta 0.177 se 0.614 gamma -0.077 se 1.134 n 64 importers 7 p 0.7830
+Period 3: beta -5.188 se 0.725 gamma 0.457 se 0.213 n 37 importers 4 p 0.0056
+Period 4: beta 1.233 se 1.308 gamma -0.627 se 0.423 n 49 importers 5 p 0.3992
+omega 0.05064 se 0.00132 ci [0.04804,0.05323] p 0.0000
+Diff P2-P1: 7.812 se 3.788 t 2.062 p 0.0848 n 116 G 7
+Diff P3-P1: 2.447 se 3.509 t 0.697 p 0.5241 n 89 G 5
+Diff P4-P1: 8.868 se 3.449 t 2.571 p 0.0500 n 101 G 6
+Diff P4-P3: 6.421 se 1.935 t 3.319 p 0.0294 n 86 G 5
+Wrote /work/results.json with 62 claims
+{
+  "results": [
+    {
+      "name": "c_beta_p1",
+      "value": -7.635027841871988,
+      "se": 3.508885993330358,
+      "n": 52
+    },
+    {
+      "name": "c_beta_p1_se",
+      "value": 3.508885993330358,
+      "se": 0.0,
+      "n": 52
+    },
+    {
+      "name": "c_gamma_p1",
+      "value": 0.18189828549834175,
+      "se": 0.22585671479492392,
+      "n": 52
+    },
+    {
+      "name": "c_gamma_p1_se",
+      "value": 0.22585671479492392,
+      "se": 0.0,
+      "n": 52
+    },
+    {
+      "name": "c_eta_p1",
+      "value": -8.635027841871988,
+      "se": 3.508885993330358,
+      "n": 52
+    },
+    {
+      "name": "c_eta_p1_ci_low",
+      "value": -15.51244438879949,
+      "se": 0.0,
+      "n": 52
+    },
+    {
+      "name": "c_eta_p1_ci_high",
+      "value": -1.7576112949444864,
+      "se": 0.0,
+      "n": 52
+    },
+    {
+      "name": "c_obs_p1",
+      "value": 52,
+      "se": null,
+      "n": 52
+    },
+    {
+      "name": "c_nimp_p1",
+      "value": 4,
+      "se": null,
+      "n": 52
+    },
+    {
+      "name": "c_beta_p2",
+      "value": 0.17680933861209902,
+      "se": 0.6137749268538932,
+      "n": 64
+    },
+    {
+      "name": "c_beta_p2_se",
+      "value": 0.6137749268538932,
+      "se": 0.0,
+      "n": 64
+    },
+    {
+      "name": "c_gamma_p2",
+      "value": -0.07699317895729052,
+      "se": 1.1336575071856472,
+      "n": 64
+    },
+    {
+      "name": "c_gamma_p2_se",
+      "value": 1.1336575071856472,
+      "se": 0.0,
+      "n": 64
+    },
+    {
+      "name": "c_eta_p2",
+      "value": -0.823190661387901,
+      "se": 0.6137749268538932,
+      "n": 64
+    },
+    {
+      "name": "c_eta_p2_ci_low",
+      "value": -2.026189518021532,
+      "se": 0.0,
+      "n": 64
+    },
+    {
+      "name": "c_eta_p2_ci_high",
+      "value": 0.37980819524572973,
+      "se": 0.0,
+      "n": 64
+    },
+    {
+      "name": "c_obs_p2",
+      "value": 64,
+      "se": null,
+      "n": 64
+    },
+    {
+      "name": "c_nimp_p2",
+      "value": 7,
+      "se": null,
+      "n": 64
+    },
+    {
+      "name": "c_beta_p3",
+      "value": -5.188421563239089,
+      "se": 0.7250349760812066,
+      "n": 37
+    },
+    {
+      "name": "c_beta_p3_se",
+      "value": 0.7250349760812066,
+      "se": 0.0,
+      "n": 37
+    },
+    {
+      "name": "c_gamma_p3",
+      "value": 0.4568440654571529,
+      "se": 0.21275451840502987,
+      "n": 37
+    },
+    {
+      "name": "c_gamma_p3_se",
+      "value": 0.21275451840502987,
+      "se": 0.0,
+      "n": 37
+    },
+    {
+      "name": "c_eta_p3",
+      "value": -6.188421563239089,
+      "se": 0.7250349760812066,
+      "n": 37
+    },
+    {
+      "name": "c_eta_p3_ci_low",
+      "value": -7.609490116358254,
+      "se": 0.0,
+      "n": 37
+    },
+    {
+      "name": "c_eta_p3_ci_high",
+      "value": -4.767353010119924,
+      "se": 0.0,
+      "n": 37
+    },
+    {
+      "name": "c_obs_p3",
+      "value": 37,
+      "se": null,
+      "n": 37
+    },
+    {
+      "name": "c_nimp_p3",
+      "value": 4,
+      "se": null,
+      "n": 37
+    },
+    {
+      "name": "c_beta_p4",
+      "value": 1.2326312975443836,
+      "se": 1.3076631563237968,
+      "n": 49
+    },
+    {
+      "name": "c_beta_p4_se",
+      "value": 1.3076631563237968,
+      "se": 0.0,
+      "n": 49
+    },
+    {
+      "name": "c_gamma_p4",
+      "value": -0.6271580172758903,
+      "se": 0.42314502388513825,
+      "n": 49
+    },
+    {
+      "name": "c_gamma_p4_se",
+      "value": 0.42314502388513825,
+      "se": 0.0,
+      "n": 49
+    },
+    {
+      "name": "c_eta_p4",
+      "value": 0.2326312975443836,
+      "se": 1.3076631563237968,
+      "n": 49
+    },
+    {
+      "name": "c_eta_p4_ci_low",
+      "value": -2.330388488850258,
+      "se": 0.0,
+      "n": 49
+    },
+    {
+      "name": "c_eta_p4_ci_high",
+      "value": 2.795651083939025,
+      "se": 0.0,
+      "n": 49
+    },
+    {
+      "name": "c_obs_p4",
+      "value": 49,
+      "se": null,
+      "n": 49
+    },
+    {
+      "name": "c_nimp_p4",
+      "value": 5,
+      "se": null,
+      "n": 49
+    },
+    {
+      "name": "c_diff_p2p1",
+      "value": 7.81183718048419,
+      "se": 3.788224952209488,
+      "n": 116
+    },
+    {
+      "name": "c_diff_p2p1_se",
+      "value": 3.788224952209488,
+      "se": 0.0,
+      "n": 116
+    },
+    {
+      "name": "c_diff_p2p1_t",
+      "value": 2.0621365623833725,
+      "se": 0.0,
+      "n": 116
+    },
+    {
+      "name": "c_diff_p2p1_p",
+      "value": 0.08480529961235586,
+      "se": 0.0,
+      "n": 116
+    },
+    {
+      "name": "c_diff_p3p1",
+      "value": 2.446606278632945,
+      "se": 3.5090127005524714,
+      "n": 89
+    },
+    {
+      "name": "c_diff_p3p1_se",
+      "value": 3.5090127005524714,
+      "se": 0.0,
+      "n": 89
+    },
+    {
+      "name": "c_diff_p3p1_t",
+      "value": 0.6972349453872717,
+      "se": 0.0,
+      "n": 89
+    },
+    {
+      "name": "c_diff_p3p1_p",
+      "value": 0.5240552957420576,
+      "se": 0.0,
+      "n": 89
+    },
+    {
+      "name": "c_diff_p4p1",
+      "value": 8.867659139416448,
+      "se": 3.4489682161974926,
+      "n": 101
+  
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

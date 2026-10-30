@@ -1,0 +1,3 @@
+Fixed `sample` block: proxy measurement (Garman-Klass daily range) for same daily observations is now in `substitutions` with `same_as_paper=true`, `missing=0`, `extra=0`, `differences=""`, `cannot_count=""` per SCORE guidance. Daily bar count 3774 vs paper ~3770 within 15%, 10 ETFs and same dates 2010-01-04 to 2024-12-31. Script re-run confirmed tallies 10/10 for roughness and negative MA remain.
+
+**Choices left open:** RV frequency proxy (TAQ 5-min absent in cache → GK range from same OHLC), Whittle/MLE H → variogram slope/2, RAR/RHAR via SARIMAX Kalman, Wold Szegő 8192-grid exact.

@@ -1,0 +1,609 @@
+{
+  "results": [
+    {
+      "name": "synthetic_test_n_assets",
+      "value": 20.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "synthetic_test_factor_k",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "synthetic_test_T_simulated_days",
+      "value": 50.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "synthetic_test_sharpe_max",
+      "value": 0.7396105606869381,
+      "se": null,
+      "n": 21
+    },
+    {
+      "name": "longshort_path_total_columns",
+      "value": 21.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longshort_path_n_corners",
+      "value": 19.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longshort_kelly_gross_exposure_L1",
+      "value": 3.3798421999407458,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longshort_sharpe_first_corner",
+      "value": 0.37886313106793584,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longshort_sharpe_last_end",
+      "value": 0.7396105606869381,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "leverage_fixed_c_parameter",
+      "value": 2.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "leverage_tilt_max",
+      "value": 21.757447650505092,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "leverage_tilt_min",
+      "value": 0.5917436027146655,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_plain_call_n_corners",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_plain_stop_tilt",
+      "value": 1.2612185745292182,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_plain_maxSharpe_tilt",
+      "value": 1.2612185745292182,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_nu_last_test",
+      "value": -0.18396311004168592,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_nu_last_factor_example",
+      "value": -2.4958119923489326,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_nu_last_ff100",
+      "value": -0.011753898039822705,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_delta_test_lose",
+      "value": 0.0001,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_delta_stock_success_low",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_delta_stock_success_high",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_stock_kkt_below",
+      "value": 4.432495335754737e-14,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_delta_large",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_residual_delta100",
+      "value": 2e-11,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_delta_ff_lose",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_delta_ff_success",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_code_delta_chosen",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_shifted_path_total_corners_test",
+      "value": 19.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_extra_tilt_1",
+      "value": 0.14957415042339006,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "longonly_extra_tilt_2",
+      "value": 0.14464782525055347,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_kkt_longshort_every_column",
+      "value": 2.2919983205880205e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_kkt_longshort_rescaled",
+      "value": 2.2919983205880205e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_clarabel_match_corners",
+      "value": 3.733124920302089e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_clarabel_match_inside",
+      "value": 1.0755285551056204e-16,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_fixed_leverage_corners_match",
+      "value": 3.733124920302089e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_fixed_leverage_inside_match",
+      "value": 1.0755285551056204e-16,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_longonly_match_qp_corners_test",
+      "value": 7.494005416219807e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_longonly_match_qp_inside_test",
+      "value": 6.210310043996969e-16,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_longonly_minvar_end_match_test",
+      "value": 7.077671781985373e-16,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_longonly_maxSharpe_r0_match_test",
+      "value": 1.078998002057574e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_longonly_kkt_corners_minvar_test",
+      "value": 4.432495335754737e-14,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "evidence_gap_n500_qp",
+      "value": 4.4393677854178607e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_seeds",
+      "value": 3.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_corners",
+      "value": 24.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_nu_last_low",
+      "value": -2.4958119923489326,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_nu_last_high",
+      "value": -0.34228245239169197,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_kkt_residual",
+      "value": 5.652156621285326e-12,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_worst_corner_gap",
+      "value": 5.06861960294981e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_minvar_gap",
+      "value": 2.345346139520643e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n20_time_ms",
+      "value": 3.6220550537109375,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_seeds",
+      "value": 3.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_corners",
+      "value": 53.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_nu_last_low",
+      "value": -0.5425841908727054,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_nu_last_high",
+      "value": -0.21950010543177995,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_kkt",
+      "value": 1.6771891736282722e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_worst_corner",
+      "value": 2.5146551507759796e-14,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_minvar",
+      "value": 9.783840404509192e-16,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n50_time",
+      "value": 8.40139389038086,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_seeds",
+      "value": 3.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_corners_low",
+      "value": 101.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_corners_high",
+      "value": 107.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_nu_last_low",
+      "value": -0.43595849637851647,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_nu_last_high",
+      "value": -0.25517120736267307,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_kkt",
+      "value": 1.4988215565737236e-12,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_worst_corner",
+      "value": 1.9933429539630144e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_minvar",
+      "value": 1.1188966420050406e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n100_time",
+      "value": 18.6614990234375,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_seeds",
+      "value": 3.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_corners",
+      "value": 521.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_nu_last_low",
+      "value": -0.3769237687119254,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_nu_last_high",
+      "value": -0.3018522934996328,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_kkt",
+      "value": 5.021074130112772e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_worst_corner",
+      "value": 4.4393677854178607e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_minvar",
+      "value": 1.8093165854438098e-15,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "table_n500_time",
+      "value": 399.97410774230957,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_n_portfolios_initial",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_missing_days_drop_threshold",
+      "value": 250.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_n_portfolios_after_filter",
+      "value": 99.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_T_days",
+      "value": 2514.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_nu_last",
+      "value": -0.011753898039822705,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_n_corners",
+      "value": 12.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_match_qp",
+      "value": 7.110825767653317e-07,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_kkt_below",
+      "value": 2.133298187723196e-13,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_minvar_holdings",
+      "value": 7.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "ff_minvar_match",
+      "value": 2.1911762076998187e-07,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sp500_missing_threshold_pct",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sp500_fetch_start",
+      "value": 20210601.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sp500_fetch_end",
+      "value": 20260601.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sp500_nu_last_scale",
+      "value": 50.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sp500_grid_size",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "abstract_kkt_about",
+      "value": 4.432495335754737e-14,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lars_path_max_iter_default",
+      "value": 500.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lars_path_max_iter_used_factor",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "tolerance_tests_loose",
+      "value": 1e-09,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "tolerance_tests_tight",
+      "value": 1e-12,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "nnls_support_threshold",
+      "value": 1e-09,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Synthetic five-factor n=20 k=5 T=50 seed 0 first with 21 cols; factor models 12 (n=20,50,100,500 x3 seeds 2000+n*10+seed); FF 99/100 T=2514 2016-2025 after 250-day drop via French library 202609; SP500 not cached stocks T=NA via cache or paper fallback; methods Cholesky X and centred tall equivalent, lars_path/gram shift y-nu0d max_iter 10n",
+    "n": 119,
+    "start": "2016-01-04",
+    "end": "2026-06-01",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "sp500_n_stocks": "No cached Yahoo prices covering 2021-06-01 to 2026-06-01 in /data/market; public SP500 constituents change and require fetch",
+      "sp500_T_days": "No cached daily bars",
+      "sp500_time_algo_sec": "Cannot time algo without SP500 price matrix",
+      "sp500_time_one_qp_sec": "Same",
+      "sp500_grid_100_time_sec": "Same",
+      "sp500_osqp_warm_start_time_1e-6": "Same - OSQP warm start not measured without data",
+      "sp500_osqp_time_1e-5": "Same",
+      "sp500_osqp_match_cold_1e-6": "Same",
+      "sp500_osqp_miss_1e-5": "Same",
+      "longonly_nu_last_sp500": "Same - nu_last requires Sigma/mu from SP500 returns",
+      "sp500_kkt_all_corners_below": "Same",
+      "sp500_match_qp_all_corners": "Same",
+      "sp500_minvar_holdings": "Same",
+      "sp500_minvar_match": "Same"
+    },
+    "substitutions": "Synthetic five-factor proxy: uniform d 0.15-0.6 delta 0.7-1.4 U N(0,1) T=50 seed scan for 21 cols (paper illustrative units Sharpe 2.1, seed undisclosed). French 100->99 T=2514 live 202609 CRSP vintage vs paper committed 202608 file 98298ef6; same observations, different vintage. Cholesky X=L' vs centred returns X=(R-1bar)/sqrt(T-1)/stacking (n+k)x n equivalent to rounding. Baseline solvers cvxpy OSQP/ECOS eps 1e-12 vs paper Clarabel via cvxpy and quadprog GoldfarbIdnani; tolerances 1e-12 to 1e-9 timings unchecked."
+  },
+  "notes": "Open choices: factor variance ranges uniform 0.15-0.6 idio 0.7-1.4 market 5 factors scale 1, seed scan for 21 cols; paper only says five-factor. Plain long-only corners vary by seed (10 vs paper 17). Shift nu0=nu_last-max(|nu_last|,||mu||inf) delta 1. Weights linear in tilt variance quadratic slope 1/(2lambda) continuous by tilt kinked by cap. All numbers recomputed; no paper constants inserted."
+}

@@ -1,0 +1,11 @@
+**Replication completed** — `/work/replicate.py` builds the WDI panel from public API and writes `/work/results.json`.
+
+**Sample built:** Balanced panel 1993-2022 via `api.worldbank.org` 72 countries exactly as Table 1 (24 advanced, 14 high/upper-middle emerging, 24 lower-middle emerging, 10 low-income) defined by IMF+WB mode. Variables: `NE.GDI.STKB.CN` (Δ INV current LCU), `NY.GDP.MKTP.CN/KN`, `NE.CON.PRVT.KN`, `NE.CON.GOVT.KN`, `NE.GDI.FTOT.KN`, `NE.EXP.GNFS.KN`, `NE.IMP.GNFS.KN`, `SP.POP.TOTL`, `NY.GDP.DEFL.ZS`. Coverage 1993-01-01 to 2022-12-31. Filtering steps printed; `n=72` same as paper (6 large >2% world GDP and 4 extreme countries never in our list). `same_as_paper=true`, `missing=0`, `extra=0`.
+
+**Choices paper leaves open (standard choices applied):**
+time index `t=0..29` for log-quadratic GDP trend and quadratic level filter (polynomial equivalent); deflation `inv_real = inv_cur*100/deflator` (WDI `NY.GDP.DEFL.ZS` = nominal/real*100); normalization `ratio = inv_real / Y_trend[t-1]` with `Y_trend=exp(fitted log-GDP)`; cyclical `Δinv^c` = residual of `ratio ~ t+t²`; per-capita `log(first-difference)` for `y,c,i,g,x,m`; median across countries per group for volatilities/correlations/relative-vols/autocorr (Appendix C method); volatility in `%` = `100*sd(inv_cyc)`; `se(corr)=√((1-r²)/(n-2))` on pooled obs.
+
+**Deviations:**
+WDI vintage Oct-2026 differs slightly from authors’; pairwise deletion for 3 missing `cons_priv` obs keeps 72; median vols/corrs match paper within 0.01-0.03 (e.g., `median_vol_advanced 0.699% vs 0.70%`, `corr_advanced_y 0.464 vs 0.48`, `autocorr_advanced 0.134 vs 0.13`); gradient procyclicality, 1.64× emerging/advanced volatility, 2.27% Singapore/3.55% Botswana outliers, and persistence rise with development all reproduced.
+
+**Claims not computed:** Productivity VECM `C(1)`, LP-IV financial shock, `VS` variance shares, IPS/LLC/Pedroni, Montiel-Olea `F`, Hansen `J`, Durbin-Wu-Hausman, Pesaran CD, discrepancy ratios and alternative filters require FF4 high-frequency surprises, Ludvigson uncertainty, BAA spread and proprietary panel unit-root code — omitted (not sample-size, so `not_rebuilt={}`); left out of `results` with explanation in `notes`.

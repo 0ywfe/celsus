@@ -1,0 +1,662 @@
+{
+ "title": "Price Responses of Rwandan Tungsten Exports under Conflict Minerals Regulation ---Period-by-Period Estimation of Export Demand Elasticity---",
+ "hypothesis": "Export demand price elasticity of Rwandan tungsten varies across institutional/market regimes (pre-regulation, Dodd-Frank implementation, post-SEC enforcement change, post-2019 destination shift).",
+ "data_sources": [
+  "UN Comtrade importer-reported trade for Rwanda HS 261100 (tungsten ores and concentrates) and global import data HS 261100 for world average price",
+  "FXTOP monthly exchange rates"
+ ],
+ "sample": "Monthly mirror trade panel of Rwandan tungsten ores and concentrates (HS 261100) by importing country, with importer-reported export values as dependent variable; quantity missing for some observations so unit values not continuously observed. World average price PtW merged plus exchange rate Ej t. Estimations by period with importer fixed effects and clustered SE at importer level.",
+ "period_start": "January 2009",
+ "period_end": "December 2023",
+ "method": [
+  "1. Construct monthly panel Jan 2009-Dec 2023: use importer-reported values X_jt for Rwanda HS261100 from UN Comtrade; exchange rates E_jt = importing-country currency per Rwandan franc from FXTOP monthly; world average price PtW = sum_i V_it / sum_i Q_it from global import data HS261100 each month (quantity-weighted).",
+  "2. Divide sample into four periods exactly as printed: Period 1 Jan. 2009--Dec. 2012 (48 months) pre-implementation baseline; Period 2 Jan. 2013--Apr. 2017 Dodd-Frank implementation; Period 3 May 2017--May 2019 after SEC April 2017 enforcement-policy change; Period 4 Jun. 2019--Dec. 2023 shift in export destinations observed in trade data.",
+  "3. Under small-country price-taker assumption, specify per-period fixed-effects reduced form: ln X_jt = mu_j + beta ln E_jt + gamma ln PtW_t + epsilon_jt, mu_j importer fixed effect; estimate by FE OLS separately by period with SE clustered at importing-country level.",
+  "4. Recover export demand elasticity via eta = beta - 1 under approximation omega=0, where omega is inverse-supply coefficient from ln UV_jt = a_j + omega ln X_jt + lambda ln PtW_t + e_jt estimated on subset with quantity observed. Report eta = beta-1 and 95% CI derived from beta SE.",
+  "5. Assess omega=0 approximation by estimating omega on quantity-observed subsample with importer FE and clustered SE; if p>0.05 and point estimate small, set omega=0 for eta calculation.",
+  "6. Test coefficient differences: for each pair (Period2-Period1, Period3-Period1, Period4-Period1, Period4-Period3) pool the two periods, estimate FE model allowing period-specific beta and gamma with importer x period FE, clustered SE at importer level, compute Delta beta = beta_s - beta_r, SE(Delta)=sqrt(Var_s+Var_r-2Cov), t=(beta_s-beta_r)/SE(Delta), p-value; Delta beta equals Delta eta under omega ~=0."
+ ],
+ "claims": [
+  {
+   "name": "beta_p1",
+   "description": "Exchange-rate coefficient Period 1 Table FE results",
+   "value": "-19.814",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Estimation Results of Fixed-Effects Model by Period, row Exchange-rate coefficient beta, Period 1"
+  },
+  {
+   "name": "se_beta_p1",
+   "description": "Clustered SE beta Period 1",
+   "value": "4.536",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses Period 1"
+  },
+  {
+   "name": "beta_p2",
+   "description": "Exchange-rate coefficient Period 2",
+   "value": "2.814",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Period 2"
+  },
+  {
+   "name": "se_beta_p2",
+   "description": "Clustered SE beta Period 2",
+   "value": "2.315",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses Period 2"
+  },
+  {
+   "name": "beta_p3",
+   "description": "Exchange-rate coefficient Period 3",
+   "value": "-4.277",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Period 3"
+  },
+  {
+   "name": "se_beta_p3",
+   "description": "Clustered SE beta Period 3",
+   "value": "0.381",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses Period 3"
+  },
+  {
+   "name": "beta_p4",
+   "description": "Exchange-rate coefficient Period 4",
+   "value": "1.44",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Period 4 shows 1.440"
+  },
+  {
+   "name": "se_beta_p4",
+   "description": "Clustered SE beta Period 4",
+   "value": "0.913",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses Period 4"
+  },
+  {
+   "name": "gamma_p1",
+   "description": "World-price coefficient Period 1",
+   "value": "0.307",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table row World-price coefficient gamma Period 1"
+  },
+  {
+   "name": "se_gamma_p1",
+   "description": "SE gamma Period 1",
+   "value": "0.159",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses gamma Period 1"
+  },
+  {
+   "name": "gamma_p2",
+   "description": "World-price coefficient Period 2",
+   "value": "0.354",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Period 2 * p<0.10"
+  },
+  {
+   "name": "se_gamma_p2",
+   "description": "SE gamma Period 2",
+   "value": "0.156",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses gamma Period 2"
+  },
+  {
+   "name": "gamma_p3",
+   "description": "World-price coefficient Period 3",
+   "value": "-0.697",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Period 3"
+  },
+  {
+   "name": "se_gamma_p3",
+   "description": "SE gamma Period 3",
+   "value": "1.062",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses gamma Period 3"
+  },
+  {
+   "name": "gamma_p4",
+   "description": "World-price coefficient Period 4",
+   "value": "-0.036",
+   "unit": "log-log coefficient",
+   "kind": "estimate",
+   "where": "Table Period 4"
+  },
+  {
+   "name": "se_gamma_p4",
+   "description": "SE gamma Period 4",
+   "value": "0.182",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table parentheses gamma Period 4"
+  },
+  {
+   "name": "eta_p1",
+   "description": "Export demand elasticity Period 1 eta=beta-1",
+   "value": "-20.814",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table row Export demand elasticity Period 1 and Abstract Period 1 (eta=-20.814, p<0.01)"
+  },
+  {
+   "name": "eta_p1_ci_lo",
+   "description": "95% CI lower eta Period 1",
+   "value": "-29.704",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 95% confidence interval Period 1"
+  },
+  {
+   "name": "eta_p1_ci_hi",
+   "description": "95% CI upper eta Period 1",
+   "value": "-11.924",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 95% confidence interval Period 1"
+  },
+  {
+   "name": "eta_p2",
+   "description": "Export demand elasticity Period 2",
+   "value": "1.814",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 2 and Abstract eta=1.814 p>0.10"
+  },
+  {
+   "name": "eta_p2_ci_lo",
+   "description": "95% CI lower eta Period 2",
+   "value": "-2.723",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 2 CI"
+  },
+  {
+   "name": "eta_p2_ci_hi",
+   "description": "95% CI upper eta Period 2",
+   "value": "6.351",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 2 CI"
+  },
+  {
+   "name": "eta_p3",
+   "description": "Export demand elasticity Period 3",
+   "value": "-5.277",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 3 and Abstract eta=-5.277 p<0.01"
+  },
+  {
+   "name": "eta_p3_ci_lo",
+   "description": "95% CI lower eta Period 3",
+   "value": "-6.024",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 3 CI"
+  },
+  {
+   "name": "eta_p3_ci_hi",
+   "description": "95% CI upper eta Period 3",
+   "value": "-4.531",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 3 CI"
+  },
+  {
+   "name": "eta_p4",
+   "description": "Export demand elasticity Period 4",
+   "value": "0.44",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 4 shows 0.440 and Abstract eta=0.440 p>0.10"
+  },
+  {
+   "name": "eta_p4_ci_lo",
+   "description": "95% CI lower eta Period 4",
+   "value": "-1.35",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 4 CI shows -1.350"
+  },
+  {
+   "name": "eta_p4_ci_hi",
+   "description": "95% CI upper eta Period 4",
+   "value": "2.229",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table Period 4 CI"
+  },
+  {
+   "name": "n_obs_p1",
+   "description": "Number of importer-month observations Period 1",
+   "value": "52",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table row Observations Period 1"
+  },
+  {
+   "name": "n_importers_p1",
+   "description": "Number of importing countries Period 1",
+   "value": "4",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table row Number of importing countries Period 1"
+  },
+  {
+   "name": "n_obs_p2",
+   "description": "Observations Period 2",
+   "value": "64",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Observations Period 2"
+  },
+  {
+   "name": "n_importers_p2",
+   "description": "Importing countries Period 2",
+   "value": "7",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table Number of importing countries Period 2"
+  },
+  {
+   "name": "n_obs_p3",
+   "description": "Observations Period 3",
+   "value": "37",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Observations Period 3"
+  },
+  {
+   "name": "n_importers_p3",
+   "description": "Importing countries Period 3",
+   "value": "4",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table Number of importing countries Period 3"
+  },
+  {
+   "name": "n_obs_p4",
+   "description": "Observations Period 4",
+   "value": "49",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Observations Period 4"
+  },
+  {
+   "name": "n_importers_p4",
+   "description": "Importing countries Period 4",
+   "value": "5",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table Number of importing countries Period 4"
+  },
+  {
+   "name": "n_obs_total",
+   "description": "Total panel observations across all periods as single total",
+   "value": "not stated",
+   "unit": "observations",
+   "kind": "count",
+   "where": "not stated as single panel total; table prints only per-period observations"
+  },
+  {
+   "name": "n_importers_total",
+   "description": "Total distinct importing countries across full sample",
+   "value": "not stated",
+   "unit": "countries",
+   "kind": "count",
+   "where": "not stated"
+  },
+  {
+   "name": "omega_est",
+   "description": "Inverse-supply coefficient omega point estimate from UV regression",
+   "value": "0.04384",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Appendix Estimation of Inverse-Supply Coefficient omega"
+  },
+  {
+   "name": "omega_se",
+   "description": "SE of omega",
+   "value": "0.0266",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Appendix SE 0.02660"
+  },
+  {
+   "name": "omega_ci_lo",
+   "description": "95% CI lower omega",
+   "value": "-0.00829",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Appendix CI [-0.00829,0.09597]"
+  },
+  {
+   "name": "omega_ci_hi",
+   "description": "95% CI upper omega",
+   "value": "0.09597",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Appendix CI"
+  },
+  {
+   "name": "p_eta_p1",
+   "description": "Significance of eta/beta Period 1 ***",
+   "value": "p<0.01",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Table ***p<0.01 and Abstract p<0.01"
+  },
+  {
+   "name": "p_eta_p2",
+   "description": "Significance of eta/beta Period 2 not significant",
+   "value": "p>0.10",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Abstract p>0.10 and Table no stars"
+  },
+  {
+   "name": "p_eta_p3",
+   "description": "Significance eta/beta Period 3 ***",
+   "value": "p<0.01",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Table ***p<0.01 and Abstract p<0.01"
+  },
+  {
+   "name": "p_eta_p4",
+   "description": "Significance eta/beta Period 4 not significant",
+   "value": "p>0.10",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Abstract p>0.10 and Table no stars"
+  },
+  {
+   "name": "p_omega",
+   "description": "Significance of omega test vs zero",
+   "value": "p>0.05",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Appendix not statistically significantly different from zero at 5% level, CI includes 0"
+  },
+  {
+   "name": "n_omega",
+   "description": "Number of observations with quantity for omega estimation",
+   "value": "not stated",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Appendix says using observations for which export quantities are available; number not printed"
+  },
+  {
+   "name": "diff_p2_p1",
+   "description": "Coefficient difference Period2 - Period1 (beta_s - beta_r = eta_s - eta_r)",
+   "value": "22.628",
+   "unit": "coefficient difference",
+   "kind": "estimate",
+   "where": "Appendix Coefficient-Difference Tests table Period 2 -- Period 1"
+  },
+  {
+   "name": "se_diff_p2_p1",
+   "description": "SE of difference Period2-Period1",
+   "value": "5.665",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table Coefficient-Difference SE Period2-Period1"
+  },
+  {
+   "name": "t_diff_p2_p1",
+   "description": "t-value difference Period2-Period1",
+   "value": "3.994",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Table t-value 3.994"
+  },
+  {
+   "name": "p_diff_p2_p1",
+   "description": "p-value difference Period2-Period1",
+   "value": "0.0021",
+   "unit": "p-value",
+   "kind": "p_value",
+   "where": "Table p-value 0.0021 and Abstract and text p=0.0021"
+  },
+  {
+   "name": "diff_p3_p1",
+   "description": "Coefficient difference Period3 - Period1",
+   "value": "15.536",
+   "unit": "coefficient difference",
+   "kind": "estimate",
+   "where": "Table Period 3 -- Period 1"
+  },
+  {
+   "name": "se_diff_p3_p1",
+   "description": "SE difference Period3-Period1",
+   "value": "4.162",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table SE 4.162"
+  },
+  {
+   "name": "t_diff_p3_p1",
+   "description": "t-value Period3-Period1",
+   "value": "3.733",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Table t-value 3.733"
+  },
+  {
+   "name": "p_diff_p3_p1",
+   "description": "p-value Period3-Period1",
+   "value": "0.0097",
+   "unit": "p-value",
+   "kind": "p_value",
+   "where": "Table p-value 0.0097 and text p=0.0097"
+  },
+  {
+   "name": "diff_p4_p1",
+   "description": "Coefficient difference Period4 - Period1",
+   "value": "21.254",
+   "unit": "coefficient difference",
+   "kind": "estimate",
+   "where": "Table Period 4 -- Period 1"
+  },
+  {
+   "name": "se_diff_p4_p1",
+   "description": "SE difference Period4-Period1",
+   "value": "4.063",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table SE 4.063"
+  },
+  {
+   "name": "t_diff_p4_p1",
+   "description": "t-value Period4-Period1",
+   "value": "5.23",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Table t-value 5.230"
+  },
+  {
+   "name": "p_diff_p4_p1_table",
+   "description": "p-value Period4-Period1 from table (precise)",
+   "value": "0.0008",
+   "unit": "p-value",
+   "kind": "p_value",
+   "where": "Appendix table p-value 0.0008"
+  },
+  {
+   "name": "p_diff_p4_p1_text",
+   "description": "p-value Period4-Period1 as stated in text (rounded)",
+   "value": "p<0.001",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Section Coefficient Differences across Periods text p<0.001 for Period4-Period1"
+  },
+  {
+   "name": "diff_p4_p3",
+   "description": "Coefficient difference Period4 - Period3",
+   "value": "5.717",
+   "unit": "coefficient difference",
+   "kind": "estimate",
+   "where": "Table Period 4 -- Period 3"
+  },
+  {
+   "name": "se_diff_p4_p3",
+   "description": "SE difference Period4-Period3",
+   "value": "0.96",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table SE 0.960"
+  },
+  {
+   "name": "t_diff_p4_p3",
+   "description": "t-value Period4-Period3",
+   "value": "5.955",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Table t-value 5.955"
+  },
+  {
+   "name": "p_diff_p4_p3_table",
+   "description": "p-value Period4-Period3 from table (precise)",
+   "value": "0.0006",
+   "unit": "p-value",
+   "kind": "p_value",
+   "where": "Table p-value 0.0006 and Abstract p=0.0006 for Period3-Period4"
+  },
+  {
+   "name": "p_diff_p4_p3_text",
+   "description": "p-value Period4-Period3 as stated in text rounded",
+   "value": "p<0.001",
+   "unit": "p-value threshold",
+   "kind": "p_value",
+   "where": "Text says p<0.001 for Period3-Period4 difference"
+  }
+ ],
+ "headline": "p_diff_p2_p1",
+ "partitions": [
+  {
+   "split": "Panel observations by institutional/market regime period",
+   "total": "n_obs_total",
+   "parts": [
+    "n_obs_p1",
+    "n_obs_p2",
+    "n_obs_p3",
+    "n_obs_p4"
+   ]
+  },
+  {
+   "split": "Number of importing countries by period",
+   "total": "n_importers_total",
+   "parts": [
+    "n_importers_p1",
+    "n_importers_p2",
+    "n_importers_p3",
+    "n_importers_p4"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Wald/t test H0 beta_P1 = beta_P2 (equiv eta) from pooled importer x period FE clustered at importer level",
+   "statistic": "t_diff_p2_p1",
+   "p_value": "p_diff_p2_p1",
+   "group_sizes": [
+    "n_obs_p1",
+    "n_importers_p1",
+    "n_obs_p2",
+    "n_importers_p2"
+   ]
+  },
+  {
+   "test": "Wald/t test H0 beta_P1 = beta_P3",
+   "statistic": "t_diff_p3_p1",
+   "p_value": "p_diff_p3_p1",
+   "group_sizes": [
+    "n_obs_p1",
+    "n_importers_p1",
+    "n_obs_p3",
+    "n_importers_p3"
+   ]
+  },
+  {
+   "test": "Wald/t test H0 beta_P1 = beta_P4 (table precise p)",
+   "statistic": "t_diff_p4_p1",
+   "p_value": "p_diff_p4_p1_table",
+   "group_sizes": [
+    "n_obs_p1",
+    "n_importers_p1",
+    "n_obs_p4",
+    "n_importers_p4"
+   ]
+  },
+  {
+   "test": "Wald/t test H0 beta_P3 = beta_P4",
+   "statistic": "t_diff_p4_p3",
+   "p_value": "p_diff_p4_p3_table",
+   "group_sizes": [
+    "n_obs_p3",
+    "n_importers_p3",
+    "n_obs_p4",
+    "n_importers_p4"
+   ]
+  },
+  {
+   "test": "Individual significance beta/eta Period1 clustered at importer level",
+   "statistic": "beta_p1",
+   "p_value": "p_eta_p1",
+   "group_sizes": [
+    "n_obs_p1",
+    "n_importers_p1"
+   ]
+  },
+  {
+   "test": "Individual significance beta/eta Period2",
+   "statistic": "beta_p2",
+   "p_value": "p_eta_p2",
+   "group_sizes": [
+    "n_obs_p2",
+    "n_importers_p2"
+   ]
+  },
+  {
+   "test": "Individual significance beta/eta Period3",
+   "statistic": "beta_p3",
+   "p_value": "p_eta_p3",
+   "group_sizes": [
+    "n_obs_p3",
+    "n_importers_p3"
+   ]
+  },
+  {
+   "test": "Individual significance beta/eta Period4",
+   "statistic": "beta_p4",
+   "p_value": "p_eta_p4",
+   "group_sizes": [
+    "n_obs_p4",
+    "n_importers_p4"
+   ]
+  },
+  {
+   "test": "Inverse-supply omega=0 test lnUV on lnX with importer FE clustered",
+   "statistic": "omega_est",
+   "p_value": "p_omega",
+   "group_sizes": [
+    "n_omega"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+exit 0 in 335.8s
+--- stdout
+Replication start
+Synthetic seed 0 cols 21 L1 3.380 sharpe_last 0.740 plain 10 shifted 19 nu_last -0.184
+FF T 2514 n 99 nu_last -0.0118 corners 12 KKT 2.13e-13 QP 7.11e-07 minvar_hold 7
+Table n=20 seed 0 corners 15 nu -0.342 kkt 1.64e-13 worst 2.53e-14
+Table n=20 seed 1 corners 24 nu -0.485 kkt 1.05e-12 worst 7.90e-14
+Table n=20 seed 2 corners 20 nu -2.496 kkt 5.65e-12 worst 5.07e-13
+Table n=50 seed 0 corners 51 nu -0.303 kkt 1.55e-13 worst 2.51e-14
+Table n=50 seed 1 corners 49 nu -0.220 kkt 1.68e-13 worst 2.20e-14
+Table n=50 seed 2 corners 53 nu -0.543 kkt 2.14e-14 worst 8.94e-15
+Table n=100 seed 0 corners 101 nu -0.337 kkt 1.94e-13 worst 5.52e-14
+Table n=100 seed 1 corners 101 nu -0.436 kkt 1.50e-12 worst 1.99e-13
+Table n=100 seed 2 corners 107 nu -0.255 kkt 1.20e-13 worst 5.71e-14
+Table n=500 seed 0 corners 507 nu -0.302 kkt 3.56e-13 worst 4.44e-14
+Table n=500 seed 1 corners 521 nu -0.377 kkt 1.92e-13 worst 1.87e-13
+Table n=500 seed 2 corners 511 nu -0.303 kkt 3.46e-13 worst 2.23e-13
+Manifest cached tickers covering window: 0
+Wrote 96 results
+
+--- stderr

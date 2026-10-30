@@ -1,0 +1,1841 @@
+{
+ "title": "Robust enhanced index tracking portfolio selection under distributional uncertainty",
+ "hypothesis": "not stated",
+ "data_sources": [
+  "Yahoo! Finance monthly adjusted closing prices Jan 2015 - Dec 2024 for tickers AAPL, NVDA, MSFT, AVGO, ORCL, JNJ, ABBV, LLY, UNH, ABT, BRK-B, JPM, V, BAC, MA, AMZN, TSLA, HD, MCD, BKNG, WMT, COST, KO, PG, PM and benchmark index (not named, S&P500 implied) - file not named, download via Yahoo! Finance"
+ ],
+ "sample": "Monthly loss data for 25 US stocks (5 largest by market cap per sector: Technology, Healthcare, Financial Services, Consumer Cyclical, Consumer Defensive; tickers AAPL, NVDA, MSFT, AVGO, ORCL, JNJ, ABBV, LLY, UNH, ABT, BRK-B, JPM, V, BAC, MA, AMZN, TSLA, HD, MCD, BKNG, WMT, COST, KO, PG, PM) from Yahoo! Finance. Loss x_{i,t}= -(P_{i,t+1}-P_{i,t})/P_{i,t} where P_{i,t} is adjusted closing price. Vector x_t=(x_{1,t},...,x_{25,t}). No additional filters stated. Sample sizes: count_TotalStocks_25=25 total, count_Technology_5 etc each 5, count_InSampleMonths_60=60 in-sample (2015-2019) rolling, count_OutSampleMonths_60=60 out-of-sample (2020-2024), count_TotalMonths_120=120",
+ "period_start": "2015-01",
+ "period_end": "2024-12",
+ "method": [
+  "Step 1: Universe construction. Fix n=25. For each of 5 sectors collect 5 largest companies by market capitalization as listed in sample.",
+  "Step 2: Data download. Retrieve monthly adjusted closing prices P_{i,t} from Yahoo! Finance for Jan 2015 - Dec 2024.",
+  "Step 3: Return definition. Compute monthly loss rate x_{i,t}= -(P_{i,t+1}-P_{i,t})/P_{i,t}; return is -x_{i,t}. Form vector x_t.",
+  "Step 4: Uncertainty set M_{n+1}(mu,Sigma) specification. Estimate mu and Sigma as sample mean vector and sample covariance matrix from current 60-month in-sample window. Define M set as all distributions G,F with same mean mu and covariance Sigma positive definite.",
+  "Step 5: Uncertainty set D_{n+1}(gamma1,gamma2) specification. Compute hat mu and hat Sigma as sample mean and covariance from initial in-sample (Jan 2015-Dec 2019). For gamma1,gamma2 calibration, use rolling 60-month windows i, compute gamma1i=(hat mu_{n,i}-hat mu_n)' hat Sigma_n^{-1} (hat mu_{n,i}-hat mu_n) and gamma2i=||hat Sigma_i - hat Sigma||_F; set gamma1=average gamma1i=0.22 (0.21 in sensitivity figures) and gamma2=average gamma2i=0.025.",
+  "Step 6: Index loss X0. Use benchmark index loss X0 with mean mu0 and variance sigma0^2 included in joint mu,Sigma. Excess target defines X_alpha = X0 + alpha with alpha=-0.04 (chosen because -bar alpha=0.0075 average excess, so -alpha=0.04 > -bar alpha).",
+  "Step 7: Model parameters. Set r0=0.02 (chosen bar r=0.0176 < r0 < -alpha) for M set; r=-0.01 (<r0) for D set; kappa=5 (kappa>kappa0=4.65 where kappa0=[2+2 sqrt(b0+1)]/b0) for main results. Weight constraints: allow short selling W=R^n or prohibit W=A^n=[0,inf)^n with omega'e=1.",
+  "Step 8: Closed-form solutions under M set (Sec 3). Compute constants alpha*=alpha+mu0, u=(e'Sigma_n^{-1} e)(mu_n'Sigma_n^{-1} mu_n)-(e'Sigma_n^{-1} mu_n)^2, c0=e'Sigma_n^{-1} e, c1=e'Sigma_n^{-1} mu_n, c2=mu_n'Sigma_n^{-1} mu_n, c3=b'Sigma_n^{-1} mu_n, c4=b'Sigma_n^{-1} e, c5=b'Sigma_n^{-1} b, b0=c0/u, b1=c1/u, b2=c2/u. For m=1 use Theorem 1(i) formula for omega_{1,kappa}^* with s_{1,kappa} as printed; for m=2 use Theorem 1(ii) formula with s_{2,kappa}. For ER/TSV-only use Proposition 1 formulas. For M-V and V use MV-model-1 and V-model-1 closed forms as printed.",
+  "Step 9: Convex optimization under D set (Sec 4). Solve second-order cone programs: Thm 2 (m=1) problem ob-m=1, Thm 2 (m=2) ob-m=2, Prop 2 (ER) ob-m=1-only/ob-m=2-only, Prop 3 (M-V/V) ob-MV-D/ob-V-D with variables omega in W, s in R+, t in R+, using hat mu_n, hat mu0, hat Sigma, gamma1, gamma2, alpha* = alpha+hat mu0, a=(omega,-1). Use convex solver.",
+  "Step 10: Back-test. Initial window Jan 2015-Dec 2019 estimate parameters solve optimal omega0*. Compute out-of-sample portfolio return R1= -omega0* ' x1 for Jan 2020. Roll window forward one month (Feb 2015-Jan 2020 etc), re-estimate, re-solve, compute Rt= -omega_{t-1}* ' x_t for t=1..60 (Jan 2020-Dec 2024). Repeat for each model (a) M-ER m=1, (b) ER m=1, (c) M-TSV m=2, (d) TSV m=2, (e) M-V, (f) V, (g) EWP equal weights 1/25.",
+  "Step 11: Performance metrics. From 60 out-of-sample returns compute CW (cumulative wealth starting at 1, compounded), Mean Return (sample mean of Rt), SD (sample standard deviation), ER (expected regret = sample mean of (omega'X - X0 -alpha)_+ ), TSV (sample mean of squared excess), Sharpe, Sortino, Omega ratios as defined in cited references. Report values in Table M (M set, alpha=-0.04,r0=0.02,kappa=5) and Table D (D set, alpha=-0.04,r=-0.01,gamma1=0.22,gamma2=0.025,kappa=5) separately with/without short selling; box best per column.",
+  "Step 12: Sensitivity to kappa. Vary kappa over (kappa0,inf) for M-ER and (0,inf) for M-TSV/M-V, recompute out-of-sample CW, Sharpe, Sortino, Omega with/without short selling under both uncertainty sets; plot Figs 2-7 and record optimal/crossover kappa values as printed."
+ ],
+ "claims": [
+  {
+   "name": "count_TotalStocks_25",
+   "description": "Total number of stocks in portfolio (5 largest by market cap from each of 5 sectors)",
+   "value": "25",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec 5: 25 stocks selected, Table M/D caption models (a)-(g)"
+  },
+  {
+   "name": "count_Technology_5",
+   "description": "Stocks from Technology sector: AAPL, NVDA, MSFT, AVGO, ORCL",
+   "value": "5",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec 5 empirical experiments list"
+  },
+  {
+   "name": "count_Healthcare_5",
+   "description": "Stocks from Healthcare sector: JNJ, ABBV, LLY, UNH, ABT",
+   "value": "5",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec 5"
+  },
+  {
+   "name": "count_FinServices_5",
+   "description": "Stocks from Financial Services sector: BRK-B, JPM, V, BAC, MA",
+   "value": "5",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec 5"
+  },
+  {
+   "name": "count_ConsCyclical_5",
+   "description": "Stocks from Consumer Cyclical sector: AMZN, TSLA, HD, MCD, BKNG",
+   "value": "5",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec 5"
+  },
+  {
+   "name": "count_ConsDefensive_5",
+   "description": "Stocks from Consumer Defensive sector: WMT, COST, KO, PG, PM",
+   "value": "5",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec 5"
+  },
+  {
+   "name": "count_InSampleMonths_60",
+   "description": "In-sample training window length: January 2015 to December 2019, five-year rolling window",
+   "value": "60",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec 5: period from Jan 2015 to Dec 2019 as five-year in-sample"
+  },
+  {
+   "name": "count_OutSampleMonths_60",
+   "description": "Out-of-sample back-test period: January 2020 to December 2024",
+   "value": "60",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec 5"
+  },
+  {
+   "name": "count_TotalMonths_120",
+   "description": "Total monthly data: January 2015 to December 2024, 10-year period",
+   "value": "120",
+   "unit": "months",
+   "kind": "count",
+   "where": "Sec 5: monthly loss data from Yahoo! Finance over 10-year period Jan 2015 to Dec 2024"
+  },
+  {
+   "name": "param_alpha_minus0_04",
+   "description": "Loss threshold alpha where -alpha is excess return over index, set to 0.04 above average historical excess -bar alpha",
+   "value": "-0.04",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 5.1 (i), Fig 1 caption: alpha=-0.04"
+  },
+  {
+   "name": "param_r0_0_02",
+   "description": "Minimum expected return requirement under M_{n+1}(mu,Sigma) set, bar r < r0 < -alpha",
+   "value": "0.02",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 5.1 (ii): r0=0.02, Fig 1a-b, Table M caption"
+  },
+  {
+   "name": "param_r_minus0_01",
+   "description": "Minimum worst-case expected return under D_{n+1}(gamma1,gamma2) set",
+   "value": "-0.01",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 5.2 (i): r=-0.01, Fig 1c-d, Table D caption"
+  },
+  {
+   "name": "param_kappa_5",
+   "description": "Weight balancing mean loss and downside risk/variance in M-ER, M-TSV, M-V models",
+   "value": "5",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 5.1 (iii): kappa=5, Tables M/D"
+  },
+  {
+   "name": "param_gamma1_0_22",
+   "description": "Size of mean uncertainty in D_{n+1}(gamma1,gamma2), calibrated as average rolling-window deviation",
+   "value": "0.22",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 5.2 (ii): gamma1=0.22, Fig 1c-d, Table D"
+  },
+  {
+   "name": "param_gamma1_alt_0_21",
+   "description": "Alternative gamma1 value shown in Fig 4 captions for D set sensitivity analysis",
+   "value": "0.21",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Figs 4-5 captions: gamma1=0.21"
+  },
+  {
+   "name": "param_gamma2_0_025",
+   "description": "Size of covariance uncertainty in D set, average rolling-window Frobenius deviation",
+   "value": "0.025",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Sec 5.2 (ii): gamma2=0.025, Figs 1c-d, Table D"
+  },
+  {
+   "name": "estimate_barAlphaExcess_0_0075",
+   "description": "Average historical excess return -bar alpha from in-sample data, used to choose -alpha",
+   "value": "0.0075",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.1 (i): -bar alpha =0.0075"
+  },
+  {
+   "name": "estimate_bar_r_0_0176",
+   "description": "Historical average portfolio return bar r from in-sample data",
+   "value": "0.0176",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.1 (ii): bar r=0.0176"
+  },
+  {
+   "name": "estimate_kappa0_4_65",
+   "description": "Threshold kappa0 = [2+2*sqrt(b0+1)]/b0 for existence of M-ER solution under M set",
+   "value": "4.65",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.1 (iii): kappa0=4.65"
+  },
+  {
+   "name": "estimate_kappaStar_MV_Sharpe_WS_M_20_9",
+   "description": "Optimal kappa maximizing Sharpe ratio for M-V model under M with short selling",
+   "value": "20.9",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: optimal value is kappa*=20.9 for M-V model"
+  },
+  {
+   "name": "estimate_kappaStar_MER_Sortino_WS_M_7_1",
+   "description": "Optimal kappa maximizing Sortino ratio for M-ER under M with short selling",
+   "value": "7.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: optimal values are kappa*=7.1 for M-ER with short selling"
+  },
+  {
+   "name": "estimate_kappaStar_MTSV_Sortino_WS_M_7_5",
+   "description": "Optimal kappa maximizing Sortino ratio for M-TSV under M with short selling",
+   "value": "7.5",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: kappa*=7.5 for M-TSV"
+  },
+  {
+   "name": "estimate_kappaStar_MV_Sortino_WS_M_8_1",
+   "description": "Optimal kappa maximizing Sortino ratio for M-V under M with short selling",
+   "value": "8.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: and 8.1 for M-V"
+  },
+  {
+   "name": "estimate_thresh_kappa_12_3_Sharpe_WS_M",
+   "description": "Crossover kappa where M-ER Sharpe > M-TSV and M-V for kappa<12.3 with short selling under M",
+   "value": "12.3",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: for small kappa (kappa<12.3) M-ER higher Sharpe"
+  },
+  {
+   "name": "estimate_thresh_kappa_5_2_WS_M",
+   "description": "Crossover kappa where M-TSV Sortino/Omega best for kappa<5.2, M-ER best for kappa>5.2 with short selling under M",
+   "value": "5.2",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: for small kappa (kappa<5.2) M-TSV higher Sortino, for larger kappa>5.2 M-ER best"
+  },
+  {
+   "name": "estimate_kappaStar_MTSV_Sharpe_NSS_M_2_1",
+   "description": "Optimal kappa maximizing Sharpe for M-TSV without short selling under M",
+   "value": "2.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: optimal values are kappa*=2.1 for M-TSV model"
+  },
+  {
+   "name": "estimate_kappaStar_MV_Sharpe_NSS_M_1_7",
+   "description": "Optimal kappa maximizing Sharpe for M-V without short selling under M",
+   "value": "1.7",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: and kappa*=1.7 for M-V model without short selling"
+  },
+  {
+   "name": "estimate_thresh_kappa_2_2_Sharpe_NSS_M",
+   "description": "Crossover kappa where M-V Sharpe > M-ER/M-TSV for kappa<2.2 without short selling under M",
+   "value": "2.2",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: for small kappa (kappa<2.2) M-V higher Sharpe"
+  },
+  {
+   "name": "estimate_thresh_kappa_13_5_Sharpe_NSS_M",
+   "description": "Crossover kappa where M-ER Sharpe > others for kappa>13.5 without short selling under M, M-TSV best for 2.2<kappa<13.5",
+   "value": "13.5",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Sec 5.3.1: for large kappa (kappa>13.5) M-ER outperforms, intermediate 2.2<kappa<13.5 M-TSV highest"
+  },
+  {
+   "name": "TM_WS_MER_MeanReturn",
+   "description": "Table M with short selling M-ER Mean Return",
+   "value": "0.038021",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling row M-ER"
+  },
+  {
+   "name": "TM_WS_MER_SD",
+   "description": "Table M with short selling M-ER SD",
+   "value": "0.110156",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MER_ER",
+   "description": "Table M with short selling M-ER ER",
+   "value": "0.043788",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MER_TSV",
+   "description": "Table M with short selling M-ER TSV",
+   "value": "0.005928",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MER_Sharpe",
+   "description": "Table M with short selling M-ER Sharpe",
+   "value": "0.345155",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MER_Sortino",
+   "description": "Table M with short selling M-ER Sortino",
+   "value": "0.493813",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MER_Omega",
+   "description": "Table M with short selling M-ER Omega",
+   "value": "0.954801",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_ER_MeanReturn",
+   "description": "Table M with short selling ER Mean Return",
+   "value": "0.030584",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_ER_SD",
+   "description": "Table M with short selling ER SD",
+   "value": "0.079341",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_ER_ER",
+   "description": "Table M with short selling ER ER",
+   "value": "0.036200",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_ER_TSV",
+   "description": "Table M with short selling ER TSV",
+   "value": "0.003655",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_ER_Sharpe",
+   "description": "Table M with short selling ER Sharpe",
+   "value": "0.385482",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_ER_Sortino",
+   "description": "Table M with short selling ER Sortino",
+   "value": "0.505900",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed best"
+  },
+  {
+   "name": "TM_WS_ER_Omega",
+   "description": "Table M with short selling ER Omega",
+   "value": "0.739903",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_MeanReturn",
+   "description": "Table M with short selling M-TSV Mean Return",
+   "value": "0.048939",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_SD",
+   "description": "Table M with short selling M-TSV SD",
+   "value": "0.150532",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_ER",
+   "description": "Table M with short selling M-TSV ER",
+   "value": "0.052809",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_TSV",
+   "description": "Table M with short selling M-TSV TSV",
+   "value": "0.009546",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_Sharpe",
+   "description": "Table M with short selling M-TSV Sharpe",
+   "value": "0.325107",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_Sortino",
+   "description": "Table M with short selling M-TSV Sortino",
+   "value": "0.500902",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MTSV_Omega",
+   "description": "Table M with short selling M-TSV Omega",
+   "value": "1.169271",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed best"
+  },
+  {
+   "name": "TM_WS_TSV_MeanReturn",
+   "description": "Table M with short selling TSV Mean Return",
+   "value": "0.023855",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_TSV_SD",
+   "description": "Table M with short selling TSV SD",
+   "value": "0.060104",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_TSV_ER",
+   "description": "Table M with short selling TSV ER",
+   "value": "0.032059",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_TSV_TSV",
+   "description": "Table M with short selling TSV TSV",
+   "value": "0.002714",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_TSV_Sharpe",
+   "description": "Table M with short selling TSV Sharpe",
+   "value": "0.396902",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_TSV_Sortino",
+   "description": "Table M with short selling TSV Sortino",
+   "value": "0.457940",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_TSV_Omega",
+   "description": "Table M with short selling TSV Omega",
+   "value": "0.496404",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MV_MeanReturn",
+   "description": "Table M with short selling M-V Mean Return boxed best",
+   "value": "0.050084",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M With short selling M-V Mean Return"
+  },
+  {
+   "name": "TM_WS_MV_SD",
+   "description": "Table M with short selling M-V SD",
+   "value": "0.155359",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MV_ER",
+   "description": "Table M with short selling M-V ER",
+   "value": "0.053195",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MV_TSV",
+   "description": "Table M with short selling M-V TSV",
+   "value": "0.010652",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MV_Sharpe",
+   "description": "Table M with short selling M-V Sharpe",
+   "value": "0.322376",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MV_Sortino",
+   "description": "Table M with short selling M-V Sortino",
+   "value": "0.485271",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_MV_Omega",
+   "description": "Table M with short selling M-V Omega",
+   "value": "1.189569",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_MeanReturn",
+   "description": "Table M with short selling V Mean Return",
+   "value": "0.021873",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_SD",
+   "description": "Table M with short selling V SD",
+   "value": "0.056794",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_ER",
+   "description": "Table M with short selling V ER",
+   "value": "0.032461",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_TSV",
+   "description": "Table M with short selling V TSV",
+   "value": "0.002751",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_Sharpe",
+   "description": "Table M with short selling V Sharpe",
+   "value": "0.385127",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_Sortino",
+   "description": "Table M with short selling V Sortino",
+   "value": "0.416900",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_V_Omega",
+   "description": "Table M with short selling V Omega",
+   "value": "0.441582",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_EWP_MeanReturn",
+   "description": "Table M with short selling EWP Mean Return",
+   "value": "0.020299",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_EWP_SD",
+   "description": "Table M with short selling EWP SD boxed best",
+   "value": "0.050758",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_WS_EWP_ER",
+   "description": "Table M with short selling EWP ER boxed best",
+   "value": "0.031082",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_WS_EWP_TSV",
+   "description": "Table M with short selling EWP TSV boxed best",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_WS_EWP_Sharpe",
+   "description": "Table M with short selling EWP Sharpe boxed best",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_WS_EWP_Sortino",
+   "description": "Table M with short selling EWP Sortino",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_WS_EWP_Omega",
+   "description": "Table M with short selling EWP Omega",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MER_MeanReturn",
+   "description": "Table M without short selling M-ER Mean Return",
+   "value": "0.027183",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M Without short selling"
+  },
+  {
+   "name": "TM_NSS_MER_SD",
+   "description": "Table M without short selling M-ER SD",
+   "value": "0.064414",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MER_ER",
+   "description": "Table M without short selling M-ER ER",
+   "value": "0.032721",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MER_TSV",
+   "description": "Table M without short selling M-ER TSV",
+   "value": "0.002856",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MER_Sharpe",
+   "description": "Table M without short selling M-ER Sharpe",
+   "value": "0.422011",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MER_Sortino",
+   "description": "Table M without short selling M-ER Sortino",
+   "value": "0.508637",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MER_Omega",
+   "description": "Table M without short selling M-ER Omega",
+   "value": "0.608300",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_MeanReturn",
+   "description": "Table M without short selling ER Mean Return",
+   "value": "0.024979",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_SD",
+   "description": "Table M without short selling ER SD",
+   "value": "0.061403",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_ER",
+   "description": "Table M without short selling ER ER",
+   "value": "0.032544",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_TSV",
+   "description": "Table M without short selling ER TSV",
+   "value": "0.002817",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_Sharpe",
+   "description": "Table M without short selling ER Sharpe",
+   "value": "0.406812",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_Sortino",
+   "description": "Table M without short selling ER Sortino",
+   "value": "0.470651",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_ER_Omega",
+   "description": "Table M without short selling ER Omega",
+   "value": "0.538451",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MTSV_MeanReturn",
+   "description": "Table M without short selling M-TSV Mean Return boxed best",
+   "value": "0.033821",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_MTSV_SD",
+   "description": "Table M without short selling M-TSV SD",
+   "value": "0.074642",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MTSV_ER",
+   "description": "Table M without short selling M-TSV ER",
+   "value": "0.033818",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MTSV_TSV",
+   "description": "Table M without short selling M-TSV TSV",
+   "value": "0.003061",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MTSV_Sharpe",
+   "description": "Table M without short selling M-TSV Sharpe boxed best",
+   "value": "0.453109",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_MTSV_Sortino",
+   "description": "Table M without short selling M-TSV Sortino boxed best",
+   "value": "0.611352",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_MTSV_Omega",
+   "description": "Table M without short selling M-TSV Omega boxed best",
+   "value": "0.817288",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_TSV_MeanReturn",
+   "description": "Table M without short selling TSV Mean Return",
+   "value": "0.021018",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_TSV_SD",
+   "description": "Table M without short selling TSV SD",
+   "value": "0.055961",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_TSV_ER",
+   "description": "Table M without short selling TSV ER",
+   "value": "0.032370",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_TSV_TSV",
+   "description": "Table M without short selling TSV TSV",
+   "value": "0.002723",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_TSV_Sharpe",
+   "description": "Table M without short selling TSV Sharpe",
+   "value": "0.375585",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_TSV_Sortino",
+   "description": "Table M without short selling TSV Sortino",
+   "value": "0.402786",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_TSV_Omega",
+   "description": "Table M without short selling TSV Omega",
+   "value": "0.413597",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_MeanReturn",
+   "description": "Table M without short selling M-V Mean Return",
+   "value": "0.026298",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_SD",
+   "description": "Table M without short selling M-V SD",
+   "value": "0.063587",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_ER",
+   "description": "Table M without short selling M-V ER",
+   "value": "0.034140",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_TSV",
+   "description": "Table M without short selling M-V TSV",
+   "value": "0.002796",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_Sharpe",
+   "description": "Table M without short selling M-V Sharpe",
+   "value": "0.413580",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_Sortino",
+   "description": "Table M without short selling M-V Sortino",
+   "value": "0.497338",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_MV_Omega",
+   "description": "Table M without short selling M-V Omega",
+   "value": "0.598669",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_V_MeanReturn",
+   "description": "Table M without short selling V Mean Return",
+   "value": "0.018312",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_V_SD",
+   "description": "Table M without short selling V SD boxed best",
+   "value": "0.046906",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_V_ER",
+   "description": "Table M without short selling V ER",
+   "value": "0.031722",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_V_TSV",
+   "description": "Table M without short selling V TSV boxed best",
+   "value": "0.002219",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_V_Sharpe",
+   "description": "Table M without short selling V Sharpe",
+   "value": "0.390402",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_V_Sortino",
+   "description": "Table M without short selling V Sortino",
+   "value": "0.388780",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_V_Omega",
+   "description": "Table M without short selling V Omega",
+   "value": "0.316313",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_EWP_MeanReturn",
+   "description": "Table M without short selling EWP Mean Return",
+   "value": "0.020299",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_EWP_SD",
+   "description": "Table M without short selling EWP SD",
+   "value": "0.050758",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_EWP_ER",
+   "description": "Table M without short selling EWP ER boxed best",
+   "value": "0.031082",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M boxed"
+  },
+  {
+   "name": "TM_NSS_EWP_TSV",
+   "description": "Table M without short selling EWP TSV",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_EWP_Sharpe",
+   "description": "Table M without short selling EWP Sharpe",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_EWP_Sortino",
+   "description": "Table M without short selling EWP Sortino",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TM_NSS_EWP_Omega",
+   "description": "Table M without short selling EWP Omega",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table M"
+  },
+  {
+   "name": "TD_WS_MER_MeanReturn",
+   "description": "Table D with short selling M-ER Mean Return boxed best",
+   "value": "0.023264",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D With short selling M-ER"
+  },
+  {
+   "name": "TD_WS_MER_SD",
+   "description": "Table D with short selling M-ER SD",
+   "value": "0.053799",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MER_ER",
+   "description": "Table D with short selling M-ER ER",
+   "value": "0.030781",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MER_TSV",
+   "description": "Table D with short selling M-ER TSV",
+   "value": "0.002346",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MER_Sharpe",
+   "description": "Table D with short selling M-ER Sharpe boxed best",
+   "value": "0.432424",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_WS_MER_Sortino",
+   "description": "Table D with short selling M-ER Sortino boxed best",
+   "value": "0.480342",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_WS_MER_Omega",
+   "description": "Table D with short selling M-ER Omega boxed best",
+   "value": "0.456294",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_WS_ER_MeanReturn",
+   "description": "Table D with short selling ER Mean Return",
+   "value": "0.022533",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_ER_SD",
+   "description": "Table D with short selling ER SD",
+   "value": "0.052189",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_ER_ER",
+   "description": "Table D with short selling ER ER",
+   "value": "0.030456",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_ER_TSV",
+   "description": "Table D with short selling ER TSV",
+   "value": "0.002304",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_ER_Sharpe",
+   "description": "Table D with short selling ER Sharpe",
+   "value": "0.431760",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_ER_Sortino",
+   "description": "Table D with short selling ER Sortino",
+   "value": "0.469414",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_ER_Omega",
+   "description": "Table D with short selling ER Omega",
+   "value": "0.426487",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MTSV_MeanReturn",
+   "description": "Table D with short selling M-TSV Mean Return",
+   "value": "0.021712",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MTSV_SD",
+   "description": "Table D with short selling M-TSV SD",
+   "value": "0.050744",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MTSV_ER",
+   "description": "Table D with short selling M-TSV ER boxed best",
+   "value": "0.030381",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_WS_MTSV_TSV",
+   "description": "Table D with short selling M-TSV TSV",
+   "value": "0.002281",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MTSV_Sharpe",
+   "description": "Table D with short selling M-TSV Sharpe",
+   "value": "0.427870",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MTSV_Sortino",
+   "description": "Table D with short selling M-TSV Sortino",
+   "value": "0.454599",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MTSV_Omega",
+   "description": "Table D with short selling M-TSV Omega",
+   "value": "0.398040",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_MeanReturn",
+   "description": "Table D with short selling TSV Mean Return",
+   "value": "0.020297",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_SD",
+   "description": "Table D with short selling TSV SD",
+   "value": "0.049517",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_ER",
+   "description": "Table D with short selling TSV ER",
+   "value": "0.030621",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_TSV",
+   "description": "Table D with short selling TSV TSV",
+   "value": "0.002316",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_Sharpe",
+   "description": "Table D with short selling TSV Sharpe",
+   "value": "0.409908",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_Sortino",
+   "description": "Table D with short selling TSV Sortino",
+   "value": "0.421810",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_TSV_Omega",
+   "description": "Table D with short selling TSV Omega",
+   "value": "0.356556",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MV_MeanReturn",
+   "description": "Table D with short selling M-V Mean Return",
+   "value": "0.018856",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MV_SD",
+   "description": "Table D with short selling M-V SD",
+   "value": "0.047087",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MV_ER",
+   "description": "Table D with short selling M-V ER",
+   "value": "0.031181",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MV_TSV",
+   "description": "Table D with short selling M-V TSV boxed best",
+   "value": "0.002204",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_WS_MV_Sharpe",
+   "description": "Table D with short selling M-V Sharpe",
+   "value": "0.400460",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MV_Sortino",
+   "description": "Table D with short selling M-V Sortino",
+   "value": "0.401616",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_MV_Omega",
+   "description": "Table D with short selling M-V Omega",
+   "value": "0.321904",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_V_MeanReturn",
+   "description": "Table D with short selling V Mean Return",
+   "value": "0.016176",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_V_SD",
+   "description": "Table D with short selling V SD boxed best",
+   "value": "0.045302",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_WS_V_ER",
+   "description": "Table D with short selling V ER",
+   "value": "0.031771",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_V_TSV",
+   "description": "Table D with short selling V TSV",
+   "value": "0.002256",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_V_Sharpe",
+   "description": "Table D with short selling V Sharpe",
+   "value": "0.357065",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_V_Sortino",
+   "description": "Table D with short selling V Sortino",
+   "value": "0.340532",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_V_Omega",
+   "description": "Table D with short selling V Omega",
+   "value": "0.250130",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_MeanReturn",
+   "description": "Table D with short selling EWP Mean Return",
+   "value": "0.020299",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_SD",
+   "description": "Table D with short selling EWP SD",
+   "value": "0.050758",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_ER",
+   "description": "Table D with short selling EWP ER",
+   "value": "0.031082",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_TSV",
+   "description": "Table D with short selling EWP TSV",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_Sharpe",
+   "description": "Table D with short selling EWP Sharpe",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_Sortino",
+   "description": "Table D with short selling EWP Sortino",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_WS_EWP_Omega",
+   "description": "Table D with short selling EWP Omega",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MER_MeanReturn",
+   "description": "Table D without short selling M-ER Mean Return boxed best",
+   "value": "0.023280",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D Without short selling boxed"
+  },
+  {
+   "name": "TD_NSS_MER_SD",
+   "description": "Table D without short selling M-ER SD",
+   "value": "0.052341",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MER_ER",
+   "description": "Table D without short selling M-ER ER",
+   "value": "0.030257",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MER_TSV",
+   "description": "Table D without short selling M-ER TSV",
+   "value": "0.002261",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MER_Sharpe",
+   "description": "Table D without short selling M-ER Sharpe boxed best",
+   "value": "0.444768",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_NSS_MER_Sortino",
+   "description": "Table D without short selling M-ER Sortino boxed best",
+   "value": "0.489637",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_NSS_MER_Omega",
+   "description": "Table D without short selling M-ER Omega boxed best",
+   "value": "0.447392",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_NSS_ER_MeanReturn",
+   "description": "Table D without short selling ER Mean Return",
+   "value": "0.022586",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_ER_SD",
+   "description": "Table D without short selling ER SD",
+   "value": "0.051537",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_ER_ER",
+   "description": "Table D without short selling ER ER boxed best",
+   "value": "0.030261",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_NSS_ER_TSV",
+   "description": "Table D without short selling ER TSV",
+   "value": "0.002262",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_ER_Sharpe",
+   "description": "Table D without short selling ER Sharpe",
+   "value": "0.438237",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_ER_Sortino",
+   "description": "Table D without short selling ER Sortino",
+   "value": "0.474836",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_ER_Omega",
+   "description": "Table D without short selling ER Omega",
+   "value": "0.424523",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_MeanReturn",
+   "description": "Table D without short selling M-TSV Mean Return",
+   "value": "0.021762",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_SD",
+   "description": "Table D without short selling M-TSV SD",
+   "value": "0.050701",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_ER",
+   "description": "Table D without short selling M-TSV ER",
+   "value": "0.030357",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_TSV",
+   "description": "Table D without short selling M-TSV TSV",
+   "value": "0.002277",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_Sharpe",
+   "description": "Table D without short selling M-TSV Sharpe",
+   "value": "0.429233",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_Sortino",
+   "description": "Table D without short selling M-TSV Sortino",
+   "value": "0.456087",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MTSV_Omega",
+   "description": "Table D without short selling M-TSV Omega",
+   "value": "0.399229",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_MeanReturn",
+   "description": "Table D without short selling TSV Mean Return",
+   "value": "0.020297",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_SD",
+   "description": "Table D without short selling TSV SD",
+   "value": "0.049517",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_ER",
+   "description": "Table D without short selling TSV ER",
+   "value": "0.030621",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_TSV",
+   "description": "Table D without short selling TSV TSV",
+   "value": "0.002316",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_Sharpe",
+   "description": "Table D without short selling TSV Sharpe",
+   "value": "0.409908",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_Sortino",
+   "description": "Table D without short selling TSV Sortino",
+   "value": "0.421810",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_TSV_Omega",
+   "description": "Table D without short selling TSV Omega",
+   "value": "0.356556",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MV_MeanReturn",
+   "description": "Table D without short selling M-V Mean Return",
+   "value": "0.018905",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MV_SD",
+   "description": "Table D without short selling M-V SD",
+   "value": "0.047072",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MV_ER",
+   "description": "Table D without short selling M-V ER",
+   "value": "0.031067",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MV_TSV",
+   "description": "Table D without short selling M-V TSV boxed best",
+   "value": "0.002202",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_NSS_MV_Sharpe",
+   "description": "Table D without short selling M-V Sharpe",
+   "value": "0.401610",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MV_Sortino",
+   "description": "Table D without short selling M-V Sortino",
+   "value": "0.402831",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_MV_Omega",
+   "description": "Table D without short selling M-V Omega",
+   "value": "0.320983",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_V_MeanReturn",
+   "description": "Table D without short selling V Mean Return",
+   "value": "0.016281",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_V_SD",
+   "description": "Table D without short selling V SD boxed best",
+   "value": "0.045175",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D boxed"
+  },
+  {
+   "name": "TD_NSS_V_ER",
+   "description": "Table D without short selling V ER",
+   "value": "0.031731",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_V_TSV",
+   "description": "Table D without short selling V TSV",
+   "value": "0.002243",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_V_Sharpe",
+   "description": "Table D without short selling V Sharpe",
+   "value": "0.360401",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_V_Sortino",
+   "description": "Table D without short selling V Sortino",
+   "value": "0.343776",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_V_Omega",
+   "description": "Table D without short selling V Omega",
+   "value": "0.252501",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_MeanReturn",
+   "description": "Table D without short selling EWP Mean Return",
+   "value": "0.020299",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_SD",
+   "description": "Table D without short selling EWP SD",
+   "value": "0.050758",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_ER",
+   "description": "Table D without short selling EWP ER",
+   "value": "0.031082",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_TSV",
+   "description": "Table D without short selling EWP TSV",
+   "value": "0.002379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_Sharpe",
+   "description": "Table D without short selling EWP Sharpe",
+   "value": "0.399910",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_Sortino",
+   "description": "Table D without short selling EWP Sortino",
+   "value": "0.416174",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  },
+  {
+   "name": "TD_NSS_EWP_Omega",
+   "description": "Table D without short selling EWP Omega",
+   "value": "0.366154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table D"
+  }
+ ],
+ "headline": "TM_NSS_MTSV_MeanReturn",
+ "partitions": [
+  {
+   "split": "sector (5 stocks each)",
+   "total": "count_TotalStocks_25",
+   "parts": [
+    "count_Technology_5",
+    "count_Healthcare_5",
+    "count_FinServices_5",
+    "count_ConsCyclical_5",
+    "count_ConsDefensive_5"
+   ]
+  }
+ ],
+ "tests": []
+}

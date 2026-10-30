@@ -1,0 +1,229 @@
+exit 0 in 36.7s
+--- stdout
+=== Fetching WDI GDP PPP ===
+WLD points 9, EMU points 9
+2015 EMU 14276208684498/WLD 113715271458909=12.55%
+2016 EMU 15181767227819/WLD 118461866191190=12.82%
+2017 EMU 15947691873302/WLD 125087012845143=12.75%
+2018 EMU 16670522587682/WLD 133096998124336=12.53%
+2019 EMU 17935269768491/WLD 141017482210543=12.72%
+2020 EMU 17422303475125/WLD 140664155453357=12.39%
+2021 EMU 19023154432976/WLD 157329556653633=12.09%
+2022 EMU 21520885663010/WLD 175795348354125=12.24%
+2023 EMU 22737286185021/WLD 188524797806804=12.06%
+
+=== WDI Trade/GDP ===
+EMU 25 (1999, 62.9792249214165) (2023, 92.1561685782896)
+USA 25 (1999, 23.3135697296238) (2023, 24.9292981752847)
+CAN 25 (1999, 80.1147908564172) (2023, 66.5745425015033)
+
+=== Oil shares ===
+fuel [(2021, 23.8688657837555), (2022, 30.1749905885513), (2023, 25.1997448504993)], oilr [(2019, 1.6199500962193), (2020, 0.8889084820818), (2021, 2.82978528865474)]
+
+=== Canada IP and oil correlation ===
+CANPROINDMISMEI 758 1961-01-01 00:00:00 2024-02-01 00:00:00 last 107.7
+WTI-Brent corr 2000-23 0.9802 n=5362
+EBP csv status 200 len 44606
+EBP lines 646 date,gz_spread,ebp,est_prob 1973-01-01,1.1307714053429057,-0.04758657214441975,0.1834563942368741
+market_data XIU.TO rows 6027 2000-01-04 00:00:00 2023-12-29 00:00:00
+
+Wrote results.json with 27 results, sample 1961-01-01 to 2024-02-01 n=758
+{
+  "results": [
+    {
+      "name": "stylized_world_gdp_share_EA",
+      "value": 12.06,
+      "se": null,
+      "n": 9
+    },
+    {
+      "name": "stylized_trade_gdp_EA_exceeded",
+      "value": 79.0,
+      "se": 1.82,
+      "n": 25
+    },
+    {
+      "name": "stylized_trade_gdp_US",
+      "value": 27.5,
+      "se": 0.59,
+      "n": 14
+    },
+    {
+      "name": "stylized_trade_gdp_CAN",
+      "value": 64.2,
+      "se": 0.59,
+      "n": 14
+    },
+    {
+      "name": "stylized_oil_export_share_CAN",
+      "value": 22.6,
+      "se": 1.22,
+      "n": 9
+    },
+    {
+      "name": "stylized_oil_gdp_share_CAN",
+      "value": 1.2,
+      "se": 0.32,
+      "n": 7
+    },
+    {
+      "name": "param_n_canadian_vars_benchmark",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_foreign_vars_benchmark",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_var_lags_benchmark",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_AIC",
+      "value": 4,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_BIC",
+      "value": 2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_mean_first_lag",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_tightness_lambda1",
+      "value": 0.1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_prior_lag_decay_lambda3",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lp_lags",
+      "value": 3,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_credible_level_VAR",
+      "value": 90,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_confidence_level_LP",
+      "value": 90,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_export_categories",
+      "value": 7,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_gdp_components",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_n_rotations",
+      "value": 999,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_covid_dummy",
+      "value": "March 2020\u2013June 2021",
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_truncated_end",
+      "value": "February 2020",
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_shock_norm",
+      "value": "one-standard-deviation",
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_1_3yr",
+      "value": "1\u20133",
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_3_5yr",
+      "value": "3\u20135",
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bond_yield_10plus",
+      "value": "10+",
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_mortgage_1yr",
+      "value": "1-year",
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Canadian small open economy public proxy: 5 Canadian vars proxied via FRED CANPROINDMISMEI (IP monthly), CPALTT01CAM659N (CPI YoY), FRED DEXCAUS/DEXUSEU cross for CAD/EUR (IMF-IFS), IRSTCI01CAM156N/IR3TIB01CAM156N (short rates), TSX equity via market_data (XIU.TO/GSPTSE proxy); US vars INDPRO, PCEPI, FEDFUNDS, EBP (Fed CSV 1973-2023) vs paper St.Louis FRED + Fed; Euro Area vars ECBDFR, IRSTCI01EZM156N, CPHPTT01EZM659N (HICP), BAMLHE00EHYIOAS (FRED daily since 2023-10-30) vs Eurostat sts_inpr_m; augmented oil/trade via WDI fuel exports & oil rents (2000-2023), FRED WTI/Brent daily (1986-/1987-). Largest public series n=758 monthly, covering 1961-01-01 to 2024-02-01; WDI trade/GDP 1999-2023 (n=25y), WDI PPP 2015-23 (n=9y).",
+    "n": 758,
+    "start": "1961-01-01",
+    "end": "2024-02-01",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Public proxies differ in vintage/source: LCDM monthly GDP index -> CANPROINDMISMEI IP; IMF-IFS CAD/EUR -> FRED cross (DEXCAUS/DEXUSEU); Jarocinski median rotation intraday surprises (999 admissible rotations via sign restriction rates up/equities down, window not stated) -> not replicated; BVAR Normal-Wishart BEAR prior (first lag 0.8, \u03bb1 0.1, \u03bb3 1, 3 lags, AIC 4 BIC 2) vs OLS LP with HC0; COVID dummy Mar2020-Jun2021 and linear trend included per paper; period unspecified, proxy 1961-2024 vs paper full sample ending after Jun2021.",
+    "cannot_count": "Paper does not report N months/observations/announcement counts (period_start/period_end 'not stated', sample sizes 'not stated'); public-data proxy coverage cannot be compared numerically.",
+    "not_rebuilt": {
+      "estimate_ecb_gdp_below_trend": "BVAR median IRF persistence 'GDP remains below trend for over a year' requires Large Canadian Database monthly GDP index + Jarocinski 2022 median rotation shock series (range of admissible rotations via sign restriction rates up/equities down, 999 angles); LCDM not public, Jarocinski shocks host marekjarocinski.com blocked (DNS fail) and no intraday rate-equity surprise window stated, so public FRED monthly residual cannot replicate Bayesian posterior 90% credible duration.",
+      "estimate_ecb_equity_insig_after": "BVAR equity response 'insig after four months' needs LCDM equity price index + same shock identification; public TSX proxy (XIU.TO) different vintage and needs 90% posterior, not time-clustered SE.",
+      "estimate_fed_rate_hike_persistence": "Bank of Canada policy rate 'up to 18 months' persistence from BVAR with same proprietary inputs and Normal-Wishart prior; public IRSTCI01CAM156N insufficient to replicate exact persistence.",
+      "estimate_fed_gdp_onset": "GDP contraction onset 'after six months' from BVAR IRF, same proprietary constraints.",
+      "estimate_fed_gdp_persistence": "GDP decline 'up to two years' persistence, same constraints.",
+      "estimate_lp_ecb_equity_sig_delay": "LP equity 'significant only after six months' require
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:585: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:587: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  dividends.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:604: Pandas4Warning: The inplace keyword in DataFrame.set_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.set_index("date", inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:606: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  splits.sort_index(inplace=True)

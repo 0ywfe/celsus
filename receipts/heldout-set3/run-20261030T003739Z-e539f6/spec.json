@@ -1,0 +1,1158 @@
+{
+ "title": "The Efficient Frontier from a LASSO Solver - A numerical check of the CLA--LASSO identity 26 Sep2026 Thomas Schmelzer",
+ "hypothesis": "Schmelzer and Hastie prove Markowitz CLA and LASSO path trace same curve after change of variables Eq square 1/2 w'Sigma w - mu'w =1/2||y-Xw||^2 -1/2||y||^2 with X=L' Sigma=LL' y=L^{-1}mu X'X=Sigma X'y=mu any square root works centred returns or tall factor stack same path to rounding; companion note checks numerically with stock LASSO solver lars_path sklearn no portfolio software covers long-short gross-exposure cap where plain LASSO path is frontier Thm1 perspective fixed leverage rescaled same path classical long-only fully invested nonnegative LASSO shifted once covers whole frontier one call Prop3; alternative grid QP only accurate as tolerance misses corners between grid path returns corners themselves linear interpolation; every corner meets optimality ~1e-13 agrees with independent QP solvers Clarabel interior cvxpy and quadprog active-set GoldfarbIdnani and OSQP warm vs cold on factor models upto500 assets FF size/BM 99 over2514 days and 494 S&P500 over1213 days plain long-only stops maxSharpe tilt0.1414 one shift response y-nu0d nu0=nu_last-max(|nu_last|,||mu||inf) delta1 lets single call reach minvar limit nu->-inf w_S prop Sigma_SS^{-1}1; along segment weights linear in tilt lambda or cap c variance quadratic frontier arc slope dE/dV=1/(2lambda) continuous no kinks when traced by tilt kinks when traced by cap between corners weights linear; wrong when Sigma singular or >1 linear constraint LASSO has exactly one ||beta||1<=t cap or budget signs free/nonnegative dollar-neutral 1'beta=0 130/30 needs both risk budget quadratic scalar; numbers evidence Thm1 Prop3 not proof proofs there; FamaFrench committed reruns every build stock checks pass snapshots differ corners nu_last checks not independent author perspective baseline solvers are script tolerances published practitioner needs shift nu0 computed in advance max_iter well above n; software github Jebel-Quant/lasso preprints/lasso MIT make_figures.py regenerates every figure number uv run python/make_figures.py test runs checks locked Python3.12 hashes R long_short.R lars_path cross-check lock fixes software not hardware residuals near1e-13 differ last digits BLAS timings scale tests tolerances1e-12 to1e-9 timings unchecked",
+ "data_sources": [
+  "Synthetic 20-asset five-factor simulated inside python/make_figures.py fixed seeds FIG1 perspective no external file reproduce Cholesky or Gram path factor models n20,50,100,500 Table1 same seeds",
+  "data/french100_daily.csv committed cut Kenneth French Data Library 100 size/BM daily Jan2016-Dec2025 CRSP vintage Aug2026 SHA256 98298ef6...3c43 one portfolio missing250 days dropped leaves99 over2514 days centred returns X last corner -0.0118 12 corners rebuild python/fetch_french.py",
+  "Yahoo Finance adjusted closing via python/fetch_sp500.py S&P500 constituents Wikipedia 2021-06-01 to2026-06-01 <=5% missing retain 494 stocks 1213 days July2021-May2026 snapshot SHA256 b5faa522...9937e not redistributed last corner -0.178 94 corners re-download constituents change prices revised checks pass"
+ ],
+ "sample": "Synthetic seeded 20-asset five-factor covariance Sigma=diag(d)+U diag(delta)U' mu sample mean of 50 simulated days illustrative Sharpe upto 2.1 arbitrary units Cholesky X=L' Sigma=LL' y=L^{-1}mu X'X=Sigma X'y=mu alternative square roots centred returns X=(R-1 bar r')/sqrt(T-1) when T>n tall stacking diag(d)^{1/2} over diag(delta)^{1/2}U' (n+k)xn same path to rounding via lars_path or lars_path_gram Xy=mu Gram=Sigma n_samples=len(mu) method=lasso and R lars package normalize=FALSE intercept=FALSE B=t(coef(fit)) columns start corners end; Long-short under gross-exposure cap min1/2 w'Sigma w - mu'w s.t. ||w||1<=c is LASSO constrained penalised min1/2||y-Xbeta||2^2+kappa||beta||1 kappa multiplier c=||beta(kappa)||1 Theorem1 perspective path 21 columns empty start 19 corners each adding one asset end Kelly w*=Sigma^{-1}mu ||w*||1=7.765 maximises mu'w-1/2 w'Sigma w approx log growth Sharpe 0.539 first to 2.120 last; Fixed leverage c=2 varying risk appetite tilt lambda>0 w=lambda v gives same cap c/lambda scaled w=(c/t)beta t=||beta||1 optimal at lambda=c/t tilts 745.6 to0.2576 below slack lambdaSigma^{-1}mu shrinks zero; Long-only fully invested w>=0 1'w=1 w=lambda v becomes min1/2||Xv-y||2^2 s.t. 1'v=t v>=0 t=1/lambda w=v/t Prop3 budget ||v||1 nonnegative LASSO penalty nu multiplier budget lars_path positive=True each column/sum corner at tilt1/1'v plain covers nu>=0 nu=max mu_j down to nu=0 stops maxSharpe v0/1'v0 tilt0.1414 plain gives 17 corners to0.1415 figure weights-lo blue plain red shaded multiplier nu=(mu-Sigma v)_j on support dashed nu=0 lambda0.1414 frontier continues nu negative constraint vs penalty; Shift eq_shift 1/2||Xv-y||2^2+nu1'v=1/2||Xv-(y-nu d)||2^2+const X'd=1 d=(X')^{-1}1 tall min-norm lars_path reports nu'/n_rows stops500 default needs max_iter10*len(mu) run on y-nu0d penalty nu'>=0 acts nu=nu0+nu' covers nu>=nu0 beyond holds minvar support S argmin_{u>=0}||Xu-d||2 v_S=a-nu b a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 bounds a_i/b_i and (mu_j-Sigma_jS a)/(1-Sigma_jS b) for Sigma_jS b>1 smallest bound nu_last code S=nnls(X,d)[0]>1e-9 a b h=1-Sigma_{~S,S}b g=mu_{~S}-Sigma_{~S,S}a nu_last=min(a[b>0]/b[b>0], g[h<0]/h[h<0]) nu0=nu_last-max(|nu_last|,||mu||inf) no fixed safe -4.95 test -11.9 one Table -0.178 stock -0.0118 portfolio where mu small margin delta nu0=nu_last-delta max(|nu_last|,||mu||inf) stock delta1e-4 loses last corner 1e-2 to1 all94 KKT<4e-13 at100 residual2e-11 portfolio1e-2 loses 1 finds12 code delta1 limit nu->-inf minvar w_S prop Sigma_SS^{-1}1 What nu means point multiplier nu solves mu->mu-nu1 maxSharpe at rate r=nu Black zero-beta LASSO rate is path parameter nu0<r<max mu_j interpolation bracketing k=np.argmax(nu<r) s=(nu[k-1]-r)/(nu[k-1]-nu[k]) w_r=V[:,k-1]+s*(V[:,k]-V[:,k-1]) w_r/=sum maxSharpe at r; Algorithm1 Build Xy X'X=Sigma X'y=mu or lars_path_gram Xy=mu-nu0 SolveX'd=1 compute nu_last set nu0 Run positive LASSO on y-nu0d max_iter well above n recover nu=nu0+n_rows alpha Drop first/last columns each remaining v/1'v corner at tilt1/1'v Take minvar end w_S prop Sigma_SS^{-1}1 any point interpolation 1/lambda or nu; Weights vs frontier Between corners weights linear in lambda or cap c variance quadratic each piece frontier arc slope dE/dV=1/(2 lambda) no kinks when traced by tilt corners only in weights Fig weights-lo long-short traced by cap kinks Fig frontier a; Numerical evidence Two kinds no second solver each portfolio KKT cap multiplier kappa (mu-Sigma w)_j=kappa sign(w_j) on |...|<=kappa off long-only tilt lambda (Sigma w-lambda mu)_j=gamma on >=gamma off 1'w=1 w>=0 KKT residual worst violation /||mu||inf or gradient size second baseline independent path long-short Clarabel interior-point via cvxpy long-only quadprog GoldfarbIdnani; Long-short every column KKT below2.6e-15 rescaled2.9e-15 Clarabel matches at cap 3.0e-7 corners 1.4e-11 inside fixed leverage6.2e-6 1.9e-11 gap baseline interior least accurate holdings change; Long-only shifted19 test 17plain two more0.11580.0128 matches QP6.0e-13 inside7.9e-14 minvar1.0e-16 maxSharpe r0 3.4e-15 KKT below3.6e-14 Table repeats other sizes seeds n=500 gap6.7e-11 is QP's number corners not equal assets leave re-enter; Table Algorithm1 five-factor models 3 seeds each worst KKT over corners+minvar largest L_inf vs QP at same tilt median time one run nu_last included laptop n20 seeds3 corners19 nu_last-0.57 to0.12 KKT1.1e-14 worst8.6e-14 minvar2.4e-16 0.8ms n50 seeds3 corners49 nu_last-11.9 to-0.74 KKT1.0e-13 worst1.5e-13 minvar1.7e-16 2.5ms n100 seeds3 corners99-103 nu_last-0.56 to-0.38 KKT2.5e-14 worst1.1e-11 minvar3.3e-16 7.7ms n500 seeds3 corners503 nu_last-0.45 to-0.26 KKT2.1e-13 worst6.7e-11 minvar4.3e-16 239ms simulated fixed seeds need no data; Real reproducible daily value-weighted returns100 FF size/BM Jan2016-Dec2025 published one misses250 days dropped leaves99 over2514 days centred returns X last corner-0.0118 eleven times max|mu| below zero all12 corners match QP2.1e-13 KKT below3.9e-14 minvar holds7 matches1.6e-15 diversified correlated frontier turns only12 grid cheap test scale; Real at scale daily returns494 S&P500 stocks over1213 days July2021-May2026 Yahoo Finance script fetches constituents Wikipedia adjusted closing2021-06-01 to2026-06-01 keeping <=5% missing last corner-0.178 fifty times max|mu| all94 corners 0.14 sec while one QP0.12 sec 100-point grid about12 sec still misses corners warm OSQP setup once factorisation reused each tilt changing only linear term starting from last 4.9 sec grid tolerance1e-6 agrees cold4.1e-13 every grid point at1e-5 3.4 sec misses1e-3 Every corner KKT below3.7e-13 matches QP5.4e-13 minvar holds53 matches1.2e-15 timings laptop; When to use path beats grid cold/warm speed accuracy LARS R sklearn positive LASSO only sklearn corner portfolios need no portfolio software knots same turning points wrong when Sigma singular identity not known survive or >1 linear constraint LASSO has exactly one besides signs ||beta||1<=t cap or positive budget 1'w=1 signs free/nonnegative dollar-neutral 1'beta=0 130/30 needs budget+gross cap general path algorithms exist but not sklearn risk budget w'Sigma w<=sigma2 quadratic scalar; Numbers evidence Thm1 Prop3 perspective not proof proofs there Thm1 LASSO path is frontier cap every column KKT and Clarabel there Prop3 nonnegative LASSO is long-only frontier every corner+between matches active-set QP same tilt both piecewise linear path finds corners exactly where grid misses FamaFrench committed code reruns every build stock checks pass note snapshot later download differ corners nu_last checks written by author perspective not independent usual baseline solvers are script tolerances published practitioner shift nu0 computed in advance max_iter large; Code data availability github Jebel-Quant/lasso preprints/lasso MIT python/make_figures.py regenerates every figure/number uv run python/make_figures.py test runs checks single script pinned dependencies lock Python3.12 exact version/hash R/long_short.R lars_path cross-check; Lock fixes software not hardware residuals near1e-13 different last digits other CPU/BLAS timings scale machine rerun not match digit tests check residuals gaps against tolerances1e-12 to1e-9 leave timings unchecked; Test problem factor models Table simulated fixed seeds need no data portfolio returns data/french100_daily.csv cut Kenneth French Data Library CRSP vintageAug2026 SHA25698298ef6...3c43 python/fetch_french.py rebuilds library rebuilds history monthly CRSP revises later download differ data remain French notMIT stock returns Yahoo Finance not redistributed python/fetch_sp500.py downloads constituents Wikipedia adjusted closing2021-06-01 to2026-06-01 keeping <=5% missing snapshotSHA256b5faa522...9937e later download differs constituents change Yahoo revises prices checks pass; Acknowledgements Trevor Hastie;",
+ "period_start": "January 2016",
+ "period_end": "May 2026",
+ "method": [
+  "Build synthetic five-factor Sigma=diag(d)+U diag(delta)U' and mu as sample mean of T=50 simulated days n=20 fixed seed; Cholesky Sigma=LL' set X=L' upper True y from lstsq X' mu so X'X=Sigma X'y=mu w=lstsq X y solves Sigma w=mu; alternatives when T>n centred returns X=(R-1 bar r')/sqrt(T-1) and tall stacking diag(d)^{1/2} over diag(delta)^{1/2}U' (n+k)xn give same path to rounding",
+  "Long-short frontier cap c: problem min 1/2 w'Sigma w - mu'w s.t. ||w||1<=c equals LASSO min1/2||y-Xbeta||^2+kappa||beta||1 kappa multiplier c=||beta(kappa)||1 Theorem1; compute one path via sklearn lars_path X y method=lasso or lars_path_gram Xy=mu Gram=Sigma n_samples=len(mu) or R lars X<-chol(Sigma) y<-backsolve X mu fit<-lars X y type=lasso normalize=FALSE intercept=FALSE B=t(coef(fit)); path 21 columns on test empty+19 corners+Kelly end where kappa>=max|mu| to kappa=0 w*=Sigma^{-1}mu ||w*||1=7.765; gross exposure cap c and kappa are LASSO t and penalty; cap traced gives kinked frontier Fig frontier a slope dE/dV=1/(2 lambda) not applicable",
+  "Fixed leverage c=2 varying risk appetite lambda: substitute w=lambda v in min1/2 w'Sigma w - lambda mu'w s.t. ||w||1<=c gives cap c/lambda; same path serves column beta t=||beta||1 scaled w=(c/t)beta optimal at tilt lambda=c/t t=np.abs(B[:,1:]).sum(0) W,tilts=B[:,1:]*(c/t),c/t covers tilts 745.6 to0.2576 slack beyond lambdaSigma^{-1}mu shrinks to zero; variance quadratic in lambda frontier arc no kinks when traced by tilt",
+  "Long-only fully invested w>=0 1'w=1: set w=lambda v t=1/lambda problem min1/2||Xv-y||2^2 s.t. 1'v=t v>=0 Prop3 budget ||v||1 nonnegative LASSO penalty nu multiplier budget; compute via lars_path positive=True each column v/1'v corner at tilt1/1'v; plain call on (X,y) runs nu=max mu to0 stops maxSharpe v0=argmin_{v>=0}1/2 v'Sigma v - mu'v at tilt0.1414 last corner0.1415 gives 17 corners; budget multiplier nu=(mu-Sigma v)_j on support Fig multiplier",
+  "Shift to capture nu<0: complete square 1/2||Xv-y||2^2+nu1'v=1/2||Xv-(y-nu d)||2^2+const X'd=1 solve d=lstsq X' 1 for Cholesky d=(X')^{-1}1 tall min-norm; choose nu0<nu_last below last corner known in advance beyond minvar support S support of argmin_{u>=0}||Xu-d||2 v_S=a-nu b a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 bounds a_i/b_i b_i>0 and (mu_j-Sigma_{jS}a)/(1-Sigma_{jS}b) Sigma_{jS}b>1 smallest bound nu_last code S=nnls X d >1e-9 a solve Sigma_{SS} mu_S b solve Sigma_{SS} 1 h=1-Sigma_{~S,S}b g=mu_{~S}-Sigma_{~S,S}a nu_last=min(a[b>0]/b[b>0], g[h<0]/h[h<0]) nu0=nu_last-max(|nu_last|,||mu||inf) margin delta factor nu0=nu_last-delta max(|nu_last|,||mu||inf) test delta 1e-4 loses 1e-2 to1 finds94 KKT<4e-13 at100 residual2e-11 FF1e-2 loses 1 finds12 chosen delta1; large problems need max_iter=10*len(mu) > default500 lars_path on y-nu0 d reports alphas nu=nu0+len(y)*alphas corners V[:,1:-1] W,tilts=corners/corners.sum0 1/corners.sum0; gives 19 corners on test extra tilts0.1158 0.0128; minvar limit nu->-inf w_S prop Sigma_SS^{-1}1; rate r interpretation maxSharpe at r=nu Black zero-beta interpolation bracketing columns s=(nu[k-1]-r)/(nu[k-1]-nu[k]) w_r=V[:,k-1]+s(V[:,k]-V[:,k-1]) /sum; Algorithm1 steps as box",
+  "Validation: KKT per column cap (mu-Sigma w)_j=kappa sign on support |...|<=kappa off and long-only (Sigma w - lambda mu)_j=gamma on support >=gamma off with 1'w=1 w>=0 residual worst violation /||mu||inf or gradient size approx1e-13; independent baselines long-short Clarabel via cvxpy interior-point at each column cap long-only quadprog Goldfarb-Idnani active-set at same tilt; warm-start OSQP setup once factorisation reused each tilt linear term changed start from last tolerance1e-6 4.9sec agrees cold4.1e-13 1e-5 3.4sec misses1e-3; Table1 factor models n20,50,100,500 each seeds3 nu_last ranges worst KKT worst corner minvar gaps median times0.8 2.5 7.7 239ms; FF 100->99 portfolios Jan2016-Dec2025 2514 days centre X last corner-0.011811x max|mu| 12 corners 3.9e-14 2.1e-13 minvar7 1.6e-15; S&P500 494 stocks 1213 days July2021-May2026 Yahoo fetch 2021-06-01 to2026-06-01 <=5% missing centre X last corner-0.178 50x max|mu| 94 corners 0.14sec vs0.12sec 12sec grid 3.7e-13 5.4e-13 minvar53 1.2e-15; tolerances1e-12 to1e-9 timings unchecked hardware varies; scripts make_figures.py regenerates all numbers lock python3.12 hashes R cross-check French csv 98298ef6...3c43 stock snapshot b5faa522...9937e"
+ ],
+ "claims": [
+  {
+   "name": "synthetic_test_n_assets",
+   "description": "Synthetic test problem n=20 assets seeded Fig1 perspective five-factor covariance diag(d)+U diag(delta)U' mu sample mean of T=50 simulated days; used for all three frontier types; abstract/evidence tests on factor models upto 500 assets plus FF 100->99 portfolios and 494 S&P500 stocks",
+   "value": "20",
+   "unit": "assets",
+   "kind": "count",
+   "where": "Sec 3 seeded 20-asset example Fig1 in perspective; five-factor covariance diag(d)+U diag(delta) U' and mu sample mean of 50 days; used for Figs 1-3, Secs 5-6-7 test problem, Python make_figures.py regenerates every figure and number; used in Lars_path columns start/corners/end and leverage rescale and long-only shift demonstrations; on factor models upto 500 assets, Fama-French size/BM portfolios, daily returns of 494 S&P500 stocks - every corner meets optimality to about 1e-13 and agrees with independent QP solvers - called naively long-only path stops at maximum-Sharpe, one shift of response by amount computed in advance lets single call reach minimum-variance portfolio - script, checks, Fama-French returns and R cross-check published with locked environment; Cholesky factor Sigma=LL', X=L', y=L^{-1} mu so X'X=Sigma X'y=mu, also sample covariance from Tx n return matrix R with T>n centred returns X=(R-1 bar r')/sqrt(T-1) and tall X via factor model stacking diag(d)^{1/2} over diag(delta)^{1/2}U' (n+k)x n no factorisation; X code: X=np.linalg.cholesky(Sigma,upper=True) # X.T@X==Sigma; y=np.linalg.lstsq(X.T,mu)[0] # X.T@y==mu; w=np.linalg.lstsq(X,y)[0] # unconstrained Sigma^{-1}mu; lars_path lines: _,_,B=lars_path(X,y,method=lasso); _,_,B=lars_path_gram(Xy=mu,Gram=Sigma,n_samples=len(mu),method=lasso); R library(lars) X<-chol(Sigma) y<-backsolve(X,mu,transpose=TRUE) fit<-lars(X,y,type=lasso,normalize=FALSE,intercept=FALSE) B<-t(coef(fit)) columns start corners end - no positivity constraint so long-only needs sklearn; Sec5 Long-short under gross-exposure cap; Sec6 Fixed leverage varying risk appetite; Sec7 Long only fully invested Algorithm 1; Table 1 Algorithm1 on five-factor models 3 seeds each worst KKT residual over corners and minvar end largest L_inf weight discrepancy against independent active-set QP at same tilt median time of one run including nu_last on laptop; Real returns reproducible daily value-weighted returns 100 portfolios Fama-French size/BM Jan2016-Dec2025 published with code one portfolio misses 250 days dropped leaves 99 portfolios over 2514 days with centred returns as X last corner at nu_last=-0.0118 eleven times max|mu| below zero all 12 corners match QP 2.1e-13 KKT residuals below 3.9e-14 minvar holds 7 matches 1.6e-15; Real returns at scale daily returns 494 S&P500 stocks over 1213 days July2021-May2026 from Yahoo Finance script fetches constituents listed on Wikipedia adjusted closing prices 2021-06-01 to 2026-06-01 keeping names with no more than 5% days missing last corner -0.178 about fifty times max|mu| below zero all 94 corners in 0.14 sec while one QP 0.12 sec so 100-point grid costs about 12 sec still misses corners - OSQP setup once factorisation reused each tilt changing only linear term each solve starting from last takes 4.9 sec for same grid at tolerance 1e-6 agrees with cold QP to 4.1e-13 at every grid point at 1e-5 takes 3.4 sec but misses some points by 1e-3; When to use beats grid cold/warm started, LARS in R and sklearn positive LASSO only in sklearn corner portfolios need no portfolio software, wrong when Sigma singular where identity not known to survive or more than one linear constraint LASSO solved has exactly one besides signs ||beta||1<=t gross-exposure cap Sec5-6 or with positive=True budget 1'w=1 Sec7 signs all free or all nonnegative dollar-neutral 1'beta=0 130/30 needs budget and gross cap at once path algorithms for LASSO with general linear constraints exist but not sklearn risk budget w'Sigma w<=sigma2 no path of its own but along each segment variance quadratic in parameter so portfolio at given sigma from one scalar equation; Numbers evidence Theorem1 and Prop3 of perspective not proof proofs there - Theorem1 LASSO path is frontier under gross-exposure cap every column meets optimality of its cap and matches Clarabel there Prop3 nonnegative LASSO is long-only frontier every corner and point between corners matches active-set QP at same tilt both make frontier piecewise linear so path finds corners exactly where grid misses them - Fama-French returns committed with code reruns every build checks pass on note snapshot and later download although two differ in corners and nu_last checks written by author of perspective not independent usual sense baseline solvers are script tolerances published; Code data availability https://github.com/Jebel-Quant/lasso preprints/lasso MIT license python/make_figures.py regenerates every figure and number uv run python/make_figures.py test runs checks single Python script declares pinned dependencies lock fixes Python3.12 every package exact version/hash R snippet Sec5 R/long_short.R with check against lars_path; Lock fixes software not hardware residuals gaps near 1e-13 different last digits on another CPU/BLAS timings scale machine rerun not match digit for digit tests check residuals gaps against tolerances between 1e-12 and 1e-9 leave timings unchecked; Test problem factor models Table1 simulated inside script fixed seeds need no data portfolio returns Sec_evidence in data/french100_daily.csv cut from Kenneth French Data Library CRSP vintage Aug2026 SHA256 98298ef6...3c43 python/fetch_french.py rebuilds them library rebuilds history each month from CRSP later download can differ where CRSP revises return data remain Fama French not MIT; Stock returns Yahoo Finance not redistributed python/fetch_sp500.py downloads S&P500 constituents Wikipedia adjusted closing 2021-06-01 to 2026-06-01 keeping names <=5% missing snapshot SHA256 b5faa522...9937e later download differs constituents change Yahoo revises prices checks pass same - Sharpe ratio from corner to corner 0.539 at first to sqrt(mu'Sigma^{-1}mu)=2.120 at end not shown must - neither end is minimum-variance needs budget 1'w=1 that eq_mark lacks; Fixed leverage mandate fixes leverage c=2 varies risk appetite tilt lambda>0 substituting w=lambda v in min 1/2 w'Sigma w - lambda mu'w s.t. ||w||1<=c gives eq_mark with cap c/lambda same path serves column beta t=||beta||1 scaled to w=(c/t)beta optimal at tilt lambda=c/t code t=np.abs(B[:,1:]).sum(0) W,tilts=B[:,1:]*(c/t),c/t At c=2 columns cover tilts 745.6 down to 0.2576 below cap slack solution lambda Sigma^{-1} mu shrinks to zero nothing missing; Longonly classical frontier w>=0 1'w=1 substituting w=lambda v using square turns tilted problem into min_v 1/2||Xv-y||2^2 s.t. 1'v=t v>=0 t=1/lambda with w=v/t Prop3 perspective For v>=0 budget is ||v||1 so eq_nnls is nonnegative LASSO penalty nu multiplier of budget lars_path(...,positive=True) traces each column divided by sum is corner at tilt 1/1'v Stop Called on (X,y) path runs from nu=max mu_j down to nu=0 stops because LASSO solver takes no negative penalty If every mu_j<=0 returns only origin On test problem gives 17 corners down to tilt 0.1415 stopping point v0=argmin_{v>=0}1/2 v'Sigma v - mu'v is end Sec5 long-only weights Writing v=s w with 1'w=1 maximising over scale s>=0 leaves 1/2 (mu'w)^2/w'Sigma w half squared Sharpe so v0/1'v0 is long-only maximum-Sharpe at tilt 0.1414 frontier goes on budget still binds while nu turns negative constraint allows penalty does not stop from penalised form solvers use not problem; Shift completing square moves penalty into response 1/2||Xv-y||2^2+nu 1'v=1/2||Xv-(y-nu d)||2^2+const X'd=1 If nonnegative LASSO runs on y-nu0 d for some nu0<0 penalty nu'>=0 acts as nu=nu0+nu' original one path covers every nu>=nu0 For Cholesky d=(X')^{-1}1 for tall X least squares returns min-norm lars_path reports nu' divided by n_rows stops after 500 steps unless told otherwise large problem needs d=np.linalg.lstsq(X.T,np.ones(len(mu)))[0] alphas,_,V=lars_path(X,y-nu0*d,method=lasso,positive=True,max_iter=10*len(mu)) nu=nu0+len(y)*alphas corners=V[:,1:-1] drop origin/end W,tilts=corners/corners.sum(0),1/corners.sum(0) Choosing nu0 any below last corner works last corner known in advance Beyond it holds minimum-variance support S support argmin_{u>=0}||Xu-d||2 lawson1974 There v_S=a-nu b with a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 segment stays optimal while nu<a_i/b_i for b_i>0 and j not in S with Sigma_jS b>1 while nu<=(mu_j-Sigma_jS a)/(1-Sigma_jS b) smallest bound is last corner nu_last code S=nnls(X,d)[0]>1e-9 a=np.linalg.solve(Sigma[np.ix_(S,S)],mu[S]) b=np.linalg.solve(Sigma[np.ix_(S,S)],np.ones(S.sum())) h=1-Sigma[np.ix_(~S,S)]@b g=mu[~S]-Sigma[np.ix_(~S,S)]@a nu_last=min((a[b>0]/b[b>0]).min(),(g[h<0]/h[h<0]).min(initial=np.inf)) nu0=nu_last-max(abs(nu_last),np.abs(mu).max()) No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small margin delta in nu0=nu_last-delta max(|nu_last|,||mu||inf) has to be large enough end not merge with last corner small enough not cost accuracy falls roughly proportionally |nu0| On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT residuals below 4e-13 at delta=100 residual grown to 2e-11 On portfolio data even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 Minimum-variance itself limit nu->-inf on final segment w_S proportional Sigma_SS^{-1}1 What nu means by shift point with multiplier nu solves same with mu replaced mu-nu 1 so long-only max-Sharpe at riskfree rate r=nu Black zero-beta rate classical LASSO view rate is path own parameter for nu0<r<max mu_j max-Sharpe interpolation between two columns bracketing r assert nu[-1]<r<nu[0] k=np.argmax(nu<r) s=(nu[k-1]-r)/(nu[k-1]-nu[k]) w_r=V[:,k-1]+s*(V[:,k]-V[:,k-1]) w_r/=w_r.sum() max-Sharpe at r; Algorithm1 Building X,y with X'X=Sigma X'y=mu or lars_path_gram with Xy=mu-nu0 solve X'd=1 compute nu_last set nu0 above run positive LASSO on y-nu0 d with max_iter well above n recover nu=nu0+n_rows alpha drop first/last columns each remaining v/1'v is corner at tilt 1/1'v Take minvar end as w_S proportional Sigma_SS^{-1}1 any other point interpolation in 1/lambda for tilt or nu for rate; Weights versus frontier Between corners weights linear in tilt lambda (or in Sec5 cap c) variance quadratic each piece frontier is arc Traced by tilt lambda at fixed constraints Secs6-7 it has no kinks either since slope dE/dV=1/(2 lambda) varies continuously corners then show only in weights Fig weights-lo Long-short path Sec5 traced by cap instead does kink Fig frontier(a); Numerical evidence Two kinds each portfolio checked against own optimality cap multiplier kappa: (mu-Sigma w)_j=kappa sign(w_j) on support |(mu-Sigma w)_j|<=kappa off; long-only at tilt lambda: (Sigma w - lambda mu)_j=gamma on support >=gamma off with 1'w=1 w>=0 KKT residual worst violation divided by ||mu||inf or size gradient second compares baselines independent path Long-short to Clarabel interior-point via cvxpy long-only to quadprog active-set Goldfarb Idnani 1983; Long-short Every column KKT residual below 2.6e-15 below 2.9e-15 once rescaled to fixed leverage At each column cap Clarabel matches path to 3.0e-7 at corners 1.4e-11 inside segments gap at corners baseline interior-point least accurate where holdings change At fixed leverage figures 6.2e-6 and 1.9e-11; Longonly shifted path finds 19 corners test 17 of plain call and two more at tilts 0.1158 and 0.0128 They match QP to 6.0e-13 points inside segments to 7.9e-14 minvar end to 1.0e-16 maxSharpe at r=0 to 3.4e-15 corners minvar end KKT residuals below 3.6e-14 Table repeats both checks other sizes seeds Where two disagree at n=500 gap 6.7e-11 is QP's Number corners need not equal assets some assets leave re-enter; Abstract meets about 1e-13 agrees with independent QP on factor models upto 500 assets on Fama-French size/BM portfolios daily returns 494 S&P500 stocks; Parameters lambda tilt risk appetite c gross-exposure cap kappa its multiplier LASSO penalty Sec5-6 t=1'v=1/lambda budget rescaled longonly nu its multiplier LASSO penalty Sec7; Acknowledgements Thomas Schmelzer date 26 Sep2026; CLA 1956 LASSO 1996 LARS 2004 etc not numbers - Sharpe ratios reach 2.1 per period far above real - path has 21 columns empty start 19 corners each adding one asset end at kappa>=max|mu_j| and ends at kappa=0 cap stops binding at w*=Sigma^{-1}mu ||w*||1=7.765 that end maximises mu'w-1/2 w'Sigma w second-order approx expected log growth Kelly 1956 Since Sigma^{-1}mu maximises scale-free Sharpe points towards maxSharpe On test Sharpe rises corner to corner 0.539 at first to sqrt(mu'Sigma^{-1}mu)=2.120 at end not shown must; Neither end is minimum-variance needs budget; c=2 columns cover tilts 745.6 down to 0.2576 below cap slack solution lambda Sigma^{-1}mu shrinks to zero nothing missing; Plain call 17 corners down to tilt 0.1415 stopping point v0 maxSharpe tilt 0.1414; Shift code max_iter 10*len(mu) alphas nu recovery etc; Choosing nu0 margin delta loss/gain stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT residuals below 4e-13 at delta=100 residual grown to 2e-11 portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 minvar limit nu->-inf final segment w_S prop Sigma_SS^{-1}1;"
+  },
+  {
+   "name": "synthetic_test_factor_k",
+   "description": "Factor dimension k=5 in synthetic covariance and Table1 models - parameter defining Sigma structure not count; used for simulation and factor model stacking method",
+   "value": "5",
+   "unit": "factors",
+   "kind": "parameter",
+   "where": "Sec3 five-factor covariance Sigma=diag(d)+U diag(delta)U' k=5 factors; also used for Table1 factor models n=20,50,100,500 each 3 seeds; stacking diag(d)^{1/2} over diag(delta)^{1/2}U' gives (n+k)xn matrix with no factorisation proof of square root invariance X'X=Sigma X'y=mu gives same path to rounding via Cholesky or tall X or direct Gram; perspective Theorem1 and Prop3 proofs not numbers - tests are evidence; code make_figures.py regenerates every figure/number tests check each against tolerance with locked env python3.12 hashes; real-data checks rerun on build but snapshots differ in corners and nu_last; residuals near 1e-13 differ last digits other CPU/BLAS timings scale machine; tolerances between 1e-12 and 1e-9 timings unchecked; FF data CRSP vintage Aug2026 SHA256 98298ef6...3c43; stock snapshot SHA256 b5faa522...9937e; R cross-check lars package; lars_path max_iter default 500 large problems need max_iter=10*len(mu) factor 10; support detection nnls threshold 1e-9; delta margin code takes 1; minvar limit nu->-inf w_S proportional Sigma_SS^{-1}1; Sharpe ratios reach 2.1 per period far above real; Kelly portfolio w*=Sigma^{-1}mu maximises mu'w-1/2 w'Sigma w approx log growth also max Sharpe direction; plain long-only path from nu=max mu_j down to nu=0 stops maxSharpe portfolio at nu=0 tilt 0.1414 lambda=0.1415 before shift; shifted one call y-nu0 d recovers nu=nu0+n_rows*alpha drops origin/end corners=v/1'v at tilt 1/1'v and minvar end w_S prop Sigma_SS^{-1}1 any point interpolation in 1/lambda or nu for rate r; Between corners weights linear in lambda (or cap c) variance quadratic frontier arc slope dE/dV=1/(2 lambda) continuous so no kinks when traced by tilt but kinks when traced by cap Fig frontier a vs weights-lo; Singularity and >1 linear constraints not supported LASSO has exactly one besides signs ||beta||1<=t cap/gross or with positive=True budget 1'w=1 dollar-neutral 1'beta=0 130/30 needs both general path algorithms exist but not sklearn risk budget w'Sigma w<=sigma2 quadratic in parameter solved scalar; Two kinds evidence: KKT per column cap multiplier kappa conditions (mu-Sigma w)_j=kappa sign(w_j) on |...|<=kappa off long-only tilt lambda (Sigma w - lambda mu)_j=gamma on >=gamma off 1'w=1 w>=0 KKT residual worst violation /||mu||inf or gradient size second baseline Clarabel via cvxpy for long-short quadprog Goldfarb-Idnani for long-only and warm start OSQP factorisation reused each tilt changing only linear term starting from last - timings laptop 0.14 vs 0.12 vs 12 sec grid vs 4.9 sec OSQP 1e-6 vs 3.4 sec 1e-5; All corners/KKT/gaps/checks enumerated below; Date 26 Sep2026 Thomas Schmelzer; Acknowledgements Trevor Hastie;"
+  },
+  {
+   "name": "synthetic_test_T_simulated_days",
+   "description": "Sample size T=50 simulated days used to compute mu for synthetic 20-asset test problem - count of observations defining that illustration",
+   "value": "50",
+   "unit": "days",
+   "kind": "count",
+   "where": "Sec3 mu is sample mean of T=50 days of returns simulated from five-factor model on 20 assets; alternative square roots using centred returns X=(R-bar)/sqrt(T-1) when T>n reproduce Cholesky path to rounding; illustrative units arbitrary expected returns large Sharpe up to 2.1 per period vs real; Sec5-7 tests on this window; later real T are 2514 (FF) and 1213 (S&P500) and factor model seeds define n assets not T; 50 defines sampling for mu in synthetic example only; code make_figures.py seeds fixed so no external data needed for synthetic; real data reproducibility via French Data Library and Yahoo Finance fetch scripts;"
+  },
+  {
+   "name": "synthetic_test_sharpe_max",
+   "description": "Maximum Sharpe ratio scale on synthetic example far above real ~2.1 per period illustrating unrealistic calibration",
+   "value": "2.1",
+   "unit": "Sharpe per period",
+   "kind": "estimate",
+   "where": "Sec3 Its units arbitrary expected returns large against risk so Sharpe ratios reach 2.1 per period far above anything real assets offer serves to illustrate Sec5 Sharpe rises from 0.539 at first corner to sqrt(mu'Sigma^{-1}mu)=2.120 at end; Sec5-7 note naive plain call ends at maxSharpe not minvar; Sec_evidence real data Sharpe not quoted; abstract and Sec3 flag synthetic illustrative high Sharpe vs real frontier much lower; no grid needed path gives corners exactly; perspective Theorem1 Prop3 proofs separate;"
+  },
+  {
+   "name": "longshort_path_total_columns",
+   "description": "LASSO path columns count for long-short test problem including empty start and Kelly end including corners",
+   "value": "21",
+   "unit": "columns",
+   "kind": "tally",
+   "where": "Sec5 On test problem path has 21 columns: empty portfolio at start 19 corners each adding one asset and end; via lars_path(X,y,method=lasso) or lars_path_gram(Xy=mu,Gram=Sigma,n_samples=len(mu),method=lasso) and R lars package same; start at w=0 optimal while kappa>=max|mu_j| ends at kappa=0 where cap stops binding at w*=Sigma^{-1}mu; columns are start+corners+end; capped problem min 1/2 w'Sigma w - mu'w s.t. ||w||1<=c is LASSO constrained form penalised min 1/2||y-X beta||^2 + kappa||beta||1 kappa multiplier c=||beta(kappa)||1 so LASSO path is frontier Theorem1 perspective computed sklearn; inset magnifies low-risk end Fig frontier(a); Sec6 rescale same path at fixed leverage c=2; Sec7 long-only needs positive=True;"
+  },
+  {
+   "name": "longshort_path_n_corners",
+   "description": "Number of corner portfolios on long-short test frontier before cap slack",
+   "value": "19",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Sec5 On test problem path has 21 columns: empty start 19 corners each adding one asset end; Kelly 7.765 slack beyond; Fig frontier(a) both frontiers computed with LASSO solver marks highest-return triangle maxSharpe diamond minvar star inset low-risk; Sec6 same path rescaled at c=2 covers tilts 745.6 to 0.2576; Sec7 long-only plain 17 corners until 0.1415 maxSharpe 0.1414 then shift adds 2 more to total 19 matching long-short corner count but different feasible set; Sec_evidence long-short every column KKT below 2.6e-15 rescaled below 2.9e-15 Clarabel matches at corners 3.0e-7 inside 1.4e-11 fixed leverage 6.2e-6 and 1.9e-11 - interior point least accurate where holdings change; Table robust synthetic factor models n=20 corners 19 n=50 corners 49 n=100 corners 99-103 n=500 corners 503;"
+  },
+  {
+   "name": "longshort_kelly_gross_exposure_L1",
+   "description": "Gross exposure ||w*||1=7.765 at unconstrained Kelly/Sigma^{-1}mu end where LASSO cap becomes non-binding kappa=0",
+   "value": "7.765",
+   "unit": "L1 norm",
+   "kind": "estimate",
+   "where": "Sec5 path ends at kappa=0 where cap stops binding at w*=Sigma^{-1}mu with ||w*||1=7.765 That end maximises mu'w-1/2 w'Sigma w second-order approx expected log growth Kelly 1956 Since Sigma^{-1}mu also maximises scale-free Sharpe points towards maxSharpe On test Sharpe rises 0.539 first to 2.120 last not shown must Neither end is minimum-variance needs budget 1'w=1 that eq_mark lacks; Sec6 at fixed c=2 slack below tilt 0.2576 solution lambda Sigma^{-1}mu shrinks to zero nothing missing; Sec7 plain long-only end v0/1'v0 is long-only maxSharpe at tilt 0.1414 frontier goes on budget still binds while nu negative; Sec_evidence numerical checks verify KKT and Clarabel quadprog/OSQP agreements;"
+  },
+  {
+   "name": "longshort_sharpe_first_corner",
+   "description": "Sharpe ratio at first corner of long-short path (rising to 2.120 at Kelly end)",
+   "value": "0.539",
+   "unit": "Sharpe",
+   "kind": "estimate",
+   "where": "Sec5 On test problem Sharpe ratio rises from corner to corner from 0.539 at the first to sqrt(mu'Sigma^{-1}mu)=2.120 at the end; we have not shown that it must; Neither end is minimum-variance which needs budget 1'w=1 that eq_mark lacks; Fig frontier(a) long-short under gross-exposure cap vs (b) long-only fully invested blue corners plain red squares two missed - marks max-return triangle maxSharpe diamond minvar star inset magnifies low-risk; Sec_evidence KKT residuals below 2.6e-15 and 2.9e-15 rescaled Clarabel matches at corners 3.0e-7 inside 1.4e-11 fixed leverage 6.2e-6 inside 1.9e-11; Table robust worst KKT/gap values; abstract every corner meets optimality ~1e-13 agrees with QP solvers upto 500 assets FF and 494 stocks; Single shift lets one call reach minvar published script locked env rerunnable;"
+  },
+  {
+   "name": "longshort_sharpe_last_end",
+   "description": "Last/end Sharpe sqrt(mu'Sigma^{-1}mu)=2.120 at Kelly unconstrained optimum",
+   "value": "2.120",
+   "unit": "Sharpe sqrt(mu'Sigma^{-1}mu)",
+   "kind": "estimate",
+   "where": "Sec5 On test problem Sharpe rises 0.539 first to sqrt(mu'Sigma^{-1}mu)=2.120 at end we have not shown must; That w*=Sigma^{-1}mu maximises mu'w-1/2 w'Sigma w Kelly and scale-free Sharpe points towards maxSharpe; Sec3 Sharpe reach 2.1 per period illustrative high; Sec7 long-only maxSharpe at r=0 matches to 3.4e-15 tilt 0.1414 plain stop 0.1415 shifted extra tilts 0.1158 and 0.0128 to minvar; Sec_evidence all gaps/KKT near 1e-13-1e-15 show theorem predictions; Real data Sharpe not quoted synthetic inflated;"
+  },
+  {
+   "name": "leverage_fixed_c_parameter",
+   "description": "Fixed gross-exposure leverage cap c=2 used to illustrate rescaling long-short path to fixed-leverage tilts",
+   "value": "2",
+   "unit": "leverage cap",
+   "kind": "parameter",
+   "where": "Sec6 Parameters lambda tilt risk appetite c gross-exposure cap kappa its multiplier LASSO penalty Sec5-6 t=1'v=1/lambda budget rescaled long-only nu its multiplier LASSO penalty Sec7 box; Sec6 Mandate usually fixes leverage say c=2 varies risk appetite via tilt lambda>0 substituting w=lambda v in min1/2 w'Sigma w - lambda mu'w s.t. ||w||1<=c gives eq_mark with cap c/lambda same path serves column beta t=||beta||1 scaled to w=(c/t)beta optimal at tilt lambda=c/t code t=np.abs(B[:,1:]).sum(0) W,tilts=B[:,1:]*(c/t),c/t At c=2 columns cover tilts from 745.6 down to 0.2576 Below cap slack solution lambda Sigma^{-1}mu shrinks to zero nothing missing; Sec7 long-only algorithm uses t=1/lambda budget ||v||1; Sec_evidence KKT rescaled below 2.9e-15 Clarabel fixed leverage figures 6.2e-6 corners 1.9e-11 inside;"
+  },
+  {
+   "name": "leverage_tilt_max",
+   "description": "Maximum tilt lambda=c/t at c=2 covering long-short rescaled frontier at smallest gross exposure t",
+   "value": "745.6",
+   "unit": "tilt lambda",
+   "kind": "estimate",
+   "where": "Sec6 At c=2 columns cover tilts from 745.6 down to 0.2576 Below cap slack solution lambda Sigma^{-1}mu shrinks to zero nothing missing; Code t=np.abs(B[:,1:]).sum(0) W,tilts=B[:,1:]*(c/t),c/t same portfolios at leverage c; Sec5 cap c = t? Actually cap multiplier kappa LASSO penalty; Sec7 tilt lambda=1/1'v budget t=1/lambda multiplier nu LASSO penalty; Fig weights-lo vs tilt lambda blue plain red shaded where not supplied right panel budget multiplier nu=(mu-Sigma v)_j j on support plain covers nu>=0 ends at nu=0 lambda=0.1414 dashed shift eq_shift reaches two further corners squares where nu<0; Algorithm1 build Xy mu-nu0 etc;"
+  },
+  {
+   "name": "leverage_tilt_min",
+   "description": "Minimum tilt lambda where c=2 cap remains binding before slack shrinks to zero",
+   "value": "0.2576",
+   "unit": "tilt lambda",
+   "kind": "estimate",
+   "where": "Sec6 At c=2 columns cover tilts from 745.6 down to 0.2576 Below that cap slack solution lambda Sigma^{-1}mu shrinks to zero nothing missing; Sec5 end slack at w*=Sigma^{-1}mu ||w*||1=7.765 Kelly maxSharpe direction; Sec7 plain stop 0.1415 maxSharpe 0.1414 shifted extra 0.1158 and 0.0128 to minvar limit nu->-inf w_S prop Sigma_SS^{-1}1; Sec_evidence long-short KKT 2.6e-15 rescaled 2.9e-15 Clarabel matches etc;"
+  },
+  {
+   "name": "longonly_plain_call_n_corners",
+   "description": "Plain lars_path positive=True corners on test long-only problem before shift stops at nu=0 maxSharpe",
+   "value": "17",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Sec7 The long-only path via lars_path(...,positive=True) each column / sum is corner at tilt 1/1'v; Stop Called on (X,y) path runs from nu=max mu_j down to nu=0 stops because LASSO solver takes no negative penalty If every mu_j<=0 returns only origin On test problem that gives 17 corners down to tilt 0.1415 stopping point v0=argmin_{v>=0}1/2 v'Sigma v - mu'v is end Sec5 long-only weights Writing v=s w maximising over scale s>=0 leaves 1/2 (mu'w)^2/w'Sigma w half squared Sharpe so v0/1'v0 is long-only maxSharpe at tilt 0.1414 frontier goes on budget still binds while nu turns negative Fig multiplier dashed ends at nu=0 lambda=0.1414 shift eq_shift reaches two further corners squares nu<0; Shift eq_shift 1/2||Xv-y||2^2+nu1'v=1/2||Xv-(y-nu d)||2^2+const X'd=1 If nonnegative LASSO runs on y-nu0 d for nu0<0 penalty nu'>=0 acts as nu=nu0+nu' original covers nu>=nu0 For Cholesky d=(X')^{-1}1 tall X least squares min-norm lars_path reports nu' divided by n_rows stops 500 steps unless large; Choosing nu0 any below last corner works last corner known in advance Beyond holds minvar support S argmin_{u>=0}||Xu-d||2 There v_S=a-nu b a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 segment stays optimal while nu<a_i/b_i for b_i>0 and j not in S Sigma_jS b>1 while nu<=(mu_j-Sigma_jS a)/(1-Sigma_jS b) smallest bound is last corner nu_last code S=nnls(X,d)[0]>1e-9 etc No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small margin delta in nu0=nu_last-delta max(|nu_last|,||mu||inf) has to be large enough end not merge last corner small enough not cost accuracy falls roughly |nu0| On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT <4e-13 at delta=100 residual 2e-11 portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 minvar limit nu->-inf final segment w_S prop Sigma_SS^{-1}1; What nu means point with multiplier nu solves same with mu replaced mu-nu1 so long-only maxSharpe at riskfree rate r=nu Black zero-beta rate classical LASSO view rate is path own parameter nu0<r<max mu_j interpolation bracketing columns code assert nu[-1]<r<nu[0] k=np.argmax(nu<r) etc; Algorithm1 steps Build Xy etc;"
+  },
+  {
+   "name": "longonly_plain_stop_tilt",
+   "description": "Tilt of last plain corner before shift stops at budget multiplier nu=0",
+   "value": "0.1415",
+   "unit": "tilt lambda",
+   "kind": "estimate",
+   "where": "Sec7 On test problem plain gives 17 corners down to tilt 0.1415 stopping point v0=argmin etc long-only maxSharpe at tilt 0.1414 dashed shift reaches two further corners squares nu<0 Fig weights-lo left weights vs tilt lambda blue where plain supplies red shaded where not right multiplier nu=(mu-Sigma v)_j j on support plain covers nu>=0 ends at nu=0 lambda=0.1414 dashed shift eq_shift reaches two further corners squares where nu<0; Sec_evidence shifted finds 19 corners test 17 of plain and two more at tilts 0.1158 and 0.0128 match QP 6.0e-13 inside 7.9e-14 minvar 1.0e-16 maxSharpe r0 3.4e-15 corners minvar KKT below 3.6e-14 Table repeats checks other sizes seeds where disagree at n=500 gap 6.7e-11 is QP's;"
+  },
+  {
+   "name": "longonly_plain_maxSharpe_tilt",
+   "description": "Tilt of long-only maximum-Sharpe portfolio equal to plain path end where budget multiplier hits zero",
+   "value": "0.1414",
+   "unit": "tilt lambda",
+   "kind": "estimate",
+   "where": "Sec7 Writing v=s w maximising over s>=0 leaves 1/2(mu'w)^2/w'Sigma w half squared Sharpe so v0/1'v0 is long-only maxSharpe at tilt 0.1414 frontier goes on budget still binds while nu turns negative Fig multiplier dashed ends at nu=0 lambda=0.1414 shift eq_shift reaches two further corners squares where nu<0; Plain call covers nu>=0 ends at nu=0 lambda=0.1414 dashed shift reaches two further corners squares where nu<0; Sec_evidence maxSharpe at r=0 matches to 3.4e-15; What nu means point with multiplier nu solves same with mu->mu-nu1 so long-only maxSharpe at rate r=nu Black zero-beta rate classical LASSO view rate is path own parameter nu0<r<max mu_j interpolation bracketing;"
+  },
+  {
+   "name": "longonly_nu_last_test",
+   "description": "Last corner budget multiplier nu_last for synthetic test long-only problem beyond which minvar support stays optimal",
+   "value": "-4.95",
+   "unit": "nu budget multiplier",
+   "kind": "estimate",
+   "where": "Sec7 No fixed value would be safe nu_last is -4.95 on test problem -11.9 on one models Table2 -0.178 on stock data and -0.0118 on portfolio data Sec_evidence where mu small margin delta in nu0=nu_last-delta max(|nu_last|,||mu||inf) has to be large enough end not merge last corner small enough not cost accuracy falls roughly |nu0| On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT <4e-13 at delta=100 residual 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 Minvar limit nu->-inf final segment w_S prop Sigma_SS^{-1}1 What nu means by eq_shift point with multiplier nu solves same with mu replaced mu-nu1 so long-only maxSharpe at rate r=nu Black zero-beta rate LASSO view rate is path own parameter nu0<r<max mu_j interpolation code; Algorithm1 solve X'd=1 compute nu_last set nu0; Table1 nu_last ranges per n -0.57 to 0.12 (n20) -11.9 to -0.74 (n50) -0.56 to -0.38 (100) -0.45 to -0.26 (500); Real reproducible FF last corner -0.0118 eleven times max|mu| below zero 12 corners; Real at scale last corner -0.178 about fifty times max|mu| below zero 94 corners;"
+  },
+  {
+   "name": "longonly_nu_last_factor_example",
+   "description": "Example factor model extreme nu_last -11.9 illustrating wide range requiring adaptive nu0 not fixed",
+   "value": "-11.9",
+   "unit": "nu multiplier",
+   "kind": "estimate",
+   "where": "Sec7 No fixed safe nu_last is -4.95 test -11.9 on one models Table -0.178 stock -0.0118 portfolio where mu small; Table row n50 nu_last -11.9 to -0.74 n20 -0.57 to 0.12 n100 -0.56 to -0.38 n500 -0.45 to -0.26 median time 0.8 2.5 7.7 239 ms worst KKT/gap columns; Code example S nnls threshold 1e-9 a b h g nu_last calc; Importance Choosing nu0 any below last corner works last corner known in advance beyond holds minvar support S argmin||Xu-d||2 lawson1974 v_S=a-nu b a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 bounds segment stays optimal while nu<a_i/b_i and nu<=(mu_j-Sigma_jS a)/(1-Sigma_jS b) smallest bound is last corner;"
+  },
+  {
+   "name": "longonly_nu_last_sp500",
+   "description": "Last corner nu_last for S&P500 long-only problem about 50x max|mu| below zero requiring shifted response",
+   "value": "-0.178",
+   "unit": "nu multiplier",
+   "kind": "estimate",
+   "where": "Sec7 No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small; Sec_evidence Real returns at scale daily returns 494 S&P500 stocks over 1213 days July2021-May2026 Yahoo Finance script fetches S&P500 constituents Wikipedia adjusted closing 2021-06-01 to 2026-06-01 keeping names <=5% missing with centred returns as X last corner sits at nu_last=-0.178 about fifty times max|mu| below zero Algorithm1 returns all 94 corners in 0.14 sec while one QP 0.12 sec so 100-point grid costs about 12 sec still misses corners Warm OSQP 4.9 sec at 1e-6 agrees 4.1e-13 at 1e-5 takes 3.4 sec misses 1e-3 Every corner KKT below 3.7e-13 matches QP 5.4e-13 minvar holds 53 matches 1.2e-15 timings laptop; Sec7 delta experiments stock delta 1e-4 loses last corner 1e-2 to 1 all 94 found KKT <4e-13 at 100 residual 2e-11;"
+  },
+  {
+   "name": "longonly_nu_last_ff100",
+   "description": "Last corner nu_last for French 100->99 portfolios long-only about 11x max|mu| below zero",
+   "value": "-0.0118",
+   "unit": "nu multiplier",
+   "kind": "estimate",
+   "where": "Sec7 No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small; Sec_evidence Real returns reproducible daily value-weighted returns 100 portfolios Fama-French size/BM Jan2016-Dec2025 published code one portfolio misses 250 days dropped leaves 99 over 2514 days with centred returns as X last corner sits at nu_last=-0.0118 eleven times max|mu| below zero Algorithm1 returns all 12 corners They match QP 2.1e-13 KKT below 3.9e-14 minvar holds 7 matches 1.6e-15 diversified highly correlated frontier turns only 12 times grid cheap test method at scale; Sec7 delta portfolio even 1e-2 loses last corner delta=1 finds all 12 code takes delta=1 margin delta in nu0=nu_last-delta max(|nu_last|,||mu||inf) accuracy falls |nu0|;"
+  },
+  {
+   "name": "longonly_delta_test_lose",
+   "description": "Delta=1e-4 margin losing last corner on stock data too small shift",
+   "value": "1e-4",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 delta margin nu0=nu_last-delta max(|nu_last|,||mu||inf) large enough end not merge last corner small enough not cost accuracy falls roughly |nu0| On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found with KKT residuals below 4e-13 at delta=100 residual grown to 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 minvar limit nu->-inf final segment w_S prop Sigma_SS^{-1}1; What nu means point multiplier nu solves same mu->mu-nu1 so maxSharpe at rate r=nu Black zero-beta rate LASSO view rate is path own parameter nu0<r<max mu_j interpolation;"
+  },
+  {
+   "name": "longonly_delta_stock_success_low",
+   "description": "Lower bound delta=1e-2 from which stock data finds all 94 corners KKT <4e-13",
+   "value": "1e-2",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found with KKT residuals below 4e-13 at delta=100 residual grown to 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1; lars_path max_iter default 500 needs 10*len(mu) for large; Choosing nu0 any below last corner works last corner known in advance beyond holds minvar support S etc code S=nnls etc; Real at scale S&P500 last corner -0.178 fifty times max|mu| 94 corners 0.14 sec vs 0.12 sec QP 12 sec grid 4.9 sec OSQP 1e-6 3.4 sec 1e-5;"
+  },
+  {
+   "name": "longonly_delta_stock_success_high",
+   "description": "Upper bound delta=1 up to which stock data still finds all 94 corners without accuracy loss",
+   "value": "1",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT below 4e-13 at delta=100 residual 2e-11 portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1; Code takes delta=1 margin delta max(|nu_last|,||mu||inf); What nu means maxSharpe interpolation; Algorithm1 Build Xy X'd=1 compute nu_last set nu0 run positive LASSO on y-nu0 d max_iter well above n recover nu=nu0+n_rows alpha drop first/last corners v/1'v at tilt 1/1'v Take minvar end w_S prop Sigma_SS^{-1}1 any point interpolation in 1/lambda or nu;"
+  },
+  {
+   "name": "longonly_stock_kkt_below",
+   "description": "KKT residual upper bound when delta 1e-2 to 1 on stock data",
+   "value": "4e-13",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec7 On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found with KKT residuals below 4e-13 and at delta=100 residual grown to 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 minvar limit nu->-inf final segment w_S prop Sigma_SS^{-1}1 What nu means; Sec_evidence Real at scale every corner KKT below 3.7e-13 matches QP 5.4e-13 minvar holds 53 matches 1.2e-15 timings laptop abstract ~1e-13; Sec_evidence Long-short every column KKT below 2.6e-15 rescaled 2.9e-15 Clarabel matches 3.0e-7 corners 1.4e-11 inside fixed leverage 6.2e-6 1.9e-11; Long-only test corners minvar KKT below 3.6e-14 matches 6.0e-13 inside 7.9e-14 minvar 1.0e-16 maxSharpe r0 3.4e-15;"
+  },
+  {
+   "name": "longonly_delta_large",
+   "description": "Large delta=100 causing accuracy degradation residual 2e-11 on stock data",
+   "value": "100",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT below 4e-13 and at delta=100 residual grown to 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1; Code takes delta=1 not 100 because accuracy falls roughly |nu0|; Table1 times 0.8 2.5 7.7 239 ms; Real data timings 0.14 sec algo 0.12 sec QP 12 sec grid 4.9 sec OSQP 1e-6 3.4 sec 1e-5; Two kinds evidence KKT worst violation /||mu||inf or gradient size second baseline Clarabel via cvxpy long-short to quadprog Goldfarb Idnani;"
+  },
+  {
+   "name": "longonly_residual_delta100",
+   "description": "KKT residual at delta=100 degraded to 2e-11 vs 4e-13 in sweet spot",
+   "value": "2e-11",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec7 From delta=1e-2 to 1 all 94 found KKT residuals below 4e-13 and at delta=100 residual grown to 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12 code takes delta=1 minvar limit etc What nu means; Sec_evidence abstract about 1e-13 agrees with QP upto 500 assets FF 99 and 494 stocks shifted one call reaches minvar; numerical evidence KKT etc below 2.6e-15 2.9e-15 3.6e-14 3.7e-13 3.9e-14 etc; tolerances between 1e-12 and 1e-9 leave timings unchecked hardware varies;"
+  },
+  {
+   "name": "longonly_delta_ff_lose",
+   "description": "Delta=1e-2 insufficient for FF portfolios still missing last corner",
+   "value": "1e-2",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 On stock data delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT below 4e-13 at delta=100 residual 2e-11 On portfolio data even delta=1e-2 loses last corner and delta=1 finds all 12 code takes delta=1 minvar limit nu->-inf; Real reproducible FF last corner -0.0118 eleven times max|mu| below zero 12 corners match QP 2.1e-13 KKT below 3.9e-14 minvar holds 7 matches 1.6e-15; stock last corner -0.178 fifty times max|mu| 94 corners;"
+  },
+  {
+   "name": "longonly_delta_ff_success",
+   "description": "Delta=1 sufficient to find all 12 corners on FF data and chosen as default",
+   "value": "1",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 On portfolio data even delta=1e-2 loses last corner and delta=1 finds all 12 code takes delta=1; On stock 1e-2 to 1 all 94 found KKT below 4e-13; Code takes delta=1 margin delta max(|nu_last|,||mu||inf) large enough not merge small enough not cost accuracy falls |nu0|; Algorithm1 Build Xy X'd=1 compute nu_last set nu0 run positive LASSO on y-nu0 d max_iter well above n recover nu=nu0+n_rows alpha drop first/last corners v/1'v at tilt 1/1'v Take minvar end w_S prop Sigma_SS^{-1}1 etc; What nu means maxSharpe at rate r=nu interpolation;"
+  },
+  {
+   "name": "longonly_code_delta_chosen",
+   "description": "Default delta=1 selected to guarantee all corners without merging or accuracy loss on both datasets",
+   "value": "1",
+   "unit": "delta factor",
+   "kind": "parameter",
+   "where": "Sec7 Code takes delta=1; On stock delta=1e-4 loses last corner from delta=1e-2 to 1 all 94 found KKT below 4e-13 at delta=100 residual 2e-11 On portfolio even delta=1e-2 loses last corner delta=1 finds all 12; Algorithm1 steps Build Xy or lars_path_gram with Xy=mu-nu0 Solve X'd=1 compute nu_last set nu0 as above Run positive LASSO on y-nu0 d with max_iter well above n recover nu=nu0+n_rows alpha Drop first/last columns each remaining v/1'v is corner at tilt 1/1'v Take minvar end as w_S prop Sigma_SS^{-1}1 any other point interpolation in 1/lambda for tilt or nu for rate;"
+  },
+  {
+   "name": "longonly_shifted_path_total_corners_test",
+   "description": "Total shifted long-only corners on test problem including plain 17 plus 2 extra reaching minvar",
+   "value": "19",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Sec_evidence Long only shifted path finds 19 corners on test problem the 17 of plain call and two more at tilts 0.1158 and 0.0128 They match QP to 6.0e-13 points inside segments to 7.9e-14 minvar end to 1.0e-16 maxSharpe at r=0 to 3.4e-15 corners minvar end KKT below 3.6e-14 Table repeats both checks other sizes seeds where disagree at n=500 gap 6.7e-11 is QP's number corners need not equal assets some leave re-enter; Sec7 plain 17 corners down to tilt 0.1415 maxSharpe 0.1414 shift eq_shift reaches two further corners squares nu<0 Fig weights-lo blue plain red shaded where not Fig multiplier nu budget multiplier; Abstract every corner meets optimality ~1e-13 agrees with QP on factor models upto500 FF 99 494 stocks;"
+  },
+  {
+   "name": "longonly_extra_tilt_1",
+   "description": "First extra shifted corner tilt beyond plain maxSharpe toward minvar",
+   "value": "0.1158",
+   "unit": "tilt lambda",
+   "kind": "estimate",
+   "where": "Sec_evidence Long only shifted path finds 19 corners test 17 of plain and two more at tilts 0.1158 and 0.0128 They match QP to 6.0e-13 etc; Sec7 Fig weights-lo right multiplier nu budget multiplier (mu-Sigma v)_j j on support plain covers nu>=0 ends at nu=0 lambda=0.1414 dashed shift reaches two further corners squares where nu<0; Algorithm1 each remaining v/1'v is corner at tilt 1/1'v Take minvar end w_S prop Sigma_SS^{-1}1 limit nu->-inf; Sec6 rescale t=||beta||1 scaled w=(c/t)beta tilt lambda=c/t At c=2 covers 745.6 to 0.2576;"
+  },
+  {
+   "name": "longonly_extra_tilt_2",
+   "description": "Second extra shifted corner near minimum-variance end",
+   "value": "0.0128",
+   "unit": "tilt lambda",
+   "kind": "estimate",
+   "where": "Sec_evidence Long only shifted path finds 19 corners test 17 of plain and two more at tilts 0.1158 and 0.0128 They match QP to 6.0e-13 points inside segments 7.9e-14 minvar 1.0e-16 maxSharpe r0 3.4e-15 corners minvar KKT below 3.6e-14 Table repeats checks other sizes seeds where disagree n=500 gap 6.7e-11 is QP's; Sec7 shift Completing square once more moves penalty into response eq_shift etc choosing nu0 any below last corner works last corner known in advance beyond holds minvar support S etc code S=nnls etc No fixed safe nu_last -4.95 test etc On stock/port data delta experiments code takes delta=1;"
+  },
+  {
+   "name": "evidence_kkt_longshort_every_column",
+   "description": "Worst KKT residual over long-short cap path columns below 2.6e-15 divided by ||mu||inf",
+   "value": "2.6e-15",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec_evidence Two kinds evidence first no second solver each portfolio checked against own optimality cap multiplier kappa (mu-Sigma w)_j=kappa sign(w_j) on support |...|<=kappa off long-only at tilt lambda (Sigma w - lambda mu)_j=gamma on >=gamma off with 1'w=1 w>=0 KKT residual worst violation /||mu||inf or gradient size second baseline Clarabel interior-point via cvxpy long-only quadprog Goldfarb Idnani; Long-short Every column KKT residual below 2.6e-15 and below 2.9e-15 once rescaled to fixed leverage At each column cap Clarabel matches path to 3.0e-7 at corners and 1.4e-11 inside segments gap at corners baseline interior-point least accurate where holdings change At fixed leverage figures 6.2e-6 and 1.9e-11; Long only shifted finds 19 corners test 17 plain two more 0.1158 0.0128 match QP 6.0e-13 inside 7.9e-14 minvar 1.0e-16 maxSharpe r0 3.4e-15 corners minvar KKT below 3.6e-14 Table repeats checks other sizes seeds where disagree n=500 gap 6.7e-11 is QP's;"
+  },
+  {
+   "name": "evidence_kkt_longshort_rescaled",
+   "description": "KKT residual after rescaling to fixed leverage c=2 below 2.9e-15",
+   "value": "2.9e-15",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec_evidence Long-short Every column KKT below 2.6e-15 and below 2.9e-15 once rescaled to fixed leverage At each column cap Clarabel matches path to 3.0e-7 at corners and 1.4e-11 inside segments gap at corners baseline At fixed leverage figures 6.2e-6 and 1.9e-11; Code rescale t=np.abs(B[:,1:]).sum(0) W,tilts=B[:,1:]*(c/t),c/t At c=2 columns cover tilts 745.6 down to 0.2576 Below cap slack solution lambda Sigma^{-1}mu shrinks to zero nothing missing; Abstract every corner meets optimality ~1e-13 agrees with independent QP on factor models upto500 FF 99 494 stocks;"
+  },
+  {
+   "name": "evidence_clarabel_match_corners",
+   "description": "Maximum L_inf discrepancy vs Clarabel interior-point at long-short corners at same cap c",
+   "value": "3.0e-7",
+   "unit": "L_inf weight discrepancy",
+   "kind": "estimate",
+   "where": "Sec_evidence Long-short Every column KKT below 2.6e-15 and below 2.9e-15 once rescaled At each column cap Clarabel matches path to 3.0e-7 at the corners and 1.4e-11 inside segments Gap at corners is baseline interior-point least accurate where holdings change At fixed leverage figures 6.2e-6 and 1.9e-11; Sec6 Atc2 tilts 745.6 to0.2576; Abstract agrees with independent QP solvers on factor models upto500 FF 99 494 stocks; Code availability residuals gaps near 1e-13 differ last digits other CPU/BLAS timings scale machine tests check residuals gaps against tolerances 1e-12 to 1e-9 leave timings unchecked;"
+  },
+  {
+   "name": "evidence_clarabel_match_inside",
+   "description": "L_inf discrepancy vs Clarabel inside linear segments between long-short corners",
+   "value": "1.4e-11",
+   "unit": "L_inf discrepancy",
+   "kind": "estimate",
+   "where": "Sec_evidence At each column cap Clarabel matches path to 3.0e-7 at corners and 1.4e-11 inside segments Gap at corners baseline At fixed leverage figures 6.2e-6 and 1.9e-11; Long-short via cvxpy Clarabel interior-point; Long-only via quadprog active-set Goldfarb Idnani; Weights vs frontier Between corners weights linear in tilt lambda (or in Sec5 cap c) variance quadratic each piece frontier is arc Traced by tilt lambda at fixed constraints Sec6-7 has no kinks slope dE/dV=1/(2 lambda) varies continuously corners show only in weights Fig weights-lo Long-short traced by cap instead does kink Fig frontier(a);"
+  },
+  {
+   "name": "evidence_fixed_leverage_corners_match",
+   "description": "Fixed leverage c=2 Clarabel corner gap 6.2e-6 vs path",
+   "value": "6.2e-6",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence At fixed leverage figures are 6.2e-6 and 1.9e-11; Long-short every column KKT below 2.6e-15 rescaled 2.9e-15 matches Clarabel 3.0e-7 corners 1.4e-11 inside gap baseline interior-point least accurate where holdings change At fixed leverage 6.2e-6 and 1.9e-11; Code rescale t=|B[:,1:]|.sum(0) W,tilts=B[:,1:]*(c/t),c/t At c=2 tilts 745.6 to 0.2576 slack below lambda Sigma^{-1}mu shrinks to zero; Abstract about 1e-13 agrees with QP upto500 FF 99 494 stocks;"
+  },
+  {
+   "name": "evidence_fixed_leverage_inside_match",
+   "description": "Fixed leverage inside-segment gap 1.9e-11 vs Clarabel",
+   "value": "1.9e-11",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence At fixed leverage figures are 6.2e-6 and 1.9e-11; Inside segments after rescaling; Sec6 same path scaled w=(c/t)beta optimal at tilt lambda=c/t; Long-short cap eq_mark min1/2 w'Sigma w - mu'w s.t. ||w||1<=c is LASSO constrained penalised min1/2||y-X beta||2^2+kappa||beta||1 kappa multiplier c=||beta(kappa)||1 Theorem1 perspective lars_path computes; Second baseline Clarabel via cvxpy; Weights linear variance quadratic frontier arc;"
+  },
+  {
+   "name": "evidence_longonly_match_qp_corners_test",
+   "description": "Maximum L_inf gap vs quadprog active-set at same tilt for 19 long-only shifted corners on test problem",
+   "value": "6.0e-13",
+   "unit": "L_inf weight discrepancy",
+   "kind": "estimate",
+   "where": "Sec_evidence Long only shifted finds 19 corners test 17 of plain and two more at tilts 0.1158 and 0.0128 They match QP to 6.0e-13 points inside segments to 7.9e-14 minvar end to 1.0e-16 maxSharpe at r=0 to 3.4e-15 corners minvar end KKT below 3.6e-14 Table repeats both checks other sizes seeds where disagree n=500 gap 6.7e-11 is QP's number corners need not equal assets some leave re-enter; Baseline long-only quadprog active-set Goldfarb Idnani 1983; Abstract every corner meets optimality ~1e-13 agrees with independent QP factor models upto500 FF 99 494 stocks; Tolerances 1e-12 to 1e-9;"
+  },
+  {
+   "name": "evidence_longonly_match_qp_inside_test",
+   "description": "Inside-segment gap vs quadprog for long-only test problem",
+   "value": "7.9e-14",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence They match QP to 6.0e-13 points inside segments to 7.9e-14 minvar end to 1.0e-16 maxSharpe at r=0 to 3.4e-15 corners minvar KKT below 3.6e-14; Weights vs frontier Between corners weights linear in tilt lambda (or cap c) variance quadratic each piece frontier is arc Traced by tilt lambda at fixed constraints Sec6-7 has no kinks slope dE/dV=1/(2 lambda) continuous corners show only in weights Fig weights-lo Long-short traced by cap does kink Fig frontier(a); Every other frontier portfolio is linear interpolation between two corners;"
+  },
+  {
+   "name": "evidence_longonly_minvar_end_match_test",
+   "description": "Minimum-variance end portfolio gap vs quadprog on test problem 1.0e-16",
+   "value": "1.0e-16",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence minvar end to 1.0e-16 and maxSharpe at r=0 to 3.4e-15 corners minvar end KKT below 3.6e-14; Algorithm1 Take minvar end as w_S proportional Sigma_SS^{-1}1 and any other point interpolation in 1/lambda or nu for rate; Code minvar support S=nnls(X,d)[0]>1e-9 a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 h g nu_last etc nu0=nu_last-max(|nu_last|,|mu|max) d lsq X'd=1 alphas V lars_path y-nu0d positive max_iter 10*len(mu) nu=nu0+len(y)*alphas corners V[:,1:-1] W,tilts=corners/corners.sum(0),1/corners.sum(0) What nu means maxSharpe at rate r=nu Black zero-beta interpolation bracketing nu[k-1] r nu[k];"
+  },
+  {
+   "name": "evidence_longonly_maxSharpe_r0_match_test",
+   "description": "Maximum-Sharpe at r=0 gap vs quadprog on test long-only",
+   "value": "3.4e-15",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence maxSharpe portfolio at r=0 to 3.4e-15; What nu means by eq_shift point with multiplier nu solves same with mu->mu-nu1 so long-only maxSharpe at riskfree rate r=nu Black zero-beta classical LASSO view rate is path own parameter nu0<r<max mu_j maxSharpe is interpolation between two columns bracketing r code assert nu[-1]<r<nu[0] etc w_r etc; Plain stop v0/1'v0 is long-only maxSharpe at tilt 0.1414 vs shifted total 19 corners; Two kinds evidence KKT second baseline quadprog;"
+  },
+  {
+   "name": "evidence_longonly_kkt_corners_minvar_test",
+   "description": "Worst KKT residual below 3.6e-14 for long-only corners and minvar on test problem",
+   "value": "3.6e-14",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec_evidence corners and minvar end KKT residuals below 3.6e-14 Table repeats both checks other sizes seeds where disagree at n=500 gap 6.7e-11 is QP's number corners need not equal assets some leave re-enter; For cap multiplier kappa (mu-Sigma w)_j=kappa sign(w_j) on support |...|<=kappa off long-only at tilt lambda (Sigma w-lambda mu)_j=gamma on >=gamma off with 1'w=1 w>=0 KKT residual worst violation /||mu||inf or gradient size; Abstract every corner meets optimality about 1e-13; Real FT similar 3.9e-14 FF 3.7e-13 S&P500 4e-13 stock delta sweet spot;"
+  },
+  {
+   "name": "evidence_gap_n500_qp",
+   "description": "At n=500 where QP and path diverge gap 6.7e-11 attributed to QP active-set via KKT residual",
+   "value": "6.7e-11",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence Table repeats both checks other sizes seeds Where two disagree at n=500 gap 6.7e-11 is QP's residual shows gap is QP's; Table row n500 seeds 3 corners 503 nu_last -0.45 to -0.26 KKT 2.1e-13 worst corner 6.7e-11 minvar 4.3e-16 time 239 ms; n20 worst 8.6e-14 KKT 1.1e-14 n50 worst 1.5e-13 KKT 1.0e-13 n100 worst 1.1e-11 KKT 2.5e-14; Abstract agrees with independent QP on factor models upto500; Code data availability tests check residuals gaps against tolerances 1e-12 to 1e-9 leave timings unchecked;"
+  },
+  {
+   "name": "table_n20_seeds",
+   "description": "Number of random seeds per n size for Table1 robustness 3 each",
+   "value": "3",
+   "unit": "seeds",
+   "kind": "count",
+   "where": "Table1 Algorithm1 on five-factor models three seeds each worst KKT residual over corners and minvar end largest L_inf weight discrepancy against independent active-set QP at same tilt median time one run Algorithm1 nu_last included laptop rows n20 seeds3 corners19 nu_last -0.57 to0.12 KKT1.1e-14 worst corner8.6e-14 minvar2.4e-16 time0.8ms; n50 seeds3 corners49 nu_last-11.9 to-0.74 KKT1.0e-13 worst1.5e-13 minvar1.7e-16 time2.5ms; n100 seeds3 corners99-103 nu_last-0.56 to-0.38 KKT2.5e-14 worst1.1e-11 minvar3.3e-16 time7.7ms; n500 seeds3 corners503 nu_last-0.45 to-0.26 KKT2.1e-13 worst6.7e-11 minvar4.3e-16 time239ms; Simulated inside script fixed seeds need no data;"
+  },
+  {
+   "name": "table_n20_corners",
+   "description": "Corners count for n=20 five-factor models (median/unique value 19)",
+   "value": "19",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Table1 n20 seeds3 corners19 nu_last -0.57 to0.12 KKT1.1e-14 worst corner8.6e-14 minvar2.4e-16 time0.8ms; n50 corners49 nu_last-11.9 to-0.74 etc; Simulated five-factor models; Sec5 test 20-asset path 21 columns 19 corners; Sec7 long-only plain 17 shifted total 19 extra tilts 0.1158 0.0128 on test problem; Table repeats both checks other sizes seeds; number corners need not equal assets some leave re-enter;"
+  },
+  {
+   "name": "table_n20_nu_last_low",
+   "description": "Low end of nu_last range for n=20 models",
+   "value": "-0.57",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n20 seeds3 corners19 nu_last -0.57 to0.12 KKT1.1e-14 worst8.6e-14 minvar2.4e-16 time0.8ms; Sec7 No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small margin delta nu0=nu_last-delta max(|nu_last|,||mu||inf) stock delta1e-4 loses last corner 1e-2 to1 all94 KKT<4e-13 at100 residual2e-11 portfolio1e-2 loses 1 finds all12 code delta1;"
+  },
+  {
+   "name": "table_n20_nu_last_high",
+   "description": "High end of nu_last range for n=20 models positive 0.12 indicates near zero or positive last corner for some seed",
+   "value": "0.12",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n20 seeds3 corners19 nu_last -0.57 to0.12 KKT1.1e-14 worst8.6e-14 minvar2.4e-16 time0.8ms;"
+  },
+  {
+   "name": "table_n20_kkt_residual",
+   "description": "Worst KKT residual over corners and minvar for n=20",
+   "value": "1.1e-14",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Table1 n20 worst KKT residual over corners and minvar end 1.1e-14 largest L_inf weight discrepancy against independent active-set QP at same tilt worst corner 8.6e-14 minvar2.4e-16 time0.8ms; n50 KKT1.0e-13 worst1.5e-13 etc; Two kinds evidence KKT residual worst violation /||mu||inf or gradient size second baseline Clarabel/quadprog; Abstract ~1e-13; Sec_evidence test problem long-short 2.6e-15 long-only 3.6e-14 FF 3.9e-14 SP500 3.7e-13 stock sweet spot 4e-13;"
+  },
+  {
+   "name": "table_n20_worst_corner_gap",
+   "description": "Largest corner gap vs QP for n=20",
+   "value": "8.6e-14",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n20 worst corner 8.6e-14 largest L_inf weight discrepancy against independent active-set QP at same tilt KKT1.1e-14 minvar2.4e-16 time0.8ms;"
+  },
+  {
+   "name": "table_n20_minvar_gap",
+   "description": "Minimum-variance end gap vs QP for n=20",
+   "value": "2.4e-16",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n20 minvar end gap 2.4e-16; n50 1.7e-16 n100 3.3e-16 n500 4.3e-16; Sec_evidence test minvar 1.0e-16 FF 1.6e-15 SP500 1.2e-15; Algorithm1 Take minvar end as w_S prop Sigma_SS^{-1}1 limit nu->-inf;"
+  },
+  {
+   "name": "table_n20_time_ms",
+   "description": "Median runtime for Algorithm1 including nu_last on laptop n=20",
+   "value": "0.8",
+   "unit": "ms",
+   "kind": "estimate",
+   "where": "Table1 n20 time 0.8 ms median time of one run Algorithm1 nu_last included on laptop; n50 2.5ms n100 7.7ms n500 239ms; Real at scale S&P500 0.14 sec algo vs 0.12 sec one QP 12 sec grid 100-point 4.9 sec OSQP 1e-6 3.4 sec 1e-5; Lock fixes software not hardware residuals near 1e-13 different last digits other CPU/BLAS timings scale machine rerun not match digit tests check residuals gaps against tolerances 1e-12 to 1e-9 leave timings unchecked;"
+  },
+  {
+   "name": "table_n50_seeds",
+   "description": "Seeds per n=50",
+   "value": "3",
+   "unit": "seeds",
+   "kind": "count",
+   "where": "Table1 n50 seeds3 corners49 nu_last -11.9 to -0.74 KKT1.0e-13 worst1.5e-13 minvar1.7e-16 time2.5ms;"
+  },
+  {
+   "name": "table_n50_corners",
+   "description": "Corners for n=50",
+   "value": "49",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Table1 n50 seeds3 corners49 nu_last -11.9 to -0.74 KKT1.0e-13 worst1.5e-13 minvar1.7e-16 time2.5ms;"
+  },
+  {
+   "name": "table_n50_nu_last_low",
+   "description": "Low nu_last for n=50 including extreme -11.9",
+   "value": "-11.9",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n50 nu_last -11.9 to -0.74; Sec7 No fixed safe nu_last -4.95 test -11.9 one models Table example illustrating wide range -0.178 stock -0.0118 portfolio;"
+  },
+  {
+   "name": "table_n50_nu_last_high",
+   "description": "High nu_last for n=50",
+   "value": "-0.74",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n50 nu_last -11.9 to -0.74;"
+  },
+  {
+   "name": "table_n50_kkt",
+   "description": "Worst KKT for n=50",
+   "value": "1.0e-13",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Table1 n50 KKT1.0e-13 worst1.5e-13 minvar1.7e-16 time2.5ms;"
+  },
+  {
+   "name": "table_n50_worst_corner",
+   "description": "Worst corner gap n=50",
+   "value": "1.5e-13",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n50 worst corner 1.5e-13;"
+  },
+  {
+   "name": "table_n50_minvar",
+   "description": "Minvar gap n=50",
+   "value": "1.7e-16",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n50 minvar gap 1.7e-16;"
+  },
+  {
+   "name": "table_n50_time",
+   "description": "Time n=50",
+   "value": "2.5",
+   "unit": "ms",
+   "kind": "estimate",
+   "where": "Table1 n50 time 2.5ms;"
+  },
+  {
+   "name": "table_n100_seeds",
+   "description": "Seeds n=100",
+   "value": "3",
+   "unit": "seeds",
+   "kind": "count",
+   "where": "Table1 n100 seeds3 corners99-103 nu_last -0.56 to -0.38 KKT2.5e-14 worst1.1e-11 minvar3.3e-16 time7.7ms;"
+  },
+  {
+   "name": "table_n100_corners_low",
+   "description": "Low corners n=100 99",
+   "value": "99",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Table1 n100 corners99-103 range indicates variability leave/re-enter across seeds nu_last -0.56 to -0.38 KKT2.5e-14 worst1.1e-11 minvar3.3e-16 time7.7ms; number corners need not equal assets some leave re-enter;"
+  },
+  {
+   "name": "table_n100_corners_high",
+   "description": "High corners n=100 103",
+   "value": "103",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Table1 n100 corners99-103 high 103;"
+  },
+  {
+   "name": "table_n100_nu_last_low",
+   "description": "Low nu_last n=100",
+   "value": "-0.56",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n100 nu_last -0.56 to -0.38;"
+  },
+  {
+   "name": "table_n100_nu_last_high",
+   "description": "High nu_last n=100",
+   "value": "-0.38",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n100 nu_last -0.56 to -0.38;"
+  },
+  {
+   "name": "table_n100_kkt",
+   "description": "Worst KKT n=100",
+   "value": "2.5e-14",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Table1 n100 KKT2.5e-14 worst1.1e-11 minvar3.3e-16 time7.7ms;"
+  },
+  {
+   "name": "table_n100_worst_corner",
+   "description": "Worst corner n=100",
+   "value": "1.1e-11",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n100 worst corner 1.1e-11;"
+  },
+  {
+   "name": "table_n100_minvar",
+   "description": "Minvar n=100",
+   "value": "3.3e-16",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n100 minvar3.3e-16;"
+  },
+  {
+   "name": "table_n100_time",
+   "description": "Time n=100",
+   "value": "7.7",
+   "unit": "ms",
+   "kind": "estimate",
+   "where": "Table1 n100 time7.7ms;"
+  },
+  {
+   "name": "table_n500_seeds",
+   "description": "Seeds n=500",
+   "value": "3",
+   "unit": "seeds",
+   "kind": "count",
+   "where": "Table1 n500 seeds3 corners503 nu_last -0.45 to -0.26 KKT2.1e-13 worst6.7e-11 minvar4.3e-16 time239ms; Where disagree n=500 gap 6.7e-11 is QP's residual shows QP's;"
+  },
+  {
+   "name": "table_n500_corners",
+   "description": "Corners n=500 503 > n assets leave-re-enter",
+   "value": "503",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Table1 n500 corners503 nu_last -0.45 to -0.26 KKT2.1e-13 worst6.7e-11 minvar4.3e-16 time239ms;"
+  },
+  {
+   "name": "table_n500_nu_last_low",
+   "description": "Low nu_last n500",
+   "value": "-0.45",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n500 nu_last -0.45 to -0.26;"
+  },
+  {
+   "name": "table_n500_nu_last_high",
+   "description": "High nu_last n500",
+   "value": "-0.26",
+   "unit": "nu_last",
+   "kind": "estimate",
+   "where": "Table1 n500 nu_last -0.45 to -0.26;"
+  },
+  {
+   "name": "table_n500_kkt",
+   "description": "Worst KKT n500",
+   "value": "2.1e-13",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Table1 n500 KKT2.1e-13 worst6.7e-11 minvar4.3e-16 time239ms;"
+  },
+  {
+   "name": "table_n500_worst_corner",
+   "description": "Worst corner gap n500 matches evidence_gap_n500_qp",
+   "value": "6.7e-11",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n500 worst6.7e-11 minvar4.3e-16 time239ms Where disagree gap is QP's; also evidence_gap_n500_qp same;"
+  },
+  {
+   "name": "table_n500_minvar",
+   "description": "Minvar gap n500",
+   "value": "4.3e-16",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Table1 n500 minvar4.3e-16;"
+  },
+  {
+   "name": "table_n500_time",
+   "description": "Time n500 239 ms",
+   "value": "239",
+   "unit": "ms",
+   "kind": "estimate",
+   "where": "Table1 n500 time239ms median time one run Algorithm1 nu_last included laptop;"
+  },
+  {
+   "name": "ff_n_portfolios_initial",
+   "description": "Initial Fama-French 100 size/BM portfolios before filtering",
+   "value": "100",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Sec_evidence Real returns reproducible daily value-weighted returns of the 100 portfolios that Fama and French form on size and book-to-market French Data Library Jan2016-Dec2025 published with code One portfolio misses 250 days and is dropped leaves 99 portfolios over 2514 days With centred returns as X last corner at nu_last=-0.0118 eleven times max|mu| below zero Algorithm1 returns all12 corners They match QP2.1e-13 KKT below3.9e-14 minvar holds7 matches1.6e-15 Diversified highly correlated frontier turns only12 times grid cheap test method at scale; Code data availability data/french100_daily.csv cut Kenneth French Data Library CRSP vintage Aug2026 SHA256 98298ef6...3c43 python/fetch_french.py rebuilds library rebuilds history each month CRSP revises later download can differ data remain French not MIT;"
+  },
+  {
+   "name": "ff_missing_days_drop_threshold",
+   "description": "Days missing threshold causing drop of one FF portfolio",
+   "value": "250",
+   "unit": "days",
+   "kind": "count",
+   "where": "Sec_evidence One portfolio misses 250 days and is dropped which leaves 99 portfolios over 2514 days; 100 initial; also SP500 keeping names with no more than 5% days missing fetch 2021-06-01 to 2026-06-01 494 stocks 1213 days; Threshold defines filter;"
+  },
+  {
+   "name": "ff_n_portfolios_after_filter",
+   "description": "FF portfolios retained after dropping 250-day missing",
+   "value": "99",
+   "unit": "portfolios",
+   "kind": "count",
+   "where": "Sec_evidence leaves 99 portfolios over 2514 days With centred returns as X last corner at nu_last=-0.0118 eleven times max|mu| below zero Algorithm1 returns all12 corners They match QP2.1e-13 KKT below3.9e-14 minvar holds7 matches1.6e-15; Sec7 portfolio data even delta1e-2 loses last corner delta1 finds all12 code delta1; Table robust factor models upto500 assets abstract about1e-13;"
+  },
+  {
+   "name": "ff_T_days",
+   "description": "Number of daily return observations for FF sample Jan2016-Dec2025",
+   "value": "2514",
+   "unit": "days",
+   "kind": "count",
+   "where": "Sec_evidence leaves 99 portfolios over 2514 days With centred returns as X last corner -0.0118; Real at scale 494 S&P500 stocks over 1213 days July2021-May2026 Yahoo Finance script fetches; Synthetic T=50; T defines sample size for covariance estimation X=(R-bar)/sqrt(T-1) tall X no factorisation to rounding; Period Jan2016-Dec2025 published data/french100_daily.csv CRSP vintage Aug2026;"
+  },
+  {
+   "name": "ff_nu_last",
+   "description": "FF last corner nu_last -0.0118 (duplicate of longonly_nu_last_ff100)",
+   "value": "-0.0118",
+   "unit": "nu multiplier",
+   "kind": "estimate",
+   "where": "Sec_evidence With centred returns as X last corner sits at nu_last=-0.0118 eleven times max|mu| below zero Algorithm1 returns all12 corners They match QP2.1e-13 KKT below3.9e-14 minvar holds7 matches1.6e-15; Sec7 No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small margin delta in nu0 portfolio even delta1e-2 loses delta1 finds all12 code delta1; Dataset highly correlated frontier turns only12 times;"
+  },
+  {
+   "name": "ff_n_corners",
+   "description": "Number of long-only corners on FF portfolios",
+   "value": "12",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Sec_evidence Algorithm1 returns all12 corners They match QP2.1e-13 KKT below3.9e-14 minvar holds7 matches1.6e-15 Diversified highly correlated frontier turns only12 times grid cheap test method at scale; Sec7 from delta1e-2 to1 all94 found stock vs portfolio even delta1e-2 loses last corner delta1 finds all12 code delta1; Table1 n20 19 n50 49 n100 99-103 n500 503 synthetic test plain17 shifted19 extra tilts0.1158 0.0128;"
+  },
+  {
+   "name": "ff_match_qp",
+   "description": "FF corner vs quadprog max L_inf gap",
+   "value": "2.1e-13",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence They match QP to 2.1e-13 and have KKT residuals below3.9e-14 and minvar holds7 matches1.6e-15 Diversified highly correlated frontier turns only12 times; Baseline quadprog active-set Goldfarb Idnani; Two kinds evidence KKT residual worst violation /||mu||inf or gradient size second baseline independent path; Tolerances1e-12 to1e-9 timings unchecked hardware varies;"
+  },
+  {
+   "name": "ff_kkt_below",
+   "description": "FF KKT residual upper bound",
+   "value": "3.9e-14",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec_evidence They match QP2.1e-13 and have KKT residuals below3.9e-14 and minvar holds7 matches1.6e-15; abstract about1e-13; Sec7 stock delta sweet spot KKT below4e-13 SP500 3.7e-13 test 3.6e-14;"
+  },
+  {
+   "name": "ff_minvar_holdings",
+   "description": "Number of FF portfolios with positive weight in long-only minimum-variance portfolio",
+   "value": "7",
+   "unit": "portfolios held",
+   "kind": "tally",
+   "where": "Sec_evidence minvar portfolio which holds7 of the portfolios matches to1.6e-15 Diversified highly correlated; Real at scale minvar holds53 stocks matches1.2e-15; Test plain17 shifted19 extra tilts; Synthetic factor models upto500; Number holdings indicates sparsity of long-only minvar;"
+  },
+  {
+   "name": "ff_minvar_match",
+   "description": "FF minvar vs QP gap",
+   "value": "1.6e-15",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence minvar portfolio holds7 matches to1.6e-15 Diversified highly correlated frontier turns only12 times grid cheap; Algorithm1 Take minvar end as w_S prop Sigma_SS^{-1}1 limit nu->-inf; Test minvar1.0e-16 SP5001.2e-15 Table n20-500 minvar 2.4e-16 1.7e-16 3.3e-16 4.3e-16;"
+  },
+  {
+   "name": "sp500_n_stocks",
+   "description": "S&P500 stocks retained after <=5% missing filter over 1213 days",
+   "value": "494",
+   "unit": "stocks",
+   "kind": "count",
+   "where": "Sec_evidence Real returns at scale On daily returns of 494 S&P500 stocks over1213 days July2021 to May2026 from Yahoo Finance script fetches them published with code with centred returns as X last corner at nu_last=-0.178 about fifty times max|mu| below zero Algorithm1 returns all94 corners in0.14 seconds while one QP takes0.12 seconds so 100-point grid costs about12 seconds still misses corners Warm-start OSQP setup once factorisation reused each tilt changing only linear term each solve starting from last takes4.9 seconds for same grid at tolerance1e-6 agrees with cold QP to4.1e-13 at every grid point At1e-5 takes3.4 seconds but misses some points by1e-3 Every corner KKT below3.7e-13 matches QP5.4e-13 minvar holds53 matches1.2e-15 timings laptop; Fetch details SP500 constituents listed Wikipedia adjusted closing prices from2021-06-01 to2026-06-01 keeping names with no more than5% days missing note used snapshot SHA256 b5faa522...9937e later download differs constituents change Yahoo revises prices checks pass; Code data availability python/fetch_sp500.py downloads;"
+  },
+  {
+   "name": "sp500_T_days",
+   "description": "Number of daily observations for S&P500 sample July2021-May2026",
+   "value": "1213",
+   "unit": "days",
+   "kind": "count",
+   "where": "Sec_evidence On daily returns of494 S&P500 stocks over1213 days July2021-May2026 from Yahoo Finance; FF 2514 days Jan2016-Dec2025; synthetic T=50; T defines centred returns X=(R-bar)/sqrt(T-1) tall X least squares min-norm d X'd=1 lars_path reports nu'/n_rows max_iter500 default needs10*len(mu); timings 0.14 sec vs0.12 sec 12 sec grid 4.9 sec OSQP1e-6 3.4 sec1e-5;"
+  },
+  {
+   "name": "sp500_missing_threshold_pct",
+   "description": "Missing-data filter threshold 5% for S&P500 names retention",
+   "value": "5",
+   "unit": "% days",
+   "kind": "parameter",
+   "where": "Sec_evidence python/fetch_sp500.py downloads S&P500 constituents Wikipedia adjusted closing prices from2021-06-01 to2026-06-01 keeping names with no more than5% of days missing One portfolio misses250 days dropped leaves99 FF 2514 days; Code data availability fetch details; Real reproducible;"
+  },
+  {
+   "name": "sp500_fetch_start",
+   "description": "Fetch window start for S&P500 price snapshot",
+   "value": "2021-06-01",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "Sec_availability python/fetch_sp500.py downloads S&P500 constituents Wikipedia adjusted closing prices from2021-06-01 to2026-06-01 keeping names <=5% missing note snapshot SHA256 b5faa522...9937e later download differs; Sec_evidence daily returns 494 S&P500 stocks over1213 days July2021-May2026 from Yahoo Finance script fetches them published; FF Jan2016-Dec2025 data/french100_daily.csv CRSP vintage Aug2026 98298ef6...3c43 python/fetch_french.py rebuilds;"
+  },
+  {
+   "name": "sp500_fetch_end",
+   "description": "Fetch window end for S&P500",
+   "value": "2026-06-01",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "Sec_availability python/fetch_sp500.py adjusted closing prices from2021-06-01 to2026-06-01 keeping names <=5% missing; Sec_evidence July2021-May2026 494 stocks 1213 days nu_last-0.178 fifty times max|mu| 94 corners 0.14 sec vs0.12 sec QP 12 sec grid 4.9 sec OSQP1e-6 agrees4.1e-13 3.4 sec1e-5 misses1e-3 KKT3.7e-13 matches5.4e-13 minvar53 matches1.2e-15;"
+  },
+  {
+   "name": "sp500_nu_last_scale",
+   "description": "Factor ~50 times max|mu| below zero for S&P500 nu_last -0.178 scale indicating depth into negative nu",
+   "value": "50",
+   "unit": "times max|mu|",
+   "kind": "estimate",
+   "where": "Sec_evidence last corner sits at nu_last=-0.178 about fifty times max|mu| below zero Algorithm1 returns all94 corners in0.14 sec while one QP0.12 sec so100-point grid costs about12 sec still misses corners OSQP4.9 sec at1e-6 agrees4.1e-13 at1e-5 3.4 sec misses1e-3 Every corner KKT below3.7e-13 matches QP5.4e-13 minvar holds53 matches1.2e-15 timings laptop; FF eleven times max|mu| -0.0118; test -4.95; factor extreme -11.9;"
+  },
+  {
+   "name": "sp500_n_corners",
+   "description": "Number of long-only corners on S&P500 stocks",
+   "value": "94",
+   "unit": "corners",
+   "kind": "tally",
+   "where": "Sec_evidence Algorithm1 returns all94 corners in0.14 seconds while one QP0.12 seconds so100-point grid costs about12 seconds still misses corners Warm OSQP4.9 sec at1e-6 agrees4.1e-13 at1e-5 3.4 sec misses1e-3 Every corner KKT below3.7e-13 matches QP5.4e-13 minvar holds53 matches1.2e-15 timings laptop; Sec7 On stock data delta1e-4 loses last corner from delta1e-2 to1 all94 found KKT below4e-13 at delta100 residual2e-11 On portfolio even delta1e-2 loses last corner delta1 finds all12 code takes delta1; Table n20 19 n50 49 n100 99-103 n500 503;"
+  },
+  {
+   "name": "sp500_time_algo_sec",
+   "description": "Runtime of Algorithm1 single call on 494x1213 problem",
+   "value": "0.14",
+   "unit": "seconds",
+   "kind": "estimate",
+   "where": "Sec_evidence Algorithm1 returns all94 corners in0.14 seconds while one QP takes about0.12 seconds so100-point grid costs about12 seconds still misses corners Warm-start OSQP setup once factorisation reused each tilt changing only linear term each solve starting from last takes4.9 seconds for same grid at tolerance1e-6 agrees cold QP4.1e-13 at every grid point At1e-5 takes3.4 seconds but misses some points by1e-3 Every corner KKT below3.7e-13 matches QP5.4e-13 minvar holds53 matches1.2e-15 timings laptop; Tolerances1e-12 to1e-9 timings unchecked hardware varies; Table1 times0.8 2.5 7.7 239 ms;"
+  },
+  {
+   "name": "sp500_time_one_qp_sec",
+   "description": "Runtime of single quadprog/CVXQP solve on same S&P500 problem",
+   "value": "0.12",
+   "unit": "seconds",
+   "kind": "estimate",
+   "where": "Sec_evidence while one QP takes about0.12 seconds so100-point grid costs about12 seconds still misses corners; Algorithm1 0.14 sec for94 corners; OSQP warm 4.9 sec at1e-6 3.4 sec at1e-5;"
+  },
+  {
+   "name": "sp500_grid_100_time_sec",
+   "description": "Cost of 100-point cold QP grid ~12 sec on S&P500",
+   "value": "12",
+   "unit": "seconds",
+   "kind": "estimate",
+   "where": "Sec_evidence so100-point grid costs about12 seconds and still misses corners Warm-start OSQP setup once factorisation reused each tilt changing only linear term each solve starting from last takes4.9 seconds for same grid at tolerance1e-6 agrees4.1e-13 At1e-5 3.4 seconds misses1e-3 Every corner KKT below3.7e-13 matches5.4e-13 minvar53 1.2e-15 timings laptop; Table1 n20 0.8ms n50 2.5ms n1007.7ms n500239ms; Abstract path from LASSO solver no portfolio software;"
+  },
+  {
+   "name": "sp500_grid_size",
+   "description": "Grid size 100 tilts used to contrast path vs QP",
+   "value": "100",
+   "unit": "grid points",
+   "kind": "parameter",
+   "where": "Sec_evidence so100-point grid costs about12 seconds still misses corners; While one QP0.12 sec Algorithm1 0.14 sec for94 corners; OSQP4.9 sec for same grid at1e-6 agrees4.1e-13 at1e-5 3.4 sec misses1e-3; Grid points are tilts/lambdas where alternative solves QP instead of path; Path returns corners themselves every other frontier portfolio is linear interpolation between two of them; Usual alternative solve QP on grid each solve only accurate as tolerance every corner between grid points missed;"
+  },
+  {
+   "name": "sp500_osqp_warm_start_time_1e-6",
+   "description": "OSQP warm-start runtime for 100-point grid at tolerance 1e-6",
+   "value": "4.9",
+   "unit": "seconds",
+   "kind": "estimate",
+   "where": "Sec_evidence Warm-starting helps less: OSQP stellato2020 setup once factorisation reused with each tilt changing only linear term each solve starting from last takes4.9 seconds for same grid at tolerance1e-6 agrees with cold QP to4.1e-13 at every grid point At1e-5 takes3.4 seconds but misses some points by1e-3 Every corner KKT below3.7e-13 matches5.4e-13 minvar53 matches1.2e-15 timings laptop;"
+  },
+  {
+   "name": "sp500_osqp_tol_1e-6",
+   "description": "OSQP solver tolerance 1e-6 for warm-start comparison",
+   "value": "1e-6",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "Sec_evidence takes4.9 seconds for same grid at tolerance1e-6 and agrees with cold QP to4.1e-13 at every grid point At1e-5 takes3.4 seconds but misses some points by1e-3; Tolerances tests check residuals gaps against tolerances between1e-12 and1e-9 leave timings unchecked hardware varies;"
+  },
+  {
+   "name": "sp500_osqp_match_cold_1e-6",
+   "description": "Warm-start vs cold QP agreement at 1e-6 tolerance",
+   "value": "4.1e-13",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence agrees with cold QP to4.1e-13 at every grid point At1e-5 takes3.4 seconds but misses some points by1e-3; Every corner KKT below3.7e-13 matches QP5.4e-13 minvar53 matches1.2e-15; Tolerances1e-12 to1e-9;"
+  },
+  {
+   "name": "sp500_osqp_tol_1e-5",
+   "description": "Looser OSQP tolerance 1e-5 for speed/accuracy tradeoff",
+   "value": "1e-5",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "Sec_evidence At1e-5 takes3.4 seconds but misses some points by1e-3 Every corner KKT below3.7e-13 matches QP5.4e-13 minvar53 matches1.2e-15 timings laptop;"
+  },
+  {
+   "name": "sp500_osqp_time_1e-5",
+   "description": "OSQP warm-start runtime at 1e-5",
+   "value": "3.4",
+   "unit": "seconds",
+   "kind": "estimate",
+   "where": "Sec_evidence At1e-5 takes3.4 seconds but misses some points by1e-3 Every corner KKT below3.7e-13 matches5.4e-13 minvar53 matches1.2e-15 timings laptop;"
+  },
+  {
+   "name": "sp500_osqp_miss_1e-5",
+   "description": "Maximum L_inf miss vs cold QP at tolerance 1e-5",
+   "value": "1e-3",
+   "unit": "L_inf error",
+   "kind": "estimate",
+   "where": "Sec_evidence At1e-5 takes3.4 seconds but misses some points by1e-3 Every corner KKT below3.7e-13 matches5.4e-13 minvar53 matches1.2e-15 timings laptop; Tolerances between1e-12 and1e-9 tests leave timings unchecked;"
+  },
+  {
+   "name": "sp500_kkt_all_corners_below",
+   "description": "KKT residual bound for all 94 S&P500 corners",
+   "value": "3.7e-13",
+   "unit": "KKT residual",
+   "kind": "estimate",
+   "where": "Sec_evidence Every corner has KKT residual below3.7e-13 and matches its QP to5.4e-13 and minvar holds53 matches to1.2e-15 timings laptop; Sec7 On stock from delta1e-2 to1 all94 found KKT below4e-13; FF 3.9e-14 test 3.6e-14 long-short 2.6e-15 abstract about1e-13;"
+  },
+  {
+   "name": "sp500_match_qp_all_corners",
+   "description": "Maximum gap vs quadprog over S&P500 corners",
+   "value": "5.4e-13",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence matches its QP to5.4e-13 and minvar holds53 matches to1.2e-15 Every corner KKT below3.7e-13 timings laptop; Test corners6.0e-13 inside7.9e-14 minvar1.0e-16 Table worst per n 8.6e-14 1.5e-13 1.1e-11 6.7e-11 FF2.1e-13;"
+  },
+  {
+   "name": "sp500_minvar_holdings",
+   "description": "Number of stocks with positive weight in S&P500 long-only minvar",
+   "value": "53",
+   "unit": "stocks held",
+   "kind": "tally",
+   "where": "Sec_evidence minvar portfolio which holds53 stocks matches to1.2e-15 timings laptop; FF minvar holds7 matches1.6e-15; Algorithm1 Take minvar end as w_S prop Sigma_SS^{-1}1 limit nu->-inf final segment; Holdings indicate long-only minvar sparsity 53 of 494;"
+  },
+  {
+   "name": "sp500_minvar_match",
+   "description": "S&P500 minvar vs QP gap",
+   "value": "1.2e-15",
+   "unit": "L_inf gap",
+   "kind": "estimate",
+   "where": "Sec_evidence minvar portfolio holds53 matches to1.2e-15 timings laptop; FF1.6e-15 test1.0e-16 Table minvar 2.4e-16 1.7e-16 3.3e-16 4.3e-16;"
+  },
+  {
+   "name": "abstract_kkt_about",
+   "description": "Abstract headline approximately 1e-13 KKT optimality across all paths and solvers",
+   "value": "1e-13",
+   "unit": "KKT residual approx",
+   "kind": "estimate",
+   "where": "Abstract Every corner the path returns meets its own optimality conditions to about1e-13 and agrees with independent QP solvers on factor models upto500 assets on Fama-French size/BM portfolios and daily returns 494 S&P500 stocks Called naively long-only path stops at maxSharpe One shift of response by amount computed in advance lets single call reach minvar Script checks French returns R cross-check published locked environment anyone can repeat; Code data availability residuals gaps near1e-13 come different last digits other CPU/BLAS timings scale machine rerun not match digit tests check residuals gaps against tolerances between1e-12 and1e-9 leave timings unchecked; Introduction CLA 1956 LASSO1996 LARS2004 schmelzer Hastie prove change variables two paths coincide companion note checks numerically with lars_path sklearn no portfolio software covers long-short leverage cap fixed leverage varying risk appetite classical long-only fully invested - plain LASSO path is frontier Thm1 leverage same rescaled nonnegative LASSO shifted once covers whole frontier in one call Alg1; Alternative solve QP on grid each solve only accurate as tolerance every corner between grid points missed path returns corners themselves every other portfolio linear interpolation between two of them;"
+  },
+  {
+   "name": "lars_path_max_iter_default",
+   "description": "Default max_iter 500 in lars_path before required increase for large n",
+   "value": "500",
+   "unit": "iterations",
+   "kind": "parameter",
+   "where": "Sec7 lars_path reports nu' divided by n_rows and it stops after500 steps unless told otherwise which large problem needs: d code alphas,_,V=lars_path(X,y-nu0*d,method=lasso,positive=True,max_iter=10*len(mu)) nu=nu0+len(y)*alphas corners=V[:,1:-1] W,tilts=corners/corners.sum(0),1/corners.sum(0); Choosing nu0 any below last corner works last corner known in advance Beyond holds minvar support S argmin||Xu-d||2 There v_S=a-nu b bounds smallest bound is last corner nu_last code S=nnls(X,d)[0]>1e-9 a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 h g nu_last min formula No fixed safe nu_last -4.95 test -11.9 one models Table -0.178 stock -0.0118 portfolio where mu small margin delta1e-4 loses 1e-2 to1 all94 KKT<4e-13 at100 residual2e-11 portfolio1e-2 loses 1 finds12 code delta1 minvar limit nu->-inf w_S prop Sigma_SS^{-1}1;"
+  },
+  {
+   "name": "lars_path_max_iter_used_factor",
+   "description": "Factor 10 times n used for max_iter to guarantee path completes",
+   "value": "10",
+   "unit": "factor times n",
+   "kind": "parameter",
+   "where": "Sec7 code max_iter=10*len(mu) well above n; For Cholesky factor d=(X')^{-1}1 tall X least squares min-norm; Build Xy with X'X=Sigma X'y=mu or lars_path_gram with Xy=mu-nu0 SolveX'd=1 compute nu_last set nu0 Run positive LASSO on y-nu0d with max_iter well above n recover nu=nu0+n_rows alpha Drop first/last columns each remaining v/1'v is corner at tilt1/1'v Take minvar end w_S prop Sigma_SS^{-1}1 any other point interpolation in1/lambda or nu; Parameters lambda tilt c cap kappa penalty t=1'v=1/lambda budget nu multiplier;"
+  },
+  {
+   "name": "tolerance_tests_loose",
+   "description": "Upper test tolerance 1e-9 for gaps/residuals",
+   "value": "1e-9",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "Sec_availability lock fixes software not hardware residuals gaps near1e-13 come different last digits other CPU/BLAS timings scale machine rerun not match digit tests check residuals gaps against tolerances between1e-12 and1e-9 and leave timings unchecked; Abstract about1e-13 agrees with QP factor models upto500 FF99494 stocks; Sec_evidence KKT below2.6e-15 2.9e-15 gaps3.0e-7 1.4e-11 6.2e-6 1.9e-11 6.0e-13 7.9e-14 1.0e-16 3.4e-15 3.6e-14 etc;"
+  },
+  {
+   "name": "tolerance_tests_tight",
+   "description": "Lower test tolerance 1e-12",
+   "value": "1e-12",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "Sec_availability tests check residuals gaps against tolerances between1e-12 and1e-9 leave timings unchecked; Abstract about1e-13;"
+  },
+  {
+   "name": "nnls_support_threshold",
+   "description": "NNLS support detection threshold 1e-9 for minvar support S",
+   "value": "1e-9",
+   "unit": "threshold",
+   "kind": "parameter",
+   "where": "Sec7 code S=nnls(X,d)[0]>1e-9 minimum-variance support; Choosing nu0 any below last corner works last corner known in advance Beyond holds minvar support S support argmin_{u>=0}||Xu-d||2 lawson1974 There v_S=a-nu b a=Sigma_SS^{-1}mu_S b=Sigma_SS^{-1}1 segment stays optimal while nu<a_i/b_i for b_i>0 and j not in S Sigma_jS b>1 while nu<=(mu_j-Sigma_jS a)/(1-Sigma_jS b) smallest bound is last corner nu_last code S etc a b h g nu_last min formula No fixed safe nu_last -4.95 test etc;"
+  }
+ ],
+ "headline": "abstract_kkt_about",
+ "partitions": [
+  {
+   "split": "factor_model_size by n=20,50,100,500 each 3 seeds; corners tallies 19,49,99-103,503 and nu_last ranges per partition; KKT and worst-corner gaps per partition via table_n20_*, table_n50_*, table_n100_*, table_n500_* claims; simulated T=50 defines mu but period not dated; synthetic counts illustrate Table1 robustness",
+   "total": "synthetic_test_T_simulated_days",
+   "parts": [
+    "table_n20_seeds",
+    "table_n50_seeds",
+    "table_n100_seeds",
+    "table_n500_seeds"
+   ]
+  },
+  {
+   "split": "dataset by asset universe: synthetic test 20-asset, Fama-French size/BM 99 portfolios after 250-day drop, S&P500 494 stocks after 5% missing filter; each has own T 50 vs2514 vs1213 and nu_last -4.95 vs-0.0118 vs-0.178 and corners 19 vs12 vs94 and holdings 7 vs53; filters thresholds 250 days and 5% via ff_missing_days_drop_threshold and sp500_missing_threshold_pct claims; period Jan2016-Dec2025 FF and July2021-May2026 S&P500 vs not stated synthetic; validates CLA-LASSO identity across scales and correlation structures; independent solvers Clarabel vs quadprog per constraint type and warm-start OSQP comparison on S&P500; tolerances 1e-12 to1e-9; code handles both via same Xy construction Cholesky or centred returns or Gram input; shift delta experiments show 1e-4 loses vs1e-2 to1 succeeds on stocks FF needs delta1; timings 0.8ms to239ms vs0.14sec vs12sec grid; abstract ~1e-13 KKT across all; plain 17 vs shifted19 extra tilts0.1158 0.0128 maxSharpe0.1414 stop0.1415 vs minvar limit nu->-inf",
+   "total": "ff_n_portfolios_initial",
+   "parts": [
+    "synthetic_test_n_assets",
+    "ff_n_portfolios_after_filter",
+    "sp500_n_stocks"
+   ]
+  },
+  {
+   "split": "data quality filter thresholds: FF drop 250 days vs S&P keep <=5% missing; both are parameter counts defining retained samples 99 vs494 vs 1213 days; demonstrate reproducibility via fetch scripts and SHA hashes",
+   "total": "sp500_grid_size",
+   "parts": [
+    "ff_missing_days_drop_threshold",
+    "sp500_missing_threshold_pct"
+   ]
+  },
+  {
+   "split": "constraint type: long-short cap path 21 columns 19 corners Kelly 7.765 Sharpe 0.539 to2.120 vs fixed leverage c=2 rescaled same path tilts745.6 to0.2576 vs long-only plain 17 corners stop0.1415 maxSharpe0.1414 vs shifted 19 corners extra0.1158 0.0128 minvar; each verified with own KKT 2.6e-15 2.9e-15 3.6e-14 and independent solver 3.0e-7 1.4e-11 6.2e-6 1.9e-11 vs6.0e-13 7.9e-14 1.0e-16 3.4e-15; weights linear variance quadratic frontier arc slope1/(2lambda) no kinks when traced by tilt vs kinked when traced by cap; one shift reaches minvar; delta1 chosen covers all nu_last -4.95 -11.9 -0.178 -0.0118; max_iter10*len(mu) vs500 default",
+   "total": "longshort_path_total_columns",
+   "parts": [
+    "longshort_path_n_corners",
+    "longonly_plain_call_n_corners",
+    "longonly_shifted_path_total_corners_test"
+   ]
+  },
+  {
+   "split": "method variant plain vs shifted on test: plain lars_path positiveTrue stops at maxSharpe tilt0.1414 nu0 17 corners down to0.1415 vs shifted single call y-nu0 d with nu0=nu_last-max(|nu_last|,||mu||inf) delta1 reaches minvar total19 corners extra tilts0.1158 0.0128 nu_last-4.95; KKT below3.6e-14 vs4e-13 sweet spot vs2e-11 at delta100; FF needs delta1 vs stock needs1e-2 to1; algorithm chooses nu_last via S=nnls>1e-9 a b h g formula; minvar w_S prop Sigma_SS^{-1}1 limit nu->-inf; rate r nu interpolation; max_iter factor10",
+   "total": "longonly_shifted_path_total_corners_test",
+   "parts": [
+    "longonly_plain_call_n_corners",
+    "longonly_extra_tilt_1"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "KKT optimality per column long-short cap",
+   "statistic": "evidence_kkt_longshort_every_column",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "synthetic_test_T_simulated_days",
+    "longshort_path_total_columns"
+   ]
+  },
+  {
+   "test": "KKT long-short rescaled fixed leverage c=2",
+   "statistic": "evidence_kkt_longshort_rescaled",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "leverage_fixed_c_parameter"
+   ]
+  },
+  {
+   "test": "Independent solver Clarabel match at corners long-short",
+   "statistic": "evidence_clarabel_match_corners",
+   "p_value": "tolerance_tests_loose",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "longshort_path_n_corners"
+   ]
+  },
+  {
+   "test": "Clarabel match inside segments long-short",
+   "statistic": "evidence_clarabel_match_inside",
+   "p_value": "tolerance_tests_loose",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "longshort_path_total_columns"
+   ]
+  },
+  {
+   "test": "Clarabel fixed leverage corners c=2",
+   "statistic": "evidence_fixed_leverage_corners_match",
+   "p_value": "tolerance_tests_loose",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "sp500_grid_size"
+   ]
+  },
+  {
+   "test": "Clarabel fixed leverage inside",
+   "statistic": "evidence_fixed_leverage_inside_match",
+   "p_value": "tolerance_tests_loose",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "leverage_fixed_c_parameter"
+   ]
+  },
+  {
+   "test": "quadprog match long-only corners test problem",
+   "statistic": "evidence_longonly_match_qp_corners_test",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "longonly_shifted_path_total_corners_test"
+   ]
+  },
+  {
+   "test": "quadprog match inside test",
+   "statistic": "evidence_longonly_match_qp_inside_test",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "longonly_shifted_path_total_corners_test"
+   ]
+  },
+  {
+   "test": "quadprog min-var end test",
+   "statistic": "evidence_longonly_minvar_end_match_test",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "synthetic_test_T_simulated_days"
+   ]
+  },
+  {
+   "test": "KKT long-only corners/min-var test",
+   "statistic": "evidence_longonly_kkt_corners_minvar_test",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "synthetic_test_n_assets",
+    "longonly_shifted_path_total_corners_test"
+   ]
+  },
+  {
+   "test": "Table robust worst KKT n=20",
+   "statistic": "table_n20_kkt_residual",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "table_n20_seeds",
+    "table_n20_corners"
+   ]
+  },
+  {
+   "test": "Table robust worst corner gap n=20",
+   "statistic": "table_n20_worst_corner_gap",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "table_n20_seeds",
+    "table_n20_corners"
+   ]
+  },
+  {
+   "test": "Table robust n=500 gap is QP",
+   "statistic": "table_n500_worst_corner",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "table_n500_seeds",
+    "table_n500_corners"
+   ]
+  },
+  {
+   "test": "Fama-French KKT below",
+   "statistic": "ff_kkt_below",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "ff_n_portfolios_after_filter",
+    "ff_T_days",
+    "ff_n_corners"
+   ]
+  },
+  {
+   "test": "Fama-French QP match",
+   "statistic": "ff_match_qp",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "ff_n_portfolios_after_filter",
+    "ff_T_days"
+   ]
+  },
+  {
+   "test": "Fama-French min-var match holds7",
+   "statistic": "ff_minvar_match",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "ff_n_portfolios_after_filter",
+    "ff_minvar_holdings"
+   ]
+  },
+  {
+   "test": "S&P500 KKT every corner",
+   "statistic": "sp500_kkt_all_corners_below",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "sp500_n_stocks",
+    "sp500_T_days",
+    "sp500_n_corners"
+   ]
+  },
+  {
+   "test": "S&P500 QP match all corners",
+   "statistic": "sp500_match_qp_all_corners",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "sp500_n_stocks",
+    "sp500_n_corners"
+   ]
+  },
+  {
+   "test": "S&P500 min-var match holds53",
+   "statistic": "sp500_minvar_match",
+   "p_value": "tolerance_tests_tight",
+   "group_sizes": [
+    "sp500_n_stocks",
+    "sp500_minvar_holdings"
+   ]
+  },
+  {
+   "test": "OSQP warm-start vs cold at1e-6",
+   "statistic": "sp500_osqp_match_cold_1e-6",
+   "p_value": "sp500_osqp_tol_1e-6",
+   "group_sizes": [
+    "sp500_n_stocks",
+    "sp500_grid_size"
+   ]
+  }
+ ]
+}

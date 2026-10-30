@@ -1,0 +1,103 @@
+{
+ "title": "Fast Times, Slow Times: Timescale Separation in Financial Timeseries Data",
+ "hypothesis": "Slow variance and tail processes can be separated from fast processes via generalized eigenvalue / nonlinear FastICA criteria and their in-sample relaxation timescales persist out-of-sample.",
+ "data_sources": [
+  "not stated - source/vendor, frequency and price vs return definition not stated; X_t described only as \"n-dimensional column vector process (e.g., prices or returns)\""
+ ],
+ "sample": "Three independent baskets, each split into training (in-sample) and continuation (out-of-sample) with weights rescaled to unit gross exposure for plotting. No observation counts, frequency, missing data filters, or Treasury basket composition printed.\n- Basket 1 G10 currencies: n=10 implied by \"G10\" label; tickers/composition not stated; train \"2006–2010\", test \"2010–2025\"\n- Basket 2 five multifactor equity ETFs: IFSU, IUSZ, IUVL, IUMO, IUQA; n=5; train \"2021–2022\", test \"2022–2025\"\n- Basket 3 US Treasuries: number of tenors/maturities not stated; train \"1994-1998\", test \"1998-2025\"\nOverall span implied 1994 to 2025. No sample sizes (N rows) printed.",
+ "period_start": "not stated as single range - earliest train start printed is \"1994-1998\" (Treasuries); other baskets start \"2006–2010\" and \"2021–2022\"",
+ "period_end": "not stated as single range - latest test end printed is \"2010–2025\" (G10), \"2022–2025\" (ETFs), \"1998-2025\" (Treasuries); latest calendar year printed is 2025",
+ "method": [
+  "Define X_t as n-dim vector process of prices or returns (exact transform not stated). Define instantaneous variance drift min problem d/dt Var(X_t w_i^T)->min s.t. Var(W X_t^T)=1 ; E[w_i X_t^T X_t w_j^T]=delta_ij.",
+  "Variance Timescales (linear, k=1): Solve generalized eigenvalue problem C(t,T) w = lambda C(t,0) w where C(t,0)=covariance, C(t,T)=1/2 E[X_{t+T}^T X_t + X_t^T X_{t+T}] symmetrized autocovariance with lag T, lambda=(1+beta)/2T in [-1,1]. Relation to timescale t_i = -2T/(lambda_i-1). Solve via LAPACK gvd / scipy.linalg.eigh. Extract n eigenvectors; retain 5 slowest (largest lambda_closest to 1 / smallest beta) per basket. Lag T value, data frequency, covariance estimator (sample vs EWMA), demeaning not stated.",
+  "Tail Timescales (nonlinear, k=4): Minimize drift of 2k-th moment 1/2k E[(X_t w^T)^{2k}] s.t. E[w_i X_t^T X_t w_j^T]=delta_ij. Solution satisfies (2k-1)E[(X_t w^T)^{2k-2}(dX_t w^T) X_t] + E[(X_t w^T)^{2k-1} dX_t]=beta w, beta=2k E[(X_t w^T)^{2k-1}(dX_t w^T)]=2k d/dt M_2k, lambda=E[(X_t w^T)^{2k-1}(X_{t+T} w^T)] tail autocorrelation order k. Solve numerically via FastICA fixed-point iteration: single component w <- E[X_t d (w^T X_t)^{2k-1}] - (2k-1)E[(w^T X_t)^{2k-2}] w ; w <- w/|w| ; parallel W <- E[X_t d (W^T X_t)^{2k-1}] - (2k-1)E[(W^T X_t)^{2k-2}] W ; W <- (W X_t^T X_t W^T)^{-1/2} W . Convergence tolerance, initialization, max iter not stated.",
+  "Empirical fit: For each basket estimate W on training window only: G10 \"2006–2010\", ETFs \"2021–2022\", Treasuries \"1994-1998\". Fit twice: linear tICA k=1 and nonlinear tICA k=4 as defined Sec 2.1/2.2. Increasing k beyond 4 reported as producing no further meaningful changes - threshold not quantified.",
+  "Projection: Apply same in-sample W to out-of-sample period without re-estimation: G10 \"2010–2025\", ETFs \"2022–2025\", Treasuries \"1998-2025\". Rescale weights to unit gross exposure for display. Plot resulting portfolios time-series (green background=in-sample, white=out-of-sample) as Figures 1-3: g10/g10k, etf/etfk, tsy/tsyk each with subcaption Linear tICA k=1 vs Nonlinear tICA k=4.",
+  "Assessment is visual/qualitative only: compare persistence of weight profiles vs time-series; assess remark: relaxation timescales for slowest components appear remarkably robust out-of-sample with no visible deterioration at in-to-out transition and revert to slow timescale after shocks (e.g. 2008-2010 GFC, 2023 geopolitical events) vs orthogonality of components which decays as expected out-of-sample. No numeric timescale, autocorrelation, deterioration metric, test statistic or p-value printed."
+ ],
+ "claims": [
+  {
+   "name": "g10_basket_size_implied",
+   "description": "G10 currencies basket size implied by label G10",
+   "value": "10",
+   "unit": "currencies",
+   "kind": "count",
+   "where": "Sec 3 Empirical Examples: \"G10 currencies\""
+  },
+  {
+   "name": "etf_basket_size",
+   "description": "Number of multifactor equity ETFs in basket",
+   "value": "five",
+   "unit": "ETFs",
+   "kind": "count",
+   "where": "Sec 3: \"five multifactor equity ETFs (IFSU, IUSZ, IUVL, IUMO, IUQA)\""
+  },
+  {
+   "name": "g10_n_slow_components_extracted",
+   "description": "Number of slowest components extracted for G10 in-sample",
+   "value": "five",
+   "unit": "components",
+   "kind": "parameter",
+   "where": "Sec 3: \"we extracted the five slowest components from 2006–2010\""
+  },
+  {
+   "name": "etf_n_slow_components_extracted",
+   "description": "Number of slowest components extracted for factor ETFs in-sample",
+   "value": "five",
+   "unit": "components",
+   "kind": "parameter",
+   "where": "Sec 3: \"we extracted the five slowest components over 2021–2022\""
+  },
+  {
+   "name": "tsy_n_slow_components_implied",
+   "description": "Number of slowest components for US Treasuries - figure shows 5 lines but text does not state number explicitly",
+   "value": "not stated (figure implies five; text says \"we fitted over 1994-1998, and continued over 1998-2025\" without stating number)",
+   "unit": "components",
+   "kind": "parameter",
+   "where": "Sec 3 + Fig 3 caption"
+  },
+  {
+   "name": "linear_tica_exponent_k",
+   "description": "Exponent for linear variance-timescale tICA",
+   "value": "1",
+   "unit": "k",
+   "kind": "parameter",
+   "where": "Sec 3: \"linear tICA (k=1, section 2.1)\" and Eq 8-11"
+  },
+  {
+   "name": "nonlinear_tica_exponent_k",
+   "description": "Exponent for nonlinear tail-timescale tICA",
+   "value": "4",
+   "unit": "k",
+   "kind": "parameter",
+   "where": "Sec 3: \"nonlinear tICA (k=4, section 2.2)\" and Fig captions \"Nonlinear tICA, k=4\""
+  },
+  {
+   "name": "flash_crash_sp500_drop_background",
+   "description": "Background factual reference to 2010 Flash Crash magnitude - not a result of this paper",
+   "value": "9%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Sec 1: \"S&P 500 losing 9% of its value\" - Illustrative example, not estimated by authors"
+  },
+  {
+   "name": "headline_persistence_slow_timescales_qualitative",
+   "description": "Main conclusion: in-sample relaxation timescales of slowest components persist out-of-sample with no visible deterioration and revert after shocks (2008-2010, 2023 events). No numeric timescale, lambda, t_i, autocorrelation or deterioration statistic printed; Figures 1-3 only.",
+   "value": "not stated - no numeric estimate, test statistic or p-value printed; qualitative visual assessment only",
+   "unit": "none",
+   "kind": "estimate",
+   "where": "Sec 3 paragraphs 6-8 + Conclusion: \"appear to be remarkably robust out of sample, with no visible deterioration\"; \"revert back to their original, slow timescale\"; \"ability to persist the in-sample time scales ... out of sample\""
+  },
+  {
+   "name": "secondary_orthogonality_decay_qualitative",
+   "description": "Secondary qualitative finding: orthogonality of components decays as expected out-of-sample but timescales do not",
+   "value": "not stated - no numeric orthogonality measure, test statistic or p-value printed",
+   "unit": "none",
+   "kind": "estimate",
+   "where": "Sec 3 last paragraph: \"This robustness does not carry over to orthogonality of components, which decays as expected out of sample.\""
+  }
+ ],
+ "headline": "headline_persistence_slow_timescales_qualitative",
+ "partitions": [],
+ "tests": []
+}

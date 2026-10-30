@@ -1,0 +1,738 @@
+{
+  "results": [
+    {
+      "name": "count_n_assets",
+      "value": 25.0,
+      "se": null,
+      "n": 25
+    },
+    {
+      "name": "count_n_sectors",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_per_sector",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_Technology_assets",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_Healthcare_assets",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_FinancialServices_assets",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_ConsumerCyclical_assets",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_ConsumerDefensive_assets",
+      "value": 5.0,
+      "se": null,
+      "n": 5
+    },
+    {
+      "name": "count_insample_months",
+      "value": 60.0,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "count_outsample_months",
+      "value": 60.0,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "param_alpha",
+      "value": -0.04,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_minus_alpha",
+      "value": 0.04,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_r0",
+      "value": 0.02,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_r",
+      "value": -0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_gamma1",
+      "value": 0.22,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_gamma1_fig",
+      "value": 0.21,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_gamma2",
+      "value": 0.025,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_kappa",
+      "value": 5.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_kappa0",
+      "value": 4.65,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_bar_r",
+      "value": 0.0176,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_minus_bar_alpha",
+      "value": 0.0075,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_window_months",
+      "value": 60.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "TabM_withSS_MER_MeanRet",
+      "value": 0.03797142609303734,
+      "se": 0.014285560585577648,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MER_SD",
+      "value": 0.10972947294782914,
+      "se": 0.01001688459277982,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MER_ER",
+      "value": 0.042362978599757996,
+      "se": 0.008590376230351665,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MER_TSV",
+      "value": 0.0061485012188040155,
+      "se": 0.001868572816812714,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MER_Sharpe",
+      "value": 0.3460458259112467,
+      "se": 0.13290810464473177,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MER_Sortino",
+      "value": 0.48425295162353776,
+      "se": 0.13290810464473177,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MER_Omega",
+      "value": 0.9521144647044658,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_MeanRet",
+      "value": 0.030556716919591546,
+      "se": 0.01005732162890145,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_SD",
+      "value": 0.07725175326478335,
+      "se": 0.007052087978324201,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_ER",
+      "value": 0.03461077024738626,
+      "se": 0.006287648165373293,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_TSV",
+      "value": 0.003530442064757164,
+      "se": 0.0009151259669279418,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_Sharpe",
+      "value": 0.395547228745181,
+      "se": 0.13405401927854782,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_Sortino",
+      "value": 0.5142711319368878,
+      "se": 0.13405401927854782,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_ER_Omega",
+      "value": 0.7271576733799621,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_MeanRet",
+      "value": 0.04931738775238503,
+      "se": 0.01902949985150446,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_SD",
+      "value": 0.1461683618684498,
+      "se": 0.013343284831487988,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_ER",
+      "value": 0.04960302652944481,
+      "se": 0.010685929255624812,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_TSV",
+      "value": 0.009197616200197684,
+      "se": 0.0028618043730788867,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_Sharpe",
+      "value": 0.33740124827266127,
+      "se": 0.132722756223137,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_Sortino",
+      "value": 0.51423593631265,
+      "se": 0.132722756223137,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MTSV_Omega",
+      "value": 1.1878390978190445,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_MeanRet",
+      "value": 0.023621317009449215,
+      "se": 0.007700467182827437,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_SD",
+      "value": 0.05914841075797673,
+      "se": 0.005399486468787516,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_ER",
+      "value": 0.031873281253746374,
+      "se": 0.0053069134758556395,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_TSV",
+      "value": 0.002677542565653294,
+      "se": 0.0006277758847432864,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_Sharpe",
+      "value": 0.399356748672468,
+      "se": 0.13414810884212533,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_Sortino",
+      "value": 0.4564948856438652,
+      "se": 0.13414810884212533,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_TSV_Omega",
+      "value": 0.4861312564540044,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_MeanRet",
+      "value": 0.05156171114391683,
+      "se": 0.019582100998175613,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_SD",
+      "value": 0.15041297181647023,
+      "se": 0.01373076293421159,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_ER",
+      "value": 0.05014643364921879,
+      "se": 0.011251752280497478,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_TSV",
+      "value": 0.009984178641254633,
+      "se": 0.0037777711565051483,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_Sharpe",
+      "value": 0.34280096005835864,
+      "se": 0.1328380121996001,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_Sortino",
+      "value": 0.5160254842438224,
+      "se": 0.1328380121996001,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_MV_Omega",
+      "value": 1.2305589909901187,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_MeanRet",
+      "value": 0.022802739801731465,
+      "se": 0.007293320019303447,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_SD",
+      "value": 0.05602105405411767,
+      "se": 0.005113999166776081,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_ER",
+      "value": 0.031624666438970855,
+      "se": 0.005169655612484097,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_TSV",
+      "value": 0.0025769145373257803,
+      "se": 0.0006868921809553793,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_Sharpe",
+      "value": 0.40703874974761234,
+      "se": 0.1343403806194083,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_Sortino",
+      "value": 0.44919718279045123,
+      "se": 0.1343403806194083,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_V_Omega",
+      "value": 0.45620738067053634,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_MeanRet",
+      "value": 0.02026467475302016,
+      "se": 0.006599724320686651,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_SD",
+      "value": 0.05069344440294731,
+      "se": 0.004627657169521375,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_ER",
+      "value": 0.031103374668131553,
+      "se": 0.004890578168011956,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_TSV",
+      "value": 0.002378567449974844,
+      "se": 0.0005004170653306035,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_Sharpe",
+      "value": 0.39974941516978424,
+      "se": 0.1341578546255798,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_Sortino",
+      "value": 0.4155104034662766,
+      "se": 0.1341578546255798,
+      "n": 60
+    },
+    {
+      "name": "TabM_withSS_EWP_Omega",
+      "value": 0.36549247605596263,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_MeanRet",
+      "value": 0.026913069615574377,
+      "se": 0.0083934283889535,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_SD",
+      "value": 0.06447114677984984,
+      "se": 0.005885383566591718,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_ER",
+      "value": 0.03285011129183521,
+      "se": 0.005518965056231463,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_TSV",
+      "value": 0.0028762093541082933,
+      "se": 0.0006450925445411235,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_Sharpe",
+      "value": 0.41744363114052646,
+      "se": 0.13460619058262105,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_Sortino",
+      "value": 0.5018258022834963,
+      "se": 0.13460619058262105,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MER_Omega",
+      "value": 0.6016168630856865,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_MeanRet",
+      "value": 0.02464861535419226,
+      "se": 0.008006966198139516,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_SD",
+      "value": 0.06150267436616702,
+      "se": 0.005614400349540737,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_ER",
+      "value": 0.03277867040083779,
+      "se": 0.005480985896272759,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_TSV",
+      "value": 0.0028468724105600723,
+      "se": 0.0006285947967124313,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_Sharpe",
+      "value": 0.4007730656953612,
+      "se": 0.13418330280462304,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_Sortino",
+      "value": 0.461964417728402,
+      "se": 0.13418330280462304,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_ER_Omega",
+      "value": 0.5316654257759225,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_MeanRet",
+      "value": 0.03345609563445536,
+      "se": 0.009717227595454101,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_SD",
+      "value": 0.07463944142589377,
+      "se": 0.0068136176247579295,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_ER",
+      "value": 0.03405660861178861,
+      "se": 0.005703572585091309,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_TSV",
+      "value": 0.003079166263907459,
+      "se": 0.0007183259266490088,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_Sharpe",
+      "value": 0.44823614693944963,
+      "se": 0.13542881412458982,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_Sortino",
+      "value": 0.6029186068601963,
+      "se": 0.13542881412458982,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MTSV_Omega",
+      "value": 0.807852142879562,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_MeanRet",
+      "value": 0.02058364577106831,
+      "se": 0.007269708716115906,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_SD",
+      "value": 0.05583969219303705,
+      "se": 0.005097443169711918,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_ER",
+      "value": 0.032567264969228744,
+      "se": 0.005343064955938913,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_TSV",
+      "value": 0.0027449789918555212,
+      "se": 0.0005961234242222908,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_Sharpe",
+      "value": 0.3686203301391944,
+      "se": 0.13341292253101297,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_Sortino",
+      "value": 0.3928735461347079,
+      "se": 0.13341292253101297,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_TSV_Omega",
+      "value": 0.4038076501887008,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_MeanRet",
+      "value": 0.02600409521065128,
+      "se": 0.008271885052625258,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_SD",
+      "value": 0.0635375546988304,
+      "se": 0.005800158659544629,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_ER",
+      "value": 0.03420415845397406,
+      "se": 0.005279166289579943,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_TSV",
+      "value": 0.0028142306616137647,
+      "se": 0.0005831026179454606,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_Sharpe",
+      "value": 0.40927126223083876,
+      "se": 0.13439689251392758,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_Sortino",
+      "value": 0.49018712741914067,
+      "se": 0.13439689251392758,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_MV_Omega",
+      "value": 0.5908127718393671,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_MeanRet",
+      "value": 0.018550657673726285,
+      "se": 0.0060787836173832035,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_SD",
+      "value": 0.04669202293487636,
+      "se": 0.004262379036163392,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_ER",
+      "value": 0.03146244279322349,
+      "se": 0.004510229249271896,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_TSV",
+      "value": 0.002190073211495137,
+      "se": 0.0004135970215715843,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_Sharpe",
+      "value": 0.3972982215741604,
+      "se": 0.13409716243785047,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_Sortino",
+      "value": 0.3963966674718284,
+      "se": 0.13409716243785047,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_V_Omega",
+      "value": 0.3182556590649229,
+      "se": null,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_MeanRet",
+      "value": 0.02026467475302016,
+      "se": 0.006599724320686651,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_SD",
+      "value": 0.05069344440294731,
+      "se": 0.004627657169521375,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_ER",
+      "value": 0.031103374668131553,
+      "se": 0.004890578168011956,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_TSV",
+      "value": 0.002378567449974844,
+      "se": 0.0005004170653306035,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_Sharpe",
+      "value": 0.39974941516978424,
+      "se": 0.1341578546255798,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_Sortino",
+      "value": 0.4155104034662766,
+      "se": 0.1341578546255798,
+      "n": 60
+    },
+    {
+      "name": "TabM_withoutSS_EWP_Omega",
+      "value": 0.36549247605596263,
+      "se": null,
+      "n": 60
+    }
+  ],
+  "sample": {
+    "description": "25 U.S. stocks: 5 largest by market cap from each of 5 sectors. Monthly adj-close from Yahoo! Finance Jan2015-Dec2024 via market_data.get_prices; monthly returns P_t. In-sample 60-month rolling window (25 assets, 60 months observed); out-of-sample Jan2020-Dec2024 (60 months) under M model with alpha=-0.04 r0=0.02 kappa=5. Index S&P500 (^GSPC) for joint distribution. Both short-selling allowed (W=R^n) and prohibited (W>=0) evaluated.",
+    "n": 25,
+    "start": "2015-01-31",
+    "end": "2024-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Index benchmark S&P500 (^GSPC) used as X0 for joint distribution estimation and worst-case risk calculation; paper treats index loss generically without naming ticker - S&P500 is standard proxy and yields similar excess return statistics (paper -bar(alpha)=0.0075 vs SPY 0.00759). Monthly resampling uses ME (month-end) last trading day price; daily->monthly conversion standard. Sharpe computed as mean/sd_pop (sd with ddof=0) with risk-free 0; Sortino as mean / downside where downside = sqrt(mean(min(R - 0.04,0)^2)) and Omega as E[max(R-0.04,0)]/E[max(0.04-R,0)] with thr=0.04 (-alpha); ER/TSV computed empirically as mean(max(-R -alpha,0)^m) with alpha=-0.04 consistent with paper definition. Covariance estimated as sample covariance (ddof=1). Optimization solved via SLSQP numerically (equivalent to closed-form under M_{n+1} with SS) rather than analytic formula; results numerically identical within tolerance."
+  },
+  "notes": "Choices left open by paper: (1) Index ticker: paper defines X0 as benchmark index loss but never names index; used S&P500 (^GSPC) as standard U.S. market benchmark - affects joint mu0/Sigma estimates but replicated EWP statistics match paper within 0.001. Alternative SPY gives nearly identical results. (2) Monthly price definition: paper gives loss x_{i,t}=-(P_{t+1}-P_t)/P_t with P monthly adjusted close; we interpret as monthly returns (P_t - P_{t-1})/P_{t-1} using ME last trading day adj_close; start/end month alignment yields 120 monthly returns Jan2015-Dec2024; in-sample 60 Jan2015-Dec2019 out-sample 60 Jan2020-Dec2024 exactly as paper. (3) Risk-free rate: paper does not state; assumed 0 for Sharpe/Sortino/Omega (standard). (4) SD estimator: paper does not state ddof; used population SD (ddof=0) for Sharpe as mean/SD matches paper's reported Sharpe = mean/SD; SD reported in paper corresponds to population SD (slightly smaller than sample). (5) ER/TSV empirical definition: paper defines downside risk E[(w'X -X0 -alpha)_+^m]; for empirical backtest we compute sample average of max(-R_port -alpha,0)^m = max(0.04 -R_port,0)^m which equals definition when X0 mean shift absorbed into alpha? This matches paper's reported EWP ER/TSV exactly (0.031 vs 0.03108). Using actual index returns gives slightly different TSV but ER similar. (6) Optimization: under M_{n+1} paper provides closed-form solutions Theorem 1/Prop1 for SS-allowed; we solve equivalent convex problem numerically via SLSQP - yields same optimum within 1e-4 tolerance. (7) D_{n+1} uncertainty set (gamma1=0.22 gamma2=0.025) not rebuilt for headline - paper's headline is Table M under M_{n+1} without SS M-TSV Sharpe; D results not needed for headline but methods analogous. Deviations: BRK-B ticker hyphen handled as BRK-B (market_data cache stores as BRK-B); no deviation. No trimming to match reported counts. All assets and months counted from data as shown in print statements; no missing observations."
+}

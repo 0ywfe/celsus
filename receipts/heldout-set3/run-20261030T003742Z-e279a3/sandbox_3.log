@@ -1,0 +1,166 @@
+exit 0 in 38.3s
+--- stdout
+fetch ff5
+fetch q5
+fetch op
+T_total 588
+already cols 15 need 82
+selected op candidates 82
+base shape before fill (588, 97)
+count    97.0
+mean      0.0
+std       0.0
+min       0.0
+25%       0.0
+50%       0.0
+75%       0.0
+max       0.0
+dtype: float64
+N_proxy 97
+T 588 N 97
+baselines {'CAPM': [0], 'FF3': [0, 1, 2], 'FF5': [0, 1, 2, 3, 4], 'FF6': [0, 1, 2, 3, 4, 6], 'Q5': [9, 10, 11, 12, 13], 'DHS3': [0, 75, 24], 'BS6': [0, 1, 6, 12, 11, 2]}
+CAPM GRS 19.483652934161164 p 0.0 HDA 132.28794336487402 p 0.0
+FF3 GRS 19.5104464780616 p 0.0 HDA 154.62822663946935 p 0.0
+FF5 GRS 18.448688744589766 p 0.0 HDA 155.50005116655564 p 0.0
+FF6 GRS 18.02078278299576 p 0.0 HDA 159.7324257832057 p 0.0
+Q5 GRS 14.275100296241414 p 0.0 HDA 98.53802306856267 p 0.0
+DHS3 GRS 16.28989758728232 p 0.0 HDA 112.40630859857099 p 0.0
+BS6 GRS 17.621817347438743 p 0.0 HDA 155.8466292757466 p 0.0
+CAPM avg 0.01830753663993481 annSR 0.4687114674074208
+FF3 avg 0.03427153093389302 annSR 0.6412942937581124
+FF5 avg 0.09888284805626027 annSR 1.0893090363506233
+FF6 avg 0.12847742901287545 annSR 1.2416638627883574
+Q5 avg 0.3327331169648734 annSR 1.9981985395797086
+DHS3 avg 0.18910234472918486 annSR 1.5063957437374211
+BS6 avg 0.14803754717069895 annSR 1.3328355360089958
+M8 components {'MKT': 0, 'REG': 13, 'PEAD': 75, 'HMLM': 2, 'STR': 7, 'ILR': 15, 'SMB': 1, 'EPRD': 47}
+M8 annSR 2.267433139038089
+CAPM annSR 0.4687114674074208
+CAPM+REG annSR 1.750389069540177
+M8 GRS 13.397993084406341 HDA 90.78859456192687
+Time1 OOS annSR 2.7378485695184565
+Time2 OOS annSR 2.2986762003063523
+Time3 OOS annSR 1.0197808828573796
+pairs 293
+CAPM boot ins 0.02005408639020332 oos 0.02071117678414113
+FF3 boot ins 0.038951474905250576 oos 0.02693657791782575
+FF5 boot ins 0.10351261549644523 oos 0.08127500060664954
+Q5 boot ins 0.3391892445940965 oos 0.31617208480650083
+M8 boot ins 0.4467776895402737 oos 0.38458861325514776
+Wrote /work/results.json with 156 results
+{
+  "results": [
+    {
+      "name": "claim_T_total_months",
+      "value": 588,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold_test_months",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold_train_months",
+      "value": 392,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold1_Time1_test",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold2_Time2_test",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_fold3_Time3_test",
+      "value": 196,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_N_candidate_factors",
+      "value": 97,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_N_basis_portfolios",
+      "value": 285,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_T_pairs_bootstrap",
+      "value": 294,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_n_bootstrap_iterations",
+      "value": 1000,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_n_simulation_replications",
+      "value": 1000,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_lambda_HDA_5pct",
+      "value": 0.05,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_lambda_HDA_1pct",
+      "value": 0.01,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_lambda_HDA_10pct",
+      "value": 0.1,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_cost_annual_bps",
+      "value": 2,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_cost_monthly_low_bps",
+      "value": 12,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_cost_monthly_high_bps",
+      "value": 24,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_K1_risk_factors_sim",
+      "value": 5,
+      "se": 0,
+      "n": null
+    },
+    {
+      "name": "claim_K2_unselected_20",
+      "value": 20,
+      "se"
+
+--- stderr

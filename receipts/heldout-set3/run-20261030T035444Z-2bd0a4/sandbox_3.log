@@ -1,0 +1,216 @@
+exit 0 in 40.8s
+--- stdout
+Step 1: Fetch OEC Rwanda bilateral tungsten
+Fetching trade_i_baci_a_92 years 2009,2010,2011,2012
+  total 33 rows 33
+Fetching trade_i_baci_a_12 years 2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023
+  total 119 rows 119
+Total Rwanda bilateral records before dedup: 152
+Deduped records: 148
+Filtered value>0: 148
+Rwanda records 148
+
+Step 2: Fetch world price
+Fetching world price trade_i_baci_a_92 2009,2010,2011
+ World 2009 value 203037510 qty 22128 price 9175.44
+ World 2010 value 210583713 qty 151614 price 1388.94
+ World 2011 value 460433771 qty 31206 price 14754.64
+Fetching world price trade_i_baci_a_12 2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023
+ World 2012 value 388347619 qty 40493 price 9590.57
+ World 2013 value 395188998 qty 100025 price 3950.89
+ World 2014 value 412442209 qty 29285 price 14083.53
+ World 2015 value 263039737 qty 25280 price 10404.93
+ World 2016 value 187896389 qty 23380 price 8036.54
+ World 2017 value 197012570 qty 24316 price 8102.09
+ World 2018 value 251926641 qty 20400 price 12349.32
+ World 2019 value 174076883 qty 17511 price 9940.96
+ World 2020 value 140145391 qty 15728 price 8910.83
+ World 2021 value 227466867 qty 21578 price 10541.76
+ World 2022 value 275223329 qty 20179 price 13639.14
+ World 2023 value 218552573 qty 19361 price 11288.29
+World price years: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+
+Step 3: Build FX annual
+FX AUDUSD=X OK 3906 2009-01-01->2023-12-29
+FX EURRWF=X OK 3902 2009-01-01->2023-12-29
+FX EURUSD=X OK 3907 2009-01-01->2023-12-29
+FX GBPUSD=X OK 3907 2009-01-01->2023-12-29
+FX RWF=X OK 3909 2009-01-01->2023-12-29
+FX USDAED=X OK 3907 2009-01-01->2023-12-29
+FX USDBGN=X unavailable
+FX USDCHF=X OK 3904 2009-01-01->2023-12-29
+FX USDCNY=X OK 3904 2009-01-01->2023-12-29
+FX USDHKD=X OK 3906 2009-01-01->2023-12-29
+FX USDIDR=X OK 3906 2009-01-01->2023-12-29
+FX USDINR=X OK 3906 2009-01-01->2023-12-29
+FX USDJPY=X OK 3907 2009-01-01->2023-12-29
+FX USDKRW=X OK 3906 2009-01-01->2023-12-29
+FX USDKZT=X OK 3903 2009-01-01->2023-12-29
+FX USDMYR=X OK 3910 2009-01-01->2023-12-29
+FX USDPLN=X OK 3907 2009-01-01->2023-12-29
+FX USDRUB=X OK 3907 2009-01-01->2023-12-29
+FX USDRWF=X OK 3909 2009-01-01->2023-12-29
+FX USDSGD=X OK 3907 2009-01-01->2023-12-29
+FX USDTHB=X OK 3907 2009-01-01->2023-12-29
+FX USDTWD=X OK 3906 2009-01-01->2023-12-29
+FX USDTZS=X OK 3903 2009-01-01->2023-12-29
+FX USDUGX=X OK 3896 2009-01-01->2023-12-29
+FX USDVND=X OK 3909 2009-01-01->2023-12-29
+FX USDZAR=X OK 3905 2009-01-01->2023-12-29
+annual AUDUSD=X -> 15 years
+annual EURRWF=X -> 15 years
+annual EURUSD=X -> 15 years
+annual GBPUSD=X -> 15 years
+annual RWF=X -> 15 years
+annual USDAED=X -> 15 years
+annual USDCHF=X -> 15 years
+annual USDCNY=X -> 15 years
+annual USDHKD=X -> 15 years
+annual USDIDR=X -> 15 years
+annual USDINR=X -> 15 years
+annual USDJPY=X -> 15 years
+annual USDKRW=X -> 15 years
+annual USDKZT=X -> 15 years
+annual USDMYR=X -> 15 years
+annual USDPLN=X -> 15 years
+annual USDRUB=X -> 15 years
+annual USDRWF=X -> 15 years
+annual USDSGD=X -> 15 years
+annual USDTHB=X -> 15 years
+annual USDTWD=X -> 15 years
+annual USDTZS=X -> 15 years
+annual USDUGX=X -> 15 years
+annual USDVND=X -> 15 years
+annual USDZAR=X -> 15 years
+FX annual keys ['AUDUSD=X', 'EURRWF=X', 'EURUSD=X', 'GBPUSD=X', 'RWF=X']
+Unknown importer euukr Ukraine skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer ocaus Australia skipping (no currency mapping)
+Unknown importer ocaus Australia skipping (no currency mapping)
+Unknown importer sabol Bolivia skipping (no currency mapping)
+Missing E for eubgr BGN year 2016 skipping
+Unknown importer eurus Russia skipping (no currency mapping)
+Unknown importer eurus Russia skipping (no currency mapping)
+Unknown importer eurus Russia skipping (no currency mapping)
+Unknown importer eurus Russia skipping (no currency mapping)
+Unknown importer euswe Sweden skipping (no currency mapping)
+Unknown importer euswe Sweden skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer nausa United States skipping (no currency mapping)
+Unknown importer ocaus Australia skipping (no currency mapping)
+Unknown importer ocaus Australia skipping (no currency mapping)
+Dropped invalid 123->123
+Period counts:
+period_label
+Period2    45
+Period4    27
+Period3    26
+Period1    25
+Name: count, dtype: int64
+Importers overall 25 ['aftza', 'afuga', 'afzaf', 'asare', 'aschn', 'ashkg', 'asidn', 'asind', 'asjpn', 'askaz', 'askor', 'asmys', 'assgp', 'astha', 'astwn', 'asvnm', 'euaut', 'eubel', 'euche', 'eudeu', 'eugbr', 'euirl', 'eulux', 'eunld', 'eupol']
+Period1 n 25 importers 10 years [np.int64(2009), np.int64(2010), np.int64(2011), np.int64(2012)]
+Period2 n 45 importers 19 years [np.int64(2013), np.int64(2014), np.int64(2015), np.int64(2016)]
+Period3 n 26 importers 12 years [np.int64(2017), np.int64(2018), np.int64(2019)]
+Period4 n 27 importers 13 years [np.int64(2020), np.int64(2021), np.int64(2022), np.int64(2023)]
+Period1 beta -3.0385 se 12.4677 gamma -0.1659 se 0.4565 eta -4.0385 p 0.8075 n 25 imp 10
+Period2 beta -0.8515 se 16.5836 gamma -0.5176 se 1.2769 eta -1.8515 p 0.9591 n 45 imp 19
+Period3 beta -0.7465 se 9.3025 gamma 3.3389 se 1.8294 eta -1.7465 p 0.9360 n 26 imp 12
+Period4 beta -18.8473 se 14.9060 gamma -1.6936 se 2.3585 eta -19.8473 p 0.2061 n 27 imp 13
+
+Omega subsample 123
+Omega 0.16769 se 0.03568 p 0.0000 CI [0.09776,0.23761] n 123
+Diff Period2-Period1: diff 2.1870 se 22.3888 t 0.0977 p 0.9233 clusters 19
+Diff Period3-Period1: diff 2.2919 se 15.9894 t 0.1433 p 0.8881 clusters 15
+Diff Period4-Period1: diff -15.8089 se 21.5011 t -0.7353 p 0.4717 clusters 19
+Diff Period4-Period3: diff -18.1008 se 13.8068 t -1.3110 p 0.2084 clusters 17
+
+Wrote /work/results.json with 64 results
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/work/replicate.py:442: Pandas4Warning: The inplace keyword in DataFrame.dropna is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  df_panel.dropna(subset=["ln_X", "ln_E", "ln_PW"], inplace=True)

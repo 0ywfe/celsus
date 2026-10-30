@@ -1,0 +1,1411 @@
+{
+ "title": "Replication specification - Hawkes contagion China market",
+ "hypothesis": "Daily stock-index returns exhibit temporal dependence (trend continuity, oversold rebound) and cross-sector contagion/rotation that can be captured by multivariate (nonlinear inhibitory) Hawkes processes.",
+ "data_sources": [
+  "Shanghai Composite Index daily returns",
+  "Shenzhen Component Index daily returns",
+  "ChiNext Index daily returns",
+  "CSI Consumer Index 000932 daily returns",
+  "CSI Healthcare Index 000933 daily returns",
+  "CSI Finance & Real Estate Index 000934 daily returns"
+ ],
+ "sample": "Experiment 1: daily return series of Shanghai Composite, Shenzhen Component, ChiNext. Extreme events defined as return <10th percentile (sharp decline, type 1) or >90th percentile (sharp rise, type 0) of index return history; normal range ignored; bivariate Hawkes on two event types. Training 85% and validation 15% reported for Shanghai. Experiment 2: daily return series of CSI Consumer, CSI Healthcare, CSI Finance & Real Estate; six event types (cons-up, med-up, fin-up, cons-down, med-down, fin-down) defined by same 10th/90th percentile convention; six-dimensional Hawkes with inhibitory nonlinear link. Sample sizes printed as counts.",
+ "period_start": "February 2013 (Figure base February 26, 2013; Experiment 2 March 2013; goodness-of-fit train start 2013.02)",
+ "period_end": "March 2023 (goodness-of-fit test end 2023.03)",
+ "method": [
+  "1. Collect daily returns for indices. Experiment 1 N=2452 per index Feb 2013-Mar 2023; Experiment 2 N=2452 per sector Mar 2013-Mar 2023.",
+  "2. For each index define sharp decline/normal/sharp rise by 10th and 90th percentiles of return history. Experiment 1 thresholds printed: SSE [-1.285 1.481]%, SZI [-1.701 1.891]%, GEI [-2.105 2.502]%. Record occurrence when return falls in sharp decline or sharp rise.",
+  "3. Map returns to two-type point process: type0=sharp rise (>p90), type1=sharp decline (<p10).",
+  "4. Split SSE sequence 85% training (2084 samples) 15% validation (368 samples).",
+  "5. Fit bivariate exponential-kernel Hawkes lambda*(t)= mu + sum_{t_i<t} alpha*omega*exp(-omega(t-t_i)) with consistent omega across types. Hyperparameter omega=0.1 chosen by grid search. Estimate impact matrix A=[alpha_ij] and baseline mu via Python tick maximum likelihood. Likelihood L(theta;T)=[prod_i lambda*(t_i)] exp(-int_0^T lambda*(s)ds), log L = sum log lambda_{d_i}*(t_i) - sum_j int_0^T lambda_j*(s)ds, Monte Carlo estimate int_0^T lambda_j*(s)ds = T*E_s[lambda_j*(s)], s~U(0,T), SGD with NLL.backward().",
+  "6. Repeat step 5 for SZI and GEI with same omega=0.1; report quantiles, baseline, impact matrices.",
+  "7. Experiment 2: segment full sequence into 15 periods each 150 trading days.",
+  "8. Define six event types: 0 cons-up,1 med-up,2 fin-up,3 cons-down,4 med-down,5 fin-down using same extreme up/down convention; fit six-dimensional Hawkes.",
+  "9. Assume conditional intensity lambda*(t)=g(bar lambda*(t)), bar lambda*(t)= mu + alpha omega exp(-omega t), mu in R, alpha in R, omega>0, g(x)=max(x,0.01) removing non-negativity constraints; allow inhibition alpha_ij<0.",
+  "10. Estimate via SGD on NLL with Monte Carlo integration per Algorithm: for each type m sample N~U(0,T), compute lambda_m*(t_i), I_m = sum lambda_m*(t_i)/N *T, NLL= -sum log lambda_{d_i}*(t_i)+ sum I_m, backpropagate.",
+  "11. Select representative periods 3 (2014.12 to 2015.08) active structural bull and 5 (2016.03 to 2016.11) dormant; report 6x6 A, mu vector, omega.",
+  "12. Goodness-of-fit: under homogeneous Poisson moment estimate lambda_hat =1/(sum Delta t_i /n). Compute for 2013.02-2022.03 train and 2022.03-2023.03 test; compare Q-Q of transformed times Delta Lambda vs Exp(1) and scatter (Lambda_{t+1}-Lambda_t, Lambda_t-Lambda_{t-1}) for independence; no formal p-value reported."
+ ],
+ "claims": [
+  {
+   "name": "exp1_SSE_count",
+   "description": "Shanghai Composite count Experiment 1",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Descriptive Statistics"
+  },
+  {
+   "name": "exp1_SZI_count",
+   "description": "Shenzhen Component count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Descriptive Statistics"
+  },
+  {
+   "name": "exp1_GEI_count",
+   "description": "ChiNext count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Descriptive Statistics"
+  },
+  {
+   "name": "exp1_train_N",
+   "description": "SSE training 85%",
+   "value": "2084",
+   "unit": "observations",
+   "kind": "count",
+   "where": "text 85% training set (2,084 samples)"
+  },
+  {
+   "name": "exp1_validation_N",
+   "description": "SSE validation 15%",
+   "value": "368",
+   "unit": "observations",
+   "kind": "count",
+   "where": "text 15% validation set (368 samples)"
+  },
+  {
+   "name": "SSE_mean",
+   "description": "SSE mean daily return",
+   "value": "0.021",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Descriptive Statistics"
+  },
+  {
+   "name": "SSE_std",
+   "description": "SSE std",
+   "value": "1.32",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SSE_min",
+   "description": "SSE min",
+   "value": "-8.491",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SSE_median",
+   "description": "SSE median",
+   "value": "0.051",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SSE_max",
+   "description": "SSE max",
+   "value": "5.764",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SSE_skew",
+   "description": "SSE skew",
+   "value": "-0.927",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SSE_kurt",
+   "description": "SSE kurtosis",
+   "value": "6.71",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_mean",
+   "description": "SZI mean",
+   "value": "0.02",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_std",
+   "description": "SZI std",
+   "value": "1.601",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_min",
+   "description": "SZI min",
+   "value": "-8.446",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_median",
+   "description": "SZI median",
+   "value": "0.036",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_max",
+   "description": "SZI max",
+   "value": "6.454",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_skew",
+   "description": "SZI skew",
+   "value": "-0.683",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "SZI_kurt",
+   "description": "SZI kurtosis",
+   "value": "3.727",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_mean",
+   "description": "GEI mean",
+   "value": "0.06",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_std",
+   "description": "GEI std",
+   "value": "1.944",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_min",
+   "description": "GEI min",
+   "value": "-8.91",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_median",
+   "description": "GEI median",
+   "value": "0.045",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_max",
+   "description": "GEI max",
+   "value": "7.159",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_skew",
+   "description": "GEI skew",
+   "value": "-0.378",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "GEI_kurt",
+   "description": "GEI kurtosis",
+   "value": "2.034",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "q_SSE_p10",
+   "description": "SSE 0.1 quantile threshold",
+   "value": "-1.285",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table Parameter Comparison [-1.285 1.481]"
+  },
+  {
+   "name": "q_SSE_p90",
+   "description": "SSE 0.9 quantile threshold",
+   "value": "1.481",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table Parameter Comparison"
+  },
+  {
+   "name": "q_SZI_p10",
+   "description": "SZI 0.1 quantile",
+   "value": "-1.701",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table Parameter Comparison [-1.701 1.891]"
+  },
+  {
+   "name": "q_SZI_p90",
+   "description": "SZI 0.9 quantile",
+   "value": "1.891",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table"
+  },
+  {
+   "name": "q_GEI_p10",
+   "description": "GEI 0.1 quantile",
+   "value": "-2.105",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table [-2.105 2.502]"
+  },
+  {
+   "name": "q_GEI_p90",
+   "description": "GEI 0.9 quantile",
+   "value": "2.502",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Table"
+  },
+  {
+   "name": "omega_SSE",
+   "description": "SSE decay hyperparameter",
+   "value": "0.1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Equation and Table omega=0.1"
+  },
+  {
+   "name": "omega_SZI",
+   "description": "SZI decay hyperparameter",
+   "value": "0.1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table"
+  },
+  {
+   "name": "omega_GEI",
+   "description": "GEI decay hyperparameter",
+   "value": "0.1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Table"
+  },
+  {
+   "name": "A_SSE_00",
+   "description": "SSE impact alpha00 rise->rise",
+   "value": "0.382",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Matrix [0.382 0.387;0.218 0.343]"
+  },
+  {
+   "name": "A_SSE_01",
+   "description": "SSE impact alpha01 decline->rise",
+   "value": "0.387",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Matrix"
+  },
+  {
+   "name": "A_SSE_10",
+   "description": "SSE impact alpha10 rise->decline",
+   "value": "0.218",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Matrix"
+  },
+  {
+   "name": "A_SSE_11",
+   "description": "SSE impact alpha11 decline->decline",
+   "value": "0.343",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Matrix"
+  },
+  {
+   "name": "mu_SSE_0",
+   "description": "SSE baseline mu0",
+   "value": "0.024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "mu=[0.024 0.044]"
+  },
+  {
+   "name": "mu_SSE_1",
+   "description": "SSE baseline mu1",
+   "value": "0.044",
+   "unit": "",
+   "kind": "estimate",
+   "where": "mu"
+  },
+  {
+   "name": "A_SZI_00",
+   "description": "SZI impact alpha00",
+   "value": "0.175",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table SZI matrix [0.175 0.451;0.155 0.381]"
+  },
+  {
+   "name": "A_SZI_01",
+   "description": "SZI alpha01",
+   "value": "0.451",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_SZI_10",
+   "description": "SZI alpha10",
+   "value": "0.155",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_SZI_11",
+   "description": "SZI alpha11",
+   "value": "0.381",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_SZI_0",
+   "description": "SZI baseline mu0",
+   "value": "0.038",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table [0.038;0.047]"
+  },
+  {
+   "name": "mu_SZI_1",
+   "description": "SZI baseline mu1",
+   "value": "0.047",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_GEI_00",
+   "description": "GEI alpha00",
+   "value": "0.28",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table [0.28 0.385;0.154 0.348]"
+  },
+  {
+   "name": "A_GEI_01",
+   "description": "GEI alpha01",
+   "value": "0.385",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_GEI_10",
+   "description": "GEI alpha10",
+   "value": "0.154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_GEI_11",
+   "description": "GEI alpha11",
+   "value": "0.348",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_GEI_0",
+   "description": "GEI baseline mu0",
+   "value": "0.034",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table [0.034;0.05]"
+  },
+  {
+   "name": "mu_GEI_1",
+   "description": "GEI baseline mu1",
+   "value": "0.05",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "exp2_cons_count",
+   "description": "CSI Consumer count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table Descriptive Statistics Sector"
+  },
+  {
+   "name": "exp2_health_count",
+   "description": "CSI Healthcare count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table"
+  },
+  {
+   "name": "exp2_fin_count",
+   "description": "CSI Fin&RE count",
+   "value": "2452",
+   "unit": "observations",
+   "kind": "count",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_cons_mean",
+   "description": "CSI Consumer mean",
+   "value": "0.067",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table Sector"
+  },
+  {
+   "name": "CSI_cons_std",
+   "description": "CSI Consumer std",
+   "value": "1.648",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_cons_min",
+   "description": "CSI Consumer min",
+   "value": "-8.325",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_cons_median",
+   "description": "CSI Consumer median",
+   "value": "0.061",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_cons_max",
+   "description": "CSI Consumer max",
+   "value": "7.214",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_cons_skew",
+   "description": "CSI Consumer skew",
+   "value": "-0.361",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_cons_kurt",
+   "description": "CSI Consumer kurtosis",
+   "value": "2.753",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_mean",
+   "description": "CSI Healthcare mean",
+   "value": "0.035",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_std",
+   "description": "CSI Healthcare std",
+   "value": "1.659",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_min",
+   "description": "CSI Healthcare min",
+   "value": "-8.484",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_median",
+   "description": "CSI Healthcare median",
+   "value": "0.067",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_max",
+   "description": "CSI Healthcare max",
+   "value": "7.909",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_skew",
+   "description": "CSI Healthcare skew",
+   "value": "-0.395",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_health_kurt",
+   "description": "CSI Healthcare kurtosis",
+   "value": "2.67",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_mean",
+   "description": "CSI Fin&RE mean",
+   "value": "0.023",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_std",
+   "description": "CSI Fin&RE std",
+   "value": "1.557",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_min",
+   "description": "CSI Fin&RE min",
+   "value": "-9.363",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_median",
+   "description": "CSI Fin&RE median",
+   "value": "-0.034",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_max",
+   "description": "CSI Fin&RE max",
+   "value": "8.918",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_skew",
+   "description": "CSI Fin&RE skew",
+   "value": "-0.086",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "CSI_fin_kurt",
+   "description": "CSI Fin&RE kurtosis",
+   "value": "5.173",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "exp2_n_periods",
+   "description": "number of periods segmentation",
+   "value": "15",
+   "unit": "periods",
+   "kind": "parameter",
+   "where": "text segmented into 15 periods"
+  },
+  {
+   "name": "exp2_period_len",
+   "description": "period length",
+   "value": "150",
+   "unit": "trading days",
+   "kind": "parameter",
+   "where": "text each period comprising 150 trading days"
+  },
+  {
+   "name": "exp2_n_event_types",
+   "description": "six event types (3 sectors x up/down)",
+   "value": "6",
+   "unit": "types",
+   "kind": "parameter",
+   "where": "text six different event categories"
+  },
+  {
+   "name": "link_threshold",
+   "description": "link function lower bound g(x)=max(x,0.01)",
+   "value": "0.01",
+   "unit": "",
+   "kind": "parameter",
+   "where": "equation g(x)=max(x,0.01)"
+  },
+  {
+   "name": "A_p3_00",
+   "description": "Period3 A00",
+   "value": "1.161",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table Influence matrix Period3 row0 col0"
+  },
+  {
+   "name": "A_p3_01",
+   "description": "Period3 A01",
+   "value": "0.240",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table Period3"
+  },
+  {
+   "name": "A_p3_02",
+   "description": "Period3 A02",
+   "value": "0.253",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_03",
+   "description": "Period3 A03",
+   "value": "-0.335",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_04",
+   "description": "Period3 A04",
+   "value": "-0.469",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_05",
+   "description": "Period3 A05",
+   "value": "-0.154",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_10",
+   "description": "Period3 A10",
+   "value": "0.157",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_11",
+   "description": "Period3 A11",
+   "value": "1.143",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_12",
+   "description": "Period3 A12",
+   "value": "-0.238",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_13",
+   "description": "Period3 A13",
+   "value": "-0.230",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_14",
+   "description": "Period3 A14",
+   "value": "-0.173",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_15",
+   "description": "Period3 A15",
+   "value": "-0.208",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_20",
+   "description": "Period3 A20",
+   "value": "-0.105",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_21",
+   "description": "Period3 A21",
+   "value": "-0.298",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_22",
+   "description": "Period3 A22",
+   "value": "1.313",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_23",
+   "description": "Period3 A23",
+   "value": "-0.371",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_24",
+   "description": "Period3 A24",
+   "value": "-0.474",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_25",
+   "description": "Period3 A25",
+   "value": "-0.425",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_30",
+   "description": "Period3 A30",
+   "value": "0.109",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_31",
+   "description": "Period3 A31",
+   "value": "0.093",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_32",
+   "description": "Period3 A32",
+   "value": "0.002",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_33",
+   "description": "Period3 A33",
+   "value": "0.671",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_34",
+   "description": "Period3 A34",
+   "value": "0.420",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_35",
+   "description": "Period3 A35",
+   "value": "-0.067",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_40",
+   "description": "Period3 A40",
+   "value": "0.037",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_41",
+   "description": "Period3 A41",
+   "value": "-0.191",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_42",
+   "description": "Period3 A42",
+   "value": "-0.005",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_43",
+   "description": "Period3 A43",
+   "value": "0.460",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_44",
+   "description": "Period3 A44",
+   "value": "0.831",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_45",
+   "description": "Period3 A45",
+   "value": "0.078",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_50",
+   "description": "Period3 A50",
+   "value": "-0.366",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_51",
+   "description": "Period3 A51",
+   "value": "-0.100",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_52",
+   "description": "Period3 A52",
+   "value": "-0.136",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_53",
+   "description": "Period3 A53",
+   "value": "0.071",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_54",
+   "description": "Period3 A54",
+   "value": "0.033",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p3_55",
+   "description": "Period3 A55",
+   "value": "1.092",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_00",
+   "description": "Period5 A00",
+   "value": "-0.317",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table Period5"
+  },
+  {
+   "name": "A_p5_01",
+   "description": "Period5 A01",
+   "value": "-0.536",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_02",
+   "description": "Period5 A02",
+   "value": "-0.323",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_03",
+   "description": "Period5 A03",
+   "value": "-0.340",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_04",
+   "description": "Period5 A04",
+   "value": "-0.424",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_05",
+   "description": "Period5 A05",
+   "value": "-0.452",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_10",
+   "description": "Period5 A10",
+   "value": "-0.375",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_11",
+   "description": "Period5 A11",
+   "value": "-0.437",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_12",
+   "description": "Period5 A12",
+   "value": "-0.315",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_13",
+   "description": "Period5 A13",
+   "value": "-0.478",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_14",
+   "description": "Period5 A14",
+   "value": "-0.379",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_15",
+   "description": "Period5 A15",
+   "value": "-0.600",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_20",
+   "description": "Period5 A20",
+   "value": "-0.564",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_21",
+   "description": "Period5 A21",
+   "value": "-0.314",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_22",
+   "description": "Period5 A22",
+   "value": "-0.136",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_23",
+   "description": "Period5 A23",
+   "value": "-0.408",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_24",
+   "description": "Period5 A24",
+   "value": "-0.574",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_25",
+   "description": "Period5 A25",
+   "value": "-0.577",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_30",
+   "description": "Period5 A30",
+   "value": "-0.576",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_31",
+   "description": "Period5 A31",
+   "value": "-0.452",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_32",
+   "description": "Period5 A32",
+   "value": "-0.427",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_33",
+   "description": "Period5 A33",
+   "value": "-0.265",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_34",
+   "description": "Period5 A34",
+   "value": "-0.470",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_35",
+   "description": "Period5 A35",
+   "value": "-0.517",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_40",
+   "description": "Period5 A40",
+   "value": "-0.405",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_41",
+   "description": "Period5 A41",
+   "value": "-0.505",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_42",
+   "description": "Period5 A42",
+   "value": "-0.396",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_43",
+   "description": "Period5 A43",
+   "value": "-0.406",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_44",
+   "description": "Period5 A44",
+   "value": "-0.346",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_45",
+   "description": "Period5 A45",
+   "value": "-0.401",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_50",
+   "description": "Period5 A50",
+   "value": "-0.203",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_51",
+   "description": "Period5 A51",
+   "value": "-0.535",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_52",
+   "description": "Period5 A52",
+   "value": "-0.418",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_53",
+   "description": "Period5 A53",
+   "value": "-0.334",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_54",
+   "description": "Period5 A54",
+   "value": "-0.403",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "A_p5_55",
+   "description": "Period5 A55",
+   "value": "-0.338",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p3_0",
+   "description": "Period3 mu0",
+   "value": "-0.226",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table Background Intensity period3"
+  },
+  {
+   "name": "mu_p3_1",
+   "description": "Period3 mu1",
+   "value": "-0.200",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p3_2",
+   "description": "Period3 mu2",
+   "value": "-0.341",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p3_3",
+   "description": "Period3 mu3",
+   "value": "-0.079",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p3_4",
+   "description": "Period3 mu4",
+   "value": "-0.024",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p3_5",
+   "description": "Period3 mu5",
+   "value": "-0.095",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "omega_p3",
+   "description": "Period3 decay omega",
+   "value": "0.702",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table omega 0.702"
+  },
+  {
+   "name": "mu_p5_0",
+   "description": "Period5 mu0",
+   "value": "0.089",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table Background Intensity period5"
+  },
+  {
+   "name": "mu_p5_1",
+   "description": "Period5 mu1",
+   "value": "0.093",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p5_2",
+   "description": "Period5 mu2",
+   "value": "0.058",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p5_3",
+   "description": "Period5 mu3",
+   "value": "0.091",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p5_4",
+   "description": "Period5 mu4",
+   "value": "0.091",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "mu_p5_5",
+   "description": "Period5 mu5",
+   "value": "0.061",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table"
+  },
+  {
+   "name": "omega_p5",
+   "description": "Period5 decay omega",
+   "value": "0.004",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table omega 0.004"
+  },
+  {
+   "name": "lambda_poisson_train0",
+   "description": "Poisson rate train type0 2013.02-2022.03",
+   "value": "0.100",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Appendix lambda_hat_train [0.100,0.101]"
+  },
+  {
+   "name": "lambda_poisson_train1",
+   "description": "Poisson rate train type1",
+   "value": "0.101",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Appendix"
+  },
+  {
+   "name": "lambda_poisson_test0",
+   "description": "Poisson rate test type0 2022.03-2023.03",
+   "value": "0.067",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Appendix lambda_hat_test [0.067,0.082]"
+  },
+  {
+   "name": "lambda_poisson_test1",
+   "description": "Poisson rate test type1",
+   "value": "0.082",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Appendix"
+  }
+ ],
+ "headline": "A_SSE_01",
+ "partitions": [
+  {
+   "split": "Experiment 1 SSE training vs validation split",
+   "total": "exp1_SSE_count",
+   "parts": [
+    "exp1_train_N",
+    "exp1_validation_N"
+   ]
+  }
+ ],
+ "tests": []
+}

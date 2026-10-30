@@ -1,0 +1,4 @@
+Fixed: removed hard-coded paper counts (`1183`, `1178`, `318/264`) and trimming logic (`extra = cal_days - 1183`). Script now builds sample purely from data (`cal_days=1186` calendar, `descriptive_N=1181`, `VIX N=813`, `kalshi_series_count=len(list)`, `crypto_assets_count=len(dict)`) and reports counts as computed; `sample.extra`/`missing` set to `null` with `cannot_count` explanation for Kalshi-filtered paper N. `replicate.py` runs clean and writes `/work/results.json` with no paper literals.
+
+**Sample:** 6 cryptos via yfinance proxy for CoinGecko Jan2023-Mar2026 `1186` calendar days, `1181` descriptive, `813` trading (31.5% weekend drop), HAR `≈796` effective; vendor substitution noted.
+**Non-rebuildable:** all Kalshi-dependent claims (10 series, volume/OI, Fed-dovish/CPI coefficients `t=3.63` etc., OOS/CW, BH, orthogonalization, release-window, bootstrap, lead-lag, DVOL/GARCH) — listed in `not_rebuilt`.

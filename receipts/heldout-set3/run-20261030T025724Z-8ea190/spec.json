@@ -1,0 +1,155 @@
+{
+ "title": "Rethinking Beta: A Causal Take on CAPM",
+ "hypothesis": "Contemporaneous CAPM Rm,t -> Ri,t is incoherent as an acyclic SCM because Rm is a value-weighted aggregate of constituents (Aggregator Contradiction); the empirically plausible baseline is fork Z->{Rm,Ri} where OLS beta is an attenuated proxy for Z exposure, not a causal transmission. Any genuine market->stock mechanism must be lagged or leave-one-out.",
+ "data_sources": [
+  "ALFRED (macro)",
+  "Yahoo Finance (SPY, tickers, SPDR sector ETFs, VIX, DGS10, DXY)"
+ ],
+ "sample": "Large-cap U.S. equities, ~100 tickers balanced across 11 SPDR sectors; market proxy SPY log return; Z proxies daily change in VIX (DeltaVIX), change in 10y Treasury yield (DeltaDGS10), DXY log return, SPDR sector ETF return; CPI release dates as shock days; public data only; no leave-one-out index built for this test.",
+ "period_start": "2015",
+ "period_end": "2025",
+ "method": [
+  "1. Define returns at daily sampling Delta: market proxy Xm,t = SPY log return; Yi,t = ticker log return; Z_ext,t = {DeltaVIX_t, DeltaDGS10_t, DXY_ret_t, Sector_ret_t}; standardize shock controls where noted.",
+  "2. State admissible SCMs over (X,Y,Z) with time index; enforce necessary conditions temporal priority, acyclicity, mechanism, causal elimination; prove Aggregator Contradiction: with Xt = sum_j w_{j,t-1} Y_{j,t}, w_i>0, same-period structural Yi,t := beta Xt + Zt forces beta=0 unless w_i=0 (leave-one-out) or cyclic.",
+  "3. Illustrative Gaussian SEMs: Fork Z->X,Z->Y: X=a Z+UX, Y=b Z+UY; Chain Z->X->Y with lag: Xt = a Z_{t-Delta}+UX,t, Yt = c X_{t-Delta}+UY,t; UX,UY,UZ independent Normal(0,sigma^2); derive beta_fork = ab sigma_Z^2/(a^2 sigma_Z^2+sigma_X^2)=b/a * lambda, lambda in (0,1), residual Y-beta_fork X loads on Z with coefficient b sigma_X^2/(a^2 sigma_Z^2+sigma_X^2); derive beta_chain = Cov(Yt,X_{t-Delta})/Var(X_{t-Delta})=c, residual = UY,t orthogonal to Z.",
+  "4. Simulation verification: n=100,000 draws per sigma_X, a=b=c=1, sigma_Z=1, sigma_Y=1, sweep sigma_X in [0,5]; estimate OLS slope and fork post-hedge loading on Z for each sigma_X.",
+  "5. Pillar 1i CPI shock-day proxy test (pooled cross-section on CPI dates only): OLS Yi,t = alpha + beta Rm,t + e vs Yi,t = alpha + beta Rm,t + Gamma' Z_ext,t + e with Z_ext = {DeltaVIX,DeltaDGS10,DXY_ret,Sector_ret}; compare beta without vs with controls.",
+  "6. Pillar 1ii Environment dependence (full 2015-2025 sample): pooled interaction OLS Yi,t = alpha + beta Rm,t + sum_{e!=e0}(gamma_e 1{E_t=e}+ delta_e Rm,t 1{E_t=e}) + Gamma' Z_ext,t + u with environments E = VIX terciles, 60-day rates trend, 60-day USD trend, structural episodes (COVIDShock, RatesDown, hiking cycle, etc.); recover beta_e = beta+delta_e.",
+  "7. Pillar 1iii Post-hedge residuals on CPI days: form residuals from pre-event rolling CAPM Yi,t - beta_roll Rm,t (rolling window per conventional CAPM) then per-CPI-date regression residuals_t on standardized shock controls (DeltaVIX,Sector_ret,DGS10,DXY).",
+  "8. Pillar 2 Lag profile for causal timing (pooled, 2015-2025, k=0..5): OLS Yi,t = alpha + sum_{k=0}^{5} c_k Rm,t-k + Gamma' Z_ext,t + e; examine c_0 vs c_{k>=1} with CIs; diagnostics timing Granger-style X_{t-Delta}->Y vs Y_{t-Delta}->X and leave-one-out X^{-i} attenuation are stated as admissible checks but only lag profile is estimated with numbers in this version.",
+  "9. Conventional CAPM estimation context noted as rolling windows 36-60 months monthly or multi-year daily, not re-estimated here except as described."
+ ],
+ "claims": [
+  {
+   "name": "sample_n_tickers",
+   "description": "Cross-section of large-cap U.S. tickers",
+   "value": "~100",
+   "unit": "tickers",
+   "kind": "count",
+   "where": "Empirical checks: Data and setup 'comprises ~100 large-cap U.S. tickers'"
+  },
+  {
+   "name": "sample_n_sectors",
+   "description": "Number of SPDR sectors balanced across",
+   "value": "11",
+   "unit": "sectors",
+   "kind": "count",
+   "where": "Data and setup 'balanced across the 11 SPDR sectors'"
+  },
+  {
+   "name": "beta_cpi_no_controls",
+   "description": "Pooled OLS slope on Rm,t on CPI release days without Z controls",
+   "value": "~0.9",
+   "unit": "beta",
+   "kind": "estimate",
+   "where": "Pillar 1i text and Fig.1a 'from ~0.9 to ~0.03'"
+  },
+  {
+   "name": "beta_cpi_with_controls",
+   "description": "Pooled OLS slope on Rm,t on CPI release days with DeltaVIX,DeltaDGS10,DXY,Sector controls",
+   "value": "~0.03",
+   "unit": "beta",
+   "kind": "estimate",
+   "where": "Pillar 1i text and Fig.1a 'from ~0.9 to ~0.03'"
+  },
+  {
+   "name": "window_36_60_months",
+   "description": "Conventional CAPM rolling window length",
+   "value": "36–60 months",
+   "unit": "months",
+   "kind": "parameter",
+   "where": "Introduction para 2 'often 36–60 months of monthly data'"
+  },
+  {
+   "name": "sim_n_draws",
+   "description": "Simulation observations per sigma_X value",
+   "value": "100,000",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Numerical simulation 'We draw n=100,000 observations with a=b=c=1 ...'"
+  },
+  {
+   "name": "sim_a",
+   "description": "Fork/Chain SEM coefficient a",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Numerical simulation 'with a=b=c=1, sigma_Z=sigma_Y=1'"
+  },
+  {
+   "name": "sim_b",
+   "description": "Fork SEM coefficient b",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Numerical simulation 'with a=b=c=1'"
+  },
+  {
+   "name": "sim_c",
+   "description": "Chain SEM causal effect c = beta_chain benchmark",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Numerical simulation 'with a=b=c=1' and Chain sec 'beta_chain = c'"
+  },
+  {
+   "name": "sim_sigma_Z",
+   "description": "Simulation SD sigma_Z",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Numerical simulation 'sigma_Z=sigma_Y=1'"
+  },
+  {
+   "name": "sim_sigma_Y",
+   "description": "Simulation SD sigma_Y",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Numerical simulation 'sigma_Z=sigma_Y=1'"
+  },
+  {
+   "name": "sim_sigma_X_range",
+   "description": "Sweep range for proxy noise sigma_X in fork/chain simulations",
+   "value": "[0,5]",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Numerical simulation 'vary sigma_X in [0,5]'"
+  },
+  {
+   "name": "lag_k_max",
+   "description": "Maximum lag in pooled lag-profile regression sum_{k=0}^{5}",
+   "value": "5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Pillar 2 'sum_{k=0}^{5} c_k Rm,t-k' and Fig.2 k=0..5"
+  },
+  {
+   "name": "lag_k_blip",
+   "description": "Weak sample-specific lag where small slope appears",
+   "value": "2",
+   "unit": "lags",
+   "kind": "estimate",
+   "where": "Pillar 2 text 'if anything, there is a weak, sample-specific blip at k=2'"
+  },
+  {
+   "name": "beta_fork_formula",
+   "description": "Population OLS under fork Gaussian SEM",
+   "value": "ab sigma_Z^2 / (a^2 sigma_Z^2 + sigma_X^2)",
+   "unit": "formula",
+   "kind": "parameter",
+   "where": "Fork sec beta_fork = ab sigma_Z^2/(a^2 sigma_Z^2+sigma_X^2) = b/a * lambda"
+  },
+  {
+   "name": "beta_chain_benchmark",
+   "description": "Population OLS under lagged chain recovers true causal effect",
+   "value": "c",
+   "unit": "beta",
+   "kind": "parameter",
+   "where": "Chain sec beta_chain = c"
+  }
+ ],
+ "headline": "beta_cpi_with_controls",
+ "partitions": [],
+ "tests": []
+}

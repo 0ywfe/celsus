@@ -1,0 +1,60 @@
+exit 0 in 59.7s
+--- stdout
+Fetched FP.CPI.TOTL: 7714
+Fetched NY.GDP.PCAP.KD: 7714
+Fetched FP.CPI.TOTL.ZG: 7714
+Fetched NY.GDP.PCAP.KD.ZG: 7714
+Fetched NY.GDP.PETR.RT.ZS: 7714
+Fetched NE.TRD.GNFS.ZS: 7714
+Fetched TT.PRI.MRCH.XD.WD: 7714
+Fetched NE.GDI.TOTL.ZS: 7714
+Fetched NE.CON.GOVT.ZS: 7714
+Fetched SP.POP.GROW: 7714
+Fetched TM.VAL.FUEL.ZS.UN: 7714
+Fetched TX.VAL.FUEL.ZS.UN: 7714
+Fetched GOV_WGI_RL.EST: 5616
+Panel shape (7569, 13)
+Retained 133
+Missing [] extra ['IRQ', 'MOZ', 'QAT', 'TJK']
+Final countries 133
+Partition sanctions_only 14 direct_only 1 both 28 neither 87 geo ['RUS', 'BLR', 'UKR']
+sanctions_cpi rank 2 cond 88.66 donors 88 targets 42
+sanctions_cpi beta [-2.38087951e-03 -4.01143205e-05 -2.95188066e-04 -9.35058425e-04
+ -3.42547981e-03 -3.93467829e-02  5.04764642e-03 -3.92542624e-04]
+sanctions_cpi W1 -0.0385 se 0.0091 *** W2 0.0321 se 0.0144 ** inc 0.0761 se 0.0068 ***
+sanctions_gdppc rank 2 cond 624.54 donors 88 targets 42
+sanctions_gdppc beta [ 0.00127169 -0.00039294 -0.00010242  0.00301339 -0.00642003  0.05106792
+ -0.00974306 -0.0007709 ]
+sanctions_gdppc W1 0.0260 se 0.0107 ** W2 0.0878 se 0.0186 *** inc 0.0269 se 0.0078 ***
+direct_cpi rank 2 cond 95.96 donors 100 targets 29
+direct_cpi beta [-2.45489188e-03 -3.77135981e-05 -3.06785057e-04 -9.59154638e-04
+ -3.35471599e-03 -3.78390486e-02  5.08540801e-03 -4.12026358e-04]
+direct_cpi W1 -0.0291 se 0.0133 ** W2 0.0857 se 0.0433 * inc 0.1105 se 0.0272 ***
+direct_gdppc rank 2 cond 685.01 donors 101 targets 29
+direct_gdppc beta [ 1.11418940e-03 -4.73278306e-04 -4.01270069e-05  2.95258320e-03
+ -6.35661440e-03  4.72971284e-02 -9.81099114e-03 -7.74837331e-04]
+direct_gdppc W1 0.0017 se 0.0067  W2 0.0436 se 0.0137 *** inc 0.0172 se 0.0100 *
+inflation rank 2 cond 57.23 donors 88 targets 42
+inflation beta [ 0.00299108  0.00045807 -0.00035336  0.00073958  0.00169745 -0.01762093
+  0.00163818 -0.0007736 ]
+inflation W1 -0.0022 se 0.0014  W2 0.0287 se 0.0029 *** inc 0.0261 se 0.0023 ***
+growth rank 2 cond 74.94 donors 88 targets 42
+growth beta [-9.99647547e-05  4.03617451e-06  1.35417416e-04  2.55571679e-04
+ -1.05103438e-03 -6.80749664e-03 -5.22007333e-03  2.07649959e-04]
+growth W1 0.0227 se 0.0026 *** W2 -0.0035 se 0.0035  inc -0.0356 se 0.0056 ***
+CPI 2019-2021 0.0761 se 0.0068
+GDP 2019-2021 0.0269 se 0.0078
+CPI 2017-2019 0.0749 se 0.0081
+GDP 2017-2019 0.0542 se 0.0093
+CPI 2021 0.0747 se 0.0061
+GDP 2021 0.0004 se 0.0073
+CPI 2017-2021 0.0759 se 0.0073
+GDP 2017-2021 0.0401 se 0.0081
+CPI 2018-2021 0.0757 se 0.0071
+GDP 2018-2021 0.0334 se 0.0077
+Wrote results.json
+HEADLINE 0.0761
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/pandas/core/arraylike.py:438: RuntimeWarning: invalid value encountered in log
+  result = getattr(ufunc, method)(*inputs, **kwargs)

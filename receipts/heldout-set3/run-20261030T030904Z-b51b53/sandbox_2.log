@@ -1,0 +1,9 @@
+exit 0 in 39.7s
+--- stdout
+Downloading Zenodo archive...
+Downloaded 4958752 bytes
+Extracted
+Wrote 180 results
+non-numeric check: 0 []
+
+--- stderr

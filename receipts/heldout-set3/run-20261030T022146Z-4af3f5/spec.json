@@ -1,0 +1,147 @@
+{
+ "title": "A Millennium of UK Business Cycles: Insights from Structural VAR Analysis",
+ "hypothesis": "The main business cycle shock in the UK changed from supply-driven stagflationary before 1900 to demand-driven after 1900, with long-run decline in volatility peaking in the 17th century and time-varying real vs inflationary effects of money",
+ "data_sources": [
+  "A millennium of macroeconomic data compiled by Ryland et al. (2018) updated to 2022",
+  "Schmelzing (2020) long-term real interest rate for DFM natural rate",
+  "Bank of England / Ryland M0, synthetic M4/M3 series, GDP per capita, CPI"
+ ],
+ "sample": "Baseline is annual UK (England only for 1271-1700 GDP, 1271-1869 CPI) log-differences of GDP per capita, CPI and M0 per capita 1271-2022. First 50 observations used as training sample for OLS priors. Four-variable extension adds nominal interest rate and is estimated 1700-2022. DFM robustness uses unbalanced panel of 11 variables 1271-2022. Broad money M4 is M4x spliced with synthetic M4/M3 estimates pre-1870. Money M0 spliced from three M0 series from 1833 with M3 estimate growth pre-1833.",
+ "period_start": "1271",
+ "period_end": "2022",
+ "method": [
+  "Construct annual growth rates Y_t = {Delta y_t, Delta p_t, Delta m_t} where y=log GDP per capita, p=log CPI, m=log M0 per capita (variants with M4 per capita or aggregate non-per-capita for robustness)",
+  "Estimate time-varying VAR with stochastic volatility and fat tails: Y_t = c_t + sum_{j=1}^{P} b_{j,t} Y_{t-j} + Sigma_t^{1/2} e_t, e~N(0,1), P=2 (L=2). Phi_t=vec([c_t,b_{j,t}]) follows random walk Phi_t=Phi_{t-1}+Q^{1/2} eta_t. Covariance factored Sigma_t = A_t^{-1} H_t A_t^{-1'} where non-zero non-one elements of A_t follow random walk alpha_{ij,t}=alpha_{ij,t-1}+Q_alpha^{1/2} v_t. Diagonal H_t elements = sigma_{i,t}^2 * 1/lambda_{i,t} i=1,2,3 with log sigma_{i,t}^2 = log sigma_{i,t-1}^2 + g_i^{1/2} z_t and A_t u_t ~ T(0,sigma_{i,t},v_{lambda,i}) via scale mixture of normals p(lambda_k)= prod Gamma(1,v_{lambda,k})",
+  "Priors: initial VAR coefficients phi_0 from OLS on first 50 observations; sigma_0^2 fixed to diagonal of OLS covariance v_ols; A_0 ~ N(a_ols, V(a_ols)) with V diagonal =10*abs(a_ols); Q_0 ~ IW(Qbar_0,T0) where Qbar_0=var(phi_OLS)*1e-4 and T0 = length of pre-sample; blocks of S_i,0 ~ IW(Sbar_i,K_i) Sbar_i diagonal = a_ols*1e-3; sigma_i^2 ~ IG( (1e-4)/2,1/2 ); lambda_{k,i}=1/varpi_{k,i} prior p(lambda_k)~Gamma(1,v_{lambda,k}), p(v_{lambda,k})~Gamma(v0,2) with v0=20, Gamma(a,b) mean a df b",
+  "Simulate posterior via Gibbs sampling cycling 8 conditionals: G(lambda_{i,t}|Psi), G(v_{lambda,i}|lambda_{i,t}), G(g_{i,t}|Psi), G(sigma_{i,t}^2|Psi), G(A_t|Psi), G(Phi_t|Psi), G(Q|Psi), G(Q_A|Psi) using Carter-Kohn for TVP coefficients and Jacquier-Polson-Rossi Metropolis for stochastic volatility",
+  "Identify business cycle shock as VAR innovation that maximizes contribution to forecast error variance of Delta y_t at horizon 1: decompose Sigma=Omega Omega' Omega=tilde Omega Q with tilde Omega Cholesky and Q orthonormal, structural MA Y_t=B(L) Omega epsilon_t, solve argmax_{Q1} e1' [sum_{k=0}^{K} sum_{j=0}^{k-1} B_j tildeOmega Q1 Q1' tildeOmega' B_j'] e1 s.t. Q1'Q1=1. This equals frequency-domain shock dominant at 1.5-8 year business cycle frequencies (Angeletos et al. 2020)",
+  "Compute cumulative impulse response functions over 5-year horizon normalized to unit standard deviation shock; compute forecast error variance decompositions; compute time-varying unconditional stochastic volatilities and volatilities conditional on identified shock; report medians and 68 percent credible sets; compute forecast R2 predictability (Cogley 2010)",
+  "Robustness: re-estimate with M4 per capita in place of M0; re-estimate with aggregate (non-per-capita) GDP and M0; estimate Dynamic Factor Model on 11 variables (real wages, GDP deflator, CPI, exports, commodity prices, GDP, GDP per capita, M4, share prices, dollar rate, real interest rate) in first differences except interest rate with observation X_t=B F_t+v_t, v_t=rho v_{t-1}+sigma_t^{1/2} e_t, log sigma_t=log sigma_{t-1}+g_t and transition F_t=beta_t F_{t-1}+A_t^{-1} H_t^{1/2} epsilon_t; estimate natural rate (r-star) as 5-year-ahead forecast of observed real interest rate following Lubik-Matthes (2015)",
+  "Four-variable sign-restricted VAR 1700-2022 adding nominal interest rate to separate pure aggregate demand shocks vs money supply shocks; report FEVDs for output, price, money, interest rate"
+ ],
+ "claims": [
+  {
+   "name": "gdp_irf_17c_approx_5pct",
+   "description": "Cumulative 5-year response of GDP per capita to unit business-cycle shock peaks in 17th century",
+   "value": "5%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Results: The Most Volatile Economic Period – a realization of the shock had the largest effects on GDP and CPI, with changes of approximately 5% and -4%, respectively"
+  },
+  {
+   "name": "cpi_irf_17c_minus_4pct",
+   "description": "Cumulative 5-year response of CPI to unit business-cycle shock peaks in 17th century",
+   "value": "-4%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "same sentence as above"
+  },
+  {
+   "name": "fev_inflation_16c_20pct",
+   "description": "Business cycle shock explains at most around 20% of FEV of inflation during most of 16th century",
+   "value": "20%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "business cycle shocks explain, at most, around 20% of the forecast error variance in inflation during the 16th century"
+  },
+  {
+   "name": "fev_inflation_17c_40pct",
+   "description": "Business cycle shock explains approximately 40% of FEV of inflation during 17th century",
+   "value": "40%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "and approximately 40% during the 17th century (middle panel Fig 2)"
+  },
+  {
+   "name": "fev_money_mid16c_20pct_low",
+   "description": "FEV of money due to business cycle shock rises from around 20% in mid-16th century",
+   "value": "20%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "forecast error variance in money rises from around 20% to nearly 80% by 1600"
+  },
+  {
+   "name": "fev_money_1600_80pct_high",
+   "description": "FEV of money due to business cycle shock reaches nearly 80% by 1600 and remains elevated in 17th century",
+   "value": "80%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "to nearly 80% by 1600 and remains elevated throughout the 17th century"
+  },
+  {
+   "name": "m4_m0_ratio_1833_1_9",
+   "description": "M4/M0 ratio in 1833",
+   "value": "1.9",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "M4/M0 ratio rose from 1.9 in 1833 to 4.8 by 1900"
+  },
+  {
+   "name": "m4_m0_ratio_1900_4_8",
+   "description": "M4/M0 ratio by 1900",
+   "value": "4.8",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "to 4.8 by 1900 — period during which inflation response shifted from negative to positive"
+  },
+  {
+   "name": "fev_output_pure_demand_low_20pct",
+   "description": "Median share of output FEV due to pure aggregate demand shocks lower bound in post-1700 4-variable VAR",
+   "value": "20%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "median estimates indicate pure aggregate demand shocks account for larger share (20--30%) of output variation"
+  },
+  {
+   "name": "fev_output_pure_demand_high_30pct",
+   "description": "Median share of output FEV due to pure aggregate demand shocks upper bound",
+   "value": "30%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "same (20--30%)"
+  },
+  {
+   "name": "fev_output_money_supply_low_10pct",
+   "description": "Median share of output FEV due to money supply shocks lower bound",
+   "value": "10%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "compared to money supply shocks (approximately 10--20%)"
+  },
+  {
+   "name": "fev_output_money_supply_high_20pct",
+   "description": "Median share of output FEV due to money supply shocks upper bound",
+   "value": "20%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "approximately 10--20%"
+  },
+  {
+   "name": "fev_money_money_supply_60pct",
+   "description": "Median share of money FEV due to money supply shocks",
+   "value": "60%",
+   "unit": "percent FEV",
+   "kind": "estimate",
+   "where": "money supply shocks explain nearly 60% of the variation in money"
+  },
+  {
+   "name": "natural_rate_1974_11_5pct",
+   "description": "Natural rate of interest peak in 1974 from DFM",
+   "value": "11.5%",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "natural rate peaking at 11.5% in 1974 (Fig rstar)"
+  },
+  {
+   "name": "gdp_corr_england_uk_99pct",
+   "description": "Correlation between growth of England-only and UK GDP where both available from 1700 onwards",
+   "value": "99%",
+   "unit": "percent correlation",
+   "kind": "estimate",
+   "where": "Appendix Data: correlation between their growth is very strong: 99%"
+  }
+ ],
+ "headline": "gdp_irf_17c_approx_5pct",
+ "partitions": [],
+ "tests": []
+}

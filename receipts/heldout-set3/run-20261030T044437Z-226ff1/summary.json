@@ -1,0 +1,42 @@
+{
+ "run_id": "run-20261030T044437Z-226ff1",
+ "paper": "2511.15643",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication's sample covers 1271-01-01 to 2016-12-31, but the paper's runs to 2022",
+ "first_line": "We could not check this paper: the replication's sample covers 1271-01-01 to 2016-12-31, but the paper's runs to 2022. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "irf_cpi_peak_17th_century",
+  "kind": "estimate",
+  "unit": "percent",
+  "reported": -4.0,
+  "reproduced": -3.4635658809012453,
+  "se": 1.0,
+  "n": 101,
+  "consistent": true,
+  "why": "paper inside -3.464 +/- 1.96"
+ },
+ "sample": [],
+ "judged": 15,
+ "matched": 6,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (m4_m0_ratio_1833 (1.9) at line 815, m4_m0_ratio_1900 (4.8) at line 816, rstar_peak_1974 (11.5%) at line 822). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "et_xmlfile==2.0.0",
+  "openpyxl==3.1.5"
+ ],
+ "calls": 79,
+ "cost_usd": 1.7819,
+ "tokens_in": 7257870,
+ "tokens_out": 117647,
+ "wall_s": 3303.0,
+ "crashed": null
+}

@@ -1,0 +1,113 @@
+{
+ "run_id": "run-20261030T003732Z-bad7a6",
+ "paper": "2512.02352",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 13 of 26 checked results match within their uncertainty. Its main result, abstract_hat_theta_mean, is 0.91 in the paper and 0.9097 here (consistent). Sample size not rebuilt: requires 90k fBm paths T=2^16 via Davies-Harte exact circulant embedding (N=10k per H x9) ~5.9e8 timesteps, infeasible in 20min sandbox (fBm_N_per_H, 10,000 in the paper).",
+ "headline": {
+  "name": "abstract_hat_theta_mean",
+  "kind": "estimate",
+  "unit": "",
+  "reported": 0.91,
+  "reproduced": 0.9097391100606045,
+  "se": 0.02837188165857547,
+  "n": 45,
+  "consistent": true,
+  "why": "paper inside 0.9097 +/- 0.05561"
+ },
+ "sample": [
+  {
+   "name": "fBm_N_per_H",
+   "reported": 10000.0,
+   "reproduced": null,
+   "consistent": null
+  },
+  {
+   "name": "VIX_n_days",
+   "reported": 6651.0,
+   "reproduced": 6621,
+   "consistent": true
+  },
+  {
+   "name": "VIX_windows_count",
+   "reported": 45.0,
+   "reproduced": 45,
+   "consistent": true
+  },
+  {
+   "name": "VIX_windows_total_45",
+   "reported": 45.0,
+   "reproduced": 45,
+   "consistent": true
+  },
+  {
+   "name": "iid_null_W1024_N",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W512_N",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W1024_N2",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W2048_N",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W4096_N",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W8192_N",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W16384_N",
+   "reported": 1000.0,
+   "reproduced": 1000,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W32768_N",
+   "reported": 500.0,
+   "reproduced": 500,
+   "consistent": true
+  },
+  {
+   "name": "null_table_W65536_N",
+   "reported": 500.0,
+   "reproduced": 500,
+   "consistent": true
+  }
+ ],
+ "judged": 26,
+ "matched": 13,
+ "rejections": [],
+ "rounds": 1,
+ "packages": [],
+ "calls": 30,
+ "cost_usd": 0.8294,
+ "tokens_in": 1568245,
+ "tokens_out": 96830,
+ "wall_s": 2575.9,
+ "crashed": null
+}

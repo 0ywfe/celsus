@@ -1,0 +1,228 @@
+{
+ "title": "Price Stability in the European Union: A Systemic Approach Using Random Matrix Theory",
+ "hypothesis": "Monthly inflation indices of Eurozone countries as a 27 x 307 system are not randomly generated; eigenvalue spectrum via Marčenko-Pastur and Power-law fit reveals noise-dominated overfitting, Dragon-king spikes, and regional modular structures with self-organization.",
+ "data_sources": [
+  "Eurostat databrowser prc_hicp_minr__custom_22494633"
+ ],
+ "sample": "Monthly inflation rate variations (HICP / Consumption Price indices) for 27 Eurozone country members, matrix W = countries x time, no pre-processing or transformation",
+ "period_start": "January 2001",
+ "period_end": "July 2026",
+ "method": [
+  "Step 1 - Data collection: Gather Eurostat monthly inflation rate variations for N=27 countries, T=307 monthly observations covering January 2001-July 2026 inclusive. Matrix W is T x N = 307 x 27. Abstract also prints 'January 2021 to July 2026' as period - Application section period January 2001-July 2026 with 307 observations is used. No transformations.",
+  "Step 2 - Wishart/correlation: Normalize W to tilde{W} and compute sample correlation matrix X = (1/N) * tilde{W}^T tilde{W}. Extract eigenvalues lambda_i. Ordered eigenvalues bar{lambda}_1 > bar{lambda}_2 > ... > bar{lambda}_n >0.",
+  "Step 3 - MP ESD and SETOL fit: Using WeightWatcher tool compute empirical spectral density (ESD) f(lambda)= N/T * sqrt((lambda_+-lambda)(lambda-lambda_-))/(2*pi*sigma^2) for lambda in [lambda_-,lambda_+] , 0 otherwise, where lambda_- = sigma^2*(1-sqrt(T/N))^2, lambda_+ = sigma^2*(1+sqrt(T/N))^2, aspect ratio Q=T/N. Log-log regression Power-law fit rho(lambda) ~ lambda^{-(a*mu + b)} to obtain lambda_-, sigma, information correlation alpha, and Kolmogorov-Smirnov distance D_KS vs theoretical Power-law. Select lambda_- achieving lowest D_KS.",
+  "Step 4 - Parameters for fit: Selected lambda_- =37.21, sigma=0.2, alpha=1.82, D_KS=0.10. Theoretical benchmarks: alpha ~2 = nearly perfect-fit, alpha in [2,6]= underfitting, alpha <2 =overfitting. lambda_- in [100,160]= perfect fit, lambda_- >200 = underfitting. These are parameters, not results.",
+  "Step 5 - Random benchmark: Compare empirical ESD to theoretical MP random ensemble max rand lambda_+^{rand} to identify spikes > lambda_+^{rand} as Dragon-kings / correlation-trap, not Gaussian outliers.",
+  "Step 6 - Pareto mapping: For overfitted case map alpha to Pareto shape mu via w_{i,j}(mu) ~ C/x^{mu+1}; rho(lambda) ~ lambda^{-(a*mu+b)} with a=1/2, b=1 for ideal alpha~2. Retrieved alpha=1.82 => mu=1.64.",
+  "Step 7 - Iterative stability: Compute condition numbers kappa_E(X)=sqrt(bar{lambda}_1/bar{lambda}_n) and kappa_D(X)=sqrt(sum bar{lambda}_i/bar{lambda}_n) iteratively: base estimation window 2001-2018 inclusive, then monthly additions 2019-2026 inclusive. Track kappa_E downward trend vs 2022 spike. Compute correlation between kappa_D and kappa_E series, and correlation of overall 2019-2026 sample with HICP.",
+  "Step 8 - NNSD denoising: Compute spacing distribution s_i=|bar{lambda}_i - bar{lambda}_{i-1}| for eigenvalues of X. Compute negative log-likelihood distances to P_GOE(s)= pi/2 * s * exp(-pi/4 * s^2) and P_Exp(s)=exp(-s) across correlation thresholds. Turning point where regime changes = cutoff 0.356. Clean correlation matrix keeping |corr| >0.356.",
+  "Step 9 - Clustering: On denoised X run Walktrap short random walks and leading eigenvector of modularity matrix Newman_2006 to detect communities. Report 6 communities. No other tuning printed."
+ ],
+ "claims": [
+  {
+   "name": "n_countries",
+   "description": "Number of Eurozone country indices in system",
+   "value": "27",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Abstract and Application: 27 country members / 27 Eurozone countries"
+  },
+  {
+   "name": "n_observations",
+   "description": "Number of monthly observations in system matrix W",
+   "value": "307",
+   "unit": "monthly observations",
+   "kind": "count",
+   "where": "Application: 307 observations"
+  },
+  {
+   "name": "lambda_minus_opt",
+   "description": "Selected lower bound lambda_- achieving lowest D_KS for Power-law fit",
+   "value": "37.21",
+   "unit": "eigenvalue units",
+   "kind": "estimate",
+   "where": "Figure 1 caption and text: lambda_-=37.21"
+  },
+  {
+   "name": "sigma_mp",
+   "description": "Sigma parameter of MP fit at selected lambda_-",
+   "value": "0.2",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Figure 1: sigma=0.2"
+  },
+  {
+   "name": "alpha_info_corr",
+   "description": "Information correlation Power-law index from WeightWatcher SETOL fit",
+   "value": "1.82",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Figure 1: alpha=1.82"
+  },
+  {
+   "name": "D_KS_opt",
+   "description": "Kolmogorov-Smirnov distance vs theoretical Power-law at selected lambda_-",
+   "value": "0.10",
+   "unit": "distance",
+   "kind": "estimate",
+   "where": "Figure 1: D_KS=0.10"
+  },
+  {
+   "name": "pareto_mu",
+   "description": "Pareto shape mu implied by alpha=1.82 via rho(lambda)~lambda^{-(a mu + b)} a=1/2 b=1",
+   "value": "1.64",
+   "unit": "not stated",
+   "kind": "estimate",
+   "where": "Text: mu=1.64"
+  },
+  {
+   "name": "corr_kappa_D_E",
+   "description": "Correlation between Demmel kappa_D and standard kappa_E iterative series",
+   "value": "0.988",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Footnote: correlation coefficient of 0.988"
+  },
+  {
+   "name": "corr_system_HICP_2019_2026",
+   "description": "Overall sample correlation of system (2019-2026) with HICP",
+   "value": "-0.824",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Text: overall sample correlation (2019-2026) with the HICP was found to be at a level of -0.824"
+  },
+  {
+   "name": "nnsd_cutoff",
+   "description": "NNSD regime-change turning point threshold used to denoise correlation matrix",
+   "value": "0.356",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Figure 5: cutoff of 0.356"
+  },
+  {
+   "name": "n_communities_leading_eig",
+   "description": "Number of distinct communities from leading eigenvector on denoised X",
+   "value": "6",
+   "unit": "communities",
+   "kind": "tally",
+   "where": "Text and Figure 6: six distinct communities"
+  },
+  {
+   "name": "n_eastEurope_claimed",
+   "description": "Claimed size of east-European community in text",
+   "value": "5",
+   "unit": "countries",
+   "kind": "tally",
+   "where": "Text: clusters five east-European countries"
+  },
+  {
+   "name": "n_eastEurope_listed",
+   "description": "Number of names listed for east-European community: Slovakia, Czechia, Hungary, Poland, Latvia, Estonia",
+   "value": "6",
+   "unit": "countries",
+   "kind": "tally",
+   "where": "Parenthesis list: Slovakia, Czechia, Hungary, Poland, Latvia and Estonia (6 names)"
+  },
+  {
+   "name": "price_stability_target",
+   "description": "ECB quantitative price stability target for HICP Euro area",
+   "value": "below 2%",
+   "unit": "year-on-year HICP",
+   "kind": "parameter",
+   "where": "Section 2: year-on-year increase ... below 2%"
+  },
+  {
+   "name": "alpha_ideal_benchmark",
+   "description": "SETOL benchmark for nearly perfect-fit systems",
+   "value": "2",
+   "unit": "alpha units",
+   "kind": "parameter",
+   "where": "Text: alpha ~ 2 nearly perfect-fit"
+  },
+  {
+   "name": "alpha_underfit_low",
+   "description": "Lower bound of underfitting interval",
+   "value": "2",
+   "unit": "alpha units",
+   "kind": "parameter",
+   "where": "Text: values in range [2,6] underfitting"
+  },
+  {
+   "name": "alpha_underfit_high",
+   "description": "Upper bound of underfitting interval",
+   "value": "6",
+   "unit": "alpha units",
+   "kind": "parameter",
+   "where": "Text: values in range [2,6] underfitting"
+  },
+  {
+   "name": "alpha_overfit_threshold",
+   "description": "Overfitting threshold below which heavy-tail infinite variance",
+   "value": "2",
+   "unit": "alpha units",
+   "kind": "parameter",
+   "where": "Text: Overfitting occurs with values below 2"
+  },
+  {
+   "name": "lambda_minus_perf_low",
+   "description": "Lower bound of lambda_- interval yielding perfect fit [100,160]",
+   "value": "100",
+   "unit": "eigenvalue units",
+   "kind": "parameter",
+   "where": "Figure 3 text: values of lambda_- in range [100,160] perfect fit"
+  },
+  {
+   "name": "lambda_minus_perf_high",
+   "description": "Upper bound of lambda_- interval yielding perfect fit",
+   "value": "160",
+   "unit": "eigenvalue units",
+   "kind": "parameter",
+   "where": "Figure 3 text: values of lambda_- in range [100,160] perfect fit"
+  },
+  {
+   "name": "lambda_minus_underfit_thresh",
+   "description": "Lambda_- threshold above which underfitting",
+   "value": "200",
+   "unit": "eigenvalue units",
+   "kind": "parameter",
+   "where": "Text: values greater than 200 demonstrate underfitting"
+  },
+  {
+   "name": "p_KS",
+   "description": "p-value for KS Power-law goodness-of-fit",
+   "value": "not stated",
+   "unit": "not stated",
+   "kind": "parameter",
+   "where": "Paper does not report p-value for D_KS=0.10"
+  },
+  {
+   "name": "p_NNSD",
+   "description": "p-value for NNSD GOE vs Exp regime change test",
+   "value": "not stated",
+   "unit": "not stated",
+   "kind": "parameter",
+   "where": "Paper does not report p-value, reports cutoff 0.356 as turning point"
+  }
+ ],
+ "headline": "alpha_info_corr",
+ "partitions": [],
+ "tests": [
+  {
+   "test": "KS_powerlaw_fit",
+   "statistic": "D_KS_opt",
+   "p_value": "p_KS",
+   "group_sizes": [
+    "n_countries",
+    "n_observations"
+   ]
+  },
+  {
+   "test": "NNSD_GOEs_vs_Exp_regime_change",
+   "statistic": "nnsd_cutoff",
+   "p_value": "p_NNSD",
+   "group_sizes": [
+    "n_countries"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,132 @@
+{
+  "results": [
+    {
+      "name": "estimate_beta_CPI_uncontrolled",
+      "value": 0.9093790463120408,
+      "se": 0.042565203629153454,
+      "n": 11785
+    },
+    {
+      "name": "estimate_beta_CPI_controlled",
+      "value": -0.030316064551574852,
+      "se": 0.01902512036873084,
+      "n": 11785
+    },
+    {
+      "name": "count_tickers",
+      "value": 98,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "count_sectors",
+      "value": 11,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_window_months_low",
+      "value": 36,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_window_months_high",
+      "value": 60,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_illust_beta",
+      "value": 1.2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_illust_market_move",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_illust_stock_move",
+      "value": 1.2,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_n",
+      "value": 100000,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_a",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_b",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_c",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_sigma_Z",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_sigma_Y",
+      "value": 1,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_sigma_X_low",
+      "value": 0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_sim_sigma_X_high",
+      "value": 5,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_min_k",
+      "value": 0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "param_lag_max_k",
+      "value": 5,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "Pooled CPI-day panel of ~100 large-cap US equities balanced across 11 SPDR sectors (SPY market log return; \u0394VIX daily change; \u0394DGS10 daily change from FRED; DXY log return; sector ETF log return). CPI release dates 2015-2025 from BLS. Pooled OLS on CPI dates, SE clustered by date.",
+    "n": 11785,
+    "start": "2015-01-02",
+    "end": "2025-10-10",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "Ticker identities proxied: 99 defined (9\u00d711), 98 retained (EA no Yahoo data). Market SPY adj_close log return; VIX \u0394 = ^VIX close diff; DGS10 \u0394 from FRED fredgraph.csv ffill to trading days then diff; DXY log return from DX-Y.NYB; sector ETF adj_close log return (XLRE from 2015-10-08, XLC from 2018-06-19 cause early drops, counted as 409 sector-missing obs). CPI dates scraped from bls.gov/bls/news-release/cpi.htm (cpi_MMDDYYYY.htm) with fallback hard-coded; 2 Good Fridays dropped. SE clustered by date (paper prints none). FRED and market data vintages live 2025-10-10. No leave-one-out index built per paper."
+  },
+  "notes": "Every choice paper leaves open and deviations: (1) Tickers: paper ~100 large-cap balanced across 11 SPDR sectors, no list; built 9 per sector =99 (XLF/XLE/XLK/XLV/XLI/XLB/XLP/XLY/XLU/XLRE/XLC), 98 retained (EA has no Yahoo prices in this window). Standard large-cap names; any similar set is same design. (2) Market proxy: SPY log return; used adj_close log return (dividend/split adjusted) as standard; paper says log return. (3) VIX proxy: ^VIX close daily point change (paper \u0394VIX daily change); Yahoo ^VIX is CBOE VIX. (4) DGS10 proxy: FRED DGS10 via fredgraph.csv; paper \u0394DGS10 daily change. Levels forward-filled to trading days then first-differenced (handles FRED blanks on holidays). Alternative using 10y yield ETF ^TNX gives similar. (5) DXY proxy: DX-Y.NYB (Yahoo ICE Dollar Index) log return; paper DXY log return. UUP would be alternative. (6) Sector ETFs: 11 SPDRs XLF/XLE/XLK/XLV/XLI/XLB/XLP/XLY/XLU/XLRE/XLC; paper SPDR sector ETF return. XLC inception 2018-06-19 and XLRE 2015-10-08 mean early CPI dates drop those sector tickers when sector required (dropped_sector counted). (7) CPI shock days: BLS archive index cpi.htm links cpi_MMDDYYYY.htm parsed with Mozilla UA; fallback hard-coded list verifies 131 dates 2015-2025 (paper 2015-2025). 2 Good Fridays (2017-04-14, 2020-04-10) are non-trading and dropped; no shift to next trading day. Mapping to SPY trading index. (8) Returns alignment: all log returns adj_close except VIX point change and DGS10 point change, aligned on same trading day T (contemporaneous). (9) Estimation: pooled OLS with intercept; SE reported as cluster-robust by date (cross-sectional dependence). Paper prints no SE/t/p for Fig3a; we supply cluster SE. HC0 SE also computed but cluster is appropriate. (10) Results: uncontrolled 0.909 (se 0.043) vs paper ~0.9; controlled with sector -0.030 (se 0.019) vs paper ~0.03. Both near zero, order-of-magnitude collapse; sign around zero is noise when residual market beta is near zero and SE 0.02 straddles zero. Without sector 0.83 (se 0.05) vs paper 'materially attenuated but positive' (no numeric) \u2013 consistent. (11) Period: live Yahoo ends 2025-10-10 vs paper 2015-2025 inclusive; FRED DGS10 up to 2025-12-31 but truncated to market window. Difference noted in sample. (12) Other pillars (environment dependence Fig3b-e, residual loadings Fig3f, lag profile Fig4) not in headline spec; our lag check shows c0 large ~0.91 without sector and ~0.0 with sector due to collinearity \u2013 paper's pillar2 c0 large is consistent with specification without sector control, we detail in subs. (13) Aggregator Contradiction proposition is analytical; not estimated. Live vintage and ticker-proxy are substitutions per SCORE, not sample differences; missing/extra are 0 because no paper N was printed to differ from."
+}

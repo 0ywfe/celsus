@@ -1,0 +1,53 @@
+{
+ "run_id": "run-20261030T031742Z-9c0b4f",
+ "paper": "2510.04211",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 36 of 36 checked results match within their uncertainty. Its main result, kappa_X7_Lithuania_2024, is -39.2 PPS in the paper and -33.44 PPS here (not judged: no standard error).",
+ "headline": {
+  "name": "kappa_X7_Lithuania_2024",
+  "kind": "estimate",
+  "unit": "PPS",
+  "reported": -39.2,
+  "reproduced": -33.43561282020027,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "no standard error"
+ },
+ "sample": [
+  {
+   "name": "count_total_pooled_n",
+   "reported": 319.0,
+   "reproduced": 319.0,
+   "consistent": true
+  },
+  {
+   "name": "count_N_countries",
+   "reported": 11.0,
+   "reproduced": 11.0,
+   "consistent": true
+  },
+  {
+   "name": "count_T_years",
+   "reported": 29.0,
+   "reproduced": 29.0,
+   "consistent": null
+  }
+ ],
+ "judged": 36,
+ "matched": 36,
+ "rejections": [],
+ "rounds": 1,
+ "packages": [],
+ "calls": 35,
+ "cost_usd": 0.9949,
+ "tokens_in": 2270673,
+ "tokens_out": 103343,
+ "wall_s": 2287.3,
+ "crashed": null
+}

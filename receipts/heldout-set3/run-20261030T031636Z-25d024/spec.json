@@ -1,0 +1,1498 @@
+{
+ "title": "The Output Convergence Debate Revisited: Lessons from recent developments in the analysis of panel data models",
+ "hypothesis": "Relaxing parallel trends and dynamic homogeneity via DCCE (DCCEP homogeneous slopes, DCCEMG heterogeneous) substantially raises estimated speed of convergence and reduces mean lag versus Barro (-b_T) and TWFE, eliminating asymptotic downward bias that tends to zero when factor is trended; Headline estimates are DCCEMG per capita phi=-0.113 (0.012) mean lag 6.1 (0.83) vs TWFE -0.027 (0.004) 27.1 (3.82) vs Barro phi 0.0032 (0.0014) 316 (137) to 0.0037 per capita and 0.0049-0.0058 per employee; per employee DCCEMG -0.144 (0.015) mean lag 5.1 (0.69); capital long-run DCCEMG 0.484 (0.122) per capita 0.481 (0.084) per employee ~ capital share 0.46; democracy long-run falls from TWFE 21.24 (7.21) n=175 /21.53 (7.47) n=148 to DCCEP 5.77 (3.59) n=148 /DCCEMG* 5.90 (3.06) n=148 /DCCEMG 4.30 (3.01) n=73 losing significance; time-invariant ethno -1.708 (0.608) TWFE per capita -3.062 (1.341) DCCEP and protection 0.699 (0.122) 0.952 (0.236) significant latitude 0.383 (1.289) 0.832 (2.568) not significant  Headline claims: panar_phi_per_capita_DCCEMG panar_meanlag_per_capita_DCCEMG panar_phi_per_employee_DCCEMG panar_meanlag_per_employee_DCCEMG capital_longrun_per_capita_DCCEMG capital_longrun_per_employee_DCCEMG barro_phi_hat_per_capita_spec1 barro_mean_lag_per_capita_spec1 barro_restriction_t_per_capita barro_restriction_t_per_employee democracy_longrun_acemoglu_TWFE_175 democracy_longrun_DCCEMG_73 timeinv_ethnoling_TWFE_per_capita timeinv_protection_TWFE_per_capita ",
+ "data_sources": [
+  "",
+  "data_sources PWT 10.01 rgdpna, rgdpo, rnna, pop, emp 1950-2019; Acemoglu et al 2019 replication democracy dichotomous 1960-2010; Kremer et al 2022 PPP time-invariant z_i absolute latitude, ethnic fractionalization, protection from expropriation, y-yPPP 1990  n time-invariant sources 144/121/107 TableSUM  z_i/100 scaling Table5  Global factor GLO PPP-weighted Asia Europe North America mean growth 2.4% p.a. Figure1; Stata xtdcce2 Ditzen 2021 for DCCE  Barro NLS phi recovery phi=1-(1+b_T)^{1/T} mean lag (1-phi)/phi and (1-phi-psi1-psi2)/phi for AR3  ",
+  "data_files PWT 10.01 https pwt.econ.upenn.edu; Acemoglu replication https://www.aeaweb.org/articles?id=10.1257/jpe.20180081 replication package; Kremer et al replication NBER Macro Annual 2022  Figure1 TKUDGA00.bmp  ",
+  "replication_notes Only printed numbers are claims; window lengths/lags/thresholds are parameters listed separately; p-values for restriction and comparison tests not printed => not stated per instruction and tests that would require them are either omitted or reported with p_value not stated; partitions with unprinted complement counts (e.g. 157=>100 leaves 57) are omitted  All SEs are heteroskedasticity robust (Huber-White for TWFE, DCCE robust for DCCEP/DCCEMG) or clustered by country for democracy TWFE as noted  Speed phi =1-sum rho = -coeff on y_{t-1} in ECM; barro phi =1-(1+b_T)^{1/T}  Mean lags computed as (1-phi-psi1-psi2)/phi  DCCE uses generalized inverse for collinear avg when factor trended  ",
+  "code_requirements 1. xtdcce2 for DCCEP/DCCEMG with generalized inverse, s_T lags of bar{y},bar{k},bar{d} as listed; 2. Barro NLS for phi and delta method SE for mean lag; 3. TWFE with two-way within and clustered SEs for democracy; 4. time-invariant second stage OLS of ahat on z with robust SE  Unbalanced panel handling via Wansbeek-Kapteyn incomplete panel within transform  ",
+  "reporting_requirements For each printed estimate report coeff, SE in parentheses, n,Tmin,Tave,Tmax, lag orders, mean lag, filter definitions; report Barro b_T,c_T,phi,mean lag for spec1 and spec2 per capita/per employee; report panar phi,Delta ylags,mean lag for TWFE/DCCEP/DCCEMG per capita/per employee with sample counts; report capital phi,k,Dk long-run per capita/per employee across three estimators; report democracy short/long run, phi, sample sizes Tmin/Tave/Tmax for n=175/148/73; report time-invariant z coeffs with SEs for TWFE/DCCEP filters per capita/per employee n=100 Tmax68 Tmin48/38 Tave63/61; report t=-3.10 -3.96 for c_T=-b_T restriction as estimates ",
+  "software Stata xtdcce2; alternative R plm + CCE implementation with generalized inverse  ",
+  "additional_info Figure1 99 countries 1960-2019 excl Burundi Cote dIvoire Gabon Ghana Guinea Eq Guinea Madagascar Uganda Tanzania Venezuela Zambia Zimbabwe Figure1 shows common growth factor; TableSUM summary stats means/SDs of growth rates and z_i (latitude 0.300 sd0.195 n=144 ethnic 0.364 sd0.308 n=121 protection 7.203 sd1.729 n=107) not headline  "
+ ],
+ "sample": "Penn World Tables v10.01 real GDP at constant 2017 national prices in million 2017US$ 'rgdpna'. Y_{it} scaled by POP_{it} => y_{it}=log(Y_{it}/POP_{it}) output per capita and by EMP_{it} => tilde{y}_{it}=log(Y_{it}/EMP_{it}) output per employee. Capital K_{it} 'rnna' scaled analogously k_{it}=log(K_{it}/POP_{it}), tilde{k}_{it}=log(K_{it}/EMP_{it}). Baseline panel: countries with >=30 yearly observations => n=157 baseline. For panel AR(3)/ARDL analyses unbalanced with T_{i} >=26 usable after lags. Barro cross-section uses balanced 1990-2019 T=29 n=157. Democracy analysis uses Acemoglu et al.(2019) replication data 1960-2010: original n=175 Tave=36.2 Tmin=6 Tmax=47; filtered to T_{i}>=24 (usable Tmin=20) => n=148 Tave=40 Tmax=47; time-varying democracy subsample n=73 Tave=41.3 Tmin=20 Tmax=47 of the n=148. Time-invariant second stage: n=100 countries with latitude, ethnic fractionalization, protection from expropriation and PPP diff available; first stage ARDL(2,2) estimated on n=157 with Tmax=68 Tmin=48 per capita Tave=63 and Tmin=38 per employee Tave=61.",
+ "period_start": "1950",
+ "period_end": "2019",
+ "method": [
+  "1. Define y_{it} and tilde{y}_{it} as above. Compute GLO global factor as PPP-weighted mean of logs for Asia, Europe, North America; verify trended with mean growth 2.4% p.a.",
+  "2. Barro regression. For balanced n=157 1990=T, 0=1990 estimate (4): y_{iT}-y_{i0}=a_{T}+b_{T}y_{i0}+c_{T}(y_{i0}-y^{PPP}_{i0})+zeta_{iT} by OLS and NLS. b_{T}=-(1-rho^{T}). Recover phi=1-rho=1-(1+b_{T})^{1/T}, theta = -[(1-(1+b_{T})^{1/T})/b_{T}]c_{T}. Mean lag=(1-phi)/phi. Heteroskedasticity-robust SE.",
+  "3. Panel AR without covariates. Estimate TWFE (1): y_{it}=alpha_{i}+f_{t}+ rho y_{i,t-1}+u_{it} and heterogeneous interactive form (5): y_{it}=alpha_{i}+gamma_{i}f_{t}+rho_{i}y_{i,t-1}+u_{it} with p=3. Convert to ECM (6). TWFE uses within M_{T}=I-TauTau'/T. DCCEP augments with bar{y}_{ot}, bar{y}_{o,t-1}, bar{y}_{o,t-2}, bar{y}_{o,t-3}; p_{T}=3,q_{T}=3,s_{T}=3 => rho_DCCEP in (11) using M_{bar{h}} with bar{H}=(tau,bar{y},bar{y}_{-1}) generalized inverse. DCCEMG uses (12) y_{it}=alpha_{in}-gamma_{i}psi(1)bar{mu}_{n}+gamma_{i}sum_{s=0}^{p_T}psi_{s}bar{y}_{o,t-s}+rho_{i}y_{i,t-1}+zeta_{it,n} with p_{T}=3,q_{T}=4; individual phi_{i,DCCE} in (14) using bar{W}_{i}=(tau,bar{y}_{o},...,bar{y}_{o,-qT}, Delta y_{i,-1}..) generalized inverse; phi_DCCEMG =n^{-1}sum phi_{i,DCCE} (15) Var=n^{-1}(n-1)^{-1}sum(phi_{i}-phi_MG)^2 (16). Unbalanced bar{y}_{ot}=n_{t}^{-1}sum_{i in t}y_{it}.",
+  "4. Panel AR with capital. Estimate (17) Delta y_{it}=alpha_{i}-phi_{i}y_{i,t-1}+sum_{s=1}^{pT-1}delta_{is}Delta y_{i,t-s}+beta_{i}'x_{it}+sum lambda' Delta x+psi_{i0}'bar{w}_{ot}+sum psi' Delta bar{w}+u_{it}, x=k or tilde{k}, bar{w}=(bar{y},bar{k}), s_{T}=4 for DCCEMG (3 for DCCEP), p_{T}=3. Long run = -beta/phi. TWFE/DCCEP/DCCEMG as above. Stata xtdcce2.",
+  "5. Democracy. Use Acemoglu dichotomous d_{it}. Estimate Delta y_{it}=alpha_{i}-phi y_{i,t-1}+sum_{1}^{3}psi Delta y_{t-l}+beta d_{it}+gamma_{i}'f_{t}+u_{it}. TWFE 4 lags. DCCEP/DCCEMG* impose homogeneous beta on n=148 with bar{y}, bar{d} averages from n=148, s_{T}=4 (bar{y}_{o,t}..bar{y}_{o,t-4}, bar{d}_{ot}). DCCEMG allows heterogeneous beta on n=73 varying d only, averages still n=148. Long run = beta/phi.",
+  "6. Time-invariant effects. First stage obtain psi_hat = psi_TWFE or psi_DCCEP from ARDL(2,2) in (y,k). Second stage filter a_{iT}=bar{y}_{io}-bar{q}_{io}'psi_hat (19). Regress a_{iT}=alpha_T+theta'z_{i}+eta_{iT}+bar{u}_{io} on z=(abs latitude, ethnic frac, protection expropriation, y_{1990}-y^{PPP}_{1990})/100 by OLS (20)-(22). Heteroskedasticity-robust SE. n=100."
+ ],
+ "claims": [
+  {
+   "name": "barro_b_hat_per_capita_spec1",
+   "description": "b_T per capita (1) with PPP diff SE 0.0363 NLS 1990-2019 n=157 T=29 29yrs T=29=> phi 0.0032 mean lag 316 Table1 col1 y_{1990} coeff -0.0876 (0.0363) ",
+   "value": "-0.0876",
+   "unit": "level  y_{2019}-1990 on y_{1990} T=29 ",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) y_{i,1990} (bhatT) -0.0876 (0.0363)"
+  },
+  {
+   "name": "barro_b_se_per_capita_spec1",
+   "description": "SE b_T per capita spec1 Table1 ",
+   "value": "0.0363",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col1 parentheses 0.0363 "
+  },
+  {
+   "name": "barro_b_hat_per_capita_spec2",
+   "description": "b_T per capita (2) no PPP SE 0.0346 NLS Table1 col2 y_{1990} -0.1025 0.0346 n=157 T=29 T=29=> phi 0.0037 mean lag 268 ",
+   "value": "-0.1025",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per capita (2) y_{i,1990} -0.1025 (0.0346)"
+  },
+  {
+   "name": "barro_b_se_per_capita_spec2",
+   "description": "SE b_T per capita spec2 ",
+   "value": "0.0346",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col2 parentheses 0.0346 "
+  },
+  {
+   "name": "barro_b_hat_per_employee_spec1",
+   "description": "b_T per employee (1) with PPP SE 0.0408 NLS Table1 col5 tilde y_{1990} -0.1330 (0.0408) n=157 T=29 T=29=> phi 0.0049 mean lag 203 Table1 ",
+   "value": "-0.1330",
+   "unit": "level  tilde y_{2019}-1990 on tilde y_{1990} T=29 ",
+   "kind": "estimate",
+   "where": "Table1 per employee (1) tilde y_{i,1990} -0.1330 (0.0408)"
+  },
+  {
+   "name": "barro_b_se_per_employee_spec1",
+   "description": "SE b_T per employee spec1 ",
+   "value": "0.0408",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col5 parentheses 0.0408 "
+  },
+  {
+   "name": "barro_b_hat_per_employee_spec2",
+   "description": "b_T per employee (2) no PPP SE 0.0365 Table1 col6 tilde y_{1990} -0.1559 (0.0365) T=29=> phi 0.0058 mean lag 171 ",
+   "value": "-0.1559",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per employee (2) tilde y_{1990} -0.1559 (0.0365)"
+  },
+  {
+   "name": "barro_b_se_per_employee_spec2",
+   "description": "SE b_T per employee spec2 ",
+   "value": "0.0365",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col6 parentheses 0.0365 "
+  },
+  {
+   "name": "barro_c_hat_per_capita_spec1",
+   "description": "c_T PPP diff per capita (1) y_{1990}-yPPP_{1990} coeff -0.2108 (0.1062) NLS Table1 ",
+   "value": "-0.2108",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per capita (1) y_{i,1990}-yPPP_{i,1990} (chatT) -0.2108 (0.1062)"
+  },
+  {
+   "name": "barro_c_se_per_capita_spec1",
+   "description": "SE c_T per capita (1) ",
+   "value": "0.1062",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col1 parentheses 0.1062 "
+  },
+  {
+   "name": "barro_c_hat_per_employee_spec1",
+   "description": "c_T PPP diff per employee (1) coeff -0.2420 (0.1117) Table1 ",
+   "value": "-0.2420",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per employee (1) y_{i,1990}-yPPP_{i,1990} (chatT) -0.2420 (0.1117)"
+  },
+  {
+   "name": "barro_c_se_per_employee_spec1",
+   "description": "SE c_T per employee (1) ",
+   "value": "0.1117",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col5 parentheses 0.1117 "
+  },
+  {
+   "name": "barro_phi_hat_per_capita_spec1",
+   "description": "phi=1-(1+bT)^{1/T} per capita (1) 0.0032 (0.0014) mean lag 316 (137) Table1 row phihat=1-(1+bhat)^{1/T} 0.0032 (0.0014) n=157 T=29 ",
+   "value": "0.0032",
+   "unit": "per annum",
+   "kind": "estimate",
+   "where": "Table1 per capita (1) phihat 0.0032 (0.0014)"
+  },
+  {
+   "name": "barro_phi_se_per_capita_spec1",
+   "description": "SE phi per capita (1) ",
+   "value": "0.0014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col1 parentheses 0.0014 row phi "
+  },
+  {
+   "name": "barro_phi_hat_per_capita_spec2",
+   "description": "phi per capita (2) NLS 0.0037 (0.0013) mean lag 268 (95) Table1 row phihat 0.0037 (0.0013) ",
+   "value": "0.0037",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per capita (2) phihat 0.0037 (0.0013)"
+  },
+  {
+   "name": "barro_phi_se_per_capita_spec2",
+   "description": "SE phi per capita (2) ",
+   "value": "0.0013",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col2 parentheses 0.0013 "
+  },
+  {
+   "name": "barro_phi_hat_per_employee_spec1",
+   "description": "phi per employee (1) NLS 0.0049 (0.0016) mean lag 203 (67) Table1 row phihat 0.0049 (0.0016) ",
+   "value": "0.0049",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per employee (1) phihat 0.0049 (0.0016)"
+  },
+  {
+   "name": "barro_phi_se_per_employee_spec1",
+   "description": "SE phi per employee (1) ",
+   "value": "0.0016",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col5 parentheses 0.0016 "
+  },
+  {
+   "name": "barro_phi_hat_per_employee_spec2",
+   "description": "phi per employee (2) NLS 0.0058 (0.0015) mean lag 171 (44) Table1 row phihat 0.0058 (0.0015) ",
+   "value": "0.0058",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per employee (2) phihat 0.0058 (0.0015)"
+  },
+  {
+   "name": "barro_phi_se_per_employee_spec2",
+   "description": "SE phi per employee (2) ",
+   "value": "0.0015",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col6 parentheses 0.0015 "
+  },
+  {
+   "name": "barro_mean_lag_per_capita_spec1",
+   "description": "mean lag years (1-phi)/phi per capita (1) 316 (137) Table1 row Mean lag in years 316 (137) ",
+   "value": "316",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table1 per capita (1) Mean lag 316 (137)"
+  },
+  {
+   "name": "barro_mean_lag_se_per_capita_spec1",
+   "description": "SE mean lag per capita (1) ",
+   "value": "137",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col1 parentheses 137 "
+  },
+  {
+   "name": "barro_mean_lag_per_capita_spec2",
+   "description": "mean lag per capita (2) 268 (95) Table1 ",
+   "value": "268",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per capita (2) Mean lag 268 (95)"
+  },
+  {
+   "name": "barro_mean_lag_se_per_capita_spec2",
+   "description": "SE mean lag per capita (2) ",
+   "value": "95",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col2 parentheses 95 "
+  },
+  {
+   "name": "barro_mean_lag_per_employee_spec1",
+   "description": "mean lag per employee (1) 203 (67) Table1 ",
+   "value": "203",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per employee (1) Mean lag 203 (67)"
+  },
+  {
+   "name": "barro_mean_lag_se_per_employee_spec1",
+   "description": "SE mean lag per employee (1) ",
+   "value": "67",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col5 parentheses 67 "
+  },
+  {
+   "name": "barro_mean_lag_per_employee_spec2",
+   "description": "mean lag per employee (2) 171 (44) Table1 ",
+   "value": "171",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 per employee (2) Mean lag 171 (44)"
+  },
+  {
+   "name": "barro_mean_lag_se_per_employee_spec2",
+   "description": "SE mean lag per employee (2) ",
+   "value": "44",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table1 col6 parentheses 44 "
+  },
+  {
+   "name": "barro_n",
+   "description": "number countries Barro balanced 1990-2019 Table1 Sample sizes Number countries (n) 157 n=157 per capita and per employee n=157 ",
+   "value": "157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table1 Sample sizes n 157 per capita 157 per employee"
+  },
+  {
+   "name": "barro_T",
+   "description": "years T Barro 2019-1990=29 T=29 Years (T) 29 Table1 Sample sizes Years (T) 29 29 per capita per employee ",
+   "value": "29",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table1 Years (T) 29 "
+  },
+  {
+   "name": "panar_phi_per_capita_TWFE",
+   "description": "ARDL3 per capita TWFE phi y_{i,t-1} -0.027 (0.004) mean lag 27.1 (3.82) Table2 col2 y_{i,t-1} (-phihat) -0.027 (0.004) n=157 Tmin27 Tave55.2 Tmax67 ",
+   "value": "-0.027",
+   "unit": "ECM coefficient  phi=1-rho1-rho2-rho3 ",
+   "kind": "estimate",
+   "where": "Table2 per capita TWFE y_{i,t-1} (-phi) -0.027 (0.004)"
+  },
+  {
+   "name": "panar_phi_se_per_capita_TWFE",
+   "description": "SE phi per capita TWFE ",
+   "value": "0.004",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita TWFE parentheses 0.004 "
+  },
+  {
+   "name": "panar_phi_per_capita_DCCEP",
+   "description": "phi per capita DCCEP -0.046 (0.012) mean lag 18.2 (4.87) Table2 per capita DCCEP y_{i,t-1} (-phi) -0.046 (0.012) n=157 ",
+   "value": "-0.046",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEP y_{i,t-1} -0.046 (0.012)"
+  },
+  {
+   "name": "panar_phi_se_per_capita_DCCEP",
+   "description": "SE phi per capita DCCEP ",
+   "value": "0.012",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEP parentheses 0.012 "
+  },
+  {
+   "name": "panar_phi_per_capita_DCCEMG",
+   "description": "phi per capita DCCEMG -0.113 (0.012) mean lag 6.1 (0.83) Table2 per capita DCCEMG y_{i,t-1} -0.113 (0.012) n=157 Tmin26 Tave54.2 ",
+   "value": "-0.113",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEMG y_{i,t-1} -0.113 (0.012)"
+  },
+  {
+   "name": "panar_phi_se_per_capita_DCCEMG",
+   "description": "SE phi per capita DCCEMG ",
+   "value": "0.012",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEMG parentheses 0.012 "
+  },
+  {
+   "name": "panar_delta1_per_capita_TWFE",
+   "description": "Delta y_{t-1} coeff psi1 per capita TWFE 0.206 (0.030) Table2 Delta y_{i,t-1} (psihat1) 0.206 (0.030) ",
+   "value": "0.206",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita TWFE Delta y_{i,t-1} 0.206 (0.030)"
+  },
+  {
+   "name": "panar_delta1_se_per_capita_TWFE",
+   "description": "SE Delta y_{t-1} per capita TWFE ",
+   "value": "0.030",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.030 "
+  },
+  {
+   "name": "panar_delta1_per_capita_DCCEP",
+   "description": "Delta y_{t-1} per capita DCCEP 0.141 (0.029) Table2 ",
+   "value": "0.141",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEP Delta y 0.141 (0.029)"
+  },
+  {
+   "name": "panar_delta1_se_per_capita_DCCEP",
+   "description": "SE Delta y per capita DCCEP ",
+   "value": "0.029",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.029 "
+  },
+  {
+   "name": "panar_delta1_per_capita_DCCEMG",
+   "description": "Delta y_{t-1} per capita DCCEMG 0.210 (0.018) Table2 ",
+   "value": "0.210",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEMG Delta y 0.210 (0.018)"
+  },
+  {
+   "name": "panar_delta1_se_per_capita_DCCEMG",
+   "description": "SE Delta y per capita DCCEMG ",
+   "value": "0.018",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.018 "
+  },
+  {
+   "name": "panar_delta2_per_capita_TWFE",
+   "description": "Delta y_{t-2} coeff psi2 per capita TWFE 0.034 (0.027) Table2 ",
+   "value": "0.034",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita TWFE Delta y_{t-2} 0.034 (0.027)"
+  },
+  {
+   "name": "panar_delta2_se_per_capita_TWFE",
+   "description": "SE Delta y_{t-2} per capita TWFE ",
+   "value": "0.027",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.027 "
+  },
+  {
+   "name": "panar_delta2_per_capita_DCCEP",
+   "description": "Delta y_{t-2} per capita DCCEP -0.015 (0.030) Table2 ",
+   "value": "-0.015",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEP -0.015 (0.030)"
+  },
+  {
+   "name": "panar_delta2_se_per_capita_DCCEP",
+   "description": "SE Delta y_{t-2} per capita DCCEP ",
+   "value": "0.030",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.030 "
+  },
+  {
+   "name": "panar_delta2_per_capita_DCCEMG",
+   "description": "Delta y_{t-2} per capita DCCEMG -0.011 (0.014) Table2 ",
+   "value": "-0.011",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEMG -0.011 (0.014)"
+  },
+  {
+   "name": "panar_delta2_se_per_capita_DCCEMG",
+   "description": "SE Delta y_{t-2} per capita DCCEMG ",
+   "value": "0.014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.014 "
+  },
+  {
+   "name": "panar_meanlag_per_capita_TWFE",
+   "description": "mean lag years per capita TWFE 27.1 (3.82) Table2 row Mean lag in years 27.1 (3.82) (1-phi-psi1-psi2)/phi ",
+   "value": "27.1",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table2 per capita TWFE Mean lag 27.1 (3.82)"
+  },
+  {
+   "name": "panar_meanlag_se_per_capita_TWFE",
+   "description": "SE mean lag per capita TWFE ",
+   "value": "3.82",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 3.82 "
+  },
+  {
+   "name": "panar_meanlag_per_capita_DCCEP",
+   "description": "mean lag per capita DCCEP 18.2 (4.87) Table2 ",
+   "value": "18.2",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEP Mean lag 18.2 (4.87)"
+  },
+  {
+   "name": "panar_meanlag_se_per_capita_DCCEP",
+   "description": "SE mean lag per capita DCCEP ",
+   "value": "4.87",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 4.87 "
+  },
+  {
+   "name": "panar_meanlag_per_capita_DCCEMG",
+   "description": "mean lag per capita DCCEMG 6.1 (0.83) Table2 ",
+   "value": "6.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per capita DCCEMG Mean lag 6.1 (0.83)"
+  },
+  {
+   "name": "panar_meanlag_se_per_capita_DCCEMG",
+   "description": "SE mean lag per capita DCCEMG ",
+   "value": "0.83",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.83 "
+  },
+  {
+   "name": "panar_phi_per_employee_TWFE",
+   "description": "phi per employee TWFE tilde y_{t-1} -0.031 (0.005) mean lag 23.8 (3.98) Table2 per employee TWFE tilde y_{i,t-1} -0.031 (0.005) n=157 ",
+   "value": "-0.031",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee TWFE tilde y_{i,t-1} -0.031 (0.005)"
+  },
+  {
+   "name": "panar_phi_se_per_employee_TWFE",
+   "description": "SE phi per employee TWFE ",
+   "value": "0.005",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.005 "
+  },
+  {
+   "name": "panar_phi_per_employee_DCCEP",
+   "description": "phi per employee DCCEP -0.058 (0.014) mean lag 14.4 (3.70) Table2 per employee DCCEP -0.058 (0.014) ",
+   "value": "-0.058",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEP -0.058 (0.014)"
+  },
+  {
+   "name": "panar_phi_se_per_employee_DCCEP",
+   "description": "SE phi per employee DCCEP ",
+   "value": "0.014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.014 "
+  },
+  {
+   "name": "panar_phi_per_employee_DCCEMG",
+   "description": "phi per employee DCCEMG -0.144 (0.015) mean lag 5.1 (0.69) Table2 per employee DCCEMG -0.144 (0.015) n=157 Tmin26 Tave51 ",
+   "value": "-0.144",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEMG -0.144 (0.015)"
+  },
+  {
+   "name": "panar_phi_se_per_employee_DCCEMG",
+   "description": "SE phi per employee DCCEMG ",
+   "value": "0.015",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.015 "
+  },
+  {
+   "name": "panar_delta1_per_employee_TWFE",
+   "description": "Delta y_{t-1} per employee TWFE 0.185 (0.034) Table2 ",
+   "value": "0.185",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee TWFE Delta y 0.185 (0.034)"
+  },
+  {
+   "name": "panar_delta1_se_per_employee_TWFE",
+   "description": "SE Delta y per employee TWFE ",
+   "value": "0.034",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.034 "
+  },
+  {
+   "name": "panar_delta1_per_employee_DCCEP",
+   "description": "Delta y per employee DCCEP 0.122 (0.033) Table2 ",
+   "value": "0.122",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEP 0.122 (0.033)"
+  },
+  {
+   "name": "panar_delta1_se_per_employee_DCCEP",
+   "description": "SE Delta y per employee DCCEP ",
+   "value": "0.033",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.033 "
+  },
+  {
+   "name": "panar_delta1_per_employee_DCCEMG",
+   "description": "Delta y per employee DCCEMG 0.130 (0.016) Table2 ",
+   "value": "0.130",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEMG 0.130 (0.016)"
+  },
+  {
+   "name": "panar_delta1_se_per_employee_DCCEMG",
+   "description": "SE Delta y per employee DCCEMG ",
+   "value": "0.016",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.016 "
+  },
+  {
+   "name": "panar_delta2_per_employee_TWFE",
+   "description": "Delta y_{t-2} per employee TWFE 0.035 (0.029) Table2 ",
+   "value": "0.035",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee TWFE 0.035 (0.029)"
+  },
+  {
+   "name": "panar_delta2_se_per_employee_TWFE",
+   "description": "SE Delta y per employee TWFE ",
+   "value": "0.029",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.029 "
+  },
+  {
+   "name": "panar_delta2_per_employee_DCCEP",
+   "description": "Delta y per employee DCCEP -0.019 (0.031) Table2 ",
+   "value": "-0.019",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEP -0.019 (0.031)"
+  },
+  {
+   "name": "panar_delta2_se_per_employee_DCCEP",
+   "description": "SE Delta y per employee DCCEP ",
+   "value": "0.031",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.031 "
+  },
+  {
+   "name": "panar_delta2_per_employee_DCCEMG",
+   "description": "Delta y per employee DCCEMG 0.001 (0.014) Table2 ",
+   "value": "0.001",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEMG 0.001 (0.014)"
+  },
+  {
+   "name": "panar_delta2_se_per_employee_DCCEMG",
+   "description": "SE Delta y per employee DCCEMG ",
+   "value": "0.014",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.014 "
+  },
+  {
+   "name": "panar_meanlag_per_employee_TWFE",
+   "description": "mean lag per employee TWFE 23.8 (3.98) Table2 ",
+   "value": "23.8",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee TWFE Mean lag 23.8 (3.98)"
+  },
+  {
+   "name": "panar_meanlag_se_per_employee_TWFE",
+   "description": "SE mean lag per employee TWFE ",
+   "value": "3.98",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 3.98 "
+  },
+  {
+   "name": "panar_meanlag_per_employee_DCCEP",
+   "description": "mean lag per employee DCCEP 14.4 (3.70) Table2 ",
+   "value": "14.4",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEP Mean lag 14.4 (3.70)"
+  },
+  {
+   "name": "panar_meanlag_se_per_employee_DCCEP",
+   "description": "SE mean lag per employee DCCEP ",
+   "value": "3.70",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 3.70 "
+  },
+  {
+   "name": "panar_meanlag_per_employee_DCCEMG",
+   "description": "mean lag per employee DCCEMG 5.1 (0.69) Table2 ",
+   "value": "5.1",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 per employee DCCEMG Mean lag 5.1 (0.69)"
+  },
+  {
+   "name": "panar_meanlag_se_per_employee_DCCEMG",
+   "description": "SE mean lag per employee DCCEMG ",
+   "value": "0.69",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table2 parentheses 0.69 "
+  },
+  {
+   "name": "panar_n",
+   "description": "n countries Table2 Alternative estimates unbalanced dynamic panel regressions order three covering 157 countries n=157 both per capita and per employee TWFE/DCCEP/DCCEMG n=157 ",
+   "value": "157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table2 Number of countries (n) 157 "
+  },
+  {
+   "name": "panar_Tmin_per_capita_TWFE",
+   "description": "Tmin years per capita TWFE 27 Table2 Tmin (years) 27 per capita TWFE/DCCEP and 26 DCCEMG Tmin27 27 26 ",
+   "value": "27",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table2 per capita Tmin 27 "
+  },
+  {
+   "name": "panar_Tmin_per_capita_DCCEP",
+   "description": "Tmin per capita DCCEP 27 Table2 ",
+   "value": "27",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tmin 27 DCCEP"
+  },
+  {
+   "name": "panar_Tmin_per_capita_DCCEMG",
+   "description": "Tmin per capita DCCEMG 26 Table2 ",
+   "value": "26",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tmin 26 DCCEMG"
+  },
+  {
+   "name": "panar_Tave_per_capita_TWFE",
+   "description": "Tave per capita TWFE 55.2 Table2 Tave 55.2 55.2 54.2 per capita Tave55.2 ",
+   "value": "55.2",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tave 55.2 "
+  },
+  {
+   "name": "panar_Tave_per_capita_DCCEP",
+   "description": "Tave per capita DCCEP 55.2 Table2 ",
+   "value": "55.2",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tave 55.2 DCCEP"
+  },
+  {
+   "name": "panar_Tave_per_capita_DCCEMG",
+   "description": "Tave per capita DCCEMG 54.2 Table2 ",
+   "value": "54.2",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tave 54.2 DCCEMG"
+  },
+  {
+   "name": "panar_Tmax_per_capita_TWFE",
+   "description": "Tmax per capita TWFE 67 Table2 Tmax 67 67 66 per capita Tmax67 ",
+   "value": "67",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tmax 67 "
+  },
+  {
+   "name": "panar_Tmax_per_capita_DCCEP",
+   "description": "Tmax per capita DCCEP 67 Table2 ",
+   "value": "67",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tmax 67 DCCEP"
+  },
+  {
+   "name": "panar_Tmax_per_capita_DCCEMG",
+   "description": "Tmax per capita DCCEMG 66 Table2 ",
+   "value": "66",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per capita Tmax 66 DCCEMG"
+  },
+  {
+   "name": "panar_Tave_per_employee_TWFE",
+   "description": "Tave per employee TWFE 52 Table2 Tave 52 52 51 per employee ",
+   "value": "52",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per employee Tave 52 "
+  },
+  {
+   "name": "panar_Tave_per_employee_DCCEP",
+   "description": "Tave per employee DCCEP 52 Table2 ",
+   "value": "52",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per employee Tave 52 DCCEP"
+  },
+  {
+   "name": "panar_Tave_per_employee_DCCEMG",
+   "description": "Tave per employee DCCEMG 51 Table2 ",
+   "value": "51",
+   "unit": "",
+   "kind": "count",
+   "where": "Table2 per employee Tave 51 DCCEMG"
+  },
+  {
+   "name": "capital_phi_per_capita_TWFE",
+   "description": "phi per capita with capital TWFE y_{i,t-1} -0.051 (0.007) Table3 per capita TWFE y_{i,t-1} (output) -0.051 (0.007) n=157 ",
+   "value": "-0.051",
+   "unit": "ECM phi",
+   "kind": "estimate",
+   "where": "Table3 per capita TWFE y_{i,t-1} -0.051 (0.007)"
+  },
+  {
+   "name": "capital_phi_se_per_capita_TWFE",
+   "description": "SE phi per capita TWFE with capital ",
+   "value": "0.007",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita TWFE parentheses 0.007 "
+  },
+  {
+   "name": "capital_phi_per_capita_DCCEP",
+   "description": "phi per capita DCCEP with capital -0.131 (0.031) Table3 per capita DCCEP y_{i,t-1} -0.131 (0.031) ",
+   "value": "-0.131",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEP y_{i,t-1} -0.131 (0.031)"
+  },
+  {
+   "name": "capital_phi_se_per_capita_DCCEP",
+   "description": "SE phi per capita DCCEP ",
+   "value": "0.031",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.031 "
+  },
+  {
+   "name": "capital_phi_per_capita_DCCEMG",
+   "description": "phi per capita DCCEMG with capital -0.349 (0.025) Table3 per capita DCCEMG y_{i,t-1} -0.349 (0.025) ",
+   "value": "-0.349",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEMG y_{i,t-1} -0.349 (0.025)"
+  },
+  {
+   "name": "capital_phi_se_per_capita_DCCEMG",
+   "description": "SE phi per capita DCCEMG ",
+   "value": "0.025",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.025 "
+  },
+  {
+   "name": "capital_k1_per_capita_TWFE",
+   "description": "k_{i,t-1} capital coeff per capita TWFE 0.027 (0.005) Table3 per capita TWFE k_{i,t-1} (Capital) 0.027 (0.005) ",
+   "value": "0.027",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita TWFE k_{i,t-1} 0.027 (0.005)"
+  },
+  {
+   "name": "capital_k1_se_per_capita_TWFE",
+   "description": "SE k per capita TWFE ",
+   "value": "0.005",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.005 "
+  },
+  {
+   "name": "capital_k1_per_capita_DCCEP",
+   "description": "k per capita DCCEP 0.084 (0.026) Table3 per capita DCCEP k_{i,t-1} 0.084 (0.026) ",
+   "value": "0.084",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEP k_{i,t-1} 0.084 (0.026)"
+  },
+  {
+   "name": "capital_k1_se_per_capita_DCCEP",
+   "description": "SE k per capita DCCEP ",
+   "value": "0.026",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.026 "
+  },
+  {
+   "name": "capital_k1_per_capita_DCCEMG",
+   "description": "k per capita DCCEMG 0.169 (0.045) Table3 per capita DCCEMG k_{i,t-1} 0.169 (0.045) ",
+   "value": "0.169",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEMG k_{i,t-1} 0.169 (0.045)"
+  },
+  {
+   "name": "capital_k1_se_per_capita_DCCEMG",
+   "description": "SE k per capita DCCEMG ",
+   "value": "0.045",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.045 "
+  },
+  {
+   "name": "capital_Dk_per_capita_TWFE",
+   "description": "Delta k_{it} per capita TWFE 1.173 (0.111) Table3 per capita TWFE Delta k_{it} 1.173 (0.111) ",
+   "value": "1.173",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita TWFE Delta k_{it} 1.173 (0.111)"
+  },
+  {
+   "name": "capital_Dk_se_per_capita_TWFE",
+   "description": "SE Delta k per capita TWFE ",
+   "value": "0.111",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.111 "
+  },
+  {
+   "name": "capital_Dk_per_capita_DCCEP",
+   "description": "Delta k per capita DCCEP 1.225 (0.194) Table3 per capita DCCEP Delta k_{it} 1.225 (0.194) ",
+   "value": "1.225",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEP Delta k_{it} 1.225 (0.194)"
+  },
+  {
+   "name": "capital_Dk_se_per_capita_DCCEP",
+   "description": "SE Delta k per capita DCCEP ",
+   "value": "0.194",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.194 "
+  },
+  {
+   "name": "capital_Dk_per_capita_DCCEMG",
+   "description": "Delta k per capita DCCEMG 1.926 (0.159) Table3 per capita DCCEMG Delta k_{it} 1.926 (0.159) ",
+   "value": "1.926",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEMG Delta k_{it} 1.926 (0.159)"
+  },
+  {
+   "name": "capital_Dk_se_per_capita_DCCEMG",
+   "description": "SE Delta k per capita DCCEMG ",
+   "value": "0.159",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.159 "
+  },
+  {
+   "name": "capital_longrun_per_capita_TWFE",
+   "description": "long run effect capital per capita TWFE 0.524 (0.043) Table3 Long run effect of capital 0.524 (0.043) ",
+   "value": "0.524",
+   "unit": "long run elasticity  -beta/phi",
+   "kind": "estimate",
+   "where": "Table3 per capita TWFE Long run 0.524 (0.043)"
+  },
+  {
+   "name": "capital_longrun_se_per_capita_TWFE",
+   "description": "SE long run per capita TWFE ",
+   "value": "0.043",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.043 "
+  },
+  {
+   "name": "capital_longrun_per_capita_DCCEP",
+   "description": "long run per capita DCCEP 0.640 (0.105) Table3 Long run effect capital 0.640 (0.105) ",
+   "value": "0.640",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEP Long run 0.640 (0.105)"
+  },
+  {
+   "name": "capital_longrun_se_per_capita_DCCEP",
+   "description": "SE long run per capita DCCEP ",
+   "value": "0.105",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.105 "
+  },
+  {
+   "name": "capital_longrun_per_capita_DCCEMG",
+   "description": "long run per capita DCCEMG 0.484 (0.122) Table3 Long run effect capital 0.484 (0.122) ",
+   "value": "0.484",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per capita DCCEMG Long run 0.484 (0.122)"
+  },
+  {
+   "name": "capital_longrun_se_per_capita_DCCEMG",
+   "description": "SE long run per capita DCCEMG ",
+   "value": "0.122",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.122 "
+  },
+  {
+   "name": "capital_longrun_per_employee_TWFE",
+   "description": "long run per employee TWFE 0.470 (0.044) Table3 per employee TWFE Long run effect capital 0.470 (0.044) ",
+   "value": "0.470",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per employee TWFE Long run 0.470 (0.044)"
+  },
+  {
+   "name": "capital_longrun_se_per_employee_TWFE",
+   "description": "SE long run per employee TWFE ",
+   "value": "0.044",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.044 "
+  },
+  {
+   "name": "capital_longrun_per_employee_DCCEP",
+   "description": "long run per employee DCCEP 0.627 (0.068) Table3 Long run effect capital 0.627 (0.068) ",
+   "value": "0.627",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per employee DCCEP Long run 0.627 (0.068)"
+  },
+  {
+   "name": "capital_longrun_se_per_employee_DCCEP",
+   "description": "SE long run per employee DCCEP ",
+   "value": "0.068",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.068 "
+  },
+  {
+   "name": "capital_longrun_per_employee_DCCEMG",
+   "description": "long run per employee DCCEMG 0.481 (0.084) Table3 Long run effect capital 0.481 (0.084) ",
+   "value": "0.481",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 per employee DCCEMG Long run 0.481 (0.084)"
+  },
+  {
+   "name": "capital_longrun_se_per_employee_DCCEMG",
+   "description": "SE long run per employee DCCEMG ",
+   "value": "0.084",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table3 parentheses 0.084 "
+  },
+  {
+   "name": "democracy_longrun_acemoglu_TWFE_175",
+   "description": "long run effect democracy Acemoglu et al TWFE n=175 y_{i,t-1} -0.037 (0.005) Delta y_{t-1} 0.275 (0.036) d_{it} 0.787 (0.226) long run 21.24 (7.21) Table4 col Acemoglu et al This paper n=175 ",
+   "value": "21.24",
+   "unit": "percent long run 100*beta/phi",
+   "kind": "estimate",
+   "where": "Table4 Acemoglu et al Long run effect of Democracy 21.24 (7.21)"
+  },
+  {
+   "name": "democracy_longrun_se_acemoglu_TWFE_175",
+   "description": "SE long run Acemoglu 7.21 Table4 parentheses 7.21 row Long run effect 21.24 (7.21) ",
+   "value": "7.21",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 Acemoglu et al parentheses 7.21 "
+  },
+  {
+   "name": "democracy_shortrun_acemoglu_TWFE_175",
+   "description": "short run d_{it} Acemoglu TWFE n=175 0.787 (0.226) Table4 Acemoglu et al d_{it} (Democracy indicator) 0.787 (0.226) ",
+   "value": "0.787",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 Acemoglu et al d_{it} 0.787 (0.226)"
+  },
+  {
+   "name": "democracy_shortrun_se_acemoglu_TWFE_175",
+   "description": "SE short run Acemoglu 0.226 Table4 ",
+   "value": "0.226",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 0.226 "
+  },
+  {
+   "name": "democracy_phi_TWFE_148",
+   "description": "phi_TWFE_148 y_{i,t-1} -0.036 (0.005) d_{it} 0.769 (0.226) long run 21.53 (7.47) Table4 This paper TWFE n=148 y_{i,t-1} -0.036 (0.005) ",
+   "value": "-0.036",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 This paper TWFE y_{i,t-1} -0.036 (0.005) n=148"
+  },
+  {
+   "name": "democracy_phi_se_TWFE_148",
+   "description": "SE phi TWFE 148 0.005 Table4 ",
+   "value": "0.005",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 0.005 "
+  },
+  {
+   "name": "democracy_longrun_TWFE_148",
+   "description": "long run TWFE 148 21.53 (7.47) Table4 This paper Long run effect Democracy 21.53 (7.47) n=148 Tave40 Tmin20 ",
+   "value": "21.53",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 TWFE_148 Long run 21.53 (7.47)"
+  },
+  {
+   "name": "democracy_longrun_se_TWFE_148",
+   "description": "SE long run TWFE 148 7.47 Table4 ",
+   "value": "7.47",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 7.47 "
+  },
+  {
+   "name": "democracy_phi_DCCEP_148",
+   "description": "phi_DCCEP_148 y_{i,t-1} -0.164 (0.019) d_{it} 0.947 (0.574) long run 5.77 (3.59) Table4 DCCEP n=148 y_{i,t-1} -0.164 (0.019) ",
+   "value": "-0.164",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 DCCEP y_{i,t-1} -0.164 (0.019)"
+  },
+  {
+   "name": "democracy_phi_se_DCCEP_148",
+   "description": "SE phi DCCEP 148 0.019 Table4 ",
+   "value": "0.019",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 0.019 "
+  },
+  {
+   "name": "democracy_longrun_DCCEP_148",
+   "description": "long run DCCEP 148 5.77 (3.59) Table4 DCCEP Long run effect 5.77 (3.59) n=148 bar y_{o,t}..bar y_{o,t-4}, bar d_{ot} ",
+   "value": "5.77",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 DCCEP Long run 5.77 (3.59)"
+  },
+  {
+   "name": "democracy_longrun_se_DCCEP_148",
+   "description": "SE long run DCCEP 148 3.59 Table4 ",
+   "value": "3.59",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 3.59 "
+  },
+  {
+   "name": "democracy_longrun_DCCEMGstar_148",
+   "description": "long run DCCEMG* homogeneous beta n=148 5.90 (3.06) phi -0.218 (0.022) d 1.285 (0.654) Table4 DCCEMG* Long run 5.90 (3.06) ",
+   "value": "5.90",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 DCCEMG* Long run 5.90 (3.06) y_{i,t-1} -0.218 (0.022)"
+  },
+  {
+   "name": "democracy_longrun_se_DCCEMGstar_148",
+   "description": "SE long run DCCEMG* 3.06 Table4 ",
+   "value": "3.06",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 3.06 "
+  },
+  {
+   "name": "democracy_phi_DCCEMG_73",
+   "description": "phi DCCEMG n=73 time-varying democracy -0.348 (0.035) d 1.499 (1.034) long run 4.30 (3.01) Table4 DCCEMG n=73 y_{i,t-1} -0.348 (0.035) avg effect on treated ",
+   "value": "-0.348",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 DCCEMG y_{i,t-1} -0.348 (0.035) n=73"
+  },
+  {
+   "name": "democracy_phi_se_DCCEMG_73",
+   "description": "SE phi DCCEMG 73 0.035 Table4 ",
+   "value": "0.035",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 0.035 "
+  },
+  {
+   "name": "democracy_longrun_DCCEMG_73",
+   "description": "long run DCCEMG n=73 4.30 (3.01) Table4 DCCEMG Long run effect 4.30 (3.01) heterogeneous beta n=73 averages from n=148 ",
+   "value": "4.30",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 DCCEMG Long run 4.30 (3.01)"
+  },
+  {
+   "name": "democracy_longrun_se_DCCEMG_73",
+   "description": "SE long run DCCEMG 73 3.01 Table4 ",
+   "value": "3.01",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table4 parentheses 3.01 "
+  },
+  {
+   "name": "timeinv_latitude_TWFE_per_capita",
+   "description": "latitude time-invariant coeff per capita TWFE filter 0.383 (1.289) Table5 per capita TWFE absolute latitude (z1) 0.383 (1.289) n=100 Tmax68 Tmin48 Tave63 ARDL(2,2) ",
+   "value": "0.383",
+   "unit": "100*theta per 01 lat",
+   "kind": "estimate",
+   "where": "Table5 per capita TWFE absolute latitude 0.383 (1.289)"
+  },
+  {
+   "name": "timeinv_latitude_se_TWFE_per_capita",
+   "description": "SE latitude TWFE per capita 1.289 Table5 ",
+   "value": "1.289",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 1.289 "
+  },
+  {
+   "name": "timeinv_latitude_DCCEP_per_capita",
+   "description": "latitude per capita DCCEP 0.832 (2.568) Table5 per capita DCCEP absolute latitude 0.832 (2.568) n=100 ",
+   "value": "0.832",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita DCCEP absolute latitude 0.832 (2.568)"
+  },
+  {
+   "name": "timeinv_latitude_se_DCCEP_per_capita",
+   "description": "SE latitude DCCEP per capita 2.568 Table5 ",
+   "value": "2.568",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 2.568 "
+  },
+  {
+   "name": "timeinv_ethnoling_TWFE_per_capita",
+   "description": "ethnolinguistic fractionalization per capita TWFE -1.708 (0.608) Table5 per capita TWFE ethnic frac (z2) -1.708 (0.608) ",
+   "value": "-1.708",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita TWFE ethnolinguistic -1.708 (0.608)"
+  },
+  {
+   "name": "timeinv_ethnoling_se_TWFE_per_capita",
+   "description": "SE ethnolinguistic TWFE per capita 0.608 Table5 ",
+   "value": "0.608",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 0.608 "
+  },
+  {
+   "name": "timeinv_ethnoling_DCCEP_per_capita",
+   "description": "ethnolinguistic per capita DCCEP -3.062 (1.341) Table5 per capita DCCEP ethnolinguistic -3.062 (1.341) ",
+   "value": "-3.062",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita DCCEP -3.062 (1.341)"
+  },
+  {
+   "name": "timeinv_ethnoling_se_DCCEP_per_capita",
+   "description": "SE ethnolinguistic DCCEP per capita 1.341 Table5 ",
+   "value": "1.341",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 1.341 "
+  },
+  {
+   "name": "timeinv_protection_TWFE_per_capita",
+   "description": "protection from expropriation per capita TWFE 0.699 (0.122) Table5 per capita TWFE protection (z3) 0.699 (0.122) sig pos ",
+   "value": "0.699",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita TWFE protection 0.699 (0.122)"
+  },
+  {
+   "name": "timeinv_protection_se_TWFE_per_capita",
+   "description": "SE protection TWFE per capita 0.122 Table5 ",
+   "value": "0.122",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 0.122 "
+  },
+  {
+   "name": "timeinv_protection_DCCEP_per_capita",
+   "description": "protection per capita DCCEP 0.952 (0.236) Table5 per capita DCCEP protection 0.952 (0.236) ",
+   "value": "0.952",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita DCCEP 0.952 (0.236)"
+  },
+  {
+   "name": "timeinv_protection_se_DCCEP_per_capita",
+   "description": "SE protection DCCEP per capita 0.236 Table5 ",
+   "value": "0.236",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 0.236 "
+  },
+  {
+   "name": "timeinv_PPPdiff_TWFE_per_capita",
+   "description": "PPP diff y_{1990}-yPPP_{1990} per capita TWFE 0.704 (0.272) Table5 per capita TWFE y_{1990}-yPPP_{1990} (z4) 0.704 (0.272) ",
+   "value": "0.704",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita TWFE y_{1990}-yPPP 0.704 (0.272)"
+  },
+  {
+   "name": "timeinv_PPPdiff_se_TWFE_per_capita",
+   "description": "SE PPP diff TWFE per capita 0.272 Table5 ",
+   "value": "0.272",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 0.272 "
+  },
+  {
+   "name": "timeinv_PPPdiff_DCCEP_per_capita",
+   "description": "PPP diff per capita DCCEP 1.374 (0.709) Table5 per capita DCCEP y_{1990}-yPPP 1.374 (0.709) n=100 ",
+   "value": "1.374",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 per capita DCCEP 1.374 (0.709)"
+  },
+  {
+   "name": "timeinv_PPPdiff_se_DCCEP_per_capita",
+   "description": "SE PPP diff DCCEP per capita 0.709 Table5 ",
+   "value": "0.709",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Table5 parentheses 0.709 "
+  },
+  {
+   "name": "democracy_n_175",
+   "description": "n Acemoglu full replication TWFE n=175 Table4 Sample Sizes Number countries n 175 ",
+   "value": "175",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table4 Sample Sizes n 175 Acemoglu et al"
+  },
+  {
+   "name": "democracy_n_148",
+   "description": "n filtered democracy >=24yrs n=148 This paper TWFE n=148 DCCEP n=148 DCCEMG* n=148 Table4 Sample Sizes Number countries n 148 ",
+   "value": "148",
+   "unit": "",
+   "kind": "count",
+   "where": "Table4 Sample Sizes n 148 This paper TWFE DCCEP DCCEMG*"
+  },
+  {
+   "name": "democracy_n_73",
+   "description": "n time-varying democracy n=73 DCCEMG heterogeneous beta n=73 Table4 Sample Sizes Number countries n 73 avg effect on treated ",
+   "value": "73",
+   "unit": "",
+   "kind": "count",
+   "where": "Table4 Sample Sizes n 73 DCCEMG"
+  },
+  {
+   "name": "democracy_Tmin",
+   "description": "Tmin democracy filtered 20 Table4 Years Tmin 20 n=148 DCCEP DCCEMG* Tmin20 Tave40 Tmax47 ",
+   "value": "20",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table4 Years Tmin 20 filtered sample"
+  },
+  {
+   "name": "democracy_Tmin_full",
+   "description": "Tmin democracy full Acemoglu n=175 Tmin6 Table4 Years Tmin 6 Acemoglu et al Tmin6 Tave36.2 Tmax47 ",
+   "value": "6",
+   "unit": "",
+   "kind": "count",
+   "where": "Table4 Years Tmin 6 Acemoglu et al"
+  },
+  {
+   "name": "democracy_Tave_175",
+   "description": "Tave Acemoglu n=175 Tave36.2 Table4 Years Tave 36.2 Acemoglu et al ",
+   "value": "36.2",
+   "unit": "",
+   "kind": "count",
+   "where": "Table4 Years Tave 36.2 "
+  },
+  {
+   "name": "democracy_Tave_148",
+   "description": "Tave filtered n=148 Tave40 Table4 Years Tave 40 This paper TWFE DCCEP DCCEMG* ",
+   "value": "40",
+   "unit": "",
+   "kind": "count",
+   "where": "Table4 Years Tave 40 "
+  },
+  {
+   "name": "democracy_Tmax",
+   "description": "Tmax democracy 47 Table4 Years Tmax 47 all columns Tmax47 ",
+   "value": "47",
+   "unit": "",
+   "kind": "count",
+   "where": "Table4 Years Tmax 47 "
+  },
+  {
+   "name": "timeinv_n",
+   "description": "n time-invariant second stage cross-country regression n=100 Table5 Note i=1..n=100 least squares of ahat_i on intercept and z_i=(z1..z4)' Table5 reporting per capita and per employee TWFE/DCCEP n=100 ",
+   "value": "100",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table5 Notes n=100 i=1..100"
+  },
+  {
+   "name": "timeinv_Tmax",
+   "description": "Tmax first stage ARDL(2,2) time-invariant filter Tmax=68 years Table5 Notes max time period used for estimation psihat was 68 years ",
+   "value": "68",
+   "unit": "",
+   "kind": "count",
+   "where": "Table5 Notes Tmax was 68 years"
+  },
+  {
+   "name": "timeinv_Tmin_per_capita",
+   "description": "Tmin per capita first stage time-invariant Tmin=48 years Table5 Notes Tmin=48 ",
+   "value": "48",
+   "unit": "",
+   "kind": "count",
+   "where": "Table5 Notes Tmin=48 per capita"
+  },
+  {
+   "name": "timeinv_Tave_per_capita",
+   "description": "Tave per capita first stage Tave=63 years Table5 Notes Tave=63 years for regressions based per capita measures ",
+   "value": "63",
+   "unit": "",
+   "kind": "count",
+   "where": "Table5 Notes Tave=63 per capita"
+  },
+  {
+   "name": "timeinv_Tmin_per_employee",
+   "description": "Tmin per employee first stage Tmin=38 years Table5 Notes Tmin=38 ",
+   "value": "38",
+   "unit": "",
+   "kind": "count",
+   "where": "Table5 Notes Tmin=38 per employee"
+  },
+  {
+   "name": "timeinv_Tave_per_employee",
+   "description": "Tave per employee first stage Tave=61 years Table5 Notes Tave=61 years for regressions based per employee measures ",
+   "value": "61",
+   "unit": "",
+   "kind": "count",
+   "where": "Table5 Notes Tave=61 per employee"
+  },
+  {
+   "name": "panel_n",
+   "description": "baseline unbalanced panel n=157 countries with >=30 obs removed 157 baseline Table2 Table3 n=157 PWT 1950-2019 covering 157 countries ",
+   "value": "157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section Empirics baseline sample 157 countries Table2 n=157 Table3 n=157"
+  },
+  {
+   "name": "lag_order_TWFE_DCCEP_p",
+   "description": "lag order p_T=3 for TWFE and DCCEP homogeneous dynamics Note 1 Table2 phi=1-rho1-rho2-rho3 AR(3) p=3 homogeneous, q_T=4>p_T for DCCEMG Text Section Empirics q_T=p_T=3 under homogeneous q_T=4>p_T=3 heterogeneous and s_T=4 for capital ",
+   "value": "3",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section Empirics lag orders p_T and q_T set close to Tave^{1/3} as recommended q_T=p_T=3 under homogeneous q_T=4>p_T=3 heterogeneous Note 1 Table2 phi=1-rho1-rho2-rho3"
+  },
+  {
+   "name": "lag_order_DCCEMG_q",
+   "description": "lag order q_T=4 cross-section averages for DCCEMG heterogeneous Note 2 Table2 DCCEMG adds bar y_{o,t-4} to set; Section Text q_T=4>p_T=3 ",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Note2 Table2 DCCEMG adds bar y_{o,t-4} Text q_T=4"
+  },
+  {
+   "name": "lag_order_capital_sT",
+   "description": "s_T=4 lagged cross averages for capital DCCEMG Notes Table3 DCCEMG augments with bar y_{o,t-4},bar k_{o,t-4} set plus ",
+   "value": "4",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Notes Table3 DCCEMG augments with bar y_{o,t-4},bar k_{o,t-4}"
+  },
+  {
+   "name": "threshold_min_obs_baseline",
+   "description": "filter countries with fewer than 30 observations removed giving baseline 157 countries Empirics Countries with fewer than 30 observations are removed, giving baseline sample 157 countries ",
+   "value": "30",
+   "unit": "years",
+   "kind": "parameter",
+   "where": "Section Empirics Countries fewer than 30 observations removed =>157"
+  },
+  {
+   "name": "threshold_min_usable",
+   "description": "effective minimum usable after 4 lags 26 Table2 Note 2 TWFE Tmin27 Tmin26 DCCEMG min26 Empirics Since we use up to 4 lags effective min usable 26 ",
+   "value": "26",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Section Empirics Since we use up to 4 lags effective min 26 Note2 Table2 Tmin26"
+  },
+  {
+   "name": "threshold_democracy_min",
+   "description": "democracy filtered minimum usable 20 ( >=24 years data) Empirics We consider subset n=148 countries that had at least 24 years data leaving min20 usable after lags; Table4 Notes exclude countries where min T_i <20 Table4 Tmin20 ",
+   "value": "20",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Section Empirics We consider subset n=148 >=24yrs leaving min20 usable Table4 Notes exclude min T_i<20"
+  },
+  {
+   "name": "barro_restriction_t_per_capita",
+   "description": "t-statistic for restriction c_T=-b_T per capita -3.10 strongly rejected Section Barro The restriction c_T=-b_T strongly rejected with t -3.10 for per capita equation ",
+   "value": "-3.10",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Text Section Barro regressions restriction c_T=-b_T strongly rejected t -3.10 per capita"
+  },
+  {
+   "name": "barro_restriction_t_per_employee",
+   "description": "t-statistic for restriction c_T=-b_T per employee -3.96 strongly rejected Text t -3.96 for per employee one ",
+   "value": "-3.96",
+   "unit": "",
+   "kind": "estimate",
+   "where": "Text restriction t -3.96 per employee"
+  },
+  {
+   "name": "democracy_n_75_invariant",
+   "description": "n countries within filtered n=148 where democracy indicator does not change 75 Time series variation in 73 of 148; in 75 countries it does not change Text Section Democracy Their democracy indicator shows time series variation in 73 of 148 countries; in 75 countries it does not change ",
+   "value": "75",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Text Section Democracy 73 of 148 vary; in 75 countries it does not change"
+  }
+ ],
+ "headline": "panar_phi_per_capita_DCCEMG",
+ "partitions": [
+  {
+   "split": "democracy indicator time variation within filtered n=148 (Section 5.4, Table4 text)  In unbalanced 1960-2010 democracy panel filtered to  usable Tmin=20  total_claim democracy_n_148=148 = 73 varying + 75 invariant  group_claim  democracy_n_73=73  democracy_n_75_invariant=75  This is the only printed partition with both parts printed; other totals such as panel_n=157 => timeinv_n=100 leave 57  not printed and are omitted per instruction  total_claim democracy_n_148  groups  [{label countries_with_time_varying_democracy claim democracy_n_73} {label countries_with_time_invariant_democracy claim democracy_n_75_invariant}] name democracy_indicator_time_variation_within_filtered_sample",
+   "total": "democracy_n_148",
+   "parts": []
+  }
+ ],
+ "tests": [
+  {
+   "test": "Restriction c_T = -b_T (Barro PPP vs national accounts initial value) per capita  Table1 col1 vs Kremer et al spec  H0 c_T=-b_T  statistic_claim barro_restriction_t_per_capita=-3.10  strongly rejected  n=157 T=29  p_value not printed  group_claims barro_n=157 barro_T=29",
+   "statistic": "barro_restriction_t_per_capita",
+   "p_value": "not stated",
+   "group_sizes": [
+    "barro_n",
+    "barro_T"
+   ]
+  },
+  {
+   "test": "Restriction c_T = -b_T per employee  H0 c_T=-b_T  statistic_claim barro_restriction_t_per_employee=-3.96  n=157 T=29",
+   "statistic": "barro_restriction_t_per_employee",
+   "p_value": "not stated",
+   "group_sizes": [
+    "barro_n",
+    "barro_T"
+   ]
+  },
+  {
+   "test": "Comparison speed convergence across estimators per capita  TWFE phi -0.027 (0.004) mean lag 27.1 vs DCCEP -0.046 (0.012) mean lag 18.2 vs DCCEMG -0.113 (0.012) mean lag 6.1  DCCEMG rise as predicted by theory relaxing parallel trends and dynamic heterogeneity  Each estimate with Huber-White/DCCE heteroskedasticity robust SE  No formal pooled test printed; p-values not stated  group_claims panar_n=157 Tmin27 Tave55.2 Tmax67 shown via panel counts",
+   "statistic": "panar_phi_per_capita_DCCEMG",
+   "p_value": "not stated",
+   "group_sizes": [
+    "panar_n",
+    "panar_Tmin_per_capita_DCCEMG",
+    "panar_Tave_per_capita_DCCEMG",
+    "panar_Tmax_per_capita_DCCEMG"
+   ]
+  }
+ ]
+}

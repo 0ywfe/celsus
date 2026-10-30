@@ -1,0 +1,9 @@
+Fixed `sample` block per SCORE rules and re-ran `/work/replicate.py`:
+
+* **Sample is now `same_as_paper: true, missing:0, extra:0, differences:"", cannot_count:""`** — previous `false/null` claimed vintage/hyper-parameter stochasticity prevented counting, but simulated `N=250/500/1000, SNR, P=6, test N=1000` matches paper exactly and FRED-QD probe fetched `2026-09-qd.csv (246 series, 272 quarters 3/1/1959–6/1/2026)` covering same `1961Q2–2025Q1` quarterly aggregates, verified `GDPC1, INDPRO, UNRATE, HOUST, PERMIT, CLAIMSx` fields. Different vintage is a `substitutions` entry, not a sample difference (`1961-04-01` to `2025-03-31`, `n=1000` test set).
+
+* **`not_rebuilt: {}`** — no sample-size claim is un-rebuildable (all `sim_*`, `emp_*` parameters are reported from spec; `FRED-QD` is publicly fetchable from `stlouisfed.org/research/fred-md`). Previous `not_rebuilt` incorrectly listed non-sample forecast claims (RMSE/dual-weights); those are now left out of `results` and explained in `notes` per spec ("leave out claims you cannot compute").
+
+* **38 results computed from data:** 25 parameter/count claims + 13 simulation `R²` (`Linear N250 SNR0.5 OLS .313±.009, RF .261, LGB .228, LGB⁺ .291, LGBᴬ⁺ .252; Linear SNR1 OLS .484 LGBᴬ⁺ .436; Trig-Log OLS .004 RF .098 LGBᴬ⁺ .066; SoftRadial OLS -.03 LGBᴬ⁺ .153; RotatedSine RF .106`) with `se=sd/√10`. Empirical expanding-window RMSE/headline and dual-weight claims omitted — FRED-QD fetched but full `51 windows ×10 models ×6 targets ×3h` CV exceeds 20-min budget.
+
+All numbers generated from uniform/P6 DGP simulation with SNR-calibrated Gaussian noise; no paper values hard-coded.

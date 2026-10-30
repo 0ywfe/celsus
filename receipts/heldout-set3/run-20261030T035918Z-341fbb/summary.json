@@ -1,0 +1,40 @@
+{
+ "run_id": "run-20261030T035918Z-341fbb",
+ "paper": "2605.09740",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 2 of 19 checked results match within their uncertainty. Its main result, tab_summary_rmse_UR_h1_LGBplus_pre, is 0.67 RMSE relative to AR(4) in the paper and 1.068 RMSE relative to AR(4) here (not consistent).",
+ "headline": {
+  "name": "tab_summary_rmse_UR_h1_LGBplus_pre",
+  "kind": "estimate",
+  "unit": "RMSE relative to AR(4)",
+  "reported": 0.67,
+  "reproduced": 1.0681201686261474,
+  "se": 0.07,
+  "n": 51,
+  "consistent": false,
+  "why": "paper outside 1.068 +/- 0.1372"
+ },
+ "sample": [],
+ "judged": 19,
+ "matched": 2,
+ "rejections": [],
+ "rounds": 3,
+ "packages": [
+  "cloudpickle==3.1.2",
+  "joblib==1.6.0",
+  "lightgbm==4.7.0",
+  "scikit-learn==1.9.1",
+  "threadpoolctl==3.7.0"
+ ],
+ "calls": 47,
+ "cost_usd": 1.4072,
+ "tokens_in": 5198174,
+ "tokens_out": 97980,
+ "wall_s": 3543.3,
+ "crashed": null
+}

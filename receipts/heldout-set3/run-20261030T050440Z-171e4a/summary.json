@@ -1,0 +1,77 @@
+{
+ "run_id": "run-20261030T050440Z-171e4a",
+ "paper": "2610.10043",
+ "provider": "fireworks",
+ "model": "accounts/fireworks/models/muse-spark-open",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "none of the paper's results could be compared",
+ "first_line": "We could not check this paper: none of the paper's results could be compared. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "ip_assembled_high_0.32pct",
+  "kind": "estimate",
+  "unit": "percent contraction peak",
+  "reported": 0.32,
+  "reproduced": null,
+  "se": null,
+  "n": null,
+  "consistent": null,
+  "why": "not computed"
+ },
+ "sample": [
+  {
+   "name": "d_National",
+   "reported": 5.0,
+   "reproduced": 5.0,
+   "consistent": true
+  },
+  {
+   "name": "d_Regional",
+   "reported": 34.0,
+   "reproduced": 34.0,
+   "consistent": true
+  },
+  {
+   "name": "d_NOAA",
+   "reported": 82.0,
+   "reproduced": 82.0,
+   "consistent": true
+  },
+  {
+   "name": "d_ACI_total_components",
+   "reported": 6.0,
+   "reproduced": 6.0,
+   "consistent": true
+  },
+  {
+   "name": "n_regions_ACI",
+   "reported": 7.0,
+   "reproduced": 7.0,
+   "consistent": true
+  },
+  {
+   "name": "n_zones_NOAA",
+   "reported": 10.0,
+   "reproduced": 10.0,
+   "consistent": true
+  },
+  {
+   "name": "k_VAR_dimension",
+   "reported": 7.0,
+   "reproduced": 7.0,
+   "consistent": true
+  }
+ ],
+ "judged": 0,
+ "matched": 0,
+ "rejections": [],
+ "rounds": 3,
+ "packages": [],
+ "calls": 72,
+ "cost_usd": 1.5255,
+ "tokens_in": 5794839,
+ "tokens_out": 94660,
+ "wall_s": 3115.9,
+ "crashed": null
+}

@@ -1,0 +1,2612 @@
+{
+ "title": "Do Prediction Markets Forecast Cryptocurrency Volatility? Evidence from Kalshi Macro Contracts",
+ "hypothesis": "Daily absolute volume-weighted probability changes in Kalshi macro prediction markets forecast 5-day ahead cryptocurrency realized volatility beyond HAR and market controls, with channel specificity: Fed/policy -> BTC, CPI -> altcoins",
+ "data_sources": [
+  "Kalshi public API closing prices volumes open interest",
+  "CoinGecko daily closing prices BTC ETH SOL ADA AVAX LINK",
+  "CBOE VIX S&P500 DXY Fed Funds futures 10y Treasury Deribit DVOL BLS release calendar"
+ ],
+ "sample": "Ten Kalshi event series (KXFED KXCPI KXCPICORE KXGDP KXU3 KXPCECORE KXRECSSNBER KXACPI KXRATECUT KXUSNFP) and six cryptocurrency assets (BTC ETH SOL ADA AVAX LINK). Merged calendar dataset January 2023 to March 2026 with N=1183 calendar days. Weekends and US holidays excluded dropping approximately 30 percent of calendar days. Effective after 1-day lag and merging with crypto returns 193 to 569 observations per series. Estimation samples: BTC Fed-dovish M3 N=318, CPI M3 N=264 per asset, KXRECSSNBER usable N=569, descriptive per asset N=1178.",
+ "period_start": "January 2023",
+ "period_end": "March 2026",
+ "method": [
+  "1. For each Kalshi series s and day t aggregate multiple contracts j: Delta_vw_s_t = sum(V_jt * Delta_p_jt)/sum(V_jt) equation 1. Primary signal = |Delta_vw_s_t|. Directional Fed-dovish = -Delta_vw_KXFED. Directional CPI/NFP analogous. Alternatives: 5-day EMA of lagged signal and cross-sectional composite averaging across active series.",
+  "2. Crypto log returns r_a_t = ln(P_at/P_a_t-1). Dependent variable 5-day forward realized volatility RVol_a_t_h5 = sqrt(252)*sd(r_a_t+1...r_a_t+5) equation 2. Robustness: 1-day |r_t+1|, GARCH(1,1) conditional variance, log(RVol+0.001), 21-day RVol. Calendar scaling note sqrt(365/252)=1.20.",
+  "3. HAR benchmark M1: RVol = alpha + beta1|r_t-1| + beta2 mean|r|_5 + beta3 mean|r|_20 + e. M2 adds Ctrl=(VIX_t, r_DXY, r_SP500). M3 adds Kalshi_s_t-1 one-day lagged. Gap >=21h: Kalshi 4pm ET, crypto midnight UTC 7pm ET, dependent starts t+1. Controls aligned 4pm ET.",
+  "4. Inference: overlapping 5-day RVol uses Newey-West HAC 5 lags. Non-overlapping 5-day windows uses HC3. Multiple testing 60 signal-by-asset combinations Benjamini-Hochberg FDR q=0.05. Block moving-block bootstrap block length 5 with 2000 resamples.",
+  "5. Controls and orthogonalization: project Fed-dovish onto Fed Funds implied rate change + |change| + VIX + DXY + SP500 first-stage R2 2.3pct, residual t=3.62. Project KXCPI onto 10y Treasury return + VIX + DXY + SP500 first-stage R2 7.5pct residuals t=-2.29 ETH -2.79 SOL -2.60 ADA -3.73 LINK.",
+  "6. Out-of-sample expanding window initial 120 obs. Compute MSFE ratio M3/M2 and OOS R2 vs expanding historical mean. Clark-West nested statistic f_t = e_b^2 - [e_a^2 - (yhat_b - yhat_a)^2] one-sided. CSSED = sum(e_b^2 - e_a^2). Horizon profile h=1,3,5,10 with HAC lags=min(h,5) robustness h=21. Lead-lag placebo compares lag t-1 vs lead t+1.",
+  "7. Baseline comparisons: substitute lagged Fed Funds implied rate change M_FF t=-0.83 and 10y Treasury return M_UST t=+0.01 and joint with Kalshi Fed t=+3.45 p<0.001; ETH Treasury t=-0.25 joint Kalshi t=-2.10 p=0.035. Joint with Deribit DVOL level: BTC Kalshi t=+3.46 p=0.001 DVOL t=+1.58 p=0.12 ETH Kalshi t=-2.08 p=0.037 DVOL t=-1.52 p=0.13. Release-window dummy 3-day BLS and non-release subsample checks."
+ ],
+ "claims": [
+  {
+   "name": "kalshi_series_count",
+   "description": "number of Kalshi event series included",
+   "value": "10",
+   "unit": "series",
+   "kind": "count",
+   "where": "abstract and Table kalshi_coverage"
+  },
+  {
+   "name": "crypto_assets_count",
+   "description": "number of cryptocurrency assets tested BTC ETH SOL ADA AVAX LINK",
+   "value": "6",
+   "unit": "assets",
+   "kind": "count",
+   "where": "abstract and data section"
+  },
+  {
+   "name": "btc_fed_dovish_coef_M3",
+   "description": "M3 coefficient Fed-dovish signal on BTC 5-day RVol",
+   "value": "0.639",
+   "unit": "RVol units per prob change",
+   "kind": "estimate",
+   "where": "Table insample_btc M3"
+  },
+  {
+   "name": "btc_fed_dovish_coef_SE",
+   "description": "HAC SE Fed-dovish BTC M3",
+   "value": "0.176",
+   "unit": "same",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_fed_dovish_t",
+   "description": "HAC t-stat Fed-dovish BTC M3 overlapping Newey-West 5 lags",
+   "value": "3.63",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "abstract Fig heatmap Table insample_btc"
+  },
+  {
+   "name": "btc_fed_dovish_p",
+   "description": "p-value Fed-dovish BTC M3",
+   "value": "< 0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "abstract and Table allsignals_btc p=0.000"
+  },
+  {
+   "name": "btc_fed_dovish_BH_adj_p",
+   "description": "BH adjusted p Fed-dovish BTC survives q=0.05",
+   "value": "0.020",
+   "unit": "BH adj p",
+   "kind": "estimate",
+   "where": "robustness multiple testing"
+  },
+  {
+   "name": "btc_recession_oos_msfe",
+   "description": "OOS MSFE ratio BTC Recession Risk best signal",
+   "value": "0.979",
+   "unit": "ratio M3/M2",
+   "kind": "estimate",
+   "where": "Table oos Recession Risk bold"
+  },
+  {
+   "name": "btc_recession_oos_CW_p",
+   "description": "Clark-West one-sided p BTC Recession Risk",
+   "value": "0.020",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos and abstract"
+  },
+  {
+   "name": "btc_recession_oos_R2",
+   "description": "OOS R2 BTC Recession Risk",
+   "value": "0.126",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "btc_recession_in_t",
+   "description": "in-sample HAC t Recession Risk BTC model M3",
+   "value": "-2.76",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Fig heatmap and Table allsignals_btc"
+  },
+  {
+   "name": "btc_recession_in_p",
+   "description": "in-sample p Recession Risk BTC",
+   "value": "0.006",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "btc_recession_BH_adj_not_survive",
+   "description": "Recession Risk BTC raw p 0.006 falls just outside BH threshold q=0.05",
+   "value": "0.006",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness section"
+  },
+  {
+   "name": "eth_cpi_in_coef",
+   "description": "KXCPI absolute prob change coefficient ETH M3",
+   "value": "-1.209",
+   "unit": "RVol units",
+   "kind": "estimate",
+   "where": "Table insample_cpi ETH"
+  },
+  {
+   "name": "eth_cpi_in_t",
+   "description": "HAC t ETH CPI M3",
+   "value": "-2.12",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "eth_cpi_in_p",
+   "description": "p ETH CPI M3",
+   "value": "0.034",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "eth_cpi_in_AdjR2",
+   "description": "Adj R2 ETH CPI M3",
+   "value": "0.108",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "eth_cpi_oos_msfe",
+   "description": "OOS MSFE ratio ETH CPI",
+   "value": "0.959",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_cpi_oos_CW_p",
+   "description": "CW p ETH CPI",
+   "value": "0.010",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos abstract"
+  },
+  {
+   "name": "eth_cpi_oos_R2",
+   "description": "OOS R2 ETH CPI",
+   "value": "0.068",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "sol_cpi_in_coef",
+   "description": "KXCPI coef SOL",
+   "value": "-0.850",
+   "unit": "RVol units",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "sol_cpi_in_t",
+   "description": "t SOL CPI",
+   "value": "-2.55",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "sol_cpi_in_p",
+   "description": "p SOL CPI",
+   "value": "0.011",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "sol_cpi_in_AdjR2",
+   "description": "AdjR2 SOL CPI",
+   "value": "0.083",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "sol_cpi_oos_msfe",
+   "description": "OOS MSFE SOL CPI",
+   "value": "0.983",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "sol_cpi_oos_CW_p",
+   "description": "CW p SOL CPI",
+   "value": "0.048",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "sol_cpi_oos_R2",
+   "description": "OOS R2 SOL CPI",
+   "value": "0.048",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "ada_cpi_in_coef",
+   "description": "CPI coef ADA",
+   "value": "-0.982",
+   "unit": "RVol",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "ada_cpi_in_t",
+   "description": "t ADA CPI",
+   "value": "-2.35",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "ada_cpi_in_p",
+   "description": "p ADA CPI",
+   "value": "0.019",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "ada_cpi_in_AdjR2",
+   "description": "AdjR2 ADA CPI",
+   "value": "0.082",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "avax_cpi_in_coef",
+   "description": "CPI coef AVAX not significant",
+   "value": "-0.834",
+   "unit": "RVol",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "avax_cpi_in_t",
+   "description": "t AVAX CPI",
+   "value": "-1.31",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "avax_cpi_in_p",
+   "description": "p AVAX CPI",
+   "value": "0.191",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "avax_cpi_in_AdjR2",
+   "description": "AdjR2 AVAX CPI low",
+   "value": "0.017",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_cpi text"
+  },
+  {
+   "name": "link_cpi_in_coef",
+   "description": "CPI coef LINK largest",
+   "value": "-1.262",
+   "unit": "RVol",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "link_cpi_in_t",
+   "description": "t LINK CPI",
+   "value": "-3.39",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "link_cpi_in_p",
+   "description": "p LINK CPI",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "link_cpi_in_AdjR2",
+   "description": "AdjR2 LINK CPI",
+   "value": "0.110",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "link_cpi_BH_adj_p",
+   "description": "BH adj p LINK CPI survives",
+   "value": "0.042",
+   "unit": "BH adj p",
+   "kind": "estimate",
+   "where": "robustness BH section"
+  },
+  {
+   "name": "btc_cpi_in_coef",
+   "description": "CPI coef BTC not significant",
+   "value": "-0.454",
+   "unit": "RVol",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "btc_cpi_in_t",
+   "description": "t BTC CPI",
+   "value": "-1.56",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "btc_cpi_in_p",
+   "description": "p BTC CPI",
+   "value": "0.119",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "btc_cpi_in_AdjR2",
+   "description": "AdjR2 BTC CPI",
+   "value": "0.160",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "kalshi_cpi_range_t",
+   "description": "range of CPI t-stats across altcoins ETH SOL ADA LINK -2.1 to -3.4",
+   "value": "-2.1 to -3.4",
+   "unit": "t range",
+   "kind": "estimate",
+   "where": "abstract"
+  },
+  {
+   "name": "orth_firstStage_R2_fed",
+   "description": "first stage R2 Fed-dovish projected on Fed Funds + VIX DXY SP500",
+   "value": "2.3 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "intro and robustness orth"
+  },
+  {
+   "name": "orth_firstStage_R2_fed_orth_share",
+   "description": "orthogonal share 97.7 percent",
+   "value": "97.7 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_firstStage_R2_cpi",
+   "description": "first stage R2 KXCPI on 10y Treasury + VIX DXY SP500",
+   "value": "7.5 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "intro and robustness"
+  },
+  {
+   "name": "orth_fed_resid_t",
+   "description": "t residual Fed-dovish predicting BTC",
+   "value": "3.62",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_fed_resid_p",
+   "description": "p residual Fed BTC",
+   "value": "< 0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_t_eth",
+   "description": "t residual CPI ETH",
+   "value": "-2.29",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_p_eth",
+   "description": "p residual CPI ETH",
+   "value": "0.022",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_t_sol",
+   "description": "t residual CPI SOL",
+   "value": "-2.79",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_p_sol",
+   "description": "p residual CPI SOL",
+   "value": "0.005",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_t_ada",
+   "description": "t residual CPI ADA",
+   "value": "-2.60",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_p_ada",
+   "description": "p residual CPI ADA",
+   "value": "0.009",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_t_link",
+   "description": "t residual CPI LINK",
+   "value": "-3.73",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "orth_cpi_resid_p_link",
+   "description": "p residual CPI LINK",
+   "value": "< 0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness orth"
+  },
+  {
+   "name": "btc_M1_HAR1_coef",
+   "description": "M1 HAR 1-day lag coef BTC",
+   "value": "0.581",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc M1"
+  },
+  {
+   "name": "btc_M1_HAR1_SE",
+   "description": "SE HAR1 M1",
+   "value": "0.640",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M1_HAR5_coef",
+   "description": "M1 HAR 5-day coef",
+   "value": "6.047",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M1_HAR5_SE",
+   "description": "SE M1 HAR5",
+   "value": "3.179",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M1_HAR20_coef",
+   "description": "M1 HAR20 coef",
+   "value": "0.351",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M1_HAR20_SE",
+   "description": "SE HAR20 M1",
+   "value": "3.285",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M1_AdjR2",
+   "description": "AdjR2 M1 BTC",
+   "value": "0.093",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_HAR1_coef",
+   "description": "M2 HAR1 coef",
+   "value": "0.474",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc M2"
+  },
+  {
+   "name": "btc_M2_HAR1_SE",
+   "description": "SE M2 HAR1",
+   "value": "0.589",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_HAR5_coef",
+   "description": "M2 HAR5 coef",
+   "value": "6.075",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_HAR5_SE",
+   "description": "SE M2 HAR5",
+   "value": "3.415",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_HAR20_coef",
+   "description": "M2 HAR20 coef",
+   "value": "-1.086",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_HAR20_SE",
+   "description": "SE M2 HAR20",
+   "value": "3.351",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_VIX_coef",
+   "description": "M2 VIX coef",
+   "value": "0.005",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_VIX_SE",
+   "description": "SE VIX M2",
+   "value": "0.004",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_DXY_coef",
+   "description": "M2 DXY coef",
+   "value": "4.885",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_DXY_SE",
+   "description": "SE DXY M2",
+   "value": "2.896",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_SPX_coef",
+   "description": "M2 SPX coef",
+   "value": "-2.859",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_SPX_SE",
+   "description": "SE SPX M2",
+   "value": "1.234",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M2_AdjR2",
+   "description": "AdjR2 M2 BTC",
+   "value": "0.141",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_HAR1_coef",
+   "description": "M3 HAR1 coef",
+   "value": "0.395",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc M3"
+  },
+  {
+   "name": "btc_M3_HAR1_SE",
+   "description": "SE HAR1 M3",
+   "value": "0.560",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_HAR5_coef",
+   "description": "M3 HAR5 coef",
+   "value": "6.388",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_HAR5_SE",
+   "description": "SE HAR5 M3",
+   "value": "3.348",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_HAR20_coef",
+   "description": "M3 HAR20 coef",
+   "value": "-1.323",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_HAR20_SE",
+   "description": "SE HAR20 M3",
+   "value": "3.318",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_VIX_coef",
+   "description": "M3 VIX coef",
+   "value": "0.005",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_VIX_SE",
+   "description": "SE VIX M3",
+   "value": "0.004",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_DXY_coef",
+   "description": "M3 DXY coef",
+   "value": "4.646",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_DXY_SE",
+   "description": "SE DXY M3",
+   "value": "2.823",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_SPX_coef",
+   "description": "M3 SPX coef",
+   "value": "-2.770",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_SPX_SE",
+   "description": "SE SPX M3",
+   "value": "1.217",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_M3_AdjR2",
+   "description": "AdjR2 M3 BTC",
+   "value": "0.155",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "btc_IQR_fed",
+   "description": "IQR Fed-dovish signal approx",
+   "value": "0.023",
+   "unit": "prob change",
+   "kind": "estimate",
+   "where": "text interquartile range"
+  },
+  {
+   "name": "btc_IQR_effect",
+   "description": "IQR effect on predicted RVol 0.639*0.023",
+   "value": "0.015",
+   "unit": "annualized RVol",
+   "kind": "estimate",
+   "where": "text"
+  },
+  {
+   "name": "btc_IQR_pct_mean",
+   "description": "IQR effect as percent of mean BTC RVol 0.634",
+   "value": "2.4 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "text"
+  },
+  {
+   "name": "btc_OOS_fed_msfe",
+   "description": "OOS MSFE Fed Dovish BTC fails",
+   "value": "1.009",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos BTC Fed Dovish"
+  },
+  {
+   "name": "btc_OOS_fed_CWp",
+   "description": "CW p Fed Dovish BTC OOS",
+   "value": "0.446",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "btc_OOS_fed_R2",
+   "description": "OOS R2 Fed Dovish BTC",
+   "value": "0.118",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "btc_OOS_cpi_msfe",
+   "description": "OOS MSFE CPI BTC",
+   "value": "0.995",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "btc_OOS_cpi_CWp",
+   "description": "CW p CPI BTC OOS",
+   "value": "0.231",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "btc_OOS_cpi_R2",
+   "description": "OOS R2 CPI BTC",
+   "value": "0.095",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_OOS_fed_msfe",
+   "description": "OOS MSFE Fed Dovish ETH",
+   "value": "1.004",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_OOS_fed_CWp",
+   "description": "CW p Fed ETH OOS",
+   "value": "0.893",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_OOS_fed_R2",
+   "description": "OOS R2 Fed ETH",
+   "value": "-0.042",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_OOS_rec_msfe",
+   "description": "OOS MSFE Recession ETH",
+   "value": "1.000",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_OOS_rec_CWp",
+   "description": "CW p Recession ETH",
+   "value": "0.421",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "eth_OOS_rec_R2",
+   "description": "OOS R2 Recession ETH",
+   "value": "0.051",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "sol_OOS_mon_msfe",
+   "description": "OOS MSFE Monetary Policy SOL",
+   "value": "0.999",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "sol_OOS_mon_CWp",
+   "description": "CW p Monetary SOL OOS",
+   "value": "0.325",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "sol_OOS_mon_R2",
+   "description": "OOS R2 Monetary SOL",
+   "value": "0.012",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "ada_OOS_mon_msfe",
+   "description": "OOS MSFE Monetary Policy ADA significant",
+   "value": "0.992",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "ada_OOS_mon_CWp",
+   "description": "CW p Monetary ADA",
+   "value": "0.041",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "ada_OOS_mon_R2",
+   "description": "OOS R2 Monetary ADA",
+   "value": "0.011",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "avax_OOS_cpi_msfe",
+   "description": "OOS MSFE CPI AVAX",
+   "value": "0.996",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "avax_OOS_cpi_CWp",
+   "description": "CW p CPI AVAX",
+   "value": "0.171",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "avax_OOS_cpi_R2",
+   "description": "OOS R2 CPI AVAX",
+   "value": "-0.045",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "link_OOS_cpi_msfe",
+   "description": "OOS MSFE CPI LINK",
+   "value": "0.992",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "link_OOS_cpi_CWp",
+   "description": "CW p CPI LINK",
+   "value": "0.121",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "link_OOS_cpi_R2",
+   "description": "OOS R2 CPI LINK",
+   "value": "0.060",
+   "unit": "R2",
+   "kind": "estimate",
+   "where": "Table oos"
+  },
+  {
+   "name": "nonoverlap_btc_t",
+   "description": "non-overlapping 5-day windows HC3 t Fed-dovish BTC retains sign",
+   "value": "1.17",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness non-overlapping"
+  },
+  {
+   "name": "nonoverlap_btc_p",
+   "description": "p non-overlapping BTC Fed",
+   "value": "0.24",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "nonoverlap_btc_N",
+   "description": "N non-overlapping BTC Fed reduced from 318 to",
+   "value": "64",
+   "unit": "obs",
+   "kind": "count",
+   "where": "robustness"
+  },
+  {
+   "name": "nonoverlap_link_t",
+   "description": "t non-overlapping CPI LINK",
+   "value": "-0.71",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "nonoverlap_link_N",
+   "description": "N non-overlapping LINK",
+   "value": "54",
+   "unit": "obs",
+   "kind": "count",
+   "where": "robustness"
+  },
+  {
+   "name": "bootstrap_block_p",
+   "description": "moving-block bootstrap p 2000 resamples block 5 BTC Fed",
+   "value": "0.035",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness block bootstrap"
+  },
+  {
+   "name": "bootstrap_HAC_p",
+   "description": "analytic HAC p for comparison BTC Fed",
+   "value": "0.0003",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness block bootstrap"
+  },
+  {
+   "name": "leadlag_lag_t",
+   "description": "t lagged Fed-dovish t-1 BTC",
+   "value": "3.71",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness lead-lag"
+  },
+  {
+   "name": "leadlag_lag_p",
+   "description": "p lagged Fed BTC",
+   "value": "< 0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "leadlag_lead_t",
+   "description": "t lead placebo t+1 Fed BTC",
+   "value": "-0.17",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "leadlag_lead_p",
+   "description": "p lead placebo Fed BTC",
+   "value": "0.87",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_lead_eth_t",
+   "description": "t lead CPI ETH also significant persistent repricing",
+   "value": "-2.53",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness lead-lag CPI"
+  },
+  {
+   "name": "cpi_lead_eth_p",
+   "description": "p lead CPI ETH",
+   "value": "0.012",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_lead_sol_t",
+   "description": "t lead CPI SOL",
+   "value": "-3.76",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_lead_sol_p",
+   "description": "p lead CPI SOL",
+   "value": "< 0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_lead_link_t",
+   "description": "t lead CPI LINK attenuates",
+   "value": "-1.95",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_lead_link_p",
+   "description": "p lead CPI LINK",
+   "value": "0.051",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "baseline_FF_t",
+   "description": "t Fed Funds implied rate change alone BTC channel",
+   "value": "-0.83",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness baseline"
+  },
+  {
+   "name": "baseline_UST_t",
+   "description": "t 10y Treasury return alone BTC channel",
+   "value": "0.01",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness baseline"
+  },
+  {
+   "name": "baseline_joint_fed_t",
+   "description": "t Kalshi Fed-dovish in joint with FF and UST BTC",
+   "value": "3.45",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness baseline joint"
+  },
+  {
+   "name": "baseline_joint_fed_p",
+   "description": "p joint Fed BTC",
+   "value": "< 0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "baseline_eth_UST_t",
+   "description": "t Treasury return alone ETH CPI channel",
+   "value": "-0.25",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness baseline ETH"
+  },
+  {
+   "name": "baseline_eth_joint_cpi_t",
+   "description": "t Kalshi CPI in joint with Treasury ETH",
+   "value": "-2.10",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "baseline_eth_joint_cpi_p",
+   "description": "p joint CPI ETH",
+   "value": "0.035",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "dvol_btc_joint_fed_t",
+   "description": "t Kalshi Fed-dovish joint with DVOL BTC",
+   "value": "3.46",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_btc_joint_fed_p",
+   "description": "p joint Fed BTC vs DVOL",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_btc_joint_dvol_t",
+   "description": "t DVOL BTC in joint null",
+   "value": "1.58",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_btc_joint_dvol_p",
+   "description": "p DVOL BTC null",
+   "value": "0.12",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_eth_joint_cpi_t",
+   "description": "t Kalshi CPI joint with DVOL ETH",
+   "value": "-2.08",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_eth_joint_cpi_p",
+   "description": "p joint CPI ETH vs DVOL",
+   "value": "0.037",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_eth_joint_dvol_t",
+   "description": "t ETH DVOL in joint null",
+   "value": "-1.52",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "dvol_eth_joint_dvol_p",
+   "description": "p ETH DVOL null",
+   "value": "0.13",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness DVOL"
+  },
+  {
+   "name": "garch_btc_fed_t",
+   "description": "t GARCH conditional variance Fed-dovish BTC",
+   "value": "2.91",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness alternative vol"
+  },
+  {
+   "name": "garch_btc_fed_p",
+   "description": "p GARCH BTC Fed",
+   "value": "0.004",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "garch_eth_cpi_t",
+   "description": "t GARCH CPI ETH insignificant",
+   "value": "-0.69",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "logRVol_btc_fed_t",
+   "description": "t log RVol BTC Fed",
+   "value": "3.53",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness alternative vol"
+  },
+  {
+   "name": "logRVol_eth_cpi_t",
+   "description": "t log RVol ETH CPI",
+   "value": "-2.41",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "rvol21_btc_fed_t",
+   "description": "t 21-day RVol BTC Fed fades",
+   "value": "0.93",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "rvol21_btc_fed_p",
+   "description": "p 21-day BTC Fed",
+   "value": "0.35",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "rvol21_eth_cpi_t",
+   "description": "t 21-day RVol ETH CPI marginal",
+   "value": "-1.78",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "rvol21_eth_cpi_p",
+   "description": "p 21-day ETH CPI",
+   "value": "0.075",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_release_dummy_link_t",
+   "description": "t release-window dummy itself LINK modestly significant",
+   "value": "-2.16",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness CPI release dummy"
+  },
+  {
+   "name": "cpi_resid_nonrelease_eth_t",
+   "description": "t CPI non-release subsample ETH marginal",
+   "value": "-1.81",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness non-release"
+  },
+  {
+   "name": "cpi_resid_nonrelease_eth_p",
+   "description": "p non-release ETH",
+   "value": "0.071",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness non-release"
+  },
+  {
+   "name": "cpi_resid_nonrelease_sol_t",
+   "description": "t non-release SOL remains strongly significant",
+   "value": "-2.80",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness non-release"
+  },
+  {
+   "name": "cpi_resid_nonrelease_link_t",
+   "description": "t non-release LINK remains strongly significant",
+   "value": "-3.07",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness non-release"
+  },
+  {
+   "name": "cpi_dummy_CTRL_eth_t",
+   "description": "t KXCPI with release dummy included ETH",
+   "value": "-2.07",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness CPI with dummy"
+  },
+  {
+   "name": "cpi_dummy_CTRL_eth_p",
+   "description": "p with dummy ETH",
+   "value": "0.039",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_dummy_CTRL_sol_t",
+   "description": "t with dummy SOL",
+   "value": "-2.63",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_dummy_CTRL_sol_p",
+   "description": "p with dummy SOL",
+   "value": "0.009",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_dummy_CTRL_link_t",
+   "description": "t with dummy LINK",
+   "value": "-3.21",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "cpi_dummy_CTRL_link_p",
+   "description": "p with dummy LINK",
+   "value": "0.001",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness"
+  },
+  {
+   "name": "ema_attenuated_btc_t",
+   "description": "t 5-day EMA lagged signal BTC attenuated",
+   "value": "1.24",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "data section alternatives"
+  },
+  {
+   "name": "composite_btc_t",
+   "description": "t cross-sectional composite BTC near zero",
+   "value": "-0.79",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "composite_link_t",
+   "description": "t composite LINK",
+   "value": "-0.59",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "kalshi_median_vol_KXFED",
+   "description": "median dollar volume KXFED",
+   "value": "9326",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "kalshi_peak_vol_KXFED",
+   "description": "peak single-day dollar volume KXFED",
+   "value": "651000",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "kalshi_median_OI_KXFED",
+   "description": "median open interest KXFED",
+   "value": "278805",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "kalshi_median_OI_KXCPI",
+   "description": "median OI KXCPI",
+   "value": "147879",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "kalshi_median_OI_KXRECSSNBER",
+   "description": "median OI KXRECSSNBER highest",
+   "value": "456648",
+   "unit": "USD",
+   "kind": "estimate",
+   "where": "data section"
+  },
+  {
+   "name": "btc_mean_RVol",
+   "description": "mean annualized 5-day RVol BTC lowest",
+   "value": "0.634",
+   "unit": "annualized std",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "eth_mean_RVol",
+   "description": "mean RVol ETH",
+   "value": "0.742",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "sol_mean_RVol",
+   "description": "mean RVol SOL",
+   "value": "0.930",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "ada_mean_RVol",
+   "description": "mean RVol ADA",
+   "value": "0.810",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "avax_mean_RVol",
+   "description": "mean RVol AVAX",
+   "value": "0.918",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "link_mean_RVol",
+   "description": "mean RVol LINK",
+   "value": "0.858",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "btc_RVol_std",
+   "description": "std dev BTC RVol",
+   "value": "0.194",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "btc_RVol_min",
+   "description": "min BTC RVol",
+   "value": "0.191",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "btc_RVol_max",
+   "description": "max BTC RVol",
+   "value": "1.341",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "eth_RVol_std",
+   "description": "std ETH",
+   "value": "0.254",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "sol_RVol_std",
+   "description": "std SOL",
+   "value": "0.341",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "sol_RVol_min",
+   "description": "min SOL",
+   "value": "0.186",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "sol_RVol_max",
+   "description": "max SOL",
+   "value": "2.488",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "descriptive_N_per_asset",
+   "description": "N per crypto asset descriptive Jan2023-Mar2026",
+   "value": "1178",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table descriptive"
+  },
+  {
+   "name": "merged_calendar_N",
+   "description": "merged dataset calendar days Jan2023-Mar2026",
+   "value": "1183",
+   "unit": "calendar days",
+   "kind": "count",
+   "where": "data section"
+  },
+  {
+   "name": "kalshi_usable_N_KXFED",
+   "description": "usable obs KXFED after lag and matching",
+   "value": "469",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXCPI",
+   "description": "usable KXCPI",
+   "value": "384",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXCPICORE",
+   "description": "usable KXCPICORE",
+   "value": "331",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXGDP",
+   "description": "usable KXGDP",
+   "value": "424",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXU3",
+   "description": "usable KXU3 unemployment",
+   "value": "389",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXPCECORE",
+   "description": "usable KXPCECORE",
+   "value": "294",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage and text"
+  },
+  {
+   "name": "kalshi_usable_N_KXRECSSNBER_569",
+   "description": "usable KXRECSSNBER recession risk",
+   "value": "569",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage text"
+  },
+  {
+   "name": "kalshi_usable_N_KXACPI",
+   "description": "usable KXACPI",
+   "value": "283",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXRATECUT",
+   "description": "usable KXRATECUT excluded 28 obs insufficient",
+   "value": "28",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage and text"
+  },
+  {
+   "name": "kalshi_usable_N_KXUSNFP",
+   "description": "usable KXUSNFP zero never active excluded",
+   "value": "0",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table kalshi_coverage"
+  },
+  {
+   "name": "kalshi_usable_N_KXPCECORE_text",
+   "description": "duplicate KXPCECORE 294 in text",
+   "value": "294",
+   "unit": "obs",
+   "kind": "count",
+   "where": "data text coverage varies"
+  },
+  {
+   "name": "btc_N_M1M3",
+   "description": "N nested model comparison BTC M1-M3 Fed-dovish",
+   "value": "318",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table insample_btc"
+  },
+  {
+   "name": "cpi_N_M3",
+   "description": "N CPI signal M3 per asset",
+   "value": "264",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table insample_cpi"
+  },
+  {
+   "name": "allsig_KXACPI_N",
+   "description": "N CPI Level KXACPI BTC all signals",
+   "value": "195",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_KXACPI_coef",
+   "description": "coef KXACPI BTC",
+   "value": "0.412",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_KXACPI_t",
+   "description": "t KXACPI BTC",
+   "value": "2.40",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_KXACPI_p",
+   "description": "p KXACPI BTC",
+   "value": "0.017",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Labor_N",
+   "description": "N Labor Market BTC",
+   "value": "265",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Labor_coef",
+   "description": "coef Labor BTC",
+   "value": "0.256",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Labor_t",
+   "description": "t Labor BTC",
+   "value": "1.29",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Labor_p",
+   "description": "p Labor BTC",
+   "value": "0.196",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_MonetaryPolicy_N",
+   "description": "N Monetary Policy absolute BTC",
+   "value": "318",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_MonetaryPolicy_coef",
+   "description": "coef Monetary Policy BTC",
+   "value": "-0.354",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_MonetaryPolicy_t",
+   "description": "t Monetary Policy BTC",
+   "value": "-1.09",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_MonetaryPolicy_p",
+   "description": "p Monetary Policy BTC",
+   "value": "0.278",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_PCE_N",
+   "description": "N Inflation PCE BTC",
+   "value": "193",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_PCE_coef",
+   "description": "coef PCE BTC",
+   "value": "0.075",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_PCE_t",
+   "description": "t PCE BTC",
+   "value": "0.56",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_PCE_p",
+   "description": "p PCE BTC",
+   "value": "0.574",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_GDP_N",
+   "description": "N Output GDP BTC",
+   "value": "289",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_GDP_coef",
+   "description": "coef GDP BTC",
+   "value": "0.076",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_GDP_t",
+   "description": "t GDP BTC",
+   "value": "0.38",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_GDP_p",
+   "description": "p GDP BTC",
+   "value": "0.708",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Core_N",
+   "description": "N Inflation Core BTC",
+   "value": "225",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Core_coef",
+   "description": "coef Core BTC",
+   "value": "-0.017",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Core_t",
+   "description": "t Core BTC",
+   "value": "-0.10",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "allsig_Core_p",
+   "description": "p Core BTC",
+   "value": "0.919",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_CPI_N_allsig",
+   "description": "N CPI Signal BTC all signals",
+   "value": "264",
+   "unit": "obs",
+   "kind": "count",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_CPI_coef_allsig",
+   "description": "coef CPI Signal BTC",
+   "value": "-0.252",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_CPI_t_allsig",
+   "description": "t CPI Signal BTC",
+   "value": "-1.27",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_CPI_p_allsig",
+   "description": "p CPI Signal BTC",
+   "value": "0.203",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_Recession_coef_allsig",
+   "description": "coef Recession Risk BTC all signals",
+   "value": "-1.536",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_Recession_t_allsig",
+   "description": "t Recession Risk BTC",
+   "value": "-2.76",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_Recession_p_allsig",
+   "description": "p Recession Risk BTC",
+   "value": "0.006",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_FedDovish_coef_allsig",
+   "description": "coef Fed Dovish BTC all signals",
+   "value": "0.639",
+   "unit": "coef",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_FedDovish_t_allsig",
+   "description": "t Fed Dovish BTC",
+   "value": "3.63",
+   "unit": "t",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "sig_FedDovish_p_allsig",
+   "description": "p Fed Dovish BTC",
+   "value": "0.000",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "Table allsignals_btc"
+  },
+  {
+   "name": "implied_vol_pred_highSignal",
+   "description": "predicted BTC 5-day RVol at 90th pct Fed signal",
+   "value": "0.348",
+   "unit": "annualized RVol",
+   "kind": "estimate",
+   "where": "practical implications vol-managed portfolios"
+  },
+  {
+   "name": "implied_vol_pred_benchmark",
+   "description": "HAR benchmark predicted BTC RVol at mean signal",
+   "value": "0.324",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "practical implications"
+  },
+  {
+   "name": "implied_weight_reduction",
+   "description": "implied position weight reduction high signal",
+   "value": "7 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "practical implications"
+  },
+  {
+   "name": "eth_90pct_signal_level",
+   "description": "90th pct KXCPI signal level approx",
+   "value": "0.070",
+   "unit": "prob change",
+   "kind": "estimate",
+   "where": "practical implications options"
+  },
+  {
+   "name": "eth_vol_reduction_90pct",
+   "description": "reduction predicted RVol ETH 90th pct signal -1.209*0.070",
+   "value": "0.084",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "practical implications"
+  },
+  {
+   "name": "eth_HAR_benchmark_pred",
+   "description": "HAR benchmark predicted ETH RVol",
+   "value": "0.52",
+   "unit": "annualized",
+   "kind": "estimate",
+   "where": "practical implications"
+  },
+  {
+   "name": "eth_vol_reduction_pct",
+   "description": "reduction as percent below HAR benchmark 16 percent",
+   "value": "16 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "practical implications"
+  },
+  {
+   "name": "BH_q",
+   "description": "Benjamini-Hochberg FDR q threshold",
+   "value": "0.05",
+   "unit": "q",
+   "kind": "parameter",
+   "where": "abstract and inference"
+  },
+  {
+   "name": "BH_tests_total",
+   "description": "total testable specifications for BH correction 60 signal-by-asset",
+   "value": "60",
+   "unit": "specifications",
+   "kind": "tally",
+   "where": "inference and robustness BH"
+  },
+  {
+   "name": "BH_survive_count",
+   "description": "number surviving BH q=0.05 Bitcoin-Fed-dovish and Chainlink-CPI",
+   "value": "2",
+   "unit": "specs",
+   "kind": "tally",
+   "where": "robustness BH"
+  },
+  {
+   "name": "OOS_significant_count",
+   "description": "asset-signal pairs MSFE<1 with significant CW",
+   "value": "4",
+   "unit": "pairs",
+   "kind": "tally",
+   "where": "Table oos text BTC Recession ETH CPI SOL CPI ADA Monetary"
+  },
+  {
+   "name": "HAC_lags",
+   "description": "Newey-West HAC lags overlapping",
+   "value": "5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "method inference"
+  },
+  {
+   "name": "expanding_initial",
+   "description": "expanding window initial training period",
+   "value": "120",
+   "unit": "obs",
+   "kind": "parameter",
+   "where": "method OOS and Table oos caption"
+  },
+  {
+   "name": "h_primary",
+   "description": "primary forecast horizon 5 days ahead",
+   "value": "5",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "cryptocurrency returns equation RVol h=5"
+  },
+  {
+   "name": "h_robustness",
+   "description": "robustness 21-day RVol horizon",
+   "value": "21",
+   "unit": "days",
+   "kind": "parameter",
+   "where": "robustness alternative vol"
+  },
+  {
+   "name": "block_bootstrap_len",
+   "description": "moving block bootstrap block length",
+   "value": "5",
+   "unit": "obs",
+   "kind": "parameter",
+   "where": "robustness block bootstrap"
+  },
+  {
+   "name": "block_bootstrap_B",
+   "description": "number bootstrap resamples",
+   "value": "2000",
+   "unit": "resamples",
+   "kind": "parameter",
+   "where": "robustness block bootstrap"
+  },
+  {
+   "name": "tick_size",
+   "description": "Kalshi minimum tick",
+   "value": "0.01",
+   "unit": "USD",
+   "kind": "parameter",
+   "where": "data section"
+  },
+  {
+   "name": "spread_mid",
+   "description": "implied round-trip spread near midpoint $0.50",
+   "value": "two cents",
+   "unit": "USD",
+   "kind": "parameter",
+   "where": "data section"
+  },
+  {
+   "name": "spread_tail",
+   "description": "spread at tails",
+   "value": "five cents",
+   "unit": "USD",
+   "kind": "parameter",
+   "where": "data section"
+  },
+  {
+   "name": "sqrt252",
+   "description": "annualization factor sqrt 252",
+   "value": "sqrt(252)",
+   "unit": "factor",
+   "kind": "parameter",
+   "where": "equation RVol"
+  },
+  {
+   "name": "sqrt365_ratio",
+   "description": "rescaling to calendar days factor sqrt(365/252)",
+   "value": "1.20",
+   "unit": "factor",
+   "kind": "parameter",
+   "where": "footnote RVol"
+  },
+  {
+   "name": "solana_tBH_not_survive_p",
+   "description": "Solana-CPI raw p 0.011 falls just outside BH threshold",
+   "value": "0.011",
+   "unit": "p",
+   "kind": "estimate",
+   "where": "robustness BH text"
+  },
+  {
+   "name": "oos_msfe_improvement_range",
+   "description": "OOS MSFE improvement 2 to 4 percent",
+   "value": "2 to 4 percent",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Table oos text notable"
+  },
+  {
+   "name": "weekend_drop_pct",
+   "description": "weekends holidays excluded dropping approx",
+   "value": "30 percent",
+   "unit": "percent",
+   "kind": "parameter",
+   "where": "data section"
+  },
+  {
+   "name": "gap_hours",
+   "description": "minimum gap signal to forecast window 21 hours",
+   "value": "21 hours",
+   "unit": "hours",
+   "kind": "parameter",
+   "where": "data section"
+  }
+ ],
+ "headline": "btc_fed_dovish_BH_adj_p",
+ "partitions": [
+  {
+   "split": "by Kalshi series coverage - usable observations after 1-day lag and crypto merge Jan2023-Mar2026",
+   "total": "kalshi_series_count",
+   "parts": [
+    "kalshi_usable_N_KXFED",
+    "kalshi_usable_N_KXCPI",
+    "kalshi_usable_N_KXCPICORE",
+    "kalshi_usable_N_KXGDP",
+    "kalshi_usable_N_KXU3",
+    "kalshi_usable_N_KXPCECORE",
+    "kalshi_usable_N_KXRECSSNBER_569",
+    "kalshi_usable_N_KXACPI",
+    "kalshi_usable_N_KXRATECUT",
+    "kalshi_usable_N_KXUSNFP"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "BTC Fed-dovish M3 overlapping HAC 5 lags 5-day RVol",
+   "statistic": "btc_fed_dovish_t",
+   "p_value": "btc_fed_dovish_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "BTC Recession Risk M3 HAC",
+   "statistic": "btc_recession_in_t",
+   "p_value": "btc_recession_in_p",
+   "group_sizes": [
+    "kalshi_usable_N_KXRECSSNBER_569"
+   ]
+  },
+  {
+   "test": "ETH CPI M3 HAC",
+   "statistic": "eth_cpi_in_t",
+   "p_value": "eth_cpi_in_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "SOL CPI M3 HAC",
+   "statistic": "sol_cpi_in_t",
+   "p_value": "sol_cpi_in_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "ADA CPI M3 HAC",
+   "statistic": "ada_cpi_in_t",
+   "p_value": "ada_cpi_in_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "LINK CPI M3 HAC strongest altcoin",
+   "statistic": "link_cpi_in_t",
+   "p_value": "link_cpi_in_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "BTC CPI M3 null",
+   "statistic": "btc_cpi_in_t",
+   "p_value": "btc_cpi_in_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "AVAX CPI M3 null low AdjR2",
+   "statistic": "avax_cpi_in_t",
+   "p_value": "avax_cpi_in_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Orthogonal Fed residual predicts BTC",
+   "statistic": "orth_fed_resid_t",
+   "p_value": "orth_fed_resid_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Orthogonal CPI residual ETH",
+   "statistic": "orth_cpi_resid_t_eth",
+   "p_value": "orth_cpi_resid_p_eth",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Orthogonal CPI residual SOL",
+   "statistic": "orth_cpi_resid_t_sol",
+   "p_value": "orth_cpi_resid_p_sol",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Orthogonal CPI residual ADA",
+   "statistic": "orth_cpi_resid_t_ada",
+   "p_value": "orth_cpi_resid_p_ada",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Orthogonal CPI residual LINK",
+   "statistic": "orth_cpi_resid_t_link",
+   "p_value": "orth_cpi_resid_p_link",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Non-overlapping 5-day windows Fed BTC HC3",
+   "statistic": "nonoverlap_btc_t",
+   "p_value": "nonoverlap_btc_p",
+   "group_sizes": [
+    "nonoverlap_btc_N"
+   ]
+  },
+  {
+   "test": "Non-overlapping CPI LINK single statistic",
+   "statistic": "nonoverlap_link_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "nonoverlap_link_N"
+   ]
+  },
+  {
+   "test": "Block bootstrap BTC Fed confirms HAC",
+   "statistic": "btc_fed_dovish_t",
+   "p_value": "bootstrap_block_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Lead-lag Fed BTC lagged signal",
+   "statistic": "leadlag_lag_t",
+   "p_value": "leadlag_lag_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Lead-lag Fed BTC placebo lead",
+   "statistic": "leadlag_lead_t",
+   "p_value": "leadlag_lead_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Lead CPI ETH persistent repricing",
+   "statistic": "cpi_lead_eth_t",
+   "p_value": "cpi_lead_eth_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Lead CPI SOL persistent",
+   "statistic": "cpi_lead_sol_t",
+   "p_value": "cpi_lead_sol_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Lead CPI LINK attenuates",
+   "statistic": "cpi_lead_link_t",
+   "p_value": "cpi_lead_link_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Baseline Fed Funds alone BTC",
+   "statistic": "baseline_FF_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Baseline Treasury alone BTC",
+   "statistic": "baseline_UST_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Joint Kalshi Fed retains vs FF and UST BTC",
+   "statistic": "baseline_joint_fed_t",
+   "p_value": "baseline_joint_fed_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Baseline Treasury alone ETH CPI",
+   "statistic": "baseline_eth_UST_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Joint Kalshi CPI vs Treasury ETH",
+   "statistic": "baseline_eth_joint_cpi_t",
+   "p_value": "baseline_eth_joint_cpi_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "DVOL joint Kalshi Fed dominates BTC",
+   "statistic": "dvol_btc_joint_fed_t",
+   "p_value": "dvol_btc_joint_fed_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "DVOL BTC null in joint",
+   "statistic": "dvol_btc_joint_dvol_t",
+   "p_value": "dvol_btc_joint_dvol_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "DVOL joint Kalshi CPI dominates ETH",
+   "statistic": "dvol_eth_joint_cpi_t",
+   "p_value": "dvol_eth_joint_cpi_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "DVOL ETH null in joint",
+   "statistic": "dvol_eth_joint_dvol_t",
+   "p_value": "dvol_eth_joint_dvol_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Alternative vol GARCH BTC Fed",
+   "statistic": "garch_btc_fed_t",
+   "p_value": "garch_btc_fed_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Alternative vol log RVol BTC Fed",
+   "statistic": "logRVol_btc_fed_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Alternative vol 21-day RVol BTC Fed fades",
+   "statistic": "rvol21_btc_fed_t",
+   "p_value": "rvol21_btc_fed_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "Alternative vol GARCH ETH CPI null",
+   "statistic": "garch_eth_cpi_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Alternative vol log RVol ETH CPI",
+   "statistic": "logRVol_eth_cpi_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Alternative vol 21-day RVol ETH CPI marginal",
+   "statistic": "rvol21_eth_cpi_t",
+   "p_value": "rvol21_eth_cpi_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "CPI with release dummy ETH",
+   "statistic": "cpi_dummy_CTRL_eth_t",
+   "p_value": "cpi_dummy_CTRL_eth_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "CPI with release dummy SOL",
+   "statistic": "cpi_dummy_CTRL_sol_t",
+   "p_value": "cpi_dummy_CTRL_sol_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "CPI with release dummy LINK",
+   "statistic": "cpi_dummy_CTRL_link_t",
+   "p_value": "cpi_dummy_CTRL_link_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Non-release subsample ETH marginal",
+   "statistic": "cpi_resid_nonrelease_eth_t",
+   "p_value": "cpi_resid_nonrelease_eth_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Non-release subsample SOL remains",
+   "statistic": "cpi_resid_nonrelease_sol_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "Non-release subsample LINK remains",
+   "statistic": "cpi_resid_nonrelease_link_t",
+   "p_value": "not stated",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "All signals BTC CPI Level KXACPI",
+   "statistic": "allsig_KXACPI_t",
+   "p_value": "allsig_KXACPI_p",
+   "group_sizes": [
+    "allsig_KXACPI_N"
+   ]
+  },
+  {
+   "test": "All signals BTC Labor Market",
+   "statistic": "allsig_Labor_t",
+   "p_value": "allsig_Labor_p",
+   "group_sizes": [
+    "allsig_Labor_N"
+   ]
+  },
+  {
+   "test": "All signals BTC Monetary Policy absolute",
+   "statistic": "allsig_MonetaryPolicy_t",
+   "p_value": "allsig_MonetaryPolicy_p",
+   "group_sizes": [
+    "allsig_MonetaryPolicy_N"
+   ]
+  },
+  {
+   "test": "All signals BTC PCE",
+   "statistic": "allsig_PCE_t",
+   "p_value": "allsig_PCE_p",
+   "group_sizes": [
+    "allsig_PCE_N"
+   ]
+  },
+  {
+   "test": "All signals BTC GDP",
+   "statistic": "allsig_GDP_t",
+   "p_value": "allsig_GDP_p",
+   "group_sizes": [
+    "allsig_GDP_N"
+   ]
+  },
+  {
+   "test": "All signals BTC Core CPI",
+   "statistic": "allsig_Core_t",
+   "p_value": "allsig_Core_p",
+   "group_sizes": [
+    "allsig_Core_N"
+   ]
+  },
+  {
+   "test": "OOS Clark-West BTC Recession Risk MSFE<1",
+   "statistic": "btc_recession_oos_msfe",
+   "p_value": "btc_recession_oos_CW_p",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "OOS Clark-West ETH CPI MSFE<1",
+   "statistic": "eth_cpi_oos_msfe",
+   "p_value": "eth_cpi_oos_CW_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "OOS Clark-West SOL CPI MSFE<1",
+   "statistic": "sol_cpi_oos_msfe",
+   "p_value": "sol_cpi_oos_CW_p",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "OOS Clark-West ADA Monetary Policy MSFE<1",
+   "statistic": "ada_OOS_mon_msfe",
+   "p_value": "ada_OOS_mon_CWp",
+   "group_sizes": [
+    "cpi_N_M3"
+   ]
+  },
+  {
+   "test": "OOS BTC Fed-dovish fails",
+   "statistic": "btc_OOS_fed_msfe",
+   "p_value": "btc_OOS_fed_CWp",
+   "group_sizes": [
+    "btc_N_M1M3"
+   ]
+  },
+  {
+   "test": "BH FDR Fed-dovish survive",
+   "statistic": "btc_fed_dovish_t",
+   "p_value": "btc_fed_dovish_BH_adj_p",
+   "group_sizes": [
+    "BH_tests_total"
+   ]
+  },
+  {
+   "test": "BH FDR LINK CPI survive",
+   "statistic": "link_cpi_in_t",
+   "p_value": "link_cpi_BH_adj_p",
+   "group_sizes": [
+    "BH_tests_total"
+   ]
+  }
+ ]
+}

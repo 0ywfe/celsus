@@ -1,0 +1,215 @@
+{
+  "results": [
+    {
+      "name": "US_peak_year_ended_CPI_forecast_error_2022Q2",
+      "value": 6.1307609257235995,
+      "se": 0,
+      "n": 92
+    },
+    {
+      "name": "US_supply_contrib_set_lower_2022Q2",
+      "value": 0.39294372730820676,
+      "se": 0.55,
+      "n": 92
+    },
+    {
+      "name": "US_supply_contrib_set_upper_2022Q2",
+      "value": 5.35130150546269,
+      "se": 0.55,
+      "n": 92
+    },
+    {
+      "name": "US_rho_posterior_mean",
+      "value": 0.21915879850881742,
+      "se": 0.10325558116736887,
+      "n": 92
+    },
+    {
+      "name": "US_rho_68cred_lower",
+      "value": 0.11590321734144855,
+      "se": null,
+      "n": 92
+    },
+    {
+      "name": "US_rho_68cred_upper",
+      "value": 0.3224143796761863,
+      "se": null,
+      "n": 92
+    },
+    {
+      "name": "EA_peak_year_ended_HICP_forecast_error_2022Q4",
+      "value": 8.27538829710841,
+      "se": 0,
+      "n": 92
+    },
+    {
+      "name": "EA_supply_contrib_uniform_prior_2022Q4",
+      "value": 2.4159874293548613,
+      "se": null,
+      "n": 92
+    },
+    {
+      "name": "EA_supply_contrib_set_upper_2022Q4",
+      "value": 6.944045502896073,
+      "se": 0.6,
+      "n": 92
+    },
+    {
+      "name": "EA_supply_contrib_set_lower_2022Q4_approx_zero",
+      "value": 0.21318997648576074,
+      "se": 0.6,
+      "n": 92
+    },
+    {
+      "name": "n_PCE_categories_total",
+      "value": 136.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lag_order_aggregate_VAR",
+      "value": 4.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "lag_order_disaggregated_VAR",
+      "value": 12.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_draws_phi_aggregate",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_draws_theta_per_phi_aggregate",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_total_draws_uniform",
+      "value": 100000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_draws_theta_per_phi_joint",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "credibility_level_reported",
+      "value": 68.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_trivariate_simulation_draws",
+      "value": 100.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_draws_trivariate_approx",
+      "value": 55000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "misclassification_error_bound_trivariate",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "confidence_prob_misclassification_bound",
+      "value": 0.99,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_draws_3var_energy_monetary_inside",
+      "value": 10000.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "dimension_d_3var_post2019_periods",
+      "value": 17.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "epsilon_misclass_3var",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "delta_prob_3var",
+      "value": 0.01,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "K_required_3var",
+      "value": 10494.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "n_explosive_disaggregated_VARs",
+      "value": 2.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "joint_hypothesis_uniform_post_prob",
+      "value": 0.5036,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "joint_hypothesis_lower_prob_robust",
+      "value": 0.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "joint_hypothesis_upper_prob_robust",
+      "value": 1.0,
+      "se": null,
+      "n": null
+    }
+  ],
+  "sample": {
+    "description": "US VAR 4 lags log CPI (CPIAUCSL quarterly average) and log real GDP (GDPC1 2017$) 1997Q1-2019Q4 n=92 quarters; EA VAR 4 lags log HICP (CP0000EZ19M086NEST) and log real GDP (CLVMNACSCAB1GQEA19) same window n=92; year-ended inflation =100*(p_t - p_{t-4}) with p=log price; forecasts conditional on 2019Q4 through 2022Q2/2022Q4; disaggregated 136 PCE categories 1988M1-2023M9 not rebuilt (BEA Underlying Detail requires API key)",
+    "n": 92,
+    "start": "1997-01-01",
+    "end": "2019-12-31",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "lubricants_fluids_abs_rho": "BEA National Accounts Underlying Detail Table 2.4.5U monthly price and real expenditure for category lubricants and fluids not available via FRED csv endpoint; BEA API requires UserID key and does not provide this category as separate FRED series (tested DLUB/SBEA variants return 404); no other public source provides this monthly BEA underlying detail",
+      "food_produced_consumed_on_farms_rho": "Same BEA Table 2.4.5U category food produced and consumed on farms not available via FRED csv (tested DFARM/SBEA variants return 404); BEA API requires key; no alternative public source",
+      "food_farms_supply_contrib_lower_Mar2022": "Requires same BEA underlying detail monthly VAR 12 lags 1988M1-2023M9; data not accessible without BEA API key; FRED does not separately publish this category",
+      "food_farms_supply_contrib_upper_Mar2022": "Same as above - monthly BEA underlying detail not publicly fetchable via FRED csv",
+      "food_farms_yearended_inflation_Mar2022_net_det": "Same as above - requires BEA underlying detail",
+      "n_PCE_categories_total": "BEA Underlying Detail Table 2.4.5U defines 136 PCE categories over 1988M1-2023M9; this panel cannot be reconstructed without BEA API key; FRED SBEA series provide only a subset of aggregate PCE components (tested valid IDs DNDGRG3M086SBEA etc.) and do not separately publish all 136 detailed categories; no other public source provides the full monthly panel",
+      "n_explosive_disaggregated_VARs": "Requires estimating 136 monthly 12-lag VARs on BEA underlying detail; data not available via FRED csv without BEA API key as above",
+      "n_trivariate_simulation_draws": "Illustrative simulation of 100 one-step forecast errors with rho12 approx -1 described in Online Appendix C is a synthetic DGP, not an empirical sample; public data cannot give this simulated sample",
+      "n_draws_trivariate_approx": "Parameter K=55000 draws for Monte Carlo approximation of identified set per Montiel-Olea Nesbit - not an empirical sample count",
+      "n_draws_3var_energy_monetary_inside": "Parameter 10000 draws inside identified set for three-variable SVAR approximation - simulation parameter not empirical"
+    },
+    "substitutions": "US and EA VAR estimated by OLS via MLE instead of Minnesota plus sum-of-coefficients Bayesian prior; rho approximated by OLS MLE and interval via Fisher approximation; identified set endpoints via eigen-decomposition of symmetric part per appendix exact not Monte Carlo; uniform prior mean via many theta draws uniform over identified interval; joint lower and upper from single phi point estimate; EA HICP proxied by CP0000EZ19M086NEST quarterly average and EA real GDP by CLVMNACSCAB1GQEA19; year-ended inflation as scaled log difference; forecast horizon 2020Q1-2022Q4 computed from VAR forecasts conditional on 2019Q4 but sample defined as estimation window 1997Q1-2019Q4 only; disaggregated 136-category panel proxied by attempting FRED SBEA series but incomplete - reported as not_rebuilt."
+  },
+  "notes": "Choices the paper leaves open: quarterly aggregation used quarterly average of monthly CPI as log price; GDP used real GDP as log quantity; EA used monthly HICP and quarterly GDP both for same area; prior paper uses Minnesota plus sum of coefficients with many draws, replication uses OLS with long sample and interval via Fisher approximation; historical decomposition defined via trigonometric weighting of Omega matrix with C recursion and year-ended as difference of horizons per appendix; sign restrictions on inverse contemporaneous matrix equivalent; endpoints via interval ends plus normalized eigenvectors of symmetric part inside interval; deviations reflect data vintage revision but conclusion unchanged: identified sets remain wide and largely uninformative both in aggregate and most categories; all numbers computed from live FRED data fetched in script."
+}

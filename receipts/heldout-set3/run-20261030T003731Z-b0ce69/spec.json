@@ -1,0 +1,2672 @@
+{
+ "title": "The Output Convergence Debate Revisited: Lessons from recent developments in the analysis of panel data models - Replication Spec",
+ "hypothesis": "Under heterogeneous dynamics and nonparallel trends (trended latent technology factor) TWFE and Barro estimates of speed of convergence phi=1-rho are biased toward zero; DCCE estimators consistent. Empirically cross-country unconditional convergence very slow (Barro phi 0.3-0.6% mean lag 171-315y), within-country to country-specific trends reasonably fast (TWFE ~3% ~25y, DCCEMG ~11% ~6y business-cycle frequency). Capital long-run elasticity ~0.48 near 0.46 capital share; TI conflict and property rights significant; democracy positive but significance falls after allowing nonparallel trends/heterogeneity.",
+ "data_sources": [
+  "PWT 10.01 rgdpna, rgdpo, rnna, pop, emp 1950-2019",
+  "Acemoglu Naidu Restrepo Robinson 2019 replication dataset 1960-2010 dichotomous democracy",
+  "Kremer Willis You 2022 TI covariates: absolute latitude, ethnic fractionalization, protection against expropriation risk"
+ ],
+ "sample": "Penn World Tables PWT 10.01 rgdpna (real GDP at constant 2017 national prices, million 2017US$) /POP and /EMP: y_it=log(Y_it/POP_it) per capita and tilde y_it=log(Y_it/EMP_it) per employee 1950-2019 baseline unbalanced panel 157 countries with >=30 obs (effective >=26 after 4 lags, Tmin 27/26, Tave 55.2/54.2 per capita 52/51 per employee, Tmax 67/66). Barro cross-section balanced 157 countries 1990-2019 dependent y_{i,2019}-y_{i,1990} on y_{i,1990} and PPP adjustment y_{i,1990}-y_{i,1990}^{PPP} (rgdpo). Capital panel ARDL(2,2) same 157 countries k_it=log(K_it/POP_it) rnna. Democracy replication Acemoglu et al. 2019 1960-2010 n=175 -> filtered n=148 with >=24 raw (>=20 after lags, Tmin 20, Tave 40, Tmax 47) dichotomous democracy d_it 0/1; 75 invariant, 73 varying; DCCEMG full heterogeneity n=73 treated. Time-invariant second stage cross-country n=100 of hat a_i = bar y_i - bar q_i' psi_hat (psi_hat TWFE/DCCEP ARDL(2,2)) on z_i: absolute latitude, ethnolinguistic fractionalization, protection from expropriation, PPP gap y_{1990}-y^{PPP}_{1990} (Kremer et al. 2022, divided by 100). Summary descriptives also report latitude n=144, ELF 121, protection 107.",
+ "period_start": "1950",
+ "period_end": "2019",
+ "method": [
+  "Step 1: Construct y_it=log(rgdpna/POP_it) and tilde y_it=log(rgdpna/EMP_it) and k_it=log(rnna/POP_it), tilde k_it=log(rnna/EMP_it) from PWT 10.01 1950-2019; keep countries with >=30 time observations; use unbalanced panels; compute cross-section averages bar y_{.t}=n_t^{-1} sum_i y_it and bar k_{.t} and bar d_{.t} for democracy (using n=148 sample averages for DCCEMG n=73); global output GLO = PPP-weighted 1/3 each Asia Europe North America simple average for illustration mean growth 2.4% p.a.",
+  "Step 2: Barro cross-country OLS (heteroskedasticity-robust): estimate (3) y_{i,2019}-y_{i,1990}=a_T+b_T y_{i,1990}+c_T(y_{i,1990}-y^{PPP}_{i,1990})+zeta_{iT} on balanced n=157 T=29 (1990-2019); recover phi=1-(1+b_T)^{1/T} and mean lag=(1-phi)/phi; test restriction c_T=-b_T (t=-3.10 per capita, -3.96 per employee). Also estimate restricted models c_T=0 (cols 2).",
+  "Step 3: Panel AR(3) no covariates: Dynamic model (9) Delta y_it = alpha_i + gamma_i f_t - phi y_{i,t-1}+ psi1 Delta y_{i,t-1}+ psi2 Delta y_{i,t-2}+u_it. Estimate three ways: (i) TWFE two-way fixed effects (parallel trends homogeneous phi) via within transformation (xtreg); (ii) DCCEP pooled dynamic CCE (6) y_it = (alpha_i-delta_i0 bar alpha)+ delta_i0 bar y_{.t}+delta_i1 bar y_{.t-1}+ rho y_{i,t-1}+... proxied by Hbar=(tau_T, bar y, bar y_{-1},...,bar y_{-3}) using generalized inverse Mbar=I - Hbar(Hbar'Hbar)^- Hbar' (Stata xtdcce2 Ditzen 2021, p=3 q=3); (iii) DCCEMG mean-group (11) estimate country-specific phi_i via Delta y_it = alpha_i -phi_i y_{i,t-1}+... + psi_i0 bar y_{.t}+ sum_{s=0}^{3} psi_is Delta bar y_{.t-s}+u_it with q=4 p=3, then phi_DCCEMG=n^{-1} sum_i phi_i_hat and Var=n^{-1}(n-1)^{-1} sum_i (phi_i_hat - phi_DCCEMG)^2. Report phi=-coef(y_{t-1}), psi1, psi2, mean lag=(1-phi-psi1-psi2)/phi. Unbalanced, robust SE Huber-White for TWFE, heteroskedasticity-robust for DCCE. Same for tilde y_it.",
+  "Step 4: Panel with capital ARDL(2,2): (12) Delta y_it = alpha_i -phi_i y_{i,t-1}+ sum delta Delta y + beta_i' x_it + sum lambda Delta x + psi' bar w + u_it where x=k (per capita matching per capita, per employee matching) and bar w=(bar y, bar k). DCCEP augments with {bar y_t,bar k_t, bar y_{t-1},bar k_{t-1}, bar y_{t-2},bar k_{t-2}, bar y_{t-3},bar k_{t-3}}; DCCEMG adds bar y_{t-4},bar k_{t-4}. Estimate TWFE/DCCEP/DCCEMG as before, report impact phi, k_{t-1}, Delta k, Delta k_{t-1}, Delta k_{t-2} and long-run beta_LR = -beta/phi with delta-method SE.",
+  "Step 5: Democracy replication: Use Acemoglu et al. (2019) replication dataset y_it=log output per capita, d_it dichotomous democracy 1960-2010. Estimate (i) TWFE full n=175 and filtered n=148 (drop T_i<24 raw), (ii) DCCEP n=148 homogeneous democracy coefficient with cross-section averages {bar y_t,...,bar y_{t-4}, bar d_t}, (iii) DCCEMG* n=148 homogeneous democracy but heterogeneous dynamics, (iv) DCCEMG n=73 fully heterogeneous (only varying d). Four lags of output (error correction with 3 Delta lags). Long-run = coef(d)/phi. Robustness check dropping bar d_t (coefficient falls 0.947 t1.65 ->0.748 t1.27).",
+  "Step 6: Time-invariant covariates: After Step 4 ARDL(2,2) obtain psi_hat = TWFE or DCCEP (pooled). For n=100 with TI data compute filtered average a_i_T = bar y_i - bar q_i' psi_hat where bar q_i includes lagged output and capital means. Then cross-country OLS (8) a_i = alpha_T + theta' z_i + eta_iT + bar u_i with z=(absolute latitude, ELF, protection from expropriation, PPP gap), all z divided by 100. Report OLS coefficients with heteroskedasticity-robust SE; Tmax 68, Tmin 48 pc /38 pe, Tave 63 pc /61 pe."
+ ],
+ "claims": [
+  {
+   "name": "intro_barrorange_phi_low",
+   "description": "Barro unconditional/conditional speed range low 0.3% p.a. (Introduction)",
+   "value": "_0.3",
+   "unit": "percent per annum",
+   "kind": "estimate",
+   "where": "Introduction p.4"
+  },
+  {
+   "name": "intro_barrorange_phi_high",
+   "description": "Barro speed range high 0.6% p.a.",
+   "value": "_0.6",
+   "unit": "percent per annum",
+   "kind": "estimate",
+   "where": "Introduction p.4"
+  },
+  {
+   "name": "intro_barrorange_lag_low",
+   "description": "Barro mean lag low 171 years",
+   "value": "_171",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Introduction p.4"
+  },
+  {
+   "name": "intro_barrorange_lag_high",
+   "description": "Barro mean lag high 315 years",
+   "value": "_315",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Introduction p.4"
+  },
+  {
+   "name": "intro_twfe_phi_approx",
+   "description": "TWFE speed around 3% p.a.",
+   "value": "_3",
+   "unit": "percent per annum",
+   "kind": "estimate",
+   "where": "Introduction p.4"
+  },
+  {
+   "name": "intro_twfe_lag_approx",
+   "description": "TWFE mean lag around 25 years",
+   "value": "_25",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Introduction p.4"
+  },
+  {
+   "name": "intro_dccemg_phi_approx",
+   "description": "DCCEMG speed around 11% p.a. per capita",
+   "value": "_11",
+   "unit": "percent per annum",
+   "kind": "estimate",
+   "where": "Introduction p.4-5"
+  },
+  {
+   "name": "intro_dccemg_lag_approx",
+   "description": "DCCEMG mean lag around 6 years per capita",
+   "value": "_6",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Introduction p.4-5"
+  },
+  {
+   "name": "nber_us_cycle_months",
+   "description": "NBER average US business cycle duration 1945-2020 75 months",
+   "value": "_75",
+   "unit": "months",
+   "kind": "estimate",
+   "where": "Introduction fn p.5"
+  },
+  {
+   "name": "nber_us_cycle_years",
+   "description": "NBER 75 months = 6.25 years",
+   "value": "_6.25",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Introduction fn p.5"
+  },
+  {
+   "name": "chauvet_oecd_cycle_years",
+   "description": "Chauvet and Yu OECD average business cycle duration 7 years 1960Q1-2000Q1",
+   "value": "_7",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Introduction fn p.5"
+  },
+  {
+   "name": "glo_mean_growth",
+   "description": "GLO global log output per capita mean growth 2.4% p.a.",
+   "value": "_2.4",
+   "unit": "percent per annum",
+   "kind": "estimate",
+   "where": "Section 5 p.18"
+  },
+  {
+   "name": "dccemg_cap_lr_pc_approx",
+   "description": "DCCEMG long-run capital coefficient around 0.48 per capita",
+   "value": "_0.48",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Abstract and Section 5.3 p.22-23 and Table 3 long-run 0.484(0.122)"
+  },
+  {
+   "name": "pwt_avg_cap_share_implied",
+   "description": "PWT average capital share 0.46 implied by average labour share",
+   "value": "_0.46",
+   "unit": "share",
+   "kind": "estimate",
+   "where": "Section 5.3 p.23 and Introduction p.5: average share of capital at 0.46 from PWT data; labour share 0.54 over 126 countries => capital 0.46"
+  },
+  {
+   "name": "pwt_avg_labour_share",
+   "description": "PWT average labour share 0.54 over 126 countries",
+   "value": "_0.54",
+   "unit": "share",
+   "kind": "estimate",
+   "where": "Section 5.3 p.23"
+  },
+  {
+   "name": "pwt_labour_share_n",
+   "description": "Number of countries with labour share data",
+   "value": "_126",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 5.3 p.23: Over the 126 countries with available data, the average labour share is 0.54"
+  },
+  {
+   "name": "bias_illustration_rho0",
+   "description": "Illustrative true rho0=0.8 for Barro bias calculation",
+   "value": "_0.8",
+   "unit": "AR coefficient",
+   "kind": "parameter",
+   "where": "Section 2.1 fn p.9: if rho0=0.8 and T=10 bias =0.803 => hat rho ->0.9907"
+  },
+  {
+   "name": "bias_illustration_T",
+   "description": "Illustrative T=10 for Barro bias",
+   "value": "_10",
+   "unit": "periods",
+   "kind": "parameter",
+   "where": "Section 2.1 p.9"
+  },
+  {
+   "name": "bias_illustration_bias",
+   "description": "Asymptotic bias of rho0^T estimator (1-rho0^T)(1+rho0)/2 =0.803 when rho0=0.8 T=10",
+   "value": "_0.803",
+   "unit": "bias in rho^T",
+   "kind": "estimate",
+   "where": "Section 2.1 p.9"
+  },
+  {
+   "name": "bias_illustration_phat",
+   "description": "Implied plim hat rho =0.9907 => convergence rate 1% instead of 20%",
+   "value": "_0.9907",
+   "unit": "AR coefficient",
+   "kind": "estimate",
+   "where": "Section 2.1 p.9"
+  },
+  {
+   "name": "barro_bT_pc1",
+   "description": "Barro b_T per capita col1 -0.0876 (0.0363)",
+   "value": "_-0.0876",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) y_i,1990 coefficient b_T"
+  },
+  {
+   "name": "barro_bT_pc1_se",
+   "description": "SE of b_T per capita col1",
+   "value": "_0.0363",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) SE"
+  },
+  {
+   "name": "barro_bT_pc2",
+   "description": "Barro b_T per capita col2 -0.1025 (0.0346)",
+   "value": "_-0.1025",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 1 per capita (2) b_T"
+  },
+  {
+   "name": "barro_bT_pc2_se",
+   "description": "SE of b_T per capita col2",
+   "value": "_0.0346",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per capita (2) SE"
+  },
+  {
+   "name": "barro_bT_pe1",
+   "description": "Barro b_T per employee col1 -0.1330 (0.0408)",
+   "value": "_-0.1330",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) b_T"
+  },
+  {
+   "name": "barro_bT_pe1_se",
+   "description": "SE of b_T per employee col1",
+   "value": "_0.0408",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) SE"
+  },
+  {
+   "name": "barro_bT_pe2",
+   "description": "Barro b_T per employee col2 -0.1559 (0.0365)",
+   "value": "_-0.1559",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 1 per employee (2) b_T"
+  },
+  {
+   "name": "barro_bT_pe2_se",
+   "description": "SE of b_T per employee col2",
+   "value": "_0.0365",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per employee (2) SE"
+  },
+  {
+   "name": "barro_cT_pc1",
+   "description": "Barro c_T per capita col1 -0.2108 (0.1062)",
+   "value": "_-0.2108",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) c_T PPP adjustment"
+  },
+  {
+   "name": "barro_cT_pc1_se",
+   "description": "SE of c_T per capita col1",
+   "value": "_0.1062",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) c_T SE"
+  },
+  {
+   "name": "barro_cT_pe1",
+   "description": "Barro c_T per employee col1 -0.2420 (0.1117)",
+   "value": "_-0.2420",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) c_T"
+  },
+  {
+   "name": "barro_cT_pe1_se",
+   "description": "SE of c_T per employee col1",
+   "value": "_0.1117",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) c_T SE"
+  },
+  {
+   "name": "barro_phi_pc1",
+   "description": "Barro implied phi per capita col1 0.0032",
+   "value": "_0.0032",
+   "unit": "per annum",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) phi=1-(1+b_T)^{1/T} 0.0032 (0.0014)"
+  },
+  {
+   "name": "barro_phi_pc1_se",
+   "description": "SE of phi per capita col1",
+   "value": "_0.0014",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) phi SE"
+  },
+  {
+   "name": "barro_phi_pc2",
+   "description": "Barro phi per capita col2",
+   "value": "_0.0037",
+   "unit": "per annum",
+   "kind": "estimate",
+   "where": "Table 1 per capita (2) phi 0.0037 (0.0013)"
+  },
+  {
+   "name": "barro_phi_pc2_se",
+   "description": "SE phi per capita col2",
+   "value": "_0.0013",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per capita (2) phi SE"
+  },
+  {
+   "name": "barro_phi_pe1",
+   "description": "Barro phi per employee col1",
+   "value": "_0.0049",
+   "unit": "per annum",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) phi 0.0049 (0.0016)"
+  },
+  {
+   "name": "barro_phi_pe1_se",
+   "description": "SE phi per employee col1",
+   "value": "_0.0016",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) phi SE"
+  },
+  {
+   "name": "barro_phi_pe2",
+   "description": "Barro phi per employee col2",
+   "value": "_0.0058",
+   "unit": "per annum",
+   "kind": "estimate",
+   "where": "Table 1 per employee (2) phi 0.0058 (0.0015)"
+  },
+  {
+   "name": "barro_phi_pe2_se",
+   "description": "SE phi per employee col2",
+   "value": "_0.0015",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 1 per employee (2) phi SE"
+  },
+  {
+   "name": "barro_meanlag_pc1",
+   "description": "Barro mean lag per capita col1",
+   "value": "_316",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) mean lag 316 (137)"
+  },
+  {
+   "name": "barro_meanlag_pc1_se",
+   "description": "SE mean lag per capita col1",
+   "value": "_137",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 1 per capita (1) mean lag SE"
+  },
+  {
+   "name": "barro_meanlag_pc2",
+   "description": "Barro mean lag per capita col2",
+   "value": "_268",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 1 per capita (2) mean lag 268 (95)"
+  },
+  {
+   "name": "barro_meanlag_pc2_se",
+   "description": "SE mean lag per capita col2",
+   "value": "_95",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 1 per capita (2) mean lag SE"
+  },
+  {
+   "name": "barro_meanlag_pe1",
+   "description": "Barro mean lag per employee col1",
+   "value": "_203",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) mean lag 203 (67)"
+  },
+  {
+   "name": "barro_meanlag_pe1_se",
+   "description": "SE mean lag per employee col1",
+   "value": "_67",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 1 per employee (1) mean lag SE"
+  },
+  {
+   "name": "barro_meanlag_pe2",
+   "description": "Barro mean lag per employee col2",
+   "value": "_171",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 1 per employee (2) mean lag 171 (44)"
+  },
+  {
+   "name": "barro_meanlag_pe2_se",
+   "description": "SE mean lag per employee col2",
+   "value": "_44",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 1 per employee (2) mean lag SE"
+  },
+  {
+   "name": "barro_n",
+   "description": "Barro balanced panel 1990-2019 n=157",
+   "value": "_157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 1 balanced panel n=157 countries"
+  },
+  {
+   "name": "barro_T",
+   "description": "Barro T=29 years 1990-2019",
+   "value": "_29",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 1 Years T=29 (1990-2019)"
+  },
+  {
+   "name": "barro_restriction_t_pc",
+   "description": "Barro restriction test t per capita -3.10 rejection",
+   "value": "_-3.10",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Table 1 notes: restriction c_T=-b_T t -3.10 per capita equation"
+  },
+  {
+   "name": "barro_restriction_t_pe",
+   "description": "Barro restriction test t per employee -3.96",
+   "value": "_-3.96",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Table 1 notes: restriction c_T=-b_T t -3.96 per employee"
+  },
+  {
+   "name": "panar_phi_pc_twfe",
+   "description": "Panel AR3 phi per capita TWFE -0.027 (0.004)",
+   "value": "_-0.027",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 Output per capita TWFE y_{t-1} -0.027 (0.004)"
+  },
+  {
+   "name": "panar_phi_pc_twfe_se",
+   "description": "SE phi per capita TWFE",
+   "value": "_0.004",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE SE 0.004"
+  },
+  {
+   "name": "panar_phi_pc_dccep",
+   "description": "Panel AR3 phi per capita DCCEP",
+   "value": "_-0.046",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP y_{t-1} -0.046 (0.012)"
+  },
+  {
+   "name": "panar_phi_pc_dccep_se",
+   "description": "SE phi per capita DCCEP",
+   "value": "_0.012",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP SE 0.012"
+  },
+  {
+   "name": "panar_phi_pc_dccemg",
+   "description": "Panel AR3 phi per capita DCCEMG - headine",
+   "value": "_-0.113",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG y_{t-1} -0.113 (0.012)"
+  },
+  {
+   "name": "panar_phi_pc_dccemg_se",
+   "description": "SE phi per capita DCCEMG",
+   "value": "_0.012",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG SE 0.012"
+  },
+  {
+   "name": "panar_phi_pe_twfe",
+   "description": "Panel AR3 phi per employee TWFE",
+   "value": "_-0.031",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 Output per employee TWFE -0.031 (0.005)"
+  },
+  {
+   "name": "panar_phi_pe_twfe_se",
+   "description": "SE phi per employee TWFE",
+   "value": "_0.005",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE SE 0.005"
+  },
+  {
+   "name": "panar_phi_pe_dccep",
+   "description": "Panel AR3 phi per employee DCCEP",
+   "value": "_-0.058",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP -0.058 (0.014)"
+  },
+  {
+   "name": "panar_phi_pe_dccep_se",
+   "description": "SE phi per employee DCCEP",
+   "value": "_0.014",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP SE 0.014"
+  },
+  {
+   "name": "panar_phi_pe_dccemg",
+   "description": "Panel AR3 phi per employee DCCEMG - headline",
+   "value": "_-0.144",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG -0.144 (0.015)"
+  },
+  {
+   "name": "panar_phi_pe_dccemg_se",
+   "description": "SE phi per employee DCCEMG",
+   "value": "_0.015",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG SE 0.015"
+  },
+  {
+   "name": "panar_psi1_pc_twfe",
+   "description": "psi1 per capita TWFE",
+   "value": "_0.206",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE delta y t-1 0.206 (0.030)"
+  },
+  {
+   "name": "panar_psi1_pc_twfe_se",
+   "description": "SE psi1 per capita TWFE",
+   "value": "_0.030",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE psi1 SE 0.030"
+  },
+  {
+   "name": "panar_psi1_pc_dccep",
+   "description": "psi1 per capita DCCEP",
+   "value": "_0.141",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP delta y t-1 0.141 (0.029)"
+  },
+  {
+   "name": "panar_psi1_pc_dccep_se",
+   "description": "SE psi1 per capita DCCEP",
+   "value": "_0.029",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP SE 0.029"
+  },
+  {
+   "name": "panar_psi1_pc_dccemg",
+   "description": "psi1 per capita DCCEMG",
+   "value": "_0.210",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG delta y t-1 0.210 (0.018)"
+  },
+  {
+   "name": "panar_psi1_pc_dccemg_se",
+   "description": "SE psi1 per capita DCCEMG",
+   "value": "_0.018",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG SE 0.018"
+  },
+  {
+   "name": "panar_psi1_pe_twfe",
+   "description": "psi1 per employee TWFE",
+   "value": "_0.185",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE delta y t-1 0.185 (0.034)"
+  },
+  {
+   "name": "panar_psi1_pe_twfe_se",
+   "description": "SE psi1 per employee TWFE",
+   "value": "_0.034",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE SE 0.034"
+  },
+  {
+   "name": "panar_psi1_pe_dccep",
+   "description": "psi1 per employee DCCEP",
+   "value": "_0.122",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP delta y t-1 0.122 (0.033)"
+  },
+  {
+   "name": "panar_psi1_pe_dccep_se",
+   "description": "SE psi1 per employee DCCEP",
+   "value": "_0.033",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP SE 0.033"
+  },
+  {
+   "name": "panar_psi1_pe_dccemg",
+   "description": "psi1 per employee DCCEMG",
+   "value": "_0.130",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG delta y t-1 0.130 (0.016)"
+  },
+  {
+   "name": "panar_psi1_pe_dccemg_se",
+   "description": "SE psi1 per employee DCCEMG",
+   "value": "_0.016",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG SE 0.016"
+  },
+  {
+   "name": "panar_psi2_pc_twfe",
+   "description": "psi2 per capita TWFE",
+   "value": "_0.034",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE delta y t-2 0.034 (0.027)"
+  },
+  {
+   "name": "panar_psi2_pc_twfe_se",
+   "description": "SE psi2 per capita TWFE",
+   "value": "_0.027",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE psi2 SE 0.027"
+  },
+  {
+   "name": "panar_psi2_pc_dccep",
+   "description": "psi2 per capita DCCEP",
+   "value": "_-0.015",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP delta y t-2 -0.015 (0.030)"
+  },
+  {
+   "name": "panar_psi2_pc_dccep_se",
+   "description": "SE psi2 per capita DCCEP",
+   "value": "_0.030",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP SE 0.030"
+  },
+  {
+   "name": "panar_psi2_pc_dccemg",
+   "description": "psi2 per capita DCCEMG",
+   "value": "_-0.011",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG delta y t-2 -0.011 (0.014)"
+  },
+  {
+   "name": "panar_psi2_pc_dccemg_se",
+   "description": "SE psi2 per capita DCCEMG",
+   "value": "_0.014",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG SE 0.014"
+  },
+  {
+   "name": "panar_psi2_pe_twfe",
+   "description": "psi2 per employee TWFE",
+   "value": "_0.035",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE delta y t-2 0.035 (0.029)"
+  },
+  {
+   "name": "panar_psi2_pe_twfe_se",
+   "description": "SE psi2 per employee TWFE",
+   "value": "_0.029",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE SE 0.029"
+  },
+  {
+   "name": "panar_psi2_pe_dccep",
+   "description": "psi2 per employee DCCEP",
+   "value": "_-0.019",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP delta y t-2 -0.019 (0.031)"
+  },
+  {
+   "name": "panar_psi2_pe_dccep_se",
+   "description": "SE psi2 per employee DCCEP",
+   "value": "_0.031",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP SE 0.031"
+  },
+  {
+   "name": "panar_psi2_pe_dccemg",
+   "description": "psi2 per employee DCCEMG",
+   "value": "_0.001",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG delta y t-2 0.001 (0.014)"
+  },
+  {
+   "name": "panar_psi2_pe_dccemg_se",
+   "description": "SE psi2 per employee DCCEMG",
+   "value": "_0.014",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG SE 0.014"
+  },
+  {
+   "name": "panar_meanlag_pc_twfe",
+   "description": "Mean lag per capita TWFE",
+   "value": "_27.1",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE mean lag 27.1 (3.82)"
+  },
+  {
+   "name": "panar_meanlag_pc_twfe_se",
+   "description": "SE mean lag per capita TWFE",
+   "value": "_3.82",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 2 per capita TWFE mean lag SE 3.82"
+  },
+  {
+   "name": "panar_meanlag_pc_dccep",
+   "description": "Mean lag per capita DCCEP",
+   "value": "_18.2",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP mean lag 18.2 (4.87)"
+  },
+  {
+   "name": "panar_meanlag_pc_dccep_se",
+   "description": "SE mean lag per capita DCCEP",
+   "value": "_4.87",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEP SE 4.87"
+  },
+  {
+   "name": "panar_meanlag_pc_dccemg",
+   "description": "Mean lag per capita DCCEMG - headline fast convergence",
+   "value": "_6.1",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG mean lag 6.1 (0.83)"
+  },
+  {
+   "name": "panar_meanlag_pc_dccemg_se",
+   "description": "SE mean lag per capita DCCEMG",
+   "value": "_0.83",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 2 per capita DCCEMG SE 0.83"
+  },
+  {
+   "name": "panar_meanlag_pe_twfe",
+   "description": "Mean lag per employee TWFE",
+   "value": "_23.8",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE mean lag 23.8 (3.98)"
+  },
+  {
+   "name": "panar_meanlag_pe_twfe_se",
+   "description": "SE mean lag per employee TWFE",
+   "value": "_3.98",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 2 per employee TWFE SE 3.98"
+  },
+  {
+   "name": "panar_meanlag_pe_dccep",
+   "description": "Mean lag per employee DCCEP",
+   "value": "_14.4",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP mean lag 14.4 (3.70)"
+  },
+  {
+   "name": "panar_meanlag_pe_dccep_se",
+   "description": "SE mean lag per employee DCCEP",
+   "value": "_3.70",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEP SE 3.70"
+  },
+  {
+   "name": "panar_meanlag_pe_dccemg",
+   "description": "Mean lag per employee DCCEMG",
+   "value": "_5.1",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG mean lag 5.1 (0.69)"
+  },
+  {
+   "name": "panar_meanlag_pe_dccemg_se",
+   "description": "SE mean lag per employee DCCEMG",
+   "value": "_0.69",
+   "unit": "SE years",
+   "kind": "estimate",
+   "where": "Table 2 per employee DCCEMG SE 0.69"
+  },
+  {
+   "name": "panar_n",
+   "description": "Panel AR3 n=157",
+   "value": "_157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 2 n=157 countries unbalanced panel PWT"
+  },
+  {
+   "name": "panar_Tmin_twfe_dccep",
+   "description": "Tmin TWFE/DCCEP panel AR3",
+   "value": "_27",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tmin 27 for TWFE/DCCEP"
+  },
+  {
+   "name": "panar_Tmin_dccemg",
+   "description": "Tmin DCCEMG panel AR3",
+   "value": "_26",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tmin 26 for DCCEMG"
+  },
+  {
+   "name": "panar_Tave_pc_twfe_dccep",
+   "description": "Tave per capita TWFE/DCCEP",
+   "value": "_55.2",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tave per capita TWFE/DCCEP 55.2"
+  },
+  {
+   "name": "panar_Tave_pc_dccemg",
+   "description": "Tave per capita DCCEMG",
+   "value": "_54.2",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tave per capita DCCEMG 54.2"
+  },
+  {
+   "name": "panar_Tave_pe_twfe_dccep",
+   "description": "Tave per employee TWFE/DCCEP",
+   "value": "_52",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tave per employee TWFE/DCCEP 52"
+  },
+  {
+   "name": "panar_Tave_pe_dccemg",
+   "description": "Tave per employee DCCEMG",
+   "value": "_51",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tave per employee DCCEMG 51"
+  },
+  {
+   "name": "panar_Tmax",
+   "description": "Tmax TWFE/DCCEP panel AR3",
+   "value": "_67",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tmax 67 for TWFE/DCCEP"
+  },
+  {
+   "name": "panar_Tmax_dccemg",
+   "description": "Tmax DCCEMG",
+   "value": "_66",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tmax 66 for DCCEMG"
+  },
+  {
+   "name": "cap_phi_pc_twfe",
+   "description": "Capital regression phi per capita TWFE",
+   "value": "_-0.051",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE y_{t-1} -0.051 (0.007)"
+  },
+  {
+   "name": "cap_phi_pc_twfe_se",
+   "description": "SE phi per capita TWFE capital",
+   "value": "_0.007",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.007"
+  },
+  {
+   "name": "cap_phi_pc_dccep",
+   "description": "Capital phi per capita DCCEP",
+   "value": "_-0.131",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP y_{t-1} -0.131 (0.031)"
+  },
+  {
+   "name": "cap_phi_pc_dccep_se",
+   "description": "SE phi per capita DCCEP capital",
+   "value": "_0.031",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.031"
+  },
+  {
+   "name": "cap_phi_pc_dccemg",
+   "description": "Capital phi per capita DCCEMG",
+   "value": "_-0.349",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG y_{t-1} -0.349 (0.025)"
+  },
+  {
+   "name": "cap_phi_pc_dccemg_se",
+   "description": "SE phi per capita DCCEMG capital",
+   "value": "_0.025",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.025"
+  },
+  {
+   "name": "cap_phi_pe_twfe",
+   "description": "Capital phi per employee TWFE",
+   "value": "_-0.057",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE y_{t-1} -0.057 (0.009)"
+  },
+  {
+   "name": "cap_phi_pe_twfe_se",
+   "description": "SE phi per employee TWFE capital",
+   "value": "_0.009",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.009"
+  },
+  {
+   "name": "cap_phi_pe_dccep",
+   "description": "Capital phi per employee DCCEP",
+   "value": "_-0.183",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP y_{t-1} -0.183 (0.030)"
+  },
+  {
+   "name": "cap_phi_pe_dccep_se",
+   "description": "SE phi per employee DCCEP capital",
+   "value": "_0.030",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.030"
+  },
+  {
+   "name": "cap_phi_pe_dccemg",
+   "description": "Capital phi per employee DCCEMG",
+   "value": "_-0.375",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG y_{t-1} -0.375 (0.029)"
+  },
+  {
+   "name": "cap_phi_pe_dccemg_se",
+   "description": "SE phi per employee DCCEMG capital",
+   "value": "_0.029",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.029"
+  },
+  {
+   "name": "cap_dy1_pc_twfe",
+   "description": "Capital delta y1 per capita TWFE",
+   "value": "_0.163",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE delta y t-1 0.163 (0.030)"
+  },
+  {
+   "name": "cap_dy1_pc_twfe_se",
+   "description": "SE delta y1 per capita TWFE capital",
+   "value": "_0.030",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.030"
+  },
+  {
+   "name": "cap_dy1_pc_dccep",
+   "description": "Capital delta y1 per capita DCCEP",
+   "value": "_0.061",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP delta y t-1 0.061 (0.023)"
+  },
+  {
+   "name": "cap_dy1_pc_dccep_se",
+   "description": "SE delta y1 per capita DCCEP",
+   "value": "_0.023",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.023"
+  },
+  {
+   "name": "cap_dy1_pc_dccemg",
+   "description": "Capital delta y1 per capita DCCEMG",
+   "value": "_0.118",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG delta y t-1 0.118 (0.020)"
+  },
+  {
+   "name": "cap_dy1_pc_dccemg_se",
+   "description": "SE delta y1 per capita DCCEMG",
+   "value": "_0.020",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.020"
+  },
+  {
+   "name": "cap_dy1_pe_twfe",
+   "description": "Capital delta y1 per employee TWFE",
+   "value": "_0.178",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE delta y t-1 0.178 (0.031)"
+  },
+  {
+   "name": "cap_dy1_pe_twfe_se",
+   "description": "SE delta y1 per employee TWFE",
+   "value": "_0.031",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.031"
+  },
+  {
+   "name": "cap_dy1_pe_dccep",
+   "description": "Capital delta y1 per employee DCCEP",
+   "value": "_0.118",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP delta y t-1 0.118 (0.029)"
+  },
+  {
+   "name": "cap_dy1_pe_dccep_se",
+   "description": "SE delta y1 per employee DCCEP",
+   "value": "_0.029",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.029"
+  },
+  {
+   "name": "cap_dy1_pe_dccemg",
+   "description": "Capital delta y1 per employee DCCEMG",
+   "value": "_0.132",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG delta y t-1 0.132 (0.021)"
+  },
+  {
+   "name": "cap_dy1_pe_dccemg_se",
+   "description": "SE delta y1 per employee DCCEMG",
+   "value": "_0.021",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.021"
+  },
+  {
+   "name": "cap_dy2_pc_twfe",
+   "description": "Capital delta y2 per capita TWFE",
+   "value": "_0.028",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE delta y t-2 0.028 (0.028)"
+  },
+  {
+   "name": "cap_dy2_pc_twfe_se",
+   "description": "SE delta y2 per capita TWFE",
+   "value": "_0.028",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.028"
+  },
+  {
+   "name": "cap_dy2_pc_dccep",
+   "description": "Capital delta y2 per capita DCCEP",
+   "value": "_-0.050",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP delta y t-2 -0.050 (0.028)"
+  },
+  {
+   "name": "cap_dy2_pc_dccep_se",
+   "description": "SE delta y2 per capita DCCEP",
+   "value": "_0.028",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.028"
+  },
+  {
+   "name": "cap_dy2_pc_dccemg",
+   "description": "Capital delta y2 per capita DCCEMG",
+   "value": "_0.005",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG delta y t-2 0.005 (0.016)"
+  },
+  {
+   "name": "cap_dy2_pc_dccemg_se",
+   "description": "SE delta y2 per capita DCCEMG",
+   "value": "_0.016",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.016"
+  },
+  {
+   "name": "cap_dy2_pe_twfe",
+   "description": "Capital delta y2 per employee TWFE",
+   "value": "_0.028",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE delta y t-2 0.028 (0.030)"
+  },
+  {
+   "name": "cap_dy2_pe_twfe_se",
+   "description": "SE delta y2 per employee TWFE",
+   "value": "_0.030",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.030"
+  },
+  {
+   "name": "cap_dy2_pe_dccep",
+   "description": "Capital delta y2 per employee DCCEP",
+   "value": "_0.013",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP delta y t-2 0.013 (0.044)"
+  },
+  {
+   "name": "cap_dy2_pe_dccep_se",
+   "description": "SE delta y2 per employee DCCEP",
+   "value": "_0.044",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.044"
+  },
+  {
+   "name": "cap_dy2_pe_dccemg",
+   "description": "Capital delta y2 per employee DCCEMG",
+   "value": "_0.027",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG delta y t-2 0.027 (0.018)"
+  },
+  {
+   "name": "cap_dy2_pe_dccemg_se",
+   "description": "SE delta y2 per employee DCCEMG",
+   "value": "_0.018",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.018"
+  },
+  {
+   "name": "cap_k1_pc_twfe",
+   "description": "Capital k_{t-1} per capita TWFE",
+   "value": "_0.027",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE k_{t-1} 0.027 (0.005)"
+  },
+  {
+   "name": "cap_k1_pc_twfe_se",
+   "description": "SE k_{t-1} per capita TWFE",
+   "value": "_0.005",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.005"
+  },
+  {
+   "name": "cap_k1_pc_dccep",
+   "description": "Capital k_{t-1} per capita DCCEP",
+   "value": "_0.084",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP k_{t-1} 0.084 (0.026)"
+  },
+  {
+   "name": "cap_k1_pc_dccep_se",
+   "description": "SE k_{t-1} per capita DCCEP",
+   "value": "_0.026",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.026"
+  },
+  {
+   "name": "cap_k1_pc_dccemg",
+   "description": "Capital k_{t-1} per capita DCCEMG",
+   "value": "_0.169",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG k_{t-1} 0.169 (0.045)"
+  },
+  {
+   "name": "cap_k1_pc_dccemg_se",
+   "description": "SE k_{t-1} per capita DCCEMG",
+   "value": "_0.045",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.045"
+  },
+  {
+   "name": "cap_k1_pe_twfe",
+   "description": "Capital k_{t-1} per employee TWFE",
+   "value": "_0.027",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE k_{t-1} 0.027 (0.005)"
+  },
+  {
+   "name": "cap_k1_pe_twfe_se",
+   "description": "SE k_{t-1} per employee TWFE",
+   "value": "_0.005",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.005"
+  },
+  {
+   "name": "cap_k1_pe_dccep",
+   "description": "Capital k_{t-1} per employee DCCEP",
+   "value": "_0.115",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP k_{t-1} 0.115 (0.025)"
+  },
+  {
+   "name": "cap_k1_pe_dccep_se",
+   "description": "SE k_{t-1} per employee DCCEP",
+   "value": "_0.025",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.025"
+  },
+  {
+   "name": "cap_k1_pe_dccemg",
+   "description": "Capital k_{t-1} per employee DCCEMG",
+   "value": "_0.180",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG k_{t-1} 0.180 (0.034)"
+  },
+  {
+   "name": "cap_k1_pe_dccemg_se",
+   "description": "SE k_{t-1} per employee DCCEMG",
+   "value": "_0.034",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.034"
+  },
+  {
+   "name": "cap_dk0_pc_twfe",
+   "description": "Capital delta k0 per capita TWFE",
+   "value": "_1.173",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE delta k_it 1.173 (0.111)"
+  },
+  {
+   "name": "cap_dk0_pc_twfe_se",
+   "description": "SE delta k0 per capita TWFE",
+   "value": "_0.111",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.111"
+  },
+  {
+   "name": "cap_dk0_pc_dccep",
+   "description": "Capital delta k0 per capita DCCEP",
+   "value": "_1.225",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP delta k_it 1.225 (0.194)"
+  },
+  {
+   "name": "cap_dk0_pc_dccep_se",
+   "description": "SE delta k0 per capita DCCEP",
+   "value": "_0.194",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.194"
+  },
+  {
+   "name": "cap_dk0_pc_dccemg",
+   "description": "Capital delta k0 per capita DCCEMG",
+   "value": "_1.926",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG delta k_it 1.926 (0.159)"
+  },
+  {
+   "name": "cap_dk0_pc_dccemg_se",
+   "description": "SE delta k0 per capita DCCEMG",
+   "value": "_0.159",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.159"
+  },
+  {
+   "name": "cap_dk0_pe_twfe",
+   "description": "Capital delta k0 per employee TWFE",
+   "value": "_0.821",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE delta k_it 0.821 (0.044)"
+  },
+  {
+   "name": "cap_dk0_pe_twfe_se",
+   "description": "SE delta k0 per employee TWFE",
+   "value": "_0.044",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.044"
+  },
+  {
+   "name": "cap_dk0_pe_dccep",
+   "description": "Capital delta k0 per employee DCCEP",
+   "value": "_0.884",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP delta k_it 0.884 (0.058)"
+  },
+  {
+   "name": "cap_dk0_pe_dccep_se",
+   "description": "SE delta k0 per employee DCCEP",
+   "value": "_0.058",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.058"
+  },
+  {
+   "name": "cap_dk0_pe_dccemg",
+   "description": "Capital delta k0 per employee DCCEMG",
+   "value": "_0.904",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG delta k_it 0.904 (0.065)"
+  },
+  {
+   "name": "cap_dk0_pe_dccemg_se",
+   "description": "SE delta k0 per employee DCCEMG",
+   "value": "_0.065",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.065"
+  },
+  {
+   "name": "cap_dk1_pc_twfe",
+   "description": "Capital delta k1 per capita TWFE",
+   "value": "_-0.705",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE delta k_{t-1} -0.705 (0.112)"
+  },
+  {
+   "name": "cap_dk1_pc_twfe_se",
+   "description": "SE delta k1 per capita TWFE",
+   "value": "_0.112",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.112"
+  },
+  {
+   "name": "cap_dk1_pc_dccep",
+   "description": "Capital delta k1 per capita DCCEP",
+   "value": "_-0.516",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP delta k_{t-1} -0.516 (0.165)"
+  },
+  {
+   "name": "cap_dk1_pc_dccep_se",
+   "description": "SE delta k1 per capita DCCEP",
+   "value": "_0.165",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.165"
+  },
+  {
+   "name": "cap_dk1_pc_dccemg",
+   "description": "Capital delta k1 per capita DCCEMG",
+   "value": "_-0.815",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG delta k_{t-1} -0.815 (0.137)"
+  },
+  {
+   "name": "cap_dk1_pc_dccemg_se",
+   "description": "SE delta k1 per capita DCCEMG",
+   "value": "_0.137",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.137"
+  },
+  {
+   "name": "cap_dk1_pe_twfe",
+   "description": "Capital delta k1 per employee TWFE",
+   "value": "_-0.352",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE delta k_{t-1} -0.352 (0.050)"
+  },
+  {
+   "name": "cap_dk1_pe_twfe_se",
+   "description": "SE delta k1 per employee TWFE",
+   "value": "_0.050",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.050"
+  },
+  {
+   "name": "cap_dk1_pe_dccep",
+   "description": "Capital delta k1 per employee DCCEP",
+   "value": "_-0.279",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP delta k_{t-1} -0.279 (0.044)"
+  },
+  {
+   "name": "cap_dk1_pe_dccep_se",
+   "description": "SE delta k1 per employee DCCEP",
+   "value": "_0.044",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.044"
+  },
+  {
+   "name": "cap_dk1_pe_dccemg",
+   "description": "Capital delta k1 per employee DCCEMG",
+   "value": "_-0.285",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG delta k_{t-1} -0.285 (0.044)"
+  },
+  {
+   "name": "cap_dk1_pe_dccemg_se",
+   "description": "SE delta k1 per employee DCCEMG",
+   "value": "_0.044",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.044"
+  },
+  {
+   "name": "cap_dk2_pc_twfe",
+   "description": "Capital delta k2 per capita TWFE",
+   "value": "_-0.069",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE delta k_{t-2} -0.069 (0.066)"
+  },
+  {
+   "name": "cap_dk2_pc_twfe_se",
+   "description": "SE delta k2 per capita TWFE",
+   "value": "_0.066",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.066"
+  },
+  {
+   "name": "cap_dk2_pc_dccep",
+   "description": "Capital delta k2 per capita DCCEP",
+   "value": "_-0.074",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP delta k_{t-2} -0.074 (0.085)"
+  },
+  {
+   "name": "cap_dk2_pc_dccep_se",
+   "description": "SE delta k2 per capita DCCEP",
+   "value": "_0.085",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.085"
+  },
+  {
+   "name": "cap_dk2_pc_dccemg",
+   "description": "Capital delta k2 per capita DCCEMG",
+   "value": "_-0.043",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG delta k_{t-2} -0.043 (0.121)"
+  },
+  {
+   "name": "cap_dk2_pc_dccemg_se",
+   "description": "SE delta k2 per capita DCCEMG",
+   "value": "_0.121",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.121"
+  },
+  {
+   "name": "cap_dk2_pe_twfe",
+   "description": "Capital delta k2 per employee TWFE",
+   "value": "_-0.010",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE delta k_{t-2} -0.010 (0.038)"
+  },
+  {
+   "name": "cap_dk2_pe_twfe_se",
+   "description": "SE delta k2 per employee TWFE",
+   "value": "_0.038",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.038"
+  },
+  {
+   "name": "cap_dk2_pe_dccep",
+   "description": "Capital delta k2 per employee DCCEP",
+   "value": "_-0.050",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP delta k_{t-2} -0.050 (0.050)"
+  },
+  {
+   "name": "cap_dk2_pe_dccep_se",
+   "description": "SE delta k2 per employee DCCEP",
+   "value": "_0.050",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.050"
+  },
+  {
+   "name": "cap_dk2_pe_dccemg",
+   "description": "Capital delta k2 per employee DCCEMG",
+   "value": "_-0.029",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG delta k_{t-2} -0.029 (0.043)"
+  },
+  {
+   "name": "cap_dk2_pe_dccemg_se",
+   "description": "SE delta k2 per employee DCCEMG",
+   "value": "_0.043",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.043"
+  },
+  {
+   "name": "cap_lr_pc_twfe",
+   "description": "Long-run capital per capita TWFE",
+   "value": "_0.524",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE long-run capital 0.524 (0.043)"
+  },
+  {
+   "name": "cap_lr_pc_twfe_se",
+   "description": "SE long-run capital per capita TWFE",
+   "value": "_0.043",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita TWFE SE 0.043"
+  },
+  {
+   "name": "cap_lr_pc_dccep",
+   "description": "Long-run capital per capita DCCEP",
+   "value": "_0.640",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP long-run 0.640 (0.105)"
+  },
+  {
+   "name": "cap_lr_pc_dccep_se",
+   "description": "SE long-run capital per capita DCCEP",
+   "value": "_0.105",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEP SE 0.105"
+  },
+  {
+   "name": "cap_lr_pc_dccemg",
+   "description": "Long-run capital per capita DCCEMG - headline ~0.48",
+   "value": "_0.484",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG long-run 0.484 (0.122)"
+  },
+  {
+   "name": "cap_lr_pc_dccemg_se",
+   "description": "SE long-run capital per capita DCCEMG",
+   "value": "_0.122",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per capita DCCEMG SE 0.122"
+  },
+  {
+   "name": "cap_lr_pe_twfe",
+   "description": "Long-run capital per employee TWFE",
+   "value": "_0.470",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE long-run 0.470 (0.044)"
+  },
+  {
+   "name": "cap_lr_pe_twfe_se",
+   "description": "SE long-run capital per employee TWFE",
+   "value": "_0.044",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee TWFE SE 0.044"
+  },
+  {
+   "name": "cap_lr_pe_dccep",
+   "description": "Long-run capital per employee DCCEP",
+   "value": "_0.627",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP long-run 0.627 (0.068)"
+  },
+  {
+   "name": "cap_lr_pe_dccep_se",
+   "description": "SE long-run capital per employee DCCEP",
+   "value": "_0.068",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEP SE 0.068"
+  },
+  {
+   "name": "cap_lr_pe_dccemg",
+   "description": "Long-run capital per employee DCCEMG",
+   "value": "_0.481",
+   "unit": "elasticity",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG long-run 0.481 (0.084)"
+  },
+  {
+   "name": "cap_lr_pe_dccemg_se",
+   "description": "SE long-run capital per employee DCCEMG",
+   "value": "_0.084",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 3 per employee DCCEMG SE 0.084"
+  },
+  {
+   "name": "cap_n",
+   "description": "Capital regression n=157",
+   "value": "_157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 3 n=157 countries"
+  },
+  {
+   "name": "cap_Tmin_dccemg",
+   "description": "Tmin DCCEMG capital",
+   "value": "_26",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 3 Tmin 26 for DCCEMG"
+  },
+  {
+   "name": "cap_Tmin_twfe_dccep",
+   "description": "Tmin TWFE/DCCEP capital",
+   "value": "_27",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 3 Tmin 27 for TWFE/DCCEP"
+  },
+  {
+   "name": "dem_phi_acemoglu_twfe",
+   "description": "Democracy phi Acemoglu TWFE -0.037",
+   "value": "_-0.037",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu TWFE y_{t-1} -0.037 (0.005) col2"
+  },
+  {
+   "name": "dem_phi_acemoglu_twfe_se",
+   "description": "SE phi Acemoglu",
+   "value": "_0.005",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu SE 0.005"
+  },
+  {
+   "name": "dem_phi_this_twfe",
+   "description": "Democracy phi this TWFE -0.036",
+   "value": "_-0.036",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 This paper TWFE y_{t-1} -0.036 (0.005)"
+  },
+  {
+   "name": "dem_phi_this_twfe_se",
+   "description": "SE phi this TWFE",
+   "value": "_0.005",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE SE 0.005"
+  },
+  {
+   "name": "dem_phi_dccep",
+   "description": "Democracy phi DCCEP",
+   "value": "_-0.164",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP y_{t-1} -0.164 (0.019)"
+  },
+  {
+   "name": "dem_phi_dccep_se",
+   "description": "SE phi DCCEP democracy",
+   "value": "_0.019",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP SE 0.019"
+  },
+  {
+   "name": "dem_phi_dccemgstar",
+   "description": "Democracy phi DCCEMG* homogeneous democracy -0.218",
+   "value": "_-0.218",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* y_{t-1} -0.218 (0.022)"
+  },
+  {
+   "name": "dem_phi_dccemgstar_se",
+   "description": "SE phi DCCEMG*",
+   "value": "_0.022",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* SE 0.022"
+  },
+  {
+   "name": "dem_phi_dccemg",
+   "description": "Democracy phi DCCEMG full heterogeneity n=73",
+   "value": "_-0.348",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG y_{t-1} -0.348 (0.035) n=73"
+  },
+  {
+   "name": "dem_phi_dccemg_se",
+   "description": "SE phi DCCEMG",
+   "value": "_0.035",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG SE 0.035"
+  },
+  {
+   "name": "dem_dy1_acemoglu",
+   "description": "Democracy delta y1 Acemoglu",
+   "value": "_0.275",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu delta y t-1 0.275 (0.036)"
+  },
+  {
+   "name": "dem_dy1_acemoglu_se",
+   "description": "SE delta y1 Acemoglu",
+   "value": "_0.036",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu SE 0.036"
+  },
+  {
+   "name": "dem_dy1_this_twfe",
+   "description": "Democracy delta y1 this TWFE",
+   "value": "_0.287",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE delta y t-1 0.287 (0.035)"
+  },
+  {
+   "name": "dem_dy1_this_twfe_se",
+   "description": "SE delta y1 this TWFE",
+   "value": "_0.035",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE SE 0.035"
+  },
+  {
+   "name": "dem_dy1_dccep",
+   "description": "Democracy delta y1 DCCEP",
+   "value": "_0.210",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP delta y t-1 0.210 (0.043)"
+  },
+  {
+   "name": "dem_dy1_dccep_se",
+   "description": "SE delta y1 DCCEP",
+   "value": "_0.043",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP SE 0.043"
+  },
+  {
+   "name": "dem_dy1_dccemgstar",
+   "description": "Democracy delta y1 DCCEMG*",
+   "value": "_0.186",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* delta y t-1 0.186 (0.025)"
+  },
+  {
+   "name": "dem_dy1_dccemgstar_se",
+   "description": "SE delta y1 DCCEMG*",
+   "value": "_0.025",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* SE 0.025"
+  },
+  {
+   "name": "dem_dy1_dccemg",
+   "description": "Democracy delta y1 DCCEMG",
+   "value": "_0.207",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG delta y t-1 0.207 (0.034)"
+  },
+  {
+   "name": "dem_dy1_dccemg_se",
+   "description": "SE delta y1 DCCEMG",
+   "value": "_0.034",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG SE 0.034"
+  },
+  {
+   "name": "dem_dy2_acemoglu",
+   "description": "Democracy delta y2 Acemoglu",
+   "value": "_0.069",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu delta y t-2 0.069 (0.023)"
+  },
+  {
+   "name": "dem_dy2_acemoglu_se",
+   "description": "SE delta y2 Acemoglu",
+   "value": "_0.023",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu SE 0.023"
+  },
+  {
+   "name": "dem_dy2_this_twfe",
+   "description": "Democracy delta y2 this TWFE",
+   "value": "_0.058",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE delta y t-2 0.058 (0.025)"
+  },
+  {
+   "name": "dem_dy2_this_twfe_se",
+   "description": "SE delta y2 this TWFE",
+   "value": "_0.025",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE SE 0.025"
+  },
+  {
+   "name": "dem_dy2_dccep",
+   "description": "Democracy delta y2 DCCEP",
+   "value": "_0.018",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP delta y t-2 0.018 (0.034)"
+  },
+  {
+   "name": "dem_dy2_dccep_se",
+   "description": "SE delta y2 DCCEP",
+   "value": "_0.034",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP SE 0.034"
+  },
+  {
+   "name": "dem_dy2_dccemgstar",
+   "description": "Democracy delta y2 DCCEMG*",
+   "value": "_-0.054",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* delta y t-2 -0.054 (0.018)"
+  },
+  {
+   "name": "dem_dy2_dccemgstar_se",
+   "description": "SE delta y2 DCCEMG*",
+   "value": "_0.018",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* SE 0.018"
+  },
+  {
+   "name": "dem_dy2_dccemg",
+   "description": "Democracy delta y2 DCCEMG",
+   "value": "_-0.016",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG delta y t-2 -0.016 (0.027)"
+  },
+  {
+   "name": "dem_dy2_dccemg_se",
+   "description": "SE delta y2 DCCEMG",
+   "value": "_0.027",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG SE 0.027"
+  },
+  {
+   "name": "dem_dy3_acemoglu",
+   "description": "Democracy delta y3 Acemoglu",
+   "value": "_0.043",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu delta y t-3 0.043 (0.017)"
+  },
+  {
+   "name": "dem_dy3_acemoglu_se",
+   "description": "SE delta y3 Acemoglu",
+   "value": "_0.017",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu SE 0.017"
+  },
+  {
+   "name": "dem_dy3_this_twfe",
+   "description": "Democracy delta y3 this TWFE",
+   "value": "_0.047",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE delta y t-3 0.047 (0.019)"
+  },
+  {
+   "name": "dem_dy3_this_twfe_se",
+   "description": "SE delta y3 this TWFE",
+   "value": "_0.019",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE SE 0.019"
+  },
+  {
+   "name": "dem_dy3_dccep",
+   "description": "Democracy delta y3 DCCEP",
+   "value": "_0.057",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP delta y t-3 0.057 (0.028)"
+  },
+  {
+   "name": "dem_dy3_dccep_se",
+   "description": "SE delta y3 DCCEP",
+   "value": "_0.028",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP SE 0.028"
+  },
+  {
+   "name": "dem_dy3_dccemgstar",
+   "description": "Democracy delta y3 DCCEMG*",
+   "value": "_0.030",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* delta y t-3 0.030 (0.015)"
+  },
+  {
+   "name": "dem_dy3_dccemgstar_se",
+   "description": "SE delta y3 DCCEMG*",
+   "value": "_0.015",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* SE 0.015"
+  },
+  {
+   "name": "dem_dy3_dccemg",
+   "description": "Democracy delta y3 DCCEMG",
+   "value": "_0.086",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG delta y t-3 0.086 (0.021)"
+  },
+  {
+   "name": "dem_dy3_dccemg_se",
+   "description": "SE delta y3 DCCEMG",
+   "value": "_0.021",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG SE 0.021"
+  },
+  {
+   "name": "dem_d_acemoglu",
+   "description": "Democracy impact Acemoglu",
+   "value": "_0.787",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu democracy 0.787 (0.226)"
+  },
+  {
+   "name": "dem_d_acemoglu_se",
+   "description": "SE democracy Acemoglu",
+   "value": "_0.226",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu SE 0.226"
+  },
+  {
+   "name": "dem_d_this_twfe",
+   "description": "Democracy impact this TWFE",
+   "value": "_0.769",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE democracy 0.769 (0.226)"
+  },
+  {
+   "name": "dem_d_this_twfe_se",
+   "description": "SE democracy this TWFE",
+   "value": "_0.226",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE SE 0.226"
+  },
+  {
+   "name": "dem_d_dccep",
+   "description": "Democracy impact DCCEP 0.947 (0.574) t=1.65",
+   "value": "_0.947",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP democracy 0.947 (0.574) and text p.24-25"
+  },
+  {
+   "name": "dem_d_dccep_se",
+   "description": "SE democracy DCCEP",
+   "value": "_0.574",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP SE 0.574"
+  },
+  {
+   "name": "dem_d_dccep_t_robust",
+   "description": "t-ratio DCCEP with bar d 1.65",
+   "value": "_1.65",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Section 5.4 p.25 fn: DCCEP t 1.65 when bar d included"
+  },
+  {
+   "name": "dem_d_dccep_nobar",
+   "description": "Democracy DCCEP without bar d 0.748",
+   "value": "_0.748",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Section 5.4 p.25 fn: DCCEP 0.748 when bar d excluded"
+  },
+  {
+   "name": "dem_d_dccep_nobar_t",
+   "description": "t-ratio DCCEP without bar d 1.27",
+   "value": "_1.27",
+   "unit": "t-statistic",
+   "kind": "estimate",
+   "where": "Section 5.4 p.25 fn: t 1.27 when bar d excluded"
+  },
+  {
+   "name": "dem_d_dccemgstar",
+   "description": "Democracy impact DCCEMG*",
+   "value": "_1.285",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* democracy 1.285 (0.654)"
+  },
+  {
+   "name": "dem_d_dccemgstar_se",
+   "description": "SE democracy DCCEMG*",
+   "value": "_0.654",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* SE 0.654"
+  },
+  {
+   "name": "dem_d_dccemg",
+   "description": "Democracy impact DCCEMG n=73",
+   "value": "_1.499",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG democracy 1.499 (1.034)"
+  },
+  {
+   "name": "dem_d_dccemg_se",
+   "description": "SE democracy DCCEMG",
+   "value": "_1.034",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG SE 1.034"
+  },
+  {
+   "name": "dem_lr_acemoglu",
+   "description": "Long-run democracy Acemoglu 21.24 (7.21)",
+   "value": "_21.24",
+   "unit": "long-run effect (percent)",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu long-run 21.24 (7.21) p.24 text 21.240(7.215)"
+  },
+  {
+   "name": "dem_lr_acemoglu_se",
+   "description": "SE long-run Acemoglu",
+   "value": "_7.21",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 Acemoglu SE 7.21"
+  },
+  {
+   "name": "dem_lr_this_twfe",
+   "description": "Long-run democracy this TWFE",
+   "value": "_21.53",
+   "unit": "long-run effect",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE long-run 21.53 (7.47)"
+  },
+  {
+   "name": "dem_lr_this_twfe_se",
+   "description": "SE long-run this TWFE",
+   "value": "_7.47",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 this TWFE SE 7.47"
+  },
+  {
+   "name": "dem_lr_dccep",
+   "description": "Long-run democracy DCCEP",
+   "value": "_5.77",
+   "unit": "long-run effect",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP long-run 5.77 (3.59)"
+  },
+  {
+   "name": "dem_lr_dccep_se",
+   "description": "SE long-run DCCEP",
+   "value": "_3.59",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEP SE 3.59"
+  },
+  {
+   "name": "dem_lr_dccemgstar",
+   "description": "Long-run democracy DCCEMG*",
+   "value": "_5.90",
+   "unit": "long-run effect",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* long-run 5.90 (3.06)"
+  },
+  {
+   "name": "dem_lr_dccemgstar_se",
+   "description": "SE long-run DCCEMG*",
+   "value": "_3.06",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG* SE 3.06"
+  },
+  {
+   "name": "dem_lr_dccemg",
+   "description": "Long-run democracy DCCEMG n=73",
+   "value": "_4.30",
+   "unit": "long-run effect",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG long-run 4.30 (3.01)"
+  },
+  {
+   "name": "dem_lr_dccemg_se",
+   "description": "SE long-run DCCEMG",
+   "value": "_3.01",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 4 DCCEMG SE 3.01"
+  },
+  {
+   "name": "dem_n_acemoglu",
+   "description": "Democracy Acemoglu full sample n=175",
+   "value": "_175",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 4 Acemoglu n=175"
+  },
+  {
+   "name": "dem_n_this",
+   "description": "Democracy filtered n=148",
+   "value": "_148",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 4 this/DCCEP/DCCEMG* n=148 (filtered >=24 yrs -> >=20 obs after lags)"
+  },
+  {
+   "name": "dem_n_dccemg",
+   "description": "Democracy varying n=73 for full heterogeneity",
+   "value": "_73",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 4 DCCEMG n=73 varying democracy; text p.24:73 of 148 vary"
+  },
+  {
+   "name": "dem_n_invariant",
+   "description": "Democracy invariant n=75 of 148",
+   "value": "_75",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Section 5.4 p.24: in 75 countries indicator does not change (of 148)"
+  },
+  {
+   "name": "dem_Tmin_acemoglu",
+   "description": "Tmin Acemoglu 6 years",
+   "value": "_6",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 4 Tmin 6 for Acemoglu 175 sample"
+  },
+  {
+   "name": "dem_Tmin_filtered",
+   "description": "Tmin filtered sample 20 years after lags; min 24 yrs raw ->20 est",
+   "value": "_20",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 4 Tmin 20 for filtered 148 sample"
+  },
+  {
+   "name": "dem_Tave_acemoglu",
+   "description": "Tave Acemoglu 36.2",
+   "value": "_36.2",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 4 Tave 36.2 Acemoglu"
+  },
+  {
+   "name": "dem_Tave_filtered",
+   "description": "Tave filtered 40 years",
+   "value": "_40",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 4 Tave 40 for this TWFE/DCCEP/DCCEMG*"
+  },
+  {
+   "name": "dem_Tave_dccemg",
+   "description": "Tave DCCEMG 41.3",
+   "value": "_41.3",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 4 Tave 41.3 for DCCEMG n=73"
+  },
+  {
+   "name": "dem_Tmax",
+   "description": "Tmax democracy 47 years 1960-2010 after lags",
+   "value": "_47",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 4 Tmax 47 all"
+  },
+  {
+   "name": "inv_lat_pc_twfe",
+   "description": "TI latitude per capita TWFE",
+   "value": "_0.383",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE absolute latitude 0.383 (1.289)"
+  },
+  {
+   "name": "inv_lat_pc_twfe_se",
+   "description": "SE latitude per capita TWFE",
+   "value": "_1.289",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE SE 1.289"
+  },
+  {
+   "name": "inv_lat_pc_dccep",
+   "description": "TI latitude per capita DCCEP",
+   "value": "_0.832",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP latitude 0.832 (2.568)"
+  },
+  {
+   "name": "inv_lat_pc_dccep_se",
+   "description": "SE latitude per capita DCCEP",
+   "value": "_2.568",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP SE 2.568"
+  },
+  {
+   "name": "inv_lat_pe_twfe",
+   "description": "TI latitude per employee TWFE",
+   "value": "_0.747",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE latitude 0.747 (1.283)"
+  },
+  {
+   "name": "inv_lat_pe_twfe_se",
+   "description": "SE latitude per employee TWFE",
+   "value": "_1.283",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE SE 1.283"
+  },
+  {
+   "name": "inv_lat_pe_dccep",
+   "description": "TI latitude per employee DCCEP",
+   "value": "_1.353",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP latitude 1.353 (3.390)"
+  },
+  {
+   "name": "inv_lat_pe_dccep_se",
+   "description": "SE latitude per employee DCCEP",
+   "value": "_3.390",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP SE 3.390"
+  },
+  {
+   "name": "inv_elf_pc_twfe",
+   "description": "TI ELF per capita TWFE",
+   "value": "_-1.708",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE ELF -1.708 (0.608)"
+  },
+  {
+   "name": "inv_elf_pc_twfe_se",
+   "description": "SE ELF per capita TWFE",
+   "value": "_0.608",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE SE 0.608"
+  },
+  {
+   "name": "inv_elf_pc_dccep",
+   "description": "TI ELF per capita DCCEP",
+   "value": "_-3.062",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP ELF -3.062 (1.341)"
+  },
+  {
+   "name": "inv_elf_pc_dccep_se",
+   "description": "SE ELF per capita DCCEP",
+   "value": "_1.341",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP SE 1.341"
+  },
+  {
+   "name": "inv_elf_pe_twfe",
+   "description": "TI ELF per employee TWFE",
+   "value": "_-1.643",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE ELF -1.643 (0.658)"
+  },
+  {
+   "name": "inv_elf_pe_twfe_se",
+   "description": "SE ELF per employee TWFE",
+   "value": "_0.658",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE SE 0.658"
+  },
+  {
+   "name": "inv_elf_pe_dccep",
+   "description": "TI ELF per employee DCCEP",
+   "value": "_-4.554",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP ELF -4.554 (1.831)"
+  },
+  {
+   "name": "inv_elf_pe_dccep_se",
+   "description": "SE ELF per employee DCCEP",
+   "value": "_1.831",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP SE 1.831"
+  },
+  {
+   "name": "inv_prot_pc_twfe",
+   "description": "TI protection per capita TWFE",
+   "value": "_0.699",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE protection 0.699 (0.122)"
+  },
+  {
+   "name": "inv_prot_pc_twfe_se",
+   "description": "SE protection per capita TWFE",
+   "value": "_0.122",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE SE 0.122"
+  },
+  {
+   "name": "inv_prot_pc_dccep",
+   "description": "TI protection per capita DCCEP",
+   "value": "_0.952",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP protection 0.952 (0.236)"
+  },
+  {
+   "name": "inv_prot_pc_dccep_se",
+   "description": "SE protection per capita DCCEP",
+   "value": "_0.236",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP SE 0.236"
+  },
+  {
+   "name": "inv_prot_pe_twfe",
+   "description": "TI protection per employee TWFE",
+   "value": "_0.627",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE protection 0.627 (0.135)"
+  },
+  {
+   "name": "inv_prot_pe_twfe_se",
+   "description": "SE protection per employee TWFE",
+   "value": "_0.135",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE SE 0.135"
+  },
+  {
+   "name": "inv_prot_pe_dccep",
+   "description": "TI protection per employee DCCEP",
+   "value": "_1.219",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP protection 1.219 (0.336)"
+  },
+  {
+   "name": "inv_prot_pe_dccep_se",
+   "description": "SE protection per employee DCCEP",
+   "value": "_0.336",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP SE 0.336"
+  },
+  {
+   "name": "inv_ppp_pc_twfe",
+   "description": "TI PPP per capita TWFE",
+   "value": "_0.704",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE PPP 0.704 (0.272)"
+  },
+  {
+   "name": "inv_ppp_pc_twfe_se",
+   "description": "SE PPP per capita TWFE",
+   "value": "_0.272",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita TWFE SE 0.272"
+  },
+  {
+   "name": "inv_ppp_pc_dccep",
+   "description": "TI PPP per capita DCCEP",
+   "value": "_1.374",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP PPP 1.374 (0.709)"
+  },
+  {
+   "name": "inv_ppp_pc_dccep_se",
+   "description": "SE PPP per capita DCCEP",
+   "value": "_0.709",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per capita DCCEP SE 0.709"
+  },
+  {
+   "name": "inv_ppp_pe_twfe",
+   "description": "TI PPP per employee TWFE",
+   "value": "_0.883",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE PPP 0.883 (0.328)"
+  },
+  {
+   "name": "inv_ppp_pe_twfe_se",
+   "description": "SE PPP per employee TWFE",
+   "value": "_0.328",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee TWFE SE 0.328"
+  },
+  {
+   "name": "inv_ppp_pe_dccep",
+   "description": "TI PPP per employee DCCEP",
+   "value": "_2.675",
+   "unit": "coefficient",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP PPP 2.675 (0.984)"
+  },
+  {
+   "name": "inv_ppp_pe_dccep_se",
+   "description": "SE PPP per employee DCCEP",
+   "value": "_0.984",
+   "unit": "SE",
+   "kind": "estimate",
+   "where": "Table 5 per employee DCCEP SE 0.984"
+  },
+  {
+   "name": "inv_n",
+   "description": "TI second-stage n=100",
+   "value": "_100",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Table 5 notes n=100 countries for TI regressions"
+  },
+  {
+   "name": "inv_Tmax",
+   "description": "TI first-stage Tmax 68 years",
+   "value": "_68",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 5 notes Tmax 68 years"
+  },
+  {
+   "name": "inv_Tmin_pc",
+   "description": "TI Tmin per capita 48",
+   "value": "_48",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 5 notes Tmin per capita 48"
+  },
+  {
+   "name": "inv_Tmin_pe",
+   "description": "TI Tmin per employee 38",
+   "value": "_38",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 5 notes Tmin per employee 38"
+  },
+  {
+   "name": "inv_Tave_pc",
+   "description": "TI Tave per capita 63",
+   "value": "_63",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 5 notes Tave per capita 63"
+  },
+  {
+   "name": "inv_Tave_pe",
+   "description": "TI Tave per employee 61",
+   "value": "_61",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 5 notes Tave per employee 61"
+  },
+  {
+   "name": "sum_n_pc_growth",
+   "description": "Summary n for per capita growth 157",
+   "value": "_157",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Summary Table per capita output growth n=157"
+  },
+  {
+   "name": "sum_n_abs_lat",
+   "description": "Summary n absolute latitude 144",
+   "value": "_144",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Summary Table absolute latitude n=144"
+  },
+  {
+   "name": "sum_n_elf",
+   "description": "Summary n ELF 121",
+   "value": "_121",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Summary Table ELF n=121"
+  },
+  {
+   "name": "sum_n_prot",
+   "description": "Summary n protection 107",
+   "value": "_107",
+   "unit": "countries",
+   "kind": "count",
+   "where": "Summary Table protection n=107"
+  },
+  {
+   "name": "panar_Tave_pc_twfe_dccep",
+   "description": "duplicate for completeness",
+   "value": "_55.2",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 2 Tave per capita TWFE/DCCEP 55.2 (duplicate key see above)"
+  },
+  {
+   "name": "cap_Tmin_twfe_dccep",
+   "description": "duplicate",
+   "value": "_27",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 3 Tmin 27 TWFE/DCCEP duplicate"
+  },
+  {
+   "name": "cap_Tmin_dccemg",
+   "description": "duplicate",
+   "value": "_26",
+   "unit": "years",
+   "kind": "count",
+   "where": "Table 3 Tmin 26 DCCEMG duplicate"
+  }
+ ],
+ "headline": "_panar_phi_pc_dccemg|_panar_phi_pe_dccemg|_panar_meanlag_pc_dccemg|_panar_meanlag_pe_dccemg|_cap_lr_pc_dccemg|_cap_lr_pe_dccemg|_intro_dccemg_phi_approx|_intro_dccemg_lag_approx",
+ "partitions": [
+  {
+   "split": "democracy time variation within Acemoglu filtered sample (148 = 75 invariant + 73 varying)",
+   "total": "dem_n_this",
+   "parts": [
+    "_dem_n_invariant|_dem_n_dccemg"
+   ]
+  },
+  {
+   "split": "PWT baseline output vs capital regressions share same n=157 countries (balanced Barro 157, unbalanced panels 157)",
+   "total": "barro_n",
+   "parts": [
+    "_panar_n|_cap_n"
+   ]
+  },
+  {
+   "split": "Time-invariant second stage per capita vs per employee both n=100 (same countries)",
+   "total": "inv_n",
+   "parts": [
+    "_inv_n|_inv_n"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Barro restriction H0: c_T = -b_T per capita t=-3.10 reject",
+   "statistic": "barro_restriction_t_pc",
+   "p_value": "not stated",
+   "group_sizes": [
+    "barro_n"
+   ]
+  },
+  {
+   "test": "Barro restriction H0: c_T = -b_T per employee t=-3.96 reject",
+   "statistic": "barro_restriction_t_pe",
+   "p_value": "not stated",
+   "group_sizes": [
+    "barro_n"
+   ]
+  }
+ ]
+}

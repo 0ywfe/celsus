@@ -1,0 +1,111 @@
+{
+ "run_id": "run-20261030T045851Z-79097a",
+ "paper": "2609.00418",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "partly holds up",
+ "reason": "",
+ "first_line": "The paper's numbers partly hold up: 7 of 7 checked results match within their uncertainty. Its main result, score_gmd_rus_1938_ascf90, is 4.2% in the paper and 4.2% here (not judged: no standard error). Sample size not rebuilt: the script writes it as a fixed number (27 at line 267), not counted from the data (loo_donor_count, 27 in the paper).",
+ "headline": {
+  "name": "score_gmd_rus_1938_ascf90",
+  "kind": "estimate",
+  "unit": "%",
+  "reported": 4.2,
+  "reproduced": 4.2,
+  "se": null,
+  "n": 28,
+  "consistent": null,
+  "why": "no standard error"
+ },
+ "sample": [
+  {
+   "name": "loo_donor_count",
+   "reported": 27.0,
+   "reproduced": 27.0,
+   "consistent": null
+  },
+  {
+   "name": "placebo_mad_sun_1938_n",
+   "reported": 8.0,
+   "reproduced": 8.0,
+   "consistent": true
+  },
+  {
+   "name": "placebo_mad_rus_1938_n",
+   "reported": 8.0,
+   "reproduced": 8.0,
+   "consistent": true
+  },
+  {
+   "name": "placebo_gmd_rus_1938_n",
+   "reported": 8.0,
+   "reproduced": 8.0,
+   "consistent": true
+  },
+  {
+   "name": "placebo_mad_sun_1940_n",
+   "reported": 8.0,
+   "reproduced": 8.0,
+   "consistent": true
+  },
+  {
+   "name": "placebo_mad_rus_1940_n",
+   "reported": 8.0,
+   "reproduced": 8.0,
+   "consistent": true
+  },
+  {
+   "name": "placebo_gmd_rus_1940_n",
+   "reported": 8.0,
+   "reproduced": 8.0,
+   "consistent": true
+  },
+  {
+   "name": "fake_1905_horizon",
+   "reported": 12.0,
+   "reproduced": 12.0,
+   "consistent": null
+  },
+  {
+   "name": "fake_1913_horizon",
+   "reported": 12.0,
+   "reproduced": 12.0,
+   "consistent": null
+  },
+  {
+   "name": "fake_1921_horizon",
+   "reported": 7.0,
+   "reproduced": 7.0,
+   "consistent": null
+  },
+  {
+   "name": "fake_1924_horizon",
+   "reported": 4.0,
+   "reproduced": 4.0,
+   "consistent": null
+  },
+  {
+   "name": "fake_1926_horizon",
+   "reported": 2.0,
+   "reproduced": 2.0,
+   "consistent": null
+  }
+ ],
+ "judged": 7,
+ "matched": 7,
+ "rejections": [],
+ "rounds": 2,
+ "packages": [
+  "et_xmlfile==2.0.0",
+  "openpyxl==3.1.5",
+  "xlrd==2.0.2"
+ ],
+ "calls": 58,
+ "cost_usd": 1.2684,
+ "tokens_in": 3793801,
+ "tokens_out": 102300,
+ "wall_s": 524.6,
+ "crashed": null
+}

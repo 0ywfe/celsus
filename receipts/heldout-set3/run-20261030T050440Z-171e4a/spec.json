@@ -1,0 +1,605 @@
+{
+ "title": "Building Macroeconomically Relevant Climate Indices via the Assemblage VAR",
+ "hypothesis": "Assembled MRCI climate index (component-space and rank-space) yields materially larger and statistically significant contractionary impulse responses (up to twice benchmark) and reveals economically interpretable weight profiles (high-wind/thermal extremes and distributional tails vs slow-moving sea level/cold).",
+ "data_sources": [
+  "Actuaries Climate Index ACI U.S. portion (6 components T90,T10,Rx5Day,CDD,WP90,sea level, 5-year smoothed headline; event-oriented analogue built from month-on-month changes standardized to 1961--1990)",
+  "NOAA weather/atmospheric dataset 82 series across 10 U.S. zones + Mauna Loa CO2 level/trend, plus 4 Palmer drought indices PDSI,PHDI,PMDI,Palmer Z-index",
+  "FRED-MD macro series INDPRO,PCEPI,UNRATE,EXUSUKx,HOUST; WuXia2016 shadow rate; data vintage 1975-2025"
+ ],
+ "sample": "U.S. monthly time series. Estimation sample 1975:M1 to 2025:M4 excluding COVID-19 period 2020:M1--2021:M6. Effective sample n = T - p where p=12 VAR lags. Panel definitions: ACI U.S. portion 6 components (T90,T10,Rx5Day,CDD,WP90,sea level) - CDD excluded from estimation (annual interpolated); National specification d=5 ACI national components; Regional specification d=34 =5 components x7 regions (Midwest no sea level); NOAA specification d=82 across 10 zones incl. Mauna Loa CO2. All constituents standardized to zero mean month-on-month changes using 1961--1990 moments; assembled index x_t*(w)=w'X_t (component-space) or w'O_t rank-space with O_t=sort(X_t). VAR state y_t(w) dimension k=7: climate index + INDPRO (log-diff), PCEPI (log-diff), UNRATE (first-diff), SHADOWRATE (level, WuXia2016), EXUSUKx (log-diff), HOUST (log-diff) - FRED-MD except shadow rate. n = not stated numerically in text (T minus p minus COVID window); d counts as above are the sample-size counts printed.",
+ "period_start": "1975:M1",
+ "period_end": "2025:M4",
+ "method": [
+  "1. Panel construction: for each ACI component X_{j,t} compute month-on-month changes and standardize using 1961--1990 moments; exclude CDD (annual interpolated) to avoid exploiting mechanical predictability; build three panels National d=5, Regional d=34 (7 regions), NOAA d=82 (10 zones).",
+  "2. Assemblage definition: replace benchmark x_t with x_t*(w)=w'X_t (component-space eq.1) or x_t*(w)=w'O_t with O_t=sort(X_t) (rank-space eq.6); impose simplex w>=0, 1'w=1; mean anchoring holds automatically because constituents zero-mean.",
+  "3. Learning criterion: for fixed w estimate reduced-form VAR(p) y_t(w)=nu(w)+sum_{j=1}^p A_j(w) y_{t-j}(w)+u_t(w) with Sigma(w) via equation-by-equation OLS: Y(w)=Z(w)B(w)+U(w) with n=T-p rows; quasi-log-likelihood ell_T(B,Sigma;w) Gaussian; criterion S_T(w)=hat ell_{1,T}(w)-hat ell_{0,T}(w) vs mean-only benchmark mu(w) (eq.5); population target maximizes half log generalized variance ratio |Sigma0*|/|Sigma1*|.",
+  "4. Regularized estimator: w_hat(lambda)=argmin_{w in simplex} -S_T(w)+lambda*pen(w); component-space pen=||w-w_ref||2^2 with w_ref equal-weight ACI 20% (eq.7); rank-space pen=||D w||2^2 fused ridge smoothing adjacent ranks (eq.8, D first-difference); unpenalized target w*=argmin -S(w) on simplex.",
+  "5. Penalty selection: lambda_hat selected by 5-fold non-overlapping block CV: divide sample into 5 contiguous blocks, hold out one, estimate w^(-m)(lambda) on 4 blocks, compute fold-specific S_Tm^(m) on held-out VAR, maximize average; lambda_hat then fixed for bootstrap (fixed-tuning convention sec. Penalty_selection).",
+  "6. Optimization: SQP via NlcOptim::solnl in R with lower bound >=0, linear equality sum w=1 (and mean equality where binding); warm start at benchmark equal weights; verified stability from random simplex starts.",
+  "7. VAR specification: order climate index first (contemporaneous exogeneity, Cholesky) - same as KimMatthesPhan2025; p=12; transforms: log-differences INDPRO,PCEPI,EXUSUKx,HOUST, first-difference UNRATE, level SHADOWRATE; estimate B_hat Sigma_hat conditional on w_hat(lambda_hat).",
+  "8. Structural IRF: one-std innovation to own assembled index x_t*(w_hat) via Cholesky; recursive identification unchanged but innovation defined separately per specification; impulse responses reported cumulative except interest rate; comparison across equal-weight benchmark vs 6 assembled specifications (comp + rank x 3 granularities).",
+  "9. Inference main-text: fixed-weights residual bootstrap 68% equal-tailed percentile-t intervals conditional on lambda_hat w_hat: center residuals, resample overlapping blocks ell=floor(n^{1/3})=8 retaining contemporaneous dependence; B_outer=1,000 artificial series recursive from estimated VAR with p=12 initial rows; refit VAR; quantiles q_h of (theta*_b - theta_hat)/sigma*_b; sigma*_b from B_inner=100, sigma_hat from 200; redraw up to 50 if companion eigenvalue >=1; set.seed(123).",
+  "10. Robustness: weight-reestimating pairs bootstrap (B=1,000) at fixed lambda_hat: form aligned y/Z pairs, resample overlapping blocks ell=max{p+1,floor(T^{1/3})}=13; re-estimate w and VAR jointly per replication starting at w_hat; VAR fit; pointwise 68% basic intervals [2 theta_hat - q*0.84, 2 theta_hat - q*0.16] not studentized; percentile intervals for weights respecting simplex; also expanding-window re-estimation 2005--2025 COVID window held at Dec2019 value to trace weight stability."
+ ],
+ "claims": [
+  {
+   "name": "d_National",
+   "description": "National specification: 5 subcomponents (ACI national-level climate variables, CDD excluded)",
+   "value": "5",
+   "unit": "series",
+   "kind": "count",
+   "where": "p.7 sec. The constituent panel X_t - National uses 5 subcomponents"
+  },
+  {
+   "name": "d_Regional",
+   "description": "Regional specification: 34 subcomponents = 5 ACI components x 7 U.S. regions (Midwest has no sea level)",
+   "value": "34",
+   "unit": "series",
+   "kind": "count",
+   "where": "p.7 sec. The constituent panel X_t - Regional uses 34 subcomponents"
+  },
+  {
+   "name": "d_NOAA",
+   "description": "NOAA specification: 82 subcomponents from NOAA dataset across ten U.S. regional zones incl. CO2 at Mauna Loa",
+   "value": "82",
+   "unit": "series",
+   "kind": "count",
+   "where": "p.7 sec. The constituent panel X_t - NOAA uses 82 subcomponents"
+  },
+  {
+   "name": "d_ACI_total_components",
+   "description": "Published ACI aggregates six standardized components T90,T10,Rx5Day,CDD,WP90,sea level",
+   "value": "6",
+   "unit": "components",
+   "kind": "count",
+   "where": "p.7 para. The constituent panel X_t"
+  },
+  {
+   "name": "n_regions_ACI",
+   "description": "ACI regional disaggregation across seven U.S. regions",
+   "value": "7",
+   "unit": "regions",
+   "kind": "count",
+   "where": "p.7 footnote: The Midwest region does not have a sea level variable"
+  },
+  {
+   "name": "n_zones_NOAA",
+   "description": "NOAA dataset across ten U.S. regional zones",
+   "value": "10",
+   "unit": "zones",
+   "kind": "count",
+   "where": "p.7 - NOAA uses ... across ten U.S. regional zones"
+  },
+  {
+   "name": "k_VAR_dimension",
+   "description": "VAR state y_t(w) dimension k=7: climate index (ACI/MRCI) + 6 macro series INDPRO,PCEPI,UNRATE,SHADOWRATE,EXUSUKx,HOUST",
+   "value": "7",
+   "unit": "variables",
+   "kind": "count",
+   "where": "p.8 para. The remaining VAR variables y_t^(-x) - forming state vector y_t(w)"
+  },
+  {
+   "name": "ip_peak_benchmark_0.16pct",
+   "description": "Fixed-weight benchmark: one-std climate innovation reduces industrial production by 0.16% at peak (month 12)",
+   "value": "0.16%",
+   "unit": "percent change IP",
+   "kind": "estimate",
+   "where": "p.9 para. Industrial production - Under fixed-weight benchmark"
+  },
+  {
+   "name": "ip_peak_Kim_et_al_0.15pp",
+   "description": "KimMatthesPhan2025 reported 0.15 percentage-point decline using same ACI in nonlinear VAR (cited benchmark)",
+   "value": "0.15 percentage-point",
+   "unit": "percentage-point decline",
+   "kind": "estimate",
+   "where": "p.9 para. Industrial production"
+  },
+  {
+   "name": "ip_assembled_low_0.24pct",
+   "description": "Component-space assembled: for ascr and asco measures estimated contraction ranges from 0.24% (lower bound) - statistically significant",
+   "value": "0.24%",
+   "unit": "percent contraction peak",
+   "kind": "estimate",
+   "where": "p.9-10 para. Industrial production"
+  },
+  {
+   "name": "ip_assembled_high_0.32pct",
+   "description": "Component-space assembled: for ascr and asco measures estimated contraction ranges to 0.32% (upper bound) - one and a half to two times benchmark peak, statistically significant",
+   "value": "0.32%",
+   "unit": "percent contraction peak",
+   "kind": "estimate",
+   "where": "p.9-10 para. Industrial production"
+  },
+  {
+   "name": "equal_weight_reference_20pct",
+   "description": "Equal-weight reference benchmark ACI: 20% per component (5 components => 1/5)",
+   "value": "20%",
+   "unit": "weight",
+   "kind": "parameter",
+   "where": "p.10-11 para. ASCN - WP90 share rises from equal-weight benchmark of 20% to around 65%"
+  },
+  {
+   "name": "weight_WP90_National_65pct",
+   "description": "Component-space National ASCN: WP90 share rises to around 65% (from 20% benchmark)",
+   "value": "65%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCN (National, component-space)"
+  },
+  {
+   "name": "weight_T10_National_0pct",
+   "description": "National ASCN: low-temperature extremes T10 receive minimal weight 0%",
+   "value": "0%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCN"
+  },
+  {
+   "name": "weight_sealevel_National_0pct",
+   "description": "National ASCN: sea level receives minimal weight 0% (trending component)",
+   "value": "0%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCN"
+  },
+  {
+   "name": "weight_WP90_Regional_agg_40pct",
+   "description": "Regional ASCR component-space: high winds receive 40% aggregated weight",
+   "value": "40%",
+   "unit": "aggregated weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCR (Regional, component-space)"
+  },
+  {
+   "name": "weight_WP90_Midwest_global_29pct",
+   "description": "Regional ASCR: WP90 reaching 29% of global index in Midwest region alone",
+   "value": "29%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCR"
+  },
+  {
+   "name": "weight_T90_SWPacific_16pct",
+   "description": "Regional ASCR: heat extremes T90 enter with 16% in Southwest Pacific",
+   "value": "16%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCR"
+  },
+  {
+   "name": "weight_T90_CWPacific_2pct",
+   "description": "Regional ASCR: T90 around 2% in Central West Pacific",
+   "value": "2%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCR"
+  },
+  {
+   "name": "weight_Rx5Day_up_to_25pct",
+   "description": "Regional ASCR: precipitation Rx5Day receives up to 25% concentrated in flood-prone areas Alaska, Midwest, Southwest Pacific",
+   "value": "25%",
+   "unit": "global weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCR"
+  },
+  {
+   "name": "weight_wind_own_region_35pct",
+   "description": "Regional: Southern Plains, Southwest Pacific, Midwest allocate more than 35% of own regional weight to wind extremes",
+   "value": "35%",
+   "unit": "within-region weight",
+   "kind": "estimate",
+   "where": "p.11 para. ASCR"
+  },
+  {
+   "name": "weight_NOAA_thermal_36pct",
+   "description": "NOAA ASCO component-space: Ohio Valley thermal block (temperature + heating degree days) approx 36% of index weight",
+   "value": "36%",
+   "unit": "index weight",
+   "kind": "estimate",
+   "where": "p.12 para. ASCO (NOAA, component-space)"
+  },
+  {
+   "name": "weight_NOAA_hydro_27pct",
+   "description": "NOAA ASCO: Northern/Northeast hydroclimate block (precipitation + Palmer Z) approx 27%",
+   "value": "27%",
+   "unit": "index weight",
+   "kind": "estimate",
+   "where": "p.12 para. ASCO"
+  },
+  {
+   "name": "cyclicality_NOAA_10_15yr",
+   "description": "NOAA series displays pronounced decadal cyclicality about 10--15 years, consistent with PDO/AMO",
+   "value": "10--15 years",
+   "unit": "years period",
+   "kind": "estimate",
+   "where": "p.12 para. ASCO"
+  },
+  {
+   "name": "rank_weight_tail_mass_75pct",
+   "description": "Rank-space NOAA ASRO: about three-quarters of mass sits in two tails",
+   "value": "three-quarters",
+   "unit": "weight share",
+   "kind": "estimate",
+   "where": "p.12-13 para. Rank-space specifications - Only NOAA ASRO carries sharp distributional signal"
+  },
+  {
+   "name": "rank_weight_left_peak_2.95pct",
+   "description": "NOAA rank-space single most heavily weighted rank left tail 2.95% vs flat 1.2%",
+   "value": "2.95%",
+   "unit": "per-rank weight",
+   "kind": "estimate",
+   "where": "p.13 para. Rank-space specifications"
+  },
+  {
+   "name": "rank_weight_right_peak_2.58pct",
+   "description": "NOAA rank-space single most heavily weighted rank right tail 2.58% vs flat 1.2%",
+   "value": "2.58%",
+   "unit": "per-rank weight",
+   "kind": "estimate",
+   "where": "p.13 para. Rank-space specifications"
+  },
+  {
+   "name": "rank_weight_flat_1.2pct",
+   "description": "Flat equal weighting benchmark per rank 1/d for NOAA d=82 approx 1.2%",
+   "value": "1.2%",
+   "unit": "per-rank weight under flat",
+   "kind": "parameter",
+   "where": "p.13 para. Rank-space specifications"
+  },
+  {
+   "name": "rank_weight_interior_3pct",
+   "description": "NOAA rank-space only about three percent falling between 30th and 55th percentiles (interior)",
+   "value": "three percent",
+   "unit": "weight share interior",
+   "kind": "estimate",
+   "where": "p.13 para. Rank-space specifications & p.17 Appendix B"
+  },
+  {
+   "name": "rank_weight_Regional_20th_pctl",
+   "description": "Regional ASRR rank-space lift tails near 20th percentile",
+   "value": "20th",
+   "unit": "percentile",
+   "kind": "estimate",
+   "where": "p.13 para. Rank-space specifications - near 20th and 95--100th percentiles"
+  },
+  {
+   "name": "rank_weight_Regional_95_100th_pctl",
+   "description": "Regional ASRR rank-space lift tails near 95--100th percentiles",
+   "value": "95--100th",
+   "unit": "percentile",
+   "kind": "estimate",
+   "where": "p.13 para. Rank-space specifications"
+  },
+  {
+   "name": "weight_uncertainty_coverage_component_88pct",
+   "description": "Bootstrap index stability: point index falls within central 68% at about 88% of dates across 3 component-space specifications",
+   "value": "88%",
+   "unit": "percent of dates",
+   "kind": "estimate",
+   "where": "p.14 para. The assembled index - point estimate shifts only little"
+  },
+  {
+   "name": "weight_uncertainty_coverage_rank_99pct",
+   "description": "Rank-space point index falls within central 68% at about 99% of dates (tighter by construction)",
+   "value": "99%",
+   "unit": "percent of dates",
+   "kind": "estimate",
+   "where": "p.14 para. The assembled index"
+  },
+  {
+   "name": "rolling_WP90_National_avg_70pct",
+   "description": "Expanding window National component-space: WP90 remains dominant throughout, accounting on average for roughly 70% total weight",
+   "value": "70%",
+   "unit": "average share",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability - National component-space"
+  },
+  {
+   "name": "rolling_WP90_National_min_63pct",
+   "description": "WP90 never falls below 63% in expanding window National",
+   "value": "63%",
+   "unit": "minimum share",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_T90_National_24_to_22pct_start",
+   "description": "National T90 declines slightly from 24% start of window",
+   "value": "24%",
+   "unit": "share at start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_T90_National_22pct_end",
+   "description": "National T90 to 22% end of window",
+   "value": "22%",
+   "unit": "share at end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Rx5Day_National_12_to_15pct_start",
+   "description": "National Rx5Day proportion increased from 12% start",
+   "value": "12%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Rx5Day_National_15pct_end",
+   "description": "National Rx5Day to 15% end",
+   "value": "15%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Rx5Day_collapse_2pct",
+   "description": "National Rx5Day significant collapse between 2010-2015 to about 2%",
+   "value": "2%",
+   "unit": "trough share",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_WP90_Regional_37pct_start",
+   "description": "Regional WP90 increases from 37% start",
+   "value": "37%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability - Regional"
+  },
+  {
+   "name": "rolling_WP90_Regional_40pct_end",
+   "description": "Regional WP90 to 40% end",
+   "value": "40%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Rx5Day_Regional_35pct_start",
+   "description": "Regional Rx5Day declines from 35% start",
+   "value": "35%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Rx5Day_Regional_23pct_end",
+   "description": "Regional Rx5Day to 23% end",
+   "value": "23%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_T10_Regional_1pct_start",
+   "description": "Regional T10 becomes more important towards end increasing from 1% start",
+   "value": "1%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_T10_Regional_8pct_end",
+   "description": "Regional T10 to 8% end",
+   "value": "8%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Temp_NOAA_23pct_start",
+   "description": "NOAA temperature rising from about 23% start",
+   "value": "23%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability - NOAA"
+  },
+  {
+   "name": "rolling_Temp_NOAA_32pct_end",
+   "description": "NOAA temperature to 32% end",
+   "value": "32%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_HDD_NOAA_8pct_start",
+   "description": "NOAA heating degree days more than doubling from about 8% start",
+   "value": "8%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_HDD_NOAA_19pct_end",
+   "description": "NOAA heating degree days to 19% end",
+   "value": "19%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Precip_NOAA_26pct_start",
+   "description": "NOAA precipitation 26% start to 18% end - loses importance",
+   "value": "26%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_Precip_NOAA_18pct_end",
+   "description": "NOAA precipitation to 18% end",
+   "value": "18%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_PalmerZ_NOAA_21pct_start",
+   "description": "NOAA Palmer Z 21% start",
+   "value": "21%",
+   "unit": "share start",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rolling_PalmerZ_NOAA_16pct_end",
+   "description": "NOAA Palmer Z to 16% end",
+   "value": "16%",
+   "unit": "share end",
+   "kind": "estimate",
+   "where": "p.16 para. Expanding-window stability"
+  },
+  {
+   "name": "rank_usage_HDD_14pct",
+   "description": "Ranks-to-named NOAA panel average usage: heating-degree days U=+14% over equal weight",
+   "value": "+14%",
+   "unit": "proportional deviation",
+   "kind": "estimate",
+   "where": "p.17 Appendix B para. NOAA panel - Heating-degree days U=+14%"
+  },
+  {
+   "name": "rank_usage_Temp_13pct",
+   "description": "NOAA rank usage temperature +13% over equal weight",
+   "value": "+13%",
+   "unit": "proportional deviation",
+   "kind": "estimate",
+   "where": "p.17 Appendix B para. NOAA panel"
+  },
+  {
+   "name": "rank_usage_resid_m7pct",
+   "description": "NOAA rank usage pooled residual most under-weighted -7%",
+   "value": "-7%",
+   "unit": "proportional deviation",
+   "kind": "estimate",
+   "where": "p.17 Appendix B para. NOAA panel"
+  },
+  {
+   "name": "rank_usage_correlation_0.80",
+   "description": "Average usage Spearman rank correlation rho=0.80 with component-space weights Figure weights NOAA ranktocomp",
+   "value": "0.80",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "p.17 Appendix B para. NOAA panel - rho=0.80"
+  },
+  {
+   "name": "component_space_weight_highwind_40pct_intro",
+   "description": "Intro summary: component-space weights high-wind extremes receive about 40% of weight while sea level drops to single digits",
+   "value": "40%",
+   "unit": "weight",
+   "kind": "estimate",
+   "where": "p.2 para. Empirical results - high-wind extremes receive about 40%"
+  },
+  {
+   "name": "p_lags",
+   "description": "VAR lag length p=12",
+   "value": "12",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "p.8 Cholesky ordering, p.15 notes All specifications include 12 lags"
+  },
+  {
+   "name": "k_blocks_CV",
+   "description": "Regularization lambda selected by non-overlapping block CV: 5 contiguous blocks",
+   "value": "5",
+   "unit": "blocks",
+   "kind": "parameter",
+   "where": "p.6 sec. Optimization, Stability, Computation"
+  },
+  {
+   "name": "block_length_resid_boot_8",
+   "description": "Fixed-weights residual bootstrap MBB block length ell = floor(n^{1/3}) = 8",
+   "value": "8",
+   "unit": "observations per block",
+   "kind": "parameter",
+   "where": "p.14 Appendix sec. Fixed-weights residual bootstrap"
+  },
+  {
+   "name": "block_length_pairs_boot_13",
+   "description": "Weight-reestimating pairs bootstrap block length ell = max{p+1, floor(T^{1/3})} =13 (floor at p+1 binds)",
+   "value": "13",
+   "unit": "observations per block",
+   "kind": "parameter",
+   "where": "p.15 Appendix sec. Weight-reestimating pairs bootstrap"
+  },
+  {
+   "name": "B_outer_1000",
+   "description": "Number of outer bootstrap replications B_outer=1,000; also 1,000 attempted replications for six full-sample specifications all returned usable",
+   "value": "1,000",
+   "unit": "replications",
+   "kind": "parameter",
+   "where": "p.14 Fixed-weights & p.15 Weight-reestimating"
+  },
+  {
+   "name": "B_inner_100",
+   "description": "Each sigma_b,h computed from B_inner=100 recursive draws; sigma_h from 200 additional refits",
+   "value": "100",
+   "unit": "inner draws",
+   "kind": "parameter",
+   "where": "p.14 Fixed-weights residual bootstrap"
+  },
+  {
+   "name": "B_inner_200",
+   "description": "sigma_h computed from 200 additional refits from fitted model",
+   "value": "200",
+   "unit": "inner draws",
+   "kind": "parameter",
+   "where": "p.14 Fixed-weights residual bootstrap"
+  },
+  {
+   "name": "alpha_68pct",
+   "description": "Confidence band level 68% => alpha=0.32; bands are pointwise equal-tailed percentile-t (fixed-weights) and pointwise 68% basic intervals (pairs bootstrap)",
+   "value": "0.32",
+   "unit": "alpha",
+   "kind": "parameter",
+   "where": "p.14 fixed-weights alpha=0.32"
+  },
+  {
+   "name": "companion_eig_threshold_1",
+   "description": "Replication whose companion matrix has eigenvalue modulus >=1 redrawn up to 50 times otherwise recorded missing",
+   "value": "1",
+   "unit": "eigenvalue modulus threshold",
+   "kind": "parameter",
+   "where": "p.14 Fixed-weights residual bootstrap"
+  },
+  {
+   "name": "redraw_max_50",
+   "description": "Max redraws 50 if non-stationary draw",
+   "value": "50",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "p.14 Fixed-weights residual bootstrap"
+  },
+  {
+   "name": "seed_123",
+   "description": "Computations use set.seed(123)",
+   "value": "123",
+   "unit": "seed",
+   "kind": "parameter",
+   "where": "p.14 Fixed-weights residual bootstrap"
+  },
+  {
+   "name": "confidence_level_68pct",
+   "description": "Confidence bands reported at 68% level following Faccia2021 KimMatthesPhan2025 convention",
+   "value": "68%",
+   "unit": "confidence level",
+   "kind": "parameter",
+   "where": "p.8 footnote main-text bands & Figs Caci_irf notes"
+  },
+  {
+   "name": "normalization_window_1961_1990",
+   "description": "ACI components standardized relative to 1961--1990 moments (WMO climate normal); month-on-month changes standardized using same window moments",
+   "value": "1961--1990",
+   "unit": "years window",
+   "kind": "parameter",
+   "where": "p.7 para. The constituent panel - standardized relative to 1961--1990"
+  }
+ ],
+ "headline": "ip_assembled_high_0.32pct",
+ "partitions": [],
+ "tests": []
+}

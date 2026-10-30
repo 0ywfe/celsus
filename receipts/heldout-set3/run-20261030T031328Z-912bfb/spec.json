@@ -1,0 +1,789 @@
+{
+ "title": "Yield Curve Prediction with Machine Learning Replication Spec",
+ "hypothesis": "Macro-augmented direct-yield and factor-based forecasts vs random walk",
+ "data_sources": [
+  "FilipovicPelgerYe2024 monthly zero-coupon yields month-end",
+  "FRED-MD monthly indicators"
+ ],
+ "sample": "Full yield surface 1986-05 to 2025-06. In-sample 1986-05 to 2014-12 fixed rolling window. Out-of-sample evaluation 2015-01 to 2025-05. Validation 2010-01 to 2014-12. Key maturities {3,6,12,18,24,36,60,120,240,360} + slopes 24_120,24_360,60_360. Macro panel 123 series x lags 4-6 = 369 predictors. T_h1=125 T_h3=123 T_h6=120 T_h12=114",
+ "period_start": "1986-05",
+ "period_end": "2025-06",
+ "method": [
+  "1. Construct yields: use FilipovicPelgerYe2024 zero-coupon month-end yields for 10 key maturities 3,6,12,18,24,36,60,120,240,360 months; define slopes 24_120=y120-y24 etc. Summary stats 1986-05 to 2025-06 Table yield_summary.",
+  "2. Macro: take FRED-MD 123 series Table macro_vars_full, apply FRED-MD transform codes 1-7, impose uniform 3-month publication lag, use lags 4-6 (369 predictors).",
+  "3. Direct-yield approach: target Dh y_t(tau)=y_{t+h}(tau)-y_t(tau) equation direct_forecast_delta, predictor vector x_t, estimate f_h(tau)(x_t) direct_forecast_delta_hat, reconstruct y_{t+h|t}=y_t+ Dh_hat equations direct_forecast_delta_reconstruct.",
+  "4. Factor-based approach: DNS equation dns with lambda>0 and DNSS equation dnss with lambda1,lambda2>0. Baseline lambda=0.0609 DNS, lambda1=0.0609 lambda2=0.01 DNSS. Extract beta_t by OLS each date conditional on lambda. Forecast factors h-step direct: beta_{t+h|t}=Phi_h(I_t) equation beta_forecast_generic. Baseline AR(1) own lag beta_{i,t-1} in levels. RF variant target Dh beta_{i,t}=beta_{i,t+h}-beta_{i,t} equations beta_diff_target beta_rf_diff_forecast beta_diff_reconstruct with information set {beta_{t-l}, y_{t-l}, x_{t-j}} lags yields/factors 1-6, macro 4-6.",
+  "5. Time-varying decay: estimate lambda1t,lambda2t month-by-month by hybrid PSO + L-BFGS-B: minimize sum_j (y_t(tau_j)-hat y_t(tau_j;theta_t))^2 subject to lambda1>=lambda2>=0 baseline, plus beta0>=0 beta0+beta1>=0 ZLB variant. theta=(beta0,beta1,beta2,beta3,lambda1,lambda2). Swarm 300 particles, 1000 max PSO iter, stall tol 1e-8, inertia w linear w_start to w_end, c1,c2 ring topology init 10% swarm increasing radius, velocity v_i^{k+1}=w_k v_i^k +c1 r1(p_i-x_i)+c2 r2(n_i-x_i), x_i^{k+1}=x_i^k+v_i^{k+1}. Init one particle at t-1 optimum + anchor lambda1=0.0609 lambda2=0.01 OLS betas. Search domain lambda in [1e-9,0.4] beta in [-1,1]. L-BFGS-B on top 10 particles 500 max iter ftol 1e-12 gtol 1e-8 box constraints. In-sample betas from OLS conditional on PSO lambdas, out-of-sample lambdas random walk hat lambda_{t+h|t}=lambda_t equation lambda_random_walk, yields OLS reconstruction.",
+  "6. RF: 500 trees min leaf 5, mtry selected by recursive CV on validation 2010-01 to 2014-12 final 60 targets candidate m in {sqrt(P),P/10,P/6,P/4,P/3,P/2,2P/3} rounded lowest validation RMSE Table chosen_mtry_all_models. P=90 Direct-RF,460 Direct-RF-X,108 DNS-RF,477 DNS-RF-X,114 DNSS-RF,483 DNSS-RF-X,114 DNSS-RF-PSO,483 DNSS-RF-PSO-X. Impurity importance I_j = sum_{s in S_j} N_s/N (Q_s - N_{s,L}/N_s Q_{s,L} - N_{s,R}/N_s Q_{s,R}) forest average rescaled to 100.",
+  "7. Evaluation: fixed-size rolling window in-sample 1986-05 to 2014-12 out-of-sample 2015-01 to 2025-05 horizons h=1,3,6,12. RMSE_h = sqrt(1/T_h sum (y_{t+h}-hat y_{t+h|t})^2) Relative RMSE = RMSE_comp / RMSE_RW <1 beats RW. DM test: d_t = L(e1)-L(e2) squared loss, bar d =1/T sum d_t, DM=bar d / sigma_bar sigma_bar=sqrt(S_d(0)/T) HAC S_d(0) lag largest <= floor(T^{1/3}) significant 5% Bartlett else 0 Table hac_sig_lags. Stars ***1% **5% *10% Tables rrmse_h1 h3 h6 h12 armse.",
+  "8. Fit: date RMSE_t = sqrt(1/M sum (y_t(tau_m)-hat y_t(tau_m))^2) average over 1986-05 to 2025-06 Table factor_fit_rmse.",
+  "9. Trading: synthetic zero-coupon price P_t(tau) R_total=(P_{t+h}(tau-h)-P_t(tau))/P_t(tau) R_roll=(P_t(tau-h)-P_t(tau))/P_t(tau) R_curve=R_total-R_roll. Duration trades 24,120,360 months: w_model=-Delta hat y / sigma_Delta, w_rolldown=R_roll/sigma_roll, w_tsmom=M_t/sigma_M M_t=sum_{j=1}^{12} r_excess_{t-j}. Slope trades 24-120,24-360,60-360 DV01-neutral: s_model=Delta hat S / sigma_DeltaS, s_rolldown=R_roll_steep/sigma, hedge w_b0=1 w_a0=DV01_b/DV01_a w_a=s w_a0 w_b=-s w_b0. Vol scaling from 2y in-sample signals, capped [-1,1], tc 1bp one-way. Annualized returns, ranks, 1st/top3, Sharpe, hit rate Tables duration/slope_summary_total_return curve_return slope_table_24_120_h1."
+ ],
+ "claims": [
+  {
+   "name": "sample_T_h1",
+   "description": "Available out-of-sample T for h=1 Table hac_sig_lags footnote T=125 h=1",
+   "value": "125",
+   "unit": "forecast origins",
+   "kind": "count",
+   "where": "Table hac_sig_lags Notes T=125 h=1"
+  },
+  {
+   "name": "sample_T_h3",
+   "description": "T for h=3",
+   "value": "123",
+   "unit": "forecast origins",
+   "kind": "count",
+   "where": "Table hac_sig_lags T=123 h=3"
+  },
+  {
+   "name": "sample_T_h6",
+   "description": "T for h=6",
+   "value": "120",
+   "unit": "forecast origins",
+   "kind": "count",
+   "where": "Table hac_sig_lags T=120 h=6"
+  },
+  {
+   "name": "sample_T_h12",
+   "description": "T for h=12",
+   "value": "114",
+   "unit": "forecast origins",
+   "kind": "count",
+   "where": "Table hac_sig_lags T=114 h=12"
+  },
+  {
+   "name": "macro_variables_FRED-MD",
+   "description": "Number of FRED-MD series used",
+   "value": "123",
+   "unit": "variables",
+   "kind": "count",
+   "where": "Section Macroeconomic Data 123 macro variables are used"
+  },
+  {
+   "name": "macro_lagged_predictors",
+   "description": "Macro augmentation contributes lagged predictors lags 4-6",
+   "value": "369",
+   "unit": "predictors",
+   "kind": "count",
+   "where": "369 lagged predictors"
+  },
+  {
+   "name": "maturities_key_set_count_10",
+   "description": "Key maturities used as targets",
+   "value": "10",
+   "unit": "maturities",
+   "kind": "count",
+   "where": "{3,6,12,18,24,36,60,120,240,360} months"
+  },
+  {
+   "name": "count_targets_13",
+   "description": "Total maturity+ slope columns in RMSE tables",
+   "value": "13",
+   "unit": "targets",
+   "kind": "count",
+   "where": "Tables rrmse 10 maturities +3 slopes =13 columns Short-end 5 Belly2 Long-end3 Slope3"
+  },
+  {
+   "name": "count_short_end_5",
+   "description": "Short-end columns 3,6,12,18,24",
+   "value": "5",
+   "unit": "maturities",
+   "kind": "count",
+   "where": "Table header Short-end 5 columns"
+  },
+  {
+   "name": "count_belly_2",
+   "description": "Belly columns 36,60",
+   "value": "2",
+   "unit": "maturities",
+   "kind": "count",
+   "where": "Table header Belly 2 columns"
+  },
+  {
+   "name": "count_long_end_3",
+   "description": "Long-end 120,240,360",
+   "value": "3",
+   "unit": "maturities",
+   "kind": "count",
+   "where": "Table header Long-end 3 columns"
+  },
+  {
+   "name": "count_slope_3",
+   "description": "Slope 24-120,24-360,60-360",
+   "value": "3",
+   "unit": "slopes",
+   "kind": "count",
+   "where": "Table header Slope 3 columns"
+  },
+  {
+   "name": "count_horizons_4",
+   "description": "Forecast horizons evaluated",
+   "value": "4",
+   "unit": "horizons",
+   "kind": "count",
+   "where": "h=1,3,6,12"
+  },
+  {
+   "name": "count_validation_60",
+   "description": "Validation period final targets 2010-01 to 2014-12",
+   "value": "60",
+   "unit": "targets",
+   "kind": "count",
+   "where": "Section RF hyperparameter validation period final 60 targets"
+  },
+  {
+   "name": "count_models_12",
+   "description": "Competing models in Table model_predictor_summary",
+   "value": "12",
+   "unit": "models",
+   "kind": "count",
+   "where": "Table model_predictor_summary Random Walk +7 yields-only +4 macro-augmented =12"
+  },
+  {
+   "name": "count_yields_only_8",
+   "description": "Yields-only specs Panel A",
+   "value": "8",
+   "unit": "models",
+   "kind": "count",
+   "where": "Tables rrmse_h* Panel A 8 rows including Random Walk? Direct-RF DNS-AR DNS-RF DNSS-AR DNSS-RF DNSS-AR-PSO DNSS-RF-PSO"
+  },
+  {
+   "name": "count_macro_augmented_4",
+   "description": "Macro-augmented Panel B",
+   "value": "4",
+   "unit": "models",
+   "kind": "count",
+   "where": "Panel B Direct-RF-X DNS-RF-X DNSS-RF-X DNSS-RF-PSO-X"
+  },
+  {
+   "name": "PSO_swarm_size",
+   "description": "PSO swarm size",
+   "value": "300",
+   "unit": "particles",
+   "kind": "parameter",
+   "where": "PSO--L-BFGS-B Hyperparameters swarm size 300"
+  },
+  {
+   "name": "PSO_max_iter",
+   "description": "PSO max iterations",
+   "value": "1000",
+   "unit": "iterations",
+   "kind": "parameter",
+   "where": "maximum of 1,000 PSO iterations"
+  },
+  {
+   "name": "PSO_stall_tol",
+   "description": "Early termination objective improvement tolerance",
+   "value": "1e-8",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "stall criterion 1e-8"
+  },
+  {
+   "name": "PSO_lambda_domain_low",
+   "description": "PSO search lambda low bound",
+   "value": "1e-9",
+   "unit": "monthly decay",
+   "kind": "parameter",
+   "where": "lambda in [1e-9,0.4]"
+  },
+  {
+   "name": "PSO_lambda_domain_high",
+   "description": "PSO lambda high bound",
+   "value": "0.4",
+   "unit": "monthly decay",
+   "kind": "parameter",
+   "where": "upper bound 0.4 footnote GSW range"
+  },
+  {
+   "name": "PSO_beta_domain",
+   "description": "Beta search domain",
+   "value": "[-1,1]",
+   "unit": "beta",
+   "kind": "parameter",
+   "where": "beta_j in [-1,1] j=0,1,2,3"
+  },
+  {
+   "name": "LBFGSB_top_particles",
+   "description": "Post-PSO L-BFGS-B on top particles",
+   "value": "10",
+   "unit": "particles",
+   "kind": "parameter",
+   "where": "top 10 particles"
+  },
+  {
+   "name": "LBFGSB_max_iter",
+   "description": "L-BFGS-B max iter",
+   "value": "500",
+   "unit": "iterations",
+   "kind": "parameter",
+   "where": "maximum 500 iterations"
+  },
+  {
+   "name": "LBFGSB_ftol",
+   "description": "Function tolerance",
+   "value": "1e-12",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "function tolerance 1e-12"
+  },
+  {
+   "name": "LBFGSB_gtol",
+   "description": "Gradient tolerance",
+   "value": "1e-8",
+   "unit": "tolerance",
+   "kind": "parameter",
+   "where": "gradient tolerance 1e-8"
+  },
+  {
+   "name": "RF_n_trees",
+   "description": "Random Forest trees",
+   "value": "500",
+   "unit": "trees",
+   "kind": "parameter",
+   "where": "each RF 500 regression trees"
+  },
+  {
+   "name": "RF_min_leaf",
+   "description": "Min leaf size",
+   "value": "5",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "minimum leaf size 5"
+  },
+  {
+   "name": "yield_summary_mean_3m",
+   "description": "Mean 3-month yield 1986-05 to 2025-06 %",
+   "value": "3.136",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table yield_summary Mean 3 =3.136"
+  },
+  {
+   "name": "yield_summary_std_3m",
+   "description": "Std 3m",
+   "value": "2.483",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Std Dev 3 =2.483"
+  },
+  {
+   "name": "yield_summary_min_3m",
+   "description": "Min 3m",
+   "value": "0.002",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Min 3 =0.002"
+  },
+  {
+   "name": "yield_summary_p25_3m",
+   "description": "25th pct 3m",
+   "value": "0.378",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "25th 0.378"
+  },
+  {
+   "name": "yield_summary_median_3m",
+   "description": "Median 3m",
+   "value": "3.130",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Median 3.130"
+  },
+  {
+   "name": "yield_summary_max_3m",
+   "description": "Max 3m",
+   "value": "9.154",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Max 9.154"
+  },
+  {
+   "name": "fit_RMSE_DNS_lambda0.0609",
+   "description": "Average date-level cross-sectional RMSE DNS lambda 0.0609 1986-05 to 2025-06 % yield",
+   "value": "0.1140",
+   "unit": "% yield",
+   "kind": "estimate",
+   "where": "Table factor_fit_rmse DNS 0.1140"
+  },
+  {
+   "name": "fit_RMSE_DNSS_lambda0.0609_0.01",
+   "description": "DNSS baseline",
+   "value": "0.0923",
+   "unit": "% yield",
+   "kind": "estimate",
+   "where": "DNSS 0.0923"
+  },
+  {
+   "name": "fit_RMSE_DNSS-PSO",
+   "description": "DNSS-PSO time-varying",
+   "value": "0.0284",
+   "unit": "% yield",
+   "kind": "estimate",
+   "where": "DNSS-PSO 0.0284 lowest"
+  },
+  {
+   "name": "fit_RMSE_DNSS-PSO-ZLB",
+   "description": "DNSS-PSO with ZLB",
+   "value": "0.0331",
+   "unit": "% yield",
+   "kind": "estimate",
+   "where": "DNSS-PSO with ZLB 0.0331"
+  },
+  {
+   "name": "rrmse_h1_Direct-RF_3m",
+   "description": "Relative RMSE vs RW h=1 3m Direct-RF",
+   "value": "0.87",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table rrmse_h1 Direct-RF 3 =0.87**"
+  },
+  {
+   "name": "rrmse_h1_Direct-RF_6m",
+   "description": "h1 6m",
+   "value": "0.89",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "0.89**"
+  },
+  {
+   "name": "rrmse_h1_Direct-RF_12m",
+   "description": "h1 12m",
+   "value": "0.94",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "0.94*"
+  },
+  {
+   "name": "rrmse_h1_Direct-RF-X_3m",
+   "description": "Direct-RF-X 3m h1",
+   "value": "0.86",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Panel B Direct-RF-X 3 =0.86*"
+  },
+  {
+   "name": "rrmse_h1_Direct-RF-X_24_120_slope",
+   "description": "Slope 24_120 h1 Direct-RF-X",
+   "value": "0.97",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "0.97"
+  },
+  {
+   "name": "rrmse_h3_Direct-RF-X_3m",
+   "description": "h3 Direct-RF-X 3m",
+   "value": "0.81",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table rrmse_h3 Direct-RF-X 3 =0.81**"
+  },
+  {
+   "name": "rrmse_h3_DNSS-RF-X_3m",
+   "description": "DNSS-RF-X 3m h3",
+   "value": "0.75",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "0.75*"
+  },
+  {
+   "name": "rrmse_h6_Direct-RF-X_3m",
+   "description": "h6 Direct-RF-X 3m",
+   "value": "0.87",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table rrmse_h6 Direct-RF-X 3=0.87*"
+  },
+  {
+   "name": "rrmse_h6_Direct-RF-X_24_120_slope",
+   "description": "Slope h6 Direct-RF-X",
+   "value": "0.87",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Slope 24_120 0.87*"
+  },
+  {
+   "name": "rrmse_h12_DNS-AR_120m",
+   "description": "h12 DNS-AR 120m",
+   "value": "0.94",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table rrmse_h12 DNS-AR 120=0.94*"
+  },
+  {
+   "name": "rrmse_h12_DNSS-AR_60_360_slope",
+   "description": "60_360 slope DNSS-AR h12",
+   "value": "0.90",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "60_360 0.90**"
+  },
+  {
+   "name": "rrmse_h12_Direct-RF_3m",
+   "description": "Direct-RF 3m h12 underperforms",
+   "value": "1.15",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Direct-RF 3=1.15"
+  },
+  {
+   "name": "armse_h1_RW_3m",
+   "description": "Absolute RMSE RW h1 3m %",
+   "value": "0.20",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table armse_h1 Random Walk 3=0.20"
+  },
+  {
+   "name": "armse_h3_RW_3m",
+   "description": "RW h3 3m",
+   "value": "0.48",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "armse_h3 0.48"
+  },
+  {
+   "name": "armse_h6_RW_3m",
+   "description": "RW h6 3m",
+   "value": "0.87",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "armse_h6 0.87"
+  },
+  {
+   "name": "armse_h12_RW_3m",
+   "description": "RW h12 3m",
+   "value": "1.57",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "armse_h12 1.57"
+  },
+  {
+   "name": "incremental_Direct-RF-X_h1_60m_vs_Direct-RF",
+   "description": "Macro vs non-macro Direct-RF-X 60m h1 0.97** <1 macro better",
+   "value": "0.97",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table relative_rmse_macro Direct-RF-X h1 60=0.97**"
+  },
+  {
+   "name": "incremental_Direct-RF-X_h6_24_120",
+   "description": "Direct-RF-X 24_120 slope h6 incremental 0.89***",
+   "value": "0.89",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Direct-RF-X 24_120 h6 0.89***"
+  },
+  {
+   "name": "incremental_DNS-RF-X_h3_3m",
+   "description": "DNS-RF-X 3m h3 0.90**",
+   "value": "0.90",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "DNS-RF-X 3 h3 0.90**"
+  },
+  {
+   "name": "incremental_DNSS-RF-X_h12_3m",
+   "description": "DNSS-RF-X 3m h12 0.92***",
+   "value": "0.92",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "DNSS-RF-X 3 h12 0.92***"
+  },
+  {
+   "name": "PSO_DNSS-AR-PSO_h1_24_120_vs_DNSS-AR",
+   "description": "PSO vs non-PSO DNSS-AR-PSO 24_120 h1 0.76**",
+   "value": "0.76",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table relative_rmse_pso DNSS-AR-PSO 24_120 h1 0.76**"
+  },
+  {
+   "name": "PSO_DNSS-RF-PSO_h1_3m",
+   "description": "DNSS-RF-PSO 3m h1 2.34 deterioration",
+   "value": "2.34",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "DNSS-RF-PSO 3 h1 2.34"
+  },
+  {
+   "name": "PSO_DNSS-RF-PSO_h6_3m",
+   "description": "h6 3m 0.89* improvement",
+   "value": "0.89",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "0.89*"
+  },
+  {
+   "name": "PSO_DNSS-RF-PSO_h12_240m",
+   "description": "h12 240m 0.82***",
+   "value": "0.82",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "240 h12 0.82***"
+  },
+  {
+   "name": "approach_DNS-AR_h1_3m_vs_Direct-RF",
+   "description": "Factor vs direct DNS-AR 3m h1 1.12*** >1 direct better",
+   "value": "1.12",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Table approach_relative_rmse Panel A DNS-AR 3 h1 1.12***"
+  },
+  {
+   "name": "approach_DNSS-AR_h12_3m_vs_Direct-RF",
+   "description": "DNSS-AR 3m h12 0.80*** <1 factor better",
+   "value": "0.80",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "DNSS-AR 3 h12 0.80***"
+  },
+  {
+   "name": "approach_DNS-RF-X_h1_3m_vs_Direct-RF-X",
+   "description": "DNS-RF-X macro 3m h1 1.06 >1 direct better slope 1.73***",
+   "value": "1.06",
+   "unit": "ratio",
+   "kind": "estimate",
+   "where": "Panel B DNS-RF-X 3 h1 1.06, 24_120 1.73***"
+  },
+  {
+   "name": "mtry_Direct-RF_3m_h1",
+   "description": "Chosen m Direct-RF 3m h1",
+   "value": "9",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Table chosen_mtry Direct-RF 3 h1 9 P=90"
+  },
+  {
+   "name": "mtry_Direct-RF-X_3m_h1",
+   "description": "Direct-RF-X 3m h1",
+   "value": "21",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "Direct-RF-X 3 h1 21 P=460"
+  },
+  {
+   "name": "mtry_DNS-RF_beta0_h1",
+   "description": "DNS-RF beta0 h1",
+   "value": "11",
+   "unit": "predictors",
+   "kind": "parameter",
+   "where": "DNS-RF beta0 h1 11 P=108"
+  },
+  {
+   "name": "HAC_Direct-RF_3m_h1",
+   "description": "Significant HAC lags Direct-RF 3m h1 capped floor(T^{1/3})",
+   "value": "4",
+   "unit": "lags",
+   "kind": "estimate",
+   "where": "Table hac_sig_lags Direct-RF h1 3 =4"
+  },
+  {
+   "name": "HAC_DNSS-RF-PSO_3m_h1",
+   "description": "DNSS-RF-PSO 3m h1 0 lags",
+   "value": "0",
+   "unit": "lags",
+   "kind": "estimate",
+   "where": "DNSS-RF-PSO h1 3=0"
+  },
+  {
+   "name": "duration_summary_total_return_DNSS_AR_PSO_avg_rank_total_return",
+   "description": "Duration league ranked by avg annualized total return DNSS_AR_PSO avg rank",
+   "value": "2.67",
+   "unit": "rank (1 best of 14 strategies)",
+   "kind": "estimate",
+   "where": "Table duration_summary_total_return DNSS_AR_PSO 2.67"
+  },
+  {
+   "name": "duration_summary_total_return_DNSS_AR_PSO_avg_ann_return",
+   "description": "Avg ann return %",
+   "value": "2.433",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Avg Ann Return 2.433%"
+  },
+  {
+   "name": "duration_summary_total_return_Direct_RF_avg_ann_return",
+   "description": "Direct_RF avg ann return duration total",
+   "value": "-2.929",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Direct_RF -2.929%"
+  },
+  {
+   "name": "duration_summary_total_return_DNSS_AR_PSO_1st_finishes",
+   "description": "1st finishes",
+   "value": "5",
+   "unit": "tasks",
+   "kind": "tally",
+   "where": "1st-Place Finishes 5 top3 8"
+  },
+  {
+   "name": "duration_summary_curve_return_DNSS_AR_avg_rank",
+   "description": "Duration ranked by curve-move DNSS_AR avg rank",
+   "value": "2.00",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table duration_summary_curve_return DNSS_AR 2.00"
+  },
+  {
+   "name": "slope_summary_total_return_DNSS_AR_PSO_avg_ann_return_dup",
+   "description": "Slope total return same DNSS_AR_PSO numbers duplicated table",
+   "value": "2.433",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table slope_summary_total_return DNSS_AR_PSO 2.433 duplicate note"
+  },
+  {
+   "name": "slope_summary_curve_return_Direct_RF_X_avg_rank",
+   "description": "Slope curve-move Direct_RF_X avg rank",
+   "value": "1.58",
+   "unit": "rank",
+   "kind": "estimate",
+   "where": "Table slope_summary_curve_return Direct_RF_X 1.58"
+  },
+  {
+   "name": "slope_summary_curve_return_Direct_RF_X_1st_finishes",
+   "description": "1st finishes slope curve-move",
+   "value": "8",
+   "unit": "tasks of 12",
+   "kind": "tally",
+   "where": "1st-Place 8 Top3 11 of 12 slope trading tasks"
+  },
+  {
+   "name": "slope_summary_curve_return_Direct_RF_X_avg_ann_curve_move",
+   "description": "Avg ann curve move",
+   "value": "0.897",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Avg Ann Curve Move 0.897%"
+  },
+  {
+   "name": "slope_table_24_120_h1_Direct_RF_X_ann_return",
+   "description": "24-120 h1 Direct_RF_X annular return %",
+   "value": "-0.248",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Table slope_table_24_120_h1 Direct_RF_X -0.248%"
+  },
+  {
+   "name": "slope_table_24_120_h1_DNSS_AR_ann_return",
+   "description": "DNSS_AR 24-120 h1",
+   "value": "0.118",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "DNSS_AR 0.118%"
+  },
+  {
+   "name": "slope_table_24_120_h1_Roll-Down_ann_return",
+   "description": "Roll-Down -0.324%",
+   "value": "-0.324",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Roll-Down -0.324%"
+  },
+  {
+   "name": "slope_table_24_120_h1_Direct_RF_X_curve_move",
+   "description": "Curve move Direct_RF_X 0.736%",
+   "value": "0.736",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Ann Curve 0.736%"
+  },
+  {
+   "name": "slope_table_24_120_h1_Direct_RF_X_hit_rate",
+   "description": "Hit rate Direct_RF_X",
+   "value": "44.8",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Hit Rate 44.8%"
+  },
+  {
+   "name": "varimp_macro_share_approx",
+   "description": "Macro predictors ~80% total importance averaged horizons out-of-sample 2015-01 to 2025-06 across targets",
+   "value": "80",
+   "unit": "% importance",
+   "kind": "estimate",
+   "where": "Section Feature Importance macro accounting roughly 80% Figure varimp_bigpicture"
+  }
+ ],
+ "headline": "incremental_Direct-RF-X_h6_24_120",
+ "partitions": [
+  {
+   "split": "maturity segment",
+   "total": "count_targets_13",
+   "parts": [
+    "count_short_end_5",
+    "count_belly_2",
+    "count_long_end_3",
+    "count_slope_3"
+   ]
+  },
+  {
+   "split": "forecast horizon",
+   "total": "count_horizons_4",
+   "parts": [
+    "sample_T_h1",
+    "sample_T_h3",
+    "sample_T_h6",
+    "sample_T_h12"
+   ]
+  },
+  {
+   "split": "model family Panel A vs B",
+   "total": "count_models_12",
+   "parts": [
+    "count_yields_only_8",
+    "count_macro_augmented_4"
+   ]
+  }
+ ],
+ "tests": [
+  {
+   "test": "Diebold-Mariano equal predictive accuracy vs Random Walk squared loss HAC Bartlett lag floor(T^{1/3})",
+   "statistic": "rrmse_h1_Direct-RF_3m",
+   "p_value": "rrmse_h1_Direct-RF_3m",
+   "group_sizes": [
+    "sample_T_h1",
+    "sample_T_h3",
+    "sample_T_h6",
+    "sample_T_h12"
+   ]
+  },
+  {
+   "test": "DM incremental macro augmentation vs non-macro benchmark <1 macro better",
+   "statistic": "incremental_Direct-RF-X_h6_24_120",
+   "p_value": "incremental_Direct-RF-X_h6_24_120",
+   "group_sizes": [
+    "sample_T_h1",
+    "sample_T_h3",
+    "sample_T_h6",
+    "sample_T_h12"
+   ]
+  },
+  {
+   "test": "DM PSO vs non-PSO baseline lambda1=0.0609 lambda2=0.01",
+   "statistic": "PSO_DNSS-AR-PSO_h1_24_120_vs_DNSS-AR",
+   "p_value": "PSO_DNSS-AR-PSO_h1_24_120_vs_DNSS-AR",
+   "group_sizes": [
+    "sample_T_h1",
+    "sample_T_h3",
+    "sample_T_h6",
+    "sample_T_h12"
+   ]
+  },
+  {
+   "test": "DM direct-yield vs factor-based approach factor/direct >1 direct better",
+   "statistic": "approach_DNS-AR_h1_3m_vs_Direct-RF",
+   "p_value": "approach_DNS-AR_h1_3m_vs_Direct-RF",
+   "group_sizes": [
+    "sample_T_h1",
+    "sample_T_h3",
+    "sample_T_h6",
+    "sample_T_h12"
+   ]
+  }
+ ]
+}

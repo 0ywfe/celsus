@@ -1,0 +1,75 @@
+{
+ "run_id": "run-20261030T042534Z-a5f8f0",
+ "paper": "2609.35011",
+ "provider": "baseten",
+ "model": "meta-models/muse-spark-open-1026",
+ "effort": "xhigh",
+ "builder": "workbench",
+ "verdict": "could not check",
+ "reason": "the replication's sample covers 2001-01 to 2025-12, but the paper's runs from January 2001 to July 2026",
+ "first_line": "We could not check this paper: the replication's sample covers 2001-01 to 2025-12, but the paper's runs from January 2001 to July 2026. This says nothing about whether its numbers hold.",
+ "headline": {
+  "name": "alpha_info_corr",
+  "kind": "estimate",
+  "unit": "not stated",
+  "reported": 1.82,
+  "reproduced": 1.7927167902598038,
+  "se": 0.059396912648681216,
+  "n": 27,
+  "consistent": true,
+  "why": "paper inside 1.793 +/- 0.1164"
+ },
+ "sample": [
+  {
+   "name": "n_countries",
+   "reported": 27.0,
+   "reproduced": 27,
+   "consistent": true
+  },
+  {
+   "name": "n_observations",
+   "reported": 307.0,
+   "reproduced": 300,
+   "consistent": true
+  }
+ ],
+ "judged": 8,
+ "matched": 7,
+ "rejections": [
+  {
+   "round": 1,
+   "reason": "the code that writes these results contains the number the paper reports for them (lambda_minus_opt (37.21) at line 395, alpha_info_corr (1.82) at line 397, pareto_mu (1.64) at line 399, corr_kappa_D_E (0.988) at line 400, corr_system_HICP_2019_2026 (-0.824) at line 401, nnsd_cutoff (0.356) at line 402). Compute each result from the data; the paper's value never goes into it."
+  }
+ ],
+ "rounds": 3,
+ "packages": [
+  "cloudpickle==3.1.2",
+  "contourpy==1.4.0",
+  "cycler==0.12.1",
+  "fonttools==4.68.0",
+  "igraph==1.0.0",
+  "joblib==1.6.0",
+  "kiwisolver==1.5.1",
+  "matplotlib-inline==0.2.2",
+  "matplotlib==3.11.2",
+  "mpmath==1.4.1",
+  "networkx==3.7",
+  "pillow==13.0.0",
+  "powerlaw==2.0.0",
+  "pyparsing==3.3.3",
+  "python-igraph==1.0.0",
+  "safetensors==0.8.0",
+  "scikit-learn==1.9.1",
+  "texttable==1.7.2",
+  "threadpoolctl==3.7.0",
+  "tqdm==4.70.1",
+  "traitlets==5.16.1",
+  "weightwatcher==0.7.7"
+ ],
+ "calls": 44,
+ "cost_usd": 0.7452,
+ "tokens_in": 2089576,
+ "tokens_out": 74037,
+ "wall_s": 1511.5,
+ "crashed": null
+}

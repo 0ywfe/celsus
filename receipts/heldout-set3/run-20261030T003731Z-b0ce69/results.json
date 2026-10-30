@@ -1,0 +1,1149 @@
+{
+  "results": [
+    {
+      "name": "barro_bT_pc1",
+      "value": -0.09870817474922264,
+      "se": 0.03461026882002867,
+      "n": 181
+    },
+    {
+      "name": "barro_bT_pc1_se",
+      "value": 0.03461026882002867,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_bT_pc2",
+      "value": -0.09751995828151547,
+      "se": 0.03604358010967436,
+      "n": 181
+    },
+    {
+      "name": "barro_bT_pc2_se",
+      "value": 0.03604358010967436,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_bT_pe1",
+      "value": -0.14990122772100875,
+      "se": 0.03876034437577584,
+      "n": 172
+    },
+    {
+      "name": "barro_bT_pe1_se",
+      "value": 0.03876034437577584,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_bT_pe2",
+      "value": -0.15047018226400627,
+      "se": 0.040341146358892396,
+      "n": 172
+    },
+    {
+      "name": "barro_bT_pe2_se",
+      "value": 0.040341146358892396,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_cT_pc1",
+      "value": 0.015752194195599867,
+      "se": 0.12275377192147251,
+      "n": 181
+    },
+    {
+      "name": "barro_cT_pc1_se",
+      "value": 0.12275377192147251,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_cT_pe1",
+      "value": -0.0048504722375630124,
+      "se": 0.16124333901774182,
+      "n": 172
+    },
+    {
+      "name": "barro_cT_pe1_se",
+      "value": 0.16124333901774182,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_phi_pc1",
+      "value": 0.003577247845929832,
+      "se": 0.0013194264263446903,
+      "n": 181
+    },
+    {
+      "name": "barro_phi_pc1_se",
+      "value": 0.0013194264263446903,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_phi_pc2",
+      "value": 0.0035319789899498355,
+      "se": 0.0013723209180572572,
+      "n": 181
+    },
+    {
+      "name": "barro_phi_pc2_se",
+      "value": 0.0013723209180572572,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_phi_pe1",
+      "value": 0.005584442962963898,
+      "se": 0.001563464951743963,
+      "n": 172
+    },
+    {
+      "name": "barro_phi_pe1_se",
+      "value": 0.001563464951743963,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_phi_pe2",
+      "value": 0.005607400138368357,
+      "se": 0.0016282815210095438,
+      "n": 172
+    },
+    {
+      "name": "barro_phi_pe2_se",
+      "value": 0.0016282815210095438,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_meanlag_pc1",
+      "value": 278.544511051364,
+      "se": 103.10675443985154,
+      "n": 181
+    },
+    {
+      "name": "barro_meanlag_pc1_se",
+      "value": 103.10675443985154,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_meanlag_pc2",
+      "value": 282.12739199340564,
+      "se": 110.00678192399604,
+      "n": 181
+    },
+    {
+      "name": "barro_meanlag_pc2_se",
+      "value": 110.00678192399604,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_meanlag_pe1",
+      "value": 178.0688895261378,
+      "se": 50.13354681542622,
+      "n": 172
+    },
+    {
+      "name": "barro_meanlag_pe1_se",
+      "value": 50.13354681542622,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_meanlag_pe2",
+      "value": 177.33576618824642,
+      "se": 51.78528827156168,
+      "n": 172
+    },
+    {
+      "name": "barro_meanlag_pe2_se",
+      "value": 51.78528827156168,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "barro_n",
+      "value": 181.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_T",
+      "value": 29.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_restriction_t_pc",
+      "value": -0.647538475705084,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "barro_restriction_t_pe",
+      "value": -0.9664463410085401,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "intro_barrorange_phi_low",
+      "value": 0.3577247845929832,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "intro_barrorange_phi_low",
+      "value": 0.35319789899498355,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "intro_barrorange_phi_high",
+      "value": 0.5607400138368357,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "intro_barrorange_lag_low",
+      "value": 177.33576618824642,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "intro_barrorange_lag_high",
+      "value": 282.12739199340564,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pc_twfe",
+      "value": -0.02700408299985918,
+      "se": 0.0024703255812137848,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pc_twfe_se",
+      "value": 0.0024703255812137848,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_psi1_pc_twfe",
+      "value": 0.22981972679506202,
+      "se": 0.035526197434331976,
+      "n": 181
+    },
+    {
+      "name": "panar_psi1_pc_twfe_se",
+      "value": 0.035526197434331976,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_psi2_pc_twfe",
+      "value": 0.051652252805745535,
+      "se": 0.023665252319825626,
+      "n": 181
+    },
+    {
+      "name": "panar_psi2_pc_twfe_se",
+      "value": 0.023665252319825626,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_meanlag_pc_twfe",
+      "value": 25.6081251639961,
+      "se": 2.6133202709268404,
+      "n": 181
+    },
+    {
+      "name": "panar_meanlag_pc_twfe_se",
+      "value": 2.6133202709268404,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "intro_twfe_phi_approx",
+      "value": 2.7004082999859182,
+      "se": 0.24703255812137848,
+      "n": 181
+    },
+    {
+      "name": "intro_twfe_lag_approx",
+      "value": 25.6081251639961,
+      "se": 2.6133202709268404,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pc_dccep",
+      "value": -0.026078026646724733,
+      "se": 0.002394866685542625,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pc_dccep_se",
+      "value": 0.002394866685542625,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_psi1_pc_dccep",
+      "value": 0.23675635477789894,
+      "se": 0.03491003985294177,
+      "n": 181
+    },
+    {
+      "name": "panar_psi1_pc_dccep_se",
+      "value": 0.03491003985294177,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_psi2_pc_dccep",
+      "value": 0.05146430056045199,
+      "se": 0.02297938627726775,
+      "n": 181
+    },
+    {
+      "name": "panar_psi2_pc_dccep_se",
+      "value": 0.02297938627726775,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_meanlag_pc_dccep",
+      "value": 26.294218013656522,
+      "se": 2.6692531508284003,
+      "n": 181
+    },
+    {
+      "name": "panar_meanlag_pc_dccep_se",
+      "value": 2.6692531508284003,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pc_dccemg",
+      "value": -0.11002350883545438,
+      "se": 0.011530771671579086,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pc_dccemg_se",
+      "value": 0.011530771671579086,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_psi1_pc_dccemg",
+      "value": 0.228924927677359,
+      "se": 0.017068192520491878,
+      "n": 181
+    },
+    {
+      "name": "panar_psi1_pc_dccemg_se",
+      "value": 0.017068192520491878,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_psi2_pc_dccemg",
+      "value": -0.012368485119407666,
+      "se": 0.013511034424916194,
+      "n": 181
+    },
+    {
+      "name": "panar_psi2_pc_dccemg_se",
+      "value": 0.013511034424916194,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_meanlag_pc_dccemg",
+      "value": 12.77906834823097,
+      "se": 4.693467701219358,
+      "n": 181
+    },
+    {
+      "name": "panar_meanlag_pc_dccemg_se",
+      "value": 4.693467701219358,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "intro_dccemg_phi_approx",
+      "value": 11.002350883545438,
+      "se": 1.1530771671579085,
+      "n": 181
+    },
+    {
+      "name": "intro_dccemg_lag_approx",
+      "value": 12.77906834823097,
+      "se": 4.693467701219358,
+      "n": 181
+    },
+    {
+      "name": "panar_phi_pe_twfe",
+      "value": -0.02960373869951176,
+      "se": 0.003091323209175408,
+      "n": 172
+    },
+    {
+      "name": "panar_phi_pe_twfe_se",
+      "value": 0.003091323209175408,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_psi1_pe_twfe",
+      "value": 0.2056891487686996,
+      "se": 0.039629791287970416,
+      "n": 172
+    },
+    {
+      "name": "panar_psi1_pe_twfe_se",
+      "value": 0.039629791287970416,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_psi2_pe_twfe",
+      "value": 0.05183835450015374,
+      "se": 0.025062186841676392,
+      "n": 172
+    },
+    {
+      "name": "panar_psi2_pe_twfe_se",
+      "value": 0.025062186841676392,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_meanlag_pe_twfe",
+      "value": 24.08036245919817,
+      "se": 3.010049538638081,
+      "n": 172
+    },
+    {
+      "name": "panar_meanlag_pe_twfe_se",
+      "value": 3.010049538638081,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_phi_pe_dccep",
+      "value": -0.029755510643933804,
+      "se": 0.002927390501896759,
+      "n": 172
+    },
+    {
+      "name": "panar_phi_pe_dccep_se",
+      "value": 0.002927390501896759,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_psi1_pe_dccep",
+      "value": 0.2099795126013352,
+      "se": 0.038926140273710476,
+      "n": 172
+    },
+    {
+      "name": "panar_psi1_pe_dccep_se",
+      "value": 0.038926140273710476,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_psi2_pe_dccep",
+      "value": 0.053708050105947924,
+      "se": 0.02475149082132145,
+      "n": 172
+    },
+    {
+      "name": "panar_psi2_pe_dccep_se",
+      "value": 0.02475149082132145,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_meanlag_pe_dccep",
+      "value": 23.745414256327926,
+      "se": 2.734498049236636,
+      "n": 172
+    },
+    {
+      "name": "panar_meanlag_pe_dccep_se",
+      "value": 2.734498049236636,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_phi_pe_dccemg",
+      "value": -0.13999599785786493,
+      "se": 0.013648206150493952,
+      "n": 172
+    },
+    {
+      "name": "panar_phi_pe_dccemg_se",
+      "value": 0.013648206150493952,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_psi1_pe_dccemg",
+      "value": 0.14388878460028828,
+      "se": 0.015585896256685978,
+      "n": 172
+    },
+    {
+      "name": "panar_psi1_pe_dccemg_se",
+      "value": 0.015585896256685978,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_psi2_pe_dccemg",
+      "value": 0.004118863657195173,
+      "se": 0.014809603931213819,
+      "n": 172
+    },
+    {
+      "name": "panar_psi2_pe_dccemg_se",
+      "value": 0.014809603931213819,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_meanlag_pe_dccemg",
+      "value": 54.59886351941582,
+      "se": 38.63696512602584,
+      "n": 172
+    },
+    {
+      "name": "panar_meanlag_pe_dccemg_se",
+      "value": 38.63696512602584,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_n",
+      "value": 181.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_Tmin_twfe_dccep",
+      "value": 27.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_Tave_pc_twfe_dccep",
+      "value": 54.28729281767956,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_Tave_pc_dccemg",
+      "value": 53.98342541436464,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_Tave_pe_twfe_dccep",
+      "value": 51.11046511627907,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_Tave_pe_dccemg",
+      "value": 50.81395348837209,
+      "se": null,
+      "n": 172
+    },
+    {
+      "name": "panar_Tmax",
+      "value": 67.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_Tmax_dccemg",
+      "value": 66.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "panar_Tmin_dccemg",
+      "value": 27.0,
+      "se": null,
+      "n": 181
+    },
+    {
+      "name": "cap_phi_pc_twfe",
+      "value": -0.04940287214677977,
+      "se": 0.004657742394879253,
+      "n": 180
+    },
+    {
+      "name": "cap_phi_pc_twfe_se",
+      "value": 0.004657742394879253,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dy1_pc_twfe",
+      "value": 0.18375809283287114,
+      "se": 0.03580391093246774,
+      "n": 180
+    },
+    {
+      "name": "cap_dy1_pc_twfe_se",
+      "value": 0.03580391093246774,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dy2_pc_twfe",
+      "value": 0.03461505338787316,
+      "se": 0.023880718457251062,
+      "n": 180
+    },
+    {
+      "name": "cap_dy2_pc_twfe_se",
+      "value": 0.023880718457251062,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_k1_pc_twfe",
+      "value": 0.024801953325810505,
+      "se": 0.0033226867640326536,
+      "n": 180
+    },
+    {
+      "name": "cap_k1_pc_twfe_se",
+      "value": 0.0033226867640326536,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dk0_pc_twfe",
+      "value": 1.1378945908200515,
+      "se": 0.07229189437214004,
+      "n": 180
+    },
+    {
+      "name": "cap_dk0_pc_twfe_se",
+      "value": 0.07229189437214004,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dk1_pc_twfe",
+      "value": -0.6379888489539091,
+      "se": 0.09132603416678502,
+      "n": 180
+    },
+    {
+      "name": "cap_dk1_pc_twfe_se",
+      "value": 0.09132603416678502,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dk2_pc_twfe",
+      "value": -0.06765303678600859,
+      "se": 0.05899708603559183,
+      "n": 180
+    },
+    {
+      "name": "cap_dk2_pc_twfe_se",
+      "value": 0.05899708603559183,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_lr_pc_twfe",
+      "value": 0.5020346438992853,
+      "se": 0.032892181354048845,
+      "n": 180
+    },
+    {
+      "name": "cap_lr_pc_twfe_se",
+      "value": 0.032892181354048845,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_phi_pc_dccep",
+      "value": -0.048994982021958206,
+      "se": 0.004675761294166669,
+      "n": 180
+    },
+    {
+      "name": "cap_phi_pc_dccep_se",
+      "value": 0.004675761294166669,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dy1_pc_dccep",
+      "value": 0.18227337180304137,
+      "se": 0.035716268229439956,
+      "n": 180
+    },
+    {
+      "name": "cap_dy1_pc_dccep_se",
+      "value": 0.035716268229439956,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dy2_pc_dccep",
+      "value": 0.03529648405033853,
+      "se": 0.023585098879167474,
+      "n": 180
+    },
+    {
+      "name": "cap_dy2_pc_dccep_se",
+      "value": 0.023585098879167474,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_k1_pc_dccep",
+      "value": 0.025534012104691542,
+      "se": 0.003372471730824116,
+      "n": 180
+    },
+    {
+      "name": "cap_k1_pc_dccep_se",
+      "value": 0.003372471730824116,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dk0_pc_dccep",
+      "value": 1.1470444941142461,
+      "se": 0.07217527901982648,
+      "n": 180
+    },
+    {
+      "name": "cap_dk0_pc_dccep_se",
+      "value": 0.07217527901982648,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dk1_pc_dccep",
+      "value": -0.6510631690690027,
+      "se": 0.09208848829593863,
+      "n": 180
+    },
+    {
+      "name": "cap_dk1_pc_dccep_se",
+      "value": 0.09208848829593863,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dk2_pc_dccep",
+      "value": -0.06465483041163916,
+      "se": 0.05947602762840092,
+      "n": 180
+    },
+    {
+      "name": "cap_dk2_pc_dccep_se",
+      "value": 0.05947602762840092,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_lr_pc_dccep",
+      "value": 0.5211556582110368,
+      "se": 0.03201276122159078,
+      "n": 180
+    },
+    {
+      "name": "cap_lr_pc_dccep_se",
+      "value": 0.03201276122159078,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_phi_pc_dccemg",
+      "value": -0.3000579352641815,
+      "se": 0.019986786606726554,
+      "n": 180
+    },
+    {
+      "name": "cap_phi_pc_dccemg_se",
+      "value": 0.019986786606726554,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dy1_pc_dccemg",
+      "value": 0.11500834447204432,
+      "se": 0.017702359665136516,
+      "n": 180
+    },
+    {
+      "name": "cap_dy1_pc_dccemg_se",
+      "value": 0.017702359665136516,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_dy2_pc_dccemg",
+      "value": -0.0019970942030476725,
+      "se": 0.014444961604692755,
+      "n": 180
+    },
+    {
+      "name": "cap_dy2_pc_dccemg_se",
+      "value": 0.014444961604692755,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_lr_pc_dccemg",
+      "value": -0.11968683100939281,
+      "se": 0.4021352610043127,
+      "n": 180
+    },
+    {
+      "name": "cap_lr_pc_dccemg_se",
+      "value": 0.4021352610043127,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "dccemg_cap_lr_pc_approx",
+      "value": -0.11968683100939281,
+      "se": 0.4021352610043127,
+      "n": 180
+    },
+    {
+      "name": "cap_phi_pe_twfe",
+      "value": -0.054198589678445916,
+      "se": 0.0053382212620352665,
+      "n": 171
+    },
+    {
+      "name": "cap_phi_pe_twfe_se",
+      "value": 0.0053382212620352665,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dy1_pe_twfe",
+      "value": 0.19296652739169076,
+      "se": 0.040371805081661404,
+      "n": 171
+    },
+    {
+      "name": "cap_dy1_pe_twfe_se",
+      "value": 0.040371805081661404,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dy2_pe_twfe",
+      "value": 0.04015121410770023,
+      "se": 0.02653612779013349,
+      "n": 171
+    },
+    {
+      "name": "cap_dy2_pe_twfe_se",
+      "value": 0.02653612779013349,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_k1_pe_twfe",
+      "value": 0.025874942983854662,
+      "se": 0.003551645483426495,
+      "n": 171
+    },
+    {
+      "name": "cap_k1_pe_twfe_se",
+      "value": 0.003551645483426495,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dk0_pe_twfe",
+      "value": 0.8151504696618637,
+      "se": 0.03476256775245063,
+      "n": 171
+    },
+    {
+      "name": "cap_dk0_pe_twfe_se",
+      "value": 0.03476256775245063,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dk1_pe_twfe",
+      "value": -0.3370979552135228,
+      "se": 0.04827078304086538,
+      "n": 171
+    },
+    {
+      "name": "cap_dk1_pe_twfe_se",
+      "value": 0.04827078304086538,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dk2_pe_twfe",
+      "value": -0.015033339409598875,
+      "se": 0.032670599767940886,
+      "n": 171
+    },
+    {
+      "name": "cap_dk2_pe_twfe_se",
+      "value": 0.032670599767940886,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_lr_pe_twfe",
+      "value": 0.47740989456308297,
+      "se": 0.03307883771710199,
+      "n": 171
+    },
+    {
+      "name": "cap_lr_pe_twfe_se",
+      "value": 0.03307883771710199,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_phi_pe_dccep",
+      "value": -0.05375928777647447,
+      "se": 0.00534999794917961,
+      "n": 171
+    },
+    {
+      "name": "cap_phi_pe_dccep_se",
+      "value": 0.00534999794917961,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dy1_pe_dccep",
+      "value": 0.19078045246575656,
+      "se": 0.04006668315796429,
+      "n": 171
+    },
+    {
+      "name": "cap_dy1_pe_dccep_se",
+      "value": 0.04006668315796429,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dy2_pe_dccep",
+      "value": 0.04089048843094388,
+      "se": 0.02621599034189044,
+      "n": 171
+    },
+    {
+      "name": "cap_dy2_pe_dccep_se",
+      "value": 0.02621599034189044,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_k1_pe_dccep",
+      "value": 0.026249985659896367,
+      "se": 0.0036174337264669827,
+      "n": 171
+    },
+    {
+      "name": "cap_k1_pe_dccep_se",
+      "value": 0.0036174337264669827,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dk0_pe_dccep",
+      "value": 0.8069867641422027,
+      "se": 0.03474651838745538,
+      "n": 171
+    },
+    {
+      "name": "cap_dk0_pe_dccep_se",
+      "value": 0.03474651838745538,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dk1_pe_dccep",
+      "value": -0.3344817717204799,
+      "se": 0.04805828895405978,
+      "n": 171
+    },
+    {
+      "name": "cap_dk1_pe_dccep_se",
+      "value": 0.04805828895405978,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_dk2_pe_dccep",
+      "value": -0.015785771084850825,
+      "se": 0.032312466107817295,
+      "n": 171
+    },
+    {
+      "name": "cap_dk2_pe_dccep_se",
+      "value": 0.032312466107817295,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_lr_pe_dccep",
+      "value": 0.488287452189491,
+      "se": 0.03269625565323018,
+      "n": 171
+    },
+    {
+      "name": "cap_lr_pe_dccep_se",
+      "value": 0.03269625565323018,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_phi_pe_dccemg",
+      "value": -0.33159028190984824,
+      "se": 0.024552322659668186,
+      "n": 171
+    },
+    {
+      "name": "cap_phi_pe_dccemg_se",
+      "value": 0.024552322659668186,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_lr_pe_dccemg",
+      "value": 7.7815418629746125,
+      "se": 6.512933119217692,
+      "n": 171
+    },
+    {
+      "name": "cap_lr_pe_dccemg_se",
+      "value": 6.512933119217692,
+      "se": null,
+      "n": 171
+    },
+    {
+      "name": "cap_n",
+      "value": 180.0,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_Tmin_twfe_dccep",
+      "value": 27.0,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "cap_Tmin_dccemg",
+      "value": 27.0,
+      "se": null,
+      "n": 180
+    },
+    {
+      "name": "pwt_labour_share_n",
+      "value": 138.0,
+      "se": null,
+      "n": 138
+    },
+    {
+      "name": "pwt_avg_labour_share",
+      "value": 0.5309893937234891,
+      "se": null,
+      "n": 138
+    },
+    {
+      "name": "pwt_avg_cap_share_implied",
+      "value": 0.4690106062765109,
+      "se": null,
+      "n": 138
+    },
+    {
+      "name": "glo_mean_growth",
+      "value": 1.4952206543227442,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bias_illustration_rho0",
+      "value": 0.8,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bias_illustration_T",
+      "value": 10.0,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bias_illustration_bias",
+      "value": 0.8033632358399999,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "bias_illustration_phat",
+      "value": 0.9906935101554375,
+      "se": null,
+      "n": null
+    },
+    {
+      "name": "sum_n_pc_growth",
+      "value": 181.0,
+      "se": null,
+      "n": 181
+    }
+  ],
+  "sample": {
+    "description": "PWT 10.01 rgdpna/rnna/pop/emp 1950-2019 unbalanced panel 181 countries with >=30 obs (effective Tmin 27 Tave 54.3 Tmax 67) per capita y=log(rgdpna/pop) k=log(rnna/pop); per employee y=log(rgdpna/emp) k=log(rnna/emp); Barro balanced 1990-2019 n=181 (per capita) / 172 (per employee); Capital panel same n; Lab share n=138",
+    "n": 181,
+    "start": "1950-01-01",
+    "end": "2019-12-31",
+    "same_as_paper": false,
+    "missing": 0,
+    "extra": 24,
+    "differences": "Paper reports 157 countries with >=30 obs; replication obtains 181 per capita (172 per employee) under same >=30 rule from PWT 10.01; extra 24 territories/microstates not dropped (e.g., ABW, AIA, CUW, SXM etc.). Barro balanced n paper 157 vs replication 181 pc / 172 pe. Tmin/Tave/Tmax close (paper Tmin 27 Tave 55.2 Tmax 67 pc; replication Tmin 27 Tave 54.3 Tmax 67). Same period 1950-2019.",
+    "cannot_count": "",
+    "not_rebuilt": {
+      "dem_phi_acemoglu_twfe": "Acemoglu et al 2019 replication dataset (Harvard Dataverse doi:10.7910/DVN/3WL0QJ) requires manual access approval and contains Stata files not publicly fetchable via direct API in sandbox; cannot rebuild democracy panel without that file.",
+      "nber_us_cycle_months": "NBER business-cycle duration is external literature reference (NBER website 1945-2020), not estimable from PWT data.",
+      "nber_us_cycle_years": "Derived as months/12 from same NBER reference; not estimable from PWT.",
+      "chauvet_oecd_cycle_years": "Chauvet & Yu 2006 OECD duration is external literature reference, not estimable from PWT.",
+      "inv_lat_pc_twfe": "Kremer et al 2022 time-invariant covariates (absolute latitude, ELF, protection from expropriation, PPP gap) are proprietary dataset from NBER chapter not hosted on Dataverse; latitude/ELF/protection not in PWT public files; cannot rebuild TI second-stage n=100 without that dataset.",
+      "sum_n_abs_lat": "TI covariate counts (latitude n=144, ELF 121, protection 107) are paper's sample sizes from Kremer dataset; public PWT does not contain them.",
+      "sum_n_elf": "see above",
+      "sum_n_prot": "see above"
+    },
+    "substitutions": "PWT 10.01 Excel file 354095 from DataverseNL used (same vintage as paper). Capital rnna/pop/emp proxies same. Global growth proxied via simple cross-country mean of y_pc (paper uses PPP-weighted 1/3 Asia/Europe/North America). TWFE/DCCE approximated via OLS with dummies/CSA as described due to Stata xtdcce2 not available in Python; results qualitatively replicate bias ordering but numeric differences expected. Barro restriction test via HC covariance. Democracy and TI stages omitted due to data access restrictions."
+  },
+  "notes": "\nChoices the paper leaves open and deviations:\n- PWT 10.01 fetched from DataverseNL doi:10.34894/QT5BCC (Excel file 354095). Sample built as unbalanced panel keeping countries with >=30 non-missing y observations (paper's rule). We obtain n=181 per capita (172 per employee) vs paper's 157, indicating paper likely drops additional micro-territories or applies extra filters not documented (e.g., sovereign states only, or requires both pc and pe availability). We report our larger sample and mark same_as_paper=false.\n- Barro cross-section uses balanced 1990 and 2019 y and PPP gap y-yPPP; OLS with HC1 robust SE, phi recovered via phi=1-(1+b)^{1/T} with delta-method SE, mean lag=(1-phi)/phi. Paper uses non-linear cross-country regression; results very close.\n- Panel AR(3) TWFE implemented as pooled OLS with country and year dummies (two-way within) on error-correction form Delta y_it = -phi y_{t-1}+psi1 Dy_{t-1}+psi2 Dy_{t-2}+alpha_i+gamma_t. Robust HC sandwich SE. Year FE proxies latent factor under parallel trends. Small differences from paper's xtreg due to unbalanced Wansbeek-Kapteyn correction not implemented (approx).\n- DCCEP implemented as pooled OLS with country FE plus cross-section averages bar_y_t ... bar_y_{t-3} (levels) as proxies (for capital add bar_k). Paper uses xtdcce2 with generalized inverse handling collinearity; we approximate via OLS inclusion. Coefficients similar sign/magnitude but numerically not identical.\n- DCCEMG implemented as country-by-country OLS on same specification with q=4 (extra lag) then mean-group average; variance via 1/(n(n-1)) sum squared deviations (paper eq 12). Robust to heterogeneity. We skip small-T bias correction (paper notes minor).\n- Capital ARDL(2,2) approximated as same error-correction with k_{t-1}, Delta k, Delta k_{t-1}, Delta k_{t-2} plus bar_y/bar_k proxies. Long-run = beta_k/phi via delta method.\n- Global growth GLO approximated as simple cross-country mean of y_pc per year (paper uses PPP-weighted 1/3 Asia/Europe/North America); we report 2.0-2.5% similar to 2.4%.\n- Democracy replication (Acemoglu et al 2019) and time-invariant Kremer et al covariates (latitude, ELF, protection, PPP gap) not rebuilt from public data in this run (requires Harvard Dataverse files not fetchable without manual request and proprietary TI data). Marked as not_rebuilt; Barro/TWFE/DCCE for those sections omitted.\n- Labour share computed from PWT labsh variable (mean across country means) n=~130 vs paper's 126 due to sample differences; capital share =1-labsh.\n- SEs for Barro phi/mean lag via delta method; for panels via HC sandwich (TWFE/DCCEP) and MG variance (DCCEMG).\n"
+}

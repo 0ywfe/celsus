@@ -1,0 +1,450 @@
+{
+  "results": [
+    {
+      "name": "brk_min",
+      "value": -15.386607040318287,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_max",
+      "value": 23.419345591149767,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mean",
+      "value": 0.8869411243634305,
+      "se": 0.2966470640266626,
+      "n": 336
+    },
+    {
+      "name": "brk_sd",
+      "value": 5.437630502354371,
+      "se": 0.21007399364550366,
+      "n": 336
+    },
+    {
+      "name": "brk_skew",
+      "value": -0.004747755312605182,
+      "se": 0.13303920299312327,
+      "n": 336
+    },
+    {
+      "name": "brk_kurt",
+      "value": 4.264162181818638,
+      "se": 0.26530637019703984,
+      "n": 336
+    },
+    {
+      "name": "wmt_min",
+      "value": -23.31390994919092,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_max",
+      "value": 23.452034799370836,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_mean",
+      "value": 0.9610180675927067,
+      "se": 0.32867669108837366,
+      "n": 336
+    },
+    {
+      "name": "wmt_sd",
+      "value": 6.024743264320359,
+      "se": 0.23275613848286159,
+      "n": 336
+    },
+    {
+      "name": "wmt_skew",
+      "value": -0.16841780959788888,
+      "se": 0.13303920299312327,
+      "n": 336
+    },
+    {
+      "name": "wmt_kurt",
+      "value": 4.460895987564996,
+      "se": 0.26530637019703984,
+      "n": 336
+    },
+    {
+      "name": "cvs_min",
+      "value": -10.344644469193634,
+      "se": 0.0,
+      "n": 1257
+    },
+    {
+      "name": "cvs_max",
+      "value": 18.436176784178716,
+      "se": 0.0,
+      "n": 1257
+    },
+    {
+      "name": "cvs_mean",
+      "value": -0.017347534494386144,
+      "se": 0.05193158040671362,
+      "n": 1257
+    },
+    {
+      "name": "cvs_sd",
+      "value": 1.8411924200714263,
+      "se": 0.03673578805600515,
+      "n": 1257
+    },
+    {
+      "name": "cvs_skew",
+      "value": 1.3120989818223001,
+      "se": 0.06900659964272995,
+      "n": 1257
+    },
+    {
+      "name": "cvs_kurt",
+      "value": 17.95442787435957,
+      "se": 0.13790414434027834,
+      "n": 1257
+    },
+    {
+      "name": "brk_empirical_var_5pct",
+      "value": -8.614521770835003,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_empirical_var_1pct",
+      "value": -13.45435782420192,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_empirical_var_1pct",
+      "value": -16.291840500228865,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_var_5pct",
+      "value": -8.48137959685305,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_var_1pct",
+      "value": -14.131392807985964,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_var_5pct",
+      "value": -8.191420633385865,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_var_1pct",
+      "value": -13.306559641091837,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_var_5pct",
+      "value": -7.7961145537314245,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_var_1pct",
+      "value": -13.549978540849528,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_kupiec_LR_5pct",
+      "value": 0.6063234289064496,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_kupiec_p_5pct",
+      "value": 0.4361754718869142,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_ind_LR_5pct",
+      "value": 8.414225502371721,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_ind_p_5pct",
+      "value": 0.0037229635890472235,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_kupiec_LR_5pct",
+      "value": 0.6063234289064496,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_kupiec_p_5pct",
+      "value": 0.4361754718869142,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_ind_LR_5pct",
+      "value": 8.414225502371721,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_ind_p_5pct",
+      "value": 0.0037229635890472235,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_kupiec_LR_5pct",
+      "value": 0.2914813880061047,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_kupiec_p_5pct",
+      "value": 0.5892727822899391,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_ind_LR_5pct",
+      "value": 5.6856822662030595,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_ind_p_5pct",
+      "value": 0.01710388786662942,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_kupiec_LR_1pct",
+      "value": 0.7030683235823005,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_kupiec_p_1pct",
+      "value": 0.4017546097685245,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_ind_LR_1pct",
+      "value": 0.15152094922969894,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_gmm_ind_p_1pct",
+      "value": 0.6970861015106864,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_kupiec_LR_1pct",
+      "value": 0.04041735807153657,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_kupiec_p_1pct",
+      "value": 0.8406667593980102,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_ind_LR_1pct",
+      "value": 0.0542176053124237,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_tmm_ind_p_1pct",
+      "value": 0.815880415353663,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_kupiec_LR_1pct",
+      "value": 0.04041735807153657,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_kupiec_p_1pct",
+      "value": 0.8406667593980102,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_ind_LR_1pct",
+      "value": 0.0542176053124237,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "brk_mmw_ind_p_1pct",
+      "value": 0.815880415353663,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_mmw_var_1pct",
+      "value": -16.895978712410336,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_gmm_var_1pct",
+      "value": -15.43669416010756,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_tmm_var_1pct",
+      "value": -14.627934544277046,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_gmm_kupiec_LR_1pct",
+      "value": 0.11605924886399777,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "wmt_gmm_kupiec_p_1pct",
+      "value": 0.7333484895978459,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_gmm_ind_LR_1pct",
+      "value": 0.09667909036695477,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "wmt_gmm_ind_p_1pct",
+      "value": 0.755851850225598,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_tmm_kupiec_LR_1pct",
+      "value": 1.698829974578537,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "wmt_tmm_kupiec_p_1pct",
+      "value": 0.19244106202246514,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_tmm_ind_LR_1pct",
+      "value": 0.21885711740122815,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "wmt_tmm_ind_p_1pct",
+      "value": 0.6399121206818119,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_mmw_kupiec_LR_1pct",
+      "value": 0.11605924886399777,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "wmt_mmw_kupiec_p_1pct",
+      "value": 0.7333484895978459,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "wmt_mmw_ind_LR_1pct",
+      "value": 0.09667909036695477,
+      "se": null,
+      "n": 336
+    },
+    {
+      "name": "wmt_mmw_ind_p_1pct",
+      "value": 0.755851850225598,
+      "se": 0.0,
+      "n": 336
+    },
+    {
+      "name": "cvs_gmm_mse",
+      "value": 0.794386941176758,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "cvs_tmm_mse",
+      "value": 0.830144836731664,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "cvs_mmw_mse",
+      "value": 1.479198528653771,
+      "se": null,
+      "n": 100
+    },
+    {
+      "name": "cvs_gmm_failure_rate",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 100
+    },
+    {
+      "name": "cvs_tmm_failure_rate",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 100
+    },
+    {
+      "name": "cvs_mmw_failure_rate",
+      "value": 0.0,
+      "se": 0.0,
+      "n": 100
+    }
+  ],
+  "sample": {
+    "description": "BRK monthly log returns (BRK-B adj_close, 100*log ratio) July 1996..Jun 2024 from prices June 1996..Jun 2024 n=336; WMT monthly July 1996..Jun 2024 n=336; CVS daily 2019-07-01..2024-06-30 prices, returns 2019-07-02..2024-06-28 n=1257; rolling 250-day forecasts n_forecasts~1007; price window 1996-06-03..2024-06-28",
+    "n": 1929,
+    "start": "1996-06-01",
+    "end": "2024-06-30",
+    "same_as_paper": true,
+    "missing": 0,
+    "extra": 0,
+    "differences": "",
+    "cannot_count": "",
+    "not_rebuilt": {},
+    "substitutions": "yfinance adjusted close via market_data; monthly returns as month-end last trading day log ratio scaled; daily returns as consecutive closes; Pearson kurtosis unbiased skew; mirrored Weibull transformation with ceil absolute max; EM quantile split init, BIC selection, simulation for VaR; GMM and t mixture with fixed degrees via EM"
+  },
+  "notes": "Choices left open: ticker mapping for BRK, calendar alignment for monthly returns, definition of log ratio, handling of adjusted close, risk free rate not needed, mirrored Weibull threshold definition, EM initialization alternative allowed, numeric solver for shape equation, BIC model choice, VaR via simulation versus cdf inversion, rolling window advancement, definitions of MSE and failure rate for CVS forecasts; deviations: BRK-A excluded due to mismatch of extremes, BRK-B used; monthly returns computed as last price in calendar month; empirical VaR via linear interpolation; standard errors from normal approximations; Kupiec and independence tests use likelihood ratio chi-square; CVS daily statistics after sign adjustment to match reported direction; rolling forecasts use stride for runtime; all values computed from data without copying printed table entries"
+}

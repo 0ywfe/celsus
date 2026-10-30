@@ -1,0 +1,59 @@
+exit 0 in 141.6s
+--- stdout
+market_data 000001.SS rows 2454
+market_data 399001.SZ rows 2453
+market_data 159915.SZ rows 2455
+Fetching SSE 1.000001 ...
+SSE klines 2457 rets 2456 2013-02-26 to 2023-03-31
+Fetching SZI 0.399001 ...
+SZI klines 2457 rets 2456 2013-02-26 to 2023-03-31
+Fetching ChiNext 0.399006 ...
+ChiNext klines 2457 rets 2456 2013-02-26 to 2023-03-31
+Fetching CSIConsumer 1.000932 ...
+CSIConsumer klines 2457 rets 2456 2013-02-26 to 2023-03-31
+Fetching CSIHealthcare 1.000933 ...
+CSIHealthcare klines 2457 rets 2456 2013-02-26 to 2023-03-31
+Fetching CSIFinRE 1.000934 ...
+CSIFinRE klines 2457 rets 2456 2013-02-26 to 2023-03-31
+SSE {'n': 2456, 'mean': np.float64(0.023193912970330143), 'std': np.float64(1.3145898058151435), 'min': np.float64(-8.490652100782835), 'median': np.float64(0.0507722038108005), 'max': np.float64(5.763588513881479), 'skew': np.float64(-0.9185302233020459), 'kurt': np.float64(6.7658673463680366)}
+SZI {'n': 2456, 'mean': np.float64(0.02270094012875636), 'std': np.float64(1.597585990618978), 'min': np.float64(-8.446343815238855), 'median': np.float64(0.03774579381650156), 'max': np.float64(6.45390444966587), 'skew': np.float64(-0.6832043808200248), 'kurt': np.float64(3.762614109881388)}
+ChiNext {'n': 2456, 'mean': np.float64(0.06116826175508624), 'std': np.float64(1.94282227331107), 'min': np.float64(-8.909736213424491), 'median': np.float64(0.05539383474258974), 'max': np.float64(7.159149068737625), 'skew': np.float64(-0.38052492790584574), 'kurt': np.float64(2.0415069439945355)}
+CSIConsumer {'n': 2456, 'mean': np.float64(0.0690476144037773), 'std': np.float64(1.645705770273323), 'min': np.float64(-8.324896921822855), 'median': np.float64(0.0629733839638158), 'max': np.float64(7.21409413183447), 'skew': np.float64(-0.36421791084387534), 'kurt': np.float64(2.7700169853235965)}
+CSIHealthcare {'n': 2456, 'mean': np.float64(0.03516735937563119), 'std': np.float64(1.6576937863241457), 'min': np.float64(-8.483586746685212), 'median': np.float64(0.06682102735467987), 'max': np.float64(7.9088919628441445), 'skew': np.float64(-0.39479481814168194), 'kurt': np.float64(2.6749188807886513)}
+CSIFinRE {'n': 2456, 'mean': np.float64(0.021674904007634343), 'std': np.float64(1.555096568335497), 'min': np.float64(-9.363204094233579), 'median': np.float64(-0.03558708765264429), 'max': np.float64(8.91808978264148), 'skew': np.float64(-0.08457590555977595), 'kurt': np.float64(5.190223677315172)}
+train 2087 val 369 total 2456
+SSE q10 -1.25745 q90 1.40125
+SZI q10 -1.66201 q90 1.81808
+ChiNext q10 -2.09174 q90 2.38404
+CSIConsumer sector q10 -1.74519 q90 1.99227
+CSIHealthcare sector q10 -1.86622 q90 1.94619
+CSIFinRE sector q10 -1.48086 q90 1.70459
+Fitting SSE events 492 T 2456
+SSE omega 0.05 fun 1537.2631623672723 x [0.01069848 0.03176449 0.47402505 0.42058266 0.24900374 0.43504843] success True
+Fitting SZI events 492 T 2456
+SZI omega 0.05 fun 1560.1532432701108 x [0.01750484 0.03223105 0.38082417 0.4456731  0.23998522 0.4392861 ] success True
+Fitting ChiNext events 492 T 2456
+ChiNext omega 0.05 fun 1553.9803172088707 x [0.01141883 0.03158    0.43213753 0.45444561 0.32029261 0.36485426] success True
+available periods 16 trading_days_per_period 150 total_rets 2456
+Period 3 events 172 T 150 start_ret 450 dates 2015-01-05 to 2015-08-12
+Period 5 events 45 T 150 start_ret 750 dates 2016-03-29 to 2016-11-08
+Fit period 3 fun 415.02011936964095 omega 0.15384847485384842 success False message STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+Fit period 5 fun 159.1295052214568 omega 0.2636580626219851 success False message STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+period3 mu [0.42116393 0.32645684 0.62934337 0.11304987 0.19199737 0.50468564] omega 0.15384847485384842
+period5 mu [0.10475746 0.09628154 0.06722368 0.09944575 0.09288799 0.0100557 ] omega 0.2636580626219851
+train_end_idx 2213 test_start_idx 2191 total klines 2457
+T_train 2213 T_test 266
+train events 454 test events 44
+lambda_train {0: np.float64(0.1034794396746498), 1: np.float64(0.1016719385449616)} lambda_test {0: np.float64(0.07142857142857142), 1: np.float64(0.09398496240601503)}
+Wrote 170 results
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

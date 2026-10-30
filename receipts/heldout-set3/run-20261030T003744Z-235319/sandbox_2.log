@@ -1,0 +1,79 @@
+exit 0 in 51.7s
+--- stdout
+=== Probing empirical data source: FRED-QD ===
+FRED-QD fetch status 200 bytes 529405
+FRED-QD shape (272, 246) columns 246 rows 272
+Columns sample: ['sasdate', 'GDPC1', 'PCECC96', 'PCDGx', 'PCESVx', 'PCNDx', 'GPDIC1', 'FPIx', 'Y033RC1Q027SBEAx', 'PNFIx', 'PRFIx', 'A014RE1Q156NBEA', 'GCEC1', 'A823RL1Q225SBEA', 'FGRECPTx']
+Last columns: ['TNWMVBSNNCBBDIx', 'TLBSNNBx', 'TLBSNNBBDIx', 'TABSNNBx', 'TNWBSNNBx', 'TNWBSNNBBDIx', 'CNCFx', 'S&P 500', 'S&P div yield', 'S&P PE ratio']
+Date column: ['factors', 'transform', '3/1/1959'] ... ['12/1/2025', '3/1/2026', '6/1/2026']
+Key vars found: ['GDPC1', 'INDPRO', 'PAYEMS', 'UNRATE', 'HOUST', 'PERMIT', 'CPIAUCSL', 'TB3MS', 'GS10', 'DRIWCIL', 'CLAIMSx', 'PERMITS']
+CLAIMS-like: ['CLAIMSx']
+PERMIT-like: ['PERMIT', 'PERMITNE', 'PERMITMW', 'PERMITS', 'PERMITW']
+Appendix zip status 200 len 291189
+UNRATE single-series status 200 bytes 14211 FRED-QD accessible: YES
+
+=== Probing DGPs ===
+DGP Linear: E[f] approx 0.005 sample [-0.0296552  -0.87426277]
+DGP Product-Log: E[f] approx 1.336 sample [1.00678305 1.3623624 ]
+DGP Mixture: E[f] approx 3.504 sample [4.60811347 1.13544748]
+DGP Friedman1: E[f] approx 14.455 sample [15.05928769 12.33129263]
+DGP Trig-Log: E[f] approx 0.004 sample [-0.79714894 -0.68464291]
+DGP SoftRadial: E[f] approx 0.308 sample [0.26828651 0.42027888]
+DGP StepUcurve: E[f] approx 3.596 sample [3.15107514 2.86399768]
+DGP RotatedSine: E[f] approx -0.051 sample [ 0.98404374 -0.57894191]
+
+=== Model smoke test ===
+OLS pred mean -0.220
+RF pred mean -0.086
+LGB pred mean -0.176
+LGB+ pred mean -0.170
+LGBA+ pred mean -0.127
+
+Linear N=250 SNR=0.5 OLS: mean=0.313 sd=0.028 se=0.009
+Linear N=250 SNR=0.5 RF: mean=0.261 sd=0.026 se=0.008
+Linear N=250 SNR=0.5 LGB: mean=0.228 sd=0.042 se=0.013
+Linear N=250 SNR=0.5 LGB+: mean=0.291 sd=0.032 se=0.010
+Linear N=250 SNR=0.5 LGBA+: mean=0.252 sd=0.035 se=0.011
+Linear N=250 SNR=1.0 OLS: mean=0.484 sd=0.023 se=0.007
+Linear N=250 SNR=1.0 LGBA+: mean=0.436 sd=0.027 se=0.008
+Trig-Log N=250 SNR=0.5 OLS: mean=0.004 sd=0.019 se=0.006
+Trig-Log N=250 SNR=0.5 RF: mean=0.098 sd=0.024 se=0.008
+Trig-Log N=250 SNR=0.5 LGBA+: mean=0.066 sd=0.045 se=0.014
+SoftRadial N=250 SNR=0.5 OLS: mean=-0.030 sd=0.022 se=0.007
+SoftRadial N=250 SNR=0.5 LGBA+: mean=0.153 sd=0.018 se=0.006
+RotatedSine N=250 SNR=0.5 RF: mean=0.106 sd=0.023 se=0.007
+
+=== Empirical demo: AR(4) vs simple LGBA+ proxy on INDPRO ===
+sasdate head ['factors', 'transform', '3/1/1959', '6/1/1959', '9/1/1959']
+sasdate tail ['6/1/2025', '9/1/2025', '12/1/2025', '3/1/2026', '6/1/2026']
+sasdate unique sample <ArrowStringArray>
+[  'factors', 'transform',  '3/1/1959',  '6/1/1959',  '9/1/1959', '12/1/1959',
+  '3/1/1960',  '6/1/1960',  '9/1/1960', '12/1/1960']
+Length: 10, dtype: str
+Available targets: ['INDPRO', 'GDPC1', 'UNRATE', 'HOUST', 'CPIAUCSL', 'CPILFESL']
+           INDPRO    INDPRO_g
+count  272.000000  271.000000
+mean    67.928506         inf
+std     27.419764         NaN
+min      0.000000   -0.134380
+25%     45.147375   -0.000396
+50%     63.297750    0.006744
+75%     96.885100    0.014320
+max    104.049100         inf
+Valid INDPRO_g rows 271 from transform to 6/1/2026
+Wrote /work/results.json with 38 results
+{'name': 'sim_Linear_N250_SNR0p5_OLS_R2', 'value': 0.31315242532763166, 'se': 0.008916684447550526, 'n': 1000}
+{'name': 'sim_Linear_N250_SNR0p5_RF_R2', 'value': 0.2605817646527598, 'se': 0.00820810867310857, 'n': 1000}
+{'name': 'sim_Linear_N250_SNR0p5_LGB_R2', 'value': 0.22828939178253008, 'se': 0.013152972149142876, 'n': 1000}
+{'name': 'sim_Linear_N250_SNR0p5_LGBplus_R2', 'value': 0.2913947473410617, 'se': 0.010132307839870241, 'n': 1000}
+{'name': 'sim_Linear_N250_SNR0p5_LGBAplus_R2', 'value': 0.2518680698234284, 'se': 0.011044925097935704, 'n': 1000}
+{'name': 'sim_Linear_N250_SNR1_OLS_R2', 'value': 0.48359924820736533, 'se': 0.007412311624426918, 'n': 1000}
+{'name': 'sim_Linear_N250_SNR1_LGBAplus_R2', 'value': 0.43608376714844194, 'se': 0.008464524691127281, 'n': 1000}
+{'name': 'sim_TrigLog_N250_SNR0p5_OLS_R2', 'value': 0.004141136545970614, 'se': 0.0060776694221620665, 'n': 1000}
+{'name': 'sim_TrigLog_N250_SNR0p5_RF_R2', 'value': 0.09824785931236091, 'se': 0.0076698597860304606, 'n': 1000}
+{'name': 'sim_TrigLog_N250_SNR0p5_LGBAplus_R2', 'value': 0.06595286270828327, 'se': 0.014333457896710205, 'n': 1000}
+{'name': 'sim_SoftRadial_N250_SNR0p5_OLS_R2', 'value': -0.029895375079458365, 'se': 0.007040597853777562, 'n': 1000}
+{'name': 'sim_SoftRadial_N250_SNR0p5_LGBAplus_R2', 'value': 0.15291570591270284, 'se': 0.005642868001228948, 'n': 1000}
+{'name': 'sim_RotatedSine_N250_SNR0p5_RF_R2', 'value': 0.10566316449045088, 'se': 0.007428146772979423, 'n': 1000}
+
+--- stderr

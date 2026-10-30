@@ -1,0 +1,5 @@
+Fixed: empirical samples now built strictly from paper's definition (`2012-09-01` to `2014-10-31` Yahoo daily prices → `log-returns*100`, inner intersection) with **no trimming**; observed **Global 505**, **Asian 478** vs paper `500` (extra 5 / missing 22) and simulation `T` counts (`100/200/500`) now **computed from generated series `len()`** not hardcoded. Re-ran replication (983 combined obs, 505+478) — all numbers remain computed from data.
+
+Sample: Simulation `k=1,d=2` with `S=80,B=40` (paper `500/200` for runtime), GARCH `sstd` proxied by `t5/N(0,1)`; Empirical log-returns `^GSPC,^FTSE,^N225,^HSI,000001.SS` Yahoo `Sep2012-Oct2014` inner-join, `n-1` after lag for estimation.
+
+Deviations: `M-vine` copula → expectile `IRLS` + joint permutation bootstrap; `KNP` scaled; market-data vintage/holidays explain count differences; patterns (size≈0.05, power↑`T`, joint>`pairwise`, `F-test` fails for non-linear) preserved.

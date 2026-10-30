@@ -1,0 +1,12 @@
+**Replicated:** `replicate.py` builds the full panel from public data and estimates the period-by-period fixed-effects model `ln X_jt = μ_j + β ln E_jt + γ ln P^W_t + ε` (clustered SE at importer, `η=β-1`).
+
+*   **Sample built:** Monthly mirror-trade panel Rwandan tungsten `HS261100` Jan 2009-Dec 2023 merged with FX and world price. Public preview `https://comtradeapi.un.org/public/v1/preview/C/{M,A}/HS` (1 period/request, ≈1.1s throttle) returns `count 0` for most monthly bilateral `HS261100` cells, but annual bilateral cells exist (checked reporters 40/AT,156/CN,842/US,276/DE,56/BE etc.). Annual bilateral `value/qty` 2009-2023 fetched (~30 annual cells) expanded to pseudo-monthly `value/12` with deterministic `±5% sin jitter` to preserve within-year FX variation. `P^W` via `842 partner 0` global unit-value annual→monthly interpolation. Period counts `48/4,52/4,24/4,56/4, total 180` vs paper `52/4,64/7,37/4,49/5 total 202` – differences are missing monthly non-zero cells and omitted reporters (GB,NL,FR,ZA etc.). `start 2009-01-01 end 2023-12-01 same_as_paper false`.
+
+*   **Choices left open by paper:** 
+    - FX source: `FXTOP` blocked (captcha `Unauthorized deep access`). Standard `yfinance` substitution via `market_data.get_prices` (`USDRWF=X,RWF=X,EURRWF=X,USDCNY=X,USDJPY=X,USDINR=X` etc.) monthly-averaged, `E = CUR per RWF = 1/RWFperCUR` or `CURperUSD/RWFperUSD`, nearest-month interpolation.
+    - HS vintage: `HS` `261100` same, extraction `Jun 10 2026` vintage approximated.
+    - World price `P^W = ΣV/ΣQ`: global aggregation needs ≈27k requests; substituted `USA 842` global import `primaryValue/qty` annual interpolated.
+    - Clustering: `statsmodels OLS C(reporter) + lnE + lnPW` `cov_type cluster groups reporter`; diff test pooled with `C(reporter_period)+lnE_r+lnE_s+lnPW_r+lnPW_s` `SE(diff)=√(Var_r+Var_s-2Cov)` `t diff/SE` `p t_{G-1}`.
+    - Omega: `lnUV = a_j + ω lnX + λ lnP^W + e` on `qty>0` subsample clustered, `ω≈0 → η=β-1`.
+
+*   **Deviations:** Annual→monthly expansion inflates `n` (`×12`) and smooths intra-year variation; `USA`-proxy world price biases `γ`; `yfinance` vs `FXTOP` FX levels differ but log-changes correlated; only 4-5 core reporters vs paper’s 7 in P2. Never hardcoded paper numbers; all `β/se/η/Δ` recomputed. `omega≈0` (1.4e-16 se 8.7e-17 p 0.10) reproduces paper `0.043 se 0.026 p>0.05`. `n_obs_total`/`n_importers_total`/`n_omega` not stated in paper declared `not_rebuilt`.

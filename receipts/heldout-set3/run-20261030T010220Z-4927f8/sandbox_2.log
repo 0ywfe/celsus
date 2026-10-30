@@ -1,0 +1,16 @@
+exit 0 in 335.9s
+--- stdout
+h=6 m=24_120 rw=0.453 rel_rf=0.781 rel_rfx=0.722
+h=1 m=24_120 rw=0.144 rel_rf=1.045 rel_rfx=0.973
+h=1 m=240 rw=0.232 rel_rf=0.977 rel_rfx=0.984
+h=12 m=3 rw=1.700 rel_rf=0.699 rel_rfx=0.624
+h=6 m=24_360 rw=0.560 rel_rf=0.771 rel_rfx=0.743
+h=3 m=3 rw=0.483 rel_rf=0.844 rel_rfx=0.836
+h=1 m=120 rw=0.243 rel_rf=0.993 rel_rfx=0.996
+h=1 m=6 rw=0.186 rel_rf=0.905 rel_rfx=0.875
+h=12 m=240 rw=0.838 rel_rf=0.708 rel_rfx=0.750
+h=1 m=3 rw=0.230 rel_rf=1.006 rel_rfx=1.021
+h=12 m=60 rw=1.105 rel_rf=0.653 rel_rfx=0.685
+done 300.6s wrote 54
+
+--- stderr

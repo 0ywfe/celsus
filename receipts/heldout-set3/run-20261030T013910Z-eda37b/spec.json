@@ -1,0 +1,313 @@
+{
+ "title": "Sign Restrictions and Supply-demand Decompositions of Inflation - Replication Spec",
+ "hypothesis": "Sign restrictions on slopes alone are largely uninformative about historical decompositions of US inflation in aggregate and most PCE categories; wide robust identified sets span 0.2-7.3 of 7.7pp at US 2022:Q2 peak and around 0-6.8 of 7.9pp at EA 2022:Q4 peak with low rho~0.23 [0.13,0.33]; sharp only when |rho| large and realised error aligns e.g. food farms rho=-0.98 with 23.9-25.1 of 28.4% in Mar2022; joint hypothesis lower=0 upper=0.99 vs uniform 0.5, so conclusions depend on auxiliary prior assumptions.",
+ "data_sources": [
+  "Bureau of Economic Analysis National Accounts Underlying Detail Tables for PCE categories (price and real expenditure); FRED/Giannone-Primiceri replication data for US log CPI and log real GDP 1997:Q1-2019:Q4 and euro HICP."
+ ],
+ "sample": "Main aggregate decomposition: 4-lag Bayesian VAR in log CPI and log real GDP estimated on 1997:Q1-2019:Q4, post-2019 historical decompositions of year-ended inflation given information to 2019:Q4. Disaggregated decomposition: OLS 12-lag VAR in monthly PCE inflation and real expenditure growth for 136 PCE categories estimated on 1988:M1-2023:M9. Trivariate illustration: simulated sample of 100 one-step forecast errors with rho_{12} approx -1. Larger 3-variable SVARs: 17 post-2019 quarters (2020:Q1-...). N for estimation windows in calendar time is given by periods, N counts printed only for n_PCE_categories_total =136, n_trivariate_simulation_draws=100, dimension_d_3var_post2019_periods=17; other N not printed as integer.",
+ "period_start": "1997:Q1",
+ "period_end": "2019:Q4",
+ "method": [
+  "1. Aggregate: estimate 4-lag VAR of (p_t=log CPI, q_t=log real GDP) on 1997:Q1-2019:Q4 with Minnesota + sum-of-coefficients prior per Giannone-Lenza-Primiceri. Draw phi posterior.",
+  "2. At each phi draw compute rho = sigma21/sqrt(sigma21^2+sigma22^2), IS_theta(phi) = [arctan(sigma22/sigma21),0] if rho<0 else [-pi/2, arctan(-sigma21/sigma22)] and A0^{-1}(theta). Sign restrictions A0^{-1}=[+,+;- ,+] equivalent to A0=[+,-;+,+].",
+  "3. Historical decomposition H_{t,t+h}(theta,phi,{u}) = [cos theta sin theta] Omega_h(phi,{u}) [cos theta; sin theta] with Omega_h = sum_{l=0}^h c_{1l}(phi)(Sigma_tr^{-1} u_{t+h-l})', c_{1h}'=e1' C_h Sigma_tr, Ch recursion.",
+  "4. Year-ended inflation pi_t^{(ye)}=p_t-p_{t-4} (quarterly) or sum_{l=0}^{11} pi_{t-l} (monthly). Decompose as H_{t,t+h}-H_{t,t+h-4} (h>=4) or sum_{h=0}^{11} H_{1,t-h} via Omega_tilde = Omega_h - Omega_{h-4} or sum Omega_{t-h}. End points L_{t,t+h},U_{t,t+h} = min/max_{theta in IS_theta} H(theta) obtained by evaluating at two endpoints of IS_theta and at <=2 normalized eigenvectors of S_h=(Omega_h+Omega_h')/2 that satisfy sign normalization and lie in IS_theta.",
+  "5. Aggregate baseline: 10,000 draws of phi, 10 draws of theta uniform over IS_theta(phi) at each phi =100,000 draws of (phi,theta); report posterior mean under uniform. Robust Bayes: class of conditional priors on IS_theta(phi); set of posterior means approx = posterior mean of L and U; 68% robust credible interval = tau/2 quantile of L and 1-tau/2 quantile of U.",
+  "6. Joint hypothesis: H = union_{t in 2021:Q2-2022:Q2} {tilde H_t <= 0.5 FE_t} where tilde H_t = supply contribution to year-ended forecast error, FE_t= forecast error; posterior lower/upper probabilities approximated with 10,000 theta draws per phi uniform over IS_theta.",
+  "7. Disaggregated: for each of 136 categories OLS 12-lag VAR on 1988:M1-2023:M9 in (monthly PCE inflation in log differences, real expenditure growth); compute IS_{H} for sum_{h=0}^{11} H_{1,t-h} via Omega_tilde = sum_{h=0}^{11} Omega_{t-h}.",
+  "8. Trivariate illustration DGP with rho12 approx -1, rho13 small positive, rho23 small negative; simulate 100 forecast errors; approximate IS_{H_{t,t}} by min/max over ~55,000 uniform Q draws from identified set via Rubio-Ramirez-Waggoner-Zha; 3-variable GP24 models approximate endpoints with 10,000 uniform Q draws, K=10,494 per Montiel-Olea-Nesbit Thm3 for d=17, epsilon=delta=0.01."
+ ],
+ "claims": [
+  {
+   "name": "US_peak_year_ended_CPI_forecast_error_2022Q2",
+   "description": "forecast error in year-ended CPI inflation at 2022:Q2 peak, aggregate VAR 1997:Q1-2019:Q4 based, given info to 2019:Q4 - main text Sec 4.1 and Fig.1 notes.",
+   "value": "7.7",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "US_supply_contrib_set_lower_2022Q2",
+   "description": "lower end of set of posterior means (estimator of IS) for supply contribution to that 7.7pp forecast error at 2022:Q2.",
+   "value": "0.2",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Section 4.1 Fig.1"
+  },
+  {
+   "name": "US_supply_contrib_set_upper_2022Q2",
+   "description": "upper end of set of posterior means for supply contribution to that 7.7pp forecast error at 2022:Q2, spans 0.2-7.3.",
+   "value": "7.3",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Section 4.1 Fig.1"
+  },
+  {
+   "name": "US_rho_posterior_mean",
+   "description": "posterior mean of reduced-form price-quantity innovation correlation rho = sigma21/sqrt(sigma21^2+sigma22^2) over estimation period 1997:Q1-2019:Q4.",
+   "value": "0.23",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "US_rho_68cred_lower",
+   "description": "lower 68% credible interval bound for rho.",
+   "value": "0.13",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "US_rho_68cred_upper",
+   "description": "upper 68% credible interval bound for rho.",
+   "value": "0.33",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "EA_peak_year_ended_HICP_forecast_error_2022Q4",
+   "description": "forecast error in year-ended euro area HICP inflation at 2022:Q4 peak, same model/prior/sample.",
+   "value": "7.9",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Appendix D.2 Fig.A2"
+  },
+  {
+   "name": "EA_supply_contrib_uniform_prior_2022Q4",
+   "description": "posterior mean supply contribution under uniform prior for Q at 2022:Q4 peak for euro area.",
+   "value": "2.4",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Appendix D.2"
+  },
+  {
+   "name": "EA_supply_contrib_set_upper_2022Q4",
+   "description": "upper end of set of posterior means for supply contribution to 7.9pp euro area forecast error at 2022:Q4; lower is around zero (approx 0).",
+   "value": "6.8",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Appendix D.2 Fig.A2"
+  },
+  {
+   "name": "EA_supply_contrib_set_lower_2022Q4_approx_zero",
+   "description": "lower end approx zero, printed as 'around zero' for EA 2022:Q4 set of posterior means.",
+   "value": "0",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Appendix D.2"
+  },
+  {
+   "name": "n_PCE_categories_total",
+   "description": "total number of PCE expenditure categories for which 12-lag VARs estimated 1988:M1-2023:M9.",
+   "value": "136",
+   "unit": "categories",
+   "kind": "count",
+   "where": "Section 4.2"
+  },
+  {
+   "name": "lubricants_fluids_abs_rho",
+   "description": "printed as |rho| < 0.0001, smallest absolute innovation correlation among categories (lubricants and fluids). IS often includes both zero and observed inflation.",
+   "value": "0.0001",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.2 Fig.2"
+  },
+  {
+   "name": "food_produced_consumed_on_farms_rho",
+   "description": "rho = -0.98 for food produced and consumed on farms, largest |rho|, narrow IS.",
+   "value": "-0.98",
+   "unit": "correlation",
+   "kind": "estimate",
+   "where": "Section 4.2 Fig.2"
+  },
+  {
+   "name": "food_farms_supply_contrib_lower_Mar2022",
+   "description": "lower end of identified set for supply contribution to year-ended inflation March 2022 for food produced and consumed on farms.",
+   "value": "23.9",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Section 4.2"
+  },
+  {
+   "name": "food_farms_supply_contrib_upper_Mar2022",
+   "description": "upper end of identified set for supply contribution March 2022 for same category.",
+   "value": "25.1",
+   "unit": "percentage points",
+   "kind": "estimate",
+   "where": "Section 4.2"
+  },
+  {
+   "name": "food_farms_yearended_inflation_Mar2022_net_det",
+   "description": "realised year-ended inflation March 2022 net of deterministic components (constant+initial conditions) for same category.",
+   "value": "28.4",
+   "unit": "percent",
+   "kind": "estimate",
+   "where": "Section 4.2"
+  },
+  {
+   "name": "joint_hypothesis_uniform_post_prob",
+   "description": "printed as 'around 0.5', posterior prob under uniform prior that demand contribution exceeded supply contribution in every quarter 2021:Q2-2022:Q2.",
+   "value": "0.5",
+   "unit": "posterior probability",
+   "kind": "estimate",
+   "where": "Appendix D.1.1"
+  },
+  {
+   "name": "joint_hypothesis_lower_prob_robust",
+   "description": "posterior lower probability (robust Bayes) for same joint hypothesis H.",
+   "value": "0",
+   "unit": "posterior probability",
+   "kind": "estimate",
+   "where": "Appendix D.1.1"
+  },
+  {
+   "name": "joint_hypothesis_upper_prob_robust",
+   "description": "posterior upper probability for same joint hypothesis.",
+   "value": "0.99",
+   "unit": "posterior probability",
+   "kind": "estimate",
+   "where": "Appendix D.1.1"
+  },
+  {
+   "name": "n_trivariate_simulation_draws",
+   "description": "sample of 100 one-step-ahead forecast errors simulated from 3-variable DGP with rho12 approx -1 for illustration Fig.C1-C2.",
+   "value": "100",
+   "unit": "forecast error draws",
+   "kind": "count",
+   "where": "Appendix C"
+  },
+  {
+   "name": "n_explosive_disaggregated_VARs",
+   "description": "VAR in first differences is explosive in two PCE categories (levels spec often explosive).",
+   "value": "2",
+   "unit": "categories",
+   "kind": "tally",
+   "where": "Appendix D.4"
+  },
+  {
+   "name": "lag_order_aggregate_VAR",
+   "description": "lag order for aggregate US and euro VARs.",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 4.1"
+  },
+  {
+   "name": "lag_order_disaggregated_VAR",
+   "description": "lag order for each PCE category monthly VAR.",
+   "value": "12",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 4.2"
+  },
+  {
+   "name": "n_draws_phi_aggregate",
+   "description": "10,000 draws of reduced-form phi from posterior for aggregate exercise.",
+   "value": "10000",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix D.1"
+  },
+  {
+   "name": "n_draws_theta_per_phi_aggregate",
+   "description": "10 draws of theta uniform over IS_theta(phi) at each phi draw for aggregate.",
+   "value": "10",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix D.1"
+  },
+  {
+   "name": "n_total_draws_uniform",
+   "description": "100,000 draws of (phi,theta) total for uniform prior replication.",
+   "value": "100000",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix D.1"
+  },
+  {
+   "name": "n_draws_theta_per_phi_joint",
+   "description": "10,000 theta draws per phi for joint hypothesis lower/upper prob approximation.",
+   "value": "10000",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix D.1.1"
+  },
+  {
+   "name": "credibility_level_reported",
+   "description": "68 per cent credibility level for standard and robust credible intervals in Fig.1, Fig.A2.",
+   "value": "68",
+   "unit": "percent",
+   "kind": "parameter",
+   "where": "Section 4.1 notes"
+  },
+  {
+   "name": "n_draws_trivariate_approx",
+   "description": "printed as 'around 55,000' uniform Q draws to approximate IS_H in trivariate example, guarantees misclass error at most 1% with prob at least 99% per Montiel-Olea-Nesbit.",
+   "value": "55000",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix C Fig.C2 note"
+  },
+  {
+   "name": "misclassification_error_bound_trivariate",
+   "description": "misclassification error at most 1 per cent (epsilon) for trivariate approx.",
+   "value": "0.01",
+   "unit": "probability",
+   "kind": "parameter",
+   "where": "Appendix C"
+  },
+  {
+   "name": "confidence_prob_misclassification_bound",
+   "description": "with probability at least 99 per cent (1-delta) for trivariate approx.",
+   "value": "0.99",
+   "unit": "probability",
+   "kind": "parameter",
+   "where": "Appendix C"
+  },
+  {
+   "name": "n_draws_3var_energy_monetary_inside",
+   "description": "10,000 draws of Q from inside identified set via accept-reject to approximate endpoints for 3-variable GP24 models (energy and monetary).",
+   "value": "10000",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix D.3"
+  },
+  {
+   "name": "dimension_d_3var_post2019_periods",
+   "description": "d=17 number of post-2019 quarters (historical decompositions) used to compute required K.",
+   "value": "17",
+   "unit": "quarters",
+   "kind": "count",
+   "where": "Appendix D.3"
+  },
+  {
+   "name": "epsilon_misclass_3var",
+   "description": "epsilon=0.01 misclass error for 3-var K formula.",
+   "value": "0.01",
+   "unit": "probability",
+   "kind": "parameter",
+   "where": "Appendix D.3"
+  },
+  {
+   "name": "delta_prob_3var",
+   "description": "delta=0.01 tail prob for 3-var K formula.",
+   "value": "0.01",
+   "unit": "probability",
+   "kind": "parameter",
+   "where": "Appendix D.3"
+  },
+  {
+   "name": "K_required_3var",
+   "description": "K=10,494 draws required inside identified set per Thm3 of Montiel-Olea-Nesbit to guarantee epsilon=delta=0.01 with d=17.",
+   "value": "10494",
+   "unit": "draws",
+   "kind": "parameter",
+   "where": "Appendix D.3"
+  }
+ ],
+ "headline": "US_supply_contrib_set_upper_2022Q2",
+ "partitions": [],
+ "tests": []
+}

@@ -1,0 +1,217 @@
+exit 0 in 41.0s
+--- stdout
+=== Fetching crypto ===
+BTC BTC-USD: 1186 rows 2023-01-01 00:00:00 to 2026-03-31 00:00:00
+ETH ETH-USD: 1186 rows 2023-01-01 00:00:00 to 2026-03-31 00:00:00
+SOL SOL-USD: 1186 rows 2023-01-01 00:00:00 to 2026-03-31 00:00:00
+ADA ADA-USD: 1186 rows 2023-01-01 00:00:00 to 2026-03-31 00:00:00
+AVAX AVAX-USD: 1186 rows 2023-01-01 00:00:00 to 2026-03-31 00:00:00
+LINK LINK-USD: 1186 rows 2023-01-01 00:00:00 to 2026-03-31 00:00:00
+Control VIX ^VIX: 813 2023-01-03 00:00:00 to 2026-03-31 00:00:00
+Control SP500 ^GSPC: 813 2023-01-03 00:00:00 to 2026-03-31 00:00:00
+Control DXY DX-Y.NYB: 815 2023-01-03 00:00:00 to 2026-03-31 00:00:00
+Control TNX ^TNX: 813 2023-01-03 00:00:00 to 2026-03-31 00:00:00
+=== Probing Kalshi API ===
+Kalshi KXFED settled count 22
+Kalshi KXCPI settled count 29
+Kalshi KXCPICORE settled count 22
+Kalshi KXGDP settled count 9
+Kalshi KXU3 settled count 28
+Kalshi KXPCECORE settled count 20
+Kalshi KXRECSSNBER settled count 0
+Kalshi KXACPI settled count 0
+Kalshi KXRATECUT settled count 0
+Kalshi KXUSNFP settled count 0
+Kalshi series total (page) 15549
+candlestick historical test KXFED-26OCT-T5.25 200 {"markets":[{"candlesticks":[],"market_ticker":"KXFED-26OCT-T5.25"}]}
+
+=== Descriptive stats ===
+BTC: N_RVol=1181 mean=0.3478 sd=0.1934 min=0.0476 max=1.5656
+  trading-filtered (810): mean=0.3354 sd=0.1899
+ETH: N_RVol=1181 mean=0.4663 sd=0.2658 min=0.0237 max=1.6910
+  trading-filtered (810): mean=0.4506 sd=0.2626
+SOL: N_RVol=1181 mean=0.6467 sd=0.3297 min=0.0488 max=2.5772
+  trading-filtered (810): mean=0.6334 sd=0.3348
+ADA: N_RVol=1181 mean=0.5810 sd=0.4064 min=0.0413 max=4.7785
+  trading-filtered (810): mean=0.5709 sd=0.4166
+AVAX: N_RVol=1181 mean=0.6569 sd=0.3448 min=0.0317 max=2.4896
+  trading-filtered (810): mean=0.6462 sd=0.3465
+LINK: N_RVol=1181 mean=0.6263 sd=0.3257 min=0.0606 max=2.1626
+  trading-filtered (810): mean=0.6113 sd=0.3167
+
+Calendar days inclusive 2023-01-01 to 2026-03-31: 1186
+Common trading days (VIX & SP500 & DXY): 813 from 2023-01-03 00:00:00 to 2026-03-31 00:00:00
+Merged trading dataset N (if excluding weekends): 813
+
+=== Filtering steps ===
+BTC raw calendar rows 1186 RVol obs 1181
+ETH raw calendar rows 1186 RVol obs 1181
+SOL raw calendar rows 1186 RVol obs 1181
+ADA raw calendar rows 1186 RVol obs 1181
+AVAX raw calendar rows 1186 RVol obs 1181
+LINK raw calendar rows 1186 RVol obs 1181
+After filtering to trading days (VIX intersection): 813 days
+  BTC RVol trading filtered N 810 mean 0.3354
+  ETH RVol trading filtered N 810 mean 0.4506
+  SOL RVol trading filtered N 810 mean 0.6334
+  ADA RVol trading filtered N 810 mean 0.5709
+  AVAX RVol trading filtered N 810 mean 0.6462
+  LINK RVol trading filtered N 810 mean 0.6113
+Observed Kalshi series via probe: 10 -> ['KXFED', 'KXCPI', 'KXCPICORE', 'KXGDP', 'KXU3', 'KXPCECORE', 'KXRECSSNBER', 'KXACPI', 'KXRATECUT', 'KXUSNFP']
+
+Wrote /work/results.json with 18 results
+{
+  "results": [
+    {
+      "name": "merged_calendar_days",
+      "value": 1186,
+      "se": null,
+      "n": 1186
+    },
+    {
+      "name": "total_crypto_assets",
+      "value": 6,
+      "se": null,
+      "n": 6
+    },
+    {
+      "name": "btc_descriptive_N",
+      "value": 1181,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "eth_descriptive_N",
+      "value": 1181,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "sol_descriptive_N",
+      "value": 1181,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "ada_descriptive_N",
+      "value": 1181,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "avax_descriptive_N",
+      "value": 1181,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "link_descriptive_N",
+      "value": 1181,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "btc_descriptive_mean_RVol",
+      "value": 0.34778227049238397,
+      "se": 0.005626690848605162,
+      "n": 1181
+    },
+    {
+      "name": "eth_descriptive_mean",
+      "value": 0.46626287648148085,
+      "se": 0.007735324798083421,
+      "n": 1181
+    },
+    {
+      "name": "sol_descriptive_mean",
+      "value": 0.6466941921943818,
+      "se": 0.009593183805252233,
+      "n": 1181
+    },
+    {
+      "name": "ada_descriptive_mean",
+      "value": 0.5810085263419578,
+      "se": 0.011825073893372805,
+      "n": 1181
+    },
+    {
+      "name": "avax_descriptive_mean",
+      "value": 0.6569049922408248,
+      "se": 0.010034378343712798,
+      "n": 1181
+    },
+    {
+      "name": "link_descriptive_mean",
+      "value": 0.6262782069486783,
+      "se": 0.009476621090472433,
+      "n": 1181
+    },
+    {
+      "name": "btc_descriptive_sd",
+      "value": 0.19336506028422695,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "btc_descriptive_min",
+      "value": 0.04760261050828754,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "btc_descriptive_max",
+      "value": 1.5655607463211294,
+      "se": null,
+      "n": 1181
+    },
+    {
+      "name": "kalshi_total_series",
+      "value": 10,
+      "se": null,
+      "n": 10
+    }
+  ],
+  "sample": {
+    "description": "Daily closing prices for BTC,ETH,SOL,ADA,AVAX,LINK from Yahoo Finance (BTC-USD etc) Jan2023-Mar2026; controls VIX (^VIX), SP500 (^GSPC), DXY (DX-Y.NYB); 5-day forward realized volatility sqrt252*sd(r_{t+1:t+5}); filtered to trading days intersection for regressions. Kalshi macro contracts (10 series KXFED,KXCPI,KXCPICORE,KXGDP,KXU3,KXPCECORE,KXRECSSNBER,KXACPI,KXRATECUT,KXUSNFP) probed via public Kalshi API https://api.elections.kalshi.com/trade-api/v2",
+    "n": 813,
+    "start": "2023-01-01",
+    "end": "2026-03-31",
+    "same_as_paper": false,
+    "missing": null,
+    "extra": null,
+    "differences": "Paper N=1,183 calendar days vs our 1,186 calendar days (2023-01-01 to 2026-03-31 inclusive); paper descriptive N=1,178 per crypto vs our 1,181 RVol obs (difference 3 days due to inclusive counting/lag definition); paper trading-filtered merged N~813 (approx 30% dropped) matches our common trading days 813 but paper reports 1,183 as merged which is calendar not trading. Kalshi historical usable obs (193-569 per series) not retrievable: current API only returns markets created from 2025-08 onward (verified: KXFED settled 22 from 2025-08, KXCPI 29 from 2026-02, KXRECSSNBER 0 settled) vs paper coverage Jan2023-Mar2026.",
+    "cannot_count": "Cannot count exact missing/extra Kalshi observations because public API no longer serves pre-2025 markets; retention window appears truncated. Crypto counts differ by 3 obs due to ambiguous windowing (paper says N=1,178 after lag/match, we get 1,181 with Eq2 definition). Without Kalshi signal we cannot determine effective estimation N=318 (BTC Fed-dovish) or 264 (CPI) filtering.",
+    "not_rebuilt": {
+      "kalshi_KXFED_N": "Public Kalshi API only returns markets created from 2025-08 onward (verified 22 settled KXFED), not Jan2023-Mar2026. Historical candlesticks for 20
+
+--- stderr
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)
+/usr/local/lib/python3.12/site-packages/yfinance/utils.py:568: Pandas4Warning: The inplace keyword in DataFrame.sort_index is deprecated and will be removed in a future version (PDEP-8).
+See https://pandas.pydata.org/docs/dev/whatsnew/v3.1.0.html#deprecation-inplace for more details.
+  quotes.sort_index(inplace=True)

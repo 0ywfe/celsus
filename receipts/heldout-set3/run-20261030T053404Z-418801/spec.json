@@ -1,0 +1,294 @@
+{
+ "title": "In-between Transatlantic (Monetary) Disturbances",
+ "hypothesis": "An ECB rate hike depreciates CAD, cuts oil prices/exports and GDP with little financial tightening (trade/commodity channel); Fed hike tightens Canadian financial conditions (bond yields, mortgage rates, housing, equities) with slower, broader GDP contraction; magnitudes comparable.",
+ "data_sources": [
+  "Fortin-Poulin 2022 Large Canadian Database for Macroeconomic Analysis",
+  "IMF-IFS CAD/EUR exchange rate",
+  "FRED U.S. variables",
+  "Federal Reserve Excess Bond Premium https://www.federalreserve.gov/econres/notes/feds-notes/updating-the-recession-risk-and-the-excess-bond-premium-20161006.html",
+  "Eurostat indicator sts_inpr_m and FRED Euro Area variables",
+  "BAMLHE00EHYIOAS ICE BofA Euro High Yield OAS"
+ ],
+ "sample": "Canadian macro-financial monthly sample: 5 Canadian variables (CAD/USD vs CAD/EUR exchange rate, Bank of Canada policy rate, CPI, equity price index, monthly GDP index) from Fortin et al. 2022 Large Canadian Database plus IMF-IFS CAD/EUR; 4 U.S. variables (federal funds rate, industrial production, PCE price index, Gilchrist-Zakrajšek Excess Bond Premium) from FRED/Fed; 4 Euro Area variables (ECB main refinancing rate, industrial production, HICP, ICE BofA Euro High Yield OAS) from FRED/Eurostat sts_inpr_m; plus oil/commodity/trade extensions (WTI price, oil GDP/value added, oil production m3, oil/non-oil exports, 7 export categories, 3 bond maturities, mortgage rate, New Housing Price Index, U.S. macro-financial and Canada-U.S./EU trade flows, 5 GDP components). Monthly GDP used for Canada (robustness to industrial production). Identification uses high-frequency monetary surprises around ECB and Fed announcement windows in interest rate and equity prices. Exact observation count, start date and end date not stated; benchmark includes linear trend and COVID dummy March 2020–June 2021; robustness excludes COVID via sample ending February 2020.",
+ "period_start": "not stated",
+ "period_end": "not stated",
+ "method": [
+  "Construct high-frequency surprises: interest rate futures and equity price changes in tight windows around ECB (blue) and Fed (red) policy announcements (Figure 2).",
+  "Identification of pure monetary policy shock via Jarocinski (2022) rotational-angle decomposition: search over rotations of interest-rate/equity surprises that satisfy sign restrictions (contractionary MP raises rates + lowers equities = negative co-movement; information disclosure = positive co-movement). Benchmark uses median admissible rotation. Report ECB and Fed shock series (Figures ECB_Shocks, Fed_Shocks).",
+  "Alternative identification for robustness: Poor Man’s Sign Restriction (Jarocinski 2020) classifies negative co-movement as MP shock, positive as information shock.",
+  "Identification uncertainty robustness: normalize admissible rotations to 999 angles, draw uniformly, re-estimate VAR and compute IRFs to build bands combining posterior + identification uncertainty.",
+  "Bayesian VAR (benchmark): estimate with 3 lags endogenous, exogenous ECB/Fed MP shocks (diffuse priors), linear time trend, COVID dummy March 2020–June 2021. Normal-Wishart prior per Dieppe et al. 2016 Bear: prior mean first own lag 0.8, lambda1=0.1 overall tightness, lambda3=1 lag decay. Lag choice compromise between AIC 4 and BIC 2. Compute IRFs to one-standard-deviation ECB/Fed pure MP shock; report median IRF with 90% posterior credible intervals.",
+  "Local projections (Equation 1) complement: y_{t+h}=beta_h Shock_t + sum_{j=1 to J_i=3} phi Shock_{t-j} + sum_{j=1 to J_y=3} delta y_{t-j} + sum controls x_{t-j} (Canadian, 3 lags) + x*_{t-j} (foreign, 3 lags) + gamma1 Trend + gamma2 CovidDummy + error. Lags selected by AIC. Include lagged dependent variables for seasonality and lagged shocks for efficiency. Estimate horizon-by-horizon; 90% confidence intervals with SEs clustered at time level.",
+  "Augmented VARs for transmission channels: add one-by-one oil/trade variables (oil GDP value added, oil production m3, non-oil GDP, oil exports, non-oil exports, WTI price; 7 export categories: oil, energy, minerals, metals, industrial equipment, transport goods, consumption goods) and financial price variables (gov bond yields 1-3y, 3-5y, 10+y, 1-year mortgage rate, New Housing Price Index) and U.S. economy variables (U.S. IP, PCE price, EBP, fed funds) plus Canada-U.S./EU exports/imports and 5 GDP components (IP, durables, non-durables, construction, services). Re-estimate IRFs.",
+  "Robustness exercises: re-estimate with PMSR, with LP, integrating over 999 rotations, truncating sample to Feb 2020 (pre-COVID), and contrasting pure MP vs information vs standard HFI conflated surprises to show bias."
+ ],
+ "claims": [
+  {
+   "name": "claim_export_share_EA",
+   "description": "share of Canadian exports destined for Euro Area",
+   "value": "less than 8%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Introduction - Bilateral trade flows are modest"
+  },
+  {
+   "name": "claim_GDP_share_EA",
+   "description": "Euro Area share of world GDP (PPP)",
+   "value": "nearly 15%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Introduction - Euro Area is world’s second-largest bloc"
+  },
+  {
+   "name": "claim_trade_GDP_EA",
+   "description": "Euro Area trade-to-GDP ratio has consistently exceeded 80% of GDP",
+   "value": "80%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Introduction - Figure 1 Panel b"
+  },
+  {
+   "name": "claim_trade_GDP_US",
+   "description": "U.S. trade-to-GDP ratio",
+   "value": "25%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Introduction - compared to 25% in the U.S."
+  },
+  {
+   "name": "claim_trade_GDP_CA_low",
+   "description": "Canada trade-to-GDP ratio lower bound 60--70%",
+   "value": "60%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Introduction - 60--70% in Canada"
+  },
+  {
+   "name": "claim_trade_GDP_CA_high",
+   "description": "Canada trade-to-GDP ratio upper bound 60--70%",
+   "value": "70%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Introduction - 60--70% in Canada"
+  },
+  {
+   "name": "claim_oil_GDP",
+   "description": "oil accounting for roughly 10% of Canadian GDP",
+   "value": "roughly 10%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Section 4.1 - Oil is central to Canadian economy"
+  },
+  {
+   "name": "claim_oil_export_low",
+   "description": "oil share of goods exports lower bound 20–25%",
+   "value": "20%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Section 4.1 - 20–25% of goods exports"
+  },
+  {
+   "name": "claim_oil_export_high",
+   "description": "oil share of goods exports upper bound 20–25%",
+   "value": "25%",
+   "unit": "%",
+   "kind": "estimate",
+   "where": "Section 4.1 - 20–25% of goods exports"
+  },
+  {
+   "name": "claim_n_vars_CA",
+   "description": "number of Canadian variables in benchmark sample (exchange rate, Bank of Canada policy rate, CPI, equity price index, monthly GDP index)",
+   "value": "5",
+   "unit": "variables",
+   "kind": "count",
+   "where": "Section 2.1 Dataset - benchmark sample includes five Canadian variables"
+  },
+  {
+   "name": "claim_n_vars_foreign",
+   "description": "number of foreign variables per foreign bloc stated (U.S.: fed funds rate, IP, PCE, EBP; Euro Area: refinancing rate, IP, HICP, BAMLHE00EHYIOAS)",
+   "value": "4",
+   "unit": "variables",
+   "kind": "count",
+   "where": "Section 2.1 - four foreign variables / U.S. and Euro Area lists"
+  },
+  {
+   "name": "claim_n_export_cat",
+   "description": "number of export categories disaggregated one at a time: oil, energy, minerals, metals, industrial equipment, transport goods, consumption goods",
+   "value": "7",
+   "unit": "categories",
+   "kind": "count",
+   "where": "Section 4.1 Export heterogeneity"
+  },
+  {
+   "name": "claim_n_GDP_comp",
+   "description": "number of Canadian GDP components examined: industrial production, durable goods, non-durable goods, construction, services",
+   "value": "5",
+   "unit": "categories",
+   "kind": "count",
+   "where": "Section 5 Additional Results - Impact across GDP components"
+  },
+  {
+   "name": "param_VAR_lags",
+   "description": "Bayesian VAR includes three lags of endogenous variables",
+   "value": "3",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 2.2 Bayesian VARs"
+  },
+  {
+   "name": "param_AIC_lags",
+   "description": "lag length suggested by Akaike Information Criterion",
+   "value": "4",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 2.2 footnote - compromise between AIC (four lags) and BIC"
+  },
+  {
+   "name": "param_BIC_lags",
+   "description": "lag length suggested by Bayesian Information Criterion",
+   "value": "2",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 2.2 footnote - BIC (two lags)"
+  },
+  {
+   "name": "param_LP_lags_y",
+   "description": "local projection includes three lags of dependent variable, Canadian controls, foreign variables and shock series",
+   "value": "3",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Section 2.2 Local projections - selected based on AIC"
+  },
+  {
+   "name": "param_prior_mean",
+   "description": "Normal-Wishart prior mean for first own lag",
+   "value": "0.8",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Section 2.2 - prior mean for first own lag set to 0.8"
+  },
+  {
+   "name": "param_lambda1",
+   "description": "overall tightness lambda1",
+   "value": "0.1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Section 2.2 - overall tightness (lambda1) set to 0.1"
+  },
+  {
+   "name": "param_lambda3",
+   "description": "lag decay lambda3",
+   "value": "1",
+   "unit": "",
+   "kind": "parameter",
+   "where": "Section 2.2 - lag decay (lambda3) equal to 1"
+  },
+  {
+   "name": "param_covid_dummy",
+   "description": "COVID-19 dummy included in VAR and LP to account for pandemic disruptions",
+   "value": "March 2020–June 2021",
+   "unit": "period",
+   "kind": "parameter",
+   "where": "Section 2.2 Bayesian VARs and Local projections"
+  },
+  {
+   "name": "param_covid_excl",
+   "description": "truncated sample ends in February 2020 when excluding COVID period",
+   "value": "February 2020",
+   "unit": "date",
+   "kind": "parameter",
+   "where": "Section 5 Robustness to COVID-19 Period"
+  },
+  {
+   "name": "param_cred_level_VAR",
+   "description": "shaded areas denote 90% posterior credible intervals for VAR IRFs",
+   "value": "90%",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Figure notes throughout Section 3-5"
+  },
+  {
+   "name": "param_conf_level_LP",
+   "description": "shaded areas denote 90% confidence intervals clustered at time level for LP IRFs",
+   "value": "90%",
+   "unit": "%",
+   "kind": "parameter",
+   "where": "Figure 4 note - Standard errors clustered at time level"
+  },
+  {
+   "name": "param_n_rotations",
+   "description": "number of admissible rotations normalized to fixed number of angles drawn uniformly for identification uncertainty",
+   "value": "999",
+   "unit": "angles",
+   "kind": "parameter",
+   "where": "Section 5 Robustness to admissible rotations footnote - 999"
+  },
+  {
+   "name": "claim_persist_GDP_ECB_over_year",
+   "description": "Canadian GDP contracts on impact after ECB shock and remains below trend for over a year (VAR median rotation)",
+   "value": "over a year",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "Section 3 Transatlantic Monetary Spillovers - GDP remains below trend for over a year"
+  },
+  {
+   "name": "claim_persist_BoC_hike_Fed",
+   "description": "Bank of Canada raises policy rate persistently after Fed shock, lasting up to 18 months",
+   "value": "18 months",
+   "unit": "months",
+   "kind": "estimate",
+   "where": "Section 3 - monetary tightening immediate and persistent, lasting up to 18 months"
+  },
+  {
+   "name": "claim_persist_GDP_Fed_delay",
+   "description": "Fed shock GDP begins to contract significantly only after six months",
+   "value": "6 months",
+   "unit": "months",
+   "kind": "estimate",
+   "where": "Section 3 - output begins to contract significantly only after six months"
+  },
+  {
+   "name": "claim_persist_GDP_Fed_duration",
+   "description": "Fed shock GDP decline remains persistent for up to two years",
+   "value": "two years",
+   "unit": "years",
+   "kind": "estimate",
+   "where": "Section 3 - decline remains persistent for up to two years"
+  },
+  {
+   "name": "claim_persist_equity_ECB_VAR",
+   "description": "ECB shock equity price drop statistically indistinguishable from zero after four months (VAR)",
+   "value": "four months",
+   "unit": "months",
+   "kind": "estimate",
+   "where": "Section 3 - short-lived and statistically indistinguishable from zero after four months"
+  },
+  {
+   "name": "claim_persist_equity_ECB_LP",
+   "description": "ECB shock LP equity response becomes significant only after six months",
+   "value": "six months",
+   "unit": "months",
+   "kind": "estimate",
+   "where": "Section 3 Robustness LP - equity response emerges with delay, significant only after six months"
+  },
+  {
+   "name": "claim_persist_GDP_Fed_LP",
+   "description": "Fed shock LP GDP decline statistical significance only after a year",
+   "value": "a year",
+   "unit": "months",
+   "kind": "estimate",
+   "where": "Section 3 Robustness LP - more gradual but persistent decline in GDP, with significance only after a year"
+  },
+  {
+   "name": "claim_persist_housing_Fed",
+   "description": "Fed shock housing prices decline persistently for more than a year after mortgage rates climb",
+   "value": "more than a year",
+   "unit": "duration",
+   "kind": "estimate",
+   "where": "Section 4.2 Financial Variables - housing prices decline persistently for more than a year"
+  }
+ ],
+ "headline": "claim_persist_GDP_ECB_over_year",
+ "partitions": [],
+ "tests": []
+}

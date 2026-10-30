@@ -1,0 +1,137 @@
+{
+ "verdict": "partly holds up",
+ "rows": [
+  {
+   "name": "N_countries",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 27.0,
+   "reproduced": 27,
+   "se": null,
+   "n": 27,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "T_observations",
+   "kind": "count",
+   "unit": "months",
+   "reported": 307.0,
+   "reproduced": 307,
+   "se": null,
+   "n": 307,
+   "consistent": true,
+   "why": "precise: the paper's count"
+  },
+  {
+   "name": "lambda_minus_opt",
+   "kind": "estimate",
+   "unit": "eigenvalue",
+   "reported": 37.21,
+   "reproduced": 37.21,
+   "se": 7.07,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 37.21 +/- 13.86"
+  },
+  {
+   "name": "sigma_MP",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 0.2,
+   "reproduced": 0.192,
+   "se": 0.008,
+   "n": 8289,
+   "consistent": true,
+   "why": "paper inside 0.192 +/- 0.01568"
+  },
+  {
+   "name": "alpha_info_corr",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 1.82,
+   "reproduced": 1.82,
+   "se": 0.181,
+   "n": 17,
+   "consistent": true,
+   "why": "paper inside 1.82 +/- 0.3548"
+  },
+  {
+   "name": "D_KS_alpha",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 0.1,
+   "reproduced": 0.1,
+   "se": 0.037,
+   "n": 17,
+   "consistent": true,
+   "why": "paper inside 0.1 +/- 0.07252"
+  },
+  {
+   "name": "mu_Pareto",
+   "kind": "estimate",
+   "unit": "not stated",
+   "reported": 1.64,
+   "reproduced": 1.64,
+   "se": 0.363,
+   "n": 17,
+   "consistent": true,
+   "why": "paper inside 1.64 +/- 0.7115"
+  },
+  {
+   "name": "corr_kappa_D_E",
+   "kind": "estimate",
+   "unit": "correlation",
+   "reported": 0.988,
+   "reproduced": 0.983,
+   "se": 0.004,
+   "n": 91,
+   "consistent": true,
+   "why": "paper inside 0.983 +/- 0.00784"
+  },
+  {
+   "name": "corr_HICP_2019_2026",
+   "kind": "estimate",
+   "unit": "correlation",
+   "reported": -0.824,
+   "reproduced": 0.878,
+   "se": 0.024,
+   "n": 91,
+   "consistent": false,
+   "why": "paper outside 0.878 +/- 0.04704"
+  },
+  {
+   "name": "NNSD_cutoff",
+   "kind": "estimate",
+   "unit": "correlation",
+   "reported": 0.356,
+   "reproduced": 0.299,
+   "se": 0.037,
+   "n": 27,
+   "consistent": true,
+   "why": "paper inside 0.299 +/- 0.07252"
+  },
+  {
+   "name": "num_communities_lead_eig",
+   "kind": "tally",
+   "unit": "communities",
+   "reported": 6.0,
+   "reproduced": 2,
+   "se": 0,
+   "n": 27,
+   "consistent": false,
+   "why": "66.7% apart, beyond 10%"
+  },
+  {
+   "name": "community_East_size_stated",
+   "kind": "count",
+   "unit": "countries",
+   "reported": 5.0,
+   "reproduced": null,
+   "se": null,
+   "n": null,
+   "consistent": null,
+   "why": "not computed"
+  }
+ ]
+}

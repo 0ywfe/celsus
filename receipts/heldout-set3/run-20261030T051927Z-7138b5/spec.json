@@ -1,0 +1,178 @@
+{
+ "title": "Rethinking Beta: A Causal Take on CAPM - Replication Spec",
+ "hypothesis": "Same-period $R_{m,t} -> R_{i,t}$ is acyclically incoherent (Aggregator Contradiction); contemporaneous CAPM beta is associative proxy for common driver $Z$ in fork $Z->\\{R_m,R_i\\}$; any genuine $R_m->R_i$ must be lagged/leave-one-out and is economically second-order",
+ "data_sources": [
+  "ALFRED (macro)",
+  "Yahoo Finance (SPY, tickers, VIX, DGS10, DXY, SPDR sector ETFs)",
+  "CPI release dates as exogenous macro shock days"
+ ],
+ "sample": "Large-cap U.S. equities cross-section $\\sim 100$ tickers balanced across 11 SPDR sectors; market proxy $R_m$ = SPY log return; observables proxies for $Z$: $\\Delta$VIX daily change, $\\Delta$DGS10 daily change, DXY log return, SPDR sector ETF return; CPI release dates define shock-day sample. Period as printed 2015-2025. No leave-one-out index built (explicitly not built). No per-sector $N$, $N_{CPI}$, or pooled $N$ printed.",
+ "period_start": "2015",
+ "period_end": "2025",
+ "method": [
+  "1. Define market aggregator $X_t = \\sum_j w_{j,t-1} Y_{j,t}$ with $w_{j,t-1} >=0$, $\\sum_j w_{j,t-1}=1$. Formal Aggregator Contradiction proposition: same-period $Y_{i,t} := \\beta X_t + Z_t$ with $w_{i,t-1}>0$ and some $w_{j<>i}>0$ forces $\\beta=0$ in acyclic SCM else requires $w_{i,t-1}=0$ (leave-one-out $X_t^{-i}$) or single-asset market or cyclic simultaneity.",
+  "2. Taxonomy: 7 time-indexed DAGs for $(Z,X,Y)$ with delay $\\Delta$ (fork, chain via market, chain via asset, collider at $Z$, collider at $Y$, collider at $X$, latent confounding). Population meaning of OLS $\\beta^{OLS}_{k,l}$ in regression $Y_{t+k\\Delta}$ on $X_{t+l\\Delta}$ derived per DAG.",
+  "3. Numerical SEM illustration - fork: $X = a Z + U_X$, $Y = b Z + U_Y$ with $a<>0$; $\\beta_{fork}=ab\\sigma_Z^2/(a^2\\sigma_Z^2+\\sigma_X^2)=(b/a)\\lambda$, $\\lambda=a^2\\sigma_Z^2/(a^2\\sigma_Z^2+\\sigma_X^2) \\in (0,1)$; residual $\\tilde Y = Y-\\beta_{fork}X$ retains $Z$ loading $b-a\\beta_{fork}=b\\sigma_X^2/(a^2\\sigma_Z^2+\\sigma_X^2)$. Chain: $X_t = a Z_{t-\\Delta}+U_{X,t}$, $Y_t = c X_{t-\\Delta}+U_{Y,t}$; $\\beta_{chain}=c$, $\\tilde Y_t=U_{Y,t} \\perp Z_t$. Simulated with $U_Z\\sim N(0,\\sigma_Z^2)$, $U_X\\sim N(0,\\sigma_X^2)$, $U_Y\\sim N(0,\\sigma_Y^2)$ mutually independent; parameters as printed $n=100,000$, $a=1$, $b=1$, $c=1$, $\\sigma_Z=1$, $\\sigma_Y=1$, $\\sigma_X\\in[0,5]$ swept; $\\beta_{OLS}$ and post-hedge $Z$-loading estimated per $\\sigma_X$.",
+  "4. Empirical pillar 1 contemporaneous proxy tests - daily log returns 2015-2025: (i) On CPI dates pool cross-section OLS $R_{i,t}$ on $R_{m,t}$ alone vs $R_{m,t}+\\{\\Delta VIX, \\Delta DGS10, DXY^{ret}, Sector^{ret}\\}$; compare $R_m$ slope (Fig3a). Re-estimate without Sector^{ret} diagnostic (not shown, no numeric printed). (ii) Environment dependence: pooled interaction $R_{i,t}=\\alpha+\\beta R_{m,t}+\\sum_{e\\neq e0}(\\gamma_e 1\\{E_t=e\\}+\\delta_e R_{m,t}1\\{E_t=e\\})+\\Gamma' Z^{ext}_t+u_{i,t}$, recover $\\beta_e=\\beta+\\delta_e$ by VIX terciles, 60-day rates trend, 60-day USD trend, structural episodes (COVIDShock etc) (Fig3b-e); SE/t/p not printed, absolute values not printed, only qualitative larger/smaller pattern. Variations without sector ETFs not shown. (iii) Post-hedge residuals: per CPI date form residuals via pre-event rolling CAPM and regress on standardized shock controls; plot loadings on $\\Delta$VIX, Sector etc per vintage (Fig3f); SE/t/p not printed, numeric loadings not printed.",
+  "5. Empirical pillar 2 lagged mechanism - pooled lag profile with contemporaneous controls $R_{i,t}=\\alpha+\\sum_{k=0}^{5} c_k R_{m,t-k}+\\Gamma' Z^{ext}_t+e_{i,t}$; estimate $c_k$ for $k=0..5$ with CIs (Fig4). $c_0$ described as large contemporaneous proxy; $k>=1$ described as small, alternating sign, most CIs straddle zero, weak blip at $k=2$ not persistent; no numeric $c_k$, SE, t, p printed.",
+  "6. Diagnostics suggested but not implemented: Granger-style $X_{t-\\Delta}->Y_t$ vs $Y_{t-\\Delta}->X_t$ controlling $Z$ proxies; compare $X_t$ vs $X_t^{-i}$; attenuation on shock days; avoid conditioning on colliders (realized vol/liquidity/VIX).",
+  "7. Conventional CAPM practice cited: OLS on rolling windows often 36-60 months monthly or multi-year daily; illustrative interpretation $\\beta=1.2$, $1\\%$ market -> $1.2\\%$ stock - for reference only, not an estimated result."
+ ],
+ "claims": [
+  {
+   "name": "count_tickers",
+   "description": "large-cap cross-section size",
+   "value": "~100",
+   "unit": "tickers",
+   "kind": "count",
+   "where": "Sec5 Data and setup: comprises ~100 large-cap U.S. tickers"
+  },
+  {
+   "name": "count_sectors",
+   "description": "SPDR sector groups",
+   "value": "11",
+   "unit": "sectors",
+   "kind": "count",
+   "where": "Sec5: balanced across the 11 SPDR sectors"
+  },
+  {
+   "name": "param_window_months_low",
+   "description": "conventional CAPM rolling window lower bound",
+   "value": "36",
+   "unit": "months",
+   "kind": "parameter",
+   "where": "Sec1: often 36-60 months of monthly data"
+  },
+  {
+   "name": "param_window_months_high",
+   "description": "conventional CAPM rolling window upper bound",
+   "value": "60",
+   "unit": "months",
+   "kind": "parameter",
+   "where": "Sec1: often 36-60 months"
+  },
+  {
+   "name": "param_illust_beta",
+   "description": "illustrative causal reading of beta",
+   "value": "1.2",
+   "unit": "beta",
+   "kind": "parameter",
+   "where": "Sec1: if beta=1.2 ..."
+  },
+  {
+   "name": "param_illust_market_move",
+   "description": "illustrative market move",
+   "value": "1%",
+   "unit": "return",
+   "kind": "parameter",
+   "where": "Sec1: a 1% market rally ..."
+  },
+  {
+   "name": "param_illust_stock_move",
+   "description": "illustrative stock move",
+   "value": "1.2%",
+   "unit": "return",
+   "kind": "parameter",
+   "where": "Sec1: ... causes 1.2% move ..."
+  },
+  {
+   "name": "param_sim_n",
+   "description": "Monte Carlo draws per sigma_X",
+   "value": "100,000",
+   "unit": "observations",
+   "kind": "parameter",
+   "where": "Sec4.3: We draw n=100,000 observations"
+  },
+  {
+   "name": "param_sim_a",
+   "description": "SEM coefficient a",
+   "value": "1",
+   "unit": "coefficient",
+   "kind": "parameter",
+   "where": "Sec4.3: a=b=c=1"
+  },
+  {
+   "name": "param_sim_b",
+   "description": "SEM coefficient b",
+   "value": "1",
+   "unit": "coefficient",
+   "kind": "parameter",
+   "where": "Sec4.3: a=b=c=1"
+  },
+  {
+   "name": "param_sim_c",
+   "description": "SEM coefficient c (chain effect)",
+   "value": "1",
+   "unit": "coefficient",
+   "kind": "parameter",
+   "where": "Sec4.3: a=b=c=1"
+  },
+  {
+   "name": "param_sim_sigma_Z",
+   "description": "SEM sigma_Z",
+   "value": "1",
+   "unit": "sd",
+   "kind": "parameter",
+   "where": "Sec4.3: sigma_Z=sigma_Y=1"
+  },
+  {
+   "name": "param_sim_sigma_Y",
+   "description": "SEM sigma_Y",
+   "value": "1",
+   "unit": "sd",
+   "kind": "parameter",
+   "where": "Sec4.3: sigma_Z=sigma_Y=1"
+  },
+  {
+   "name": "param_sim_sigma_X_low",
+   "description": "sigma_X sweep lower bound",
+   "value": "0",
+   "unit": "sd",
+   "kind": "parameter",
+   "where": "Sec4.3: vary sigma_X in [0,5]"
+  },
+  {
+   "name": "param_sim_sigma_X_high",
+   "description": "sigma_X sweep upper bound",
+   "value": "5",
+   "unit": "sd",
+   "kind": "parameter",
+   "where": "Sec4.3: vary sigma_X in [0,5]"
+  },
+  {
+   "name": "param_lag_min_k",
+   "description": "lag profile minimum lag",
+   "value": "0",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Sec5 Pillar2: k=0..5"
+  },
+  {
+   "name": "param_lag_max_k",
+   "description": "lag profile maximum lag",
+   "value": "5",
+   "unit": "lags",
+   "kind": "parameter",
+   "where": "Sec5 Pillar2: k=0..5"
+  },
+  {
+   "name": "estimate_beta_CPI_uncontrolled",
+   "description": "pooled CPI-day slope on R_m alone (Fig3a left bar)",
+   "value": "~0.9",
+   "unit": "beta",
+   "kind": "estimate",
+   "where": "Sec5 Pillar1 (i): from ~0.9 to ~0.03"
+  },
+  {
+   "name": "estimate_beta_CPI_controlled",
+   "description": "pooled CPI-day slope on R_m with DeltaVIX, DeltaDGS10, DXY, Sector controls (Fig3a right bar)",
+   "value": "~0.03",
+   "unit": "beta",
+   "kind": "estimate",
+   "where": "Sec5 Pillar1 (i): from ~0.9 to ~0.03"
+  }
+ ],
+ "headline": "estimate_beta_CPI_controlled",
+ "partitions": [],
+ "tests": []
+}

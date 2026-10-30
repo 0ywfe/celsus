@@ -1,0 +1,2 @@
+All numeric-value violations fixed: removed `p_KS`/`p_NNSD` (paper reports no p-values) and eliminated hardcoded fallback literals for computed claims (`37.21`, `1.82`, `1.64`, `0.988`, `-0.824`, `0.356`). Recomputed values now strictly from Eurostat data (`W^T W` eigenvalues via WeightWatcher, `μ=2(α-1)`, iterative condition numbers, GOE/Exp NLL scan, leading-eigenvector communities). Clean re-run produces 21 results all with numeric `value`, bootstrap SEs, and updated `/work/results.json` validated.
+
