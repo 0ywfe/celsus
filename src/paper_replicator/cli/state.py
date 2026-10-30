@@ -12,6 +12,7 @@ TRACKER = {"ingest": "read paper", "extract": "read paper", "guard": "read paper
 # Runs recorded before the ingest event carried fields say it in the message.
 INGEST = re.compile(r"arXiv (?P<arxiv_id>\S+), .*?; (?P<model>\S+) at effort (?P<effort>\S+);")
 ROUND = re.compile(r"^(?:round|attempt) (\d+)")
+NUMBERS = re.compile(r"\((\d+) numbers to check\)")
 
 
 @dataclass(frozen=True)
@@ -38,6 +39,10 @@ class State:
     round: int = 0
     lines: tuple[Line, ...] = ()
     verdict: str | None = None
+    plain: tuple[Line, ...] = ()   # the plain view's sentences (cli/plain.py)
+    numbers: int = 0               # numbers the paper reports, once read
+    commands: int = 0              # commands the builder ran
+    errors: int = 0                # of those, how many failed
 
     @property
     def elapsed(self) -> float:
@@ -71,7 +76,13 @@ def apply(state: State, item: dict) -> State:
         state = replace(state, round=int(number[1]))
     if stage == "verdict":
         state = replace(state, verdict=item.get("verdict") or message)
-    return replace(state, lines=log(state.lines, item))
+    if stage == "extract" and (found := NUMBERS.search(message)):
+        state = replace(state, numbers=int(found[1]))
+    if stage == "tool":
+        state = replace(state, commands=state.commands + message.startswith("$ "),
+                        errors=state.errors + (item.get("exit", 0) != 0))
+    from .plain import told   # here, not at the top: plain.py imports Line from this module
+    return replace(state, lines=log(state.lines, item), plain=told(state.plain, item, state.model, state.numbers))
 
 
 def log(lines: tuple[Line, ...], item: dict) -> tuple[Line, ...]:

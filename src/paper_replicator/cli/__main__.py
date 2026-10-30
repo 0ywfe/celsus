@@ -26,7 +26,7 @@ from ..runs import RUNS_DIR
 from . import sabotage_view
 from .state import State, apply
 from .timeline import Tail, load, merge
-from .view import card, screen
+from .view import card, screen, spec_of
 
 POLL_S = 0.25  # how often a live run's folder is read
 RUN_ID = re.compile(r"run-\d{8}T\d{6}Z-[0-9a-f]{6}")
@@ -35,6 +35,8 @@ RUN_ID = re.compile(r"run-\d{8}T\d{6}Z-[0-9a-f]{6}")
 DEMO_RUNS = Path(__file__).parent / "demo"
 DEMO_DEFAULT = "25b01b"   # held-out set 3, 2610.04221 draw 2: holds up, 84/84, main result consistent
 DEMO_SECONDS = 28.0       # the README's "30 seconds", the verdict card included
+PLAIN_ROWS = 6            # the plain view's card: the main result, any mismatches, then "… N more matched"
+LOG_HELP = "show the full log (every event and command) instead of one plain sentence per step"
 
 
 def _folder(name: str) -> Path:
@@ -47,20 +49,22 @@ def _folder(name: str) -> Path:
     return found[0]
 
 
-def replay(folder: Path, speed: float, max_gap_s: float, console: Console, sleep=time.sleep) -> State:
-    """Plays the run at its own pace, `speed` times faster, with no pause longer than max_gap_s."""
-    items = load(folder)
+def replay(folder: Path, speed: float, max_gap_s: float, console: Console, sleep=time.sleep,
+           plain: bool = False) -> State:
+    """Plays the run at its own pace, `speed` times faster, with no pause longer than max_gap_s. `plain` tells it in
+    sentences instead of the log."""
+    items, spec = load(folder), spec_of(folder) if plain else None
     console.print(Text(f"replay of {folder.name}, recorded {items[0]['ts'][:16].replace('T', ' ')} UTC"
                        f" · {speed:.3g}× speed", style="dim") if items else Text("empty run", style="red"))
     state, previous = State(), None
-    with Live(screen(state, console.height), console=console, refresh_per_second=10) as live:
+    with Live(screen(state, console.height, plain, spec), console=console, refresh_per_second=10) as live:
         for item in items:
             if previous is not None:
                 sleep(min((item["t"] - previous) / speed, max_gap_s))
             previous, state = item["t"], apply(state, item)
-            live.update(screen(state, console.height))
+            live.update(screen(state, console.height, plain, spec))
     if (folder / "summary.json").exists():
-        console.print(card(folder, max_rows=max(console.height - 16, 6)))
+        console.print(card(folder, max_rows=PLAIN_ROWS if plain else max(console.height - 16, 6), plain=plain))
     return state
 
 
@@ -78,17 +82,18 @@ def pace(items: list[dict], seconds: float, max_gap_s: float) -> float:
     return fast
 
 
-def demo(run: str | None, seconds: float, max_gap_s: float, console: Console, sleep=time.sleep) -> State:
+def demo(run: str | None, seconds: float, max_gap_s: float, console: Console, sleep=time.sleep,
+         plain: bool = False) -> State:
     """Replays a run shipped with the package (the default when run is None) in about `seconds`, labelled as a replay
     like any other, and ends on its verdict card."""
     shipped = sorted(p for p in DEMO_RUNS.iterdir() if p.is_dir())
     found = [p for p in shipped if p.name.endswith(run or DEMO_DEFAULT)]
     if len(found) != 1:
         raise SystemExit(f"no shipped run matches {run!r}; shipped: {', '.join(p.name[-6:] for p in shipped)}")
-    return replay(found[0], pace(load(found[0]), seconds, max_gap_s), max_gap_s, console, sleep)
+    return replay(found[0], pace(load(found[0]), seconds, max_gap_s), max_gap_s, console, sleep, plain=plain)
 
 
-def check(args: list[str], console: Console) -> State:
+def check(args: list[str], console: Console, plain: bool = False) -> State:
     """Starts a run as its own process and follows its folder until the verdict."""
     RUNS_DIR.mkdir(parents=True, exist_ok=True)
     log = RUNS_DIR / "cli_last_run.out"
@@ -102,20 +107,21 @@ def check(args: list[str], console: Console) -> State:
         if folder is None and process.poll() is not None:
             raise SystemExit(f"the run did not start; see {log}")
         time.sleep(POLL_S)
-    events, calls, state = Tail(folder / "events.jsonl"), Tail(folder / "calls.jsonl"), State()
-    with Live(screen(state, console.height), console=console, refresh_per_second=10) as live:
+    events, calls, state, spec = Tail(folder / "events.jsonl"), Tail(folder / "calls.jsonl"), State(), None
+    with Live(screen(state, console.height, plain), console=console, refresh_per_second=10) as live:
         while True:
             finished = process.poll() is not None
             for item in merge(events.read(), calls.read()):
                 state = apply(state, item)
             if state.started is not None and state.verdict is None:
                 state = replace(state, now=time.time())  # the clock runs between events
-            live.update(screen(state, console.height))
+            spec = spec or (spec_of(folder) if plain else None)   # written once the paper is read
+            live.update(screen(state, console.height, plain, spec))
             if finished:
                 break
             time.sleep(POLL_S)
     if (folder / "summary.json").exists():
-        console.print(card(folder, max_rows=max(console.height - 16, 6)))
+        console.print(card(folder, max_rows=PLAIN_ROWS if plain else max(console.height - 16, 6), plain=plain))
     return state
 
 
@@ -127,10 +133,12 @@ def main(argv: list[str] | None = None) -> None:
     play.add_argument("run")
     play.add_argument("--speed", type=float, default=10.0, help="times faster than the run took")
     play.add_argument("--max-gap", type=float, default=1.5, help="longest pause between two lines, in seconds")
+    play.add_argument("--log", action="store_true", help=LOG_HELP)
     shown = sub.add_parser("demo", help="replay a held-out run shipped with the package (no API key needed)")
     shown.add_argument("run", nargs="?", help=f"a shipped run's ID (default {DEMO_DEFAULT})")
     shown.add_argument("--seconds", type=float, default=DEMO_SECONDS, help="how long the replay takes, about")
     shown.add_argument("--max-gap", type=float, default=1.5, help="longest pause between two lines, in seconds")
+    shown.add_argument("--log", action="store_true", help=LOG_HELP)
     plants = sub.add_parser("sabotage", help="replay a saboteur session: each plant and the check that caught it")
     plants.add_argument("session")
     plants.add_argument("--speed", type=float, default=10.0, help="times faster than the session took")
@@ -140,13 +148,13 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
     console = Console()
     if args.command == "replay":
-        replay(_folder(args.run), args.speed, args.max_gap, console)
+        replay(_folder(args.run), args.speed, args.max_gap, console, plain=not args.log)
     elif args.command == "demo":
-        demo(args.run, args.seconds, args.max_gap, console)
+        demo(args.run, args.seconds, args.max_gap, console, plain=not args.log)
     elif args.command == "sabotage":
         sabotage_view.replay(_folder(args.session), args.speed, args.max_gap, console)
     else:
-        check(args.rest, console)
+        check([a for a in args.rest if a != "--log"], console, plain="--log" not in args.rest)
 
 
 if __name__ == "__main__":

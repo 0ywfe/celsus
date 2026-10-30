@@ -12,6 +12,7 @@ from rich.text import Text
 
 from .. import DISCLAIMER, PRODUCT_NAME
 from ..compare import COULD_NOT_CHECK, Z95, with_unit
+from .plain import COUNTER, HEADLINE
 from .state import STAGES, TRACKER, State
 
 GLYPH = {"done": "●", "active": "◐", "pending": "○"}
@@ -91,8 +92,45 @@ def log(state: State, height: int) -> Table:
     return grid
 
 
-def screen(state: State, height: int) -> Group:
-    return Group(tracker(state), Text(""), log(state, height - 4))
+# The plain view marks each sentence: a step, a pass, a flag, a rejection, the verdict.
+MARKS = {"": ("·", "dim"), "ok": ("✓", "green"), "flag": ("!", "bold yellow"), "note": ("·", "yellow"),
+         "reject": ("✗", "bold red"), "error": ("✗", "red"), "verdict": ("●", "bold")}
+
+
+def told(state: State, height: int, spec: dict | None) -> Table:
+    """The plain view's sentences, each marked, wrapping under its own text."""
+    grid = Table.grid(expand=True)
+    grid.add_column(width=4, no_wrap=True)
+    grid.add_column(ratio=1, overflow="fold")
+    for line in state.plain[-max(height, 1):]:
+        text = said(line, state, spec)
+        if text is None:
+            continue
+        mark, style = MARKS.get(line.style, MARKS[""])
+        grid.add_row(Text(f" {mark}", style=style),
+                     Text(text, style="dim" if line.style == COUNTER else LINE_STYLES.get(line.style, "")))
+    return grid
+
+
+def said(line, state: State, spec: dict | None) -> str | None:
+    """A line's text; the main result and the command counter are filled in now, from the spec and the state."""
+    if line.style == COUNTER:
+        return f"commands run: {state.commands} · errors hit: {state.errors}"
+    if line.style == HEADLINE:
+        claim = described(spec).get((spec or {}).get("headline"))
+        return f"Main result: {claim[0]} = {with_unit(claim[1], claim[2])} in the paper." if claim else None
+    return line.text
+
+
+def described(spec: dict | None) -> dict[str, tuple[str, str, str]]:
+    """Each claim's plain description, value and unit, as the spec recorded them."""
+    return {c["name"]: (c.get("description") or c["name"], str(c.get("value", "")), c.get("unit") or "")
+            for c in (spec or {}).get("claims", []) if c.get("name")}
+
+
+def screen(state: State, height: int, plain: bool = False, spec: dict | None = None) -> Group:
+    body = told(state, height - 4, spec) if plain else log(state, height - 4)
+    return Group(tracker(state), Text(""), body)
 
 
 def _reproduced(row: dict) -> str:
@@ -120,11 +158,24 @@ def shown_rows(judged: list[dict], main: str | None, limit: int) -> tuple[list[d
     return ordered[:limit], max(len(ordered) - limit, 0)
 
 
-def card(folder: Path, max_rows: int = 12) -> Panel:
+def spec_of(folder: Path) -> dict | None:
+    try:
+        return json.loads((folder / "spec.json").read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def card(folder: Path, max_rows: int = 12, plain: bool = False) -> Panel:
+    """The verdict card. In the plain view each claim shows as the spec describes it, not by its variable name."""
     summary = json.loads((folder / "summary.json").read_text())
+    names = {name: about[0] for name, about in described(spec_of(folder)).items()} if plain else {}
     rows = json.loads((folder / "comparison.json").read_text())["rows"] if (folder / "comparison.json").exists() else []
     style = VERDICT_STYLES.get(summary["verdict"], "")
-    parts: list = [Text(summary["first_line"], style=f"bold {style}")]
+    main = (summary.get("headline") or {}).get("name")
+    first = summary["first_line"]
+    if main in names:
+        first = first.replace(f"Its main result, {main}, is", f"Its main result, {names[main]}, is")
+    parts: list = [Text(first, style=f"bold {style}")]
     judged = [r for r in rows if r["kind"] != "count" and r["consistent"] is not None]
     if judged:
         table = Table(box=None, pad_edge=False, show_edge=False, expand=True)
@@ -132,11 +183,10 @@ def card(folder: Path, max_rows: int = 12) -> Panel:
         table.add_column("paper", justify="right", no_wrap=True)
         table.add_column("reproduced", justify="right", no_wrap=True)
         table.add_column("", ratio=2, no_wrap=True, overflow="ellipsis")
-        main = (summary.get("headline") or {}).get("name")
         shown, hidden = shown_rows(judged, main, max_rows)
         for r in shown:
             mark = Text("✓ ", style="green") if r["consistent"] else Text("✗ ", style="red")
-            table.add_row(r["name"], with_unit(f"{r['reported']:.4g}", r["unit"] if r["kind"] == "estimate" else ""),
+            table.add_row(names.get(r["name"], r["name"]), with_unit(f"{r['reported']:.4g}", r["unit"] if r["kind"] == "estimate" else ""),
                           _reproduced(r),
                           mark + Text(r["why"], style="dim"))
         parts += [Text(""), table]

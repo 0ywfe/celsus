@@ -252,3 +252,68 @@ def test_a_hosted_model_path_shows_as_its_model_name():
     text = console.export_text()
     assert "muse-spark-open · xhigh" in text and "2610.04221 · muse-spark-open" in text
     assert "accounts/fireworks/models/muse-spark-open ·" not in text and "○ v…" not in text
+
+
+def plain(tmp_path, width, spec=None):
+    folder = recorded(tmp_path)
+    if spec:
+        (folder / "spec.json").write_text(json.dumps(spec))
+    console = Console(record=True, width=width, height=40, color_system=None)
+    replay(folder, speed=100, max_gap_s=0, console=console, sleep=lambda s: None, plain=True)
+    return console.export_text()
+
+
+SPEC = {"headline": "small_mean", "claims": [
+    {"name": "small_mean", "description": "mean return of small firms", "value": "-7.49", "unit": "%"},
+    {"name": "n", "description": "firms in the sample", "value": "54", "unit": ""}]}
+
+
+def test_the_plain_view_tells_the_run_in_sentences(tmp_path):
+    text = plain(tmp_path, 97)
+    for sentence in ("Reading the paper with Muse Spark (15,664 characters of LaTeX).",
+                     "Found 27 numbers the paper reports.",
+                     "The paper's own sums don't add up: 24 + 29 = 53, but its total is 54.",
+                     "Muse is writing code to rebuild the study from public data.",
+                     "commands run: 1 · errors hit: 1",
+                     "Sent back by a coded check: it cuts the sample to a count the paper reports.",
+                     "Round 2: Muse fixes the script and tries again.",
+                     "27 results, and the rebuilt sample matches the paper's counts.",
+                     "Verdict: holds up."):
+        assert sentence in text, sentence
+    assert "$ python" not in text and "run-x" not in text and "round 1:" not in text and "FLAG" not in text
+
+
+def test_the_plain_view_fits_a_wide_screen_on_single_lines(tmp_path):
+    lines = plain(tmp_path, 160).splitlines()
+    assert any(line.rstrip().endswith("muse-spark-1.3 · minimal · $0.29 · 0:18 · all on Meta ✓") for line in lines)
+    assert any(line.strip() == "!  The paper's own sums don't add up: 24 + 29 = 53, but its total is 54." for line in lines)
+
+
+def test_the_plain_view_names_the_main_result_and_describes_the_rows(tmp_path):
+    text = plain(tmp_path, 120, spec=SPEC)
+    assert "Main result: mean return of small firms = -7.49% in the paper." in text
+    assert "mean return of small firms" in text.split("The paper's numbers hold up")[1]   # the card's claim column
+    assert "small_mean" not in text
+
+
+def test_the_plain_demo_shows_no_host_paths_or_tool_calls():
+    from paper_replicator.cli.__main__ import demo
+    console = Console(record=True, width=97, height=28, color_system=None)
+    demo(None, seconds=0, max_gap_s=0, console=console, sleep=lambda s: None, plain=True)
+    text = console.export_text()
+    assert "Reading the paper with Muse Spark Open (141,038 characters of LaTeX)." in text
+    assert "226 of 228 numbers found in the paper exactly as printed." in text
+    assert "accounts/fireworks" not in text and "$ python3" not in text and "commands run: " in text
+    assert "TabM_withoutSS_MTSV_Sharpe" not in text and "more matched" in text
+
+
+def test_log_keeps_the_engineers_screen(monkeypatch, tmp_path):
+    from paper_replicator.cli import __main__ as cli
+    seen = []
+    monkeypatch.setattr(cli, "replay", lambda *a, **k: seen.append(k["plain"]))
+    monkeypatch.setattr(cli, "demo", lambda *a, **k: seen.append(k["plain"]))
+    cli.main(["replay", str(recorded(tmp_path)), "--log"])
+    cli.main(["replay", str(tmp_path / "run-20261028T153637Z-abcdef")])
+    cli.main(["demo", "--log"])
+    cli.main(["demo"])
+    assert seen == [False, True, False, True]
