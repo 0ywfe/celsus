@@ -374,7 +374,7 @@ def _bounds_only(tree: ast.AST) -> set[ast.AST]:
     """Comparisons that only bound a sample: in an if or while test, with neither branch able to change any sample
     whose len() they compare. 8dd383's `if len(all_dates) > 100:` (a minimum length before the analysis) is one;
     4ac609's `while len(ndata) < 82:` (padding with noise series) and eccf14's `if len(events) < 54:` (swapping in a
-    typed list) are not. Post-headline, the orchestrator's ruling (30 Oct)."""
+    typed list) are not. Post-headline, 30 Oct."""
     defined = {n.name: n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
     found = set()
     for node in ast.walk(tree):

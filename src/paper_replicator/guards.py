@@ -553,7 +553,7 @@ def as_parameters(claims: list[Claim]) -> tuple[list[Claim], list[str]]:
     return out, moved
 
 
-# Name words that mark a tally of what the analysis found rather than a size of its data (the orchestrator's (h),
+# Name words that mark a tally of what the analysis found rather than a size of its data (ruling (h),
 # 29 Oct). Measured on the 1,256 count names on disk: 17 carry one and no word for the data's units, all of them
 # tallies (significant pairs, Holm rejections, FDR survivors); the one with a units word ("significant assets") stays.
 _TALLY_WORDS = {"significant", "signif", "reject", "rejections", "fdr", "detected", "breaches"}

@@ -37,7 +37,7 @@ def test_a_sample_with_no_dates_cannot_be_compared():
         "the replication did not report the dates its sample covers")
 
 
-# Post-headline, the orchestrator's ruling (30 Oct): a period written as several dates is read from its earliest date
+# Post-headline, 30 Oct: a period written as several dates is read from its earliest date
 # to its latest. The strings are the 9 compound ones on disk, with the run that wrote each.
 DCB75D = spec("June 1996 (Table says mid-1997; text says June 1996 for BRK/WMT; July 2019 for CVS)",
               "May 2024 (monthly BRK/WMT); Jun 2024 (daily CVS) (Table says 2024)")

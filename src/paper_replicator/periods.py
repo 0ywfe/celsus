@@ -59,7 +59,7 @@ _ONE_DATE = re.compile(r"\b\d{4}-\d{1,2}-\d{1,2}\b|\b\d{4}-\d{1,2}\b(?![-\d])"
 
 def paper_span(printed: str | None, end: bool) -> tuple[dt.date, dt.date] | None:
     """The paper's start (or end, with end=True) as printed. A string holding more than one date is read from its
-    earliest date (a start) or to its latest (an end): post-headline, the orchestrator's ruling (30 Oct), after
+    earliest date (a start) or to its latest (an end): post-headline, 30 Oct, after
     dcb75d's "May 2024 (monthly BRK/WMT); Jun 2024 (daily CVS)" was read as May 2024 alone and decided its verdict."""
     text = (printed or "").strip().lower().replace(",", " ")
     if text.startswith(NOT_STATED):

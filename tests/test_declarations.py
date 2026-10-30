@@ -93,7 +93,7 @@ def test_a_sample_total_left_out_still_blocks_without_a_matching_largest_total(r
     assert "sample size reported" in checks(sample, results, totals=(EVENTS, POOL, OBS))
 
 
-# (m), the orchestrator's ruling (29 Oct): a smaller total neither reported nor declared, while the largest matches,
+# Ruling (m), 29 Oct: a smaller total neither reported nor declared, while the largest matches,
 # is treated as declared not rebuilt: a caveat, no cap, excusing nothing else. e7f650 (2602.07046) left out the
 # 135-firm screening pool undeclared with its 14,361 observations matching, and could not be checked.
 
@@ -285,7 +285,7 @@ def test_the_builder_is_told_to_name_the_claim_and_leave_its_count_out():
     assert "exact name" in roles.RESULTS_FORMAT and "out of results" in roles.RESULTS_FORMAT
 
 
-# (j), the orchestrator's ruling (29 Oct): the paper's largest sample total may be declared not rebuilt, with a reason
+# Ruling (j), 29 Oct: the paper's largest sample total may be declared not rebuilt, with a reason
 # naming what public data lacks. Refused, e589c6's builder declared the paper's 120 LLM forecast paths in round 2 and
 # wrote them as the paper's design arithmetic in round 3, which the reviewer stopped.
 
@@ -407,14 +407,14 @@ def test_the_first_line_names_the_declared_sample_unless_the_paper_could_not_be_
 
 
 def test_the_reviewer_checks_a_declared_sample_against_the_code():
-    """(j), the orchestrator's ruling: a declaration the code contradicts is the reviewer's to report, not a coded
+    """Ruling (j), 29 Oct: a declaration the code contradicts is the reviewer's to report, not a coded
     guard's (units are free text; a guard that wrongly refuses would bring back the pressure to fake)."""
     from paper_replicator import roles
     assert ("If the paper's largest sample size is declared not rebuilt, read the code: if the code builds that "
             "sample, the\n   declaration is false. Report it as a finding.") in roles.REVIEWER
 
 
-# The orchestrator's ruling (29 Oct), before the battery: e589c6's round-3 fake must be caught by a check that always
+# Design note (29 Oct), before the battery: e589c6's round-3 fake must be caught by a check that always
 # catches, not by a reviewer that caught it 3 times in 9. The comparison already left R("n_llm_runs", 3*4*5*2, ...)
 # unjudged (guards.fixed_results), but the sample counted as reported and the verdict was not capped: on a paper
 # whose other results all match, the fake earned "holds up" where the honest declaration earns "partly holds up".

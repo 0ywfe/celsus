@@ -353,7 +353,7 @@ if len(events)<54:
     ("if len(x) < 100:\n    print('short', len(x))\nelse:\n    y = x.mean()\n", False),
 ])
 def test_a_bound_is_a_cut_only_when_its_branches_can_change_the_sample(script, caught):
-    """Post-headline, the orchestrator's ruling (30 Oct): a literal used only as a comparison bound is ignored when
+    """Post-headline, 30 Oct: a literal used only as a comparison bound is ignored when
     the guarded branches do not assign, item-assign, augment or mutate the sample whose len() is compared."""
     totals = [_claim("n_total", "100", "count"), _claim("n_panel", "82", "count"), _claim("n_filings", "54", "count")]
     assert bool(hardcoded_counts(script, totals, totals)) is caught

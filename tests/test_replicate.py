@@ -123,7 +123,7 @@ def test_a_run_that_writes_the_paper_s_sample_size_as_a_number_is_capped_like_a_
 
 @pytest.mark.parametrize("effort", ["minimal", "xhigh"])
 def test_the_reviewer_runs_at_high_whatever_the_run_s_effort(setup, effort):
-    """The orchestrator's ruling (29 Oct): every reviewer number (the plant battery, the held-out sets, validation)
+    """Design note (29 Oct): every reviewer number (the plant battery, the held-out sets, validation)
     was measured at high; a run at minimal (the Meta demo) or xhigh moves the other roles, never the reviewer."""
     cfg, tmp_path = setup
     api = FakeChatAPI(standing=NO_FINDINGS, replies=[(json.dumps(SPEC), usage(500, 900)), (json.dumps(CLEAN), usage(800, 700))])
@@ -706,7 +706,7 @@ def test_every_finding_reaches_the_builder_and_the_runs_events(setup):
     assert review["flagged_by"] == "1 of 2"   # only one of the two reviews flagged: listed for reading in set 3
 
 
-# The orchestrator's ruling (30 Oct), from the sabotage battery: two independent reviews at high, findings unioned.
+# Design note (30 Oct), from the sabotage battery: two independent reviews at high, findings unioned.
 
 def review_round(first: str, second: str, tmp_path, cfg):
     fixed = {"script": "print('computed again')", "notes": ""}

@@ -64,7 +64,7 @@ def test_sample_sizes_match_within_scores_fifteen_percent(reported, value, consi
 
 
 def test_scores_rule_is_for_sample_totals_and_subgroup_counts_keep_the_old_band():
-    """The orchestrator's rule T (29 Oct, amended): SCORE's 15% alone for sample totals; a subgroup's count passes
+    """Rule T (29 Oct, amended): SCORE's 15% alone for sample totals; a subgroup's count passes
     within SCORE's 15% or the old band, labelled as unsourced. The breach paper's larger-cap firms, 29 in the
     paper and 24 rebuilt, is a subgroup; 2606.29591's 21 cross-asset instruments, 25 rebuilt, is its sample."""
     claims = [claim("n_filings", "54", "count"), claim("n_larger_cap", "29", "count"),
@@ -161,7 +161,7 @@ def test_a_could_not_check_names_every_blocker():
     (row("main", "estimate", False), "partly holds up"),               # judged and not consistent, as before
 ])
 def test_a_paper_holds_up_only_if_its_main_result_was_judged_and_matched(main, outcome):
-    """Fix (g), the orchestrator's ruling (29 Oct): "holds up" next to "main result not computed" costs the table
+    """Ruling (g), 29 Oct: "holds up" next to "main result not computed" costs the table
     its reader's trust."""
     rows = [main, row("a", "estimate", True), row("b", "estimate", True)]
 
@@ -374,7 +374,7 @@ STORED_UNJUDGED_MAIN = __import__("json").loads(
 
 @pytest.mark.parametrize("run", sorted(STORED_UNJUDGED_MAIN))
 def test_a_paper_does_not_hold_up_only_if_its_main_result_was_judged_and_missed(run):
-    """Post-headline, the orchestrator's ruling (30 Oct), symmetric to (g): set 3's three "does not hold up"
+    """Post-headline, 30 Oct, symmetric to (g): set 3's three "does not hold up"
     (d36131, 6942f6, 235319) each missed every checked result with its main result never computed. A miss on
     numbers that are not the paper's claim doesn't show the claim fails: 6942f6's misses were the script's declared
     PCA proxies under the paper's DFM names."""
@@ -408,7 +408,7 @@ def test_a_count_or_a_missing_main_result_never_makes_a_paper_fail(main):
     (None, None, "the paper's main result is none of the numbers checked"),
 ])
 def test_a_miss_without_a_judged_main_result_says_why_and_is_not_a_verdict_against_the_paper(main, headline, says):
-    """Post-headline, the orchestrator's wording (30 Oct): after "none of the 9 checked results match", the usual
+    """Post-headline, 30 Oct: after "none of the 9 checked results match", the usual
     "This says nothing about whether its numbers hold" would contradict itself."""
     rows = [*([main] if main else []), row("a", "estimate", False), row("b", "estimate", False)]
     outcome, reason = verdict(rows, [{"name": "a", "value": 1.0, "n": 10}], headline=headline)

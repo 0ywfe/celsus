@@ -56,7 +56,7 @@ def test_a_tally_with_no_uncertainty_given_is_not_judged_and_with_one_is(result,
 
 @pytest.mark.parametrize("value, consistent", [(10, True), (11, True), (12, False), (3, False)])
 def test_a_tally_the_builder_says_has_no_sampling_error_is_judged_as_a_fixed_number(value, consistent):
-    """(h2), the orchestrator's ruling: se = 0 is a deterministic finding (12 VaR breaches against 12), judged exact
+    """Ruling (h2), 29 Oct: se = 0 is a deterministic finding (12 VaR breaches against 12), judged exact
     or within 10%; the paper's 10 significant tests found as 3 is a finding that did not reproduce."""
     row = compare.compare([claim("t", "10", "tally")], [{"name": "t", "value": value, "se": 0}])[0]
     assert row["consistent"] is consistent
@@ -181,7 +181,7 @@ def test_the_builder_is_told_a_sample_statistic_has_an_se():
 
 
 def test_the_reviewer_is_told_a_paper_s_setting_is_not_a_breach_unless_the_code_ignores_it():
-    """(l), the orchestrator's ruling: held-out 850904 was "could not check" over three findings on design settings
+    """Ruling (l), 29 Oct: held-out 850904 was "could not check" over three findings on design settings
     written at the paper's values (10,000 surrogate trials, 1,000 null networks, C(14,7) = 3,432 permutations),
     claims of kind parameter, which are never judged."""
     text = " ".join(roles.REVIEWER.split())
