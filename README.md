@@ -1,4 +1,4 @@
-# paper-replicator
+# celsus
 
 [![tests](https://github.com/0ywfe/paper-replicator/actions/workflows/tests.yml/badge.svg)](https://github.com/0ywfe/paper-replicator/actions/workflows/tests.yml)
 
@@ -16,11 +16,11 @@ The idea came from a March run, before this event, that scored 374 arXiv papers 
 
 **See it in 30 seconds, with no API key:**
 
-![paper-replicator demo: a held-out run replayed, ending on its verdict card](docs/demo.gif)
+![celsus demo: a held-out run replayed, ending on its verdict card](docs/demo.gif)
 
 ```bash
 uv sync
-uv run paper-replicator demo     # replays a held-out run shipped with the package, labelled as a replay
+uv run celsus demo     # replays a held-out run shipped with the package, labelled as a replay
 ```
 
 The demo is run 25b01b from the held-out set below (arXiv 2610.04221, robust enhanced index tracking): 84 of 84 checked results match, its main result 0.4531 in the paper and 0.4482 ± 0.2654 here. Its report and the script that produced it are in `src/paper_replicator/cli/demo/`.
@@ -70,7 +70,7 @@ Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran
 | Impact | Published results that don't replicate cost the people who build on them: Amgen reproduced 6 of 53 landmark cancer studies (Begley & Ellis, Nature 2012), and about two-thirds of 452 published asset-pricing anomalies fail to replicate (Hou, Xue & Zhang 2020). This checks a paper end to end, from its LaTeX to a verdict in plain words, in a median of 35 minutes and $1.34. The held-out headline above is what it does on papers nobody had looked at. |
 | Use of Meta AI tooling | Muse reads the paper into a typed spec, chooses the main result, builds the replication as an agent with tools in a sandbox, and reviews its own script twice. Muse Spark Open did every call of the held-out set; Muse Spark and Muse Wonder run behind the same flag (`--model`). On one tuning paper (n=3 per model), Muse Spark at minimal effort ($0.20 a run) and Muse Wonder at max effort ($1.75 a run) both match the paper's main result of -3.07% (Spark -3.155 to -2.946, Wonder -3.086 each time); Wonder costs 8.9× as much. |
 | Technical depth | Code, not a model, judges every number, with tolerances from published replication practice (table below). Coded guards stop typed-in results, samples trimmed or padded to a count, and fetching the authors' code; the saboteur measures them; the regression gate pins them. |
-| Demo | `uv run paper-replicator demo` replays a held-out run with no key. `paper-replicator check <arxiv id>` runs a paper live, with each role on screen. |
+| Demo | `uv run celsus demo` replays a held-out run with no key. `celsus check <arxiv id>` runs a paper live, with each role on screen. |
 
 ## How it checks a paper
 
@@ -131,7 +131,7 @@ uv run python -m paper_replicator.cli check 2512.06144 --model muse-spark-1.3 --
 uv run python -m paper_replicator.cli replay <run-id> --speed 10
 
 # replay the held-out run shipped with the package: no API key, no Modal token
-uv run paper-replicator demo
+uv run celsus demo
 
 # many runs, and how reliable the result is
 uv run python -m paper_replicator.batch 2512.06144 --n 5 --parallel 5 --model muse-spark-1.3 --effort minimal \

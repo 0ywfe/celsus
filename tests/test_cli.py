@@ -184,7 +184,7 @@ def test_a_sabotage_session_replays_each_plant_next_to_the_check_that_caught_it(
 
 
 def test_the_demo_replays_a_stored_held_out_run_with_no_key(monkeypatch):
-    """`paper-replicator demo` needs no API key, no Modal token and no runs/ folder: it replays a run shipped
+    """`celsus demo` needs no API key, no Modal token and no runs/ folder: it replays a run shipped
     with the package (25b01b, held-out set 3, holds up) and ends on its verdict card."""
     from paper_replicator.cli.__main__ import DEMO_RUNS, demo
     for key in ("MODEL_API_KEY", "FIREWORKS_API_KEY", "BASETEN_API_KEY", "MODAL_TOKEN_ID", "SEC_USER_AGENT"):

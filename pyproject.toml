@@ -1,5 +1,5 @@
 [project]
-name = "paper-replicator"
+name = "celsus"
 version = "0.1.0"
 description = "Reads a research paper, reruns its analysis on public data, and reports whether the published numbers reproduce."
 readme = "README.md"
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-paper-replicator = "paper_replicator.cli.__main__:main"
+celsus = "paper_replicator.cli.__main__:main"
 
 [dependency-groups]
 dev = ["pytest>=8"]
