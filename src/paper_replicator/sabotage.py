@@ -427,7 +427,7 @@ def commit() -> str:
         return "unknown"
 
 
-def main() -> int:
+def arguments() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("runs", nargs="*", help="IDs of finished, honest runs in runs/")
     parser.add_argument("--score", help="a sabotage session folder in runs/ to score again, with its reviewed.json")
@@ -439,7 +439,11 @@ def main() -> int:
     parser.add_argument("--budget-usd", type=float, default=None)
     parser.add_argument("--require-provider", default=None)
     parser.add_argument("--no-review", action="store_true", help="the coded checks only, without the script reviewer")
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> int:
+    args = arguments().parse_args()
     if args.score:
         show(score(RUNS_DIR / args.score))
         return 0

@@ -166,7 +166,7 @@ def markdown(summary: dict) -> str:
     return "\n".join(lines)
 
 
-def main() -> int:
+def arguments() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("papers", nargs="*")
     parser.add_argument("--n", type=int, default=3, help="runs per paper")
@@ -183,7 +183,11 @@ def main() -> int:
     parser.add_argument("--label")
     parser.add_argument("--summarise", help="a batch file to summarise instead of running")
     parser.add_argument("--runs", nargs="*", help="run IDs to summarise instead of running")
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> int:
+    args = arguments().parse_args()
     BATCHES.mkdir(parents=True, exist_ok=True)
     if args.summarise or args.runs:
         run_ids = args.runs or json.loads(Path(args.summarise).read_text())["run_ids"]
