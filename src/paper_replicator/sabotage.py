@@ -1,4 +1,4 @@
-"""The saboteur: plants one fault in a finished, honest run and checks that the coded guards catch it.
+"""The saboteur: plants one fault in a finished, clean run and checks that the coded guards catch it.
 
 The form is mutation testing's (mutmut, PIT, Stryker). Each plant is one mutant of a named type:
 - killed: a guard fires, or the pipeline throws the planted number away;
@@ -429,7 +429,7 @@ def commit() -> str:
 
 def arguments() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("runs", nargs="*", help="IDs of finished, honest runs in runs/")
+    parser.add_argument("runs", nargs="*", help="IDs of finished, clean runs in runs/")
     parser.add_argument("--score", help="a sabotage session folder in runs/ to score again, with its reviewed.json")
     parser.add_argument("--types", nargs="*", default=[p.key for p in PLANTS], choices=[p.key for p in PLANTS])
     parser.add_argument("--draws", type=int, default=2, help="plants per type per run")
