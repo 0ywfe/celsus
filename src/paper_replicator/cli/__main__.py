@@ -1,10 +1,11 @@
-"""The terminal front end.
+"""The terminal front end (`celsus`, or `python -m paper_replicator.cli`).
 
-  python -m paper_replicator.cli check <arxiv_id> [replicate options]   run a check and watch it live
-  python -m paper_replicator.cli replay <run id or folder> [--speed 10]  replay a recorded run at its own pace
-  python -m paper_replicator.cli demo [run id]                          replay a run shipped with the package, no key
+  celsus check <arxiv_id> [run options]          run a check and watch it live (celsus check -h lists the options)
+  celsus replay <run id or folder> [--speed 10]  replay a recorded run at its own pace
+  celsus demo [run id]                           replay a run shipped with the package, no key
+  celsus sabotage <session>                      replay a saboteur session
 
-Both play the same files (events.jsonl and calls.jsonl in the run folder) through the same screens.
+check, replay and demo play the same files (events.jsonl and calls.jsonl in the run folder) through the same screens.
 A replay is labelled as one, with the run's ID and date, so it is never passed off as live."""
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ from rich.console import Console
 from rich.live import Live
 from rich.text import Text
 
+from .. import PRODUCT_NAME
 from ..runs import RUNS_DIR
 from . import sabotage_view
 from .state import State, apply
@@ -125,8 +127,16 @@ def check(args: list[str], console: Console, plain: bool = False) -> State:
     return state
 
 
-def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(prog="python -m paper_replicator.cli", description=__doc__,
+def check_arguments() -> argparse.ArgumentParser:
+    """`celsus check`'s options: the run's own (replicate.py), plus --log for this screen."""
+    from ..replicate import arguments   # the run's modules load only when a check is asked for
+    parser = arguments(prog=f"{PRODUCT_NAME} check")
+    parser.add_argument("--log", action="store_true", help=LOG_HELP)
+    return parser
+
+
+def arguments() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog=PRODUCT_NAME, description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     play = sub.add_parser("replay", help="replay a recorded run")
@@ -143,18 +153,28 @@ def main(argv: list[str] | None = None) -> None:
     plants.add_argument("session")
     plants.add_argument("--speed", type=float, default=10.0, help="times faster than the session took")
     plants.add_argument("--max-gap", type=float, default=1.0, help="longest pause between two lines, in seconds")
-    live = sub.add_parser("check", help="check a paper, live", add_help=False)
-    live.add_argument("rest", nargs=argparse.REMAINDER)
-    args = parser.parse_args(argv)
+    # Listed here for the top-level help; main() hands check's arguments to check_arguments() instead.
+    sub.add_parser("check", help=f"check a paper, live ({PRODUCT_NAME} check -h lists its options)", add_help=False)
+    return parser
+
+
+def main(argv: list[str] | None = None) -> None:
+    argv = sys.argv[1:] if argv is None else list(argv)
     console = Console()
+    if argv[:1] == ["check"]:   # parsed here first, so -h prints the options and a wrong flag stops before a run
+        rest = argv[1:]
+        check_arguments().parse_args(rest)
+        check([a for a in rest if a != "--log"], console, plain="--log" not in rest)
+        return
+    args = arguments().parse_args(argv)
     if args.command == "replay":
         replay(_folder(args.run), args.speed, args.max_gap, console, plain=not args.log)
     elif args.command == "demo":
         demo(args.run, args.seconds, args.max_gap, console, plain=not args.log)
     elif args.command == "sabotage":
         sabotage_view.replay(_folder(args.session), args.speed, args.max_gap, console)
-    else:
-        check([a for a in args.rest if a != "--log"], console, plain="--log" not in args.rest)
+    else:   # check reached through the top-level parser (not first on the line): never run unparsed
+        arguments().error(f"usage: {PRODUCT_NAME} check <arxiv_id> [options]")
 
 
 if __name__ == "__main__":

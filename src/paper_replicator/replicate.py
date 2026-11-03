@@ -851,8 +851,9 @@ def run_summary(run: Run, arxiv_id: str, cfg: config.ModelConfig, builder: str, 
     }
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+def arguments(prog: str | None = None) -> argparse.ArgumentParser:
+    """A run's options. `celsus check` parses with them too, so its -h lists them."""
+    parser = argparse.ArgumentParser(prog=prog, description=__doc__.splitlines()[0])
     parser.add_argument("arxiv_id")
     parser.add_argument("--provider", default=None, help="default: the quick tier's provider (Meta)")
     parser.add_argument("--model", default=None, help="default: the quick tier's model")
@@ -867,7 +868,11 @@ def main() -> int:
                              "first-measurement cap (workbench)")
     parser.add_argument("--require-provider", default=None,
                         help="stop the run before any call to another provider (demo and benchmark runs: meta)")
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> int:
+    args = arguments().parse_args()
     load_dotenv(ROOT / ".env")
     cfg = config.tier("quick")
     if args.provider or args.model:

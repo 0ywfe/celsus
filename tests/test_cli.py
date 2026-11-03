@@ -318,3 +318,37 @@ def test_log_keeps_the_engineers_screen(monkeypatch, tmp_path):
     cli.main(["demo", "--log"])
     cli.main(["demo"])
     assert seen == [False, True, False, True]
+
+
+def test_check_help_lists_the_runs_own_options(capsys):
+    """`celsus check -h` failed with "unrecognized arguments: -h": check's options are the run's, and -h shows them."""
+    import subprocess
+    import sys
+
+    import pytest
+
+    from paper_replicator.cli import __main__ as cli
+    for flag in ("-h", "--help"):
+        with pytest.raises(SystemExit) as stop:
+            cli.main(["check", flag])
+        assert stop.value.code == 0
+        shown = capsys.readouterr().out
+        assert shown.startswith(f"usage: {PRODUCT_NAME} check")
+        for option in ("--budget-usd", "--effort", "--model", "--require-provider", "--provider", "--log"):
+            assert option in shown
+    typed = subprocess.run([sys.executable, "-m", "paper_replicator.cli", "check", "-h"], capture_output=True, text=True)
+    assert typed.returncode == 0 and "--budget-usd" in typed.stdout
+
+
+def test_check_parses_its_options_before_a_run_starts(monkeypatch, capsys):
+    import pytest
+
+    from paper_replicator.cli import __main__ as cli
+    started = []
+    monkeypatch.setattr(cli, "check", lambda args, console, plain: started.append((args, plain)))
+    cli.main(["check", "--effort", "minimal", "2604.27287", "--budget-usd", "1", "--log"])
+    assert started == [(["--effort", "minimal", "2604.27287", "--budget-usd", "1"], False)]
+    with pytest.raises(SystemExit) as stop:
+        cli.main(["check", "2604.27287", "--budjet-usd", "1"])
+    assert stop.value.code == 2 and "unrecognized arguments: --budjet-usd" in capsys.readouterr().err
+    assert len(started) == 1   # the wrong flag stopped it before a run began
