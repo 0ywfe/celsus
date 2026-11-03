@@ -164,13 +164,16 @@ Where the checks stop today, and what closes each gap.
 
 ## Use
 
+The full guide, from install to reading a report and checking it yourself, is [`docs/USAGE.md`](docs/USAGE.md).
+
 ```bash
 uv sync
 cp .env.example .env            # MODEL_API_KEY, SEC_USER_AGENT
 uv run modal token new          # the sandbox runs on Modal
 
 # check a paper and watch it live: stage tracker, live log, verdict card
-uv run python -m paper_replicator.cli check 2512.06144 --model muse-spark-1.3 --require-provider meta
+# (the same as: uv run python -m paper_replicator.cli check ...)
+uv run celsus check 2512.06144 --model muse-spark-1.3 --budget-usd 3 --require-provider meta
 
 # replay a recorded run (labelled as a replay, with its run ID and date)
 uv run python -m paper_replicator.cli replay <run-id> --speed 10
