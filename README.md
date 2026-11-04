@@ -141,7 +141,7 @@ The test suite runs offline on every push (the badge above): model calls, the sa
 
 ### Open weights
 
-Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran on Muse Spark Open, Meta's open-weights model, served by Fireworks and Baseten: the reading of the paper, the build, and both reviews.
+Every model call in the held-out set, 3,172 of them ($84.11 at list prices), ran on Muse Spark Open, Meta's open-weights model: the reading of the paper, the build, and both reviews.
 
 ## What's next
 
