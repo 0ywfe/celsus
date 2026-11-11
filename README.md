@@ -11,6 +11,7 @@
 </p>
 
 <p align="center">
+  <a href="https://youtu.be/DHBQFPWbRGM"><strong>Video</strong></a> ·
   <a href="#see-it-in-30-seconds"><strong>Demo</strong></a> ·
   <a href="#vision"><strong>Vision</strong></a> ·
   <a href="#how-it-works"><strong>How it works</strong></a> ·
@@ -25,6 +26,12 @@
   <img alt="Python 3.11 or later" src="https://img.shields.io/badge/Python-3.11%2B-303336?style=flat-square">
   <img alt="Models: Meta Muse" src="https://img.shields.io/badge/Models-Meta%20Muse-303336?style=flat-square">
 </p>
+
+<p align="center">
+  <a href="https://youtu.be/DHBQFPWbRGM"><img src="https://img.youtube.com/vi/DHBQFPWbRGM/maxresdefault.jpg" alt="celsus: an AI workflow that replicates scientific research (demo video on YouTube)" width="640"></a>
+</p>
+
+<p align="center"><sub>Check out the demo video on YouTube.</sub></p>
 
 <p align="center">
   <img src="docs/assets/check-flow.svg" alt="One paper in, one verdict out. Five steps: it reads the paper, fetching the arXiv LaTeX and inlining every input file; Muse writes a typed spec, copying every reported number as printed, and code checks each one is in the LaTeX; Muse writes and runs the script on public data in a sandbox, and only a fresh re-run counts; two independent reviews, where a finding from either sends the script back to be rebuilt; and code judges each number by rules from published replication practice, for example 0.4531 in the paper against 0.4482 here, consistent. Out comes the verdict in plain words: the paper's numbers hold up, 84 of 84 checked results match within their uncertainty. The verdicts are holds up, partly holds up, does not hold up, and could not check, which is the checker's own failure and never counts against the paper." width="880">
