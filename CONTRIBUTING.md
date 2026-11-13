@@ -45,4 +45,8 @@ Before a change merges, we re-score every stored run and re-check every stored s
 - Branch from `main` and keep one change per pull request.
 - Write commit messages as `type: description`, where the type is feat, fix, docs, test, refactor or chore.
 - In the description, say what changed, why, and how you tested it. If you ran a live check, include the run ID and its cost.
-- By opening a pull request you agree that your contribution is licensed under [AGPL-3.0-only](LICENSE).
+- Sign the [Contributor License Agreement](CLA.md) before your first pull request can merge. A bot posts the sentence to reply with; you sign once and it covers every later pull request.
+
+## Licensing
+
+The project is released under [AGPL-3.0-only](LICENSE), and your contribution is too. The CLA also lets the maintainer offer the project under other terms, such as a commercial licence. You keep the copyright in your work.
